@@ -10,7 +10,7 @@ handling of a JESD204 transmit logic device. Implements the 8B/10B based link
 layer defined in JESD204C standard that is similar to the link layer defined in
 JESD204B. This includes handling of the SYSREF and SYNC~ and controlling the
 :ref:`link state machine <axi_jesd204_tx_8b_10b_link_state_machine>` accordingly
-as well as performing per lane scrambling and character replacement. It has 
+as well as performing per lane scrambling and character replacement. It has
 been designed for interoperability with
 :ref:`Analog Devices JESD204B DAC converter products <axi_jesd204_tx_supported_devices>`.
 Implements the 64B/66B based link layer defined in the JESD204C standard.
@@ -43,7 +43,7 @@ Utilization
 --------------------------------------------------------------------------------
 
 .. collapsible:: Detailed Utilization
-    
+
     +---------------+---------+----+---+
     |Device Family  |NUM_LANES|LUTs|FFs|
     +===============+=========+====+===+
@@ -153,11 +153,11 @@ AXI JESD204 TX Signal and Interface Pins
       - Interrupt output of the module. Is asserted when at least one of the
         modules interrupt is pending and enabled.
     * - device_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
+      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
         for the JESD204 interface. Its frequency must be link clock \* ``DATA_PATH_WIDTH`` /
         ``TPL_DATA_PATH_WIDTH``
     * - device_reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
 
 JESD204 TX Signal and Interface Pins
@@ -167,11 +167,11 @@ JESD204 TX Signal and Interface Pins
     :path: library/jesd204/jesd204_tx
 
     * - clk
-      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
-        for the JESD204 interface. Must be line clock/40 for correct 
+      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+        for the JESD204 interface. Must be line clock/40 for correct
         operation in 8B/10B mode, line clock/66 in 64B/66B mode.
     * - reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
     * - tx_data
       - Transmit data.
@@ -295,7 +295,7 @@ This means that ``TX_DATA`` interface is ``DATA_PATH_WIDTH`` \* 8 \*
 8 bits corresponding to one lane. The lowest ``DATA_PATH_WIDTH`` \* 8 bits
 correspond to the first lane, while the highest ``DATA_PATH_WIDTH`` \* 8 bits
 correspond to the last lane.
-E.g. for 8B/10B mode where DATA_PATH_WIDTH=4. Each lane specific 32 bit block
+E.g. for 8B/10B mode where DATA_PATH_WIDTH=4. Each lane specific 32-bit block
 corresponds to four octets each 8 bits wide. The temporal ordering of the
 octets is from LSB to MSB, this means the octet placed in the lowest 8 bits is
 transmitted first, the octet placed in the highest 8 bits is transmitted last.
@@ -321,9 +321,9 @@ section are read-only and write to them will be ignored.
 
 The ``VERSION`` (``0x000``) register contains the version of the peripheral. The
 version determines the register map layout and general features supported by the
-peripheral. The version number follows `semantic versioning <http://semver.org/>`__. 
-Increments in the major number indicate backward incompatible changes, 
-increments in the minor number indicate backward compatible changes, patch 
+peripheral. The version number follows `semantic versioning <http://semver.org/>`__.
+Increments in the major number indicate backward incompatible changes,
+increments in the minor number indicate backward compatible changes, patch
 letter increments indicate a bug fix.
 
 The ``PERIPHERAL_ID`` (``0x004``) register contains the value of the ``ID`` HDL
@@ -392,7 +392,7 @@ the corresponding bit to either the ``IRQ_SOURCE`` or ``IRQ_PENDING`` register.
 It is possible to clear multiple interrupt events at the same time by setting
 multiple bits in a single write operation.
 
-For more details regarding interrupt operation see the 
+For more details regarding interrupt operation see the
 :ref:`interrupts section <axi_jesd204_tx_interrupts>` of this document.
 
 Link Control
@@ -556,9 +556,9 @@ link status registers might contain bogus values. Their content should be
 ignored until the link is fully enabled.
 
 The ``STATUS_STATE`` (``[1:0]``) field of the ``LINK_STATUS`` (``0x280``)
-register indicates the state of the 
+register indicates the state of the
 :ref:`8B/10B link state machine <axi_jesd204_tx_8b_10b_link_state_machine>`
-or 64B/66B link state machine depending on the selected encoder. Possible 
+or 64B/66B link state machine depending on the selected encoder. Possible
 values are:
 
 Possible values for a 8B/10B link are:
@@ -583,7 +583,7 @@ Manual Synchronization Request
 For 8B/10B links the ``MANUAL_SYNC_REQUEST`` (``0x248``) register can be used to
 transition the link state from the WAIT phase to the CGS phase in the absence of
 an external synchronization request. This is useful for test cases where the
-peripheral is connected to signal analyzer instead of a JESD204B receiver 
+peripheral is connected to signal analyzer instead of a JESD204B receiver
 device.
 
 Writing a 1 to this register will trigger a manual synchronization request.
@@ -623,7 +623,7 @@ indicates that the link clock is currently not active.
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The core does not generates interrupts.
+The core does not generate interrupts.
 
 8B/10B Link
 --------------------------------------------------------------------------------
@@ -649,8 +649,8 @@ Wait Phase (WAIT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The WAIT phase is the default state entered during reset. While disabled the
-peripheral will stay in the WAIT phase. When enabled the peripheral will stay in
-the WAIT phase until a synchronization request is received.
+peripheral will stay in the WAIT phase. When enabled, the peripheral will stay
+in the WAIT phase until a synchronization request is received.
 
 A synchronization request can either be generated manually through the register
 map configuration interface or by one of the JESD204B receivers by asserting the
@@ -661,16 +661,16 @@ During the WAIT phase the peripheral will continuously transmit
 :dokuwiki:`/K/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 on each of the ``TX_PHYn`` interfaces.
 
-If at any point the peripheral is disabled it will automatically transition back
-to the WAIT state.
+If at any point the peripheral is disabled, it will automatically transition
+back to the WAIT state.
 
-Lanes that have been disabled in the register map configuration interface will
+Lanes that have been disabled in the register map configuration interface, will
 behave as if the link was in the WAIT state regardless of the actual state.
 
 Code Group Synchronization Phase (CGS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-During the CGS phase the peripheral will continuously transmit 
+During the CGS phase the peripheral will continuously transmit
 :dokuwiki:`/K/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 on each of the ``TX_PHYn`` interfaces.
 
@@ -697,13 +697,13 @@ Initial Lane Alignment Sequence Phase (ILAS)
 
 During the ILAS phase the peripheral transmits the initial lane alignment
 sequence. The transmitted ILAS consists of four multi-frames. The first octet of
-each multi-frame is the 
+each multi-frame is the
 :dokuwiki:`/R/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
-and the last octet of each multi-frame is the 
+and the last octet of each multi-frame is the
 :dokuwiki:`/A/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 
 During the second multi-frame the link configuration data is transmitted from
-the 3rd to 16th octet. The second octet of the second multi-frame is the 
+the 3rd to 16th octet. The second octet of the second multi-frame is the
 :dokuwiki:`/Q/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 to indicate that this multi-frame carries configuration data. The ILAS
 configuration data sequence can be programmed through the register map
@@ -761,10 +761,10 @@ The peripheral also performs per-lane alignment character replacement. Alignment
 character replacement will replace under certain predictable conditions (i.e.
 the receiver can recover the replaced character) the last octet in a frame or
 multi-frame. Replaced characters at the end of a frame, that is also the end of
-a multi-frame, are replaced by the 
+a multi-frame, are replaced by the
 :dokuwiki:`/A/ character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 Replaced characters at the end of a frame, that is not the end of a
-multi-frame, are replaced by the 
+multi-frame, are replaced by the
 :dokuwiki:`/F/ character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 Alignment characters can be used by the receiver to ensure proper frame
 and lane alignment.
@@ -829,7 +829,7 @@ Diagnostics
 .. image:: axi_jesd204_tx_204c_64b66b.svg
    :align: center
 
-The 64 bit wide datapath of the link layer is fairly simple, the only mandatory
+The 64-bit wide datapath of the link layer is fairly simple, the only mandatory
 part of the 64B66B link layer datapath is the scrambler. This must be active
 during the operation of the link, however for debug purposes can be bypasses
 with a control register ``SCRAMBLER_DISABLE``.
@@ -843,7 +843,7 @@ If the core does not receives at least one SYSREF pulse it will not pass any
 data from transport layer to physical layer.
 
 For each multiblock sent on the data interface a CRC is calculated which is sent
-on the 2 bit sync header stream during the next multiblock period. Beside the
+on the 2-bit sync header stream during the next multiblock period. Beside the
 CRC the sync header stream contains synchronization information to mark the
 boundary of the multiblock and extended multiblocks.
 
@@ -936,54 +936,54 @@ Supported Devices
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9135 <en/products/AD9135>`: Dual, 11-Bit, high dynamic, 2.8 GSPS, 
+-  :adi:`AD9135 <en/products/AD9135>`: Dual, 11-Bit, high dynamic, 2.8 GSPS,
    TxDAC+® Digital-to-Analog Converter;
--  :adi:`AD9136 <en/products/AD9136>`: Dual, 16-Bit, 2.8 GSPS, TxDAC+® 
+-  :adi:`AD9136 <en/products/AD9136>`: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
    Digital-to-Analog Converter;
--  :adi:`AD9144 <en/products/AD9144>`: Quad, 16-Bit, 2.8 GSPS, TxDAC+® 
+-  :adi:`AD9144 <en/products/AD9144>`: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
    Digital-to-Analog Converter;
--  :adi:`AD9152 <en/products/AD9152>`: Dual, 16-Bit, 2.25 GSPS, TxDAC+ 
+-  :adi:`AD9152 <en/products/AD9152>`: Dual, 16-Bit, 2.25 GSPS, TxDAC+
    Digital-to-Analog Converter;
--  :adi:`AD9154 <en/products/AD9154>`: Quad, 16-Bit, 2.4 GSPS, TxDAC+® 
+-  :adi:`AD9154 <en/products/AD9154>`: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
    Digital-to-Analog Converter;
--  :adi:`AD9161 <en/products/AD9161>`: 11-Bit, 12 GSPS, RF Digital-to-Analog 
+-  :adi:`AD9161 <en/products/AD9161>`: 11-Bit, 12 GSPS, RF Digital-to-Analog
    Converter;
--  :adi:`AD9162 <en/products/AD9162>`: 16-Bit, 12 GSPS, RF Digital-to-Analog 
+-  :adi:`AD9162 <en/products/AD9162>`: 16-Bit, 12 GSPS, RF Digital-to-Analog
    Converter;
--  :adi:`AD9163 <en/products/AD9163>`: 16-Bit, 12 GSPS, RF DAC and Digital 
+-  :adi:`AD9163 <en/products/AD9163>`: 16-Bit, 12 GSPS, RF DAC and Digital
    Upconverter;
--  :adi:`AD9164 <en/products/AD9164>`: 16-Bit, 12 GSPS, RF DAC and Direct 
+-  :adi:`AD9164 <en/products/AD9164>`: 16-Bit, 12 GSPS, RF DAC and Direct
    Digital Synthesizer;
--  :adi:`AD9172 <en/products/AD9172>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
+-  :adi:`AD9172 <en/products/AD9172>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Channelizers;
--  :adi:`AD9173 <en/products/AD9173>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
+-  :adi:`AD9173 <en/products/AD9173>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Channelizers;
--  :adi:`AD9174 <en/products/AD9174>`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct 
+-  :adi:`AD9174 <en/products/AD9174>`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
    Digital Synthesizer;
--  :adi:`AD9175 <en/products/AD9175>`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC 
+-  :adi:`AD9175 <en/products/AD9175>`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC
    with Wideband Channelizers;
--  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
+-  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Wideband Channelizers.
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with 
+-  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with
    Observation Path;
--  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with 
+-  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with
    Observation Path and DPD;
--  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver 
+-  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver
    with Observation Path;
 -  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver;
--  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter 
+-  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter
    with Observation Path.
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and 
+-  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
    Quad, 12-Bit, 4GSPS RFADC;
--  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
+-  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
    DUAL, 12-Bit, 6GSPS RFADC.
 
 Technical Support
