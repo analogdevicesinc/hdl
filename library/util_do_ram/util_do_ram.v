@@ -92,7 +92,7 @@ module util_do_ram #(
   localparam DST_ADDRESS_WIDTH = LENGTH_WIDTH - DST_ADDR_ALIGN;
 
   wire  wr_enable;
-  wire  [DST_DATA_WIDTH-1:0] rd_data;
+  wire  [DST_DATA_WIDTH/8*9-1:0] rd_data;
   wire  [1:0] rd_fifo_room;
   wire        rd_enable;
   wire        rd_last_beat;
@@ -101,7 +101,7 @@ module util_do_ram #(
 
   reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
   reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
-  reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
+  reg [DST_DATA_WIDTH/8*9-1:0]    rd_data_l2 = 'h0;
   reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
   reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
   reg rd_pending = 1'b0;
@@ -165,14 +165,14 @@ module util_do_ram #(
 
   ad_mem_asym #(
     .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
-    .A_DATA_WIDTH (SRC_DATA_WIDTH),
+    .A_DATA_WIDTH (SRC_DATA_WIDTH/8*9),
     .B_ADDRESS_WIDTH (DST_ADDRESS_WIDTH),
-    .B_DATA_WIDTH (DST_DATA_WIDTH)
+    .B_DATA_WIDTH (DST_DATA_WIDTH/8*9)
   ) i_mem (
     .clka (s_axis_aclk),
     .wea (wr_enable),
     .addra (wr_addr),
-    .dina (s_axis_data),
+    .dina ({s_axis_data,s_axis_keep}),
 
     .clkb (m_axis_aclk),
     .reb (1'b1),
@@ -254,7 +254,7 @@ module util_do_ram #(
 
   // Read datapath to AXIS logic
   util_axis_fifo #(
-    .DATA_WIDTH(DST_DATA_WIDTH+1),
+    .DATA_WIDTH(DST_DATA_WIDTH/8*9+1),
     .ADDRESS_WIDTH(2),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(0)
@@ -274,7 +274,7 @@ module util_do_ram #(
     .m_axis_aresetn(m_axis_aresetn & rd_request_enable),
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
-    .m_axis_data({m_axis_last,m_axis_data}),
+    .m_axis_data({m_axis_last,m_axis_data,m_axis_keep}),
     .m_axis_level(),
     .m_axis_empty(),
     .m_axis_tkeep(),
