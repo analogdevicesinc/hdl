@@ -44,7 +44,8 @@ module spi_engine_execution #(
   parameter NUM_OF_SDI = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
-  parameter [1:0] SDI_DELAY = 2'b00
+  parameter [1:0] SDI_DELAY = 2'b00,
+  parameter LOOP_CMD_MEM_ADDRESS_WIDTH = 4
 ) (
   input clk,
   input resetn,
@@ -76,10 +77,12 @@ module spi_engine_execution #(
   output reg three_wire
 );
 
-  localparam CMD_TRANSFER = 2'b00;
-  localparam CMD_CHIPSELECT = 2'b01;
-  localparam CMD_WRITE = 2'b10;
-  localparam CMD_MISC = 2'b11;
+  localparam CMD_TRANSFER = 4'b0000;
+  localparam CMD_CHIPSELECT = 4'b0001;
+  localparam CMD_WRITE = 4'b0010;
+  localparam CMD_MISC = 4'b0011;
+  localparam CMD_LOOP_START = 4'b1000;
+  localparam CMD_LOOP_END = 4'b1001;
 
   localparam MISC_SYNC = 1'b0;
   localparam MISC_SLEEP = 1'b1;
@@ -93,6 +96,10 @@ module spi_engine_execution #(
 
   localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
   localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
+
+  localparam LOOP_INACTIVE = 3'b001;
+  localparam LOOP_STORE = 3'b010;
+  localparam LOOP_REPLAY = 3'b100;
 
   reg sclk_int = 1'b0;
   wire sdo_int_s;
@@ -128,6 +135,15 @@ module spi_engine_execution #(
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
+  reg [2:0] loop_state = LOOP_INACTIVE;
+  reg [2:0] loop_state_next;
+  reg [7:0] repeat_count;
+  reg [LOOP_CMD_MEM_ADDRESS_WIDTH-1:0] repeat_mem_addr;
+  reg [15:0] repeat_cmd_mem [0:2**LOOP_CMD_MEM_ADDRESS_WIDTH-1];
+  reg repeat_loop;
+  reg repeat_cmd_mem_we;
+
+  wire [15:0] cmd_s = (repeat_loop) ? repeat_cmd_mem[repeat_mem_addr] : cmd;
   reg [15:0] cmd_d1;
 
   reg cpha = DEFAULT_SPI_CFG[0];
@@ -141,16 +157,18 @@ module spi_engine_execution #(
 
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-  wire [1:0] inst = cmd[13:12];
-  wire [1:0] inst_d1 = cmd_d1[13:12];
+  wire [3:0] inst = cmd_s[15:12];
+  wire [3:0] inst_d1 = cmd_d1[15:12];
 
-  wire exec_cmd = cmd_ready && cmd_valid;
+  wire exec_cmd = (repeat_loop) ? idle : cmd_ready && cmd_valid;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
 
   wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
   wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
   wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
-  wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
+  wire exec_sync_cmd = exec_misc_cmd && cmd_s[8] == MISC_SYNC;
+  wire exec_loop_start_cmd = exec_cmd && inst == CMD_LOOP_START;
+  wire exec_loop_end_cmd = exec_cmd && inst == CMD_LOOP_END;
 
   wire trigger_tx;
   wire trigger_rx;
@@ -174,18 +192,18 @@ module spi_engine_execution #(
                   && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
                   && (cs_sleep_repeat == 1'b0)
                   && (idle == 1'b0);
-  assign cmd_ready = idle;
+  assign cmd_ready = (repeat_loop) ? 1'b0 : idle;
 
   always @(posedge clk) begin
     if (exec_transfer_cmd) begin
-      sdo_enabled <= cmd[8];
-      sdi_enabled <= cmd[9];
+      sdo_enabled <= cmd_s[8];
+      sdi_enabled <= cmd_s[9];
     end
   end
 
   always @(posedge clk) begin
-    if (cmd_ready & cmd_valid)
-     cmd_d1 <= cmd;
+    if (exec_cmd)
+     cmd_d1 <= (exec_loop_end_cmd && loop_state == LOOP_STORE) ? repeat_cmd_mem[repeat_mem_addr] : cmd_s;
   end
 
   always @(posedge clk) begin
@@ -210,16 +228,16 @@ module spi_engine_execution #(
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
-      if (cmd[9:8] == REG_CONFIG) begin
-        cpha <= cmd[0];
-        cpol <= cmd[1];
-        three_wire <= cmd[2];
-      end else if (cmd[9:8] == REG_CLK_DIV) begin
-        clk_div <= cmd[7:0];
-      end else if (cmd[9:8] == REG_WORD_LENGTH) begin
+      if (cmd_s[9:8] == REG_CONFIG) begin
+        cpha <= cmd_s[0];
+        cpol <= cmd_s[1];
+        three_wire <= cmd_s[2];
+      end else if (cmd_s[9:8] == REG_CLK_DIV) begin
+        clk_div <= cmd_s[7:0];
+      end else if (cmd_s[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
-        word_length <= cmd[7:0];
-        left_aligned <= DATA_WIDTH - cmd[7:0];
+        word_length <= cmd_s[7:0];
+        left_aligned <= DATA_WIDTH - cmd_s[7:0];
       end
     end
   end
@@ -271,6 +289,69 @@ module spi_engine_execution #(
         counter <= counter + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH));
       end
     end
+  end
+
+  // Loop machine datapath
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      repeat_count    <= 0;
+      repeat_mem_addr <= 0;
+    end else begin
+      if (loop_state == LOOP_INACTIVE && exec_loop_start_cmd) begin
+        repeat_mem_addr <= 0;
+        repeat_count    <= cmd_s[7:0];
+      end else if (exec_loop_end_cmd) begin
+        if (loop_state == LOOP_STORE || loop_state == LOOP_REPLAY) begin
+          repeat_mem_addr <= 0;
+          repeat_count    <= repeat_count-1;
+        end
+      end else if ((loop_state == LOOP_STORE || loop_state == LOOP_REPLAY) && exec_cmd) begin
+        repeat_mem_addr <= repeat_mem_addr + 1;
+      end      
+      if (repeat_cmd_mem_we && exec_cmd) begin
+        repeat_cmd_mem[repeat_mem_addr] <= cmd_s;
+      end
+    end
+  end
+
+  // Loop machine FSM
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      loop_state  <= LOOP_INACTIVE;
+    end else begin
+      loop_state  <= loop_state_next;
+    end
+  end
+  always @(*) begin
+    loop_state_next = loop_state;
+    case (loop_state)
+        LOOP_INACTIVE : begin
+          repeat_loop = 1'b0;
+          repeat_cmd_mem_we = 1'b0;
+          if (exec_loop_start_cmd) begin
+            loop_state_next = LOOP_STORE;
+          end
+        end
+        LOOP_STORE : begin
+          repeat_loop = 1'b0;
+          repeat_cmd_mem_we = 1'b1;
+          if (exec_loop_end_cmd) begin
+            loop_state_next = LOOP_REPLAY;
+          end
+        end
+        LOOP_REPLAY : begin
+          repeat_loop = 1'b1;
+          repeat_cmd_mem_we = 1'b0;
+          if (exec_loop_end_cmd && (repeat_count == 1)) begin
+            loop_state_next = LOOP_INACTIVE;
+          end
+        end
+        default: begin
+          repeat_loop       = 1'b0;
+          repeat_cmd_mem_we = 1'b0;
+          loop_state_next   = LOOP_INACTIVE;
+        end
+      endcase
   end
 
   always @(posedge clk) begin
