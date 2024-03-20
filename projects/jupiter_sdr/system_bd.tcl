@@ -321,7 +321,9 @@ ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_ip_instance util_cpack2 util_adc_1_pack { \
   NUM_OF_CHANNELS 4 \
@@ -338,7 +340,9 @@ ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_ip_instance util_cpack2 util_adc_2_pack { \
   NUM_OF_CHANNELS 2 \
@@ -355,7 +359,9 @@ ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_ip_instance util_upack2 util_dac_1_upack { \
   NUM_OF_CHANNELS 4 \
@@ -372,7 +378,9 @@ ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_ip_instance util_upack2 util_dac_2_upack { \
   NUM_OF_CHANNELS 2 \
@@ -606,10 +614,20 @@ ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx2_dma/m_dest_axi
 ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx1_dma/m_src_axi
 ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx2_dma/m_src_axi
 
+ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx1_dma/m_sg_axi
+ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_rx2_dma/m_sg_axi
+ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx1_dma/m_sg_axi
+ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9001_tx2_dma/m_sg_axi
+
 ad_connect $sys_dma_resetn axi_adrv9001_rx1_dma/m_dest_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9001_rx2_dma/m_dest_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9001_tx1_dma/m_src_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9001_tx2_dma/m_src_axi_aresetn
+
+ad_connect $sys_dma_resetn axi_adrv9001_rx1_dma/m_sg_axi_aresetn
+ad_connect $sys_dma_resetn axi_adrv9001_rx2_dma/m_sg_axi_aresetn
+ad_connect $sys_dma_resetn axi_adrv9001_tx1_dma/m_sg_axi_aresetn
+ad_connect $sys_dma_resetn axi_adrv9001_tx2_dma/m_sg_axi_aresetn
 
 # interrupts
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
