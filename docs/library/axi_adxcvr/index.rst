@@ -67,7 +67,7 @@ Interfaces
 
 .. hdl-interfaces::
   :path: library/xilinx/axi_adxcvr
-  
+
   * - s_axi_aclk
     - System clock. (in general 100 MHz)
   * - s_axi_aresetn
@@ -108,7 +108,7 @@ Parameters
 
 .. hdl-parameters::
    :path: library/xilinx/axi_adxcvr
-   
+
    * - ID
      - Instance identification number, if more than one instance is used
    * - NUM_OF_LANES
@@ -119,12 +119,12 @@ Parameters
      - Encoded value describing the technology/generation of the FPGA device
        (7series/ultrascale)
    * - FPGA_FAMILY
-     - Encoded value describing the family variant of the FPGA device(e.g., 
+     - Encoded value describing the family variant of the FPGA device(e.g.,
        zynq, kintex, virtex)
    * - SPEED_GRADE
      - Encoded value describing the FPGA's speed-grade
    * - DEV_PACKAGE
-     - Encoded value describing the device package. The package might affect 
+     - Encoded value describing the device package. The package might affect
        high-speed interfaces
    * - FPGA_VOLTAGE
      - Contains the value(0-5000 mV) at wich the FPGA device supplied
@@ -146,10 +146,10 @@ Parameters
    * - TX_PRECURSOR
      - Transmitter pre-cursor TX pre-emphasis control
    * - SYS_CLK_SEL
-     - Selects the PLL reference clock source to drive the RXOUTCLK 
+     - Selects the PLL reference clock source to drive the RXOUTCLK
        :ref:`Table 1 <axi_adxcvr table_one_label>`
    * - OUT_CLK_SEL
-     - select the transceiver reference clock as the source of TXOUTCLK 
+     - select the transceiver reference clock as the source of TXOUTCLK
        :ref:`Table 2 <axi_adxcvr table_two_label>`
 
 Interfaces
@@ -174,9 +174,9 @@ Software Guidelines
 
 The system must have active DRP and reference clocks before any software access.
 The software is expected to write necessary control parameters to LPM_DFE_N,
-RATE, SYSCLK_SEL, OUTCLK_SEL register bits and then set RESETN bit to 0x1. After
-which monitor the STATUS bit to be set. There are no other requirements for
-initialization.
+RATE, SYSCLK_SEL, OUTCLK_SEL register bits and then set RESETN bit to 0x1.
+After that, monitor the STATUS bit to be set. There are no other requirements
+for initialization.
 
 The DRP access is identical for common and channel interfaces. The SEL bits may
 be set to a specific transceiver lane or 0xff to broadcast. A write to the
@@ -202,7 +202,7 @@ Table 1
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. list-table::
    :header-rows: 1
-   
+
    * - SYSCLK_SEL
      - 00
      - 01
@@ -236,7 +236,7 @@ Table 2
 
 .. list-table::
    :header-rows: 1
-   
+
    * - OUTCLK_SEL
      - 001
      - 010
@@ -271,7 +271,7 @@ Table 2
      - REFCLK
      - REFCLK/2
      - PROGDIVCLK
-     - RESERVED 
+     - RESERVED
 
 The REFCLK selected by OUTCLK_SEL depends on the SYSCLK_SEL, it may be CPLL,
 QPLL0 or QPLL1 refclk.
@@ -286,12 +286,12 @@ at the physical layer without the need of the link layer bringup.
 TX link procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Configure ref clock and device clocks for under test lane rate. Bring XCVR
-   out from reset.
+#. Configure the reference clock and device clocks for under test lane rate.
+   Bring XCVR out from reset.
 #. In the REG_PRBS_CNTRL registers set PRBSSEL to a non-zero value. See the
    transceiver guides for exact values, different transceiver families may have
    different encoding for the same pattern.
-#. On the receiving side of the link set the checker for the same pattern and
+#. On the receiving side of the link, set the checker for the same pattern and
    reset the error counters.
 #. No error should be recorded on the receiver side.
 #. Set the PRBSFORCEERR bit in the REG_PRBS_CNTRL register to force the error
@@ -301,9 +301,9 @@ TX link procedure
 RX link procedure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Configure ref clock and device clocks for under test lane rate. Bring XCVR
-   out from reset.
-#. On the transmit side of the link set a test pattern that is available in the
+#. Configure the reference clock and device clocks for under test lane rate.
+   Bring XCVR out from reset.
+#. On the transmit side of the link, set a test pattern that is available in the
    receiving transceiver. Consult the transceiver documentation for details.
 #. In the REG_PRBS_CNTRL registers set PRBSSEL to the corresponding pattern.
    Reset the error counters with PRBSCNTRESET.

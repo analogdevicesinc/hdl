@@ -15,7 +15,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview16"
+     id="namedview1"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -23,32 +23,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="4"
-     inkscape:cx="63.5"
-     inkscape:cy="43.375"
-     inkscape:window-width="1920"
-     inkscape:window-height="1121"
-     inkscape:window-x="2391"
-     inkscape:window-y="-9"
+     inkscape:zoom="3.1575785"
+     inkscape:cx="114.01142"
+     inkscape:cy="160.72443"
+     inkscape:window-width="2400"
+     inkscape:window-height="1271"
+     inkscape:window-x="-9"
+     inkscape:window-y="140"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g16"
-     showguides="true">
-    <sodipodi:guide
-       position="83.555775,420.1285"
-       orientation="1,0"
-       id="guide19"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="158.60663,357.32279"
-       orientation="-0.70710678,-0.70710678"
-       id="guide20"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="119.74861,301.06237"
-       orientation="0.70710678,-0.70710678"
-       id="guide21"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
+     inkscape:current-layer="svg16" />
   <defs
      id="defs1">
     <marker
@@ -57,12 +40,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -76,12 +56,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -95,12 +72,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -109,203 +83,175 @@
          id="path135" />
     </marker>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:1.33417;stroke-linejoin:round"
+     id="rect1"
+     width="227.72707"
+     height="321.44885"
+     x="0"
+     y="0" />
   <circle
      style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
      id="path16"
      cx="83.150391"
      cy="54.554947"
      r="39.749554" />
-  <g
-     id="g17"
-     transform="translate(-23.490435,-2.4401928)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.563504;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-2"
-       cx="106.64082"
-       cy="56.99514"
-       r="44.718246" />
-  </g>
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.563504;stroke-linejoin:round;stroke-dasharray:none"
+     id="path16-2"
+     cx="83.150391"
+     cy="54.554947"
+     r="44.718246" />
   <text
      xml:space="preserve"
-     style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
      x="82.701164"
      y="61.825455"
      id="text16"><tspan
-       sodipodi:role="line"
        id="tspan16"
        x="82.701164"
        y="61.825455"
-       style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1">WAIT</tspan></text>
-  <g
-     id="g16"
-     transform="translate(-23.490435,-2.4401928)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-23"
-       cx="106.64082"
-       cy="173.59946"
-       r="39.749554" />
-    <text
-       xml:space="preserve"
-       style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="106.65547"
-       y="180.8602"
-       id="text16-4"><tspan
-         sodipodi:role="line"
-         id="tspan16-1"
-         x="106.65547"
-         y="180.8602"
-         style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1">CGS</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="112.31075"
-       y="113.55469"
-       id="text16-4-1"><tspan
-         sodipodi:role="line"
-         id="tspan16-1-7"
-         x="112.31075"
-         y="113.55469"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1">sync_request &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="112.31075"
-         y="123.55469"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan27">!disabled</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="62.310749"
-       y="8.3073807"
-       id="text16-4-1-2"><tspan
-         sodipodi:role="line"
-         x="62.310749"
-         y="8.3073807"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan27-3">reset</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="23.310747"
-       y="223.1875"
-       id="text16-4-1-5"><tspan
-         sodipodi:role="line"
-         x="23.310747"
-         y="223.1875"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan27-9">!continuous_cgs &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="23.310747"
-         y="233.1875"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan28">!sync_request &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="23.310747"
-         y="243.1875"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan29">skip_ilas</tspan></text>
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-       d="M 50.973737,2.7914934 74.135517,21.333134"
-       id="path26" />
-    <text
-       xml:space="preserve"
-       style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="152.30223"
-       y="148.4375"
-       id="text16-4-1-5-2"><tspan
-         sodipodi:role="line"
-         x="152.30223"
-         y="148.4375"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan27-9-8">!continuous_cgs &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="152.30223"
-         y="158.4375"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan28-0">!sync_request &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="152.30223"
-         y="168.4375"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan29-6">!skip_ilas</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="158.62766"
-       y="268.6875"
-       id="text16-4-1-5-1"><tspan
-         sodipodi:role="line"
-         x="158.62766"
-         y="268.6875"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan29-4">ilas_mframes == 4 &amp;&amp;</tspan><tspan
-         sodipodi:role="line"
-         x="158.62766"
-         y="278.6875"
-         style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1"
-         id="tspan31">!continuous_ilas</tspan></text>
-  </g>
-  <g
-     id="g18"
-     transform="translate(-23.490435,-2.4401928)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-3"
-       cx="106.64082"
-       cy="283.88904"
-       r="39.749554" />
-    <text
-       xml:space="preserve"
-       style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="105.79121"
-       y="291.15955"
-       id="text16-8"><tspan
-         sodipodi:role="line"
-         id="tspan16-2"
-         x="105.79121"
-         y="291.15955"
-         style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1">DATA</tspan></text>
-  </g>
-  <g
-     id="g19"
-     transform="translate(-114.5994,-44.892101)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-9"
-       cx="282"
-       cy="256"
-       r="39.749554" />
-    <text
-       xml:space="preserve"
-       style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="281.90723"
-       y="263.27051"
-       id="text16-0"><tspan
-         sodipodi:role="line"
-         id="tspan16-8"
-         x="281.90723"
-         y="263.27051"
-         style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1">ILAS</tspan></text>
-  </g>
+       style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, ';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">WAIT</tspan></text>
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
+     id="path16-23"
+     cx="83.150391"
+     cy="171.15927"
+     r="39.749554" />
+  <text
+     xml:space="preserve"
+     style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+     x="83.165039"
+     y="178.42001"
+     id="text16-4"><tspan
+       id="tspan16-1"
+       x="83.165039"
+       y="178.42001"
+       style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, ';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">CGS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     x="88.82032"
+     y="111.11449"
+     id="text16-4-1"><tspan
+       id="tspan16-1-7"
+       x="88.82032"
+       y="111.11449"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none">sync_request &amp;&amp;</tspan><tspan
+       x="88.82032"
+       y="121.11449"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan27">!disabled</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     x="38.820312"
+     y="5.867188"
+     id="text16-4-1-2"><tspan
+       x="38.820312"
+       y="5.867188"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan27-3">reset</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     x="-0.17968786"
+     y="220.74731"
+     id="text16-4-1-5"><tspan
+       x="-0.17968786"
+       y="220.74731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan27-9">!continuous_cgs &amp;&amp;</tspan><tspan
+       x="-0.17968786"
+       y="230.74731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan28">!sync_request &amp;&amp;</tspan><tspan
+       x="-0.17968786"
+       y="240.74731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan29">skip_ilas</tspan></text>
+  <path
+     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
+     d="M 27.483302,0.3513006 50.645082,18.892941"
+     id="path26" />
+  <text
+     xml:space="preserve"
+     style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     x="128.8118"
+     y="145.99731"
+     id="text16-4-1-5-2"><tspan
+       x="128.8118"
+       y="145.99731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan27-9-8">!continuous_cgs &amp;&amp;</tspan><tspan
+       x="128.8118"
+       y="155.99731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan28-0">!sync_request &amp;&amp;</tspan><tspan
+       x="128.8118"
+       y="165.99731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan29-6">!skip_ilas</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:8px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
+     x="135.13722"
+     y="266.24731"
+     id="text16-4-1-5-1"><tspan
+       x="135.13722"
+       y="266.24731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan29-4">ilas_mframes == 4 &amp;&amp;</tspan><tspan
+       x="135.13722"
+       y="276.24731"
+       style="font-size:8px;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       id="tspan31">!continuous_ilas</tspan></text>
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
+     id="path16-3"
+     cx="83.150391"
+     cy="281.44885"
+     r="39.749554" />
+  <text
+     xml:space="preserve"
+     style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+     x="82.300774"
+     y="288.71936"
+     id="text16-8"><tspan
+       id="tspan16-2"
+       x="82.300774"
+       y="288.71936"
+       style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, ';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">DATA</tspan></text>
+  <circle
+     style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
+     id="path16-9"
+     cx="167.4006"
+     cy="211.10789"
+     r="39.749554" />
+  <text
+     xml:space="preserve"
+     style="font-size:20px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
+     x="167.30783"
+     y="218.3784"
+     id="text16-0"><tspan
+       id="tspan16-8"
+       x="167.30783"
+       y="218.3784"
+       style="font-size:20px;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, ';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">ILAS</tspan></text>
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
      d="m 83.556445,99.554947 -6.7e-4,28.289283"
-     id="path21"
-     sodipodi:nodetypes="cc" />
+     id="path21" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
      d="m 83.556445,211.15927 -6.7e-4,27.0607"
-     id="path22"
-     sodipodi:nodetypes="cc" />
+     id="path22" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
      d="m 122.73034,173.80092 10.58059,10.58059"
-     id="path23"
-     sodipodi:nodetypes="cc" />
+     id="path23" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.9;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker25)"
      d="m 122.28767,263.39857 20.79596,-20.79596"
-     id="path24"
-     sodipodi:nodetypes="cc" />
+     id="path24" />
 </svg>

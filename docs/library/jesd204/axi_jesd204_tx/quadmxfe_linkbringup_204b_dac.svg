@@ -3,9 +3,9 @@
 
 <svg
    id="svgcontent_0"
-   height="162.98557"
-   width="700"
-   viewBox="0 0 699.99999 162.98556"
+   height="167.5809"
+   width="715.8313"
+   viewBox="0 0 715.83129 167.5809"
    overflow="hidden"
    class="WaveDrom"
    version="1.1"
@@ -17,7 +17,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview1010"
+     id="namedview1"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -25,13 +25,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.44391893"
-     inkscape:cx="1180.3957"
-     inkscape:cy="-104.74886"
-     inkscape:window-width="1920"
-     inkscape:window-height="1121"
-     inkscape:window-x="2391"
-     inkscape:window-y="-9"
+     inkscape:zoom="2.3371429"
+     inkscape:cx="263.56968"
+     inkscape:cy="147.83007"
+     inkscape:window-width="2400"
+     inkscape:window-height="1271"
+     inkscape:window-x="-9"
+     inkscape:window-y="140"
      inkscape:window-maximized="1"
      inkscape:current-layer="svgcontent_0" />
   <style
@@ -45,12 +45,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -64,12 +61,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -83,12 +77,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3946,12 +3937,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3965,12 +3953,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3984,12 +3969,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -4003,12 +3985,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -4018,14 +3997,21 @@
     </marker>
   </defs>
   <rect
+     style="fill:#ffffff;stroke-width:1.33417;stroke-linejoin:round"
+     id="rect2"
+     width="700"
+     height="162.98557"
+     x="0"
+     y="4.595335" />
+  <rect
      width="397.57529"
      height="123.57069"
      style="fill:#ffffff;stroke:none;stroke-width:0.537264"
      id="rect789"
-     x="302.42471"
-     y="18.608566" />
+     x="318.25601"
+     y="23.203901" />
   <g
-     transform="matrix(0.5372639,0,0,0.5372639,388.65557,29.622477)"
+     transform="matrix(0.5372639,0,0,0.5372639,404.48687,34.217812)"
      id="lanes_0">
     <g
        id="gmarks_0">
@@ -4076,49 +4062,64 @@
          transform="translate(2)"><text
            x="0"
            y="-5"
-           id="text789">0</text><text
+           id="text789"
+           style="stroke:none">0</text><text
            x="40"
            y="-5"
-           id="text790">1</text><text
+           id="text790"
+           style="stroke:none">1</text><text
            x="80"
            y="-5"
-           id="text791">2</text><text
+           id="text791"
+           style="stroke:none">2</text><text
            x="120"
            y="-5"
-           id="text792">3</text><text
+           id="text792"
+           style="stroke:none">3</text><text
            x="160"
            y="-5"
-           id="text793">4</text><text
+           id="text793"
+           style="stroke:none">4</text><text
            x="200"
            y="-5"
-           id="text794">5</text><text
+           id="text794"
+           style="stroke:none">5</text><text
            x="240"
            y="-5"
-           id="text795">6</text><text
+           id="text795"
+           style="stroke:none">6</text><text
            x="280"
            y="-5"
-           id="text796">7</text><text
+           id="text796"
+           style="stroke:none">7</text><text
            x="320"
            y="-5"
-           id="text797">8</text><text
+           id="text797"
+           style="stroke:none">8</text><text
            x="360"
            y="-5"
-           id="text798">9</text><text
+           id="text798"
+           style="stroke:none">9</text><text
            x="400"
            y="-5"
-           id="text799">10</text><text
+           id="text799"
+           style="stroke:none">10</text><text
            x="440"
            y="-5"
-           id="text800">11</text><text
+           id="text800"
+           style="stroke:none">11</text><text
            x="480"
            y="-5"
-           id="text801">12</text><text
+           id="text801"
+           style="stroke:none">12</text><text
            x="520"
            y="-5"
-           id="text802">13</text><text
+           id="text802"
+           style="stroke:none">13</text><text
            x="560"
            y="-5"
-           id="text803">14</text></g>
+           id="text803"
+           style="stroke:none">14</text></g>
     </g>
     <g
        transform="translate(0,5)"
@@ -4129,8 +4130,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text804"><tspan
-           id="tspan803">SYNC_OUT0</tspan></text>
+         id="text804"
+         style="stroke:none"><tspan
+           id="tspan803"
+           style="stroke:none">SYNC_OUT0</tspan></text>
       <g
          id="wavelane_draw_0_0">
         <use
@@ -4255,8 +4258,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text831"><tspan
-           id="tspan831">SYNC_OUT1</tspan></text>
+         id="text831"
+         style="stroke:none"><tspan
+           id="tspan831"
+           style="stroke:none">SYNC_OUT1</tspan></text>
       <g
          id="wavelane_draw_1_0">
         <use
@@ -4381,8 +4386,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text859"><tspan
-           id="tspan859">SYNC_OUT2</tspan></text>
+         id="text859"
+         style="stroke:none"><tspan
+           id="tspan859"
+           style="stroke:none">SYNC_OUT2</tspan></text>
       <g
          id="wavelane_draw_2_0">
         <use
@@ -4507,8 +4514,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text887"><tspan
-           id="tspan887">SYNC_OUT3</tspan></text>
+         id="text887"
+         style="stroke:none"><tspan
+           id="tspan887"
+           style="stroke:none">SYNC_OUT3</tspan></text>
       <g
          id="wavelane_draw_3_0">
         <use
@@ -4633,8 +4642,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text915"><tspan
-           id="tspan915">SERDIN0,1,2,3[3..0]</tspan></text>
+         id="text915"
+         style="stroke:none"><tspan
+           id="tspan915"
+           style="stroke:none">SERDIN0,1,2,3[3..0]</tspan></text>
       <g
          id="wavelane_draw_4_0">
         <use
@@ -4753,22 +4764,28 @@
            y="15"
            text-anchor="middle"
            xml:space="preserve"
-           id="text943"><tspan
-             id="tspan943">CGS</tspan></text>
+           id="text943"
+           style="stroke:none"><tspan
+             id="tspan943"
+             style="stroke:none">CGS</tspan></text>
         <text
            x="446"
            y="15"
            text-anchor="middle"
            xml:space="preserve"
-           id="text944"><tspan
-             id="tspan944">ILAS</tspan></text>
+           id="text944"
+           style="stroke:none"><tspan
+             id="tspan944"
+             style="stroke:none">ILAS</tspan></text>
         <text
            x="546"
            y="15"
            text-anchor="middle"
            xml:space="preserve"
-           id="text945"><tspan
-             id="tspan945">DATA</tspan></text>
+           id="text945"
+           style="stroke:none"><tspan
+             id="tspan945"
+             style="stroke:none">DATA</tspan></text>
       </g>
     </g>
     <g
@@ -4780,8 +4797,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text946"><tspan
-           id="tspan946">LMFC</tspan></text>
+         id="text946"
+         style="stroke:none"><tspan
+           id="tspan946"
+           style="stroke:none">LMFC</tspan></text>
       <g
          transform="translate(10)"
          id="wavelane_draw_5_0">
@@ -4907,8 +4926,10 @@
          class="info"
          text-anchor="end"
          xml:space="preserve"
-         id="text973"><tspan
-           id="tspan973">SYSREF</tspan></text>
+         id="text973"
+         style="stroke:none"><tspan
+           id="tspan973"
+           style="stroke:none">SYSREF</tspan></text>
       <g
          id="wavelane_draw_6_0">
         <use
@@ -5039,9 +5060,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1001"><tspan
-             id="tspan1001">1</tspan></text>
+             id="tspan1001"
+             style="stroke:none">1</tspan></text>
       </g>
       <g
          transform="translate(86,15)"
@@ -5056,9 +5078,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1002"><tspan
-             id="tspan1002">2</tspan></text>
+             id="tspan1002"
+             style="stroke:none">2</tspan></text>
       </g>
       <g
          transform="translate(126,15)"
@@ -5073,9 +5096,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1003"><tspan
-             id="tspan1003">3</tspan></text>
+             id="tspan1003"
+             style="stroke:none">3</tspan></text>
       </g>
       <g
          transform="translate(166,15)"
@@ -5090,9 +5114,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1004"><tspan
-             id="tspan1004">4</tspan></text>
+             id="tspan1004"
+             style="stroke:none">4</tspan></text>
       </g>
       <g
          transform="translate(206,15)"
@@ -5107,9 +5132,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1005"><tspan
-             id="tspan1005">5</tspan></text>
+             id="tspan1005"
+             style="stroke:none">5</tspan></text>
       </g>
       <g
          transform="translate(134,185)"
@@ -5124,9 +5150,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1006"><tspan
-             id="tspan1006">6</tspan></text>
+             id="tspan1006"
+             style="stroke:none">6</tspan></text>
       </g>
       <g
          transform="translate(176,165)"
@@ -5141,41 +5168,43 @@
         <text
            text-anchor="middle"
            y="-71"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1007"
            x="16"><tspan
-             id="tspan1007">7</tspan></text>
+             id="tspan1007"
+             style="stroke:none">7</tspan></text>
         <text
            text-anchor="middle"
            y="-62.728031"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none"
            id="text1007-1"
            x="63.037842"><tspan
-             id="tspan1007-4">7</tspan></text>
+             id="tspan1007-4"
+             style="stroke:none">7</tspan></text>
         <text
            text-anchor="middle"
            y="-59.728031"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none"
            id="text1007-3"
            x="107.03784"><tspan
-             id="tspan1007-1">7</tspan></text>
+             id="tspan1007-1"
+             style="stroke:none">7</tspan></text>
         <text
            text-anchor="middle"
            y="-41.728031"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none"
            id="text1007-19"
            x="150.03784"><tspan
-             id="tspan1007-7">7</tspan></text>
+             id="tspan1007-7"
+             style="stroke:none">7</tspan></text>
         <path
            style="fill:none;stroke:#ff0000;stroke-width:1;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle)"
            d="m 94,-10 c 0,0 -5.120803,-28.182762 0,-40 l 13,-30"
-           id="path1014"
-           sodipodi:nodetypes="csc" />
+           id="path1014" />
         <path
            style="fill:none;stroke:#ff0000;stroke-width:1;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker1016)"
            d="m 134,-10 c 0,0 -2.54587,-16.033776 0,-23.410198 C 136.29208,-40.051306 144,-50 144,-50"
-           id="path1015"
-           sodipodi:nodetypes="csc" />
+           id="path1015" />
       </g>
       <g
          transform="translate(344,153)"
@@ -5190,9 +5219,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-size:11px"
+           style="font-size:11px;stroke:none"
            id="text1008"><tspan
-             id="tspan1008">8</tspan></text>
+             id="tspan1008"
+             style="stroke:none">8</tspan></text>
       </g>
       <g
          transform="translate(368.5,103.5)"
@@ -5207,9 +5237,10 @@
         <text
            text-anchor="middle"
            y="3"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none"
            id="text1008-6"><tspan
-             id="tspan1008-5">8</tspan></text>
+             id="tspan1008-5"
+             style="stroke:none">8</tspan></text>
       </g>
     </g>
     <g
@@ -5241,77 +5272,72 @@
   </g>
   <g
      id="groups_0"
-     transform="translate(562.89788,34.635804)">
+     transform="translate(578.72918,39.231139)">
     <g
        id="g1010" />
   </g>
   <path
      style="fill:none;stroke:#ff0000;stroke-width:0.537264;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle)"
-     d="m 490.73571,112.89838 c 0,0 -3.79516,-22.957824 -2.70833,-34.709612 1.14747,-12.407428 9.69276,-35.134693 9.69276,-35.134693"
-     id="path1010"
-     sodipodi:nodetypes="csc" />
+     d="m 506.56701,117.49372 c 0,0 -3.79516,-22.957829 -2.70833,-34.709617 1.14747,-12.407428 9.69276,-35.134693 9.69276,-35.134693"
+     id="path1010" />
   <path
      style="fill:none;stroke:#ff0000;stroke-width:0.537264;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker1013)"
-     d="m 512.22627,112.89838 c 0,0 -1.01606,-20.035291 0.26863,-29.917487 1.04346,-8.026599 6.7158,-23.808903 6.7158,-23.808903"
-     id="path1012"
-     sodipodi:nodetypes="csc" />
+     d="m 528.05757,117.49372 c 0,0 -1.01606,-20.035296 0.26863,-29.917492 1.04346,-8.026599 6.7158,-23.808903 6.7158,-23.808903"
+     id="path1012" />
   <path
      style="fill:none;stroke:#ff0000;stroke-width:0.537264;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle)"
-     d="m 576.69795,112.89838 c 0,0 0.7794,-5.87342 2.63753,-7.96277 1.45674,-1.63804 2.7351,-2.78251 2.7351,-2.78251"
-     id="path1017"
-     sodipodi:nodetypes="csc" />
+     d="m 592.52925,117.49372 c 0,0 0.7794,-5.87342 2.63753,-7.96277 1.45674,-1.63804 2.7351,-2.78251 2.7351,-2.78251"
+     id="path1017" />
   <ellipse
      style="fill:#ffff00;fill-opacity:0.294278;stroke:#000000;stroke-width:0.464922;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      id="path1018"
-     cx="570.60614"
-     cy="59.171989"
+     cx="586.43744"
+     cy="63.767326"
      rx="1.770205"
      ry="29.317053" />
   <path
      style="fill:none;fill-opacity:0.294278;stroke:#ff0000;stroke-width:0.537264;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle)"
-     d="m 572.46726,77.10523 c 0,0 9.25631,4.207255 11.48375,8.392691 2.18908,4.113496 0.53726,13.968861 0.53726,13.968861"
-     id="path1019"
-     sodipodi:nodetypes="csc" />
+     d="m 588.29856,81.700565 c 0,0 9.25631,4.207255 11.48375,8.392691 2.18908,4.113496 0.53726,13.968864 0.53726,13.968864"
+     id="path1019" />
   <path
      style="fill:none;fill-opacity:0.294278;stroke:#ff0000;stroke-width:0.537264;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Triangle)"
-     d="m 463.87252,129.0163 3.85979,-13.4316"
-     id="path1020"
-     sodipodi:nodetypes="cc" />
+     d="m 479.70382,133.61164 3.85979,-13.4316"
+     id="path1020" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 81.49278,20.574669 h 101.5302"
+     d="M 97.324076,25.170004 H 198.85428"
      id="path5-3" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 182.82355,24.606163 81.49278,24.635874"
+     d="M 198.65485,29.201498 97.324076,29.231209"
      id="path6-64" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 81.492726,55.533735 H 183.02287"
+     d="M 97.324022,60.12907 H 198.85417"
      id="path5-5" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 182.82349,59.565229 81.492726,59.59494"
+     d="M 198.65479,64.160564 97.324022,64.190275"
      id="path6-6" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 81.592496,89.63005 H 183.1227"
+     d="M 97.423792,94.225385 H 198.954"
      id="path5-9" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 182.92326,93.661544 81.592496,93.691254"
+     d="M 198.75456,98.256879 97.423792,98.286589"
      id="path6-5" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 81.49278,124.40408 h 101.5302"
+     d="M 97.324076,128.99942 H 198.85428"
      id="path5-8" />
   <path
      style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 182.82355,128.43558 -101.33077,0.0297"
+     d="m 198.65485,133.03092 -101.330774,0.0297"
      id="path6-55" />
   <g
      id="g4"
-     transform="matrix(2.0306037,0,0,2.0306037,-80.955516,-30.190425)">
+     transform="matrix(2.0306037,0,0,2.0306037,-65.12422,-25.59509)">
     <rect
        style="fill:#ffe6cc;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
        id="rect1-3"
@@ -5321,261 +5347,322 @@
        y="25" />
     <text
        xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.8945px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
        x="59.641708"
        y="58.270561"
        id="text2"><tspan
-         sodipodi:role="line"
          id="tspan2"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.8945px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
          x="59.641708"
          y="58.270561">Link Layer</tspan><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.8945px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
          x="59.641708"
          y="67.090012"
          id="tspan3">TX</tspan></text>
   </g>
-  <g
-     id="g5"
-     transform="matrix(2.0306037,0,0,2.0306037,-80.955516,-30.190425)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7">JRX0</tspan></text>
-  </g>
-  <g
-     id="g5-7"
-     transform="matrix(2.0306037,0,0,2.0306037,-80.95551,38.514733)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-7"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-5"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-7">JRX2</tspan></text>
-  </g>
-  <g
-     id="g5-1"
-     transform="matrix(2.0306037,0,0,2.0306037,-80.95551,4.6994182)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-1"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-7"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-4">JRX1</tspan></text>
-  </g>
-  <g
-     id="g5-71"
-     transform="matrix(2.0306037,0,0,2.0306037,-80.95551,73.404572)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-8"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-8"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-9">JRX3</tspan></text>
-  </g>
+  <rect
+     style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.398815;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="rect3"
+     width="87.503754"
+     height="30.459055"
+     x="198.85426"
+     y="25.170002" />
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.30856"
-     y="34.788891"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     x="242.92447"
+     y="45.604286"
+     id="text2-2"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.537263;stroke-dasharray:none"
+       x="242.92447"
+       y="45.604286"
+       id="tspan3-7">JRX0</tspan></text>
+  <rect
+     style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.398815;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="rect3-7"
+     width="87.503754"
+     height="30.459055"
+     x="198.85426"
+     y="93.87516" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     x="242.92447"
+     y="114.30945"
+     id="text2-2-5"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.537263;stroke-dasharray:none"
+       x="242.92447"
+       y="114.30945"
+       id="tspan3-7-7">JRX2</tspan></text>
+  <rect
+     style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.398815;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="rect3-1"
+     width="87.503754"
+     height="30.459055"
+     x="198.85426"
+     y="60.059845" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     x="242.92447"
+     y="80.494133"
+     id="text2-2-7"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.537263;stroke-dasharray:none"
+       x="242.92447"
+       y="80.494133"
+       id="tspan3-7-4">JRX1</tspan></text>
+  <rect
+     style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.398815;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     id="rect3-8"
+     width="87.503754"
+     height="30.459055"
+     x="198.85426"
+     y="128.765" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     x="242.92447"
+     y="149.19928"
+     id="text2-2-8"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.537263;stroke-dasharray:none"
+       x="242.92447"
+       y="149.19928"
+       id="tspan3-7-9">JRX3</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="150.13986"
+     y="39.384224"
      id="text6"><tspan
-       sodipodi:role="line"
        id="tspan6"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.30856"
-       y="34.788891">SERDIN0[3:0]</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="150.13986"
+       y="39.384224">SERDIN0[3:0]</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.05396"
-     y="49.582645"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="149.88525"
+     y="54.177979"
      id="text6-7"><tspan
-       sodipodi:role="line"
        id="tspan6-7"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.05396"
-       y="49.582645">SYNC_OUT0</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="149.88525"
+       y="54.177979">SYNC_OUT0</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.30856"
-     y="69.305855"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="150.13986"
+     y="73.901192"
      id="text6-6"><tspan
-       sodipodi:role="line"
        id="tspan6-0"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.30856"
-       y="69.305855">SERDIN1[3:0]</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="150.13986"
+       y="73.901192">SERDIN1[3:0]</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.30856"
-     y="103.82281"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="150.13986"
+     y="108.41814"
      id="text6-9"><tspan
-       sodipodi:role="line"
        id="tspan6-05"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.30856"
-       y="103.82281">SERDIN2[3:0]</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="150.13986"
+       y="108.41814">SERDIN2[3:0]</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.30856"
-     y="138.33977"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="150.13986"
+     y="142.9351"
      id="text6-64"><tspan
-       sodipodi:role="line"
        id="tspan6-8"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.30856"
-       y="138.33977">SERDIN3[3:0]</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="150.13986"
+       y="142.9351">SERDIN3[3:0]</tspan></text>
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 183.02298,46.972513 -18.27546,5e-6"
+     d="m 198.85428,51.567848 -18.27546,5e-6"
      id="path7-4" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9);paint-order:markers stroke fill"
-     d="M 101.79883,46.972518 H 83.523369"
-     id="path8-7"
-     sodipodi:nodetypes="cc" />
+     d="M 117.63013,51.567853 H 99.354665"
+     id="path8-7" />
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.05396"
-     y="84.371536"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="149.88525"
+     y="88.966873"
      id="text6-7-3"><tspan
-       sodipodi:role="line"
        id="tspan6-7-9"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.05396"
-       y="84.371536">SYNC_OUT1</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="149.88525"
+       y="88.966873">SYNC_OUT1</tspan></text>
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 183.02298,81.761406 -18.27546,6e-6"
+     d="m 198.85428,86.356741 -18.27546,6e-6"
      id="path7-0" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-8);paint-order:markers stroke fill"
-     d="M 101.79883,81.761412 H 83.523369"
-     id="path8-5"
-     sodipodi:nodetypes="cc" />
+     d="M 117.63013,86.356747 H 99.354665"
+     id="path8-5" />
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="133.81615"
-     y="118.69871"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="149.64745"
+     y="123.29404"
      id="text6-7-6"><tspan
-       sodipodi:role="line"
        id="tspan6-7-3"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="133.81615"
-       y="118.69871">SYNC_OUT2</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="149.64745"
+       y="123.29404">SYNC_OUT2</tspan></text>
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 182.78519,116.08858 H 164.50978"
+     d="M 198.61649,120.68392 H 180.34108"
      id="path7-7" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers stroke fill"
-     d="M 101.56104,116.08858 H 83.285576"
-     id="path8-56"
-     sodipodi:nodetypes="cc" />
+     d="M 117.39234,120.68392 H 99.116872"
+     id="path8-56" />
   <text
      xml:space="preserve"
-     style="font-size:8.59622px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="134.05396"
-     y="153.14343"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="149.88525"
+     y="157.73877"
      id="text6-7-9"><tspan
-       sodipodi:role="line"
        id="tspan6-7-5"
-       style="font-size:8.59622px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-opacity:1"
-       x="134.05396"
-       y="153.14343">SYNC_OUT3</tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-opacity:1"
+       x="149.88525"
+       y="157.73877">SYNC_OUT3</tspan></text>
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 183.02298,150.5333 H 164.74752"
+     d="M 198.85428,155.12864 H 180.57882"
      id="path7-3" />
   <path
      style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-7);paint-order:markers stroke fill"
-     d="M 101.79883,150.5333 H 83.523422"
-     id="path8-4"
-     sodipodi:nodetypes="cc" />
-  <g
-     id="g8"
-     transform="matrix(2.0306037,0,0,2.0306037,-86.062709,-29.711529)">
-    <text
-       xml:space="preserve"
-       style="font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       x="107.51099"
-       y="18.921003"
-       id="text8"><tspan
-         sodipodi:role="line"
-         id="tspan8"
-         style="stroke-width:0.264583"
-         x="107.51099"
-         y="18.921003">DATA DIRECTION</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       id="rect8"
-       width="44.96978"
-       height="5.2358375"
-       x="85.030228"
-       y="14.764161" />
-  </g>
+     d="M 117.63013,155.12864 H 99.354718"
+     id="path8-4" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     x="148.0808"
+     y="13.304866"
+     id="text8"><tspan
+       id="tspan8"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.537263"
+       x="148.0808"
+       y="13.304866">DATA DIRECTION</tspan></text>
+  <rect
+     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+     id="rect8"
+     width="91.315804"
+     height="10.631911"
+     x="102.43128"
+     y="4.863966" />
   <path
      style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 61.186729,6.3604394 H 86.854942"
+     d="M 77.018025,10.955774 H 102.68624"
      id="path9-3" />
   <path
      style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.537263;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-7);paint-order:markers stroke fill"
-     d="m 178.18443,6.3226913 17.80509,0.03777"
+     d="m 194.01573,10.918026 17.80509,0.03777"
      id="path10-8" />
+  <text
+     x="419.93686"
+     y="2.8691406"
+     class="info"
+     text-anchor="end"
+     xml:space="preserve"
+     id="text804-5-4"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+       id="tspan792"
+       x="419.93686"
+       y="2.8691406"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">Tx</tspan><tspan
+       id="tspan793"
+       x="419.93686"
+       y="10.77573"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">Link Layer</tspan><tspan
+       x="419.93686"
+       y="18.68232"
+       id="tspan794"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">bringup</tspan></text>
+  <text
+     x="443.66891"
+     y="2.8750005"
+     class="info"
+     text-anchor="end"
+     xml:space="preserve"
+     id="text804-5-4-5"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+       x="443.66891"
+       y="2.8750005"
+       id="tspan794-1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE0</tspan><tspan
+       x="443.66891"
+       y="10.78159"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan796">JRx</tspan><tspan
+       x="443.66891"
+       y="18.688179"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan797">bringup</tspan></text>
+  <text
+     x="465.21716"
+     y="2.8750005"
+     class="info"
+     text-anchor="end"
+     xml:space="preserve"
+     id="text804-5-4-5-8"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+       x="465.21716"
+       y="2.8750005"
+       id="tspan794-1-4"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE1</tspan><tspan
+       x="465.21716"
+       y="10.78159"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan796-9">JRx</tspan><tspan
+       x="465.21716"
+       y="18.688179"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan797-9">bringup</tspan></text>
+  <text
+     x="489.17245"
+     y="2.875"
+     class="info"
+     text-anchor="end"
+     xml:space="preserve"
+     id="text804-5-4-5-4"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+       x="489.17245"
+       y="2.875"
+       id="tspan794-1-8"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE2</tspan><tspan
+       x="489.17245"
+       y="10.78159"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan796-2">JRx</tspan><tspan
+       x="489.17245"
+       y="18.688179"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan797-0">bringup</tspan></text>
+  <text
+     x="508.2406"
+     y="2.8750005"
+     class="info"
+     text-anchor="end"
+     xml:space="preserve"
+     id="text804-5-4-5-3"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+       x="508.2406"
+       y="2.8750005"
+       id="tspan794-1-3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE3</tspan><tspan
+       x="508.2406"
+       y="10.78159"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan796-4">JRx</tspan><tspan
+       x="508.2406"
+       y="18.688179"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+       id="tspan797-4">bringup</tspan></text>
 </svg>

@@ -3,9 +3,9 @@
 
 <svg
    id="svgcontent_0"
-   height="167.89917"
-   width="700"
-   viewBox="0 0 699.99999 167.89917"
+   height="239.85594"
+   width="960"
+   viewBox="0 0 959.99999 239.85595"
    overflow="hidden"
    class="WaveDrom"
    version="1.1"
@@ -17,7 +17,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview1010"
+     id="namedview1"
      pagecolor="#ffffff"
      bordercolor="#000000"
      borderopacity="0.25"
@@ -25,16 +25,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2"
-     inkscape:cx="313"
-     inkscape:cy="169.25"
-     inkscape:window-width="1920"
-     inkscape:window-height="1121"
-     inkscape:window-x="2391"
-     inkscape:window-y="-9"
+     showguides="true"
+     inkscape:zoom="0.82630475"
+     inkscape:cx="861.66756"
+     inkscape:cy="166.4035"
+     inkscape:window-width="2400"
+     inkscape:window-height="1271"
+     inkscape:window-x="-9"
+     inkscape:window-y="140"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svgcontent_0"
-     showguides="true" />
+     inkscape:current-layer="svgcontent_0" />
   <style
      type="text/css"
      id="style1">text{font-size:11pt;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;fill-opacity:1;font-family:Helvetica}.h1{font-size:33pt;font-weight:bold}.h2{font-size:27pt;font-weight:bold}.h3{font-size:20pt;font-weight:bold}.h4{font-size:14pt;font-weight:bold}.h5{font-size:11pt;font-weight:bold}.h6{font-size:8pt;font-weight:bold}.muted{fill:#aaa}.warning{fill:#f6b900}.error{fill:#f60000}.info{fill:#0041c4}.success{fill:#00ab00}.s1{fill:none;stroke:#000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none}.s2{fill:none;stroke:#000;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none}.s3{color:#000;fill:none;stroke:#000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 3;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible}.s4{color:#000;fill:none;stroke:#000;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible}.s5{fill:#fff;stroke:none}.s6{fill:#000;fill-opacity:1;stroke:none}.s7{color:#000;fill:#fff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s8{color:#000;fill:#ffffb4;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s9{color:#000;fill:#ffe0b9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s10{color:#000;fill:#b9e0ff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s11{color:#000;fill:#ccfdfe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s12{color:#000;fill:#cdfdc5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s13{color:#000;fill:#f0c1fb;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s14{color:#000;fill:#f5c2c0;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible}.s15{fill:#0041c4;fill-opacity:1;stroke:none}.s16{fill:none;stroke:#0041c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none}</style>
@@ -3890,12 +3890,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3909,12 +3906,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3928,12 +3922,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3947,12 +3938,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -3960,1430 +3948,68 @@
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path135-3" />
     </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-9-4"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1-7" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-9-3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Triangle-9-31"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="1"
+       markerHeight="1"
+       viewBox="0 0 1 1"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1-4" />
+    </marker>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:1.33417;stroke-linejoin:round"
+     id="rect2"
+     width="960"
+     height="239.85594"
+     x="0"
+     y="0" />
   <g
      id="groups_0"
      transform="translate(562.89788,34.635804)">
     <g
        id="g1010" />
   </g>
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 83.949581,21.194943 H 188.54066"
-     id="path5-3" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.33522,25.347977 83.949581,25.378583"
-     id="path6-64" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 83.949526,57.207938 H 188.54055"
-     id="path5-5" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.33516,61.360971 83.949526,61.391578"
-     id="path6-6" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 84.052304,92.332171 H 188.64339"
-     id="path5-9" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.43794,96.485204 84.052304,96.51581"
-     id="path6-5" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 83.949581,128.15456 H 188.54066"
-     id="path5-8" />
-  <path
-     style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.33522,132.30759 83.949581,132.3382"
-     id="path6-55" />
-  <g
-     id="g4"
-     transform="matrix(2.0918213,0,0,2.0918213,-83.396122,-31.10059)">
-    <rect
-       style="fill:#ffe6cc;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       id="rect1-3"
-       width="40"
-       height="70"
-       x="40"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       x="59.641708"
-       y="58.270561"
-       id="text2"><tspan
-         sodipodi:role="line"
-         id="tspan2"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
-         x="59.641708"
-         y="58.270561">Link Layer</tspan><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none;paint-order:markers stroke fill"
-         x="59.641708"
-         y="67.090012"
-         id="tspan3">RX</tspan></text>
-  </g>
-  <g
-     id="g5"
-     transform="matrix(2.0918213,0,0,2.0918213,-83.396122,-31.10059)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7">JTX0</tspan></text>
-  </g>
-  <g
-     id="g5-7"
-     transform="matrix(2.0918213,0,0,2.0918213,-83.396117,39.675855)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-7"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-5"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-7">JTX2</tspan></text>
-  </g>
-  <g
-     id="g5-1"
-     transform="matrix(2.0918213,0,0,2.0918213,-83.396117,4.841094)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-1"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-7"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-4">JTX1</tspan></text>
-  </g>
-  <g
-     id="g5-71"
-     transform="matrix(2.0918213,0,0,2.0918213,-83.396117,75.617536)">
-    <rect
-       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.196402;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       id="rect3-8"
-       width="43.092484"
-       height="15"
-       x="130"
-       y="25" />
-    <text
-       xml:space="preserve"
-       style="font-size:7.05556px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
-       x="151.703"
-       y="35.063156"
-       id="text2-2-8"><tspan
-         sodipodi:role="line"
-         style="text-align:center;text-anchor:middle;stroke-width:0.264583;stroke-dasharray:none"
-         x="151.703"
-         y="35.063156"
-         id="tspan3-7-9">JTX3</tspan></text>
-  </g>
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.35762"
-     y="35.837688"
-     id="text6"><tspan
-       sodipodi:role="line"
-       id="tspan6"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.35762"
-       y="35.837688">SERDOUT0[3:0]</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.09535"
-     y="51.077438"
-     id="text6-7"><tspan
-       sodipodi:role="line"
-       id="tspan6-7"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.09535"
-       y="51.077438">SYNC_IN0</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.35762"
-     y="71.395248"
-     id="text6-6"><tspan
-       sodipodi:role="line"
-       id="tspan6-0"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.35762"
-       y="71.395248">SERDOUT1[3:0]</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.35762"
-     y="106.9528"
-     id="text6-9"><tspan
-       sodipodi:role="line"
-       id="tspan6-05"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.35762"
-       y="106.9528">SERDOUT2[3:0]</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.35762"
-     y="142.51036"
-     id="text6-64"><tspan
-       sodipodi:role="line"
-       id="tspan6-8"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.35762"
-       y="142.51036">SERDOUT3[3:0]</tspan></text>
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 188.54066,48.388616 -18.82642,6e-6"
-     id="path7-4" />
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9);paint-order:markers stroke fill"
-     d="M 104.86781,48.388622 H 86.041387"
-     id="path8-7"
-     sodipodi:nodetypes="cc" />
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.09535"
-     y="86.915123"
-     id="text6-7-3"><tspan
-       sodipodi:role="line"
-       id="tspan6-7-9"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.09535"
-       y="86.915123">SYNC_IN1</tspan></text>
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="m 188.54066,84.226307 -18.82642,6e-6"
-     id="path7-0" />
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-8);paint-order:markers stroke fill"
-     d="M 104.86781,84.226313 H 86.041387"
-     id="path8-5"
-     sodipodi:nodetypes="cc" />
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="137.85037"
-     y="122.27718"
-     id="text6-7-6"><tspan
-       sodipodi:role="line"
-       id="tspan6-7-3"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="137.85037"
-       y="122.27718">SYNC_IN2</tspan></text>
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.2957,119.58836 H 169.46934"
-     id="path7-7" />
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-3);paint-order:markers stroke fill"
-     d="M 104.62285,119.58836 H 85.796425"
-     id="path8-56"
-     sodipodi:nodetypes="cc" />
-  <text
-     xml:space="preserve"
-     style="font-size:8.85538px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     x="138.09535"
-     y="157.76031"
-     id="text6-7-9"><tspan
-       sodipodi:role="line"
-       id="tspan6-7-5"
-       style="font-size:8.85538px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-opacity:1"
-       x="138.09535"
-       y="157.76031">SYNCIN3</tspan></text>
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 188.54066,155.0715 H 169.71424"
-     id="path7-3" />
-  <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-7);paint-order:markers stroke fill"
-     d="M 104.86781,155.0715 H 86.041443"
-     id="path8-4"
-     sodipodi:nodetypes="cc" />
-  <g
-     id="g8"
-     transform="matrix(2.0918213,0,0,2.0918213,-88.657284,-30.607257)">
-    <text
-       xml:space="preserve"
-       style="font-size:4.23333px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       x="104.83608"
-       y="18.921003"
-       id="text8"><tspan
-         sodipodi:role="line"
-         id="tspan8"
-         style="stroke-width:0.264583"
-         x="104.83608"
-         y="18.921003">DATA DIRECTION</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.264583;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-       id="rect8"
-       width="44.96978"
-       height="5.2358375"
-       x="-127.3251"
-       y="14.764161"
-       transform="scale(-1,1)" />
-  </g>
-  <path
-     style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
-     d="M 203.86349,6.5521908 H 177.42144"
-     id="path9-3" />
-  <path
-     style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.55346;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-7);paint-order:markers stroke fill"
-     d="M 83.338593,6.5133046 64.996728,6.5522129"
-     id="path10-8" />
-  <line
-     id="gmark_0_0"
-     x1="385.35739"
-     y1="30.377155"
-     x2="385.35739"
-     y2="110.35228"
-     style="stroke:#000000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32077;stroke-dashoffset:0" />
-  <line
-     id="gmark_1_0-8"
-     x1="407.49585"
-     y1="30.377155"
-     x2="407.49585"
-     y2="44.490414"
-     style="stroke:#000000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32077;stroke-dashoffset:0" />
-  <text
-     x="385.35739"
-     y="27.60985"
-     id="text789-9"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.553461">1</text>
-  <text
-     x="407.49585"
-     y="27.60985"
-     id="text790-7"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.553461">2</text>
-  <text
-     x="429.63428"
-     y="27.60985"
-     id="text791-7"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.553461">3</text>
-  <text
-     x="451.77274"
-     y="27.60985"
-     id="text792-3"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.553461">4</text>
-  <text
-     x="473.91116"
-     y="27.60985"
-     id="text793-6"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke-width:0.553461">5</text>
-  <text
-     x="378.71585"
-     y="41.446377"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan803-3"
-       style="stroke-width:0.553461">SERDOUT0[3:0]</tspan></text>
-  <text
-     x="382.91031"
-     y="7.0006185"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5-4"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.42769px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       sodipodi:role="line"
-       id="tspan792"
-       x="382.91031"
-       y="7.0006185"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">Rx</tspan><tspan
-       sodipodi:role="line"
-       id="tspan793"
-       x="382.91031"
-       y="12.535232"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">Link Layer</tspan><tspan
-       sodipodi:role="line"
-       x="382.91031"
-       y="18.069843"
-       id="tspan794"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">bringup</tspan></text>
-  <text
-     x="407.18271"
-     y="7.0071044"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5-4-5"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.42769px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       sodipodi:role="line"
-       x="407.18271"
-       y="7.0071044"
-       id="tspan794-1"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">MxFE0</tspan><tspan
-       sodipodi:role="line"
-       x="407.18271"
-       y="12.541718"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan796">Tx</tspan><tspan
-       sodipodi:role="line"
-       x="407.18271"
-       y="18.076328"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan797">bringup</tspan></text>
-  <text
-     x="425.55948"
-     y="7.0071044"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5-4-5-8"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.42769px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       sodipodi:role="line"
-       x="425.55948"
-       y="7.0071044"
-       id="tspan794-1-4"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">MxFE1</tspan><tspan
-       sodipodi:role="line"
-       x="425.55948"
-       y="12.541718"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan796-9">Tx</tspan><tspan
-       sodipodi:role="line"
-       x="425.55948"
-       y="18.076328"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan797-9">bringup</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use804-4"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,33.14446)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,33.14446)"
-     xlink:href="#000"
-     id="use805-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,33.14446)"
-     xlink:href="#0mv-2"
-     id="use806-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,33.14446)"
-     xlink:href="#vvv-2"
-     id="use807-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,33.14446)"
-     xlink:href="#vvv-2"
-     id="use808-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,33.14446)"
-     xlink:href="#vvv-2"
-     id="use809-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,33.14446)"
-     xlink:href="#vvv-2"
-     id="use810-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,33.14446)"
-     xlink:href="#vvv-2"
-     id="use811-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,33.14446)"
-     xlink:href="#vvv-2"
-     id="use812-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,33.14446)"
-     xlink:href="#vvv-2"
-     id="use813-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,33.14446)"
-     xlink:href="#vvv-2"
-     id="use814-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,33.14446)"
-     xlink:href="#vvv-2"
-     id="use815-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,33.14446)"
-     xlink:href="#vvv-2"
-     id="use816-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,33.14446)"
-     xlink:href="#vvv-2"
-     id="use817-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,33.14446)"
-     xlink:href="#vvv-2"
-     id="use818-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,33.14446)"
-     xlink:href="#vvv-2"
-     id="use819-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,33.14446)"
-     xlink:href="#vvv-2"
-     id="use820-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,33.14446)"
-     xlink:href="#vvv-2"
-     id="use821-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,33.14446)"
-     xlink:href="#vmv-2-2"
-     id="use822-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,33.14446)"
-     xlink:href="#vvv-2"
-     id="use823-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,33.14446)"
-     xlink:href="#vvv-2"
-     id="use824-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,33.14446)"
-     xlink:href="#vvv-2"
-     id="use825-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,33.14446)"
-     xlink:href="#vvv-2"
-     id="use826-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,33.14446)"
-     xlink:href="#vvv-2"
-     id="use827-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,33.14446)"
-     xlink:href="#vvv-2"
-     id="use828-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,33.14446)"
-     xlink:href="#vvv-2"
-     id="use829-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,33.14446)"
-     xlink:href="#vmv-2-2"
-     id="use830-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,33.14446)"
-     xlink:href="#vvv-2"
-     id="use831-5" />
-  <text
-     x="498.26346"
-     y="41.446377"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text831-7"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan831-2"
-       style="stroke-width:0.553461">CGS</tspan></text>
-  <text
-     x="631.09412"
-     y="41.446377"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text832"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan832"
-       style="stroke-width:0.553461">ILAS</tspan></text>
-  <text
-     x="686.44019"
-     y="41.446377"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text833"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan833"
-       style="stroke-width:0.553461">DATA</tspan></text>
-  <text
-     x="378.71585"
-     y="58.050209"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text834"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan834"
-       style="stroke-width:0.553461">SERDOUT1[3:0]</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use834-6"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,49.748292)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,49.748292)"
-     xlink:href="#000"
-     id="use835-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,49.748292)"
-     xlink:href="#000"
-     id="use836-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,49.748292)"
-     xlink:href="#000"
-     id="use837-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,49.748292)"
-     xlink:href="#0mv-2"
-     id="use838-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,49.748292)"
-     xlink:href="#vvv-2"
-     id="use839-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,49.748292)"
-     xlink:href="#vvv-2"
-     id="use840-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,49.748292)"
-     xlink:href="#vvv-2"
-     id="use841-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,49.748292)"
-     xlink:href="#vvv-2"
-     id="use842-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,49.748292)"
-     xlink:href="#vvv-2"
-     id="use843-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,49.748292)"
-     xlink:href="#vvv-2"
-     id="use844-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,49.748292)"
-     xlink:href="#vvv-2"
-     id="use845-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,49.748292)"
-     xlink:href="#vvv-2"
-     id="use846-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,49.748292)"
-     xlink:href="#vvv-2"
-     id="use847-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,49.748292)"
-     xlink:href="#vvv-2"
-     id="use848-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,49.748292)"
-     xlink:href="#vvv-2"
-     id="use849-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,49.748292)"
-     xlink:href="#vvv-2"
-     id="use850-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,49.748292)"
-     xlink:href="#vvv-2"
-     id="use851-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,49.748292)"
-     xlink:href="#vmv-2-2"
-     id="use852-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,49.748292)"
-     xlink:href="#vvv-2"
-     id="use853-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,49.748292)"
-     xlink:href="#vvv-2"
-     id="use854-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,49.748292)"
-     xlink:href="#vvv-2"
-     id="use855-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,49.748292)"
-     xlink:href="#vvv-2"
-     id="use856-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,49.748292)"
-     xlink:href="#vvv-2"
-     id="use857-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,49.748292)"
-     xlink:href="#vvv-2"
-     id="use858-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,49.748292)"
-     xlink:href="#vvv-2"
-     id="use859-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,49.748292)"
-     xlink:href="#vmv-2-2"
-     id="use860-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,49.748292)"
-     xlink:href="#vvv-2"
-     id="use861-0" />
-  <text
-     x="509.33267"
-     y="58.050209"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text861"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan861"
-       style="stroke-width:0.553461">CGS</tspan></text>
-  <text
-     x="631.09412"
-     y="58.050209"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text862"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan862"
-       style="stroke-width:0.553461">ILAS</tspan></text>
-  <text
-     x="686.44019"
-     y="58.050209"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text863"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan863"
-       style="stroke-width:0.553461">DATA</tspan></text>
-  <text
-     x="378.71585"
-     y="74.654037"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text864"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan864"
-       style="stroke-width:0.553461">SERDOUT2[3:0]</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use864-0"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,66.352122)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,66.352122)"
-     xlink:href="#000"
-     id="use865-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,66.352122)"
-     xlink:href="#000"
-     id="use866-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,66.352122)"
-     xlink:href="#000"
-     id="use867-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,66.352122)"
-     xlink:href="#000"
-     id="use868-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,66.352122)"
-     xlink:href="#000"
-     id="use869-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,66.352122)"
-     xlink:href="#0mv-2"
-     id="use870-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,66.352122)"
-     xlink:href="#vvv-2"
-     id="use871-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,66.352122)"
-     xlink:href="#vvv-2"
-     id="use872-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,66.352122)"
-     xlink:href="#vvv-2"
-     id="use873-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,66.352122)"
-     xlink:href="#vvv-2"
-     id="use874-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,66.352122)"
-     xlink:href="#vvv-2"
-     id="use875-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,66.352122)"
-     xlink:href="#vvv-2"
-     id="use876-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,66.352122)"
-     xlink:href="#vvv-2"
-     id="use877-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,66.352122)"
-     xlink:href="#vvv-2"
-     id="use878-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,66.352122)"
-     xlink:href="#vvv-2"
-     id="use879-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,66.352122)"
-     xlink:href="#vvv-2"
-     id="use880-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,66.352122)"
-     xlink:href="#vvv-2"
-     id="use881-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,66.352122)"
-     xlink:href="#vmv-2-2"
-     id="use882-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,66.352122)"
-     xlink:href="#vvv-2"
-     id="use883-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,66.352122)"
-     xlink:href="#vvv-2"
-     id="use884-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,66.352122)"
-     xlink:href="#vvv-2"
-     id="use885-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,66.352122)"
-     xlink:href="#vvv-2"
-     id="use886-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,66.352122)"
-     xlink:href="#vvv-2"
-     id="use887-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,66.352122)"
-     xlink:href="#vvv-2"
-     id="use888-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,66.352122)"
-     xlink:href="#vvv-2"
-     id="use889-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,66.352122)"
-     xlink:href="#vmv-2-2"
-     id="use890-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,66.352122)"
-     xlink:href="#vvv-2"
-     id="use891-1" />
-  <text
-     x="520.40192"
-     y="74.654037"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text891"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan891"
-       style="stroke-width:0.553461">CGS</tspan></text>
-  <text
-     x="631.09412"
-     y="74.654037"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text892"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan892"
-       style="stroke-width:0.553461">ILAS</tspan></text>
-  <text
-     x="686.44019"
-     y="74.654037"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text893"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan893"
-       style="stroke-width:0.553461">DATA</tspan></text>
-  <text
-     x="378.71585"
-     y="91.257874"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text894"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan894"
-       style="stroke-width:0.553461">SERDOUT3[3:0]</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use894-9"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,82.955954)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,82.955954)"
-     xlink:href="#000"
-     id="use895-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,82.955954)"
-     xlink:href="#000"
-     id="use896-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,82.955954)"
-     xlink:href="#000"
-     id="use897-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,82.955954)"
-     xlink:href="#000"
-     id="use898-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,82.955954)"
-     xlink:href="#000"
-     id="use899-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,82.955954)"
-     xlink:href="#000"
-     id="use900-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,82.955954)"
-     xlink:href="#000"
-     id="use901-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,82.955954)"
-     xlink:href="#0mv-2"
-     id="use902-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,82.955954)"
-     xlink:href="#vvv-2"
-     id="use903-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,82.955954)"
-     xlink:href="#vvv-2"
-     id="use904-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,82.955954)"
-     xlink:href="#vvv-2"
-     id="use905-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,82.955954)"
-     xlink:href="#vvv-2"
-     id="use906-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,82.955954)"
-     xlink:href="#vvv-2"
-     id="use907-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,82.955954)"
-     xlink:href="#vvv-2"
-     id="use908-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,82.955954)"
-     xlink:href="#vvv-2"
-     id="use909-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,82.955954)"
-     xlink:href="#vvv-2"
-     id="use910-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,82.955954)"
-     xlink:href="#vvv-2"
-     id="use911-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,82.955954)"
-     xlink:href="#vmv-2-2"
-     id="use912-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,82.955954)"
-     xlink:href="#vvv-2"
-     id="use913-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,82.955954)"
-     xlink:href="#vvv-2"
-     id="use914-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,82.955954)"
-     xlink:href="#vvv-2"
-     id="use915-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,82.955954)"
-     xlink:href="#vvv-2"
-     id="use916-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,82.955954)"
-     xlink:href="#vvv-2"
-     id="use917-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,82.955954)"
-     xlink:href="#vvv-2"
-     id="use918-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,82.955954)"
-     xlink:href="#vvv-2"
-     id="use919-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,82.955954)"
-     xlink:href="#vmv-2-2"
-     id="use920-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,82.955954)"
-     xlink:href="#vvv-2"
-     id="use921-2" />
-  <text
-     x="531.47113"
-     y="91.257874"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text921"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan921"
-       style="stroke-width:0.553461">CGS</tspan></text>
-  <text
-     x="631.09412"
-     y="91.257874"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text922"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan922"
-       style="stroke-width:0.553461">ILAS</tspan></text>
-  <text
-     x="686.44019"
-     y="91.257874"
-     text-anchor="middle"
-     xml:space="preserve"
-     id="text923"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan923"
-       style="stroke-width:0.553461">DATA</tspan></text>
-  <text
-     x="378.71585"
-     y="107.8617"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text924"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan924"
-       style="stroke-width:0.553461">SYNC_IN0,1,2,3</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use924-5"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,99.559785)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,99.559785)"
-     xlink:href="#000"
-     id="use925-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,99.559785)"
-     xlink:href="#000"
-     id="use926-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,99.559785)"
-     xlink:href="#000"
-     id="use927-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,99.559785)"
-     xlink:href="#000"
-     id="use928-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,99.559785)"
-     xlink:href="#000"
-     id="use929-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,99.559785)"
-     xlink:href="#000"
-     id="use930-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,99.559785)"
-     xlink:href="#000"
-     id="use931-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,99.559785)"
-     xlink:href="#000"
-     id="use932-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,99.559785)"
-     xlink:href="#000"
-     id="use933-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,99.559785)"
-     xlink:href="#000"
-     id="use934-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,99.559785)"
-     xlink:href="#000"
-     id="use935-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,99.559785)"
-     xlink:href="#000"
-     id="use936-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,99.559785)"
-     xlink:href="#000"
-     id="use937-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,99.559785)"
-     xlink:href="#000"
-     id="use938-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,99.559785)"
-     xlink:href="#000"
-     id="use939-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,99.559785)"
-     xlink:href="#pclk"
-     id="use940-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,99.559785)"
-     xlink:href="#111"
-     id="use941-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,99.559785)"
-     xlink:href="#111"
-     id="use942-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,99.559785)"
-     xlink:href="#111"
-     id="use943-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,99.559785)"
-     xlink:href="#111"
-     id="use944" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,99.559785)"
-     xlink:href="#111"
-     id="use945" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,99.559785)"
-     xlink:href="#111"
-     id="use946-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,99.559785)"
-     xlink:href="#111"
-     id="use947-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,99.559785)"
-     xlink:href="#111"
-     id="use948-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,99.559785)"
-     xlink:href="#111"
-     id="use949-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,99.559785)"
-     xlink:href="#111"
-     id="use950-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,99.559785)"
-     xlink:href="#111"
-     id="use951-1" />
-  <text
-     x="378.71585"
-     y="124.46554"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text951"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan951"
-       style="stroke-width:0.553461">LMFC</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use952-2"
-     transform="matrix(0.55346106,0,0,0.55346106,389.7851,116.16362)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,400.85432,116.16362)"
-     xlink:href="#000"
-     id="use953-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,411.92355,116.16362)"
-     xlink:href="#000"
-     id="use954-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,422.99277,116.16362)"
-     xlink:href="#000"
-     id="use955-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,434.06199,116.16362)"
-     xlink:href="#000"
-     id="use956-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,445.13121,116.16362)"
-     xlink:href="#000"
-     id="use957-6" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,456.20043,116.16362)"
-     xlink:href="#000"
-     id="use958-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,467.26965,116.16362)"
-     xlink:href="#pclk"
-     id="use959-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,478.33887,116.16362)"
-     xlink:href="#nclk"
-     id="use960-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,489.40809,116.16362)"
-     xlink:href="#pclk"
-     id="use961-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,500.47732,116.16362)"
-     xlink:href="#nclk"
-     id="use962-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,511.54654,116.16362)"
-     xlink:href="#pclk"
-     id="use963-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,522.61576,116.16362)"
-     xlink:href="#nclk"
-     id="use964-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,533.68498,116.16362)"
-     xlink:href="#pclk"
-     id="use965-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,544.7542,116.16362)"
-     xlink:href="#nclk"
-     id="use966-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,555.8234,116.16362)"
-     xlink:href="#pclk"
-     id="use967-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,566.89262,116.16362)"
-     xlink:href="#nclk"
-     id="use968-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,577.96184,116.16362)"
-     xlink:href="#pclk"
-     id="use969-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,589.03106,116.16362)"
-     xlink:href="#nclk"
-     id="use970-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,600.10028,116.16362)"
-     xlink:href="#pclk"
-     id="use971-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,611.1695,116.16362)"
-     xlink:href="#nclk"
-     id="use972-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,622.23873,116.16362)"
-     xlink:href="#pclk"
-     id="use973-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,633.30795,116.16362)"
-     xlink:href="#nclk"
-     id="use974-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,644.37717,116.16362)"
-     xlink:href="#pclk"
-     id="use975-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,655.44639,116.16362)"
-     xlink:href="#nclk"
-     id="use976-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,666.51561,116.16362)"
-     xlink:href="#pclk"
-     id="use977-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,677.58483,116.16362)"
-     xlink:href="#nclk"
-     id="use978-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,688.65405,116.16362)"
-     xlink:href="#pclk"
-     id="use979-1" />
-  <text
-     x="378.71585"
-     y="141.06937"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text979"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.11745px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       id="tspan979"
-       style="stroke-width:0.553461">SYSREF</tspan></text>
-  <use
-     xlink:href="#000"
-     id="use980-4"
-     transform="matrix(0.55346106,0,0,0.55346106,384.25049,132.76745)" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,395.31971,132.76745)"
-     xlink:href="#000"
-     id="use981-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,406.38894,132.76745)"
-     xlink:href="#000"
-     id="use982-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,417.45816,132.76745)"
-     xlink:href="#000"
-     id="use983-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,428.52738,132.76745)"
-     xlink:href="#000"
-     id="use984-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,439.5966,132.76745)"
-     xlink:href="#000"
-     id="use985-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,450.66582,132.76745)"
-     xlink:href="#000"
-     id="use986-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,461.73504,132.76745)"
-     xlink:href="#000"
-     id="use987-3" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,472.80426,132.76745)"
-     xlink:href="#000"
-     id="use988-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,483.87348,132.76745)"
-     xlink:href="#000"
-     id="use989-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,494.9427,132.76745)"
-     xlink:href="#000"
-     id="use990-7" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,506.01193,132.76745)"
-     xlink:href="#000"
-     id="use991-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,517.08115,132.76745)"
-     xlink:href="#000"
-     id="use992-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,528.15037,132.76745)"
-     xlink:href="#pclk"
-     id="use993-1" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,539.21959,132.76745)"
-     xlink:href="#nclk"
-     id="use994-4" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,550.28881,132.76745)"
-     xlink:href="#000"
-     id="use995-9" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,561.35801,132.76745)"
-     xlink:href="#000"
-     id="use996-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,572.42723,132.76745)"
-     xlink:href="#000"
-     id="use997-8" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,583.49645,132.76745)"
-     xlink:href="#000"
-     id="use998-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,594.56567,132.76745)"
-     xlink:href="#000"
-     id="use999-5" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,605.63489,132.76745)"
-     xlink:href="#000"
-     id="use1000-0" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,616.70412,132.76745)"
-     xlink:href="#000"
-     id="use1001-2" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,627.77334,132.76745)"
-     xlink:href="#000"
-     id="use1002" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,638.84256,132.76745)"
-     xlink:href="#000"
-     id="use1003" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,649.91178,132.76745)"
-     xlink:href="#000"
-     id="use1004" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,660.981,132.76745)"
-     xlink:href="#000"
-     id="use1005" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,672.05022,132.76745)"
-     xlink:href="#000"
-     id="use1006" />
-  <use
-     transform="matrix(0.55346106,0,0,0.55346106,683.11944,132.76745)"
-     xlink:href="#000"
-     id="use1007" />
-  <rect
-     x="517.63458"
-     y="135.53476"
-     width="5.6120954"
-     height="6.0880718"
-     style="fill:#ffffff;stroke-width:0.553461"
-     id="rect1007-0" />
-  <text
-     text-anchor="middle"
-     y="134.27686"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.08807px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"
-     id="text1007-2"
-     x="524.80988"><tspan
-       id="tspan1007-6"
-       style="stroke-width:0.553461">6</tspan></text>
-  <rect
-     x="545.30762"
-     y="118.93092"
-     width="5.6120954"
-     height="6.0880718"
-     style="fill:#ffffff;stroke-width:0.553461"
-     id="rect1008-4" />
-  <text
-     text-anchor="middle"
-     y="117.72935"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.08807px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"
-     id="text1008-2"
-     x="550.93518"><tspan
-       id="tspan1008-9"
-       style="stroke-width:0.553461">7</tspan></text>
-  <rect
-     x="567.44611"
-     y="118.93092"
-     width="5.6120954"
-     height="6.0880718"
-     style="fill:#ffffff;stroke-width:0.553461"
-     id="rect1009" />
-  <text
-     text-anchor="middle"
-     y="117.72935"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.08807px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke-width:0.553461"
-     id="text1009"
-     x="574.5993"><tspan
-       id="tspan1009"
-       style="stroke-width:0.553461">8</tspan></text>
   <g
      id="wavegaps_0-8"
      transform="translate(694.26834,54.885803)">
@@ -5418,100 +4044,1462 @@
     <g
        id="g1011" />
   </g>
-  <line
-     id="gmark_9_0"
-     x1="586.8172"
-     y1="15.844591"
-     x2="586.8172"
-     y2="88.490562"
-     style="fill:#000000;stroke:#ff0000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32078;stroke-dashoffset:0" />
-  <line
-     id="gmark_2_0-9"
-     x1="429.63428"
-     y1="30.377155"
-     x2="429.63428"
-     y2="61.094242"
-     style="stroke:#000000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32078;stroke-dashoffset:0" />
-  <line
-     id="gmark_3_0-8"
-     x1="451.77274"
-     y1="30.377155"
-     x2="451.77274"
-     y2="77.144615"
-     style="stroke:#000000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32077;stroke-dashoffset:0" />
-  <line
-     id="gmark_4_0-4"
-     x1="473.91116"
-     y1="30.377155"
-     x2="473.91116"
-     y2="91.811333"
-     style="stroke:#000000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32077;stroke-dashoffset:0" />
-  <line
-     id="gmark_13_0"
-     x1="675.37097"
-     y1="15.844589"
-     x2="675.37097"
-     y2="89.097099"
-     style="stroke:#ff0000;stroke-width:1.10692;stroke-dasharray:1.10692, 3.32078;stroke-dashoffset:0" />
-  <path
-     style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.553461;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
-     d="m 555.8234,116.16362 c 0,0 -3.63533,-6.85602 -2.516,-10.16086 1.10263,-3.25547 5.80029,-5.26891 5.80029,-5.26891"
-     id="path790"
-     sodipodi:nodetypes="csc" />
-  <path
-     style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.553461;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
-     d="m 577.96184,116.16362 c 0,0 -1.83201,-11.38122 0,-16.603835 1.56408,-4.458809 6.17054,-9.308119 6.17054,-9.308119"
-     id="path791"
-     sodipodi:nodetypes="csc" />
-  <path
-     style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.553461;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
-     d="m 528.15037,132.76745 c 0,0 -1.30083,-6.51025 -0.27673,-9.51261 0.9866,-2.89246 4.08177,-5.81134 4.08177,-5.81134"
-     id="path792"
-     sodipodi:nodetypes="csc" />
-  <text
-     x="443.93622"
-     y="7.0071044"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5-4-5-4"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.42769px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       sodipodi:role="line"
-       x="443.93622"
-       y="7.0071044"
-       id="tspan794-1-8"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">MxFE2</tspan><tspan
-       sodipodi:role="line"
-       x="443.93622"
-       y="12.541718"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan796-2">Tx</tspan><tspan
-       sodipodi:role="line"
-       x="443.93622"
-       y="18.076328"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan797-0">bringup</tspan></text>
-  <text
-     x="462.31296"
-     y="7.0071044"
-     class="info"
-     text-anchor="end"
-     xml:space="preserve"
-     id="text804-5-4-5-3"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.42769px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke-width:0.553461"><tspan
-       sodipodi:role="line"
-       x="462.31296"
-       y="7.0071044"
-       id="tspan794-1-3"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461">MxFE3</tspan><tspan
-       sodipodi:role="line"
-       x="462.31296"
-       y="12.541718"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan796-4">Tx</tspan><tspan
-       sodipodi:role="line"
-       x="462.31296"
-       y="18.076328"
-       style="font-size:4.42769px;text-align:start;text-anchor:start;fill:#000000;stroke-width:0.553461"
-       id="tspan797-4">bringup</tspan></text>
+  <g
+     id="g2">
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 119.92798,30.27849 H 269.3438"
+       id="path5-3" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 269.05031,36.211395 -149.12233,0.04372"
+       id="path6-64" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 119.92789,81.725625 H 269.34364"
+       id="path5-5" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 269.05023,87.65853 119.92789,87.70225"
+       id="path6-6" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 120.07472,131.9031 H 269.49055"
+       id="path5-9" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 269.19705,137.836 -149.12233,0.0438"
+       id="path6-5" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 119.92798,183.07794 H 269.3438"
+       id="path5-8" />
+    <path
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#0d75b3;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 269.05031,189.01084 -149.12233,0.0438"
+       id="path6-55" />
+    <rect
+       style="fill:#ffe6cc;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect1-3"
+       width="119.53264"
+       height="209.18213"
+       x="0.39532849"
+       y="30.27849" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="59.090961"
+       y="129.70143"
+       id="text2"><tspan
+         id="tspan2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none;paint-order:markers stroke fill"
+         x="59.090961"
+         y="129.70143">Link Layer</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none;paint-order:markers stroke fill"
+         x="59.090961"
+         y="156.48715"
+         id="tspan3">RX</tspan></text>
+    <rect
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.586911;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3"
+       width="128.77397"
+       height="44.824741"
+       x="269.34378"
+       y="30.27849" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       x="334.19922"
+       y="60.35038"
+       id="text2-2"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none"
+         x="334.19922"
+         y="60.35038"
+         id="tspan3-7">JTX0</tspan></text>
+    <rect
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.586911;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3-7"
+       width="128.77397"
+       height="44.824741"
+       x="269.34378"
+       y="131.3877" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       x="334.19922"
+       y="161.45959"
+       id="text2-2-5"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none"
+         x="334.19922"
+         y="161.45959"
+         id="tspan3-7-7">JTX2</tspan></text>
+    <g
+       id="g1">
+      <rect
+         style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.586911;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         id="rect3-1"
+         width="128.77397"
+         height="44.824741"
+         x="269.34378"
+         y="81.623756" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       x="334.19922"
+       y="111.69564"
+       id="text2-2-7"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none"
+         x="334.19922"
+         y="111.69564"
+         id="tspan3-7-4">JTX1</tspan></text>
+    <rect
+       style="fill:#d5e8d4;fill-opacity:1;stroke:#000000;stroke-width:0.586911;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3-8"
+       width="128.77397"
+       height="44.824741"
+       x="269.34378"
+       y="182.73296" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       x="334.19922"
+       y="212.80486"
+       id="text2-2-8"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.4286px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;stroke:none;stroke-width:0.790657;stroke-dasharray:none"
+         x="334.19922"
+         y="212.80486"
+         id="tspan3-7-9">JTX3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.65375"
+       y="51.196697"
+       id="text6"><tspan
+         id="tspan6"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.65375"
+         y="51.196697">SERDOUT0[3:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.27907"
+       y="72.967766"
+       id="text6-7"><tspan
+         id="tspan6-7"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.27907"
+         y="72.967766">SYNC_IN0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.65375"
+       y="101.99321"
+       id="text6-6"><tspan
+         id="tspan6-0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.65375"
+         y="101.99321">SERDOUT1[3:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.65375"
+       y="152.78972"
+       id="text6-9"><tspan
+         id="tspan6-05"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.65375"
+         y="152.78972">SERDOUT2[3:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.65375"
+       y="203.58623"
+       id="text6-64"><tspan
+         id="tspan6-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.65375"
+         y="203.58623">SERDOUT3[3:0]</tspan></text>
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 146.82279,68.563644 -26.8949,9e-6"
+       id="path7-4" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9);paint-order:markers stroke fill"
+       d="M 238.60791,68.61247 H 265.5028"
+       id="path8-7" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.27907"
+       y="124.16446"
+       id="text6-7-3"><tspan
+         id="tspan6-7-9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.27907"
+         y="124.16446">SYNC_IN1</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="196.92911"
+       y="174.68169"
+       id="text6-7-6"><tspan
+         id="tspan6-7-3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="196.92911"
+         y="174.68169">SYNC_IN2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#d5e8d4;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="197.27907"
+       y="225.37187"
+       id="text6-7-9"><tspan
+         id="tspan6-7-5"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-opacity:1"
+         x="197.27907"
+         y="225.37187">SYNCIN3</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       x="186.6301"
+       y="12.817287"
+       id="text8"><tspan
+         id="tspan8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8571px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-width:0.790657"
+         x="186.6301"
+         y="12.817287">DATA DIRECTION</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect8"
+       width="134.38393"
+       height="15.646338"
+       x="-253.8344"
+       y="0.39532849"
+       transform="scale(-1,1)" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 291.23355,9.3602729 H 253.4592"
+       id="path9-3" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-7);paint-order:markers stroke fill"
+       d="M 119.05513,9.3047211 92.852469,9.3603044"
+       id="path10-8" />
+    <line
+       id="gmark_0_0"
+       x1="510.51056"
+       y1="43.395935"
+       x2="510.51056"
+       y2="157.64612"
+       style="stroke:#000000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74396;stroke-dashoffset:0" />
+    <line
+       id="gmark_1_0-8"
+       x1="542.1369"
+       y1="43.395935"
+       x2="542.1369"
+       y2="63.557735"
+       style="stroke:#000000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74396;stroke-dashoffset:0" />
+    <text
+       x="510.51056"
+       y="39.442642"
+       id="text789-9"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790659">1</text>
+    <text
+       x="542.1369"
+       y="39.442642"
+       id="text790-7"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790659">2</text>
+    <text
+       x="573.76324"
+       y="39.442642"
+       id="text791-7"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790659">3</text>
+    <text
+       x="605.38959"
+       y="39.442642"
+       id="text792-3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790659">4</text>
+    <text
+       x="637.01593"
+       y="39.442642"
+       id="text793-6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.790659">5</text>
+    <text
+       x="501.02264"
+       y="59.20911"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan803-3"
+         style="stroke:none;stroke-width:0.790659">SERDOUT0[3:0]</tspan></text>
+    <text
+       x="487.01471"
+       y="10.000884"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5-4"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan792"
+         x="487.01471"
+         y="10.000884"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">Rx</tspan><tspan
+         id="tspan793"
+         x="487.01471"
+         y="17.907473"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">Link Layer</tspan><tspan
+         x="487.01471"
+         y="25.814062"
+         id="tspan794"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">bringup</tspan></text>
+    <text
+       x="529.68958"
+       y="10.010149"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5-4-5"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         x="529.68958"
+         y="10.010149"
+         id="tspan794-1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE0</tspan><tspan
+         x="529.68958"
+         y="17.916739"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan796">Tx</tspan><tspan
+         x="529.68958"
+         y="25.823326"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan797">bringup</tspan></text>
+    <text
+       x="561.94208"
+       y="10.010149"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5-4-5-8"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         x="561.94208"
+         y="10.010149"
+         id="tspan794-1-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE1</tspan><tspan
+         x="561.94208"
+         y="17.916739"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan796-9">Tx</tspan><tspan
+         x="561.94208"
+         y="25.823326"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan797-9">bringup</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use804-4"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,47.349229)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,47.349229)"
+       xlink:href="#000"
+       id="use805-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,47.349229)"
+       xlink:href="#0mv-2"
+       id="use806-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,47.349229)"
+       xlink:href="#vvv-2"
+       id="use807-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,47.349229)"
+       xlink:href="#vvv-2"
+       id="use808-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,47.349229)"
+       xlink:href="#vvv-2"
+       id="use809-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,47.349229)"
+       xlink:href="#vvv-2"
+       id="use810-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,47.349229)"
+       xlink:href="#vvv-2"
+       id="use811-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,47.349229)"
+       xlink:href="#vvv-2"
+       id="use812-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,47.349229)"
+       xlink:href="#vvv-2"
+       id="use813-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,47.349229)"
+       xlink:href="#vvv-2"
+       id="use814-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,47.349229)"
+       xlink:href="#vvv-2"
+       id="use815-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,47.349229)"
+       xlink:href="#vvv-2"
+       id="use816-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,47.349229)"
+       xlink:href="#vvv-2"
+       id="use817-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,47.349229)"
+       xlink:href="#vvv-2"
+       id="use818-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,47.349229)"
+       xlink:href="#vvv-2"
+       id="use819-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,47.349229)"
+       xlink:href="#vvv-2"
+       id="use820-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,47.349229)"
+       xlink:href="#vvv-2"
+       id="use821-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,47.349229)"
+       xlink:href="#vmv-2-2"
+       id="use822-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,47.349229)"
+       xlink:href="#vvv-2"
+       id="use823-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,47.349229)"
+       xlink:href="#vvv-2"
+       id="use824-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,47.349229)"
+       xlink:href="#vvv-2"
+       id="use825-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,47.349229)"
+       xlink:href="#vvv-2"
+       id="use826-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,47.349229)"
+       xlink:href="#vvv-2"
+       id="use827-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,47.349229)"
+       xlink:href="#vvv-2"
+       id="use828-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,47.349229)"
+       xlink:href="#vvv-2"
+       id="use829-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,47.349229)"
+       xlink:href="#vmv-2-2"
+       id="use830-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,47.349229)"
+       xlink:href="#vvv-2"
+       id="use831-5" />
+    <text
+       x="671.80493"
+       y="59.20911"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text831-7"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan831-2"
+         style="stroke:none;stroke-width:0.790659">CGS</tspan></text>
+    <text
+       x="861.56305"
+       y="59.20911"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text832"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan832"
+         style="stroke:none;stroke-width:0.790659">ILAS</tspan></text>
+    <text
+       x="940.62885"
+       y="59.20911"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text833"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan833"
+         style="stroke:none;stroke-width:0.790659">DATA</tspan></text>
+    <text
+       x="501.02264"
+       y="82.928871"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text834"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan834"
+         style="stroke:none;stroke-width:0.790659">SERDOUT1[3:0]</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use834-6"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,71.068989)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,71.068989)"
+       xlink:href="#000"
+       id="use835-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,71.068989)"
+       xlink:href="#000"
+       id="use836-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,71.068989)"
+       xlink:href="#000"
+       id="use837-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,71.068989)"
+       xlink:href="#0mv-2"
+       id="use838-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,71.068989)"
+       xlink:href="#vvv-2"
+       id="use839-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,71.068989)"
+       xlink:href="#vvv-2"
+       id="use840-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,71.068989)"
+       xlink:href="#vvv-2"
+       id="use841-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,71.068989)"
+       xlink:href="#vvv-2"
+       id="use842-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,71.068989)"
+       xlink:href="#vvv-2"
+       id="use843-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,71.068989)"
+       xlink:href="#vvv-2"
+       id="use844-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,71.068989)"
+       xlink:href="#vvv-2"
+       id="use845-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,71.068989)"
+       xlink:href="#vvv-2"
+       id="use846-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,71.068989)"
+       xlink:href="#vvv-2"
+       id="use847-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,71.068989)"
+       xlink:href="#vvv-2"
+       id="use848-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,71.068989)"
+       xlink:href="#vvv-2"
+       id="use849-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,71.068989)"
+       xlink:href="#vvv-2"
+       id="use850-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,71.068989)"
+       xlink:href="#vvv-2"
+       id="use851-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,71.068989)"
+       xlink:href="#vmv-2-2"
+       id="use852-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,71.068989)"
+       xlink:href="#vvv-2"
+       id="use853-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,71.068989)"
+       xlink:href="#vvv-2"
+       id="use854-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,71.068989)"
+       xlink:href="#vvv-2"
+       id="use855-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,71.068989)"
+       xlink:href="#vvv-2"
+       id="use856-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,71.068989)"
+       xlink:href="#vvv-2"
+       id="use857-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,71.068989)"
+       xlink:href="#vvv-2"
+       id="use858-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,71.068989)"
+       xlink:href="#vvv-2"
+       id="use859-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,71.068989)"
+       xlink:href="#vmv-2-2"
+       id="use860-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,71.068989)"
+       xlink:href="#vvv-2"
+       id="use861-0" />
+    <text
+       x="687.61804"
+       y="82.928871"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text861"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan861"
+         style="stroke:none;stroke-width:0.790659">CGS</tspan></text>
+    <text
+       x="861.56305"
+       y="82.928871"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text862"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan862"
+         style="stroke:none;stroke-width:0.790659">ILAS</tspan></text>
+    <text
+       x="940.62885"
+       y="82.928871"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text863"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan863"
+         style="stroke:none;stroke-width:0.790659">DATA</tspan></text>
+    <text
+       x="501.02264"
+       y="106.64863"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text864"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan864"
+         style="stroke:none;stroke-width:0.790659">SERDOUT2[3:0]</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use864-0"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,94.788745)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,94.788745)"
+       xlink:href="#000"
+       id="use865-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,94.788745)"
+       xlink:href="#000"
+       id="use866-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,94.788745)"
+       xlink:href="#000"
+       id="use867-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,94.788745)"
+       xlink:href="#000"
+       id="use868-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,94.788745)"
+       xlink:href="#000"
+       id="use869-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,94.788745)"
+       xlink:href="#0mv-2"
+       id="use870-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,94.788745)"
+       xlink:href="#vvv-2"
+       id="use871-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,94.788745)"
+       xlink:href="#vvv-2"
+       id="use872-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,94.788745)"
+       xlink:href="#vvv-2"
+       id="use873-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,94.788745)"
+       xlink:href="#vvv-2"
+       id="use874-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,94.788745)"
+       xlink:href="#vvv-2"
+       id="use875-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,94.788745)"
+       xlink:href="#vvv-2"
+       id="use876-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,94.788745)"
+       xlink:href="#vvv-2"
+       id="use877-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,94.788745)"
+       xlink:href="#vvv-2"
+       id="use878-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,94.788745)"
+       xlink:href="#vvv-2"
+       id="use879-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,94.788745)"
+       xlink:href="#vvv-2"
+       id="use880-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,94.788745)"
+       xlink:href="#vvv-2"
+       id="use881-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,94.788745)"
+       xlink:href="#vmv-2-2"
+       id="use882-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,94.788745)"
+       xlink:href="#vvv-2"
+       id="use883-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,94.788745)"
+       xlink:href="#vvv-2"
+       id="use884-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,94.788745)"
+       xlink:href="#vvv-2"
+       id="use885-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,94.788745)"
+       xlink:href="#vvv-2"
+       id="use886-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,94.788745)"
+       xlink:href="#vvv-2"
+       id="use887-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,94.788745)"
+       xlink:href="#vvv-2"
+       id="use888-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,94.788745)"
+       xlink:href="#vvv-2"
+       id="use889-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,94.788745)"
+       xlink:href="#vmv-2-2"
+       id="use890-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,94.788745)"
+       xlink:href="#vvv-2"
+       id="use891-1" />
+    <text
+       x="703.43134"
+       y="106.64863"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text891"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan891"
+         style="stroke:none;stroke-width:0.790659">CGS</tspan></text>
+    <text
+       x="861.56305"
+       y="106.64863"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text892"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan892"
+         style="stroke:none;stroke-width:0.790659">ILAS</tspan></text>
+    <text
+       x="940.62885"
+       y="106.64863"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text893"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan893"
+         style="stroke:none;stroke-width:0.790659">DATA</tspan></text>
+    <text
+       x="501.02264"
+       y="130.36839"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text894"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan894"
+         style="stroke:none;stroke-width:0.790659">SERDOUT3[3:0]</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use894-9"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,118.5085)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,118.5085)"
+       xlink:href="#000"
+       id="use895-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,118.5085)"
+       xlink:href="#000"
+       id="use896-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,118.5085)"
+       xlink:href="#000"
+       id="use897-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,118.5085)"
+       xlink:href="#000"
+       id="use898-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,118.5085)"
+       xlink:href="#000"
+       id="use899-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,118.5085)"
+       xlink:href="#000"
+       id="use900-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,118.5085)"
+       xlink:href="#000"
+       id="use901-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,118.5085)"
+       xlink:href="#0mv-2"
+       id="use902-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,118.5085)"
+       xlink:href="#vvv-2"
+       id="use903-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,118.5085)"
+       xlink:href="#vvv-2"
+       id="use904-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,118.5085)"
+       xlink:href="#vvv-2"
+       id="use905-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,118.5085)"
+       xlink:href="#vvv-2"
+       id="use906-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,118.5085)"
+       xlink:href="#vvv-2"
+       id="use907-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,118.5085)"
+       xlink:href="#vvv-2"
+       id="use908-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,118.5085)"
+       xlink:href="#vvv-2"
+       id="use909-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,118.5085)"
+       xlink:href="#vvv-2"
+       id="use910-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,118.5085)"
+       xlink:href="#vvv-2"
+       id="use911-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,118.5085)"
+       xlink:href="#vmv-2-2"
+       id="use912-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,118.5085)"
+       xlink:href="#vvv-2"
+       id="use913-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,118.5085)"
+       xlink:href="#vvv-2"
+       id="use914-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,118.5085)"
+       xlink:href="#vvv-2"
+       id="use915-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,118.5085)"
+       xlink:href="#vvv-2"
+       id="use916-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,118.5085)"
+       xlink:href="#vvv-2"
+       id="use917-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,118.5085)"
+       xlink:href="#vvv-2"
+       id="use918-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,118.5085)"
+       xlink:href="#vvv-2"
+       id="use919-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,118.5085)"
+       xlink:href="#vmv-2-2"
+       id="use920-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,118.5085)"
+       xlink:href="#vvv-2"
+       id="use921-2" />
+    <text
+       x="719.24445"
+       y="130.36839"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text921"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan921"
+         style="stroke:none;stroke-width:0.790659">CGS</tspan></text>
+    <text
+       x="861.56305"
+       y="130.36839"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text922"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan922"
+         style="stroke:none;stroke-width:0.790659">ILAS</tspan></text>
+    <text
+       x="940.62885"
+       y="130.36839"
+       text-anchor="middle"
+       xml:space="preserve"
+       id="text923"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan923"
+         style="stroke:none;stroke-width:0.790659">DATA</tspan></text>
+    <text
+       x="501.02264"
+       y="154.08815"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text924"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan924"
+         style="stroke:none;stroke-width:0.790659">SYNC_IN0,1,2,3</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use924-5"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,142.22827)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,142.22827)"
+       xlink:href="#000"
+       id="use925-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,142.22827)"
+       xlink:href="#000"
+       id="use926-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,142.22827)"
+       xlink:href="#000"
+       id="use927-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,142.22827)"
+       xlink:href="#000"
+       id="use928-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,142.22827)"
+       xlink:href="#000"
+       id="use929-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,142.22827)"
+       xlink:href="#000"
+       id="use930-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,142.22827)"
+       xlink:href="#000"
+       id="use931-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,142.22827)"
+       xlink:href="#000"
+       id="use932-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,142.22827)"
+       xlink:href="#000"
+       id="use933-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,142.22827)"
+       xlink:href="#000"
+       id="use934-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,142.22827)"
+       xlink:href="#000"
+       id="use935-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,142.22827)"
+       xlink:href="#000"
+       id="use936-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,142.22827)"
+       xlink:href="#000"
+       id="use937-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,142.22827)"
+       xlink:href="#000"
+       id="use938-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,142.22827)"
+       xlink:href="#000"
+       id="use939-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,142.22827)"
+       xlink:href="#pclk"
+       id="use940-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,142.22827)"
+       xlink:href="#111"
+       id="use941-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,142.22827)"
+       xlink:href="#111"
+       id="use942-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,142.22827)"
+       xlink:href="#111"
+       id="use943-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,142.22827)"
+       xlink:href="#111"
+       id="use944" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,142.22827)"
+       xlink:href="#111"
+       id="use945" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,142.22827)"
+       xlink:href="#111"
+       id="use946-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,142.22827)"
+       xlink:href="#111"
+       id="use947-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,142.22827)"
+       xlink:href="#111"
+       id="use948-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,142.22827)"
+       xlink:href="#111"
+       id="use949-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,142.22827)"
+       xlink:href="#111"
+       id="use950-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,142.22827)"
+       xlink:href="#111"
+       id="use951-1" />
+    <text
+       x="501.02264"
+       y="177.80791"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text951"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan951"
+         style="stroke:none;stroke-width:0.790659">LMFC</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use952-2"
+       transform="matrix(0.79065865,0,0,0.79065865,516.83585,165.94803)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,532.64902,165.94803)"
+       xlink:href="#000"
+       id="use953-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,548.46221,165.94803)"
+       xlink:href="#000"
+       id="use954-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,564.27539,165.94803)"
+       xlink:href="#000"
+       id="use955-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,580.08855,165.94803)"
+       xlink:href="#000"
+       id="use956-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,595.90172,165.94803)"
+       xlink:href="#000"
+       id="use957-6" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,611.7149,165.94803)"
+       xlink:href="#000"
+       id="use958-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,627.52807,165.94803)"
+       xlink:href="#pclk"
+       id="use959-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,643.34124,165.94803)"
+       xlink:href="#nclk"
+       id="use960-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,659.15441,165.94803)"
+       xlink:href="#pclk"
+       id="use961-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,674.9676,165.94803)"
+       xlink:href="#nclk"
+       id="use962-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,690.78076,165.94803)"
+       xlink:href="#pclk"
+       id="use963-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,706.59394,165.94803)"
+       xlink:href="#nclk"
+       id="use964-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,722.40711,165.94803)"
+       xlink:href="#pclk"
+       id="use965-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,738.22029,165.94803)"
+       xlink:href="#nclk"
+       id="use966-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,754.03342,165.94803)"
+       xlink:href="#pclk"
+       id="use967-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,769.8466,165.94803)"
+       xlink:href="#nclk"
+       id="use968-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,785.65976,165.94803)"
+       xlink:href="#pclk"
+       id="use969-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,801.47294,165.94803)"
+       xlink:href="#nclk"
+       id="use970-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,817.28611,165.94803)"
+       xlink:href="#pclk"
+       id="use971-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,833.09929,165.94803)"
+       xlink:href="#nclk"
+       id="use972-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,848.91246,165.94803)"
+       xlink:href="#pclk"
+       id="use973-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,864.72564,165.94803)"
+       xlink:href="#nclk"
+       id="use974-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,880.53881,165.94803)"
+       xlink:href="#pclk"
+       id="use975-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,896.35199,165.94803)"
+       xlink:href="#nclk"
+       id="use976-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,912.16515,165.94803)"
+       xlink:href="#pclk"
+       id="use977-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,927.97832,165.94803)"
+       xlink:href="#nclk"
+       id="use978-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,943.7915,165.94803)"
+       xlink:href="#pclk"
+       id="use979-1" />
+    <text
+       x="501.02264"
+       y="201.52766"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text979"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.5963px;font-family:Helvetica;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         id="tspan979"
+         style="stroke:none;stroke-width:0.790659">SYSREF</tspan></text>
+    <use
+       xlink:href="#000"
+       id="use980-4"
+       transform="matrix(0.79065865,0,0,0.79065865,508.92927,189.66779)" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,524.74244,189.66779)"
+       xlink:href="#000"
+       id="use981-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,540.55562,189.66779)"
+       xlink:href="#000"
+       id="use982-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,556.3688,189.66779)"
+       xlink:href="#000"
+       id="use983-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,572.18197,189.66779)"
+       xlink:href="#000"
+       id="use984-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,587.99514,189.66779)"
+       xlink:href="#000"
+       id="use985-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,603.80831,189.66779)"
+       xlink:href="#000"
+       id="use986-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,619.62149,189.66779)"
+       xlink:href="#000"
+       id="use987-3" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,635.43465,189.66779)"
+       xlink:href="#000"
+       id="use988-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,651.24782,189.66779)"
+       xlink:href="#000"
+       id="use989-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,667.061,189.66779)"
+       xlink:href="#000"
+       id="use990-7" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,682.87419,189.66779)"
+       xlink:href="#000"
+       id="use991-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,698.68735,189.66779)"
+       xlink:href="#000"
+       id="use992-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,714.50052,189.66779)"
+       xlink:href="#pclk"
+       id="use993-1" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,730.3137,189.66779)"
+       xlink:href="#nclk"
+       id="use994-4" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,746.12686,189.66779)"
+       xlink:href="#000"
+       id="use995-9" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,761.94001,189.66779)"
+       xlink:href="#000"
+       id="use996-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,777.75319,189.66779)"
+       xlink:href="#000"
+       id="use997-8" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,793.56635,189.66779)"
+       xlink:href="#000"
+       id="use998-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,809.37952,189.66779)"
+       xlink:href="#000"
+       id="use999-5" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,825.1927,189.66779)"
+       xlink:href="#000"
+       id="use1000-0" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,841.00589,189.66779)"
+       xlink:href="#000"
+       id="use1001-2" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,856.81905,189.66779)"
+       xlink:href="#000"
+       id="use1002" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,872.63222,189.66779)"
+       xlink:href="#000"
+       id="use1003" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,888.4454,189.66779)"
+       xlink:href="#000"
+       id="use1004" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,904.25856,189.66779)"
+       xlink:href="#000"
+       id="use1005" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,920.07174,189.66779)"
+       xlink:href="#000"
+       id="use1006" />
+    <use
+       transform="matrix(0.79065865,0,0,0.79065865,935.88491,189.66779)"
+       xlink:href="#000"
+       id="use1007" />
+    <rect
+       x="699.47797"
+       y="193.62108"
+       width="8.0172796"
+       height="8.6972456"
+       style="fill:#ffffff;stroke-width:0.790659"
+       id="rect1007-0" />
+    <text
+       text-anchor="middle"
+       y="191.82408"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.69724px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"
+       id="text1007-2"
+       x="709.72839"><tspan
+         id="tspan1007-6"
+         style="stroke:none;stroke-width:0.790659">6</tspan></text>
+    <rect
+       x="739.01086"
+       y="169.90132"
+       width="8.0172796"
+       height="8.6972456"
+       style="fill:#ffffff;stroke-width:0.790659"
+       id="rect1008-4" />
+    <text
+       text-anchor="middle"
+       y="168.18478"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.69724px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"
+       id="text1008-2"
+       x="747.05023"><tspan
+         id="tspan1008-9"
+         style="stroke:none;stroke-width:0.790659">7</tspan></text>
+    <rect
+       x="770.63727"
+       y="169.90132"
+       width="8.0172796"
+       height="8.6972456"
+       style="fill:#ffffff;stroke-width:0.790659"
+       id="rect1009" />
+    <text
+       text-anchor="middle"
+       y="168.18478"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.69724px;font-family:Helvetica;text-align:center;fill-opacity:1;stroke:none;stroke-width:0.790659"
+       id="text1009"
+       x="780.85614"><tspan
+         id="tspan1009"
+         style="stroke:none;stroke-width:0.790659">8</tspan></text>
+    <line
+       id="gmark_9_0"
+       x1="798.3103"
+       y1="22.63513"
+       x2="798.3103"
+       y2="126.41509"
+       style="fill:#000000;stroke:#ff0000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74397;stroke-dashoffset:0" />
+    <line
+       id="gmark_2_0-9"
+       x1="573.76324"
+       y1="43.395935"
+       x2="573.76324"
+       y2="87.277481"
+       style="stroke:#000000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74397;stroke-dashoffset:0" />
+    <line
+       id="gmark_3_0-8"
+       x1="605.38959"
+       y1="43.395935"
+       x2="605.38959"
+       y2="110.2066"
+       style="stroke:#000000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74396;stroke-dashoffset:0" />
+    <line
+       id="gmark_4_0-4"
+       x1="637.01593"
+       y1="43.395935"
+       x2="637.01593"
+       y2="131.15904"
+       style="stroke:#000000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74396;stroke-dashoffset:0" />
+    <line
+       id="gmark_13_0"
+       x1="924.81567"
+       y1="22.635128"
+       x2="924.81567"
+       y2="127.28157"
+       style="stroke:#ff0000;stroke-width:1.58131;stroke-dasharray:1.58131, 4.74397;stroke-dashoffset:0" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.790659;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
+       d="m 754.03342,165.94803 c 0,0 -5.19332,-9.79432 -3.59428,-14.51552 1.57518,-4.65067 8.28612,-7.52701 8.28612,-7.52701"
+       id="path790" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.790659;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
+       d="m 785.65976,165.94803 c 0,0 -2.61715,-16.25889 0,-23.71976 2.2344,-6.36974 8.81506,-13.29731 8.81506,-13.29731"
+       id="path791" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:0.790659;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;marker-end:url(#Triangle-9)"
+       d="m 714.50052,189.66779 c 0,0 -1.85832,-9.30036 -0.39532,-13.58945 1.40942,-4.13208 5.8311,-8.30191 5.8311,-8.30191"
+       id="path792" />
+    <text
+       x="594.19458"
+       y="10.010149"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5-4-5-4"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         x="594.19458"
+         y="10.010149"
+         id="tspan794-1-8"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE2</tspan><tspan
+         x="594.19458"
+         y="17.916739"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan796-2">Tx</tspan><tspan
+         x="594.19458"
+         y="25.823326"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan797-0">bringup</tspan></text>
+    <text
+       x="626.44702"
+       y="10.010149"
+       class="info"
+       text-anchor="end"
+       xml:space="preserve"
+       id="text804-5-4-5-3"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;fill:#0041c4;fill-opacity:1;stroke:none;stroke-width:0.790659"><tspan
+         x="626.44702"
+         y="10.010149"
+         id="tspan794-1-3"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659">MxFE3</tspan><tspan
+         x="626.44702"
+         y="17.916739"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan796-4">Tx</tspan><tspan
+         x="626.44702"
+         y="25.823326"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.790659"
+         id="tspan797-4">bringup</tspan></text>
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="M 147.22103,119.53264 H 120.32614"
+       id="path7-4-4" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9-4);paint-order:markers stroke fill"
+       d="m 239.00615,119.58147 h 26.89489"
+       id="path8-7-3" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 147.22103,169.85584 -26.89489,2e-5"
+       id="path7-4-9" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9-3);paint-order:markers stroke fill"
+       d="m 239.00615,169.90467 h 26.89489"
+       id="path8-7-37" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 147.21819,221.67094 -26.89489,2e-5"
+       id="path7-4-99" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.790657;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle-9-31);paint-order:markers stroke fill"
+       d="M 239.00331,221.71977 H 265.8982"
+       id="path8-7-9" />
+  </g>
 </svg>

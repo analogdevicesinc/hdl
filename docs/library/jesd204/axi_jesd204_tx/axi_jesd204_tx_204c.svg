@@ -23,34 +23,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     showgrid="true"
-     inkscape:zoom="0.6393771"
-     inkscape:cx="-100.09742"
-     inkscape:cy="357.37908"
+     inkscape:zoom="2.3371425"
+     inkscape:cx="350.00005"
+     inkscape:cy="167.94012"
      inkscape:window-width="2400"
      inkscape:window-height="1271"
      inkscape:window-x="-9"
      inkscape:window-y="140"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g9"
-     showguides="true">
-    <inkscape:grid
-       id="grid1"
-       units="mm"
-       originx="101.58259"
-       originy="-17.952757"
-       spacingx="3.7795276"
-       spacingy="3.7795277"
-       empcolor="#0099e5"
-       empopacity="0.30196078"
-       color="#0099e5"
-       opacity="0.14901961"
-       empspacing="5"
-       dotted="false"
-       gridanglex="30"
-       gridanglez="30"
-       visible="true" />
-  </sodipodi:namedview>
+     inkscape:current-layer="svg1" />
   <defs
      id="defs1">
     <marker
@@ -59,12 +40,9 @@
        refX="0"
        refY="0"
        orient="20"
-       inkscape:stockid="Stop"
        markerWidth="0.40000001"
        markerHeight="0.40000001"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          style="fill:none;stroke:context-stroke;stroke-width:1"
@@ -77,12 +55,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -96,12 +71,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -115,12 +87,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -134,12 +103,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -153,12 +119,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -172,12 +135,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -191,12 +151,9 @@
        refX="0"
        refY="0"
        orient="auto-start-reverse"
-       inkscape:stockid="Triangle arrow"
        markerWidth="1"
        markerHeight="1"
        viewBox="0 0 1 1"
-       inkscape:isstock="true"
-       inkscape:collect="always"
        preserveAspectRatio="xMidYMid">
       <path
          transform="scale(0.5)"
@@ -205,9 +162,14 @@
          id="path7-4-2-7" />
     </marker>
   </defs>
+  <rect
+     style="fill:#ffffff;stroke-width:1.33417;stroke-linejoin:round"
+     id="rect2"
+     width="700.00012"
+     height="335.46152"
+     x="0"
+     y="0" />
   <g
-     inkscape:label="Camada 1"
-     inkscape:groupmode="layer"
      id="layer1"
      transform="translate(101.58259,-17.952756)">
     <g
@@ -228,20 +190,18 @@
            y="338.36221" />
         <text
            xml:space="preserve"
-           style="font-size:26.6667px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:none;stroke:#000000;stroke-width:2.64567;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:26.976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:none;stroke:none;stroke-width:2.64567;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="546.67737"
            y="369.3606"
            id="text3-8-9"><tspan
-             sodipodi:role="line"
              id="tspan3-7-5"
              x="546.67737"
              y="369.3606"
-             style="fill:#000000;fill-opacity:1">REGISTER</tspan><tspan
-             sodipodi:role="line"
+             style="fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:26.97595043px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">REGISTER</tspan><tspan
              x="546.67737"
              y="402.69397"
              id="tspan8"
-             style="fill:#000000;fill-opacity:1">MAP</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:26.97595043px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">MAP</tspan></text>
       </g>
       <g
          id="g9">
@@ -268,92 +228,84 @@
            y="86.100945" />
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="76.616035"
            y="138.42766"
            id="text3-7"><tspan
-             sodipodi:role="line"
              id="tspan3-1"
              x="76.616035"
              y="138.42766"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">8B/10B or 64B/66B encoder</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">8B/10B or 64B/66B encoder</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="32.950657"
            y="105.24953"
            id="text3"><tspan
-             sodipodi:role="line"
              id="tspan3"
              x="32.950657"
              y="105.24953"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">Lane 1</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Lane 1</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="-100.65088"
            y="32.70137"
            id="text3-3"><tspan
-             sodipodi:role="line"
              id="tspan3-75"
              x="-100.65088"
              y="32.70137"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">TX_PHYn</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">TX_PHYn</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="511.81949"
            y="39.082561"
            id="text3-3-2"><tspan
-             sodipodi:role="line"
              id="tspan3-75-6"
              x="511.81949"
              y="39.082561"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">TX_DATA</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">TX_DATA</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="-100.65088"
            y="79.443741"
            id="text3-3-6"><tspan
-             sodipodi:role="line"
              id="tspan3-75-7"
              x="-100.65088"
              y="79.443741"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">TX_PHY1</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">TX_PHY1</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="-100.65088"
            y="134.80869"
            id="text3-3-3"><tspan
-             sodipodi:role="line"
              id="tspan3-75-5"
              x="-100.65088"
              y="134.80869"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">TX_PHY0</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">TX_PHY0</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="60.435688"
            y="78.229836"
            id="text3-77"><tspan
-             sodipodi:role="line"
              id="tspan3-4"
              x="60.435688"
              y="78.229836"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">Lane 2</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Lane 2</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:18.7822px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:18.99999976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:1.86343;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="86.680733"
            y="50.971699"
            id="text3-77-5"><tspan
-             sodipodi:role="line"
              id="tspan3-4-0"
              x="86.680733"
              y="50.971699"
-             style="fill:#000000;fill-opacity:1;stroke-width:1.86343">Lane n</tspan></text>
+             style="fill:#000000;fill-opacity:1;stroke-width:1.86343;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Lane n</tspan></text>
         <g
            id="g4"
            transform="matrix(0.70433106,0,0,0.70433106,-20.969732,30.663991)">
@@ -366,56 +318,50 @@
              y="302.36221" />
           <text
              xml:space="preserve"
-             style="font-size:26.6667px;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:none;stroke:#000000;stroke-width:2.64567;stroke-linejoin:round;stroke-dasharray:none"
+             style="font-size:26.976px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';fill:none;stroke:none;stroke-width:2.64567;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
              x="223.54765"
              y="349.8515"
              id="text3-8"><tspan
-               sodipodi:role="line"
                id="tspan3-7"
                x="223.54765"
                y="349.8515"
-               style="fill:#000000;fill-opacity:1">CONTROL</tspan></text>
+               style="fill:#000000;fill-opacity:1;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:26.97595043px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">CONTROL</tspan></text>
         </g>
         <path
            style="fill:#a780a9;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#Triangle);marker-end:url(#marker5)"
            d="M 182.9283,236.74567 V 185.82598"
-           id="path4"
-           sodipodi:nodetypes="cc" />
+           id="path4" />
         <path
            style="fill:#a780a9;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker7)"
            d="M 63.136539,189.59223 V 338.06291"
-           id="path6"
-           sodipodi:nodetypes="cc" />
+           id="path6" />
         <path
            style="fill:#a780a9;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
            d="M 63.136539,271.51194 H 119.03935"
-           id="path8"
-           sodipodi:nodetypes="cc" />
+           id="path8" />
         <text
            xml:space="preserve"
-           style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="-48.66909"
            y="47.439354"
            id="text22"><tspan
-             sodipodi:role="line"
              id="tspan22"
              x="-48.66909"
              y="47.756302"
-             style="letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:tb-rl;stroke-width:2.39583"
+             style="letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:tb-rl;stroke-width:2.39583;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
              dy="0.28877574"
              rotate="0 0 0 0"
              dx="0.80998069">...</tspan></text>
         <text
            xml:space="preserve"
-           style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none"
+           style="font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
            x="491.82513"
            y="65.26487"
            id="text22-0"><tspan
-             sodipodi:role="line"
              id="tspan22-2"
              x="491.82513"
              y="65.581818"
-             style="letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:tb-rl;stroke-width:2.39583"
+             style="letter-spacing:0.633898px;word-spacing:0.774764px;writing-mode:tb-rl;stroke-width:2.39583;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:18.99999976px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
              dy="0.28877574"
              rotate="0 0 0 0"
              dx="0.80998069">...</tspan></text>
@@ -423,157 +369,137 @@
       <path
          style="fill:#d3d7cf;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker7)"
          d="m 242.82416,258.33944 96.99804,0.0375"
-         id="path10"
-         sodipodi:nodetypes="cc" />
+         id="path10" />
       <path
          style="fill:#d3d7cf;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker7-4);marker-mid:url(#Stop)"
          d="m 243.57286,277.12785 25.60322,0.01 1.59206,6.2e-4 69.80276,0.027"
-         id="path10-8"
-         sodipodi:nodetypes="cccc" />
+         id="path10-8" />
       <path
          style="fill:#d3d7cf;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker7-2);marker-mid:url(#Stop)"
          d="m 335.84459,295.91627 -6.899,0.003 -1.82444,7.1e-4 -80.29843,0.031 -7.97616,0.003"
-         id="path10-3"
-         sodipodi:nodetypes="ccccc" />
+         id="path10-3" />
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="283.07104"
          y="254.1217"
          id="text10"><tspan
-           sodipodi:role="line"
            id="tspan10"
            x="283.07104"
            y="254.1217"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">Enable</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Enable</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="68.460617"
          y="351.37311"
          id="text10-8"><tspan
-           sodipodi:role="line"
            id="tspan10-9"
            x="68.460617"
            y="351.37311"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">Device_clk</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Device_clk</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="355.96078"
          y="351.37311"
          id="text10-8-0"><tspan
-           sodipodi:role="line"
            id="tspan10-9-7"
            x="355.96078"
            y="351.37311"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">S_AXI</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">S_AXI</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="406.37268"
          y="351.37311"
          id="text10-8-0-7"><tspan
-           sodipodi:role="line"
            id="tspan10-9-7-4"
            x="406.37268"
            y="351.37311"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">s_axi_clk</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">s_axi_clk</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="462.44235"
          y="350.85953"
          id="text10-8-0-7-7"><tspan
-           sodipodi:role="line"
            id="tspan10-9-7-4-1"
            x="462.44235"
            y="350.85953"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">irq</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">irq</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="142.56895"
          y="352.62494"
          id="text10-8-7"><tspan
-           sodipodi:role="line"
            id="tspan10-9-3"
            x="142.56895"
            y="352.62494"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">SYNC~</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">SYNC~</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="282.75009"
          y="292.73312"
          id="text10-2"><tspan
-           sodipodi:role="line"
            id="tspan10-8"
            x="282.75009"
            y="292.73312"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">Status</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Status</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="299.32657"
          y="274.17398"
          id="text10-1"><tspan
-           sodipodi:role="line"
            id="tspan10-2"
            x="299.32657"
            y="274.17398"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">Configuration</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">Configuration</tspan></text>
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7-2)"
          d="m 142.9977,297.30471 v 32.77208"
-         id="path11"
-         sodipodi:nodetypes="cc" />
+         id="path11" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7-2-4)"
          d="M 222.85886,338.26865 V 306.11844"
-         id="path11-6"
-         sodipodi:nodetypes="cc" />
+         id="path11-6" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7-2-4-9)"
          d="m 402.17802,338.79031 v -32.1502"
-         id="path11-6-1"
-         sodipodi:nodetypes="cc" />
+         id="path11-6-1" />
       <text
          xml:space="preserve"
-         style="font-size:9.39106px;font-family:sans-serif;-inkscape-font-specification:sans-serif;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none"
+         style="font-size:8.99999989px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.33102;stroke-linejoin:round;stroke-dasharray:none;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="225.5209"
          y="352.62494"
          id="text10-8-1"><tspan
-           sodipodi:role="line"
            id="tspan10-9-8"
            x="225.5209"
            y="352.62494"
-           style="font-size:9.39106px;fill:#000000;stroke-width:1.33102">SYSREF</tspan></text>
+           style="font-size:8.99999989px;fill:#000000;stroke-width:1.33102;stroke:none;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal">SYSREF</tspan></text>
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker7);marker-end:url(#marker7-2-4)"
          d="m 355.95391,306.6384 0.007,23.43839"
-         id="path12"
-         sodipodi:nodetypes="cc" />
+         id="path12" />
       <path
          style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7-2-4-9)"
          d="m 449.13217,271.51194 h 13.31018 v 58.56485"
-         id="path13"
-         sodipodi:nodetypes="ccc" />
+         id="path13" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7)"
          d="m 502.37294,45.238653 -42.25258,0.457005"
-         id="path14"
-         sodipodi:nodetypes="cc" />
+         id="path14" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7)"
          d="m 510.88777,85.169228 -70.27044,7e-6"
-         id="path15"
-         sodipodi:nodetypes="cc" />
+         id="path15" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7)"
          d="m 502.37294,132.68661 -94.83942,0.39932"
-         id="path16"
-         sodipodi:nodetypes="cc" />
+         id="path16" />
       <path
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.39583;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker7)"
          d="m 77.378444,32.860174 -80.1273581,-0.002"

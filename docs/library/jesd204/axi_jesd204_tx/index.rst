@@ -38,11 +38,11 @@ Features
 *  Max Lanerate with 64B/66B mode: 32 Gbps;
 *  Low Latency;
 *  Independent per lane enable/disable.
+..
+   Utilization
+   --------------------------------------------------------------------------------
 
-Utilization
---------------------------------------------------------------------------------
-
-.. collapsible:: Detailed Utilization
+   .. collapsible:: Detailed Utilization
     
     +---------------+---------+----+---+
     |Device Family  |NUM_LANES|LUTs|FFs|
@@ -125,6 +125,17 @@ JESD204 TX Synthesis Configuration Parameters
 .. hdl-parameters::
    :path: library/jesd204/jesd204_tx
 
+   * - NUM_LANES
+     - Maximum number of lanes supported by the peripheral.
+   * - NUM_LINKS
+     - Maximum number of links supported by the peripheral.
+   * - LINK_MODE
+     - |  Decoder selection of the link layer.
+       |  1 - 8B/10B mode;
+       |  2 - 64B/66B mode.
+   * - DATA_PATH_WIDTH
+     - Data path width in bytes. Set it to 4 in case of 8B/10B, 8 in case of
+       64B/66B.
    * - TPL_DATA_PATH_WIDTH
      - Data path width in bytes towards transport layer. Must be greater or
        equal to ``DATA_PATH_WIDTH``. Must be a power of 2 integer multiple of
@@ -295,7 +306,7 @@ This means that ``TX_DATA`` interface is ``DATA_PATH_WIDTH`` \* 8 \*
 8 bits corresponding to one lane. The lowest ``DATA_PATH_WIDTH`` \* 8 bits
 correspond to the first lane, while the highest ``DATA_PATH_WIDTH`` \* 8 bits
 correspond to the last lane.
-E.g. for 8B/10B mode where DATA_PATH_WIDTH=4. Each lane specific 32 bit block
+E.g. for 8B/10B mode where DATA_PATH_WIDTH=4. Each lane specific 32-bit block
 corresponds to four octets each 8 bits wide. The temporal ordering of the
 octets is from LSB to MSB, this means the octet placed in the lowest 8 bits is
 transmitted first, the octet placed in the highest 8 bits is transmitted last.
@@ -623,7 +634,7 @@ indicates that the link clock is currently not active.
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The core does not generates interrupts.
+The core does not generate interrupts.
 
 8B/10B Link
 --------------------------------------------------------------------------------
@@ -649,8 +660,8 @@ Wait Phase (WAIT)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The WAIT phase is the default state entered during reset. While disabled the
-peripheral will stay in the WAIT phase. When enabled the peripheral will stay in
-the WAIT phase until a synchronization request is received.
+peripheral will stay in the WAIT phase. When enabled, the peripheral will stay
+in the WAIT phase until a synchronization request is received.
 
 A synchronization request can either be generated manually through the register
 map configuration interface or by one of the JESD204B receivers by asserting the
@@ -661,10 +672,10 @@ During the WAIT phase the peripheral will continuously transmit
 :dokuwiki:`/K/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 on each of the ``TX_PHYn`` interfaces.
 
-If at any point the peripheral is disabled it will automatically transition back
-to the WAIT state.
+If at any point the peripheral is disabled, it will automatically transition
+back to the WAIT state.
 
-Lanes that have been disabled in the register map configuration interface will
+Lanes that have been disabled in the register map configuration interface, will
 behave as if the link was in the WAIT state regardless of the actual state.
 
 Code Group Synchronization Phase (CGS)
@@ -829,7 +840,7 @@ Diagnostics
 .. image:: axi_jesd204_tx_204c_64b66b.svg
    :align: center
 
-The 64 bit wide datapath of the link layer is fairly simple, the only mandatory
+The 64-bit wide datapath of the link layer is fairly simple, the only mandatory
 part of the 64B66B link layer datapath is the scrambler. This must be active
 during the operation of the link, however for debug purposes can be bypasses
 with a control register ``SCRAMBLER_DISABLE``.
@@ -843,7 +854,7 @@ If the core does not receives at least one SYSREF pulse it will not pass any
 data from transport layer to physical layer.
 
 For each multiblock sent on the data interface a CRC is calculated which is sent
-on the 2 bit sync header stream during the next multiblock period. Beside the
+on the 2-bit sync header stream during the next multiblock period. Beside the
 CRC the sync header stream contains synchronization information to mark the
 boundary of the multiblock and extended multiblocks.
 
@@ -936,55 +947,60 @@ Supported Devices
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9135 <en/products/AD9135>`: Dual, 11-Bit, high dynamic, 2.8 GSPS, 
-   TxDAC+® Digital-to-Analog Converter;
--  :adi:`AD9136 <en/products/AD9136>`: Dual, 16-Bit, 2.8 GSPS, TxDAC+® 
-   Digital-to-Analog Converter;
--  :adi:`AD9144 <en/products/AD9144>`: Quad, 16-Bit, 2.8 GSPS, TxDAC+® 
-   Digital-to-Analog Converter;
--  :adi:`AD9152 <en/products/AD9152>`: Dual, 16-Bit, 2.25 GSPS, TxDAC+ 
-   Digital-to-Analog Converter;
--  :adi:`AD9154 <en/products/AD9154>`: Quad, 16-Bit, 2.4 GSPS, TxDAC+® 
-   Digital-to-Analog Converter;
--  :adi:`AD9161 <en/products/AD9161>`: 11-Bit, 12 GSPS, RF Digital-to-Analog 
-   Converter;
--  :adi:`AD9162 <en/products/AD9162>`: 16-Bit, 12 GSPS, RF Digital-to-Analog 
-   Converter;
--  :adi:`AD9163 <en/products/AD9163>`: 16-Bit, 12 GSPS, RF DAC and Digital 
-   Upconverter;
--  :adi:`AD9164 <en/products/AD9164>`: 16-Bit, 12 GSPS, RF DAC and Direct 
-   Digital Synthesizer;
--  :adi:`AD9172 <en/products/AD9172>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
-   Channelizers;
--  :adi:`AD9173 <en/products/AD9173>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
-   Channelizers;
--  :adi:`AD9174 <en/products/AD9174>`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct 
-   Digital Synthesizer;
--  :adi:`AD9175 <en/products/AD9175>`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC 
-   with Wideband Channelizers;
--  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with 
-   Wideband Channelizers.
+-  :adi:`AD9135 <en/products/AD9135>`: Dual, 11-Bit, high dynamic, 2.8 GSPS,
+   TxDAC+® Digital-to-Analog Converter
+-  :adi:`AD9136 <en/products/AD9136>`: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
+   Digital-to-Analog Converter
+-  :adi:`AD9144 <en/products/AD9144>`: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
+   Digital-to-Analog Converter
+-  :adi:`AD9152 <en/products/AD9152>`: Dual, 16-Bit, 2.25 GSPS, TxDAC+
+   Digital-to-Analog Converter
+-  :adi:`AD9154 <en/products/AD9154>`: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
+   Digital-to-Analog Converter
+-  :adi:`AD9161 <en/products/AD9161>`: 11-Bit, 12 GSPS, RF Digital-to-Analog
+   Converter
+-  :adi:`AD9162 <en/products/AD9162>`: 16-Bit, 12 GSPS, RF Digital-to-Analog
+   Converter
+-  :adi:`AD9163 <en/products/AD9163>`: 16-Bit, 12 GSPS, RF DAC and Digital
+   Upconverter
+-  :adi:`AD9164 <AD9164>`: 16-Bit, 12 GSPS, RF DAC and Direct Digital
+   Synthesizer
+-  :adi:`AD9172 <en/products/AD9172>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+   Channelizers
+-  :adi:`AD9173 <en/products/AD9173>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+   Channelizers
+-  :adi:`AD9174 <en/products/AD9174>`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
+   Digital Synthesizer
+-  :adi:`AD9175 <en/products/AD9175>`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
+   Wideband Channelizers
+-  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+   Wideband Channelizers
+-  :adi:`AD9177 <en/products/AD9177>`: Quad, 16-Bit, 12 GSPS RF DAC with
+   Wideband Channelizers
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with 
-   Observation Path;
--  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with 
-   Observation Path and DPD;
--  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver 
-   with Observation Path;
--  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver;
--  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF Transmitter 
-   with Observation Path.
+-  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with
+   Observation Path
+-  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with
+   Observation Path and DPD
+-  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver
+   with Observation Path
+-  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver
+-  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF
+   Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and 
-   Quad, 12-Bit, 4GSPS RFADC;
--  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
-   DUAL, 12-Bit, 6GSPS RFADC.
+-  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+   Quad, 12-Bit, 4GSPS RFADC
+-  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+   DUAL, 12-Bit, 6GSPS RFADC
+-  :adi:`AD9986 <en/products/AD9986>`: 4T2R Direct RF Transmitter and
+   Observation Receiver
+-  :adi:`AD9988 <en/products/AD9988>`: 4T4R Direct RF Receiver and Transmitter
 
 Technical Support
 --------------------------------------------------------------------------------

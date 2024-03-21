@@ -20,7 +20,7 @@ The type of link layer is selectable during implementation phase through the
 
 It has been designed for interoperability with 
 :ref:`Analog Devices JESD204 ADC converter products <axi_jesd204_rx_supported_devices>`. 
-To form a complete JESD204 receive logic device it has to be combined with a 
+To form a complete JESD204 receive logic device, it has to be combined with a 
 :ref:`PHY layer <jesd204_physical_layer>` and
 :ref:`transport layer <jesd204_transport_layer>` peripheral.
 
@@ -31,7 +31,7 @@ Features
 -  64B/66B link layer defined in JESD204C;
 -  Subclass 0 and Subclass 1 support;
 -  Deterministic Latency (for Subclass 1 operation);
--  Runtime re-configurability through memory-mapped register interface
+-  Runtime reconfigurability through memory-mapped register interface
    (AXI4-Lite);
 -  Interrupts for event notification;
 -  Diagnostics;
@@ -40,10 +40,11 @@ Features
 -  Low Latency;
 -  Independent per lane enable/disable.
 
-Utilization
---------------------------------------------------------------------------------
+..
+   Utilization
+   --------------------------------------------------------------------------------
 
-.. collapsible:: Detailed Utilization
+   .. collapsible:: Detailed Utilization
     
     +---------------+---------+----+---+
     |Device Family  |NUM_LANES|LUTs|FFs|
@@ -126,6 +127,17 @@ JESD204 RX Synthesis Configuration Parameters
 .. hdl-parameters::
    :path: library/jesd204/jesd204_rx
 
+   * - NUM_LANES
+     - Maximum number of lanes supported by the peripheral.
+   * - NUM_LINKS
+     - Maximum number of links supported by the peripheral.
+   * - LINK_MODE
+     - |  Decoder selection of the link layer:
+       |  1 - 8B/10B mode;
+       |  2 - 64B/66B mode.
+   * - DATA_PATH_WIDTH
+     - Data path width in bytes. Set it to 4 in case of 8B/10B, 8 in case of
+       64B/66B.
    * - TPL_DATA_PATH_WIDTH
      - Data path width in bytes towards transport layer. Must be greater or
        equal to ``DATA_PATH_WIDTH``. Must be a power of 2 integer multiple of
@@ -261,7 +273,7 @@ User data is provided on the AXI4-Stream ``RX_DATA`` interface. The interface is
 a reduced AXI4-Stream interface and only features the TVALID flow control
 signal, but not the TREADY flow control signal. The behavior of the interface is
 as if the TREADY signal was always asserted. This means as soon as ``rx_valid``
-is asserted a continuous stream of user data must be accepted from ``rx_data``.
+is asserted, a continuous stream of user data must be accepted from ``rx_data``.
 
 .. wavedrom::
    :align: center
@@ -282,20 +294,20 @@ is asserted a continuous stream of user data must be accepted from ``rx_data``.
          }
    }
 
-After reset and during link initialization the ``rx_valid`` signal is
-de-asserted. As soon as the User Data Phase is entered the ``rx_valid`` will be
-asserted to indicate that the peripheral is now providing and the processed data
+After reset and during link initialization, the ``rx_valid`` signal is
+deasserted. As soon as the User Data Phase is entered, the ``rx_valid`` will be
+asserted to indicate that the peripheral is now providing the processed data
 at the ``rx_data`` signal. The ``rx_valid`` signal stays asserted until the link
-is either deactivated or re-initialized.
+is either deactivated or reinitialized.
 
 .. image:: octets_mapping.svg
    :align: right
 
-Typically the ``RX_DATA`` interface is connected to a JESD204 transport layer
-peripheral that de-frames the data and passes it to the application layer. The
-internal data path width of the peripheral is four, this means that four octets
-per lane are processed in parallel. When in the user data phase the peripheral
-provides four octets for each lane in each beat.
+Typically, the ``RX_DATA`` interface is connected to a JESD204 transport layer
+peripheral that deframes the data and passes it to the application layer. The
+internal data path width of the peripheral is 4, this means that 4 octets
+per lane are processed in parallel. When in the user data phase, the peripheral
+provides 4 octets for each lane in each beat.
 
 This means that ``RX_DATA`` interface is ``DATA_PATH_WIDTH`` \* 8 \*
 ``NUM_LANES`` bits wide. With each block of consecutive ``DATA_PATH_WIDTH`` \* 8
@@ -304,7 +316,7 @@ correspond to the first lane, while the highest ``DATA_PATH_WIDTH`` \* 8 bits
 correspond to the last lane.
 
 E.g. for 8B/10B mode where ``DATA_PATH_WIDTH``\ =4. Each lane specific 32-bit
-block corresponds to four octets each 8 bits wide. The temporal ordering of the
+block corresponds to 4 octets each 8 bits wide. The temporal ordering of the
 octets is from LSB to MSB, this means the octet placed in the lowest 8 bits was
 received first, the octet placed in the highest 8 bits was received last.
 
@@ -324,7 +336,7 @@ Peripheral Identification and HDL Synthesis Settings
 
 The peripheral contains multiple registers that allow the identification of the
 peripheral as well as the discovery of features that were configured at HDL
-synthesis time. Apart from the ``SCRATCH`` register all registers in this
+synthesis time. Apart from the ``SCRATCH`` register, all registers in this
 section are read-only and write access to them will be ignored.
 
 The ``VERSION`` (``0x000``) register contains the version of the peripheral. The
@@ -341,7 +353,7 @@ design.
 
 The ``SCRATCH`` (``0x008``) register is a general purpose 32-bit register that
 can be set to an arbitrary values. Reading the register will yield the value
-previously written (The value will be cleared when the peripheral is reset). Its
+previously written (the value will be cleared when the peripheral is reset). Its
 content does not affect the operation of the peripheral. It can be used by
 software to test whether the register map is accessible or store custom
 peripheral associated data.
@@ -375,14 +387,14 @@ Both must be less than the elastic buffer size.
 Interrupt Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Interrupt processing is handled by three closely related registers. All three
+Interrupt processing is handled by 3 closely related registers. All 3
 registers follow the same layout, each bit in the register corresponds to one
 particular interrupt.
 
 When an interrupt event occurs it is recorded in the ``IRQ_SOURCE`` (``0x088``)
-register. For a recorded interrupt event the corresponding bit is set to 1. If
-an interrupt event occurs while the bit is already set to 1 it will stay set to
-1.
+register. For a recorded interrupt event, the corresponding bit is set to 1. If
+an interrupt event occurs while the bit is already set to 1, it will stay set
+to 1.
 
 The ``IRQ_ENABLE`` (``0x080``) register controls how recorded interrupt events
 propagate. An interrupt is considered to be enabled if the corresponding bit in
@@ -540,7 +552,7 @@ The external SYSREF signal is used to align the internal local multiframe clocks
 The ``SYSREF_CONF`` (``0x100``) register allows to configure the behavior of the
 SYSREF capture circuitry. Setting the ``SYSREF_DISABLE`` (``[0]``) bit to 1
 disables the SYSREF handling. All external SYSREF events are ignored and the
-LMFC/LEMC is generated internally. For Subclass 1 operation SYSREF handling
+LMFC/LEMC is generated internally. For Subclass 1 operation, SYSREF handling
 should be enabled and for Subclass 0 operation it should be disabled.
 
 The ``SYSREF_LMFC_OFFSET`` (``0x104``) register allows to modify the offset
@@ -567,7 +579,7 @@ operation is disabled or the JESD204 link is disabled.
 Link Status
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-All link status registers are read-only. While the link is disabled some of the
+All link status registers are read-only. While the link is disabled, some of the
 link status registers might contain bogus values. Their content should be
 ignored until the link is fully enabled.
 
@@ -669,7 +681,7 @@ of the device clock (``device_clk``) relative to the AXI interface clock
 the expected rate.
 
 The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
-clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
+clock, this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
 indicates that the link clock is currently not active.
 
 .. _axi_jesd204_rx_interrupts:
@@ -677,7 +689,7 @@ indicates that the link clock is currently not active.
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The core does not generates interrupts.
+The core does not generate interrupts.
 
 8B/10B Link
 --------------------------------------------------------------------------------
@@ -703,13 +715,13 @@ RESET phase
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The RESET phase is the default state entered during reset. While disabled the
-peripheral will stay in the RESET phase. When enabled the peripheral will
+peripheral will stay in the RESET phase. When enabled, the peripheral will
 transition from the RESET phase to the WAIT FOR PHY phase.
 
-If at any point the peripheral is disabled it will automatically transition back
-to the RESET state.
+If at any point the peripheral is disabled, it will automatically transition
+back to the RESET state.
 
-Lanes that have been disabled in the register map configuration interface will
+Lanes that have been disabled in the register map configuration interface, will
 behave as if the link was in the RESET state regardless of the actual state.
 
 WAIT FOR PHY phase
@@ -762,7 +774,7 @@ application to re-initialize the link.
 
 Alignment character monitoring can optionally be disabled via the register map
 configuration interface. Alignment character monitoring is enabled or disabled
-for all lanes equally. If alignment character monitoring is disabled no errors
+for all lanes equally. If alignment character monitoring is disabled, no errors
 are reported when a misaligned alignment character is received.
 
 Data on the ``RX_DATA`` port corresponding to a disabled lanes are undefined and
@@ -816,14 +828,14 @@ The steps of the link bring-up are presented below:
 64B/66B Link
 --------------------------------------------------------------------------------
 
-The 64 bit wide datapath of the link layer is fairly simple, the data received
+The 64-bit wide datapath of the link layer is fairly simple, the data received
 from the PHY is sent through a mandatory descrambler block to an elastic buffer
 that serves as an aligner cross lanes. Each beat of the datapath contains a
 block of data of 8 octets.
 
-For each lane the control path starts from the 2 bit sync header connected to
+For each lane the control path starts from the 2-bit sync header connected to
 the header decoder that tracks and monitors multiblock and extended multiblock
-markers from the stream, reconstructs the 32 bits sync word corresponding to
+markers from the stream, reconstructs the 32-bit sync word corresponding to
 every multiblock and extracts the received CRC from it. The CRC is calculated
 for every multiblock and is compared against the received CRC. The mismatches
 are recorded by the error monitor block.
@@ -929,7 +941,7 @@ EMB LOCK State
 In the EMB LOCK state the monitoring of multiblock and extended multiblock
 indicators is continued. In case of eight consecutive indicators are incorrect
 the state machine will return in the EMB INIT state. This state ensures the
-validity of the 32 bit sync words constructed from the sync header stream. For
+validity of the 32-bit sync words constructed from the sync header stream. For
 each multiblock the calculated CRC of the previous multiblock is extracted from
 the current sync word.
 
@@ -1066,51 +1078,64 @@ JESD204B Analog-to-Digital Converters
 -  :adi:`AD6676 <en/products/AD6676>`: Wideband IF Receiver Subsystem
 -  :adi:`AD6677 <en/products/AD6677>`: 80 MHz Bandwidth, IF Receiver
 -  :adi:`AD6684 <en/products/AD6684>`: 135 MHz Quad IF Receiver
--  :adi:`AD6688 <en/products/AD6688>`: RF Diversity and 1.2GHz BW Observation 
+-  :adi:`AD6688 <en/products/AD6688>`: RF Diversity and 1.2GHz BW Observation
    Receiver
--  :adi:`AD9208 <en/products/AD9208>`: 14-Bit, 3GSPS, JESD204B, Dual 
+-  :adi:`AD9207 <en/products/AD9207>`: 12-Bit, 6 GSPS, JESD204B/JESD204C
+   Dual Analog-to-Digital Converter
+-  :adi:`AD9208 <en/products/AD9208>`: 14-Bit, 3GSPS, JESD204B,
+   Dual Analog-to-Digital Converter
+-  :adi:`AD9209 <en/products/AD9209>`: 12-Bit, 4GSPS, JESD204B/C, Quad
+   Analog-to-Digital Converter
+-  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF 
    Analog-to-Digital Converter
 -  :adi:`AD9234 <en/products/AD9234>`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
    Analog-to-Digital Converter
 -  :adi:`AD9250 <en/products/AD9250>`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
    Analog-to-Digital Converter
--  :adi:`AD9625 <en/products/AD9625>`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS, 
+-  :adi:`AD9625 <en/products/AD9625>`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
    1.3 V/2.5 V Analog-to-Digital Converter
 -  :adi:`AD9656 <en/products/AD9656>`: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
    Analog-to-Digital Converter
--  :adi:`AD9680 <en/products/AD9680>`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500 
+-  :adi:`AD9680 <en/products/AD9680>`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
    MSPS JESD204B, Dual Analog-to-Digital Converter
 -  :adi:`AD9683 <en/products/AD9683>`: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
    Analog-to-Digital Converter
 -  :adi:`AD9690 <en/products/AD9690>`: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
    Analog-to-Digital Converter
--  :adi:`AD9691 <en/products/AD9691>`: 14-Bit, 1.25 GSPS JESD204B, 
+-  :adi:`AD9691 <en/products/AD9691>`: 14-Bit, 1.25 GSPS JESD204B,
    Dual Analog-to-Digital Converter
--  :adi:`AD9694 <en/products/AD9694>`: 14-Bit, 500 MSPS JESD204B, Quad 
+-  :adi:`AD9694 <en/products/AD9694>`: 14-Bit, 500 MSPS JESD204B, Quad
    Analog-to-Digital Converter
+-  :adi:`AD9695 <en/products/AD9695>`: 14-Bit, 1300 MSPS/625 MSPS,
+   JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter
 -  :adi:`AD9083 <en/products/AD9083>`: 16-Channel, 125 MHz Bandwidth, JESD204B
+   Analog-to-Digital Converter
+-  :adi:`AD9094 <en/products/AD9094>`: 8-Bit, 1 GSPS, JESD204B, Quad
    Analog-to-Digital Converter
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with 
+-  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with
    Observation Path
--  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with 
+-  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with
    Observation Path and DPD
--  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver 
+-  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver
    with Observation Path
 -  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver
--  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF 
+-  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF
    Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and 
+-  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
    Quad, 12-Bit, 4GSPS RFADC
--  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and 
+-  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
    DUAL, 12-Bit, 6GSPS RFADC
+-  :adi:`AD9986 <en/products/AD9986>`: 4T2R Direct RF Transmitter and
+   Observation Receiver
+-  :adi:`AD9988 <en/products/AD9988>`: 4T4R Direct RF Receiver and Transmitter
 
 Technical Support
 --------------------------------------------------------------------------------
