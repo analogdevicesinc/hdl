@@ -18,13 +18,8 @@ namespace eval ipl {
                     {lsccip:max_radiant_version} {{} {} {} {}}
                     {lsccip:min_esi_version} {{lsccip:min_esi_version} {} {1.0} {}}
                     {lsccip:max_esi_version} {{} {} {} {}}
-                    {lsccip:supported_products} {{lsccip:supported_products} {} {} {
-                        {*} {{lsccip:supported_family} {{name} {name="*"}} {} {}}
-                    }}
-                    {lsccip:supported_platforms} {{lsccip:supported_platforms} {} {} {
-                        {radiant} {{lsccip:supported_platform} {{name} {name="radiant"}} {} {}}
-                        {esi} {{lsccip:supported_platform} {{name} {name="esi"}} {} {}}
-                    }}
+                    {lsccip:supported_products} {{lsccip:supported_products} {} {} {}}
+                    {lsccip:supported_platforms} {{lsccip:supported_platforms} {} {} {}}
                     {href} {{} {} {https://wiki.analog.com/resources/fpga/docs/ip_cores} {}}
                 }
             }
@@ -1162,13 +1157,31 @@ namespace eval ipl {
                 }
             } elseif {[llength $line] > 2} {
                 if {$type == "parameter"} {
-                    set values [split $values "="]
-                    set parameter [string map {" " ""} [lindex $values 0]]
-                    set default_value [string map {" " ""} [lindex $values 1]]
-                    set portdata [list type $type name $parameter defval $default_value]
-                    set parlist [list {*}$parlist $portdata]
-                    if {$debug} {
-                        puts "$type\t$parameter = $default_value"
+                    if {[llength $line] == 3} {
+                        set parameter [string map {" " ""} [lindex $values 1]]
+                        set portdata [list type $type name $parameter]
+                        set parlist [list {*}$parlist $portdata]
+                    }
+                    if {[llength $line] == 4} {
+                        set values [split $values "="]
+                        set parameter [string map {" " ""} [lindex $values 0]]
+                        set default_value [string map {" " ""} [lindex $values 1]]
+                        set portdata [list type $type name $parameter defval $default_value]
+                        set parlist [list {*}$parlist $portdata]
+                        if {$debug} {
+                            puts "$type\t$parameter = $default_value"
+                        }
+                    }
+                    if {[llength $line] == 5} {
+                        set values [split $values "="]
+                        set valtype [string map {" " ""} [lindex [lindex $values 0] 0]]
+                        set parameter [string map {" " ""} [lindex [lindex $values 0] 1]]
+                        set default_value [string map {" " ""} [lindex $values 1]]
+                        set portdata [list type $type name $parameter defval $default_value valtype $valtype]
+                        set parlist [list {*}$parlist $portdata]
+                        if {$debug} {
+                            puts "$type\t$parameter = $default_value"
+                        }
                     }
                 } else {
                     set sep {[}
@@ -1389,9 +1402,21 @@ namespace eval ipl {
         foreach data [dict get $mod_data parlist] {
             set name [dict get $data name]
             if {[llength $data] > 4} {
+                # check if parameter type is set
                 set defval [dict get $data defval]
+                set regxf {^\s*-?[0-9]*\.[0-9]+\s*$}
+                set regxi {^\s*-?[0-9]+\s*$}
+                set regxstr {^\".*\"$}
+                if {[regexp $regxf $defval]} {
+                    set value_type float
+                } elseif {[regexp $regxi $defval]} {
+                    set value_type int
+                } elseif {[regexp $regxstr $defval]} {
+                    set value_type string
+                }
+                
                 set ip [ipl::settpar -ip $ip -id $name \
-                    -type param -value_type int \
+                    -type param -value_type $value_type \
                     -conn_mod $mod_name -title $name \
                     -default $defval \
                     -output_formatter nostr \
@@ -1468,7 +1493,10 @@ namespace eval ipl {
         if {$regex != ""} {
             set flist [regexp -all -inline $regex $flist]
         }
-
+        set node [ipl::getnode fdeps $dpath $ip]
+        if {$node != ""} {
+            set flist [list {*}$node {*}$flist]
+        }
         return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
@@ -1672,10 +1700,68 @@ namespace eval ipl {
         }
     }
 
-    # to do:
-    # -add memory map descriptors and set procedure, this can be included at addif procedure
-    # -extend address space descriptor and add set procedures, this can be included at addif procedure
-    # -add source file include procedure
-    # -add ip create procedure that will create the necessary folders, collect the files, and generates the ip based in the ip script.
+    proc aximon {} {
+        set mod_data [ipl::getmod ../axi_clock_monitor/axi_clock_monitor.v]
+        set ip $::ipl::ip
+
+        set ip [ipl::addports -ip $ip -mod_data $mod_data]
+        set ip [ipl::addpars -ip $ip -mod_data $mod_data]
+
+        set ip [ipl::general \
+            -name [dict get $mod_data mod_name] \
+            -display_name "ADI AXI clock monitor" \
+            -supported_products {*} \
+            -supported_platforms {esi radiant} \
+            -href "https://wiki.analog.com/resources/fpga/docs/axi_clock_monitor" \
+            -vendor "latticesemi.com" \
+            -library "ip" \
+            -version "1.0" \
+            -category "ADI" \
+            -keywords "ADI IP" \
+            -min_radiant_version "2023.1" \
+            -min_esi_version "2023.1" -ip $ip]
+
+        set ip [ipl::mmap -ip $ip \
+            -name "axi_clock_monitor_mem_map" \
+            -description "axi_clock_monitor_mem_map" \
+            -baseAddress 0 \
+            -range 4096 \
+            -width 32]
+
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
+            -exept_pl [list s_axi_aclk s_axi_aresetn] \
+            -display_name s_axi \
+            -description s_axi \
+            -master_slave slave \
+            -mmap_ref axi_clock_monitor_mem_map \
+            -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+
+        set ip [ipl::igports -ip $ip -portlist {clock_1} -expression {not(NUM_OF_CLOCKS > 1)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_2} -expression {not(NUM_OF_CLOCKS > 2)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_3} -expression {not(NUM_OF_CLOCKS > 3)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_4} -expression {not(NUM_OF_CLOCKS > 4)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_5} -expression {not(NUM_OF_CLOCKS > 5)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_6} -expression {not(NUM_OF_CLOCKS > 6)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_7} -expression {not(NUM_OF_CLOCKS > 7)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_8} -expression {not(NUM_OF_CLOCKS > 8)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_9} -expression {not(NUM_OF_CLOCKS > 9)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_10} -expression {not(NUM_OF_CLOCKS > 10)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_11} -expression {not(NUM_OF_CLOCKS > 11)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_12} -expression {not(NUM_OF_CLOCKS > 12)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_13} -expression {not(NUM_OF_CLOCKS > 13)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_14} -expression {not(NUM_OF_CLOCKS > 14)}]
+        set ip [ipl::igports -ip $ip -portlist {clock_15} -expression {not(NUM_OF_CLOCKS > 15)}]
+
+        set ip [ipl::setport -ip $ip -name s_axi_aclk -port_type clock]
+        set ip [ipl::setport -ip $ip -name s_axi_aresetn -port_type reset]
+        set ip [ipl::setport -ip $ip -name clock_0 -port_type clock]
+
+        set ip [ipl::addfiles -spath ../axi_clock_monitor -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_clock_mon.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_axi.v} -ip $ip]
+
+        ipl::genip $ip
+    }
+
     # -create make script.
 }
