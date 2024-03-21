@@ -7,7 +7,7 @@
 
     <title>SPI Engine Tutorial - PulSAR-ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -44,12 +44,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -59,16 +59,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -77,7 +79,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -111,23 +113,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -362,7 +366,7 @@ different “downgraded” configurations.</p>
 <h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
 <p>Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
 parameters need to be set to the same value. The function takes the following
@@ -430,7 +434,7 @@ timing. This IP can also be configured from software to output 100MHz.</p>
 <h2>AD7984 Timing diagram<a class="headerlink" href="#ad7984-timing-diagram" title="Permalink to this heading">#</a></h2>
 <p>The operation mode that will be implemented using the SPI Engine in offload mode
 is the <span class="math notranslate nohighlight">\(\overline{CS}\)</span> Mode, 3-Wire with Busy Indicator Serial Interface Timing (SDI High),
-as shown in <a class="reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets//AD7984.pdf#[{&quot;num&quot;%3A51%2C&quot;gen&quot;%3A0}%2C{&quot;name&quot;%3A&quot;XYZ&quot;}%2C52%2C713%2C0]">AD7984 datasheet</a>,
+as shown in ,
 page 18, figure 30.</p>
 <p>Key timing characteristics:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">18</span><span class="w"> </span>bit<span class="w"> </span>transfers
@@ -520,9 +524,9 @@ the SPI Engine.</p>
 <section id="testbench">
 <h2>Testbench<a class="headerlink" href="#testbench" title="Permalink to this heading">#</a></h2>
 <p>To check the overall performance of the design and also to expose any major
-bugs, the system can be tested using a testbench from <a class="reference external" href="https://github.com/analogdevicesinc/testbenches">ADI Testbenches repository</a>.</p>
+bugs, the system can be tested using a testbench from <a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches">ADI Testbenches repository</a>.</p>
 <p>The testbench framework is designed to use the same bd.tcl as the actual project
-<a class="reference external" href="https://github.com/analogdevicesinc/testbenches/blob/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/blob/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
 <p>The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run <code class="code docutils literal notranslate"><span class="pre">make</span> <span class="pre">cfg1</span></code> from the
 <em>hdl/testbenches/pulsar_adc_pmdz/</em> folder. Besides exposing possible bugs,
@@ -573,8 +577,8 @@ development, using software.</p>
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

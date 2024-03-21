@@ -7,7 +7,7 @@
 
     <title>ADAQ7980-SDZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -43,12 +43,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -58,16 +58,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -76,7 +78,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -117,23 +119,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -203,19 +207,19 @@ Content on this topic
 <span id="adaq7980-sdz"></span><h1>ADAQ7980-SDZ HDL project<a class="headerlink" href="#adaq7980-sdz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> are 16-bit analog-to-digital converter
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="icon adi reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> are 16-bit analog-to-digital converter
 (ADC) subsystems that integrate four common signal processing and conditioning
 blocks into a system in package (SiP) design that supports a variety of
 applications. These devices contain the most critical passive components,
 eliminating many of the design challenges associated with traditional signal
 chains that use successive approximation register (SAR) ADCs. These passive
 components are crucial to achieving the specified device performance.</p>
-<p>The <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> contain a high accuracy, low power,
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="icon adi reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> contain a high accuracy, low power,
 16-bit SAR ADC, a low power, high bandwidth, high input impedance ADC driver,
 a low power, stable reference buffer, and an efficient power management block.
 Housed within a tiny, 5 mm × 4 mm LGA package, these systems simplify the
 design process for data acquisition systems. The level of system integration
-of the <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> solves many design challenges, while
+of the <a class="icon adi reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="icon adi reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a> solves many design challenges, while
 the devices still provide the flexibility of a configurable ADC driver feedback
 loop to allow gain and/or common-mode adjustments. A set of four device
 supplies provides optimal system performance; however, single-supply operation
@@ -239,14 +243,14 @@ logic. Specified operation of these devices is from −55°C to +125°C.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-ADAQ7980">EVAL-ADAQ7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ7980">EVAL-ADAQ7980</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -431,7 +435,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get the source
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get the source
 you must <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
@@ -446,14 +450,14 @@ the HDL repository, and then build the project as follows:.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADAQ7980">ADAQ7980</a>/<a class="icon adi reference external" href="https://www.analog.com/ADAQ7988">ADAQ7988</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/adaq7980-7988.pdf">UG-1060, Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -470,55 +474,55 @@ the HDL repository, and then build the project as follows:.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_dmac</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
@@ -531,7 +535,7 @@ the HDL repository, and then build the project as follows:.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ No-OS project</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adaq7980_sdz">ADAQ7980_SDZ No-OS project</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
 </ul>
 </section>
@@ -545,14 +549,14 @@ the HDL repository, and then build the project as follows:.</p>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
 <p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
-on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
 <p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
@@ -578,8 +582,8 @@ are, the lower the chances to receive support from <a class="reference external"
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

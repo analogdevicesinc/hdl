@@ -7,7 +7,7 @@
 
     <title>AD4630-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -43,12 +43,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -58,16 +58,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -76,7 +78,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -124,23 +126,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -210,39 +214,39 @@ Content on this topic
 <span id="ad4630-fmc"></span><h1>AD4630-FMC HDL project<a class="headerlink" href="#ad4630-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a> is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a> is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
 successive approximation register (SAR) analog-to-digital converter (ADC). The
-<a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> is the single channel version. With a guaranteed maximum ±0.9
-ppm INL and no missing codes at 24-bits, the <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a> and
-<a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> achieve unparalleled precision from −40°C to +125°C.
-The <a class="reference external" href="https://www.analog.com/AD4030-16">AD4030-16</a> is a 16-bit dual channel version.</p>
+<a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> is the single channel version. With a guaranteed maximum ±0.9
+ppm INL and no missing codes at 24-bits, the <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a> and
+<a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> achieve unparalleled precision from −40°C to +125°C.
+The <a class="icon adi reference external" href="https://www.analog.com/AD4030-16">AD4030-16</a> is a 16-bit dual channel version.</p>
 <p>A low-drift, internal precision reference buffer eases voltage reference
 sharing with other system circuitry. The AD4630-24 offers a typical dynamic
-range of 106 dB when using a 5 V reference. The <a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> offers a typical
+range of 106 dB when using a 5 V reference. The <a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> offers a typical
 dynamic range of 109 dB using a 5 V reference. The low noise floor enables signal
 chains requiring less gain and lower power. A block averaging filter with
 programmable decimation ratio can increase dynamic range up to 153 dB and
-155.5dB for the <a class="reference external" href="https://www.analog.com/AD4030">AD4030</a>. The wide differential input and common mode ranges
+155.5dB for the <a class="icon adi reference external" href="https://www.analog.com/AD4030">AD4030</a>. The wide differential input and common mode ranges
 allow inputs to use the full ±VREF range without saturating, simplifying signal
 conditioning requirements and system calibration. The improved settling of the
 Easy Drive analog inputs broadens the selection of analog front-end components
-compatible with the <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>, <a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> and <a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a>.
+compatible with the <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> and <a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a>.
 Both single-ended and differential signals are supported.</p>
 <p>The versatile Flexi-SPI serial interface eases host processor and ADC
 integration. A wide data clocking window, multiple SDO lanes, and optional DDR
 data clocking can reduce the serial clock to 10 MHz while operating at a
 sample rate of 2 MSPS. Echo clock mode and ADC master clock mode relax the
 timing requirements and simplify the use of digital isolators.</p>
-<p>The <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>’s, <a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a>’s and <a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a>’s BGA package
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>’s, <a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a>’s and <a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a>’s BGA package
 integrates all critical power supply and reference bypass capacitors, reducing
 the footprint and system component count, and lessening sensitivity to board
 layout.</p>
-<p>The HDL reference design for the <a class="reference external" href="https://www.analog.com/EVAL-AD4630_FMCZ">EVAL-AD4630_FMCZ</a> and
-<a class="reference external" href="https://www.analog.com/EVAL-AD4030_FMCZ">EVAL-AD4030_FMCZ</a> provides all the interfaces that are necessary to
+<p>The HDL reference design for the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630_FMCZ">EVAL-AD4630_FMCZ</a> and
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030_FMCZ">EVAL-AD4030_FMCZ</a> provides all the interfaces that are necessary to
 interact with the device using a Xilinx FPGA development board. The design has
-all the necessary infrastructure to acquire data from the <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>
-24-bit dual-channel precision SAR ADC, <a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> 16-bit dual channel
-precision SAR ADC and <a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> single channel ADC, supporting
+all the necessary infrastructure to acquire data from the <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>
+24-bit dual-channel precision SAR ADC, <a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> 16-bit dual channel
+precision SAR ADC and <a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> single channel ADC, supporting
 continuous data capture at maximum 2 MSPS data rate. The design targeted to the
 Zedboard, which is a low cost FPGA carrier board from Digilent, using a
 Zynq-7000 re-programmable SoC from Xilinx.</p>
@@ -261,17 +265,17 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD4030-24FMCZ">EVAL-AD4030-24FMCZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD4630-16FMCZ">EVAL-AD4630-16FMCZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD4630-24FMCZ">EVAL-AD4630-24FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030-24FMCZ">EVAL-AD4030-24FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-16FMCZ">EVAL-AD4630-16FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-24FMCZ">EVAL-AD4630-24FMCZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -288,8 +292,8 @@ interface configurations of the device. In echo clock mode, because the clock
 for data latching is routed back through the BUSY line, an additional data
 capture module is used for saving the received samples and transmitting
 forward for the DMA.</p>
-<p>There are three modes in which the system can run. Refer to the <a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>,
-<a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> or <a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> data sheet section titled SAMPLE CONVERSION
+<p>There are three modes in which the system can run. Refer to the <a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a>,
+<a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a> or <a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a> data sheet section titled SAMPLE CONVERSION
 TIMING AND DATA TRANSFER for more explanation of data transfer zones.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
@@ -520,7 +524,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
@@ -549,16 +553,16 @@ by the configuration used:</p>
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad4630-24-eval-board">[Wiki] AD4630/AD4030 Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad4630_fmc">AD4630_FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad4630_fmc">AD4630_FMC HDL project source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad463x/hdl">[Wiki] AD4630_FMC HDL project documentation</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
@@ -576,59 +580,59 @@ by the configuration used:</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AD463X_DATA_CAPTURE</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/ad463x_data_capture">library/ad463x_data_capture</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/ad463x_data_capture">library/ad463x_data_capture</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_AXIS_REORDER</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_axis_reorder">library/spi_engine/spi_axis_reorder</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_axis_reorder">library/spi_engine/spi_axis_reorder</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
@@ -641,8 +645,8 @@ by the configuration used:</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad4630.c">AD4630_FMC Linux driver source code</a></p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad463x_fmcz">AD463x_FMC No-OS project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad4630.c">AD4630_FMC Linux driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad463x_fmcz">AD463x_FMC No-OS project source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad4630">AD4630 ADC Linux Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad463x">AD463X ADC Linux Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad463x">AD4630/AD4030 - No-OS Driver</a></p></li>
@@ -658,14 +662,14 @@ by the configuration used:</p>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
 <p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
-on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
 <p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
@@ -691,8 +695,8 @@ are, the lower the chances to receive support from <a class="reference external"
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

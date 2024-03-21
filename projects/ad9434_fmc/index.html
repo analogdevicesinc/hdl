@@ -7,7 +7,7 @@
 
     <title>AD9434-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -43,12 +43,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -58,16 +58,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -76,7 +78,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -117,23 +119,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -203,7 +207,7 @@ Content on this topic
 <span id="ad9434-fmc"></span><h1>AD9434-FMC HDL project<a class="headerlink" href="#ad9434-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference external" href="https://www.analog.com/AD9434">AD9434</a> is a 12-bit monolithic sampling analog-to-digital converter
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a> is a 12-bit monolithic sampling analog-to-digital converter
 (ADC) optimized for high performance, low power, and ease of use. The part
 operates at up to a 500 MSPS conversion rate and is optimized for outstanding
 dynamic performance in wideband carrier and broadband systems. All necessary
@@ -217,13 +221,13 @@ analog inputs of the ADC.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9434">EVAL-AD9434</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9434">EVAL-AD9434</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -242,7 +246,7 @@ analog inputs of the ADC.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.analog.com/EVAL-AD9434">EVAL-AD9434-FMC-500EBZ</a></p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9434">EVAL-AD9434-FMC-500EBZ</a></p></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
 <td><p>FMC LPC</p></td>
 </tr>
@@ -262,7 +266,7 @@ analog inputs of the ADC.</p>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
-<p>There are multiple ways to configure the clock source for <a class="reference external" href="https://www.analog.com/AD9434">AD9434</a>.
+<p>There are multiple ways to configure the clock source for <a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a>.
 In this section is presented a guide on how to rework the board to the desired
 user clock circuitry. Below is a table on what components are needed to install
 or uninstall on the evaluation board.</p>
@@ -296,7 +300,7 @@ or uninstall on the evaluation board.</p>
 </div>
 <p>For LVPECL and LVDS configurations, appropriate charge pump filter circuit
 values are necessary to have an optimized clock buffer performance from
-<a class="reference external" href="https://www.analog.com/AD9517-4">AD9517-4</a>.</p>
+<a class="icon adi reference external" href="https://www.analog.com/AD9517-4">AD9517-4</a>.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
@@ -374,14 +378,14 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </table>
 </div>
 <p>These are the board-specific interrupts
-(found in <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9434_fmc/common/ad9434_bd.tcl">here</a>).</p>
+(found in <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9434_fmc/common/ad9434_bd.tcl">here</a>).</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
@@ -423,14 +427,14 @@ guide.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets: <a class="reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
+<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad9434fmc-500ebz">EVAL-AD9434 user guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9434_fmc">AD9434-FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9434_fmc">AD9434-FMC HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -447,31 +451,31 @@ guide.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD9434</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9434">library/axi_ad9434</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9434">library/axi_ad9434</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 </tbody>
@@ -481,8 +485,8 @@ guide.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts">Linux device tree zynq-zc706-adv7511-ad9434-fmc-500ebz.dts</a></p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad9467.c">Linux driver ad9467.c</a>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts">Linux device tree zynq-zc706-adv7511-ad9434-fmc-500ebz.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad9467.c">Linux driver ad9467.c</a>
 (used for AD9434-FMC as well)</p></li>
 </ul>
 </section>
@@ -496,14 +500,14 @@ guide.</p>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
 <p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
-on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
 <p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
@@ -529,8 +533,8 @@ are, the lower the chances to receive support from <a class="reference external"
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

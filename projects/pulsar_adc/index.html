@@ -7,7 +7,7 @@
 
     <title>PULSAR-ADC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -42,12 +42,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -57,16 +57,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -75,7 +77,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -122,23 +124,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -219,22 +223,22 @@ the differences being found in their performance.  A full description of these
 products are available in their respective data sheets and should be consulted
 when utilizing the boards.</p>
 <p>ADAQ40xx families is also part of the family of pulsar converters with PMOD
-connector. This type of boards come with the <a class="reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a> PMOD to
+connector. This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a> PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
 interfaces with the system demonstration controller board.
-The <a class="reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
-design on a laminate that includes the <a class="reference external" href="https://www.analog.com/AD4003">AD4003</a> ADC with a fully
-differential driver the <a class="reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a>, a reference buffer
-(the <a class="reference external" href="https://www.analog.com/ADA4807-1">ADA4807-1</a>), a precision resistor iPassive network on a separate die
+The <a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
+design on a laminate that includes the <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> ADC with a fully
+differential driver the <a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a>, a reference buffer
+(the <a class="icon adi reference external" href="https://www.analog.com/ADA4807-1">ADA4807-1</a>), a precision resistor iPassive network on a separate die
 along with discrete capacitors and resistors. The device solves many design
 challenges for a wide range of applications similar to AD400x, yet it still
 provides the flexibility. It offers over 75% area savings compared to discrete
 design and reduces TTM.</p>
 <p>PulSAR converters which have FMC boards associated with them are AD40xx family.
-The <a class="reference external" href="https://www.analog.com/AD4003">AD4003</a> / <a class="reference external" href="https://www.analog.com/AD4007">AD4007</a> / <a class="reference external" href="https://www.analog.com/AD4011">AD4011</a> / <a class="reference external" href="https://www.analog.com/AD4020">AD4020</a> are low noise,
+The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a> are low noise,
 low power, high speed, 18-bit, precision successive approximation register (SAR)
-analog-to-digital converters (ADCs). The <a class="reference external" href="https://www.analog.com/AD4003">AD4003</a>, <a class="reference external" href="https://www.analog.com/AD4007">AD4007</a>, and
-<a class="reference external" href="https://www.analog.com/AD4011">AD4011</a> offer 2 MSPS, 1 MSPS, and 500 kSPS throughputs, respectively.
+analog-to-digital converters (ADCs). The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a>, and
+<a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> offer 2 MSPS, 1 MSPS, and 500 kSPS throughputs, respectively.
 They incorporate ease of use features that reduce signal chain power consumption,
 reduce signal chain complexity, and enable higher channel density. The high-Z
 mode, coupled with a long acquisition phase, eliminates the need for a dedicated
@@ -262,55 +266,55 @@ task of sending data across digital isolation.</p>
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <p>PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7942-PMDZ">EVAL-AD7942-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7946-PMDZ">EVAL-AD7946-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ">EVAL-AD7988-1-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ">EVAL-AD7685-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ">EVAL-AD7687-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ">EVAL-AD7691-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ">EVAL-AD7686-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ">EVAL-AD7688-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ">EVAL-AD7693-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ">EVAL-AD7988-5-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7980-PMDZ">EVAL-AD7980-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ">EVAL-AD7983-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ">EVAL-AD7690-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7982-PMDZ">EVAL-AD7982-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD7984-PMDZ">EVAL-AD7984-PMDZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-ADAQ40xx">EVAL-ADAQ40xx</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7942-PMDZ">EVAL-AD7942-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7946-PMDZ">EVAL-AD7946-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ">EVAL-AD7988-1-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ">EVAL-AD7685-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ">EVAL-AD7687-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ">EVAL-AD7691-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ">EVAL-AD7686-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ">EVAL-AD7688-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ">EVAL-AD7693-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ">EVAL-AD7988-5-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7980-PMDZ">EVAL-AD7980-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ">EVAL-AD7983-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ">EVAL-AD7690-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7982-PMDZ">EVAL-AD7982-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7984-PMDZ">EVAL-AD7984-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ40xx">EVAL-ADAQ40xx</a></p></li>
 </ul>
 <p>PulSAR with FMC connector:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD400x-FMCZ">EVAL-AD400x-FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD400x-FMCZ">EVAL-AD400x-FMCZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <p>PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
 </ul>
 <p>PulSAR with FMC connector:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -323,7 +327,7 @@ task of sending data across digital isolation.</p>
 <section id="other-required-hardware">
 <h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -533,7 +537,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
@@ -558,39 +562,39 @@ by the configuration used:</p>
 <p>PulSAR with PMOD connector:</p>
 <ul class="simple">
 <li><p>Product datasheets:</p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf">UG-682, Evaluation Board User Guide</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-340.pdf">UG-340, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf">UG-682, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-340.pdf">UG-340, Evaluation Board User Guide</a></p></li>
 </ul>
 <p>PulSAR with FMC connector:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-1042.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-1042.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/pulsar_adc">pulsar_adc HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/pulsar_adc">pulsar_adc HDL project source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/pulsar_adc_pmods_hdl">[Wiki] PulSAR ADC PMOD HDL start guide</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">[Wiki] PulSAR ADC PMOD quick start guide</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">[Wiki] AD40xx/ADAQ40xx quick start guide</a></p></li>
@@ -610,55 +614,55 @@ by the configuration used:</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a> *</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a> *</p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a> *</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_i2s_adi">library/axi_i2s_adi</a> *</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a> *</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a> *</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
 <td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a> *</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_i2c_mixer">library/util_i2c_mixer</a> *</p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
@@ -677,8 +681,8 @@ by the configuration used:</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad_pulsar.c">PulSAR ADC PMDZ Linux driver source code</a></p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad400x.c">AD40xx/ADAQ40xx Linux driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad_pulsar.c">PulSAR ADC PMDZ Linux driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad400x.c">AD40xx/ADAQ40xx Linux driver source code</a></p></li>
 </ul>
 </section>
 </section>
@@ -691,14 +695,14 @@ by the configuration used:</p>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
 <p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
-on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
 <p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
@@ -724,8 +728,8 @@ are, the lower the chances to receive support from <a class="reference external"
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

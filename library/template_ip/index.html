@@ -7,7 +7,7 @@
 
     <title>IP Template &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -41,12 +41,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -56,16 +56,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -74,7 +76,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -104,23 +106,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -211,7 +215,7 @@ Content on this topic
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac/axi_dmac.v">library/axi_dmac/axi_dmac.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac/axi_dmac.v">library/axi_dmac/axi_dmac.v</a></p></td>
 <td><p>Verilog source for the peripheral.</p></td>
 </tr>
 </tbody>
@@ -728,7 +732,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1c</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_FPGA_INFO</span></code></td>
 <td class="description bold"><section>
-<p>FPGA device information <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values) <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<p>FPGA device information <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -1970,13 +1974,13 @@ from the interface module.</p>
 </section>
 <section id="software-guidelines">
 <h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>Linux is supported also using <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master/"></a>.</p>
+<p>Linux is supported also using <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/master/"></a>.</p>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>, <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a> library.</p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master/"></a>.</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a> library.</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/master/"></a>.</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a>.</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a>.</p></li>
 </ul>
@@ -2003,8 +2007,8 @@ from the interface module.</p>
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

@@ -7,7 +7,7 @@
 
     <title>Project template &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -41,12 +41,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -56,16 +56,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -74,7 +76,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -126,23 +128,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../../documentation/index.html">System Level</a>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
@@ -220,17 +224,17 @@ information found on the</strong> <a class="reference external" href="https://ww
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <p><strong>*IF IT APPLIES</strong>*</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <p><strong>*EXAMPLES</strong>*</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD9177">AD9177</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9177">AD9177</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -251,7 +255,7 @@ another carrier. Take these tables as an example:</strong>*</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></td>
 <td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a></p></td>
 <td><p>FMCA</p></td>
 </tr>
@@ -292,7 +296,7 @@ another carrier. Take these tables as an example:</strong>*</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
 <td><p>FMC0</p></td>
 </tr>
@@ -943,7 +947,7 @@ ALWAYS USE PL I2C FOR THESE DESIGNS!!</p>
 <p><strong>*YOU CAN KEEP THE FIRST PARAGRAPH SINCE IT IS GENERIC</strong>*</p>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
@@ -969,7 +973,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a — (dash) it means that the parameter doesn’t exist
 for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="0ac3edf16516bf32c861b8fb1448a489820d45b9" name="0ac3edf16516bf32c861b8fb1448a489820d45b9" type="checkbox"></input><label for="0ac3edf16516bf32c861b8fb1448a489820d45b9"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
+<input class="collapsible_input" id="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3" name="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3" type="checkbox"></input><label for="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1260,10 +1264,10 @@ specified in detail, etc. in the form of a table as the one below</p></li>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
-<li><p><a class="reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD9988">AD9988</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/AD9986">AD9986</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf">UG-1578, Device User Guide</a></p></li>
@@ -1283,8 +1287,8 @@ another column</p></li>
 </ul>
 <p><strong>THIS IS JUST AN EXAMPLE</strong></p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9081_fmca_ebz">AD9081_FMCA_EBZ HDL project source code</a></p></li>
-<li><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9082_fmca_ebz">AD9082_FMCA_EBZ HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9081_fmca_ebz">AD9081_FMCA_EBZ HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9082_fmca_ebz">AD9082_FMCA_EBZ HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -1301,51 +1305,51 @@ another column</p></li>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_cpack">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_UPACK2</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_upack">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_xcvr">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adxcvr">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adxcvr">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx">[Wiki]</a></p></td>
 </tr>
 <tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_adc">[Wiki]</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
-<td><p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_dac">[Wiki]</a></p></td>
 </tr>
 </tbody>
@@ -1388,14 +1392,14 @@ and of the device tree.</p>
 <section id="support">
 <h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
-using the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
-<a class="reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
 <p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
-from our <a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
-on the <a class="reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
 <p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
-<a class="reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
-<a class="reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
@@ -1421,8 +1425,8 @@ are, the lower the chances to receive support from <a class="reference external"
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">

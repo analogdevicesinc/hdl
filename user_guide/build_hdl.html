@@ -7,7 +7,7 @@
 
     <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=fbec5f67" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e974aa45" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
@@ -43,12 +43,12 @@
   }
 </style>
   </head><body>
-  <input type="checkbox" id="input-showsidebar">
-  <input type="checkbox" id="input-showonthispage">
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
   <header>
     <div class="header">
       <div id="left">
-        <label id="show-sidebar" for="input-showsidebar" title="Show/hide index"></label>
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
       </div>
       <div id="right">
         <span>
@@ -58,16 +58,18 @@
               </a>
         </span>
         <span class="reverse">
-          <label id="show-onthispage" for="input-showonthispage" title="Show/hide contents"></label>
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
         </span>
       </div>
     </div>
-    <div class="subdomain-tree">
+    <div class="repotoc-tree">
       <root>
-  <a href="../../documentation/index.html">System Level</a>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
   <a href="../index.html" class="current">HDL</a>
   <a href="../../no-OS/index.html">no-OS</a>
   <a href="../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
     </div>
@@ -76,7 +78,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="onthispage">On this page</div>
+          <div class="localtoc-header">On this page</div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -127,23 +129,25 @@
         <div class="sphinxsidebarwrapper">
               <a id="no-logo" href="../index.html">
                 HDL
-              </a><input id="input-showsubdomain" type="checkbox">
-<label id="showsubdomain-1" for="input-showsubdomain">
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
-<label id="showsubdomain-2" for="input-showsubdomain">
+<label id="show-toc" for="input-switch-toc">
 Content on this topic
 </label>
-<div class="subdomain-tree">
+<div class="repotoc-tree">
   <root>
-  <a href="../../documentation/index.html">System Level</a>
+  <a href="../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../documentation/university/index.html">University Program</a>
   <a href="../index.html" class="current">HDL</a>
   <a href="../../no-OS/index.html">no-OS</a>
   <a href="../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
 </root>
 
 </div>
-<div class="sidebar-tree">
+<div class="toc-tree">
   <html>
   <body><ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
@@ -233,10 +237,10 @@ Make sure that you’re always using the latest release.</p></li>
 <li><p>The proper Vivado/Quartus version can be found in:</p>
 <ul class="simple">
 <li><p>Starting with <code class="docutils literal notranslate"><span class="pre">hdl_2021_r1</span></code> release branch:
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
 <li><p>For <code class="docutils literal notranslate"><span class="pre">hdl_2019_r2</span></code> and older:
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_xilinx.tcl">hdl/projects/scripts/adi_project_xilinx.tcl</a> for Vivado, and
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_intel.tcl">hdl/projects/scripts/adi_project_intel.tcl</a> for Quartus.</p></li>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_xilinx.tcl">hdl/projects/scripts/adi_project_xilinx.tcl</a> for Vivado, and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2019_r2/projects/scripts/adi_project_intel.tcl">hdl/projects/scripts/adi_project_intel.tcl</a> for Quartus.</p></li>
 </ul>
 </li>
 <li><p>Download the tools from the following links:</p>
@@ -257,7 +261,7 @@ note.</p></li>
 projects. Depending on what OS you’re using, you have these options:</p></li>
 </ol>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="cea666a6d7a115b9bcddd5094edc27aa351210b7" name="cea666a6d7a115b9bcddd5094edc27aa351210b7" type="checkbox"></input><label for="cea666a6d7a115b9bcddd5094edc27aa351210b7"><p>For Windows environment with Cygwin</p>
+<input class="collapsible_input" id="d79b51c5e3fe7737294e831d24a8aadaafdad7b7" name="d79b51c5e3fe7737294e831d24a8aadaafdad7b7" type="checkbox"></input><label for="d79b51c5e3fe7737294e831d24a8aadaafdad7b7"><p>For Windows environment with Cygwin</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>Because GNU Make is not supported on Windows, you need to install
 <a class="reference external" href="https://www.cygwin.com/">Cygwin</a>, which is a UNIX-like environment
@@ -283,7 +287,7 @@ and the <strong>tools version</strong> with the proper one.</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="3d9210c2f56efb8253b724d250a57fc25766d5e2" name="3d9210c2f56efb8253b724d250a57fc25766d5e2" type="checkbox"></input><label for="3d9210c2f56efb8253b724d250a57fc25766d5e2"><p>How to verify your environment setup</p>
+<input class="collapsible_input" id="356312f27f93c34c68e2934fbceb78d39ba711a0" name="356312f27f93c34c68e2934fbceb78d39ba711a0" type="checkbox"></input><label for="356312f27f93c34c68e2934fbceb78d39ba711a0"><p>How to verify your environment setup</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>Run any of the following commands. These commands will return a valid path
 if your setup is good.</p>
@@ -300,7 +304,7 @@ if your setup is good.</p>
 <h2>Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading">#</a></h2>
 <p>These designs are built upon ADI’s generic HDL reference designs framework.
 ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available <a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">here</a>. To get
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the repository. This is the best method to get the sources. Here, we are
@@ -396,7 +400,7 @@ ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/
 <p>You may now use this <strong>sopcinfo</strong> file as the input to your no-OS and/or
 Linux build. The <strong>sof</strong> file is used to program the device.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b" name="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b" type="checkbox"></input><label for="d72b31e7492d45fd5e4bd200981e9c0cf5d05f8b"><p>Building an Intel project in WSL - known issues</p>
+<input class="collapsible_input" id="d6277e09b937f5703b1c39f22652810d9004262d" name="d6277e09b937f5703b1c39f22652810d9004262d" type="checkbox"></input><label for="d6277e09b937f5703b1c39f22652810d9004262d"><p>Building an Intel project in WSL - known issues</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>For a10Soc and s10Soc projects it’s very possible to face the following
 error when you try to build the project:</p>
@@ -437,7 +441,7 @@ project. To create a swap file you can use the following commands:</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="80857d2b90b02213b6ba59e93e72ddba2243326b" name="80857d2b90b02213b6ba59e93e72ddba2243326b" type="checkbox"></input><label for="80857d2b90b02213b6ba59e93e72ddba2243326b"><p>Building manually in Quartus GUI</p>
+<input class="collapsible_input" id="f664ff2c072ab69ccfeadd6d0ab4475e09ceaed6" name="f664ff2c072ab69ccfeadd6d0ab4475e09ceaed6" type="checkbox"></input><label for="f664ff2c072ab69ccfeadd6d0ab4475e09ceaed6"><p>Building manually in Quartus GUI</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -583,7 +587,7 @@ build.</p>
 <p>Starting with Vivado 2019.3, the output file extension was changed from
 <strong>.hdf</strong> to <strong>.xsa</strong>.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="0a31c7c0b3d524201f0027f16565206ad716fb69" name="0a31c7c0b3d524201f0027f16565206ad716fb69" type="checkbox"></input><label for="0a31c7c0b3d524201f0027f16565206ad716fb69"><p>Building an AMD project in WSL - known issues</p>
+<input class="collapsible_input" id="e385a4d4e6babe3b50029dfcd5e31372b6d358af" name="e385a4d4e6babe3b50029dfcd5e31372b6d358af" type="checkbox"></input><label for="e385a4d4e6babe3b50029dfcd5e31372b6d358af"><p>Building an AMD project in WSL - known issues</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>For some projects it is very possible to face the following error when you make a
 build:</p>
@@ -619,7 +623,7 @@ find more information about what a swap file is at this link:
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="734115b089b8a81360e11b0f94e806b32c2be3ed" name="734115b089b8a81360e11b0f94e806b32c2be3ed" type="checkbox"></input><label for="734115b089b8a81360e11b0f94e806b32c2be3ed"><p>Building manually in Vivado GUI</p>
+<input class="collapsible_input" id="a6ed46db2efc1dcf0e6c3f10ef3dd428c6af35ca" name="a6ed46db2efc1dcf0e6c3f10ef3dd428c6af35ca" type="checkbox"></input><label for="a6ed46db2efc1dcf0e6c3f10ef3dd428c6af35ca"><p>Building manually in Vivado GUI</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -802,9 +806,9 @@ The easiest way is to check the <a class="reference external" href="https://gith
 notes</a>. You may
 also check out or browse the desired branch, and verify the tool version
 in the base Tcl script ./hdl/scripts/adi_env.tcl
-(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl#L18">for Vivado version</a>)
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl#L18">for Vivado version</a>)
 or
-(<a class="reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl#L34">or for Quartus version</a>),
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl#L34">or for Quartus version</a>),
 which build the projects.</p>
 </div>
 </section>
@@ -888,7 +892,7 @@ the root directory of your project.</p>
 <p>More info on how to generate this file you will find in the
 <a class="reference internal" href="#references">References</a> section or in the <strong>ReadMe.txt</strong> file from <strong>boot</strong> partition.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="847e41da20f18b87b580ad40c9c64192796613df" name="847e41da20f18b87b580ad40c9c64192796613df" type="checkbox"></input><label for="847e41da20f18b87b580ad40c9c64192796613df"><p>How to build the boot image BOOT.BIN in WSL</p>
+<input class="collapsible_input" id="5a8213f11bd3f7b810e540035db37b478df31340" name="5a8213f11bd3f7b810e540035db37b478df31340" type="checkbox"></input><label for="5a8213f11bd3f7b810e540035db37b478df31340"><p>How to build the boot image BOOT.BIN in WSL</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>After obtaining <strong>.xsa</strong> file, you must be sure that you have done source for
 Vivado and Vitis. To create <strong>boot.bin</strong> is recommended to run
@@ -969,8 +973,8 @@ that it does copy these files to the project area, but ignores them.</p>
 
   <div id="vertical-border"></div>
 
-  <label id="cancel-area-showsidebar" for="input-showsidebar"></label>
-  <label id="cancel-area-showonthispage" for="input-showonthispage"></label>
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
 
   
   <form action="" method="get" class="search-area">
