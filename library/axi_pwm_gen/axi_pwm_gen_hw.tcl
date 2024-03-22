@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -30,6 +30,10 @@ ad_ip_parameter ASYNC_CLK_EN INTEGER 1
 ad_ip_parameter N_PWMS INTEGER 1
 ad_ip_parameter PWM_EXT_SYNC INTEGER 0
 ad_ip_parameter EXT_ASYNC_SYNC INTEGER 0
+ad_ip_parameter EXT_SYNC_PHASE_ALIGN INTEGER 0
+ad_ip_parameter SOFTWARE_BRINGUP INTEGER 1
+ad_ip_parameter FORCE_ALIGN INTEGER 0
+ad_ip_parameter START_AT_SYNC INTEGER 1
 ad_ip_parameter PULSE_0_WIDTH INTEGER 7
 ad_ip_parameter PULSE_1_WIDTH INTEGER 7
 ad_ip_parameter PULSE_2_WIDTH INTEGER 7
