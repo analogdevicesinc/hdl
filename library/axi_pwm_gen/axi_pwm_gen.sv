@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -41,6 +41,10 @@ module axi_pwm_gen #(
   parameter  N_PWMS = 1,
   parameter  PWM_EXT_SYNC = 0,
   parameter  EXT_ASYNC_SYNC = 0,
+  parameter  SOFTWARE_BRINGUP = 1,
+  parameter  EXT_SYNC_PHASE_ALIGN = 0,
+  parameter  FORCE_ALIGN = 0,
+  parameter  START_AT_SYNC = 1,
   parameter  PULSE_0_WIDTH = 7,
   parameter  PULSE_1_WIDTH = 7,
   parameter  PULSE_2_WIDTH = 7,
@@ -139,7 +143,7 @@ module axi_pwm_gen #(
 
   localparam        PWMS = N_PWMS-1;
   localparam [31:0] CORE_VERSION = {16'h0002,     /* MAJOR */
-                                     8'h00,       /* MINOR */
+                                     8'h01,       /* MINOR */
                                      8'h00};      /* PATCH */
   localparam [31:0] CORE_MAGIC = 32'h601a3471;    // PLSG
   localparam reg [31:0] PULSE_WIDTH_G[15:0] = '{PULSE_0_WIDTH,
@@ -197,8 +201,9 @@ module axi_pwm_gen #(
 
   reg [PWMS:0]    sync;
   reg   [31:0]    offset_cnt = 32'd0;
-  reg             offset_alignment = 1'b0;
-  reg             pause_cnt_d = 1'b0;
+  reg             offset_alignment = 1'b1;
+  reg   [31:0]    pwm_offset_d[0:PWMS];
+  reg   [31:0]    pwm_offset_read[0:PWMS];
 
   // internal signals
 
@@ -219,9 +224,17 @@ module axi_pwm_gen #(
   wire   [ 31:0]  pwm_offset_s[0:PWMS];
   wire   [ 15:0]  pwm_armed;
   wire            load_config_s;
+  wire            start_at_sync_s;
+  wire            force_align_s;
+  wire            ext_sync_align_s;
+  wire   [ 15:0]  ready_to_align_s;
+  wire   [ 15:0]  active_channel_s;
   wire            pwm_gen_resetn;
   wire            ext_sync_s;
+  wire            new_alignment;
   wire            pause_cnt;
+  wire            enable_wait;
+  wire            wait_for_all;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -229,6 +242,10 @@ module axi_pwm_gen #(
   axi_pwm_gen_regmap #(
     .ID (ID),
     .ASYNC_CLK_EN (ASYNC_CLK_EN),
+    .SOFTWARE_BRINGUP (SOFTWARE_BRINGUP),
+    .EXT_SYNC_PHASE_ALIGN (EXT_SYNC_PHASE_ALIGN),
+    .FORCE_ALIGN (FORCE_ALIGN),
+    .START_AT_SYNC (START_AT_SYNC),
     .CORE_MAGIC (CORE_MAGIC),
     .CORE_VERSION (CORE_VERSION),
     .N_PWMS (PWMS),
@@ -243,6 +260,9 @@ module axi_pwm_gen #(
     .pwm_period (pwm_period_s),
     .pwm_offset (pwm_offset_s),
     .load_config (load_config_s),
+    .start_at_sync (start_at_sync_s),
+    .force_align (force_align_s),
+    .ext_sync_align (ext_sync_align_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -278,46 +298,95 @@ module axi_pwm_gen #(
 
   endgenerate
 
+  assign new_alignment = load_config_s | ext_sync_s & ext_sync_align_s;
+
   // offset counter
 
   always @(posedge clk) begin
-    if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0) begin
+    if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0 || ext_sync_s == 1'b1) begin
       offset_cnt <= 32'd0;
     end else begin
       offset_cnt <= offset_cnt + 1'b1;
     end
 
     if (pwm_gen_resetn == 1'b0) begin
-      offset_alignment <= 1'b0;
+      offset_alignment <= 1'b1;
     end else begin
-      // when using external sync an offset alignment can be done only
-      // after all pwm counters are paused(load_config)/reseated
-      offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
+      // the offset alignment by external sync has two options
+      // 1. event on a faster clock(2'nd async clk) cannot be sampled on the base
+      // external clock.
+      // 2. fall edge
+      // when using external sync an offset alignment can only be done
+      // after all pwm counters are paused(load_config)/reseated while the
+      // external sync is held high
+      offset_alignment <= (new_alignment == 1'b1) ? 1'b1 :
                           offset_alignment &
-                          (ext_sync_s ? 1'b1 : !pause_cnt);
+                          (ext_sync_s ? 1'b1 : pause_cnt);
     end
   end
 
-  assign pause_cnt = ((pwm_armed[0]  |
-                       pwm_armed[1]  |
-                       pwm_armed[2]  |
-                       pwm_armed[3]  |
-                       pwm_armed[4]  |
-                       pwm_armed[5]  |
-                       pwm_armed[6]  |
-                       pwm_armed[7]  |
-                       pwm_armed[8]  |
-                       pwm_armed[9]  |
-                       pwm_armed[10] |
-                       pwm_armed[11] |
-                       pwm_armed[12] |
-                       pwm_armed[13] |
-                       pwm_armed[14] |
-                       pwm_armed[15] ) ? 1'b1 : 1'b0);
+  assign enable_wait = ((pwm_armed[0]  & active_channel_s[0])  |
+                        (pwm_armed[1]  & active_channel_s[1])  |
+                        (pwm_armed[2]  & active_channel_s[2])  |
+                        (pwm_armed[3]  & active_channel_s[3])  |
+                        (pwm_armed[4]  & active_channel_s[4])  |
+                        (pwm_armed[5]  & active_channel_s[5])  |
+                        (pwm_armed[6]  & active_channel_s[6])  |
+                        (pwm_armed[7]  & active_channel_s[7])  |
+                        (pwm_armed[8]  & active_channel_s[8])  |
+                        (pwm_armed[9]  & active_channel_s[9])  |
+                        (pwm_armed[10] & active_channel_s[10]) |
+                        (pwm_armed[11] & active_channel_s[11]) |
+                        (pwm_armed[12] & active_channel_s[12]) |
+                        (pwm_armed[13] & active_channel_s[13]) |
+                        (pwm_armed[14] & active_channel_s[14]) |
+                        (pwm_armed[15] & active_channel_s[15]));
+
+  assign wait_for_all = (pwm_armed[0]  &
+                         pwm_armed[1]  &
+                         pwm_armed[2]  &
+                         pwm_armed[3]  &
+                         pwm_armed[4]  &
+                         pwm_armed[5]  &
+                         pwm_armed[6]  &
+                         pwm_armed[7]  &
+                         pwm_armed[8]  &
+                         pwm_armed[9]  &
+                         pwm_armed[10] &
+                         pwm_armed[11] &
+                         pwm_armed[12] &
+                         pwm_armed[13] &
+                         pwm_armed[14] &
+                         pwm_armed[15]);
+
+  assign pause_cnt = !(enable_wait & wait_for_all);
+
   genvar i;
   generate
     for (i = 0; i <= 15; i = i + 1) begin: pwm_cnt
       if (i <= PWMS) begin
+
+        // flop the desired offset
+
+        always @(posedge clk) begin
+          if (pwm_gen_resetn == 1'b0) begin
+            pwm_offset_d[i] <= pwm_offset_s[i];
+            pwm_offset_read[i] <= pwm_offset_s[i];
+          end else begin
+            // load the input period/width values
+            if (load_config_s) begin
+              pwm_offset_read[i] <= pwm_offset_s[i];
+              if (force_align_s == 1) begin
+                pwm_offset_d[i] <= pwm_offset_s[i];
+              end
+            end
+            // update the current period/width at the end of the period
+            if (ready_to_align_s[i]) begin
+              pwm_offset_d[i] <= pwm_offset_read[i];
+            end
+          end
+        end
+
         axi_pwm_gen_1  #(
           .PULSE_WIDTH (PULSE_WIDTH_G[i]),
           .PULSE_PERIOD (PULSE_PERIOD_G[i])
@@ -327,19 +396,27 @@ module axi_pwm_gen #(
           .pulse_width (pwm_width_s[i]),
           .pulse_period (pwm_period_s[i]),
           .load_config (load_config_s),
+          .start_at_sync_en (start_at_sync_s),
+          .force_align_en (force_align_s),
+          .ext_sync_align_en (ext_sync_align_s),
+          .ext_sync (ext_sync_s),
           .sync (sync[i]),
           .pulse (pwm[i]),
+          .active_channel (active_channel_s[i]),
+          .ready_to_align (ready_to_align_s[i]),
           .pulse_armed (pwm_armed[i]));
         always @(posedge clk) begin
           if (pwm_gen_resetn == 1'b0) begin
             sync[i] <= 1'b1;
           end else begin
-            sync[i] <= (offset_cnt == pwm_offset_s[i]) ? offset_alignment : 1'b1;
+            sync[i] <= (offset_cnt == pwm_offset_d[i]) ? offset_alignment : 1'b1;
           end
         end
       end else begin
        assign pwm[i] = 1'b0;
-       assign pwm_armed[i] = 1'b0;
+       assign pwm_armed[i] = 1'b1;
+       assign active_channel_s[i] = 1'b0;
+       assign ready_to_align_s[i] = 1'b1;
       end
     end
   endgenerate

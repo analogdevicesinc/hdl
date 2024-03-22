@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -40,6 +40,10 @@ module axi_pwm_gen_regmap #(
   parameter            CORE_MAGIC = 0,
   parameter            CORE_VERSION = 0,
   parameter            ASYNC_CLK_EN = 1,
+  parameter            SOFTWARE_BRINGUP = 1,
+  parameter            EXT_SYNC_PHASE_ALIGN = 0,
+  parameter            FORCE_ALIGN = 0,
+  parameter            START_AT_SYNC = 1,
   parameter            N_PWMS = 0,
   parameter reg [31:0] PULSE_WIDTH_G[0:15]  = '{16{32'd0}},
   parameter reg [31:0] PULSE_PERIOD_G[0:15] = '{16{32'd0}},
@@ -58,6 +62,9 @@ module axi_pwm_gen_regmap #(
   output      [31:0]      pwm_period[0:N_PWMS],
   output      [31:0]      pwm_offset[0:N_PWMS],
   output                  load_config,
+  output                  start_at_sync,
+  output                  force_align,
+  output                  ext_sync_align,
 
   // processor interface
 
@@ -80,7 +87,16 @@ module axi_pwm_gen_regmap #(
   reg     [31:0]  up_pwm_period[0:N_PWMS] = PULSE_PERIOD_G[0:N_PWMS];
   reg     [31:0]  up_pwm_offset[0:N_PWMS] = PULSE_OFFSET_G[0:N_PWMS];
   reg             up_load_config = 1'b0;
-  reg             up_reset = 1'b1;
+  reg             up_reset = SOFTWARE_BRINGUP[0];
+  reg     [ 2:0]  up_control = {EXT_SYNC_PHASE_ALIGN[0],FORCE_ALIGN[0],START_AT_SYNC[0]};
+
+  // internal signals
+
+  wire    [ 2:0]  control;
+
+  assign start_at_sync = control[0];
+  assign force_align = control[1];
+  assign ext_sync_align = control[2];
 
   genvar n;
 
@@ -92,7 +108,8 @@ module axi_pwm_gen_regmap #(
       up_pwm_period <= PULSE_PERIOD_G[0:N_PWMS];
       up_pwm_offset <= PULSE_OFFSET_G[0:N_PWMS];
       up_load_config <= 1'b0;
-      up_reset <= 1'b1;
+      up_reset <= SOFTWARE_BRINGUP[0];
+      up_control <= {EXT_SYNC_PHASE_ALIGN[0],FORCE_ALIGN[0],START_AT_SYNC[0]};
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
@@ -103,6 +120,9 @@ module axi_pwm_gen_regmap #(
         up_load_config <= up_wdata[1];
       end else begin
         up_load_config <= 1'b0;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h6)) begin
+        up_control <= up_wdata[2:0];
       end
       for (int i = 0; i <= N_PWMS; i++) begin
         if ((up_wreq == 1'b1) && (up_waddr == 14'h10 + i)) begin
@@ -133,6 +153,7 @@ module axi_pwm_gen_regmap #(
             14'h3: up_rdata <= CORE_MAGIC;
             14'h4: up_rdata <= up_reset;
             14'h5: up_rdata <= N_PWMS +1;
+            14'h6: up_rdata <= {29'd0, up_control};
             default: up_rdata <= 0;
           endcase
         end else if (up_raddr[3:0] > N_PWMS) begin
@@ -161,7 +182,16 @@ module axi_pwm_gen_regmap #(
       .rstn (pwm_gen_resetn),
       .rst ());
 
-    for (n = 0; n <= N_PWMS; n = n + 1) begin: up_to_adc_cdc
+    sync_data #(
+      .NUM_OF_BITS (3),
+      .ASYNC_CLK (1))
+    i_pwm_controls (
+      .in_clk (up_clk),
+      .in_data (up_control),
+      .out_clk (clk_out),
+      .out_data (control));
+
+    for (n = 0; n <= N_PWMS; n = n + 1) begin: pwm_cdc
       sync_data #(
         .NUM_OF_BITS (96),
         .ASYNC_CLK (1))

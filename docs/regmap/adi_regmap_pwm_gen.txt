@@ -13,7 +13,7 @@ Version and Scratch Registers
 ENDREG
 
 FIELD
-[31:0] 0x00010100
+[31:0] 0x00020100
 VERSION[31:0]
 RO
 Version number. Unique to all cores.
@@ -92,6 +92,41 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
+
+REG
+0x0006
+REG_CONFIG
+Features enable register
+ENDREG
+
+FIELD
+[2] 0x0
+EXT_SYNC_ALIGN
+RW
+If active the ext_sync will trigger a phase align at each neg-edge.
+Otherwise the phase align will be armed by a load config toggle.
+ENDFIELD
+
+FIELD
+[1] 0x0
+FORCE_ALIGN
+RW
+If active the current active pulses are immediately stopped and realigned.
+Otherwise, the synchronized pulses will start only after all running pulse periods end.
+ENDFIELD
+
+FIELD
+[0] 0x1
+START_AT_SYNC
+RW
+If active, the pulses will start after the trigger event.
+Otherwise each pulse will start after a period equal to the one for which it is set.
+Default valew can be overwritten at build time through parameters.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
 
 REG
 0x0005
