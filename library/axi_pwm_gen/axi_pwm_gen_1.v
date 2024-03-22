@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -45,11 +45,20 @@ module axi_pwm_gen_1 #(
   input       [31:0]  pulse_width,
   input       [31:0]  pulse_period,
   input               load_config,
+  input               start_at_sync_en,
+  input               force_align_en,
+  input               ext_sync_align_en,
+  input               ext_sync,
   input               sync,
 
   output              pulse,
+  output              active_channel,
+  output              ready_to_align,
   output              pulse_armed
 );
+
+  localparam [0:0] ARM = 0;
+  localparam [0:0] RUN = 1;
 
   // internal registers
 
@@ -60,18 +69,26 @@ module axi_pwm_gen_1 #(
   reg     [31:0]               pulse_width_d = PULSE_WIDTH;
   reg                          phase_align_armed = 1'b1;
   reg                          pulse_i = 1'b0;
-  reg                          busy = 1'b0;
+  reg                          run_sm = ARM;
+  reg                          run_sm_next = ARM;
 
   // internal wires
 
+  wire                         ext_sync_align;
   wire                         phase_align;
   wire                         end_of_period;
   wire                         end_of_pulse;
   wire                         pulse_enable;
+  wire                         align_pulse;
+  wire                         align_period;
+  wire                         pulse_start;
+  wire                         start_at_sync;
 
   // enable pwm
 
   assign pulse_enable = (pulse_period_d != 32'd0) ? 1'b1 : 1'b0;
+
+  assign ext_sync_align = ext_sync & ext_sync_align_en;
 
   // flop the desired period
 
@@ -86,6 +103,10 @@ module axi_pwm_gen_1 #(
       if (load_config) begin
         pulse_period_read <= pulse_period;
         pulse_width_read <= pulse_width;
+        if (force_align_en == 1 && start_at_sync_en == 1) begin
+          pulse_period_d <= pulse_period;
+          pulse_width_d <= pulse_width;
+        end
       end
       // update the current period/width at the end of the period
       if (end_of_period | ~pulse_enable) begin
@@ -103,30 +124,47 @@ module axi_pwm_gen_1 #(
     end else begin
       if (load_config == 1'b1) begin
         phase_align_armed <= sync;
+      end else if (ext_sync_align == 1'b1) begin
+        phase_align_armed <= sync;
       end else begin
         phase_align_armed <= phase_align_armed & sync;
       end
     end
   end
 
+  // phase align SM
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
-      busy <= 1'b0;
+      run_sm <= ARM;
+      run_sm_next <= ARM;
     end else begin
-      if (end_of_period) begin
-        busy <= 1'b0;
-      end else if ( ~(phase_align_armed & sync)) begin
-        busy <= 1'b1;
-      end
+      case (run_sm)
+        ARM: begin
+          if (sync == 1'b0) begin
+            run_sm_next <= RUN;
+          end
+        end
+        RUN: begin
+          if (force_align_en == 1) begin
+            if (ext_sync_align == 1'b1 || load_config == 1'b1) begin
+              run_sm_next <= ARM;
+            end
+          end else if (phase_align_armed == 1'b1 && end_of_period == 1'b1) begin
+            run_sm_next <= ARM;
+          end else if (end_of_period == 1'b1) begin
+            run_sm_next <= RUN;
+          end
+        end
+      endcase
+      run_sm <= run_sm_next;
     end
   end
 
-  assign phase_align = phase_align_armed & sync & busy;
-
-  // a free running counter
+  assign align_pulse =  ext_sync_align & force_align_en;
+  assign align_period = align_pulse == 1 || run_sm_next <= ARM || end_of_period == 1'b1;
 
   always @(posedge clk) begin
-    if (rstn == 1'b0 || phase_align == 1'b1 || end_of_period == 1'b1) begin
+    if (rstn == 1'b0 || align_period) begin
       pulse_period_cnt <= 32'd1;
     end else begin
       if (pulse_enable == 1'b1) begin
@@ -138,17 +176,25 @@ module axi_pwm_gen_1 #(
   assign end_of_period = (pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0;
   assign end_of_pulse = (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
 
+  assign start_at_sync = start_at_sync_en == 1 ? ~run_sm & ~sync : 1'b0;
+  assign pulse_start = end_of_period == 1'b1 && phase_align_armed == 1'b0 ||
+                       start_at_sync == 1'b1 || pulse_period_d == pulse_width_d;
+  assign pulse_stop = rstn == 1'b0 || end_of_pulse == 1'b1 || align_pulse == 1 ||
+                      pulse_enable == 1'b0 || pulse_width_d == 32'd0;
+
   // generate pulse with a specified width
 
   always @ (posedge clk) begin
-    if ((rstn == 1'b0) || (end_of_pulse == 1'b1)) begin
+    if (pulse_stop) begin
       pulse_i <= 1'b0;
-    end else if ((end_of_period == 1'b1 || phase_align == 1'b1) && pulse_enable == 1'b1) begin
+    end else if (pulse_start) begin
       pulse_i <= 1'b1;
     end
   end
 
-  assign pulse = pulse_i & !(phase_align_armed & sync);
-  assign pulse_armed = phase_align_armed;
+  assign pulse = pulse_i;
+  assign active_channel = pulse_enable;
+  assign ready_to_align = end_of_period | ~pulse_enable;
+  assign pulse_armed = phase_align_armed & ~run_sm | ~pulse_enable;
 
 endmodule
