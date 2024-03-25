@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -112,11 +112,9 @@ module axi_clock_monitor #(
   wire         clock         [0:15];
   wire [20:0]  clk_mon_count [0:15];
 
-  wire         up_wreq_i_s;
   wire [13:0]  up_waddr_i_s;
   wire [31:0]  up_wdata_i_s;
   wire         up_wack_o_s;
-  wire         up_rreq_i_s;
   wire [13:0]  up_raddr_i_s;
   wire [31:0]  up_rdata_o_s;
   wire         up_rack_o_s;
@@ -147,11 +145,6 @@ module axi_clock_monitor #(
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign reset = up_reset_core;
-
-  // decode block select
-
-  assign up_wreq_s = (up_waddr_i_s[13:8] == ID) ? up_wreq_i_s : 1'b0;
-  assign up_rreq_s = (up_raddr_i_s[13:8] == ID) ? up_rreq_i_s : 1'b0;
 
   // processor write interface
 
@@ -184,32 +177,32 @@ module axi_clock_monitor #(
     end else begin
       up_rack_int <= up_rreq_s;
       if (up_rreq_s == 1'b1) begin
-        case (up_raddr_i_s)
+        case (up_raddr_i_s[4:0])
           /* Standard registers */
-          14'h000: up_rdata_int <= PCORE_VERSION;
-          14'h001: up_rdata_int <= ID;
+          5'h00: up_rdata_int <= PCORE_VERSION;
+          5'h01: up_rdata_int <= ID;
 
           /* Core configuration */
-          14'h003: up_rdata_int <= NUM_OF_CLOCKS;
-          14'h004: up_rdata_int <= {31'h00, up_reset_core};
+          5'h03: up_rdata_int <= NUM_OF_CLOCKS;
+          5'h04: up_rdata_int <= {31'h00, up_reset_core};
 
           /* Clock ratios registers*/
-          14'h010: up_rdata_int <= {11'h00, clk_mon_count[ 0]};
-          14'h011: up_rdata_int <= {11'h00, clk_mon_count[ 1]};
-          14'h012: up_rdata_int <= {11'h00, clk_mon_count[ 2]};
-          14'h013: up_rdata_int <= {11'h00, clk_mon_count[ 3]};
-          14'h014: up_rdata_int <= {11'h00, clk_mon_count[ 4]};
-          14'h015: up_rdata_int <= {11'h00, clk_mon_count[ 5]};
-          14'h016: up_rdata_int <= {11'h00, clk_mon_count[ 6]};
-          14'h017: up_rdata_int <= {11'h00, clk_mon_count[ 7]};
-          14'h018: up_rdata_int <= {11'h00, clk_mon_count[ 8]};
-          14'h019: up_rdata_int <= {11'h00, clk_mon_count[ 9]};
-          14'h01a: up_rdata_int <= {11'h00, clk_mon_count[10]};
-          14'h01b: up_rdata_int <= {11'h00, clk_mon_count[11]};
-          14'h01c: up_rdata_int <= {11'h00, clk_mon_count[12]};
-          14'h01d: up_rdata_int <= {11'h00, clk_mon_count[13]};
-          14'h01e: up_rdata_int <= {11'h00, clk_mon_count[14]};
-          14'h01f: up_rdata_int <= {11'h00, clk_mon_count[15]};
+          5'h10: up_rdata_int <= {11'h00, clk_mon_count[ 0]};
+          5'h11: up_rdata_int <= {11'h00, clk_mon_count[ 1]};
+          5'h12: up_rdata_int <= {11'h00, clk_mon_count[ 2]};
+          5'h13: up_rdata_int <= {11'h00, clk_mon_count[ 3]};
+          5'h14: up_rdata_int <= {11'h00, clk_mon_count[ 4]};
+          5'h15: up_rdata_int <= {11'h00, clk_mon_count[ 5]};
+          5'h16: up_rdata_int <= {11'h00, clk_mon_count[ 6]};
+          5'h17: up_rdata_int <= {11'h00, clk_mon_count[ 7]};
+          5'h18: up_rdata_int <= {11'h00, clk_mon_count[ 8]};
+          5'h19: up_rdata_int <= {11'h00, clk_mon_count[ 9]};
+          5'h1a: up_rdata_int <= {11'h00, clk_mon_count[10]};
+          5'h1b: up_rdata_int <= {11'h00, clk_mon_count[11]};
+          5'h1c: up_rdata_int <= {11'h00, clk_mon_count[12]};
+          5'h1d: up_rdata_int <= {11'h00, clk_mon_count[13]};
+          5'h1e: up_rdata_int <= {11'h00, clk_mon_count[14]};
+          5'h1f: up_rdata_int <= {11'h00, clk_mon_count[15]};
 
           default: up_rdata_int <= 'h00;
         endcase
@@ -257,11 +250,11 @@ module axi_clock_monitor #(
     .up_axi_rresp (s_axi_rresp),
     .up_axi_rdata (s_axi_rdata),
     .up_axi_rready (s_axi_rready),
-    .up_wreq (up_wreq_i_s),
+    .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_i_s),
     .up_wdata (up_wdata_i_s),
     .up_wack (up_wack_o_s),
-    .up_rreq (up_rreq_i_s),
+    .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_i_s),
     .up_rdata (up_rdata_o_s),
     .up_rack (up_rack_o_s));
