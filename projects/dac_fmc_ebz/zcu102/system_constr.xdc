@@ -64,10 +64,10 @@ set_property  -dict {PACKAGE_PIN  J19 IOSTANDARD LVCMOS33} [get_ports pmod_gpio[
 # clocks
 
 # Max lane rate of 15.4 Gbps
-create_clock -name tx_ref_clk   -period  2.597 [get_ports tx_ref_clk_p]
+create_clock -name tx_ref_clk   -period  9.76 [get_ports tx_ref_clk_p]
 
-# Assumption is that REFCLK and SYSREF have similar propagation delay, 
+# Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
-set_input_delay -clock [get_clocks tx_ref_clk] \
-  [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \
-  [get_ports {tx_sysref_*}]
+#set_input_delay -clock [get_clocks tx_ref_clk] \
+#  [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \
+#  [get_ports {tx_sysref_*}]

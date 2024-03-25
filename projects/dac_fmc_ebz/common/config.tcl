@@ -9,7 +9,7 @@
 # make ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04
 
 # Default:
-set device AD9172
+set device AD9163
 set mode   04
 
 if [info exists ::env(ADI_DAC_DEVICE)] {
