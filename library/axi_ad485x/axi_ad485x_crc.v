@@ -39,7 +39,7 @@
 // Initial value:      0x0000
 // Direction:          shift left
 
-module axi_ad4858_crc (
+module axi_ad485x_crc (
   input             rst,
   input             clk,
   input             crc_en,

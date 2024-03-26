@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad4858_channel #(
+module axi_ad485x_20b_channel #(
 
   parameter CHANNEL_ID = 0,
   parameter ACTIVE_LANE = 8'b11111111, // for cmos if
@@ -59,7 +59,6 @@ module axi_ad4858_channel #(
 
   // error monitoring
 
-  output reg             adc_or,
   output reg [ 6:0]      adc_status_header,
   output                 up_adc_pn_err,
   output                 up_adc_pn_oos,
@@ -93,6 +92,7 @@ module axi_ad4858_channel #(
   reg        [31:0]      adc_raw_data;
   reg        [31:0]      read_channel_data;
   reg        [31:0]      expected_package_pattern;
+  reg                    adc_or;
 
   // internal signals
 
@@ -237,9 +237,10 @@ module axi_ad4858_channel #(
     .adc_iqcor_coeff_2 (),
     .adc_pnseq_sel (),
     .adc_data_sel (),
+    .adc_softspan (),
     .adc_pn_err (adc_pn_err),
     .adc_pn_oos (1'b0),
-    .adc_or (1'b0),
+    .adc_or (adc_or),
     .adc_read_data (read_channel_data),
     .adc_status_header ({1'b1, adc_status_header}),
     .adc_crc_err (if_crc_err),
