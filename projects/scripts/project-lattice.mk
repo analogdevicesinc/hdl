@@ -123,6 +123,7 @@ clean-rd:
 	-rm -f $(PROJECT_NAME)_radiant.log
 
 $(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
+	-rm -f $(PROJECT_NAME)_propel_builder.log
 	$(call build, \
 		$(PROPEL_BUILDER) system_project_bd.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_propel_builder.log, \
@@ -136,6 +137,7 @@ $(R_TARGETS): $(filter $(R_DEPS_FILTER), $(M_DEPS))
 			exit 2; \
 		fi \
 	done
+	-rm -f $(PROJECT_NAME)_radiant.log
 	$(call build, \
 		$(RADIANT) system_project.tcl ${PROJECT_NAME}, \
 		$(PROJECT_NAME)_radiant.log, \
