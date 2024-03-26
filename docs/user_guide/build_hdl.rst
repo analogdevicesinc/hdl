@@ -27,7 +27,7 @@ HDL project from the repository:
    You can find information about the proper version in our
    `release notes <https://github.com/analogdevicesinc/hdl/releases>`__.
    Make sure that you're always using the latest release.
-#. The proper Vivado/Quartus/Prople/Radiant version can be found in:
+#. The proper Vivado/Quartus/Propel/Radiant version can be found in:
 
    -  Starting with ``hdl_2021_r1`` release branch:
       :git-hdl:`scripts/adi_env.tcl`
@@ -520,6 +520,12 @@ Starting with Vivado 2019.3, the output file extension was changed from
 Building a Lattice project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+   .. warning::
+
+      Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
+      unknown compatibility reason. You can use Cygwin on Windows or a normal
+      Linux installation.
+
 The Lattice build is in a very early version, does not support any ADI library
 builds yet. We are just starting to develop the library build part.
 Currently we only have a single early version base design that builds almost
@@ -817,8 +823,8 @@ the tools to set up the environment.
 
    export PATH=$PATH:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
    export PATH=$PATH:/opt/intelFPGA_pro/2x.x/quartus/bin
-   export PATH=$PATH:/<path_to>/lscc/propel/202x.x/builder/rtf/bin/lin64
-   export PATH=$PATH:/<path_to>/lscc/radiant/202x.x/bin/lin64
+   export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+   export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
 
 Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -832,8 +838,8 @@ look like that of the Linux environment.
 
    export PATH=$PATH:/cygdrive/d/Xilinx/Vivado/202x.x/bin:/cygdrive/d/Xilinx/Vitis/202x.x/bin
    export PATH=$PATH:/cygdrive/d/intelFPGA_pro/2x.x/quartus/bin64
-   export PATH=$PATH:/cygdrive/<c><path_to>/lscc/propel/202x.x/builder/rtf/bin/nt64
-   export PATH=$PATH:/cygdrive/<c><path_to>/lscc/radiant/202x.x/bin/nt64
+   export PATH=$PATH:/cygdrive/d/lscc/propel/202x.x/builder/rtf/bin/nt64
+   export PATH=$PATH:/cygdrive/d/lscc/radiant/202x.x/bin/nt64
 
 A very good alternative to Cygwin is
 `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. The
@@ -841,10 +847,10 @@ manual changes to your **.bashrc** should look like:
 
 .. code-block:: bash
 
-   export PATH=$PATH:/opt/path_to/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
-   export PATH=$PATH:/opt/path_to/quartus/bin
-   export PATH=$PATH:/<path_to>/lscc/propel/202x.x/builder/rtf/bin/lin64
-   export PATH=$PATH:/<path_to>/lscc/radiant/202x.x/bin/lin64
+   export PATH=$PATH:/opt/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
+   export PATH=$PATH:/opt/quartus/bin
+   export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+   export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
 
 If you do not want to install Cygwin, there might still be some
 alternative. There are ``make`` alternatives for **Windows Command
