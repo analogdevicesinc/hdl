@@ -174,7 +174,7 @@ module util_do_ram #(
     .clka (s_axis_aclk),
     .wea (wr_enable),
     .addra (wr_addr),
-    .dina ({s_axis_data}),
+    .dina (s_axis_data),
 
     .clkb (m_axis_aclk),
     .reb (1'b1),
@@ -190,7 +190,7 @@ module util_do_ram #(
     .clka (s_axis_aclk),
     .wea (wr_enable),
     .addra (wr_addr),
-    .dina ({s_axis_keep}),
+    .dina (s_axis_keep),
 
     .clkb (m_axis_aclk),
     .reb (1'b1),
@@ -277,7 +277,7 @@ module util_do_ram #(
 
   // Read datapath to AXIS logic
   util_axis_fifo #(
-    .DATA_WIDTH(DST_DATA_WIDTH/8*9+1),
+    .DATA_WIDTH(DST_DATA_WIDTH),
     .ADDRESS_WIDTH(2),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(0),
@@ -289,7 +289,7 @@ module util_do_ram #(
     .s_axis_valid(rd_fifo_s_valid),
     .s_axis_ready(rd_fifo_s_ready),
     .s_axis_full(),
-    .s_axis_data({rd_data_l2}),
+    .s_axis_data(rd_data_l2),
     .s_axis_room(rd_fifo_room),
     .s_axis_tkeep(rd_keep_l2),
     .s_axis_tlast(rd_last_l2),
@@ -299,7 +299,7 @@ module util_do_ram #(
     .m_axis_aresetn(m_axis_aresetn & rd_request_enable),
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
-    .m_axis_data({m_axis_data}),
+    .m_axis_data(m_axis_data),
     .m_axis_level(),
     .m_axis_empty(),
     .m_axis_tkeep(m_axis_keep),
