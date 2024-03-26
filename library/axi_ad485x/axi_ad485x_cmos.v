@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,13 +35,15 @@
 
 `timescale 1ns/100ps
 
-module axi_ad4858_cmos #(
+module axi_ad485x_cmos #(
 
   parameter FPGA_TECHNOLOGY = 0,
+  parameter RESOLUTION = 20,
   parameter DELAY_REFCLK_FREQ = 200,
   parameter IODELAY_ENABLE = 1,
   parameter IODELAY_GROUP = "dev_if_delay_group",
-  parameter ACTIVE_LANE = 8'b11111111
+  parameter ACTIVE_LANE = 8'b11111111,
+  parameter N_CHANNELS = 8
 ) (
 
   input                   rst,
@@ -80,23 +82,20 @@ module axi_ad4858_cmos #(
   output                  delay_locked
 );
 
-  localparam NEG_EDGE = 1;
-  localparam DW = 32;
-  localparam BW = DW - 1;
-  localparam PACKET_1_BITS = 20;
-  localparam PACKET_2_BITS = 24;
-  localparam PACKET_3_BITS = 32;
+  localparam [5:0] PACKET_1 = RESOLUTION == 16 ? 16 : 20;
+  localparam [5:0] PACKET_2 = RESOLUTION == 16 ? 24 : 24;
+  localparam [5:0] PACKET_3 = RESOLUTION == 16 ? 24 : 32;
 
   // internal registers
 
-  reg         [BW:0]  adc_lane_0;
-  reg         [BW:0]  adc_lane_1;
-  reg         [BW:0]  adc_lane_2;
-  reg         [BW:0]  adc_lane_3;
-  reg         [BW:0]  adc_lane_4;
-  reg         [BW:0]  adc_lane_5;
-  reg         [BW:0]  adc_lane_6;
-  reg         [BW:0]  adc_lane_7;
+  reg         [31:0]  adc_lane_0;
+  reg         [31:0]  adc_lane_1;
+  reg         [31:0]  adc_lane_2;
+  reg         [31:0]  adc_lane_3;
+  reg         [31:0]  adc_lane_4;
+  reg         [31:0]  adc_lane_5;
+  reg         [31:0]  adc_lane_6;
+  reg         [31:0]  adc_lane_7;
 
   reg         [ 5:0]  data_counter = 6'h0;
   reg         [ 5:0]  scki_counter = 6'h0;
@@ -104,8 +103,8 @@ module axi_ad4858_cmos #(
   reg                 scki_i;
   reg                 scki_d;
 
-  reg         [BW:0]  adc_data_store[8:0];
-  reg         [BW:0]  adc_data_init[7:0];
+  reg         [31:0]  adc_data_store[8:0];
+  reg         [31:0]  adc_data_init[7:0];
   reg                 adc_valid_init;
   reg                 adc_valid_init_d;
 
@@ -157,6 +156,7 @@ module axi_ad4858_cmos #(
   reg        [288:0]  crc_data_in;
   reg         [15:0]  crc_cnt;
   reg         [ 7:0]  data_in_byte;
+  reg         [15:0]  crc_data_length;
 
   // internal wires
 
@@ -176,12 +176,11 @@ module axi_ad4858_cmos #(
   wire                crc_enable;
   wire                crc_valid;
   wire        [15:0]  crc_res;
-  wire        [15:0]  crc_data_lenght;
 
   // packet format selection
 
-  assign packet_lenght = packet_format == 2'd0 ? 6'd20 :
-                         packet_format == 2'd1 ? 6'd24 : 6'd32;
+  assign packet_lenght = packet_format == 2'd0 ? PACKET_1 :
+                         packet_format == 2'd1 ? PACKET_2 : PACKET_3;
 
   always @(posedge clk) begin
     if (rst == 1'b1) begin
@@ -326,15 +325,25 @@ module axi_ad4858_cmos #(
     end
   end
 
-  assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
-                         (ch_data_lock[1] | ~adc_enable[1]) &
-                         (ch_data_lock[2] | ~adc_enable[2]) &
-                         (ch_data_lock[3] | ~adc_enable[3]) &
-                         (ch_data_lock[4] | ~adc_enable[4]) &
-                         (ch_data_lock[5] | ~adc_enable[5]) &
-                         (ch_data_lock[6] | ~adc_enable[6]) &
-                         (ch_data_lock[7] | ~adc_enable[7]) &
-                         (ch_data_lock[8] | ~crc_enable_window));
+  generate
+    if (N_CHANNELS == 8) begin
+      assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
+                             (ch_data_lock[1] | ~adc_enable[1]) &
+                             (ch_data_lock[2] | ~adc_enable[2]) &
+                             (ch_data_lock[3] | ~adc_enable[3]) &
+                             (ch_data_lock[4] | ~adc_enable[4]) &
+                             (ch_data_lock[5] | ~adc_enable[5]) &
+                             (ch_data_lock[6] | ~adc_enable[6]) &
+                             (ch_data_lock[7] | ~adc_enable[7]) &
+                             (ch_data_lock[8] | ~crc_enable_window));
+    end else begin
+      assign aquire_data = ~((ch_data_lock[0] | ~adc_enable[0]) &
+                             (ch_data_lock[1] | ~adc_enable[1]) &
+                             (ch_data_lock[2] | ~adc_enable[2]) &
+                             (ch_data_lock[3] | ~adc_enable[3]) &
+                             (ch_data_lock[4] | ~crc_enable_window));
+    end
+  endgenerate
 
   // capture data
 
@@ -364,27 +373,31 @@ module axi_ad4858_cmos #(
         .delay_locked (delay_locked));
     end
     for (i = 1; i < 8; i = i + 1) begin: g_rx_lanes
-      ad_data_in #(
-        .SINGLE_ENDED (1),
-        .DDR_SDR_N (0),
-        .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-        .IODELAY_CTRL (0),
-        .IODELAY_ENABLE (IODELAY_ENABLE),
-        .IODELAY_GROUP (IODELAY_GROUP),
-        .REFCLK_FREQUENCY (DELAY_REFCLK_FREQ)
-      ) i_rx_data (
-        .rx_clk (scko),
-        .rx_data_in_p (db_i[i]),
-        .rx_data_in_n (1'd0),
-        .rx_data_p (db_s[i]),
-        .rx_data_n (),
-        .up_clk (up_clk),
-        .up_dld (up_adc_dld[i]),
-        .up_dwdata (up_adc_dwdata[((i*5)+4):(i*5)]),
-        .up_drdata (up_adc_drdata[((i*5)+4):(i*5)]),
-        .delay_clk (delay_clk),
-        .delay_rst (delay_rst),
-        .delay_locked ());
+      if (i < N_CHANNELS) begin
+        ad_data_in #(
+          .SINGLE_ENDED (1),
+          .DDR_SDR_N (0),
+          .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+          .IODELAY_CTRL (0),
+          .IODELAY_ENABLE (IODELAY_ENABLE),
+          .IODELAY_GROUP (IODELAY_GROUP),
+          .REFCLK_FREQUENCY (DELAY_REFCLK_FREQ)
+        ) i_rx_data (
+          .rx_clk (scko),
+          .rx_data_in_p (db_i[i]),
+          .rx_data_in_n (1'd0),
+          .rx_data_p (db_s[i]),
+          .rx_data_n (),
+          .up_clk (up_clk),
+          .up_dld (up_adc_dld[i]),
+          .up_dwdata (up_adc_dwdata[((i*5)+4):(i*5)]),
+          .up_drdata (up_adc_drdata[((i*5)+4):(i*5)]),
+          .delay_clk (delay_clk),
+          .delay_rst (delay_rst),
+          .delay_locked ());
+      end else begin
+        assign db_s[i] = 1'b0;
+      end
     end
   endgenerate
 
@@ -392,14 +405,14 @@ module axi_ad4858_cmos #(
   // previous sample for packet formats other than 32.
 
   always @(negedge scko) begin
-    adc_lane_0 <= {adc_lane_0[BW-1:0], db_s[0]};
-    adc_lane_1 <= {adc_lane_1[BW-1:0], db_s[1]};
-    adc_lane_2 <= {adc_lane_2[BW-1:0], db_s[2]};
-    adc_lane_3 <= {adc_lane_3[BW-1:0], db_s[3]};
-    adc_lane_4 <= {adc_lane_4[BW-1:0], db_s[4]};
-    adc_lane_5 <= {adc_lane_5[BW-1:0], db_s[5]};
-    adc_lane_6 <= {adc_lane_6[BW-1:0], db_s[6]};
-    adc_lane_7 <= {adc_lane_7[BW-1:0], db_s[7]};
+    adc_lane_0 <= {adc_lane_0[30:0], db_s[0]};
+    adc_lane_1 <= {adc_lane_1[30:0], db_s[1]};
+    adc_lane_2 <= {adc_lane_2[30:0], db_s[2]};
+    adc_lane_3 <= {adc_lane_3[30:0], db_s[3]};
+    adc_lane_4 <= {adc_lane_4[30:0], db_s[4]};
+    adc_lane_5 <= {adc_lane_5[30:0], db_s[5]};
+    adc_lane_6 <= {adc_lane_6[30:0], db_s[6]};
+    adc_lane_7 <= {adc_lane_7[30:0], db_s[7]};
   end
 
   always @(posedge clk) begin
@@ -493,16 +506,25 @@ module axi_ad4858_cmos #(
       adc_ch5_shift_d <= adc_ch5_shift;
       adc_ch6_shift_d <= adc_ch6_shift;
       adc_ch7_shift_d <= adc_ch7_shift;
-      adc_valid <= adc_valid_init_d &
-                     (ch_captured[0] | ~adc_enable[0]) &
-                     (ch_captured[1] | ~adc_enable[1]) &
-                     (ch_captured[2] | ~adc_enable[2]) &
-                     (ch_captured[3] | ~adc_enable[3]) &
-                     (ch_captured[4] | ~adc_enable[4]) &
-                     (ch_captured[5] | ~adc_enable[5]) &
-                     (ch_captured[6] | ~adc_enable[6]) &
-                     (ch_captured[7] | ~adc_enable[7]) &
-                     (ch_captured[8] | ~crc_enable_window);
+      if (N_CHANNELS == 8) begin
+        adc_valid <= adc_valid_init_d &
+                       (ch_captured[0] | ~adc_enable[0]) &
+                       (ch_captured[1] | ~adc_enable[1]) &
+                       (ch_captured[2] | ~adc_enable[2]) &
+                       (ch_captured[3] | ~adc_enable[3]) &
+                       (ch_captured[4] | ~adc_enable[4]) &
+                       (ch_captured[5] | ~adc_enable[5]) &
+                       (ch_captured[6] | ~adc_enable[6]) &
+                       (ch_captured[7] | ~adc_enable[7]) &
+                       (ch_captured[8] | ~crc_enable_window);
+      end else begin
+        adc_valid <= adc_valid_init_d &
+                       (ch_captured[0] | ~adc_enable[0]) &
+                       (ch_captured[1] | ~adc_enable[1]) &
+                       (ch_captured[2] | ~adc_enable[2]) &
+                       (ch_captured[3] | ~adc_enable[3]) &
+                       (ch_captured[4] | ~crc_enable_window);
+      end
     end
   end
 
@@ -547,9 +569,15 @@ module axi_ad4858_cmos #(
     end
   end
 
-  assign dev_status = packet_format == 0 ? adc_data_store[8][23:16] << 4 :
-                                           adc_data_store[8][23:16];
-  assign crc_data = adc_data_store[8][15:0];
+  generate
+    if (RESOLUTION == 20) begin
+      assign dev_status = packet_format == 0 ? adc_data_store[8][23:16] << 4 :
+                                               adc_data_store[8][23:16];
+    end else begin
+      assign dev_status = packet_format == 0 ? 8'd0 : adc_data_store[8][23:16];
+    end
+  endgenerate
+
   assign adc_data = {adc_data_store[7],
                      adc_data_store[6],
                      adc_data_store[5],
@@ -561,48 +589,94 @@ module axi_ad4858_cmos #(
 
   // CRC checker logic
 
-  always @(posedge clk) begin
-    if (rst == 1) begin
-      crc_data_in <= 0;
-    end else begin
-      if (adc_valid == 1) begin
-        if (packet_format == 0) begin
-          crc_data_in <= {104'd0,
-                          adc_data_store[0][19:0],
-                          adc_data_store[1][19:0],
-                          adc_data_store[2][19:0],
-                          adc_data_store[3][19:0],
-                          adc_data_store[4][19:0],
-                          adc_data_store[5][19:0],
-                          adc_data_store[6][19:0],
-                          adc_data_store[7][19:0],
-                          adc_data_store[8][19:0],
-                          4'd0};
-        end else if (packet_format == 1) begin
-          crc_data_in <= {72'd0,
-                          adc_data_store[0][23:0],
-                          adc_data_store[1][23:0],
-                          adc_data_store[2][23:0],
-                          adc_data_store[3][23:0],
-                          adc_data_store[4][23:0],
-                          adc_data_store[5][23:0],
-                          adc_data_store[6][23:0],
-                          adc_data_store[7][23:0],
-                          adc_data_store[8][23:0]};
-        end else  begin
-          crc_data_in <= {adc_data_store[0],
-                          adc_data_store[1],
-                          adc_data_store[2],
-                          adc_data_store[3],
-                          adc_data_store[4],
-                          adc_data_store[5],
-                          adc_data_store[6],
-                          adc_data_store[7],
-                          adc_data_store[8]};
+  generate
+    always @(posedge clk) begin
+      if (rst == 1) begin
+        crc_data_in <= 0;
+      end else begin
+        if (adc_valid == 1) begin
+          if (N_CHANNELS == 8) begin
+            if (packet_format == 0 && RESOLUTION == 16) begin
+              crc_data_in <= {144'd0,
+                            adc_data_store[0][15:0],
+                            adc_data_store[1][15:0],
+                            adc_data_store[2][15:0],
+                            adc_data_store[3][15:0],
+                            adc_data_store[4][15:0],
+                            adc_data_store[5][15:0],
+                            adc_data_store[6][15:0],
+                            adc_data_store[7][15:0],
+                            adc_data_store[8][15:0]};
+            end else if (packet_format == 0 && RESOLUTION == 20) begin
+              crc_data_in <= {104'd0,
+                              adc_data_store[0][19:0],
+                              adc_data_store[1][19:0],
+                              adc_data_store[2][19:0],
+                              adc_data_store[3][19:0],
+                              adc_data_store[4][19:0],
+                              adc_data_store[5][19:0],
+                              adc_data_store[6][19:0],
+                              adc_data_store[7][19:0],
+                              adc_data_store[8][19:0],
+                              4'd0};
+            end else if (packet_format == 1) begin
+              crc_data_in <= {72'd0,
+                              adc_data_store[0][23:0],
+                              adc_data_store[1][23:0],
+                              adc_data_store[2][23:0],
+                              adc_data_store[3][23:0],
+                              adc_data_store[4][23:0],
+                              adc_data_store[5][23:0],
+                              adc_data_store[6][23:0],
+                              adc_data_store[7][23:0],
+                              adc_data_store[8][23:0]};
+            end else  begin
+              crc_data_in <= {adc_data_store[0],
+                              adc_data_store[1],
+                              adc_data_store[2],
+                              adc_data_store[3],
+                              adc_data_store[4],
+                              adc_data_store[5],
+                              adc_data_store[6],
+                              adc_data_store[7],
+                              adc_data_store[8]};
+            end
+          end else begin
+            if (packet_format == 0 && RESOLUTION == 16) begin
+                crc_data_in <= {208'd0,
+                              adc_data_store[0][15:0],
+                              adc_data_store[1][15:0],
+                              adc_data_store[2][15:0],
+                              adc_data_store[3][15:0],
+                              adc_data_store[4][15:0]};
+            end else if (packet_format == 0 && RESOLUTION == 20) begin
+              crc_data_in <= {184'd0,
+                              adc_data_store[0][19:0],
+                              adc_data_store[1][19:0],
+                              adc_data_store[2][19:0],
+                              adc_data_store[3][19:0],
+                              adc_data_store[4][19:0],
+                              4'd0};
+            end else if (packet_format == 1) begin
+              crc_data_in <= {168'd0,
+                              adc_data_store[0][23:0],
+                              adc_data_store[1][23:0],
+                              adc_data_store[2][23:0],
+                              adc_data_store[3][23:0],
+                              adc_data_store[4][23:0]};
+            end else  begin
+              crc_data_in <= {128'd0,
+                              adc_data_store[0],
+                              adc_data_store[1],
+                              adc_data_store[2],
+                              adc_data_store[3],
+                              adc_data_store[4]};
+            end
+          end
         end
       end
     end
-  end
+  endgenerate
 
   // As an optimization, a crc checker with 8 parallel operations per clk cycle
   // will be used for all packet formats.
@@ -612,12 +686,29 @@ module axi_ad4858_cmos #(
   // multiple of 8. So, we will feed 184 bits, which is a multiple of 8.
   // First extra 4 bits entering the checker being 0, will not affect the result
   // since the initial value of the LFSR is 0x0000.
-  assign crc_data_lenght = packet_format == 2'd0 ? 16'd176 : // 184-8
-                           packet_format == 2'd1 ? 16'd208 : 16'd280;
+  generate
+    always @(posedge clk) begin
+      if (N_CHANNELS == 8) begin
+        if (RESOLUTION == 16) begin
+          crc_data_length <= packet_format == 2'd0 ? 16'd144 : 16'd208;
+        end else if (RESOLUTION == 20) begin
+          crc_data_length <= packet_format == 2'd0 ? 16'd176 : // 184-8
+                             packet_format == 2'd1 ? 16'd208 : 16'd280;
+        end
+      end else begin // quad channel
+        if (RESOLUTION == 16) begin
+          crc_data_length <= packet_format == 2'd0 ? 16'd80 : 16'd120;
+        end else if (RESOLUTION == 20) begin
+          crc_data_length <= packet_format == 2'd0 ? 16'd104 :
+                             packet_format == 2'd1 ? 16'd120 : 16'd160;
+        end
+      end
+    end
+  endgenerate
 
   always @(posedge clk) begin
     if (crc_enable_window == 0 || adc_valid == 1) begin
-      crc_cnt <= crc_data_lenght;
+      crc_cnt <= crc_data_length;
       data_in_byte <= 0;
       run_crc <= adc_valid;
     end else begin
@@ -648,7 +739,7 @@ module axi_ad4858_cmos #(
     end
   end
 
-  axi_ad4858_crc i_ad4858_crc_8 (
+  axi_ad485x_crc i_ad485x_crc_8 (
     .rst (crc_reset),
     .clk (clk),
     .crc_en (crc_enable),

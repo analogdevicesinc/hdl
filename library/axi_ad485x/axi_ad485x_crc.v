@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,7 +39,7 @@
 // Initial value:      0x0000
 // Direction:          shift left
 
-module axi_ad4858_crc (
+module axi_ad485x_crc (
   input             rst,
   input             clk,
   input             crc_en,

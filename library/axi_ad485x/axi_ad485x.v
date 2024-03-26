@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,12 +35,14 @@
 
 `timescale 1ns/100ps
 
-module axi_ad4858 #(
+module axi_ad485x #(
 
   parameter       FPGA_TECHNOLOGY = 0,
   parameter       DELAY_REFCLK_FREQ = 200,
   parameter       IODELAY_ENABLE = 1,
   parameter       ID = 0,
+  parameter       DEVICE = "AD4858",
+  parameter       DW = 31,
   parameter       LVDS_CMOS_N = 1,
   parameter       LANE_0_ENABLE = "1",
   parameter       LANE_1_ENABLE = "1",
@@ -124,17 +126,35 @@ module axi_ad4858 #(
   output                  adc_enable_5,
   output                  adc_enable_6,
   output                  adc_enable_7,
-  output      [31:0]      adc_data_0,
-  output      [31:0]      adc_data_1,
-  output      [31:0]      adc_data_2,
-  output      [31:0]      adc_data_3,
-  output      [31:0]      adc_data_4,
-  output      [31:0]      adc_data_5,
-  output      [31:0]      adc_data_6,
-  output      [31:0]      adc_data_7
+  output      [DW:0]      adc_data_0,
+  output      [DW:0]      adc_data_1,
+  output      [DW:0]      adc_data_2,
+  output      [DW:0]      adc_data_3,
+  output      [DW:0]      adc_data_4,
+  output      [DW:0]      adc_data_5,
+  output      [DW:0]      adc_data_6,
+  output      [DW:0]      adc_data_7
 );
 
   // localparam
+
+  localparam             RESOLUTION = (DEVICE == "AD4858") ? 20 :
+                                      (DEVICE == "AD4857") ? 16 :
+                                      (DEVICE == "AD4856") ? 20 :
+                                      (DEVICE == "AD4855") ? 16 :
+                                      (DEVICE == "AD4854") ? 20 :
+                                      (DEVICE == "AD4853") ? 16 :
+                                      (DEVICE == "AD4852") ? 20 :
+                                      (DEVICE == "AD4851") ? 16 : 20;
+
+  localparam             N_CHANNELS = (DEVICE == "AD4858") ? 8 :
+                                      (DEVICE == "AD4857") ? 8 :
+                                      (DEVICE == "AD4856") ? 8 :
+                                      (DEVICE == "AD4855") ? 8 :
+                                      (DEVICE == "AD4854") ? 4 :
+                                      (DEVICE == "AD4853") ? 4 :
+                                      (DEVICE == "AD4852") ? 4 :
+                                      (DEVICE == "AD4851") ? 4 : 'hz;
 
   localparam  [ 0:0]     READ_RAW = 1'b1;
   localparam             CONFIG = {18'd0, READ_RAW, 5'd0, ~LVDS_CMOS_N[0], 7'd0};
@@ -179,11 +199,10 @@ module axi_ad4858 #(
 
   wire   [255:0]          adc_data_if_s;
   wire    [ 7:0]          adc_enable_s;
-  wire    [31:0]          adc_data_s[7:0];
+  wire    [DW:0]          adc_data_s[7:0];
   wire                    adc_valid_if;
   wire    [ 7:0]          adc_valid_s;
   wire                    crc_error;
-  wire    [ 7:0]          adc_or;
   wire    [ 7:0]          up_adc_or_s;
 
   wire    [ 7:0]          up_adc_pn_err;
@@ -279,11 +298,13 @@ module axi_ad4858 #(
         assign scko_s_n = scki_n;
       end
 
-      axi_ad4858_lvds #(
+      axi_ad485x_lvds #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+        .RESOLUTION (RESOLUTION),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
-        .IODELAY_ENABLE (IODELAY_ENABLE)
-      ) i_ad4858_lvds_interface (
+        .IODELAY_ENABLE (IODELAY_ENABLE),
+        .N_CHANNELS (N_CHANNELS)
+      ) i_ad485x_lvds_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
         .fast_clk (external_fast_clk),
@@ -345,12 +366,14 @@ module axi_ad4858 #(
       end else begin
         assign scko_s = scki;
       end
-      axi_ad4858_cmos #(
+      axi_ad485x_cmos #(
         .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+        .RESOLUTION (RESOLUTION),
         .DELAY_REFCLK_FREQ(DELAY_REFCLK_FREQ),
         .IODELAY_ENABLE (IODELAY_ENABLE),
-        .ACTIVE_LANE (ACTIVE_LANES)
-      ) i_ad4858_cmos_interface (
+        .ACTIVE_LANE (ACTIVE_LANES),
+        .N_CHANNELS (N_CHANNELS)
+      ) i_ad485x_cmos_interface (
         .rst (adc_if_reset),
         .clk (adc_clk_s),
         .adc_enable (adc_enable_s),
@@ -406,38 +429,75 @@ module axi_ad4858 #(
     // adc channels
 
     for (i = 0; i < 8; i=i+1) begin : channel
-      always @(posedge adc_clk_s) begin
-        adc_reset[i] <= adc_rst_s;
+      if (i < N_CHANNELS) begin // LVDS
+        always @(posedge adc_clk_s) begin
+          adc_reset[i] <= adc_rst_s;
+        end
+        if (DEVICE == "AD4858" ||
+            DEVICE == "AD4856" ||
+            DEVICE == "AD4854" || DEVICE == "AD4852") begin
+          axi_ad485x_20b_channel #(
+            .CHANNEL_ID(i),
+            .ACTIVE_LANE (ACTIVE_LANES)
+          ) i_adc_channel (
+            .adc_clk (adc_clk_s),
+            .adc_rst (adc_reset[i]),
+            .adc_ch_valid_in (adc_valid_if),
+            .adc_ch_data_in (adc_data_if_s[32*i+:32]),
+            .if_crc_err (crc_error),
+            .adc_enable (adc_enable_s[i]),
+            .adc_valid (adc_valid_s[i]),
+            .adc_data (adc_data_s[i]),
+            .adc_status_header (),
+            .packet_format (packet_format),
+            .oversampling_en (oversampling_en),
+            .up_adc_or (up_adc_or_s[i]),
+            .up_adc_pn_err (up_adc_pn_err[i]),
+            .up_adc_pn_oos (up_adc_pn_oos[i]),
+            .up_rstn (up_rstn),
+            .up_clk (up_clk),
+            .up_wreq (up_wreq_s),
+            .up_waddr (up_waddr_s),
+            .up_wdata (up_wdata_s),
+            .up_wack (up_wack_s[i]),
+            .up_rreq (up_rreq_s),
+            .up_raddr (up_raddr_s),
+            .up_rdata (up_rdata_s[i]),
+            .up_rack (up_rack_s[i]));
+        end else begin
+          axi_ad485x_16b_channel #(
+            .CHANNEL_ID(i),
+            .ACTIVE_LANE (ACTIVE_LANES)
+          ) i_adc_channel (
+            .adc_clk (adc_clk_s),
+            .adc_rst (adc_reset[i]),
+            .adc_ch_valid_in (adc_valid_if),
+            .adc_ch_data_in (adc_data_if_s[32*i+:32]),
+            .if_crc_err (crc_error),
+            .adc_enable (adc_enable_s[i]),
+            .adc_valid (adc_valid_s[i]),
+            .adc_data (adc_data_s[i]),
+            .adc_status_header (),
+            .packet_format (packet_format),
+            .oversampling_en (oversampling_en),
+            .up_adc_or (up_adc_or_s[i]),
+            .up_adc_pn_err (up_adc_pn_err[i]),
+            .up_adc_pn_oos (up_adc_pn_oos[i]),
+            .up_rstn (up_rstn),
+            .up_clk (up_clk),
+            .up_wreq (up_wreq_s),
+            .up_waddr (up_waddr_s),
+            .up_wdata (up_wdata_s),
+            .up_wack (up_wack_s[i]),
+            .up_rreq (up_rreq_s),
+            .up_raddr (up_raddr_s),
+            .up_rdata (up_rdata_s[i]),
+            .up_rack (up_rack_s[i]));
+        end
+      end else begin
+        assign adc_data_s[i] = 'd0;
+        assign adc_enable_s[i] = 'd0;
       end
-      axi_ad4858_channel #(
-        .CHANNEL_ID(i),
-        .ACTIVE_LANE (ACTIVE_LANES)
-      ) i_adc_channel (
-        .adc_clk (adc_clk_s),
-        .adc_rst (adc_reset[i]),
-        .adc_ch_valid_in (adc_valid_if),
-        .adc_ch_data_in (adc_data_if_s[32*i+:32]),
-        .if_crc_err (crc_error),
-        .adc_enable (adc_enable_s[i]),
-        .adc_valid (adc_valid_s[i]),
-        .adc_data (adc_data_s[i]),
-        .adc_or (adc_or[i]),
-        .adc_status_header (),
-        .packet_format (packet_format),
-        .oversampling_en (oversampling_en),
-        .up_adc_or (up_adc_or_s[i]),
-        .up_adc_pn_err (up_adc_pn_err[i]),
-        .up_adc_pn_oos (up_adc_pn_oos[i]),
-        .up_rstn (up_rstn),
-        .up_clk (up_clk),
-        .up_wreq (up_wreq_s),
-        .up_waddr (up_waddr_s),
-        .up_wdata (up_wdata_s),
-        .up_wack (up_wack_s[i]),
-        .up_rreq (up_rreq_s),
-        .up_raddr (up_raddr_s),
-        .up_rdata (up_rdata_s[i]),
-        .up_rack (up_rack_s[i]));
     end
   endgenerate
 
