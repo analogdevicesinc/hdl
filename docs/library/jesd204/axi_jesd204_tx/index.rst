@@ -38,6 +38,7 @@ Features
 *  Max Lanerate with 64B/66B mode: 32 Gbps;
 *  Low Latency;
 *  Independent per lane enable/disable.
+
 ..
    Utilization
    --------------------------------------------------------------------------------

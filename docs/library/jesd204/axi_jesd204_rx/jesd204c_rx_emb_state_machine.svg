@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    contentStyleType="text/css"
-   height="368.43307"
+   height="437.85907"
    preserveAspectRatio="none"
    version="1.1"
-   viewBox="0 0 428.02328 368.43307"
-   width="428.02328"
+   viewBox="0 0 440.58023 437.85906"
+   width="440.58023"
    zoomAndPan="magnify"
    id="svg16"
    sodipodi:docname="jesd204c_rx_emb_state_machine.svg"
@@ -23,9 +23,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="3.0450919"
-     inkscape:cx="275.52535"
-     inkscape:cy="160.42209"
+     inkscape:zoom="0.76127298"
+     inkscape:cx="-22.987812"
+     inkscape:cy="375.02973"
      inkscape:window-width="2400"
      inkscape:window-height="1271"
      inkscape:window-x="-9"
@@ -50,193 +50,346 @@
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path27" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutS-8"
+       style="overflow:visible">
+      <path
+         id="path4063-7"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect1079"
+       effect="spiro"
+       lpeversion="0" />
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutS"
+       style="overflow:visible">
+      <path
+         id="path4063"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1"
+       style="overflow:visible">
+      <path
+         id="path1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2"
+       style="overflow:visible">
+      <path
+         id="path2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker3"
+       style="overflow:visible">
+      <path
+         id="path3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
   </defs>
   <rect
-     style="fill:#ffffff;stroke-width:1.34419;stroke-linejoin:round"
+     style="fill:#ffffff;stroke-width:1.48557;stroke-linejoin:round"
      id="rect1"
-     width="429.93927"
-     height="367.35934"
+     width="440.58023"
+     height="437.85907"
      x="0"
      y="0" />
   <circle
-     style="fill:none;stroke:#000000;stroke-width:0.519093;stroke-linejoin:round;stroke-dasharray:none"
-     id="path16"
-     cx="175.01846"
-     cy="111.53145"
-     r="41.193932" />
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.51027;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="circle1075"
+     cx="189.02844"
+     cy="160.87465"
+     r="52.932316" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:connector-curvature="0"
+     inkscape:original-d="m 113,-163.63782 29,46"
+     inkscape:path-effect="#path-effect1079"
+     id="path1077"
+     d="m 113,-163.63782 29,46"
+     style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS-8)"
+     transform="matrix(0.87756872,0,0,0.87756872,30.639938,211.45041)" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1085"
+     y="76.974976"
+     x="154.6398"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="76.974976"
+       x="154.6398"
+       id="tspan1081"
+       sodipodi:role="line">Reset || </tspan><tspan
+       id="tspan1083"
+       y="84.474976"
+       x="154.6398"
+       sodipodi:role="line"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569" /><tspan
+       y="84.474976"
+       x="154.6398"
+       sodipodi:role="line"
+       id="tspan1182"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569" /><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="91.974976"
+       x="154.6398"
+       sodipodi:role="line"
+       id="tspan1184">Sync header alignment lost</tspan></text>
+  <circle
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="circle1087"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.51027;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     cx="189.02844"
+     cy="160.87465"
+     r="46.229843" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1093"
+     y="157.89743"
+     x="163.96887"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.877569"
+       y="157.89743"
+       x="163.96887"
+       id="tspan1089"
+       sodipodi:role="line">EMB</tspan><tspan
+       id="tspan1091"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.877569"
+       y="185.39743"
+       x="163.96887"
+       sodipodi:role="line">INIT</tspan></text>
   <g
-     id="g17"
-     transform="matrix(1.0363369,0,0,1.0363369,64.502622,52.46527)">
+     id="g1103"
+     transform="matrix(0.87756872,0,0,0.87756872,150.84093,293.63815)"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-ydpi="90.034584">
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.563504;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-2"
-       cx="106.64082"
-       cy="56.99514"
-       r="44.718246" />
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle1095"
+       transform="translate(0.54321289)"
+       cx="212.48558"
+       cy="78.67614"
+       r="52.679455" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="183.17365"
+       y="72.29348"
+       id="text1101"><tspan
+         sodipodi:role="line"
+         id="tspan1097"
+         x="183.17365"
+         y="72.29348"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">EMB</tspan><tspan
+         id="tspan1099"
+         sodipodi:role="line"
+         x="183.17365"
+         y="103.6301"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">HUNT</tspan></text>
   </g>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="174.3252"
-     y="106.11193"
-     id="text16"><tspan
-       id="tspan16"
-       x="174.3252"
-       y="106.11193"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168">EMB</tspan><tspan
-       x="174.3252"
-       y="122.36193"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan1">INIT</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="128.09991"
-     y="44.561447"
-     id="text16-4-1-2"><tspan
-       x="128.09991"
-       y="44.561447"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan27-3">Reset or</tspan><tspan
-       x="128.09991"
-       y="60.811447"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan3">Sync header alignment lost</tspan></text>
   <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.932703;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-     d="m 112.75529,58.811579 24.0034,19.215387"
-     id="path26" />
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path1105"
+     d="m 245.66439,175.68967 c 46.12647,7.35727 81.63461,42.31154 96.77374,130.20477"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.51027;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="240.2504"
-     y="124.384"
-     id="text16-4-1-5-2"><tspan
-       x="240.2504"
-       y="124.384"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan4">An EoEMB received</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="268.51303"
-     y="266.8241"
-     id="text16-4-1-5-3"><tspan
-       x="268.51303"
-       y="266.8241"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan7">Four consecutive correct</tspan><tspan
-       x="268.51303"
-       y="283.0741"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan11">EoMB received</tspan></text>
-  <path
-     style="fill:#ffffff;stroke:#000000;stroke-width:1.03634;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker27)"
-     d="m 315.708,147.69775 c 0,0 -28.69087,-14.80895 -44.25641,-18.40515 -13.70503,-3.16636 -51.91933,-3.25951 -51.91933,-3.25951"
-     id="path7" />
-  <path
-     style="fill:#ffffff;stroke:#000000;stroke-width:1.03634;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker27)"
-     d="m 147.75995,153.91005 c 0,0 -1.11455,2.31386 -1.7812,4.25655 -3.22603,9.401 -10.49035,33.00979 -11.04966,49.43135 -0.9837,28.88187 17.59595,89.13777 17.59595,89.13777"
-     id="path8" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="134.27832"
-     y="191.29884"
-     id="text16-4-1-5"><tspan
-       x="134.27832"
-       y="191.29884"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;letter-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan6">Eight incorrect EoMB</tspan><tspan
-       x="134.27832"
-       y="207.54884"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;letter-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan5">or EoEMB received</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="198.36136"
-     y="190.29675"
-     id="text16-4-1-5-2-5"><tspan
-       x="198.36136"
-       y="190.29675"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan4-4">Unexpected EoMB</tspan><tspan
-       x="198.36136"
-       y="206.54675"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan9">or EoEMB received</tspan></text>
-  <path
-     style="fill:#ffffff;stroke:#000000;stroke-width:1.03634;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-     d="M 331.41796,199.3732 217.7119,301.13616"
-     id="path10" />
-  <circle
-     style="fill:none;stroke:#000000;stroke-width:0.519093;stroke-linejoin:round;stroke-dasharray:none"
-     id="path16-3"
-     cx="180.49374"
-     cy="326.97958"
-     r="41.193932" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="179.59302"
-     y="321.4032"
-     id="text16-8"><tspan
-       x="179.59302"
-       y="321.4032"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan2">EMB</tspan><tspan
-       x="179.59302"
-       y="337.6532"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan12">LOCK</tspan></text>
-  <circle
-     style="fill:none;stroke:#000000;stroke-width:0.519093;stroke-linejoin:round;stroke-dasharray:none"
-     id="path16-9"
-     cx="356.9303"
-     cy="167.03033"
-     r="41.193932" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.518168;stroke-linejoin:round;stroke-dasharray:none"
-     x="355.91827"
-     y="161.45396"
-     id="text16-0"><tspan
-       id="tspan16-8"
-       x="355.91827"
-       y="161.45396"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168">EMB</tspan><tspan
-       x="355.91827"
-       y="177.70395"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.518168"
-       id="tspan13">HUNT</tspan></text>
-  <path
-     style="fill:#ffffff;stroke:#000000;stroke-width:1.03634;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#marker27)"
-     d="m 317.8707,180.11797 c 0,0 -34.27941,-6.00174 -50.5693,-11.86973 -18.33617,-6.60512 -52.3661,-26.00723 -52.3661,-26.00723"
-     id="path9" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.415661;stroke-linejoin:round;stroke-dasharray:none"
-     x="97.999779"
-     y="10.636719"
-     id="text16-06-1"><tspan
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     x="315.49448"
+     y="214.25241"
+     id="text1109"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-ydpi="90.034584"><tspan
        sodipodi:role="line"
-       id="tspan17"
-       x="97.999779"
-       y="10.636719"><tspan
-         id="tspan16-7-9"
-         x="97.999779"
-         y="10.636719"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.415661"
-         dx="1">Extendend Multi-block</tspan></tspan><tspan
+       x="315.49448"
+       y="214.25241"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       id="tspan1107">An EoEMB received</tspan></text>
+  <g
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     transform="matrix(0.87756872,0,0,0.87756872,-135.18355,293.63815)"
+     id="g1119">
+    <circle
+       r="52.679455"
+       cy="78.67614"
+       cx="212.48558"
+       transform="translate(0.54321289)"
+       id="circle1111"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       id="text1117"
+       y="73.126175"
+       x="180.17743"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         y="73.126175"
+         x="180.17743"
+         id="tspan1113"
+         sodipodi:role="line">EMB</tspan><tspan
+         id="tspan1115"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.0693px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         y="104.46275"
+         x="180.17743"
+         sodipodi:role="line">LOCK</tspan></text>
+  </g>
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.51027;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="m 285.25186,372.35296 c -54.28411,26.06423 -113.05239,33.04416 -180.42261,3.41498"
+     id="path1121"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1127"
+     y="415.92331"
+     x="152.49796"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     xml:space="preserve"><tspan
+       id="tspan1123"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="415.92331"
+       x="152.49796"
+       sodipodi:role="line">Four consecutive correct</tspan><tspan
+       id="tspan1125"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="430.92331"
+       x="152.49796"
+       sodipodi:role="line"> EoMB received.</tspan></text>
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.51027;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="m 41.248628,310.8793 c 5.36076,-65.28361 29.20009,-115.41538 88.486622,-136.48155"
+     id="path1129"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.51027;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="M 318.64736,312.2264 C 278.68738,306.01282 247.9262,276.49224 234.81096,202.26217"
+     id="path1135"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1139"
+     y="303.03339"
+     x="157.80576"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     xml:space="preserve"><tspan
+       id="tspan1137"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="303.03339"
+       x="157.80576"
+       sodipodi:role="line">Unexpected EoMB</tspan><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="318.03339"
+       x="157.80576"
        sodipodi:role="line"
-       id="tspan18"
-       x="97.999779"
-       y="10.636719"><tspan
-         x="97.999779"
-         y="10.636719"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.415661"
-         id="tspan19"
-         dx="0"
-         dy="15">Aligment State Machine</tspan></tspan></text>
+       id="tspan1151"> or EoEMB received</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     x="50.12146"
+     y="20.480965"
+     id="text1145"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-ydpi="90.034584"><tspan
+       sodipodi:role="line"
+       id="tspan1141"
+       x="50.12146"
+       y="20.480965"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.877569">Extendend Multi-Block</tspan><tspan
+       id="tspan1143"
+       sodipodi:role="line"
+       x="50.12146"
+       y="47.980965"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:22px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.877569">Alignment  State Machine</tspan></text>
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1127-4"
+     y="239.94699"
+     x="67.197937"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.877569"
+     xml:space="preserve"><tspan
+       id="tspan1125-6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="239.94699"
+       x="67.197937"
+       sodipodi:role="line">Eight incorrect EoMB</tspan><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.877569"
+       y="254.94699"
+       x="67.197937"
+       sodipodi:role="line"
+       id="tspan1180">or EoEMB received.</tspan></text>
 </svg>

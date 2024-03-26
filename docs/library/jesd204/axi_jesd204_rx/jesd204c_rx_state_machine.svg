@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    contentStyleType="text/css"
-   height="419.65411"
+   height="447.96201"
    preserveAspectRatio="none"
    version="1.1"
-   viewBox="0 0 351.73084 419.65411"
-   width="351.73083"
+   viewBox="0 0 356.29542 447.962"
+   width="356.29541"
    zoomAndPan="magnify"
    id="svg16"
    sodipodi:docname="jesd204c_rx_state_machine.svg"
@@ -23,9 +23,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2.4186585"
-     inkscape:cx="175.71724"
-     inkscape:cy="209.82706"
+     inkscape:zoom="0.60466463"
+     inkscape:cx="-52.094994"
+     inkscape:cy="371.28019"
      inkscape:window-width="2400"
      inkscape:window-height="1271"
      inkscape:window-x="-9"
@@ -66,228 +66,417 @@
          d="M 5.77,0 -2.88,5 V -5 Z"
          id="path135" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutS"
+       style="overflow:visible">
+      <path
+         id="path4063"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect1007"
+       effect="spiro"
+       lpeversion="0" />
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1"
+       style="overflow:visible">
+      <path
+         id="path1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect1027"
+       is_visible="true"
+       lpeversion="0" />
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker2"
+       style="overflow:visible">
+      <path
+         id="path2"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker3"
+       style="overflow:visible">
+      <path
+         id="path3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4"
+       style="overflow:visible">
+      <path
+         id="path4"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5"
+       style="overflow:visible">
+      <path
+         id="path5"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker6"
+       style="overflow:visible">
+      <path
+         id="path6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="scale(0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
   </defs>
   <rect
-     style="fill:#ffffff;stroke-width:1.33417;stroke-linejoin:round"
+     style="fill:#ffffff;stroke-width:1.38735;stroke-linejoin:round"
      id="rect1"
-     width="351.73083"
-     height="419.65411"
+     width="356.29541"
+     height="447.96201"
      x="0"
      y="0" />
   <circle
-     style="fill:none;stroke:#000000;stroke-width:0.490034;stroke-linejoin:round;stroke-dasharray:none"
-     id="path16"
-     cx="134.7572"
-     cy="76.366638"
-     r="38.887894" />
-  <g
-     id="g17"
-     transform="matrix(0.97832273,0,0,0.97832273,30.428047,20.607)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.563504;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-2"
-       cx="106.64082"
-       cy="56.99514"
-       r="44.718246" />
-  </g>
+     r="43.216091"
+     cy="107.25038"
+     cx="138.61261"
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.86593;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="circle975" />
+  <circle
+     r="37.743919"
+     cy="237.15433"
+     cx="138.61261"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.58241;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="circle977" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.489161;stroke-linejoin:round;stroke-dasharray:none"
-     x="134.3177"
-     y="83.479546"
-     id="text16"><tspan
-       id="tspan16"
-       x="134.3177"
-       y="83.479546"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489161">RESET</tspan></text>
-  <g
-     id="g16"
-     transform="translate(31.063908,20.554103)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.490034;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-23"
-       cx="103.69328"
-       cy="169.88919"
-       r="38.887894" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.489161;stroke-linejoin:round;stroke-dasharray:none"
-       x="103.25379"
-       y="164.64409"
-       id="text16-4"><tspan
-         id="tspan16-1"
-         x="103.25379"
-         y="164.64409"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489161">WAIT</tspan><tspan
-         x="103.25379"
-         y="189.10222"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489161"
-         id="tspan1">BS</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489161;stroke-linejoin:round;stroke-dasharray:none"
-       x="60.324162"
-       y="8.1801958"
-       id="text16-4-1-2"><tspan
-         x="60.324162"
-         y="8.1801958"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489161"
-         id="tspan27-3">reset</tspan></text>
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.88049;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-       d="M 49.232905,2.7838782 71.892601,20.923587"
-       id="path26" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489;stroke-linejoin:round;stroke-dasharray:none"
-       x="150.81068"
-       y="156.97296"
-       id="text16-4-1-5-2"><tspan
-         x="150.81068"
-         y="156.97296"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan29-6">One of the lanes lost</tspan><tspan
-         x="150.81068"
-         y="166.75618"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan4">sync header alignment</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489;stroke-linejoin:round;stroke-dasharray:none"
-       x="224.94426"
-       y="298.16238"
-       id="text16-4-1-5-3"><tspan
-         x="224.94426"
-         y="298.16238"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan29-5">All lanes reached</tspan><tspan
-         x="224.94426"
-         y="308.16238"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan6-2">multi-block alignment</tspan><tspan
-         x="224.94426"
-         y="318.16238"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan7">and buffer was released</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489;stroke-linejoin:round;stroke-dasharray:none"
-       x="156.08705"
-       y="249.65132"
-       id="text16-4-1-5-3-7"><tspan
-         x="156.08705"
-         y="249.65132"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan29-5-0">One of the lanes lost</tspan><tspan
-         x="156.08705"
-         y="259.65131"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan7-7">multi-block alignment</tspan></text>
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.978323;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-       d="m 235.12924,192.28068 c 0,0 -29.54241,-15.23449 -45.56995,-18.93402 -14.11177,-3.25734 -43.37056,-2.60144 -43.37056,-2.60144"
-       id="path7" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.978323;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-       d="m 73.189379,195.65356 c 0,0 0.629332,-1.83395 0,0 -3.045436,8.87473 -11.982036,36.11263 -12.510033,51.61491 -0.928631,27.26506 14.251747,80.59219 14.251747,80.59219"
-       id="path8" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.978323;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker27)"
-       d="m 130.20774,203.33012 c 0,0 7.26072,33.28258 6.74851,55.89276 -0.56061,24.74659 -9.50234,70.08363 -9.50234,70.08363"
-       id="path9" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489;stroke-linejoin:round;stroke-dasharray:none"
-       x="60.064995"
-       y="231.88179"
-       id="text16-4-1-5"><tspan
-         x="60.064999"
-         y="231.88179"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;letter-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan29">All lanes reached</tspan><tspan
-         x="60.064999"
-         y="241.66501"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;letter-spacing:0px;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan6">sync header alignment</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;text-anchor:start;fill:none;stroke:none;stroke-width:0.489;stroke-linejoin:round;stroke-dasharray:none"
-       x="136.06343"
-       y="215.84233"
-       id="text16-4-1-5-2-5"><tspan
-         x="136.06343"
-         y="215.84233"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan29-6-3">One of the lanes lost</tspan><tspan
-         x="136.06343"
-         y="225.62555"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.489;stroke-dasharray:none"
-         id="tspan4-4">sync header alignment</tspan></text>
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.978323;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#marker27)"
-       d="M 246.16876,239.50414 138.82797,335.5704"
-       id="path10" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.978323;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;marker-start:url(#marker27)"
-       d="M 268.13436,250.62685 142.82619,364.90876"
-       id="path11" />
-  </g>
-  <g
-     id="g18"
-     transform="matrix(0.97832273,0,0,0.97832273,30.428047,89.089591)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-3"
-       cx="106.64082"
-       cy="297.88904"
-       r="39.749554" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="105.77168"
-       y="292.67908"
-       id="text16-8"><tspan
-         id="tspan16-2"
-         x="105.77168"
-         y="292.67908"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none">BLOCK</tspan><tspan
-         x="105.77168"
-         y="317.67908"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-         id="tspan2">SYNC</tspan></text>
-  </g>
-  <g
-     id="g19"
-     transform="matrix(0.97832273,0,0,0.97832273,25.429831,-20.924667)">
-    <circle
-       style="fill:none;stroke:#000000;stroke-width:0.500892;stroke-linejoin:round;stroke-dasharray:none"
-       id="path16-9"
-       cx="282"
-       cy="256"
-       r="39.749554" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="281.90723"
-       y="263.27051"
-       id="text16-0"><tspan
-         id="tspan16-8"
-         x="281.90723"
-         y="263.27051"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none">DATA</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.421px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:none;stroke:none;stroke-width:0.5;stroke-linejoin:round;stroke-dasharray:none"
-       x="129.41431"
-       y="36.143715"
-       id="text16-0-0"><tspan
-         id="tspan16-8-4"
-         x="129.41431"
-         y="36.143715"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:19.421px;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none">64B66B Link State Machine</tspan></text>
-  </g>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     x="115.61194"
+     y="234.88293"
+     id="text983"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       sodipodi:role="line"
+       id="tspan979"
+       x="115.61194"
+       y="234.88293">WAIT</tspan><tspan
+       id="tspan981"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       sodipodi:role="line"
+       x="115.61194"
+       y="254.88293">BS</tspan></text>
+  <circle
+     r="37.743919"
+     cy="315.74869"
+     cx="312.93961"
+     id="circle987"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.58241;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <text
+     id="text991"
+     y="321.9147"
+     x="290.23309"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       y="321.9147"
+       x="290.23309"
+       id="tspan989"
+       sodipodi:role="line">DATA</tspan></text>
+  <circle
+     r="37.743919"
+     cy="406.96512"
+     cx="135.7467"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.58241;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="circle995" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     x="105.70581"
+     y="403.00183"
+     id="text1001"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       sodipodi:role="line"
+       id="tspan997"
+       x="105.70581"
+       y="403.00183">BLOCK </tspan><tspan
+       id="tspan999"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       sodipodi:role="line"
+       x="105.70581"
+       y="423.00183">SYNC</tspan></text>
   <path
-     style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.88049;stroke-linejoin:round;stroke-dasharray:none;marker-end:url(#Triangle)"
-     d="m 135.15445,120.39116 -6.6e-4,27.67606"
-     id="path21" />
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:connector-curvature="0"
+     inkscape:original-d="m 113,-163.63782 29,46"
+     inkscape:path-effect="#path-effect1007"
+     id="path1005"
+     d="m 113,-163.63782 29,46"
+     style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     transform="matrix(0.71648276,0,0,0.71648276,9.2977914,148.54251)" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1011"
+     y="46.344978"
+     x="106.73944"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       y="46.344978"
+       x="106.73944"
+       id="tspan1009"
+       sodipodi:role="line">reset</tspan></text>
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     x="111.66547"
+     y="310.33286"
+     id="text1017"><tspan
+       sodipodi:role="line"
+       x="111.66547"
+       y="310.33286"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1188">All lanes reached </tspan><tspan
+       sodipodi:role="line"
+       x="111.66547"
+       y="321.58286"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1192">sync header allignment</tspan></text>
+  <circle
+     r="37.743919"
+     cy="107.25037"
+     cx="138.61261"
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="circle1019"
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.86593;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1023"
+     y="113.41203"
+     x="110.99359"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.716483"
+       y="113.41203"
+       x="110.99359"
+       id="tspan1021"
+       sodipodi:role="line">RESET</tspan></text>
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     sodipodi:nodetypes="cc"
+     style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="m 181.43857,10.36218 -1,49"
+     id="path1025"
+     inkscape:path-effect="#path-effect1027"
+     inkscape:original-d="m 181.43857,10.36218 -1,49"
+     inkscape:connector-curvature="0"
+     transform="matrix(0.71648276,0,0,0.71648276,9.2977914,148.54251)" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     id="text1035"
+     y="394.2251"
+     x="204.98782"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.59779px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"><tspan
+       style="font-size:17.9121px;line-height:1.25;stroke-width:0.716483"
+       y="394.2251"
+       x="204.98782"
+       id="tspan1033"
+       sodipodi:role="line"> </tspan></text>
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path1037"
+     d="m 126.22567,276.9584 c -13.53284,27.57575 -16.48906,55.86348 0.84374,85.51703"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.86593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.86593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="m 151.75717,366.55187 c 13.53284,-27.57575 16.48907,-55.86349 -0.84374,-85.51703"
+     id="path1039"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.86593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="m 174.92227,391.43173 c 40.68285,10.70471 77.91707,2.40501 108.53582,-42.35062"
+     id="path1041"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path1043"
+     d="m 274.84261,336.29245 c -38.65872,-9.88102 -74.04039,-2.21995 -103.13573,39.09188"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.86593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)" />
+  <path
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     style="vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:2.86593;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutS)"
+     d="M 282.99661,284.89404 C 263.14072,250.2837 232.98838,230.24895 183.08452,238.17433"
+     id="path1045"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     id="text1073"
+     y="23.065567"
+     x="60.889709"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, ';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16px;line-height:1.25;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.716483"
+       y="23.065567"
+       x="60.889709"
+       id="tspan1071"
+       sodipodi:role="line">64B66B Link State Machine</tspan></text>
+  <text
+     id="text1198"
+     y="216.67746"
+     x="305.72617"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-ydpi="90.034584"><tspan
+       id="tspan1194"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       y="216.67746"
+       x="305.72617"
+       sodipodi:role="line">One of the lanes lost</tspan><tspan
+       id="tspan1196"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       y="227.92746"
+       x="305.72617"
+       sodipodi:role="line">sync header allignment</tspan></text>
+  <text
+     id="text1204"
+     y="407.36322"
+     x="294.75754"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     xml:space="preserve"
+     inkscape:export-filename="/home/lars/text14934.png"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-ydpi="90.034584"><tspan
+       id="tspan1200"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       y="407.36322"
+       x="294.75754"
+       sodipodi:role="line">All lanes reached </tspan><tspan
+       id="tspan1202"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       y="418.61322"
+       x="294.75754"
+       sodipodi:role="line">multi-block allignment</tspan><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       y="429.86322"
+       x="294.75754"
+       sodipodi:role="line"
+       id="tspan1206">and buffer was released</tspan></text>
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     x="271.71906"
+     y="314.52246"
+     id="text1212"><tspan
+       sodipodi:role="line"
+       x="271.71906"
+       y="314.52246"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1208">One of the lanes lost</tspan><tspan
+       sodipodi:role="line"
+       x="271.71906"
+       y="325.77246"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1210">multi-block allignment</tspan></text>
+  <text
+     inkscape:export-ydpi="90.034584"
+     inkscape:export-xdpi="90.034584"
+     inkscape:export-filename="/home/lars/text14934.png"
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:0%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.716483"
+     x="266.9472"
+     y="277.34982"
+     id="text1212-6"><tspan
+       sodipodi:role="line"
+       x="266.9472"
+       y="277.34982"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1208-3">One of the lanes lost</tspan><tspan
+       sodipodi:role="line"
+       x="266.9472"
+       y="288.59982"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:end;text-anchor:end;stroke-width:0.716483"
+       id="tspan1210-8">sync header allignment</tspan></text>
 </svg>

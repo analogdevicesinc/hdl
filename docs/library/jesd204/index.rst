@@ -86,7 +86,7 @@ JESD204B/C link.
 The **application** layer is user-defined and can be used to implement
 application-specific signal processing.
 
-.. image:: jesd204_tx_chain.svg
+.. image:: jesd204_chain.svg
    :align: center
 
 .. _jesd204_physical_layer:
