@@ -16,3 +16,4 @@ Contents
 
    axi_dmac/index
    spi_engine/index
+   i3c_controller/index
