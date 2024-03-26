@@ -43,16 +43,16 @@ adi_ip_instance -vlnv {latticesemi.com:ip:gpio1:1.6.2} \
     DIRECTION_DEF_VAL_INPUT: 00000000
   } \
   -ip_iname "gpio1_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
-  -meta_vlnv {latticesemi.com:ip:spi_master:1.4.1} \
+adi_ip_instance -vlnv {latticesemi.com:ip:spi0:2.1.0} \
+  -meta_vlnv {latticesemi.com:ip:spi_controller:2.1.0} \
   -cfg_value {
     DATA_WIDTH: 8,
     FIFO_DEPTH: 256,
     SYS_CLOCK_FREQ: 100
   } \
   -ip_iname "spi0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.0.0} \
-  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.0.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.0.1} \
+  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.0.1} \
   -cfg_value {
     SYS_CLOCK_FREQ: 100
   } \

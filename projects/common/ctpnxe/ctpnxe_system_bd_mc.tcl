@@ -50,16 +50,16 @@ adi_ip_instance -vlnv {latticesemi.com:ip:uart0:1.3.0} \
     SYS_CLOCK_FREQ: 75.0
   } \
   -ip_iname "uart0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:spi0:1.4.1} \
-  -meta_vlnv {latticesemi.com:ip:spi_master:1.4.1} \
+adi_ip_instance -vlnv {latticesemi.com:ip:spi0:2.1.0} \
+  -meta_vlnv {latticesemi.com:ip:spi_controller:2.1.0} \
   -cfg_value {
     DATA_WIDTH: 8,
     FIFO_DEPTH: 256,
     SYS_CLOCK_FREQ: 75.0
   } \
   -ip_iname "spi0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.0.0} \
-  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.0.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.0.1} \
+  -meta_vlnv {latticesemi.com:ip:i2c_controller:2.0.1} \
   -cfg_value {
     SYS_CLOCK_FREQ: 75
   } \
