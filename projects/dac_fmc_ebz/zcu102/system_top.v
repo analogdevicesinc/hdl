@@ -96,10 +96,10 @@ module system_top #(
   output  [ 7:0]  tx_data_n,
 
   output          spi_csn_dac,
-  output          spi_csn_clk,
-  output          spi_csn_clk2,
+  output          fmc_cs2,
+  output          fmc_cs3,
   input           spi_miso,
-  output          spi_mosi,
+  inout           spi_mosi,
   output          spi_clk,
   output          spi_en,
 
@@ -123,6 +123,9 @@ module system_top #(
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
   wire            tx_sysref_loc;
+  wire            spi_mosi_s;
+  wire            spi_miso_s;
+  wire            spi_miso_proc;
 
   // spi
 
@@ -134,10 +137,22 @@ module system_top #(
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  //                                        9135/9144/9172    916(1,2,3,4)
+  //                                      AD9135/9144/9172   AD916(1,2,3,4)
   assign spi_csn_dac  = spi0_csn[1];
-  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044          AD9508
-  assign spi_csn_clk2 = spi0_csn[2];    //   NC               ADF4355
+  assign fmc_cs2 = spi0_csn[0];         //   HMC7044          AD9508
+  assign fmc_cs3 = spi0_csn[2];         //   NC               ADF4355
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES (1)
+  ) i_spi ( //  AD9508
+    .spi_csn (fmc_cs2),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_sdio (spi_mosi),
+    .spi_dir ());
+
+  assign spi_miso_proc = (fmc_cs2 == 1'b0) ? spi_miso_s : spi_miso;
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -212,8 +227,8 @@ module system_top #(
     .gpio_o (gpio_o),
     .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
-    .spi0_miso (spi_miso),
-    .spi0_mosi (spi_mosi),
+    .spi0_miso (spi_miso_proc),
+    .spi0_mosi (spi_mosi_s),
     .spi0_sclk (spi_clk),
     .spi1_csn (spi1_csn),
     .spi1_miso (pmod_spi_miso),

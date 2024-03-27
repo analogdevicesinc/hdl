@@ -13,13 +13,13 @@ set_property  -dict {PACKAGE_PIN  Y4  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [g
 set_property  -dict {PACKAGE_PIN  Y3  IOSTANDARD LVDS DIFF_TERM_ADV TERM_100} [get_ports tx_sysref_n]   ; ## G07  FMC_HPC0_LA00_CC_N        IO_L13N_T2L_N1_GC_QBC_66_Y3
 
 set_property  -dict {PACKAGE_PIN  AA1 IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]                      ; ## H11  FMC_HPC0_LA04_N           IO_L21N_T3L_N5_AD8N_66_AA1
-set_property  -dict {PACKAGE_PIN  AB3 IOSTANDARD LVCMOS18} [get_ports spi_csn_clk]                      ; ## D11  FMC_HPC0_LA05_P           IO_L20P_T3L_N2_AD1P_66_AB3
+set_property  -dict {PACKAGE_PIN  AB3 IOSTANDARD LVCMOS18} [get_ports fmc_cs2]                      ; ## D11  FMC_HPC0_LA05_P           IO_L20P_T3L_N2_AD1P_66_AB3
 set_property  -dict {PACKAGE_PIN  AA2 IOSTANDARD LVCMOS18} [get_ports spi_miso]                         ; ## H10  FMC_HPC0_LA04_P           IO_L21P_T3L_N4_AD8P_66_AA2
 set_property  -dict {PACKAGE_PIN  Y1  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                         ; ## G10  FMC_HPC0_LA03_N           IO_L22N_T3U_N7_DBC_AD0N_66_Y1
 set_property  -dict {PACKAGE_PIN  Y2  IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## G09  FMC_HPC0_LA03_P           IO_L22P_T3U_N6_DBC_AD0P_66_Y2
 set_property  -dict {PACKAGE_PIN  AC3 IOSTANDARD LVCMOS18} [get_ports spi_en]                           ; ## D12  FMC_HPC0_LA05_N           IO_L20N_T3L_N3_AD1N_66_AC3
 # For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  W2  IOSTANDARD LVCMOS18} [get_ports spi_csn_clk2]                     ; ## D14  FMC_HPC_LA09_P            IO_L10P_T1_11
+set_property  -dict {PACKAGE_PIN  W2  IOSTANDARD LVCMOS18} [get_ports fmc_cs3]                     ; ## D14  FMC_HPC_LA09_P            IO_L10P_T1_11
 
 # For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  U5  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[0]]                      ; ## H13  FMC_HPC0_LA07_P           IO_L18P_T2U_N10_AD2P_66_U5
@@ -29,7 +29,7 @@ set_property  -dict {PACKAGE_PIN  U4  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[3
 set_property  -dict {PACKAGE_PIN  AC2 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[1]]                      ; ## C10  FMC_HPC0_LA06_P           IO_L19P_T3L_N0_DBC_AD9P_66_AC2
 set_property  -dict {PACKAGE_PIN  AC1 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[2]]                      ; ## C11  FMC_HPC0_LA06_N           IO_L19N_T3L_N1_DBC_AD9N_66_AC1
 # For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  W1  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[4]]                      ; ## D15  FMC_HPC_LA09_P            IO_L10N_T1_11
+set_property  -dict {PACKAGE_PIN  W1  IOSTANDARD LVCMOS18} [get_ports dac_ctrl[4]]                      ; ## D15  FMC_HPC_LA09_N            IO_L10N_T1_11
 
 set_property  -dict {PACKAGE_PIN  G8} [get_ports tx_ref_clk_p]                                          ; ## D04  FMC_HPC0_GBTCLK0_M2C_C_P  MGTREFCLK0P_229_G8
 set_property  -dict {PACKAGE_PIN  G7} [get_ports tx_ref_clk_n]                                          ; ## D05  FMC_HPC0_GBTCLK0_M2C_C_N  MGTREFCLK0N_229_G7
