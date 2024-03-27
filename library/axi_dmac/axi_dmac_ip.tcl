@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -274,14 +274,14 @@ foreach {k v} { \
         "ASYNC_CLK_SRC_SG" "true" \
         "ASYNC_CLK_DEST_SG" "true" \
         "CYCLIC" "false" \
-        "DMA_2D_TRANSFER" "false" \
         "DMA_SG_TRANSFER" "false" \
+        "DMA_2D_TRANSFER" "false" \
         "SYNC_TRANSFER_START" "false" \
         "AXI_SLICE_SRC" "false" \
         "AXI_SLICE_DEST" "false" \
         "DISABLE_DEBUG_REGISTERS" "false" \
         "ENABLE_DIAGNOSTICS_IF" "false" \
-        "CACHE_COHERENT_DEST" "false" \
+        "CACHE_COHERENT" "false" \
 	} { \
 	set_property -dict [list \
 			"value_format" "bool" \
@@ -369,18 +369,6 @@ set_property -dict [list \
 	"enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
 ] [ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
 
-set p [ipgui::get_guiparamspec -name "CACHE_COHERENT_DEST" -component $cc]
-ipgui::move_param -component $cc -order 4 $p -parent $dest_group
-set_property -dict [list \
-	"tooltip" "Assume destination port ensures cache coherency (e.g. Ultrascale HPC port)" \
-] $p
-set_property -dict [list \
-	"display_name" "Assume cache coherent" \
-	"enablement_tcl_expr" "\$DMA_TYPE_DEST == 0 && \$DMA_AXI_PROTOCOL_DEST == 0" \
-	"value_tcl_expr" "\$DMA_TYPE_DEST == 0 && \$DMA_AXI_PROTOCOL_DEST == 0" \
-	"enablement_value" "false" \
-] [ipx::get_user_parameters CACHE_COHERENT_DEST -of_objects $cc]
-
 set p [ipgui::get_guiparamspec -name "DMA_AXI_PROTOCOL_SG" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $sg_group
 set_property -dict [list \
@@ -441,6 +429,24 @@ set_property -dict [list \
 	"display_name" "DMA AXI Address Width" \
 ] $p
 
+set p [ipgui::get_guiparamspec -name "AXI_AXCACHE" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $general_group
+set_property -dict [list \
+        "display_name" "ARCACHE/AWCACHE" \
+] $p
+set_property -dict [list \
+        "enablement_tcl_expr" "\$CACHE_COHERENT == true" \
+] [ipx::get_user_parameters AXI_AXCACHE -of_objects $cc]
+
+set p [ipgui::get_guiparamspec -name "AXI_AXPROT" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $general_group
+set_property -dict [list \
+        "display_name" "ARPROT/AWPROT" \
+] $p
+set_property -dict [list \
+        "enablement_tcl_expr" "\$CACHE_COHERENT == true" \
+] [ipx::get_user_parameters AXI_AXPROT -of_objects $cc]
+
 set feature_group [ipgui::add_group -name "Features" -component $cc \
 		-parent $page0 -display_name "Features"]
 
@@ -450,17 +456,27 @@ set_property -dict [list \
 	"display_name" "Cyclic Transfer Support" \
 ] $p
 
-set p [ipgui::get_guiparamspec -name "DMA_2D_TRANSFER" -component $cc]
+set p [ipgui::get_guiparamspec -name "DMA_SG_TRANSFER" -component $cc]
 ipgui::move_param -component $cc -order 1 $p -parent $feature_group
+set_property -dict [list \
+	"display_name" "SG Transfer Support" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "DMA_2D_TRANSFER" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $feature_group
 set_property -dict [list \
 	"display_name" "2D Transfer Support" \
 ] $p
 
-set p [ipgui::get_guiparamspec -name "DMA_SG_TRANSFER" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $feature_group
+set p [ipgui::get_guiparamspec -name "CACHE_COHERENT" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $feature_group
 set_property -dict [list \
-	"display_name" "SG Transfer Support" \
+	"tooltip" "Assume DMA ports ensure cache coherence (e.g. Ultrascale HPC port)" \
 ] $p
+set_property -dict [list \
+	"display_name" "Cache Coherent" \
+	"enablement_tcl_expr" "\$DMA_TYPE_SRC == 0 || \$DMA_TYPE_DEST == 0" \
+] [ipx::get_user_parameters CACHE_COHERENT -of_objects $cc]
 
 set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \
 		-parent $page0 -display_name {Clock Domain Configuration}]

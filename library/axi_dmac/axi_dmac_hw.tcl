@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -92,6 +92,46 @@ set_parameter_property DMA_AXI_ADDR_WIDTH HDL_PARAMETER true
 set_parameter_property DMA_AXI_ADDR_WIDTH ALLOWED_RANGES {16:64}
 set_parameter_property DMA_AXI_ADDR_WIDTH GROUP $group
 
+add_parameter AXI_AXCACHE_AUTO BOOLEAN 1
+set_parameter_property AXI_AXCACHE_AUTO DISPLAY_NAME "ARCACHE/AWCACHE Automatically Set"
+set_parameter_property AXI_AXCACHE_AUTO HDL_PARAMETER false
+set_parameter_property AXI_AXCACHE_AUTO GROUP $group
+
+add_parameter AXI_AXPROT_AUTO BOOLEAN 1
+set_parameter_property AXI_AXPROT_AUTO DISPLAY_NAME "ARPROT/AWPROT Automatically Set"
+set_parameter_property AXI_AXPROT_AUTO HDL_PARAMETER false
+set_parameter_property AXI_AXPROT_AUTO GROUP $group
+
+add_parameter AXI_AXCACHE_MANUAL STD_LOGIC_VECTOR
+set_parameter_property AXI_AXCACHE_MANUAL WIDTH 4
+set_parameter_property AXI_AXCACHE_MANUAL DISPLAY_NAME "ARCACHE/AWCACHE"
+set_parameter_property AXI_AXCACHE_MANUAL HDL_PARAMETER false
+set_parameter_property AXI_AXCACHE_MANUAL ALLOWED_RANGES {0x0:0xF}
+set_parameter_property AXI_AXCACHE_MANUAL GROUP $group
+
+add_parameter AXI_AXPROT_MANUAL STD_LOGIC_VECTOR
+set_parameter_property AXI_AXPROT_MANUAL WIDTH 3
+set_parameter_property AXI_AXPROT_MANUAL DISPLAY_NAME "ARPROT/AWPROT"
+set_parameter_property AXI_AXPROT_MANUAL HDL_PARAMETER false
+set_parameter_property AXI_AXPROT_MANUAL ALLOWED_RANGES {0x0:0x7}
+set_parameter_property AXI_AXPROT_MANUAL GROUP $group
+
+add_parameter AXI_AXCACHE STD_LOGIC_VECTOR
+set_parameter_property AXI_AXCACHE WIDTH 4
+set_parameter_property AXI_AXCACHE DISPLAY_NAME "ARCACHE/AWCACHE"
+set_parameter_property AXI_AXCACHE HDL_PARAMETER true
+set_parameter_property AXI_AXCACHE ALLOWED_RANGES {0x0:0xF}
+set_parameter_property AXI_AXCACHE DERIVED true
+set_parameter_property AXI_AXCACHE GROUP $group
+
+add_parameter AXI_AXPROT STD_LOGIC_VECTOR
+set_parameter_property AXI_AXPROT WIDTH 3
+set_parameter_property AXI_AXPROT DISPLAY_NAME "ARPROT/AWPROT"
+set_parameter_property AXI_AXPROT HDL_PARAMETER true
+set_parameter_property AXI_AXPROT ALLOWED_RANGES {0x0:0x7}
+set_parameter_property AXI_AXPROT DERIVED true
+set_parameter_property AXI_AXPROT GROUP $group
+
 foreach {suffix group} { \
     "SRC" "Source" \
     "DEST" "Destination" \
@@ -153,23 +193,30 @@ set_parameter_property CYCLIC DISPLAY_HINT boolean
 set_parameter_property CYCLIC HDL_PARAMETER true
 set_parameter_property CYCLIC GROUP $group
 
-add_parameter DMA_2D_TRANSFER INTEGER 0
-set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME "2D Transfer Support"
-set_parameter_property DMA_2D_TRANSFER DISPLAY_HINT boolean
-set_parameter_property DMA_2D_TRANSFER HDL_PARAMETER true
-set_parameter_property DMA_2D_TRANSFER GROUP $group
-
 add_parameter DMA_SG_TRANSFER INTEGER 0
 set_parameter_property DMA_SG_TRANSFER DISPLAY_NAME "SG Transfer Support"
 set_parameter_property DMA_SG_TRANSFER DISPLAY_HINT boolean
 set_parameter_property DMA_SG_TRANSFER HDL_PARAMETER true
 set_parameter_property DMA_SG_TRANSFER GROUP $group
 
+add_parameter DMA_2D_TRANSFER INTEGER 0
+set_parameter_property DMA_2D_TRANSFER DISPLAY_NAME "2D Transfer Support"
+set_parameter_property DMA_2D_TRANSFER DISPLAY_HINT boolean
+set_parameter_property DMA_2D_TRANSFER HDL_PARAMETER true
+set_parameter_property DMA_2D_TRANSFER GROUP $group
+
 add_parameter SYNC_TRANSFER_START INTEGER 0
 set_parameter_property SYNC_TRANSFER_START DISPLAY_NAME "Transfer Start Synchronization Support"
 set_parameter_property SYNC_TRANSFER_START DISPLAY_HINT boolean
 set_parameter_property SYNC_TRANSFER_START HDL_PARAMETER true
 set_parameter_property SYNC_TRANSFER_START GROUP $group
+
+add_parameter CACHE_COHERENT BOOLEAN 0
+set_parameter_property CACHE_COHERENT DISPLAY_NAME "Cache Coherent"
+set_parameter_property CACHE_COHERENT DESCRIPTION "Assume DMA ports ensure cache coherence"
+set_parameter_property CACHE_COHERENT DISPLAY_HINT boolean
+set_parameter_property CACHE_COHERENT HDL_PARAMETER true
+set_parameter_property CACHE_COHERENT GROUP $group
 
 set group "Clock Domain Configuration"
 
@@ -328,6 +375,26 @@ proc axi_dmac_validate {} {
   }
 
   set_parameter_property MAX_BYTES_PER_BURST ALLOWED_RANGES "1:$max_burst"
+
+  set cache_coherent [get_parameter_value CACHE_COHERENT]
+  set axcache_auto [get_parameter_value AXI_AXCACHE_AUTO]
+  set axprot_auto [get_parameter_value AXI_AXPROT_AUTO]
+  set axcache_manual [get_parameter_value AXI_AXCACHE_MANUAL]
+  set axprot_manual [get_parameter_value AXI_AXPROT_MANUAL]
+  set axcache_default [expr {$cache_coherent == true} ? 0xF : 0x3]
+  set axprot_default [expr {$cache_coherent == true} ? 0x2 : 0x0]
+
+  set_parameter_property AXI_AXCACHE_AUTO ENABLED $cache_coherent
+  set_parameter_property AXI_AXPROT_AUTO ENABLED $cache_coherent
+  set_parameter_property AXI_AXCACHE_MANUAL ENABLED $cache_coherent
+  set_parameter_property AXI_AXPROT_MANUAL ENABLED $cache_coherent
+  set_parameter_property AXI_AXCACHE_MANUAL VISIBLE [expr {$cache_coherent == true} ? [expr {$axcache_auto == true} ? false : true] : false]
+  set_parameter_property AXI_AXPROT_MANUAL VISIBLE [expr {$cache_coherent == true} ? [expr {$axprot_auto == true} ? false : true] : false]
+  set_parameter_property AXI_AXCACHE VISIBLE [expr {$cache_coherent == true} ? $axcache_auto : true]
+  set_parameter_property AXI_AXPROT VISIBLE [expr {$cache_coherent == true} ? $axprot_auto : true]
+
+  set_parameter_value AXI_AXCACHE [expr {$cache_coherent == true} ? [expr {$axcache_auto == true} ? $axcache_default : $axcache_manual] : $axcache_default]
+  set_parameter_value AXI_AXPROT [expr {$cache_coherent == true} ? [expr {$axprot_auto == true} ? $axprot_default : $axprot_manual]  : $axprot_default]
 }
 
 # conditional interfaces

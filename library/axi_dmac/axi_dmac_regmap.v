@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -53,7 +53,9 @@ module axi_dmac_regmap #(
   parameter DMA_2D_TRANSFER = 0,
   parameter DMA_SG_TRANSFER = 0,
   parameter SYNC_TRANSFER_START = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter CACHE_COHERENT = 0,
+  parameter [3:0] AXI_AXCACHE = 4'b0011,
+  parameter [2:0] AXI_AXPROT = 3'b000
 ) (
 
   // Slave AXI interface
@@ -121,7 +123,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-  localparam PCORE_VERSION = 'h00040561;
+  localparam PCORE_VERSION = 'h00040562;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
@@ -223,7 +225,10 @@ module axi_dmac_regmap #(
                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
-      9'h005: up_rdata <= {31'd0, CACHE_COHERENT_DEST};
+      9'h005: up_rdata <= {20'b0,
+                           1'b0,AXI_AXPROT,
+                           AXI_AXCACHE,
+                           3'b0,CACHE_COHERENT};
       9'h020: up_rdata <= up_irq_mask;
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;

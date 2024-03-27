@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -64,7 +64,8 @@ module axi_dmac_transfer #(
   parameter AXI_LENGTH_WIDTH_SG = 8,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter [3:0] AXI_AXCACHE = 4'b0011,
+  parameter [2:0] AXI_AXPROT = 3'b000
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -321,7 +322,9 @@ module axi_dmac_transfer #(
     .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
     .BYTES_PER_BEAT_WIDTH_SG(BYTES_PER_BEAT_WIDTH_SG),
-    .ASYNC_CLK_REQ_SG(ASYNC_CLK_REQ_SG)
+    .ASYNC_CLK_REQ_SG(ASYNC_CLK_REQ_SG),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT)
   ) i_dmac_sg (
     .req_clk(req_clk),
     .req_resetn(req_resetn),
@@ -500,7 +503,8 @@ module axi_dmac_transfer #(
     .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
     .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM),
-    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT)
   ) i_request_arb (
     .req_clk (req_clk),
     .req_resetn (req_resetn),

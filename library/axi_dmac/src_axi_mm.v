@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,7 +42,9 @@ module src_axi_mm #(
   parameter DMA_ADDR_WIDTH = 32,
   parameter BYTES_PER_BEAT_WIDTH = 3,
   parameter BEATS_PER_BURST_WIDTH = 4,
-  parameter AXI_LENGTH_WIDTH = 8
+  parameter AXI_LENGTH_WIDTH = 8,
+  parameter [3:0] AXI_AXCACHE = 4'b0011,
+  parameter [2:0] AXI_AXPROT = 3'b000
 ) (
   input                           m_axi_aclk,
   input                           m_axi_aresetn,
@@ -148,7 +150,9 @@ module src_axi_mm #(
     .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH),
     .DMA_DATA_WIDTH(DMA_DATA_WIDTH),
     .LENGTH_WIDTH(AXI_LENGTH_WIDTH),
-    .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH)
+    .DMA_ADDR_WIDTH(DMA_ADDR_WIDTH),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT)
   ) i_addr_gen (
     .clk(m_axi_aclk),
     .resetn(m_axi_aresetn),
