@@ -60,6 +60,12 @@ Chip-select Instruction
 The chip-select instruction updates the value chip-select output signal of the
 SPI Engine execution module.
 
+If the cs_active_high bit of the :ref:`spi_engine spi-configuration-register` 
+is set to 1, the actual values on the pins will be the opposite of the values 
+on each of the bits for the instruction. Thus, if the last 8 bits of this 
+instruction are 0xFE, CS[0] will be active regardless of polarity, and 
+transparently to the programmer.
+
 Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
 the setting of the prescaler register and the parameter :math:`t` of the
@@ -197,9 +203,15 @@ bus behavior.
    * - Bits
      - Name
      - Description
-   * - [7:3]
+   * - [7:4]
      - reserved
      - Must always be 0.
+   * - [3]
+     - cs_active_high
+     - Configures the polarity of CS. When 0 (default), CS is active-low as 
+     - usual. If set to 1, CS will be active-high. Note that there's no need 
+     - to change the commands: for cs_active_high=1, the value of CS will be 
+     - automatically inverted with respect to the command.
    * - [2]
      - three_wire
      - Configures the output of the three_wire pin.
