@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -58,7 +58,8 @@ module request_arb #(
   parameter AXI_LENGTH_WIDTH_DEST = 8,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter [3:0] AXI_AXCACHE = 4'b0011,
+  parameter [2:0] AXI_AXPROT = 3'b000
 ) (
   input req_clk,
   input req_resetn,
@@ -357,7 +358,8 @@ module request_arb #(
     .MAX_BYTES_PER_BURST(MAX_BYTES_PER_BURST),
     .BYTES_PER_BURST_WIDTH(BYTES_PER_BURST_WIDTH),
     .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_DEST),
-    .CACHE_COHERENT(CACHE_COHERENT_DEST)
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT)
   ) i_dest_dma_mm (
     .m_axi_aclk(m_dest_axi_aclk),
     .m_axi_aresetn(dest_resetn),
@@ -619,7 +621,9 @@ module request_arb #(
     .DMA_ADDR_WIDTH(DMA_AXI_ADDR_WIDTH),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC),
     .BYTES_PER_BEAT_WIDTH(BYTES_PER_BEAT_WIDTH_SRC),
-    .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SRC)
+    .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SRC),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT)
   ) i_src_dma_mm (
     .m_axi_aclk(m_src_axi_aclk),
     .m_axi_aresetn(src_resetn),

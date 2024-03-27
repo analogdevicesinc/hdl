@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -203,4 +203,11 @@ proc post_propagate {cellpath otherinfo} {
 	}
 
 	set_property "CONFIG.DMA_AXI_ADDR_WIDTH" $addr_width $ip
+
+	# AXCACHE/AXPROT configuration
+        set cache_coherent [get_property "CONFIG.CACHE_COHERENT" $ip]
+        set axcache [expr {$cache_coherent == true} ? 0b1111 : 0b0011]
+        set axprot [expr {$cache_coherent == true} ? 0b010 : 0b000]
+        set_property "CONFIG.AXI_AXCACHE" $axcache $ip
+        set_property "CONFIG.AXI_AXPROT" $axprot $ip
 }
