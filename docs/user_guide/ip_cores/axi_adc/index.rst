@@ -85,9 +85,7 @@ The ADC core is the top file of the IP core, the naming convention of this file
 is: ``axi_<device_name>.v``.
 Here are instantiated all the internal module discussed above, and a wrapper
 module (up_axi), which converts the AXI interface into a more simplistic
-addressable, memory mapped interface, so called
-:dokuwiki:`microprocessor interface <resources/fpga/docs/up_if>`
-or uP interface.
+addressable, memory mapped interface, so called :ref:`up_if` or uP interface.
 This interface is used to interconnect the different memory mapped module pieces.
 
 Interface

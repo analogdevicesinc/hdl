@@ -1,4 +1,6 @@
-Libraries
+.. _library:
+
+IP Cores
 ===============================================================================
 
 .. note::
@@ -6,7 +8,8 @@ Libraries
    This page lists only the IPs that have been ported to the new documentation
    format.
 
-   See :ref:`ip_cores` for a complete list of IP cores.
+   See :ref:`user_guide ip_cores` for a complete list of IP cores, templates
+   and user guides.
 
 Contents
 -------------------------------------------------------------------------------
@@ -14,8 +17,6 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   axi_adc/index
-   axi_dac/index
    axi_dmac/index
    axi_pwm_gen/index
    spi_engine/index
