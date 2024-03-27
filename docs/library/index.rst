@@ -16,3 +16,6 @@ Contents
 
    axi_dmac/index
    spi_engine/index
+   jesd204/index
+   axi_adxcvr/index
+   xilinx/index

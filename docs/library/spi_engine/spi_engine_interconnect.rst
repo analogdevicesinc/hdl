@@ -54,15 +54,13 @@ Signal and Interface Pins
    * - resetn
      - Synchronous active-low reset.
        Resets the internal state of the module.
-   * - s0_ctrl
+   * - s*_ctrl
      - :ref:`spi_engine control-interface` slave.
-       Connects to the first control interface master.
-   * - s1_ctrl
-     - :ref:`spi_engine control-interface` slave.
-       Connects to the second control interface master.
+       | ``s0_ctrl`` connects to the first control interface master.
+       | ``s1_ctrl`` connects to the second control interface master.
    * - m_ctrl
-     - :ref:`spi_engine control-interface` master.
-       Connects to the control interface slave.
+     - | :ref:`spi_engine control-interface` master.
+       | Connects to the control interface slave.
 
 Theory of Operation
 --------------------------------------------------------------------------------
