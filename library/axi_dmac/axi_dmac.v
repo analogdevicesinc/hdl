@@ -62,6 +62,8 @@ module axi_dmac #(
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter FIFO_SIZE = 8, // In bursts
+  parameter AXI_AXCACHE = 4'b0011,
+  parameter AXI_AXPROT = 3'b000,
   parameter AXI_ID_WIDTH_SRC = 1,
   parameter AXI_ID_WIDTH_DEST = 1,
   parameter AXI_ID_WIDTH_SG = 1,
@@ -70,7 +72,7 @@ module axi_dmac #(
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter CACHE_COHERENT = 0
 ) (
 
   // Slave AXI interface
@@ -447,7 +449,9 @@ module axi_dmac #(
     .DMA_2D_TRANSFER(DMA_2D_TRANSFER),
     .DMA_SG_TRANSFER(DMA_SG_TRANSFER),
     .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
-    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT),
+    .CACHE_COHERENT(CACHE_COHERENT)
   ) i_regmap (
     .s_axi_aclk(s_axi_aclk),
     .s_axi_aresetn(s_axi_aresetn),
@@ -535,9 +539,10 @@ module axi_dmac #(
     .AXI_LENGTH_WIDTH_SRC(8-(4*DMA_AXI_PROTOCOL_SRC)),
     .AXI_LENGTH_WIDTH_DEST(8-(4*DMA_AXI_PROTOCOL_DEST)),
     .AXI_LENGTH_WIDTH_SG(8-(4*DMA_AXI_PROTOCOL_SG)),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT),
     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-    .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
-    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+    .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM)
   ) i_transfer (
     .ctrl_clk(s_axi_aclk),
     .ctrl_resetn(s_axi_aresetn),

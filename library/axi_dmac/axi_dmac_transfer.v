@@ -62,9 +62,10 @@ module axi_dmac_transfer #(
   parameter AXI_LENGTH_WIDTH_SRC = 8,
   parameter AXI_LENGTH_WIDTH_DEST = 8,
   parameter AXI_LENGTH_WIDTH_SG = 8,
+  parameter AXI_AXCACHE = 4'b0011,
+  parameter AXI_AXPROT = 3'b000,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
-  parameter ALLOW_ASYM_MEM = 0,
-  parameter CACHE_COHERENT_DEST = 0
+  parameter ALLOW_ASYM_MEM = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -318,6 +319,8 @@ module axi_dmac_transfer #(
     .DMA_DATA_WIDTH(DMA_DATA_WIDTH_SG),
     .DMA_LENGTH_WIDTH(DMA_LENGTH_WIDTH),
     .AXI_LENGTH_WIDTH(AXI_LENGTH_WIDTH_SG),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT),
     .BYTES_PER_BEAT_WIDTH_DEST(BYTES_PER_BEAT_WIDTH_DEST),
     .BYTES_PER_BEAT_WIDTH_SRC(BYTES_PER_BEAT_WIDTH_SRC),
     .BYTES_PER_BEAT_WIDTH_SG(BYTES_PER_BEAT_WIDTH_SG),
@@ -498,9 +501,10 @@ module axi_dmac_transfer #(
     .ID_WIDTH (ID_WIDTH),
     .AXI_LENGTH_WIDTH_DEST (AXI_LENGTH_WIDTH_DEST),
     .AXI_LENGTH_WIDTH_SRC (AXI_LENGTH_WIDTH_SRC),
+    .AXI_AXCACHE(AXI_AXCACHE),
+    .AXI_AXPROT(AXI_AXPROT),
     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
-    .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM),
-    .CACHE_COHERENT_DEST(CACHE_COHERENT_DEST)
+    .ALLOW_ASYM_MEM (ALLOW_ASYM_MEM)
   ) i_request_arb (
     .req_clk (req_clk),
     .req_resetn (req_resetn),

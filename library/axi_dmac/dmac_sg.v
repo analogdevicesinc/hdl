@@ -40,6 +40,8 @@ module dmac_sg #(
   parameter DMA_DATA_WIDTH = 64,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter AXI_LENGTH_WIDTH = 8,
+  parameter AXI_AXCACHE = 4'b0011,
+  parameter AXI_AXPROT = 3'b000,
   parameter BYTES_PER_BEAT_WIDTH_DEST = 3,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
   parameter BYTES_PER_BEAT_WIDTH_SG = 3,
@@ -147,8 +149,8 @@ module dmac_sg #(
 
   assign m_axi_arsize  = 3'h3;
   assign m_axi_arburst = 2'h1;
-  assign m_axi_arprot  = 3'h0;
-  assign m_axi_arcache = 4'h3;
+  assign m_axi_arprot  = AXI_AXPROT;
+  assign m_axi_arcache = AXI_AXCACHE;
   assign m_axi_arlen   = 'h5;
   assign m_axi_araddr  = {next_desc_addr, {BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
 
