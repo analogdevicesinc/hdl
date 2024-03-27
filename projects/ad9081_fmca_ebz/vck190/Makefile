@@ -11,6 +11,7 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
+M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../common/vmk180/vmk180_system_bd.tcl
 M_DEPS += ../../common/vck190/vck190_system_constr.xdc
 M_DEPS += ../../common/vck190/vck190_system_bd.tcl

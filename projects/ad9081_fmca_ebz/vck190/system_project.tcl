@@ -31,26 +31,41 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #   [RX/TX]_NUM_LINKS : Number of links, matches numer of MxFE devices
 #   [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
+#   [ADC/DAC]_FIR_FILTER_INSERT : If 1 insert a FIR filter on the ADC/DAC path
+#   [ADC/DAC]_FIR_RATE : Filter rate
+#   [ADC/DAC]_FIR_PARALLEL_PATHS : Number of paralell paths. For scenarios where the sampling rate is x times the core clock
+#   [ADC/DAC]_FIR_CORE_CLK_RATE : Core clock in MHz
+#   [ADC/DAC]_FIR_SAMPLING_RATE : Sampling frequency in MHz
 
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 TX_LANE_RATE=24.75 RX_JESD_M=8 RX_JESD_L=8 RX_JESD_S=2 RX_JESD_NP=12 TX_JESD_M=8 TX_JESD_L=8 TX_JESD_S=2 TX_JESD_NP=12
 
 adi_project ad9081_fmca_ebz_vck190 0 [list \
-  JESD_MODE         [get_env_param JESD_MODE     64B66B ]\
-  RX_LANE_RATE      [get_env_param RX_LANE_RATE   24.75 ] \
-  TX_LANE_RATE      [get_env_param TX_LANE_RATE   24.75 ] \
-  REF_CLK_RATE      [get_env_param REF_CLK_RATE     375 ] \
-  RX_JESD_M         [get_env_param RX_JESD_M          8 ] \
-  RX_JESD_L         [get_env_param RX_JESD_L          8 ] \
-  RX_JESD_S         [get_env_param RX_JESD_S          2 ] \
-  RX_JESD_NP        [get_env_param RX_JESD_NP        12 ] \
-  RX_NUM_LINKS      [get_env_param RX_NUM_LINKS       1 ] \
-  TX_JESD_M         [get_env_param TX_JESD_M          8 ] \
-  TX_JESD_L         [get_env_param TX_JESD_L          8 ] \
-  TX_JESD_S         [get_env_param TX_JESD_S          2 ] \
-  TX_JESD_NP        [get_env_param TX_JESD_NP        12 ] \
-  TX_NUM_LINKS      [get_env_param TX_NUM_LINKS       1 ] \
-  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL 64 ] \
-  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL 64 ] \
+  JESD_MODE              [get_env_param JESD_MODE              64B66B ]\
+  RX_LANE_RATE           [get_env_param RX_LANE_RATE            24.75 ] \
+  TX_LANE_RATE           [get_env_param TX_LANE_RATE            24.75 ] \
+  REF_CLK_RATE           [get_env_param REF_CLK_RATE              375 ] \
+  RX_JESD_M              [get_env_param RX_JESD_M                   8 ] \
+  RX_JESD_L              [get_env_param RX_JESD_L                   8 ] \
+  RX_JESD_S              [get_env_param RX_JESD_S                   2 ] \
+  RX_JESD_NP             [get_env_param RX_JESD_NP                 12 ] \
+  RX_NUM_LINKS           [get_env_param RX_NUM_LINKS                1 ] \
+  TX_JESD_M              [get_env_param TX_JESD_M                   8 ] \
+  TX_JESD_L              [get_env_param TX_JESD_L                   8 ] \
+  TX_JESD_S              [get_env_param TX_JESD_S                   2 ] \
+  TX_JESD_NP             [get_env_param TX_JESD_NP                 12 ] \
+  TX_NUM_LINKS           [get_env_param TX_NUM_LINKS                1 ] \
+  RX_KS_PER_CHANNEL      [get_env_param RX_KS_PER_CHANNEL          64 ] \
+  TX_KS_PER_CHANNEL      [get_env_param TX_KS_PER_CHANNEL          64 ] \
+  ADC_FIR_FILTER_INSERT  [get_env_param ADC_FIR_FILTER_INSERT       0 ] \
+  ADC_FIR_RATE           [get_env_param ADC_FIR_RATE                8 ] \
+  ADC_FIR_PARALLEL_PATHS [get_env_param ADC_FIR_PARALLEL_PATHS      1 ] \
+  ADC_FIR_CORE_CLK_RATE  [get_env_param ADC_FIR_CORE_CLK_RATE  122.88 ] \
+  ADC_FIR_SAMPLING_RATE  [get_env_param ADC_FIR_SAMPLING_RATE  122.88 ] \
+  DAC_FIR_FILTER_INSERT  [get_env_param DAC_FIR_FILTER_INSERT       0 ] \
+  DAC_FIR_RATE           [get_env_param DAC_FIR_RATE                8 ] \
+  DAC_FIR_PARALLEL_PATHS [get_env_param DAC_FIR_PARALLEL_PATHS      2 ] \
+  DAC_FIR_CORE_CLK_RATE  [get_env_param DAC_FIR_CORE_CLK_RATE  122.88 ] \
+  DAC_FIR_SAMPLING_RATE  [get_env_param DAC_FIR_SAMPLING_RATE   15.36 ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_vck190 [list \

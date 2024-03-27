@@ -125,6 +125,9 @@ module system_top  #(
   wire    [7:0]   tx_data_p_loc;
   wire    [7:0]   tx_data_n_loc;
 
+  wire            adc_fir_filter_active;
+  wire            dac_fir_filter_active;
+
   wire            clkin6;
   wire            clkin10;
   wire            tx_device_clk;
@@ -208,12 +211,14 @@ module system_top  #(
   assign gpio_i[52] = irqb[0];
   assign gpio_i[53] = irqb[1];
 
-  assign hmc_sync   = gpio_o[54];
-  assign rstb       = gpio_o[55];
-  assign rxen[0]    = gpio_o[56];
-  assign rxen[1]    = gpio_o[57];
-  assign txen[0]    = gpio_o[58];
-  assign txen[1]    = gpio_o[59];
+  assign adc_fir_filter_active = gpio_o[52];
+  assign dac_fir_filter_active = gpio_o[53];
+  assign hmc_sync              = gpio_o[54];
+  assign rstb                  = gpio_o[55];
+  assign rxen[0]               = gpio_o[56];
+  assign rxen[1]               = gpio_o[57];
+  assign txen[0]               = gpio_o[58];
+  assign txen[1]               = gpio_o[59];
 
   generate
   if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
@@ -298,6 +303,9 @@ module system_top  #(
     .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
     .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
     .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+
+    .adc_fir_filter_active (adc_fir_filter_active),
+    .dac_fir_filter_active (dac_fir_filter_active),
 
     .gt_reset (~rstb),
     .ref_clk_q0 (ref_clk),
