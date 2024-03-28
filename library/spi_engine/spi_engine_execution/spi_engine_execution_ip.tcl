@@ -128,6 +128,14 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
 
+## LOOP MEM ADR WIDTH
+set_property -dict [list \
+  "value_validation_type" "range_long" \
+  "value_validation_range_minimum" "1" \
+  "value_validation_range_maximum" "32" \
+ ] \
+ [ipx::get_user_parameters LOOP_CMD_MEM_ADDRESS_WIDTH -of_objects $cc]
+
 ## echo_sclk should be active only when ECHO_SCLK is set
 adi_set_ports_dependency echo_sclk ECHO_SCLK 0
 

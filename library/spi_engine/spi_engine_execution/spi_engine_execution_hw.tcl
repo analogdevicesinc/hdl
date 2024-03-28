@@ -21,6 +21,7 @@ ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDI INTEGER 1
 ad_ip_parameter SDI_DELAY INTEGER 0
 ad_ip_parameter SDO_DEFAULT INTEGER 0
+ad_ip_parameter LOOP_CMD_MEM_ADDRESS_WIDTH 4
 
 proc p_elaboration {} {
 
