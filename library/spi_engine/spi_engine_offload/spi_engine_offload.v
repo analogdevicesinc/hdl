@@ -103,6 +103,14 @@ module spi_engine_offload #(
   wire spi_enable;
   wire trigger_posedge;
 
+  wire [7:0] cmd_repeat_count_s;
+  wire cmd_repeat_start_s;
+  wire cmd_repeat_end_s;
+  wire repeat_jump_s;
+  reg repeat_loop = 1'b0;
+  reg [7:0] repeat_count;
+  reg [CMD_MEM_ADDRESS_WIDTH-1:0] repeat_start_addr;
+
   assign cmd_valid = spi_active;
   assign sdo_data_valid = spi_active;
 
@@ -237,7 +245,6 @@ module spi_engine_offload #(
   assign ctrl_enabled = spi_enable | spi_active;
   end endgenerate
 
-  assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
 
   wire trigger_s;
   sync_bits #(
@@ -312,6 +319,28 @@ module spi_engine_offload #(
   always @(posedge ctrl_clk) begin
     if (ctrl_sdo_wr_en)
       sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
+  end
+
+  // Hardware Loop implementation  
+  assign cmd_repeat_count_s = cmd[7:0]; 
+  assign cmd_repeat_start_s = (cmd[15:12] == 4'b1000);
+  assign cmd_repeat_end_s   = (cmd[15:12] == 4'b1001);
+  assign repeat_jump_s      = cmd_valid && cmd_ready && cmd_repeat_end_s && repeat_loop;
+  assign spi_cmd_rd_addr_next = (repeat_jump_s) ? repeat_start_addr : spi_cmd_rd_addr + 1;
+  always @(posedge spi_clk ) begin
+    if (!spi_resetn) begin
+      repeat_loop       <= 1'b0;
+      repeat_count      <= 0;
+    end else begin
+      if (cmd_valid && cmd_ready && cmd_repeat_start_s) begin
+        repeat_loop       <= 1'b1;
+        repeat_count      <= cmd_repeat_count_s;
+        repeat_start_addr <= spi_cmd_rd_addr_next;
+      end else if (repeat_jump_s) begin
+        repeat_count      <= repeat_count-1;
+        repeat_loop       <= (repeat_count == 1) ? 1'b0 : 1'b1;
+      end
+    end
   end
 
 endmodule

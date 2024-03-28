@@ -98,7 +98,7 @@ Configuration Write Instruction
 == == == == == == = = = = = = = = = =
 
 The configuration writes instruction updates a
-:ref:`spi_engine configutarion-registers`
+:ref:`spi_engine configuration-registers`
 of the SPI Engine execution module with a new value.
 
 .. list-table::
@@ -174,7 +174,66 @@ is the minimum, needed by the internal logic.
      - Time
      - The amount of time to wait.
 
-.. _spi_engine configutarion-registers:
+Loop Start Instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+== == == == == == = = = = = = = = = =
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+== == == == == == = = = = = = = = = =
+1  0  0  1  r  r  r r n n n n n n n n
+== == == == == == = = = = = = = = = =
+
+The Loop Start instruction indicates the start of a loop region, that will be 
+executed a specified number of times. Together with the Loop End Instruction,
+this implements hardware instruction looping. All instructions between the loop
+start and loop end will be executed the specified number of times automatically
+by the SPI Engine. **Looping is only supported with instruction offloading, 
+The Loop Start and Loop End instructions will be treated as NOPs otherwise.**
+
+
+.. list-table::
+   :widths: 10 15 75
+   :header-rows: 1
+
+   * - Bits
+     - Name
+     - Description
+   * - r
+     - Reserved 
+     - Must always be 0.
+   * - n
+     - Loop count
+     - The number of times the loop will be repeated.
+
+Loop End Instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+== == == == == == = = = = = = = = = =
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+== == == == == == = = = = = = = = = =
+1  0  0  0  r  r  r r r r r r r r r r
+== == == == == == = = = = = = = = = =
+
+The Loop End instruction indicates the end of a loop region. Together with the 
+Loop Start Instruction, this implements hardware instruction looping. All 
+instructions between the loop start and loop end will be executed automatically 
+by the SPI Engine, for the number of repeats specified on the Loop Start 
+instruction. **Looping is only supported with instruction offloading, The Loop 
+Start and Loop End instructions will be treated as NOPs otherwise.**
+
+
+.. list-table::
+   :widths: 10 15 75
+   :header-rows: 1
+
+   * - Bits
+     - Name
+     - Description
+   * - r
+     - Reserved 
+     - Must always be 0.
+
+.. _spi_engine configuration-registers:
 
 Configuration Registers
 --------------------------------------------------------------------------------
