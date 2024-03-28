@@ -25,6 +25,9 @@ namespace eval ipl {
             }
             {lsccip:settings} {{} {} {} {}}
             {lsccip:ports} {{} {} {} {}}
+            {lsccip:outFileConfigs} {{} {} {} {
+                wrapper_type {{} {} {} {}}
+            }}
             {xi:include} {{} {} {} {}}
             {lsccip:componentGenerators} {{} {} {} {}}
         }
@@ -681,6 +684,29 @@ namespace eval ipl {
             set splatform [list lsccip:supported_platform [list name "name=\"$platform\""] {} {}]
             set ip [ipl::setnode ip_desc/lsccip:general/lsccip:supported_platforms $platform $splatform $ip]
         }
+        return $ip
+    }
+
+    proc setwrtype {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -file_ext "v" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set file_ext $opt(-file_ext)
+
+        if {[ipl::getnname ip_desc lsccip:outFileConfigs $ip] == ""} {
+            set ip [ipl::setnname ip_desc lsccip:outFileConfigs lsccip:outFileConfigs $ip]
+        }
+
+        if {$file_ext == "v"} {
+            set atts {name {name="wrapper"} file_suffix {file_suffix="v"} file_description {file_description="top_level_verilog"}}
+        } elseif {$file_ext == "sv"} {
+            set atts {name {name="wrapper"} file_suffix {file_suffix="sv"} file_description {file_description="top_level_system_verilog"}}
+        }
+        set node [list lsccip:fileConfig $atts {} {}]
+        set ip [ipl::setnode ip_desc/lsccip:outFileConfigs wrapper_type $node $ip]
+
         return $ip
     }
 
@@ -1759,6 +1785,76 @@ namespace eval ipl {
         set ip [ipl::addfiles -spath ../axi_clock_monitor -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_clock_mon.v} -ip $ip]
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_axi.v} -ip $ip]
+
+        ipl::genip $ip
+    }
+
+    proc axipwm {} {
+        set mod_data [ipl::getmod ../axi_pwm_gen/axi_pwm_gen.sv]
+        set ip $::ipl::ip
+
+        set ip [ipl::addports -ip $ip -mod_data $mod_data]
+        set ip [ipl::addpars -ip $ip -mod_data $mod_data]
+
+        set ip [ipl::general \
+            -name [dict get $mod_data mod_name] \
+            -display_name "ADI AXI PWM generator" \
+            -supported_products {*} \
+            -supported_platforms {esi radiant} \
+            -href "https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen" \
+            -vendor "latticesemi.com" \
+            -library "ip" \
+            -version "1.0" \
+            -category "ADI" \
+            -keywords "ADI IP" \
+            -min_radiant_version "2023.1" \
+            -min_esi_version "2023.1" -ip $ip]
+
+        set ip [ipl::mmap -ip $ip \
+            -name "axi_pwm_gen_mem_map" \
+            -description "axi_pwm_gen_mem_map" \
+            -baseAddress 0 \
+            -range 65536 \
+            -width 32]
+
+        set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
+            -exept_pl [list s_axi_aclk s_axi_aresetn] \
+            -display_name s_axi \
+            -description s_axi \
+            -master_slave slave \
+            -mmap_ref axi_pwm_gen_mem_map \
+            -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+
+
+        for {set i 1} {$i < 16} {incr i} {
+            set ip [ipl::igports -ip $ip -portlist [list pwm_$i] -expression "not(N_PWMS > $i)"]
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_WIDTH -hidden "not(N_PWMS > $i)"]
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_PERIOD -hidden "not(N_PWMS > $i)"]
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_OFFSET -hidden "not(N_PWMS > $i)"]
+        }
+
+        for {set i 0} {$i < 16} {incr i} {
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_WIDTH -group2 pwm_$i]
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_PERIOD -group2 pwm_$i]
+            set ip [ipl::settpar -ip $ip -id PULSE_${i}_OFFSET -group2 pwm_$i]
+        }
+
+        set ip [ipl::igports -ip $ip -portlist ext_clk -expression {(ASYNC_CLK_EN == 0)}]
+        set ip [ipl::igports -ip $ip -portlist ext_sync -expression {(PWM_EXT_SYNC == 0)}]
+
+        set ip [ipl::settpar -ip $ip -id ASYNC_CLK_EN -options {[(True, 1), (False, 0)]}]
+        set ip [ipl::settpar -ip $ip -id PWM_EXT_SYNC -options {[(True, 1), (False, 0)]}]
+        set ip [ipl::settpar -ip $ip -id EXT_ASYNC_SYNC -options {[(True, 1), (False, 0)]}]
+        set ip [ipl::settpar -ip $ip -id EXT_ASYNC_SYNC -hidden {(PWM_EXT_SYNC == 0)}]
+
+        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen.sv} -ip $ip]
+        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_1.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_regmap.sv} -ip $ip]
+        set ip [ipl::addfiles -spath ../common -dpath rtl -extl {ad_rst.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_axi.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+
+        set ip [ipl::setwrtype -ip $ip -file_ext sv]
 
         ipl::genip $ip
     }
