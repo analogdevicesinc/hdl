@@ -9,7 +9,7 @@ User Guide
    Introduction <introduction>
    Git repository <git_repository>
    Releases <releases>
-   Build an HDL project <build_hdl>
+   Build a HDL project <build_hdl>
    HDL architecture <architecture>
    IP cores <ip_cores>
    Porting reference designs <porting_project>

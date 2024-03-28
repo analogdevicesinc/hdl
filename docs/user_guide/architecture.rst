@@ -69,7 +69,7 @@ Microprocessor
 In our designs, we use only two types:
 
 .. list-table::
-   :widths: 20 20 20 20 20
+   :widths: 20 20 20 20 20 20
    :header-rows: 2
 
    * - Intel
@@ -77,17 +77,20 @@ In our designs, we use only two types:
      - AMD Xilinx
      -
      -
+     - Lattice
    * - **SoC**
      - **FPGA**
      - **SoC**
      - **FPGA**
      - `ACAP`_
+     - **FPGA**
    * - `HPS`_
      - `NIOS II`_
      - `PS7`_
        `PS8`_
      - `MicroBlaze`_
      - `Versal`_
+     - `riscv-rx`_
 
 .. _ACAP: https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html
 .. _HPS: https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html
@@ -96,6 +99,7 @@ In our designs, we use only two types:
 .. _PS8: https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html
 .. _MicroBlaze: https://www.xilinx.com/products/design-tools/microblaze.html
 .. _Versal: https://www.xilinx.com/products/silicon-devices/acap/versal.html
+.. _riscv-rx: https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu
 
 Worth mentioning in case of SoCs, the **Hard Processor System** (HPS)
 or **Processing System 7/8** (PS7/8) do not contain just the dual-core
@@ -270,6 +274,27 @@ HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP S10SoC Linux Cyclone V Act
 0   29         61          89           121           17     40              72
 === ========== =========== ============ ============= ====== =============== ================
 
+=== ==============
+HDL riscv-rx no-OS
+=== ==============
+15  15
+14  14
+13  13
+12  12
+11  11
+10  10
+9   9
+8   8
+7   7
+6   6
+5   5
+4   4
+3   3
+2   2
+1   1
+0   0
+=== ==============
+
 Board design and capabilities
 -------------------------------------------------------------------------------
 
@@ -376,6 +401,12 @@ AMD platforms
      - ---
      - 3.3V/2.5V/**\*1.8V**
      - Zynq-7000
+   * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+     - JTAG | SPI flash
+     - HPC
+     - ---
+     - ---
+     - CertusPro-NX
 
 .. note::
 
@@ -509,6 +540,38 @@ A project for an Intel FPGA board should contain the following files:
 -  ``system_top.v`` --- contains everything about the HDL part of the
    project; it instantiates the ``system_wrapper`` module, IO buffers,
    I/ODDRs, modules that transform signals from LVDS to single-ended,
+   etc. The I/O ports of this Verilog module will be connected to actual
+   I/O pads of the FPGA
+
+Project files for Lattice boards
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A project for a Lattice FPGA board should contain the following files:
+
+-  ``Makefile`` --- auto-generated file; contains all the IP
+   dependencies needed for the project to be built
+
+-  ``system_project_bd.tcl`` --- used to build the Propel Builder project
+   (block design); linked in project-lattice.mk, run by propelbld (Windows),
+   propelbldwrap (Linux);
+
+-  ``system_project.tcl`` --- used to build the Radiant project; Linked in
+   project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);
+
+-  ``system_bd.tcl`` --- linker script for the projects, sourced in
+   adi_project_bd procedure that is called in system_project_bd.tcl and it is
+   defined in adi_project_lattice_bd.tcl; sources the *base design first*,
+   then the *board design*, and afterwards it contains all the IP instances and
+   connections that must be added on top of the sourced files, to
+   complete the design of the project (these are specific to the
+   combination of this carrier and board)
+
+-  ``system_constr.pdc`` --- contains clock definitions and other path
+   constraints
+
+-  ``system_top.v`` --- contains everything about the HDL part of the
+   project; it instantiates the **<project_name>.v** ``system_wrapper`` module,
+   IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
    etc. The I/O ports of this Verilog module will be connected to actual
    I/O pads of the FPGA
 
