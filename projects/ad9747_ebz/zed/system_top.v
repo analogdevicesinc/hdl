@@ -81,7 +81,20 @@ module system_top (
   inout   [ 1:0]  iic_mux_scl,
   inout   [ 1:0]  iic_mux_sda,
 
-  input           otg_vbusoc
+  input           otg_vbusoc,
+
+  // relevant signals
+  
+  // leaves the chip
+  //input           dco,
+
+  output  [15:0]  data_p1,
+  output  [15:0]  data_p2,
+
+  output          spi_clk,
+  output          spi_dio,
+  input           spi_do,
+  output          spi_en
 );
 
   // internal signals
