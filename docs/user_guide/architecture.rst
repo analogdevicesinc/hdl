@@ -352,6 +352,12 @@ AMD platforms
      - FMC+ (12 GTY @ 28.21 Gbps)
      - **\*1.5V**/1.2V
      - Versal Prime Series
+   * - `VPK180 <https://www.xilinx.com/products/boards-and-kits/vpk180.html>`__
+     - SD card
+     - FMC+ (8 GTYP @ 32.75 Gbps)
+     - ---
+     - **\*1.5V**/1.2V
+     - Versal Premium
    * - `ZC702 <https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html>`__
      - SD card
      - LPC
