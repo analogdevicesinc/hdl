@@ -1516,6 +1516,14 @@ namespace eval ipl {
         if {$extl != ""} {
             set flist [ipl::get_file_list $spath $extl $sdepth]
         }
+
+        set checkext {^.+\.sv$}
+        foreach file $flist {
+            if {[regexp $checkext $file]} {
+                set ip [ipl::setwrtype -ip $ip -file_ext sv]
+            }
+        }
+
         if {$regex != ""} {
             set flist [regexp -all -inline $regex $flist]
         }
@@ -1853,8 +1861,6 @@ namespace eval ipl {
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {ad_rst.v} -ip $ip]
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_axi.v} -ip $ip]
         set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
-
-        set ip [ipl::setwrtype -ip $ip -file_ext sv]
 
         ipl::genip $ip
     }
