@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -7,7 +7,7 @@
 ## mxfe
 #
 
-set_property         -dict {PACKAGE_PIN BB16  IOSTANDARD LVCMOS15                                     } [get_ports agc0[0]          ]    ; ## FMC0_LA17_CC_P      IO_L13P_T2L_N0_GC_QBC_67   
+set_property         -dict {PACKAGE_PIN BB16  IOSTANDARD LVCMOS15                                     } [get_ports agc0[0]          ]    ; ## FMC0_LA17_CC_P      IO_L13P_T2L_N0_GC_QBC_67
 set_property         -dict {PACKAGE_PIN BC16  IOSTANDARD LVCMOS15                                     } [get_ports agc0[1]          ]    ; ## FMC0_LA17_CC_N      IO_L13N_T2L_N1_GC_QBC_67
 set_property         -dict {PACKAGE_PIN BE17  IOSTANDARD LVCMOS15                                     } [get_ports agc1[0]          ]    ; ## FMC0_LA18_CC_P      IO_L16P_T2U_N6_QBC_AD3P_67
 set_property         -dict {PACKAGE_PIN BD17  IOSTANDARD LVCMOS15                                     } [get_ports agc1[1]          ]    ; ## FMC0_LA18_CC_N      IO_L16N_T2U_N7_QBC_AD3N_67
@@ -15,8 +15,8 @@ set_property         -dict {PACKAGE_PIN BE16  IOSTANDARD LVCMOS15               
 set_property         -dict {PACKAGE_PIN BF17  IOSTANDARD LVCMOS15                                     } [get_ports agc2[1]          ]    ; ## FMC0_LA20_N         IO_L22N_T3U_N7_DBC_AD0N_67
 set_property         -dict {PACKAGE_PIN BE19  IOSTANDARD LVCMOS15                                     } [get_ports agc3[0]          ]    ; ## FMC0_LA21_P         IO_L21P_T3L_N4_AD8P_67
 set_property         -dict {PACKAGE_PIN BD19  IOSTANDARD LVCMOS15                                     } [get_ports agc3[1]          ]    ; ## FMC0_LA21_N         IO_L21N_T3L_N5_AD8N_67
-set_property         -dict {PACKAGE_PIN BD24  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin10_n        ]    ; ## FMC0_CLK2_IO_N      IO_L13N_T2L_N1_GC_QBC_66 
-set_property         -dict {PACKAGE_PIN BD23  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin10_p        ]    ; ## FMC0_CLK2_IO_P      IO_L13P_T2L_N0_GC_QBC_66 
+set_property         -dict {PACKAGE_PIN BD24  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin10_n        ]    ; ## FMC0_CLK2_IO_N      IO_L13N_T2L_N1_GC_QBC_66
+set_property         -dict {PACKAGE_PIN BD23  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin10_p        ]    ; ## FMC0_CLK2_IO_P      IO_L13P_T2L_N0_GC_QBC_66
 set_property         -dict {PACKAGE_PIN AP18  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin6_n         ]    ; ## FMC0_CLK1_M2C_N     IO_L12N_T1U_N11_GC_67
 set_property         -dict {PACKAGE_PIN AP19  IOSTANDARD LVDS15   DIFF_TERM_ADV TERM_100              } [get_ports clkin6_p         ]    ; ## FMC0_CLK1_M2C_P     IO_L12P_T1U_N10_GC_67
 set_property         -dict {PACKAGE_PIN M14                                                           } [get_ports fpga_refclk_in_n ]    ; ## FMC0_GBTCLK0_M2C_N  MGTREFCLK0N_229

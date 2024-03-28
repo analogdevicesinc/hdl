@@ -245,10 +245,10 @@ module system_top  #(
     .spi1_mosi (spi1_mosi),
     .spi1_sclk (spi1_sclk),
     // FMC HPC
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+    .rx_0_p (rx_data_p_loc[3:0]),
+    .rx_0_n (rx_data_n_loc[3:0]),
+    .rx_1_p (rx_data_p_loc[7:4]),
+    .rx_1_n (rx_data_n_loc[7:4]),
 
     .gt_reset (~rstb),
     .ref_clk_q0 (ref_clk),
