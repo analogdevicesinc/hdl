@@ -88,9 +88,9 @@ module axi_pwm_gen_regmap #(
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch <= 'd0;
-      up_pwm_width = PULSE_WIDTH_G[0:N_PWMS];
-      up_pwm_period = PULSE_PERIOD_G[0:N_PWMS];
-      up_pwm_offset = PULSE_OFFSET_G[0:N_PWMS];
+      up_pwm_width <= PULSE_WIDTH_G[0:N_PWMS];
+      up_pwm_period <= PULSE_PERIOD_G[0:N_PWMS];
+      up_pwm_offset <= PULSE_OFFSET_G[0:N_PWMS];
       up_load_config <= 1'b0;
       up_reset <= 1'b1;
     end else begin
