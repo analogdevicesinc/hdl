@@ -151,6 +151,18 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
@@ -162,6 +174,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
@@ -268,7 +281,8 @@ peripheral.</p></td>
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="5299affac3ffdd98d2b758500e698bf15cab6a3e" name="5299affac3ffdd98d2b758500e698bf15cab6a3e" type="checkbox"></input><label for="5299affac3ffdd98d2b758500e698bf15cab6a3e"><div><p>m_ctrl</p>
 <section>
-<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master. Connects to the control interface slave.</p>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> master.
+Connects to the control interface slave.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -337,6 +351,11 @@ peripheral.</p></td>
 <section id="bus-interface-s*_ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="92b019dc18cadc83a13c9379d181152e82fa30d2" name="92b019dc18cadc83a13c9379d181152e82fa30d2" type="checkbox"></input><label for="92b019dc18cadc83a13c9379d181152e82fa30d2"><div><p>s*_ctrl</p>
+<section>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> slave. 
+<code class="docutils literal notranslate"><span class="pre">s0_ctrl</span></code> connects to the first control interface master.
+<code class="docutils literal notranslate"><span class="pre">s1_ctrl</span></code> connects to the second control interface master.</p>
+</section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">

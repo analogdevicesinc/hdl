@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>SPI Engine &#8212; HDL  documentation</title>
+    <title>AMD Xilinx Specific IPs &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="SPI Engine Execution Module" href="spi_engine_execution.html" />
-    <link rel="prev" title="High-Speed DMA Controller" href="../axi_dmac/index.html" />
+    <link rel="next" title="UTIL_ADXCVR core for AMD Xilinx devices" href="util_adxcvr/index.html" />
+    <link rel="prev" title="AXI_ADXCVR" href="../axi_adxcvr/index.html" />
    
   
     <meta name="robots" content="noindex">
@@ -83,13 +83,8 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">SPI Engine</a><ul>
-<li><a class="reference internal" href="#sub-modules">Sub-modules</a></li>
-<li><a class="reference internal" href="#interfaces">Interfaces</a></li>
-<li><a class="reference internal" href="#software">Software</a></li>
-<li><a class="reference internal" href="#related-ip-cores">Related IP Cores</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
-<li><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
+<li><a class="reference internal" href="#">AMD Xilinx Specific IPs</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
 </ul>
 </li>
 </ul>
@@ -140,17 +135,17 @@ Content on this topic
 </li>
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1" checked=""/><div class="collapse"><a class="current reference internal" href="#">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="spi_engine_execution.html">Execution Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="axi_spi_engine.html">AXI Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="spi_engine_offload.html">Offload Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="spi_engine_interconnect.html">Interconnect Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="control-interface.html">Control Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="offload-control-interface.html">Offload Control Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="spi-bus-interface.html">SPI Bus Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="instruction-format.html">Instruction Set Specification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pipeline-delays.html">Pipeline Delays</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
@@ -161,8 +156,8 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3" checked=""/><div class="collapse"><a class="current reference internal" href="#">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
 </ul>
@@ -200,92 +195,26 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="spi-engine">
-<span id="id1"></span><h1>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading">#</a></h1>
+  <section id="amd-xilinx-specific-ips">
+<span id="xilinx"></span><h1>AMD Xilinx Specific IPs<a class="headerlink" href="#amd-xilinx-specific-ips" title="Permalink to this heading">#</a></h1>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="util_adxcvr/index.html">UTIL_ADXCVR</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#block-diagram">Block Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#configuration-parameters">Configuration Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#interface">Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#design-guidelines">Design Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#physical-constraints-considerations">Physical constraints considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#software-guidelines">Software Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
 </div>
-<p>SPI Engine is a highly flexible and powerful SPI controller framework.
-It consist out of multiple sub-modules which communicate over well defined
-interfaces.
-This allows a high degree of flexibility and re-usability while at the same time
-staying highly customizable and easily extensible.</p>
-<p>The core component of the SPI Engine framework is a lean but powerful fully
-programmable execution module, which implements the SPI bus control logic.
-The SPI Engine execution module is controlled by a command stream which is
-generated by a separate module. Different command stream master modules are
-available and can be used depending on the system requirements.
-For example a software controlled memory mapped command stream offers high
-flexibility, while a offload core which executes a pre-programmed command stream
-when triggered by an external event allows for very low latency response times.
-By using a SPI Engine interconnect it is possible to connect multiple command
-stream master modules to a SPI Engine execution module.</p>
-<section id="sub-modules">
-<h2>Sub-modules<a class="headerlink" href="#sub-modules" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a>: Main module which processes a SPI engine command
-stream and implements the SPI bus interface logic.</p></li>
-<li><p><a class="reference internal" href="axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">AXI SPI Engine Module</span></a>: Memory mapped software accessible interface to a
-SPI Engine command stream and/or offload cores.</p></li>
-<li><p><a class="reference internal" href="spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a>: Stores a SPI Engine command stream, execution is
-triggered by an external event.</p></li>
-<li><p><a class="reference internal" href="spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a>: Connects multiple SPI Engine command streams
-to a SPI Engine execution module.</p></li>
-</ul>
-</section>
-<section id="interfaces">
-<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>: SPI Engine command stream.</p></li>
-<li><p><a class="reference internal" href="offload-control-interface.html#spi-engine-offload-control-interface"><span class="std std-ref">SPI Engine Offload Control Interface</span></a>: Program the command stream stored
-in a offload module.</p></li>
-<li><p><a class="reference internal" href="spi-bus-interface.html#spi-engine-spi-bus-interface"><span class="std std-ref">SPI Bus Interface</span></a>: Low-level SPI bus interface.</p></li>
-</ul>
-</section>
-<section id="software">
-<h2>Software<a class="headerlink" href="#software" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/spi/spi_engine">Linux Driver</a>:
-Linux driver for the SPI Engine framework.</p></li>
-<li><p><a class="reference internal" href="instruction-format.html#spi-engine-instruction-format"><span class="std std-ref">SPI Engine Instruction Set Specification</span></a>: Overview of the SPI Engine Instruction
-format.</p></li>
-</ul>
-</section>
-<section id="related-ip-cores">
-<h2>Related IP Cores<a class="headerlink" href="#related-ip-cores" title="Permalink to this heading">#</a></h2>
-<p>This list contains cores that are not part of the core SPI engine framework but
-make use of its interfaces and are intended to be used together with the SPI engine
-framework.</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/util_sigma_delta_spi">util-sigma-delta-spi</a>:
-Helper module for interfacing ADCs from the Analog Devices Sigma-Delta family.</p></li>
-</ul>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz">CN0363</a>:
-Colorimeter application using the <a class="icon adi reference external" href="https://www.analog.com/AD7175-2">AD7175-2</a> Sigma-Delta ADC.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adaq7980-sdz">adaq7980-sdz</a>:
-A 16-bit ADC subsystem with four common signal processing and conditioning blocks.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad5766">ad5766</a>:
-16-channel, 16-/12-bit, voltage output Digital-to-Analog Converters (DAC).</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz">CN0363</a>:
-The AD7768-1 is a low power, high performance, Σ-Δ analog-to-digital converter (ADC).</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad40xx_fmc">projects/ad40xx_fmc</a>
-Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad469x">AD469x</a>:
-16-Bit, 16-Channel, 500 kSPS/1 MSPS, Easy Drive Multiplexed SAR ADC.</p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad463x/hdl">AD4630-24 / AD4030-24 / AD4630-16</a>:
-16/24-Bit, 2 MSPS Single or Dual Channel SAR ADC.</p></li>
-</ul>
-</section>
-<section id="additional-resources">
-<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference download external" download="" href="https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Presentation:</span> <span class="pre">SPI</span> <span class="pre">Engine</span> <span class="pre">Design</span> <span class="pre">Philosophy</span></code></a>.</p></li>
-<li><p><a class="reference internal" href="pipeline-delays.html#spi-engine-pipeline-delays"><span class="std std-ref">SPI Engine Pipeline Delays</span></a></p></li>
-<li><p><a class="reference internal" href="tutorial.html#spi-engine-tutorial"><span class="std std-ref">SPI Engine Tutorial - PulSAR-ADC</span></a>.</p></li>
-</ul>
 </section>
 </section>
 
@@ -299,8 +228,8 @@ Evaluation Board for the AD4000 Series 16-/18-/20-Bit Precision SAR ADCs.</p></l
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../axi_dmac/index.html" title="Previous document" class="prev">High-Speed DMA Controller</a>
-    <a href="spi_engine_execution.html" title="Next document" class="next">SPI Engine Execution Module</a>
+    <a href="../axi_adxcvr/index.html" title="Previous document" class="prev">AXI_ADXCVR</a>
+    <a href="util_adxcvr/index.html" title="Next document" class="next">UTIL_ADXCVR core for AMD Xilinx devices</a>
               </div>
           
         </div>

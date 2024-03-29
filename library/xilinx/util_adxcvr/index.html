@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UTIL_ADXCVR core for AMD Xilinx devices &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=7196d5a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=96350458"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Projects" href="../../../projects/index.html" />
+    <link rel="prev" title="AMD Xilinx Specific IPs" href="../index.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <header>
+    <div class="header">
+      <div id="left">
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
+      </div>
+      <div id="right">
+        <span>
+          <a id="logo-org" href="https://analog.com"></a>
+              <a id="no-logo" href="../../../index.html">
+                HDL
+              </a>
+        </span>
+        <span class="reverse">
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
+        </span>
+      </div>
+    </div>
+    <div class="repotoc-tree">
+      <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+</root>
+
+    </div>
+  </header>
+
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">UTIL_ADXCVR core for AMD Xilinx devices</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a><ul>
+<li><a class="reference internal" href="#microprocessor-clock-and-reset">Microprocessor clock and reset</a></li>
+<li><a class="reference internal" href="#pll-reference-clock">PLL reference clock</a></li>
+<li><a class="reference internal" href="#rx-interface">RX interface</a></li>
+<li><a class="reference internal" href="#tx-interface">TX interface</a></li>
+<li><a class="reference internal" href="#common-drp-interface">Common DRP Interface</a></li>
+<li><a class="reference internal" href="#channel-drp-interface">Channel DRP Interface</a></li>
+<li><a class="reference internal" href="#eye-scan-drp-interface">Eye Scan DRP Interface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
+<li><a class="reference internal" href="#physical-constraints-considerations">Physical constraints considerations</a></li>
+<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+              <a id="no-logo" href="../../../index.html">
+                HDL
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="util-adxcvr-core-for-amd-xilinx-devices">
+<span id="util-adxcvr"></span><h1>UTIL_ADXCVR core for AMD Xilinx devices<a class="headerlink" href="#util-adxcvr-core-for-amd-xilinx-devices" title="Permalink to this heading">#</a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 387.59999999999997 570" width="387.59999999999997" height="570"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="351.59999999999997" height="516" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-up_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">up_clk</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_rstn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">up_rstn</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-cpll_ref_clk_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">cpll_ref_clk_*</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rx_clk_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">rx_clk_*</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_clk_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">tx_clk_*</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-qpll_ref_clk_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">qpll_ref_clk_*</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rx_clk_2x_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">rx_clk_2x_*</text></a><g transform="translate(18,190.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_clk_2x_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">tx_clk_2x_*</text></a><g transform="translate(18,214.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_rx_rst_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">up_rx_rst_*</text></a><g transform="translate(18,238.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_tx_rst_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">up_tx_rst_*</text></a><g transform="translate(18,262.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_cpll_rst_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">up_cpll_rst_*</text></a><g transform="translate(18,286.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_qpll_rst_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="318">up_qpll_rst_*</text></a><g transform="translate(18,310.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_cm_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="342">up_cm_*</text></a><g transform="translate(18,334.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_es_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="366">up_es_*</text></a><g transform="translate(18,358.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_rx_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="390">up_rx_*</text></a><g transform="translate(18,382.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-up_tx_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="414">up_tx_*</text></a><g transform="translate(18,406.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_*"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="438">tx_*</text></a><g transform="translate(18,430.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="462">rx_*_p</text></a><g transform="translate(18,454.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="486">rx_*_n</text></a><g transform="translate(18,478.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="510">rx_calign_*</text></a><g transform="translate(18,502.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-rx_out_clk_*"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="54">rx_out_clk_*</text></a><g transform="translate(369.59999999999997,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_out_clk_*"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="78">tx_out_clk_*</text></a><g transform="translate(369.59999999999997,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rx_*"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="102">rx_*</text></a><g transform="translate(369.59999999999997,94.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-rx_out_clk_div*_*"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="126">rx_out_clk_div*_*</text></a><g transform="translate(369.59999999999997,118.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_out_clk_div*_*"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="150">tx_out_clk_div*_*</text></a><g transform="translate(369.59999999999997,142.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="174">tx_*_p</text></a><g transform="translate(369.59999999999997,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="351.59999999999997" y="198">tx_*_n</text></a><g transform="translate(369.59999999999997,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="351.59999999999997" height="516" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="193.79999999999998" y="554">util_adxcvr</text></svg></section>
+</div><p>The
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/xilinx/util_adxcvr">util_adxcvr</a>
+IP core instantiates a Gigabit Transceiver (GT) and sets up the required
+configuration. Basically, it is a simple wrapper file for a GT* Column,
+exposing just the necessary ports and attributes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To understand the below wiki page is important to have a basic
+understanding about High Speed Serial I/O interfaces and Gigabit Serial
+Transceivers. To find more information about these technologies, please visit
+the <a class="reference external" href="https://www.xilinx.com/support/answers/37181.html">AMD Xilinx’s solution center</a>.</p>
+</div>
+<p>Currently this IP supports three different GT types:</p>
+<ul class="simple">
+<li><p>GTXE2
+(<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf">7 Series devices</a>)</p></li>
+<li><p>GTHE3
+(<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf">Ultrascale and Ultrascale+</a>)</p></li>
+<li><p>GTHE4
+(<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf">Ultrascale and Ultrascale+</a>)</p></li>
+<li><p>GTYE4
+(<a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf">Ultrascale and Ultrascale+</a>)</p></li>
+</ul>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Supports GTX2, GTH3 and GTH4</p></li>
+<li><p>Exposes all the necessary attributes for QPLL/CPLL configuration</p></li>
+<li><p>Supports shared transceiver mode</p></li>
+<li><p>Supports dynamic reconfiguration</p></li>
+<li><p>RX Eye Scan</p></li>
+</ul>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<p>The following diagram shows a GTXE2 Column, which contains four GT Quads. Each
+quad contains a GTEX2_COMMON and four GTXE2_CHANNEL primitives.</p>
+<img alt="../../../_images/gtx_column.svg" class="align-center" src="../../../_images/gtx_column.svg" /></section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">XCVR_TYPE</span></code></td>
+<td class="description"><section>
+<p>Define the current GT type:
+GTXE2(0), GTHE3(1), GTHE4(2)</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), GTPE2_NOT_SUPPORTED (1), GTXE2 (2), GTHE2_NOT_SUPPORTED (3), GTZE2_NOT_SUPPORTED (4), GTHE3 (5), GTYE3_NOT_SUPPORTED (6), GTRE4_NOT_SUPPORTED (7), GTHE4 (8), GTYE4 (9), GTME4_NOT_SUPPORTED (10)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RX_LANE_RATE</span></code></td>
+<td class="description"><p>Rx Lane Rate (Gbps).</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">12.5</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TX_LANE_RATE</span></code></td>
+<td class="description"><p>Tx Lane Rate (Gbps).</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">12.5</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code></td>
+<td class="description"><p>Link Layer mode.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>64B66B (2), 8B10B (1)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code></td>
+<td class="description"><p>Data Path Width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_REFCLK_DIV</span></code></td>
+<td class="description"><section>
+<p>QPLL reference clock divider M, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_FBDIV_RATIO</span></code></td>
+<td class="description"><section>
+<p>QPLL reference clock divider N ratio, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">POR_CFG</span></code></td>
+<td class="description"><p>Por Cfg.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0006</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PPF0_CFG</span></code></td>
+<td class="description"><p>Ppf0 Cfg.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0600</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PPF1_CFG</span></code></td>
+<td class="description"><p>Ppf1 Cfg.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0600</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG</span></code></td>
+<td class="description"><section>
+<p>Configuration settings for QPLL, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b000011010000000000110000001</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_FBDIV</span></code></td>
+<td class="description"><section>
+<p>QPLL reference clock divider N, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0000110000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG0</span></code></td>
+<td class="description"><p>Qpll Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h331C</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG1</span></code></td>
+<td class="description"><p>Qpll Cfg1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'hD038</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG1_G3</span></code></td>
+<td class="description"><p>Qpll Cfg1 G3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'hD038</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG2</span></code></td>
+<td class="description"><p>Qpll Cfg2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0FC0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG2_G3</span></code></td>
+<td class="description"><p>Qpll Cfg2 G3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0FC0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG3</span></code></td>
+<td class="description"><p>Qpll Cfg3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0120</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CFG4</span></code></td>
+<td class="description"><p>Qpll Cfg4.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0003</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CP_G3</span></code></td>
+<td class="description"><p>Qpll Cp G3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0000011111</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">QPLL_LPF</span></code></td>
+<td class="description"><p>Qpll Lpf.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0100110111</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">QPLL_CP</span></code></td>
+<td class="description"><p>Qpll Cp.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0001111111</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CPLL_FBDIV</span></code></td>
+<td class="description"><section>
+<p>CPLL feedback divider N2 settings, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CPLL_FBDIV_4_5</span></code></td>
+<td class="description"><section>
+<p>CPLL reference clock divider N1 settings, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CPLL_CFG0</span></code></td>
+<td class="description"><p>Cpll Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h01FA</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CPLL_CFG1</span></code></td>
+<td class="description"><p>Cpll Cfg1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0023</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CPLL_CFG2</span></code></td>
+<td class="description"><p>Cpll Cfg2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0002</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CPLL_CFG3</span></code></td>
+<td class="description"><p>Cpll Cfg3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CH_HSPMUX</span></code></td>
+<td class="description"><p>Ch Hspmux.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h2424</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PREIQ_FREQ_BST</span></code></td>
+<td class="description"><p>Preiq Freq Bst.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXPI_CFG0</span></code></td>
+<td class="description"><p>Rxpi Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0002</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXPI_CFG1</span></code></td>
+<td class="description"><p>Rxpi Cfg1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0015</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RTX_BUF_CML_CTRL</span></code></td>
+<td class="description"><p>Rtx Buf Cml Ctrl.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b011</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TX_NUM_OF_LANES</span></code></td>
+<td class="description"><section>
+<p>Number of transmit lanes.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TX_OUT_DIV</span></code></td>
+<td class="description"><section>
+<p>CPLL/QPLL output clock divider D for the TX datapath, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TX_CLK25_DIV</span></code></td>
+<td class="description"><section>
+<p>Divider for internal 25 MHz clock for the TX datapath, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">20</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TX_LANE_INVERT</span></code></td>
+<td class="description"><section>
+<p>Per lane polarity inversion. Set the n-th bit to invert the polarity of the n-th transmit lane.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TX_PI_BIASSET</span></code></td>
+<td class="description"><p>Tx Pi Biasset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TXPI_CFG</span></code></td>
+<td class="description"><p>Txpi Cfg.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0054</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">A_TXDIFFCTRL</span></code></td>
+<td class="description"><p>A Txdiffctrl.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b10110</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RX_NUM_OF_LANES</span></code></td>
+<td class="description"><section>
+<p>Number of transmit lanes</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RX_OUT_DIV</span></code></td>
+<td class="description"><section>
+<p>CPLL/QPLL output clock divider D for the RX datapath, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RX_CLK25_DIV</span></code></td>
+<td class="description"><section>
+<p>Divider for internal 25 MHz clock for the RX datapath, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">20</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RX_DFE_LPM_CFG</span></code></td>
+<td class="description"><section>
+<p>Configure the GT use modes, LPM or DFE, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0104</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RX_PMA_CFG</span></code></td>
+<td class="description"><section>
+<p>Search for PMA_RSV in User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h001E7080</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RX_CDR_CFG</span></code></td>
+<td class="description"><section>
+<p>Configure the RX clock data recovery circuit for GTXE2, see User Guide for more info</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0B000023FF10400020</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG0</span></code></td>
+<td class="description"><p>Rxcdr Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0002</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG2</span></code></td>
+<td class="description"><p>Rxcdr Cfg2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0269</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG2_GEN2</span></code></td>
+<td class="description"><p>Rxcdr Cfg2 Gen2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b1001100101</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG2_GEN4</span></code></td>
+<td class="description"><p>Rxcdr Cfg2 Gen4.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h00B4</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG3</span></code></td>
+<td class="description"><p>Rxcdr Cfg3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0012</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG3_GEN2</span></code></td>
+<td class="description"><p>Rxcdr Cfg3 Gen2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b011010</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG3_GEN3</span></code></td>
+<td class="description"><p>Rxcdr Cfg3 Gen3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0012</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXCDR_CFG3_GEN4</span></code></td>
+<td class="description"><p>Rxcdr Cfg3 Gen4.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0024</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RXDFE_KH_CFG2</span></code></td>
+<td class="description"><p>Rxdfe Kh Cfg2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0200</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RXDFE_KH_CFG3</span></code></td>
+<td class="description"><p>Rxdfe Kh Cfg3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h4101</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RX_WIDEMODE_CDR</span></code></td>
+<td class="description"><p>Rx Widemode Cdr.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b00</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">RX_XMODE_SEL</span></code></td>
+<td class="description"><p>Rx Xmode Sel.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TXDRV_FREQBAND</span></code></td>
+<td class="description"><p>Txdrv Freqband.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TXFE_CFG0</span></code></td>
+<td class="description"><p>Txfe Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h03C2</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TXFE_CFG1</span></code></td>
+<td class="description"><p>Txfe Cfg1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h6C00</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TXFE_CFG2</span></code></td>
+<td class="description"><p>Txfe Cfg2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h6C00</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TXFE_CFG3</span></code></td>
+<td class="description"><p>Txfe Cfg3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h6C00</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TXPI_CFG0</span></code></td>
+<td class="description"><p>Txpi Cfg0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h0300</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">TXPI_CFG1</span></code></td>
+<td class="description"><p>Txpi Cfg1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'h1000</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TXSWBST_EN</span></code></td>
+<td class="description"><p>Txswbst En.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">RX_LANE_INVERT</span></code></td>
+<td class="description"><section>
+<p>Per lane polarity inversion. Set the n-th bit to invert the polarity of the n-th receive lane.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<section id="microprocessor-clock-and-reset">
+<h3>Microprocessor clock and reset<a class="headerlink" href="#microprocessor-clock-and-reset" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">up_clk</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>System clock, running on 100 MHz</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">up_rstn</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>System reset, the same as AXI memory map slave interface reset</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="pll-reference-clock">
+<h3>PLL reference clock<a class="headerlink" href="#pll-reference-clock" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">qpll_ref_clk_0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Reference clock for the QPLL</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cpll_ref_clk_0</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Reference clock for the CPLL</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="rx-interface">
+<h3>RX interface<a class="headerlink" href="#rx-interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_*_p</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Positive differential serial data input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_*_n</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Negative differential serial data input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_out_clk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>Core logic clock output. Frequency = serial line rate/40</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_clk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Core logic clock loop-back input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_charisk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output[3:0]</span></code></p></td>
+<td><p>RX Char is K to the JESD204B IP</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_disperr_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output[3:0]</span></code></p></td>
+<td><p>RX disparity error to the JESD204B IP</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_notintable_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output[3:0]</span></code></p></td>
+<td><p>RX Not In Table to the JESD204B IP</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_data_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output[3:0]</span></code></p></td>
+<td><p>RX data to the JESD204B IP</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_calign_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>RX enable comma alignment from the JESD204B IP</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="tx-interface">
+<h3>TX interface<a class="headerlink" href="#tx-interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tx_*_p</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>Positive differential serial output</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tx_*_n</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>Negative differential serial output</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tx_out_clk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output</span></code></p></td>
+<td><p>Core logic clock output. Frequency = serial line rate/40</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tx_clk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Core logic clock loop-back input</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tx_charisk_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[3:0]</span></code></p></td>
+<td><p>TX Char is K from the JESD204B IP</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tx_data_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[31:0]</span></code></p></td>
+<td><p>TX data from the JESD204B IP</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="common-drp-interface">
+<h3>Common DRP Interface<a class="headerlink" href="#common-drp-interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">up_cm_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">IO</span></code></p></td>
+<td><p>The common DRP interface, must be connected to the equivalent DRP ports
+of AXI_ADXCVR. This is a QUAD interface, shared by four transceiver
+lanes. This interface is available only if parameter QPLL_ENABLE is set
+to 0x1.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="channel-drp-interface">
+<h3>Channel DRP Interface<a class="headerlink" href="#channel-drp-interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">up_rx_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">IO</span></code></p></td>
+<td><p>The RX channel DRP interface, must be connected to the equivalent DRP ports
+of AXI_ADXCVR. This is a channel interface, one per each RX transceiver
+lane.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">up_tx_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">IO</span></code></p></td>
+<td><p>The TX channel DRP interface, must be connected to the equivalent DRP ports
+of AXI_ADXCVR. This is a channel interface, one per each TX transceiver
+lane.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="eye-scan-drp-interface">
+<h3>Eye Scan DRP Interface<a class="headerlink" href="#eye-scan-drp-interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">up_es_*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">IO</span></code></p></td>
+<td><p>The Eye-Scan DRP interface, must be connected to the equivalent DRP
+ports of UTIL_ADXCVR. This is a channel interface, one per each
+transceiver lane. This interface is available only if parameter
+TX_OR_RX_N is set to 0x0.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="design-guidelines">
+<h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to <a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/xgt_wizard">AMD Xilinx FPGAs Transceivers Wizard</a>
+to generate the optimal parameters needed to configure the transceivers for
+your project.</p>
+</div>
+</section>
+<section id="physical-constraints-considerations">
+<h2>Physical constraints considerations<a class="headerlink" href="#physical-constraints-considerations" title="Permalink to this heading">#</a></h2>
+<p>The util_adxcvr allocates resources/quads (channels and common) sequentially.
+Meaning, if you have 8 lanes it will insert two quads, 4 channels and a common
+block for each quad.</p>
+<p>Channels within a quad are tightly coupled to the common block, the placement of
+the channel resources can be permuted within a quad and is affected by the
+constraint file with the restriction that rx_&lt;N&gt;_p/n connect to tx_&lt;N&gt;_p/n
+must connect to the same channel.</p>
+<p>Supposing we have the following pin constraints and connections to the
+util_adxcvr:</p>
+<img alt="../../../_images/xcvr_mapping_example.svg" class="align-center" src="../../../_images/xcvr_mapping_example.svg" /><p>So in this case we end up with a conflict during implementation:</p>
+<img alt="../../../_images/xcvr_conflict.svg" class="align-center" src="../../../_images/xcvr_conflict.svg" /><p>We have to ensure that in implementation the mapping is correct either by
+rearranging the Rx connections</p>
+<img alt="../../../_images/xcvr_rx_rearrangement.svg" class="align-center" src="../../../_images/xcvr_rx_rearrangement.svg" /><p>or by rearranging the Tx connections of the util_adxcvr:</p>
+<img alt="../../../_images/xcvr_tx_rearrangement.svg" class="align-center" src="../../../_images/xcvr_tx_rearrangement.svg" /><p>In such cases, when rearrangement is required due placement constraints,
+complementary reordering is required either in the converter device (lane
+crossbars) or inside the FPGA between the physical and link layer, to connect
+the logical lanes with the same index on both end of the link.</p>
+</section>
+<section id="software-guidelines">
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
+<p>The software can configure this core through the <a class="reference internal" href="../../axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI_ADXCVR</span></a> IP
+core.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/products/technology/high-speed-serial.html">High Speed Serial</a></p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug476_7Series_Transceivers.pdf">7 Series FPGAs GTX/GTH Transceivers</a></p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug576-ultrascale-gth-transceivers.pdf">UltraScale Architecture GTH Transceivers</a></p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug578-ultrascale-gty-transceivers.pdf">UltraScale Architecture GTY Transceivers</a></p></li>
+</ul>
+</section>
+<section id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../jesd204/index.html#jesd204"><span class="std std-ref">JESD204B High-Speed Serial Interface Support</span></a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../index.html" title="Previous document" class="prev">AMD Xilinx Specific IPs</a>
+    <a href="../../../projects/index.html" title="Next document" class="next">Projects</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+
+  
+  <form action="" method="get" class="search-area">
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+    <button value="search"></button>
+    <span id="search-progress"></span>
+  </form>
+  
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

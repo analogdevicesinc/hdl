@@ -1,0 +1,2995 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>JESD204B/C Link Transmit Peripheral &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=7196d5a4" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e974aa45" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=96350458"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="JESD204B/C Link Receive Peripheral" href="../axi_jesd204_rx/index.html" />
+    <link rel="prev" title="JESD204 Interface Framework" href="../index.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <header>
+    <div class="header">
+      <div id="left">
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
+      </div>
+      <div id="right">
+        <span>
+          <a id="logo-org" href="https://analog.com"></a>
+              <a id="no-logo" href="../../../index.html">
+                HDL
+              </a>
+        </span>
+        <span class="reverse">
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
+        </span>
+      </div>
+    </div>
+    <div class="repotoc-tree">
+      <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+</root>
+
+    </div>
+  </header>
+
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">JESD204B/C Link Transmit Peripheral</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#axi-jesd204-tx-synthesis-configuration-parameters">AXI JESD204 TX Synthesis Configuration Parameters</a></li>
+<li><a class="reference internal" href="#jesd204-tx-synthesis-configuration-parameters">JESD204 TX Synthesis Configuration Parameters</a></li>
+<li><a class="reference internal" href="#axi-jesd204-tx-signal-and-interface-pins">AXI JESD204 TX Signal and Interface Pins</a></li>
+<li><a class="reference internal" href="#jesd204-tx-signal-and-interface-pins">JESD204 TX Signal and Interface Pins</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
+<li><a class="reference internal" href="#interfaces-and-signals">Interfaces and Signals</a><ul>
+<li><a class="reference internal" href="#register-map-configuration-interface">Register Map Configuration Interface</a></li>
+<li><a class="reference internal" href="#jesd204b-control-signals">JESD204B Control Signals</a></li>
+<li><a class="reference internal" href="#transceiver-interface-tx-phyn">Transceiver Interface (TX_PHYn)</a></li>
+<li><a class="reference internal" href="#user-data-interface-tx-data">User Data Interface (TX_DATA)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-interface">Configuration Interface</a><ul>
+<li><a class="reference internal" href="#peripheral-identification-and-hdl-synthesis-settings">Peripheral Identification and HDL Synthesis Settings</a></li>
+<li><a class="reference internal" href="#interrupt-handling">Interrupt Handling</a></li>
+<li><a class="reference internal" href="#link-control">Link Control</a></li>
+<li><a class="reference internal" href="#multi-link-control">Multi-link Control</a></li>
+<li><a class="reference internal" href="#link-configuration">Link Configuration</a></li>
+<li><a class="reference internal" href="#ilas-configuration-data">ILAS Configuration Data</a></li>
+<li><a class="reference internal" href="#sysref-handling">SYSREF Handling</a></li>
+<li><a class="reference internal" href="#link-status">Link Status</a></li>
+<li><a class="reference internal" href="#manual-synchronization-request">Manual Synchronization Request</a></li>
+<li><a class="reference internal" href="#clock-monitor">Clock Monitor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#b-10b-link">8B/10B Link</a><ul>
+<li><a class="reference internal" href="#b-10b-link-state-machine">8B/10B Link State Machine</a><ul>
+<li><a class="reference internal" href="#wait-phase-wait">Wait Phase (WAIT)</a></li>
+<li><a class="reference internal" href="#code-group-synchronization-phase-cgs">Code Group Synchronization Phase (CGS)</a></li>
+<li><a class="reference internal" href="#initial-lane-alignment-sequence-phase-ilas">Initial Lane Alignment Sequence Phase (ILAS)</a></li>
+<li><a class="reference internal" href="#user-data-phase-data">User Data Phase (DATA)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#b-10b-multi-endpoint-tx-link-establishment">8B/10B Multi-endpoint TX link establishment</a></li>
+<li><a class="reference internal" href="#diagnostics">Diagnostics</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#b-66b-link">64B/66B Link</a></li>
+<li><a class="reference internal" href="#dual-clock-operation">Dual clock operation</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
+<li><a class="reference internal" href="#restrictions">Restrictions</a></li>
+<li><a class="reference internal" href="#supported-devices">Supported Devices</a><ul>
+<li><a class="reference internal" href="#jesd204b-digital-to-analog-converters">JESD204B Digital-to-Analog Converters</a></li>
+<li><a class="reference internal" href="#jesd204b-rf-transceivers">JESD204B RF Transceivers</a></li>
+<li><a class="reference internal" href="#jesd204b-c-mixed-signal-front-ends">JESD204B/C Mixed-Signal Front Ends</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-support">Technical Support</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+              <a id="no-logo" href="../../../index.html">
+                HDL
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="jesd204b-c-link-transmit-peripheral">
+<span id="axi-jesd204-tx"></span><h1>JESD204B/C Link Transmit Peripheral<a class="headerlink" href="#jesd204b-c-link-transmit-peripheral" title="Permalink to this heading">#</a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 339.6 306" width="339.6" height="306"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="303.6" height="252" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_ilas_config"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">tx_ilas_config</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_event"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">tx_event</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_status"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">tx_status</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">core_clk</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">core_reset_ext</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">device_clk</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-tx_cfg"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="54">tx_cfg</text></a><g transform="translate(321.6,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="78">tx_ctrl</text></a><g transform="translate(321.6,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-irq"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="102">irq</text></a><g transform="translate(321.6,94.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="126">core_reset</text></a><g transform="translate(321.6,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="150">device_reset</text></a><g transform="translate(321.6,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="303.6" height="252" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="169.8" y="290">axi_jesd204_tx</text></svg></section>
+</div><p>The Analog Devices JESD204B/C Link Transmit Peripheral implements the link layer
+handling of a JESD204 transmit logic device. Implements the 8B/10B based link
+layer defined in JESD204C standard that is similar to the link layer defined in
+JESD204B. This includes handling of the SYSREF and SYNC~ and controlling the
+<a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">link state machine</span></a> accordingly
+as well as performing per lane scrambling and character replacement. It has
+been designed for interoperability with
+<a class="reference internal" href="#axi-jesd204-tx-supported-devices"><span class="std std-ref">Analog Devices JESD204B DAC converter products</span></a>.
+Implements the 64B/66B based link layer defined in the JESD204C standard.
+This includes handling of the SYSREF, per lane encoding of sync header,
+scrambling as per data multi-block CRC generation.</p>
+<p>The type of link layer is selectable during implementation phase through the
+<code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code> synthesis parameter.</p>
+<p>To form a complete JESD204 transmit logic device it has to be combined with a
+<a class="reference internal" href="../index.html#jesd204-physical-layer"><span class="std std-ref">PHY layer</span></a> and
+<a class="reference internal" href="../index.html#jesd204-transport-layer"><span class="std std-ref">transport layer</span></a> peripheral.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Backwards compatibility with JESD204B;</p></li>
+<li><p>64B/66B link layer defined in JESD204C;</p></li>
+<li><p>Subclass 0 and Subclass 1 support;</p></li>
+<li><p>Deterministic Latency (for Subclass 1 operation);</p></li>
+<li><p>Runtime re-configurability through memory-mapped register interface (AXI4);</p></li>
+<li><p>Interrupts for event notification;</p></li>
+<li><p>Diagnostics;</p></li>
+<li><p>Max Lanerate with 8B/10B mode: 15 Gbps;</p></li>
+<li><p>Max Lanerate with 64B/66B mode: 32 Gbps;</p></li>
+<li><p>Low Latency;</p></li>
+<li><p>Independent per lane enable/disable.</p></li>
+</ul>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_tx/axi_jesd204_tx.v">axi_jesd204_tx.v</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/axi_jesd204_tx/axi_jesd204_tx_ip.tcl">axi_jesd204_tx_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the
+peripheral.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<img alt="../../../_images/axi_jesd204_tx_204c.svg" class="align-center" src="../../../_images/axi_jesd204_tx_204c.svg" /></section>
+<section id="axi-jesd204-tx-synthesis-configuration-parameters">
+<h2>AXI JESD204 TX Synthesis Configuration Parameters<a class="headerlink" href="#axi-jesd204-tx-synthesis-configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Instance identification number.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code></td>
+<td class="description"><section>
+<p>Maximum number of lanes supported by the peripheral.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_LINKS</span></code></td>
+<td class="description"><section>
+<p>Maximum number of links supported by the peripheral.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code></td>
+<td class="description"><section>
+<p>Decoder selection of the link layer.
+ 1 - 8B/10B mode;
+ 2 - 64B/66B mode.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>64B66B (2), 8B10B (1)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_LINK_STATS</span></code></td>
+<td class="description"><p>Enable Link Stats.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Data path width in bytes. Set it 4 in case of 8B/10B, 8 in case of 64B/66B.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="jesd204-tx-synthesis-configuration-parameters">
+<h2>JESD204 TX Synthesis Configuration Parameters<a class="headerlink" href="#jesd204-tx-synthesis-configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code></td>
+<td class="description"><section>
+<p>Maximum number of lanes supported by the peripheral.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_LINKS</span></code></td>
+<td class="description"><section>
+<p>Maximum number of links supported by the peripheral.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_OUTPUT_PIPELINE</span></code></td>
+<td class="description"><p>Num Output Pipeline.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code></td>
+<td class="description"><section>
+<p>Decoder selection of the link layer.
+ 1 - 8B/10B mode;
+ 2 - 64B/66B mode.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>64B66B (2), 8B10B (1)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Data path width in bytes. Set it to 4 in case of 8B/10B, 8 in case of 64B/66B.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Data path width in bytes towards transport layer. Must be greater or equal to <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code>. Must be a power of 2 integer multiple of the F parameter.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_CHAR_REPLACE</span></code></td>
+<td class="description"><p>Enable Char Replace.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
+<td class="description"><section>
+<p>Set this parameter to 1 if the link clock and the device clocks have different frequencies, or if they have the same frequency but a different source. If set, synchronizing logic and a gearbox of ratio <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code>:<code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code> is inserted to do the rate conversion. If not set, <code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code> must match <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code>, the same clock must be connected to <code class="docutils literal notranslate"><span class="pre">clk</span></code> and <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> inputs.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SYSREF_IOB</span></code></td>
+<td class="description"><p>Place SYSREF in IOB.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="axi-jesd204-tx-signal-and-interface-pins">
+<h2>AXI JESD204 TX Signal and Interface Pins<a class="headerlink" href="#axi-jesd204-tx-signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="79d4b0ee87c9b8111344c22c1c9fa4af53564c47" name="79d4b0ee87c9b8111344c22c1c9fa4af53564c47" type="checkbox"></input><label for="79d4b0ee87c9b8111344c22c1c9fa4af53564c47"><div><p>s_axi</p>
+<section>
+<p>Memory mapped AXI-lite bus that provides access to modules register map.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8dd0e37c3342cc6f15a8b3b0a93017b62d593fbb" name="8dd0e37c3342cc6f15a8b3b0a93017b62d593fbb" type="checkbox"></input><label for="8dd0e37c3342cc6f15a8b3b0a93017b62d593fbb"><div><p>s_axi_aclk</p>
+<section>
+<p>All <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> signals and <code class="docutils literal notranslate"><span class="pre">irq</span></code> are synchronous to this clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="b28caf7b67401dd38f55ef904f0eb1b757935e95" name="b28caf7b67401dd38f55ef904f0eb1b757935e95" type="checkbox"></input><label for="b28caf7b67401dd38f55ef904f0eb1b757935e95"><div><p>s_axi_aresetn</p>
+<section>
+<p>Resets the internal state of the peripheral.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_cfg">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="f21b2089ccb775c6767a50be8e44586bfc9263e1" name="f21b2089ccb775c6767a50be8e44586bfc9263e1" type="checkbox"></input><label for="f21b2089ccb775c6767a50be8e44586bfc9263e1"><div><p>tx_cfg</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_lanes_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">lanes_disable</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_links_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">links_disable</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_octets_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">octets_per_multiframe</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_octets_per_frame</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">octets_per_frame</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_continuous_cgs</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">continuous_cgs</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_continuous_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">continuous_ilas</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_skip_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">skip_ilas</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_mframes_per_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">mframes_per_ilas</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_disable_char_replacement</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">disable_char_replacement</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_disable_scrambler</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">disable_scrambler</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_octets_per_multiframe</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_frame</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_octets_per_frame</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_beats_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_beats_per_multiframe</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_lmfc_offset</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_lmfc_offset</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_oneshot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_sysref_oneshot</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_sysref_disable</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_ilas_config">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="0c85a5367bcd08b776aa4a43fcdb4487a25fae80" name="0c85a5367bcd08b776aa4a43fcdb4487a25fae80" type="checkbox"></input><label for="0c85a5367bcd08b776aa4a43fcdb4487a25fae80"><div><p>tx_ilas_config</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_rd</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">rd</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_addr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">data</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_event">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8dcc299f09501d5ebe0efb1e5bff5edca5cb45eb" name="8dcc299f09501d5ebe0efb1e5bff5edca5cb45eb" type="checkbox"></input><label for="8dcc299f09501d5ebe0efb1e5bff5edca5cb45eb"><div><p>tx_event</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_alignment_error</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sysref_alignment_error</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_edge</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sysref_edge</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_status">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="fdcfd562594e3cff69afe4c6d06ee14786243e58" name="fdcfd562594e3cff69afe4c6d06ee14786243e58" type="checkbox"></input><label for="fdcfd562594e3cff69afe4c6d06ee14786243e58"><div><p>tx_status</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_status_state</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">state</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_status_sync</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params0</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params1</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params2</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_ctrl">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="3d58407ad66d45e28bc5cfcf120de286fb14e90d" name="3d58407ad66d45e28bc5cfcf120de286fb14e90d" type="checkbox"></input><label for="3d58407ad66d45e28bc5cfcf120de286fb14e90d"><div><p>tx_ctrl</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ctrl_manual_sync_request</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">manual_sync_request</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-irq">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="2910d8911d939eeaec47f282100295d0b1aabae5" name="2910d8911d939eeaec47f282100295d0b1aabae5" type="checkbox"></input><label for="2910d8911d939eeaec47f282100295d0b1aabae5"><div><p>irq</p>
+<section>
+<p>Interrupt output of the module. Is asserted when at least one of the modules interrupt is pending and enabled.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">irq</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERRUPT</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="2a9340c6d5a0af50f91f606f2d314afeee330d1e" name="2a9340c6d5a0af50f91f606f2d314afeee330d1e" type="checkbox"></input><label for="2a9340c6d5a0af50f91f606f2d314afeee330d1e"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_clk</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Bus <code class="docutils literal notranslate"><span class="pre">tx_status_tx_event_tx_ilas_config_tx_cfg_tx_ctrl</span></code> is synchronous to this clock domain.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_reset_ext</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_reset</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Bus <code class="docutils literal notranslate"><span class="pre">tx_status_tx_event_tx_ilas_config_tx_cfg_tx_ctrl</span></code> is synchronous to this reset signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_clk</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a> for the JESD204 interface. Its frequency must be link clock * <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> / <code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_reset</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Reset active high synchronous with the <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a>.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="jesd204-tx-signal-and-interface-pins">
+<h2>JESD204 TX Signal and Interface Pins<a class="headerlink" href="#jesd204-tx-signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
+<div><section id="bus-interface-tx_data">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="4f875eac3a04a87b4c81b913a0989460925048c1" name="4f875eac3a04a87b4c81b913a0989460925048c1" type="checkbox"></input><label for="4f875eac3a04a87b4c81b913a0989460925048c1"><div><p>tx_data</p>
+<section>
+<p>Transmit data.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_cfg">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="b6550407184480e7d67320419a24d85cb08bfd10" name="b6550407184480e7d67320419a24d85cb08bfd10" type="checkbox"></input><label for="b6550407184480e7d67320419a24d85cb08bfd10"><div><p>tx_cfg</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_lanes_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">lanes_disable</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_links_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">links_disable</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_octets_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">octets_per_multiframe</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_octets_per_frame</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">octets_per_frame</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_continuous_cgs</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">continuous_cgs</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_continuous_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">continuous_ilas</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_skip_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">skip_ilas</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_mframes_per_ilas</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">mframes_per_ilas</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_disable_char_replacement</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">disable_char_replacement</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_disable_scrambler</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">disable_scrambler</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_octets_per_multiframe</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_frame</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_octets_per_frame</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_beats_per_multiframe</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_beats_per_multiframe</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_lmfc_offset</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_lmfc_offset</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_oneshot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_sysref_oneshot</span></code></td>
+<td><p>in</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_disable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">device_sysref_disable</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_ilas_config">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="bfa887a6d3df77f6f20bf2e8edf787d048f027bb" name="bfa887a6d3df77f6f20bf2e8edf787d048f027bb" type="checkbox"></input><label for="bfa887a6d3df77f6f20bf2e8edf787d048f027bb"><div><p>tx_ilas_config</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_rd</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">rd</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_addr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">data</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_event">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="0a9ff4addd182a42d4ca974e4771d8abc045769a" name="0a9ff4addd182a42d4ca974e4771d8abc045769a" type="checkbox"></input><label for="0a9ff4addd182a42d4ca974e4771d8abc045769a"><div><p>tx_event</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_alignment_error</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sysref_alignment_error</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_edge</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sysref_edge</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_status">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="305222d002228e5545fa182d58472f376f41ab39" name="305222d002228e5545fa182d58472f376f41ab39" type="checkbox"></input><label for="305222d002228e5545fa182d58472f376f41ab39"><div><p>tx_status</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_state</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">state</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_sync</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params0</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params1</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">synth_params2</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_ctrl">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2" name="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2" type="checkbox"></input><label for="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2"><div><p>tx_ctrl</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_manual_sync_request</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">manual_sync_request</span></code></td>
+<td><p>in</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-tx_phy*">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="16344675ab72b01569a4ccc8418e106c54e679b2" name="16344675ab72b01569a4ccc8418e106c54e679b2" type="checkbox"></input><label for="16344675ab72b01569a4ccc8418e106c54e679b2"><div><p>tx_phy*</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 31)</span><span>.</span><section>
+<p>n-th lane of the JESD204 interface (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">NUM_LANES</span></code>).</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">phy_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">txdata</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">phy_charisk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">txcharisk</span></code></td>
+<td><p>out</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">phy_header</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">txheader</span></code></td>
+<td><p>out</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="e66484d502edeff9cfdd477247ba07cf605a4188" name="e66484d502edeff9cfdd477247ba07cf605a4188" type="checkbox"></input><label for="e66484d502edeff9cfdd477247ba07cf605a4188"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">clk</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Link clock</a> for the JESD204 interface. Must be line clock/40 for correct operation in 8B/10B mode, line clock/66 in 64B/66B mode. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this clock domain.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">reset</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Reset active high synchronous with the <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Link clock</a>. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this reset signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_clk</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Bus <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> is synchronous to this clock domain.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_reset</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Bus <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> is synchronous to this reset signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sysref</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>JESD204 SYSREF signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">lmfc_edge</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">lmfc_clk</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><section>
+<p>sync[m-1:0] is JESD204B SYNC~ (or SYNC_N) signal, available in 8B/10B mode. (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">NUM_LINKS</span></code>)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_eof</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_sof</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_somf</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_eomf</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-regmap">
+<section id="register-map-JESD204 TX (axi_jesd204_tx)">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="9a216ff4e02e2d497ed1fee065a2d239fd7e80a4" name="9a216ff4e02e2d497ed1fee065a2d239fd7e80a4" type="checkbox"></input><label for="9a216ff4e02e2d497ed1fee065a2d239fd7e80a4"><p>JESD204 TX (axi_jesd204_tx) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version of the peripheral. Follows semantic versioning. Current version 1.03.a.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x????????</span></code></td>
+<td class="description"><section>
+<p>Value of the ID configuration parameter.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register useful for debug.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x32303454</span></code></td>
+<td class="description"><section>
+<p>Peripheral identification (‘2’, ‘0’, ‘4’, ‘T’).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNTH_NUM_LANES</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNTH_NUM_LANES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x????????</span></code></td>
+<td class="description"><section>
+<p>Number of supported lanes.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNTH_DATA_PATH_WIDTH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000002</span></code></td>
+<td class="description"><section>
+<p>Data path width in octets at Transport Layer interface. Available starting from version 1.06.a;</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNTH_DATA_PATH_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000002</span></code></td>
+<td class="description"><section>
+<p>Log2 of internal data path width in octets. Represents the datapath width towards the physical interface.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNTH_REG_1</span></code></td>
+<td class="description bold"><section>
+<p>Core description register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:19]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[18]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ENABLE_CHAR_REPLACE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p>0</p>
+</section>
+</td>
+<td class="description"><section>
+<p>This bit reflects the presence of character replacement insertion logic for cases when scrambling is disabled. Available starting from version 1.06.a;</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p>ASYNC_CLK</p>
+</section>
+</td>
+<td class="description"><section>
+<p>This bit is set if link clock and device clock are connected to different sources. This is useful for supporting modes where datapath width is not integer multiple of F. Available starting from version 1.06.a;</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ENCODER</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="description"><section>
+<p>Encoder presence: 01 - 8B10B encoder \ 10 - 64B66B encoder</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NUM_LINKS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="description"><section>
+<p>Maximum supported links. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_ENABLE</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_ENABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Interrupt enable.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pending and enabled interrupts.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x88</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pending interrupts.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link disable.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="description"><section>
+<p>0 = Enable link, 1 = Disable link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link state.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXTERNAL_RESET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x?</span></code></td>
+<td class="description"><section>
+<p>0 = External reset de-asserted, 1 = External reset asserted.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="description"><section>
+<p>0 = Link enabled, 1 = Link disabled.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x32</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CLK_FREQ</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LINK_CLK_FREQ</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x?????????</span></code></td>
+<td class="description"><section>
+<p>Ratio of the link_clk frequency relative to the s_axi_aclk. Format is 16.16.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x33</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xcc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DEVICE_CLK_FREQ</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEVICE_CLK_FREQ</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x?????????</span></code></td>
+<td class="description"><section>
+<p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16. Available starting from version 1.06.a;</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYSREF_CONF</span></code></td>
+<td class="description bold"><section>
+<p>SYSREF configuration</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYSREF_ONESHOT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>In oneshot mode only the first occurrence of the SYSREF signal is used for alignment.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYSREF_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable/Disable SYSREF handling.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYSREF_LMFC_OFFSET</span></code></td>
+<td class="description bold"><section>
+<p>SYSREF LMFC offset</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:10]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYSREF_LMFC_OFFSET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Offset between SYSREF event and internal LMFC event in octets.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYSREF_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>SYSREF status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYSREF_ALIGNMENT_ERROR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Indicates that an external SYSREF event has been observed that was unaligned to a previously observed event.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYSREF_DETECTED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Indicates that an external SYSREF event has been observed.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x200</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANES_DISABLE</span></code></td>
+<td class="description bold"><section>
+<p>Enabled/Disabled lanes.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[n]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LANE_DISABLEn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable/Disable n-th lane (0 = enabled, 1 = disabled).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x210</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF0</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link configuration.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:19]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[18:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OCTETS_PER_FRAME</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Number of octets per frame - 1 (F).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:10]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OCTETS_PER_MULTIFRAME</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
+<td class="description"><section>
+<p>Number of octets per multi-frame - 1 (K x F). In 64B/66B mode represents the number of octets per extended multiblock.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x85</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x214</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF1</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link configuration.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CHAR_REPLACEMENT_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled). Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRAMBLER_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable/Disable user data descrambling (0 = enabled, 1 = disabled).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x86</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x218</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">MULTI_LINK_DISABLE</span></code></td>
+<td class="description bold"><section>
+<p>Enable/Disable links in case of a multi-link architecture. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[n]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LINK_DISABLEn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable/Disable n-th link (0 = enabled, 1 = disabled).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x87</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF4</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link configuration.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TPL_BEATS_PER_MULTIFRAME</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer. In 64B/66B mode represents the number of octets per extended multiblock. Available starting from version 1.06.a;</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x90</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x240</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF2</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link configuration. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SKIP_ILAS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Skip ILAS sequence during link startup.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CONTINUOUS_ILAS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Continuously transmit ILAS sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CONTINUOUS_CGS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Continuously transmit CGS sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x91</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x244</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF3</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link configuration. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MFRAMES_PER_ILAS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
+<td class="description"><section>
+<p>Number of multi-frames in the ILAS sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x92</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x248</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
+<td class="description bold"><section>
+<p>Manual synchronization request. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">W1S</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Trigger manual synchronization request.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xa0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x280</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>JESD204B link status.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[11:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STATUS_SYNC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="description"><section>
+<p>Raw state of the external SYNC~ signals. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STATUS_STATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>State of the 8B/10B link state machine. (0 = WAIT, 1 = CGS, 2 = ILAS, 3 = DATA); State of the 64B/66B link state machine. (0 = RESET, 3 = DATA)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x310</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS0</span></code></td>
+<td class="description bold"><section>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[27:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>BID (Bank ID) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>DID (Device ID) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc5</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x314</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS1</span></code></td>
+<td class="description bold"><section>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">K</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>K (Frames per multi-frame) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">F</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>F (Octets per frame) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>SCR (Scrambling enabled) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[14:13]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">L</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>L (Number of lanes) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>LID (Lane ID) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc6</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x318</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS2</span></code></td>
+<td class="description bold"><section>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">JESDV</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>JESDV (JESD204 version) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">S</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>S (Samples per frame) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:21]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SUBCLASSV</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>SUBCLASSV (JESD204B subclass) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>N’ (Total number of bits per sample) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:14]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>CS (Control bits per sample) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[13]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>N (Converter resolution) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">M</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>M (Number of converters) field of the ILAS config sequence - 1.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc7</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS3</span></code></td>
+<td class="description bold"><section>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FCHK</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>FCHK (Checksum) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">HD</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>HD (High-density) field of the ILAS config sequence.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">Reserved</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>CF (control words per frame) field of the ILAS config sequence</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+</div></section>
+<section id="theory-of-operation">
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
+<p>The JESD204B/C transmit peripheral consists of two main components. The register
+map and the link processor. Both components are fully asynchronous and are
+clocked by independent clocks. The register map is in the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> clock
+domain, while the link processor is in the <code class="docutils literal notranslate"><span class="pre">clk</span></code> and <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> clock
+domain.</p>
+<p>The register map is used to configure the operational parameters of the link
+processor as well as to query the current state of the link processor. The link
+processor itself is responsible for handling the JESD204 link layer protocol.</p>
+<section id="interfaces-and-signals">
+<h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Permalink to this heading">#</a></h3>
+<section id="register-map-configuration-interface">
+<h4>Register Map Configuration Interface<a class="headerlink" href="#register-map-configuration-interface" title="Permalink to this heading">#</a></h4>
+<p>The register map configuration interface can be accessed through the AXI4-Lite
+<code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> interface. The interface is synchronous to the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>. The
+<code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code> signal is used to reset the peripheral and should be asserted
+during system startup until the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> is active and stable.
+De-assertion of the reset signal should by synchronous to <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>.</p>
+</section>
+<section id="jesd204b-control-signals">
+<h4>JESD204B Control Signals<a class="headerlink" href="#jesd204b-control-signals" title="Permalink to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">sync</span></code> and <code class="docutils literal notranslate"><span class="pre">sysref</span></code> signals corresponds to the SYNC~ and SYSREF signals
+of the JESD204 specification. These are signals generated externally and need to
+be connected to the peripheral for correct operation.</p>
+<p>In 8B/10B link layer the <code class="docutils literal notranslate"><span class="pre">sysref</span></code> signal is optional and only required to
+achieve deterministic latency in subclass 1 mode operation. If the <code class="docutils literal notranslate"><span class="pre">sysref</span></code>
+signal is not connected software needs to configure the peripheral accordingly
+to indicate this. In 64B/66B link layer the <code class="docutils literal notranslate"><span class="pre">sysref</span></code> signal is mandatory.</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">sysref</span></code> signal is used, in order to ensure correct operation, it is
+important that setup and hold of the external signal relative to the
+<code class="docutils literal notranslate"><span class="pre">device_clk</span></code> signal are met. Otherwise deterministic latency can not be
+guaranteed.</p>
+</section>
+<section id="transceiver-interface-tx-phyn">
+<h4>Transceiver Interface (TX_PHYn)<a class="headerlink" href="#transceiver-interface-tx-phyn" title="Permalink to this heading">#</a></h4>
+<p>For each lane the peripheral has one corresponding <code class="docutils literal notranslate"><span class="pre">TX_PHY</span></code> interface. These
+interfaces provide the pre-processed physical layer data. The TX_PHY interfaces
+should be connected to the down-stream physical layer transceiver peripheral.</p>
+<p>The physical layer peripheral receiving data from these interfaces are
+responsible for performing the final 8b10b mapping as well as serializing the
+data and transmitting it on the physical CML differential high-speed serial
+lane.</p>
+</section>
+<section id="user-data-interface-tx-data">
+<span id="axi-jesd204-tx-user-data"></span><h4>User Data Interface (TX_DATA)<a class="headerlink" href="#user-data-interface-tx-data" title="Permalink to this heading">#</a></h4>
+<p>User data is accepted on the the AXI4-Stream <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> interface. The
+interface is a reduced AXI4-Stream interface and only features the TREADY flow
+control signal, but not the TVALID flow control signal. The behavior of the
+interface is as if the TVALID signal was always asserted. This means as soon as
+tx_ready is asserted a continuous stream of user data must be provided on
+tx_data.</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{signal:
+   [
+      ['TX_DATA',
+         { name: "device_clk", wave: 'P.........' },
+         { name: "tx_data",  wave: "x...======",
+         data: ["D0", "D1", "D2", "D3", "D4", "..."] },
+         { name: 'tx_ready', wave: '0...1.....' },
+      ]
+   ],
+   foot:
+   {text:
+      ['tspan',{dx:'-45'}, 'Link Inicialization', ['tspan', {dx:'60'},
+      'User Data Phase'],],
+   }
+}
+</script>
+</div>
+<p>After reset and during link initialization the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> signal is
+de-asserted. As soon as the <a class="reference internal" href="#axi-jesd204-tx-user-data-phase"><span class="std std-ref">User Data Phase</span></a> is
+entered the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> will be asserted to indicate that the peripheral is now
+accepting and processing the data from the <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code>
+signal stays asserted until the link is either deactivated or re-initialized.</p>
+<img alt="../../../_images/octets_mapping1.svg" class="align-right" src="../../../_images/octets_mapping1.svg" /><p>Typically the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> interface is connected to a JESD204B transport layer
+peripheral that provides framed and lane mapped data. The internal data path
+width of the peripheral is four, this means that four octets per lane are
+processed in parallel. When in the user data phase the peripheral expects to
+receive data for four octets for each lane in each beat.</p>
+<p>This means that <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> interface is <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> * 8 *
+<code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code> bits wide. With each block of consecutive <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> *
+8 bits corresponding to one lane. The lowest <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> * 8 bits
+correspond to the first lane, while the highest <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> * 8 bits
+correspond to the last lane.
+E.g. for 8B/10B mode where DATA_PATH_WIDTH=4. Each lane specific 32-bit block
+corresponds to four octets each 8 bits wide. The temporal ordering of the
+octets is from LSB to MSB, this means the octet placed in the lowest 8 bits is
+transmitted first, the octet placed in the highest 8 bits is transmitted last.</p>
+<p>Data corresponding to lanes that have been disabled are ignored and their value
+is don’t care.</p>
+</section>
+</section>
+<section id="configuration-interface">
+<h3>Configuration Interface<a class="headerlink" href="#configuration-interface" title="Permalink to this heading">#</a></h3>
+<p>The peripheral features a register map configuration interface that can be
+accessed through the AXI4-Lite <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> port. The register map can be used to
+configure the peripherals operational parameters, query the current status of
+the device and query the features supported by the device.</p>
+<section id="peripheral-identification-and-hdl-synthesis-settings">
+<h4>Peripheral Identification and HDL Synthesis Settings<a class="headerlink" href="#peripheral-identification-and-hdl-synthesis-settings" title="Permalink to this heading">#</a></h4>
+<p>The peripheral contains multiple registers that allow the identification of the
+peripheral as well as the discovery of features that were configured at HDL
+synthesis time. Apart from the <code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code> register all registers in this
+section are read-only and write to them will be ignored.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VERSION</span></code> (<code class="docutils literal notranslate"><span class="pre">0x000</span></code>) register contains the version of the peripheral. The
+version determines the register map layout and general features supported by the
+peripheral. The version number follows <a class="reference external" href="http://semver.org/">semantic versioning</a>.
+Increments in the major number indicate backward incompatible changes,
+increments in the minor number indicate backward compatible changes, patch
+letter increments indicate a bug fix.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code> (<code class="docutils literal notranslate"><span class="pre">0x004</span></code>) register contains the value of the <code class="docutils literal notranslate"><span class="pre">ID</span></code> HDL
+configuration parameter that was set during synthesis. Its primary function is
+to allow to distinguish between multiple instances of the peripheral in the same
+design.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code> (<code class="docutils literal notranslate"><span class="pre">0x008</span></code>) register is a general purpose 32-bit register that
+can be set to an arbitrary values. Reading the register will yield the value
+previously written (The value will be cleared when the peripheral is reset). Its
+content does not affect the operation of the peripheral. It can be used by
+software to test whether the register map is accessible or store custom
+peripheral associated data.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code> (<code class="docutils literal notranslate"><span class="pre">0x00c</span></code>) register contains the value of <code class="docutils literal notranslate"><span class="pre">&quot;204T&quot;</span></code>.
+This value is unique to this type of peripheral and can be used to ensure that
+the peripheral exists at the expected location in the memory mapped IO register
+space.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYNTH_NUM_LANES</span></code> (<code class="docutils literal notranslate"><span class="pre">0x010</span></code>) register contains the value of the
+<code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code> HDL configuration parameter that was set during synthesis. It
+corresponds to the maximum of lanes supported by the peripheral. Possible values
+are between <code class="docutils literal notranslate"><span class="pre">1</span></code> and <code class="docutils literal notranslate"><span class="pre">32</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYNTH_DATA_PATH_WIDTH</span></code> (<code class="docutils literal notranslate"><span class="pre">0x014</span></code>) register contains the value of the
+internal data path width per lane in octets. This is how many octets are
+processed in parallel on each lane and affects the restrictions of possible
+values for certain runtime configuration registers. The value is encoded as the
+log2() of the data path width. Possible values are:</p>
+<ol class="arabic simple">
+<li><p>Internal data path width is 2;</p></li>
+<li><p>Internal data path width is 4;</p></li>
+<li><p>Internal data path width is 8.</p></li>
+</ol>
+</section>
+<section id="interrupt-handling">
+<h4>Interrupt Handling<a class="headerlink" href="#interrupt-handling" title="Permalink to this heading">#</a></h4>
+<p>Interrupt processing is handled by three closely related registers. All three
+registers follow the same layout, each bit in the register corresponds to one
+particular interrupt.</p>
+<p>When an interrupt event occurs it is recorded in the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x088</span></code>)
+register. For a recorded interrupt event the corresponding bit is set to 1. If
+an interrupt event occurs while the bit is already set to 1 it will stay set to
+1.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">IRQ_ENABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x080</span></code>) register controls how recorded interrupt events
+propagate. An interrupt is considered to be enabled if the corresponding bit in
+the <code class="docutils literal notranslate"><span class="pre">IRQ_ENABLE</span></code> register is set to 1, it is considered to be disabled if the
+bit is set to 0.</p>
+<p>Disabling an interrupt will not prevent it from being recorded, but only its
+propagation. This means if an interrupt event was previously recorded while the
+interrupt was disabled and the interrupt is being enabled the interrupt event
+will then propagate.</p>
+<p>An interrupt event that has been recorded and is enabled propagates to the
+<code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> (<code class="docutils literal notranslate"><span class="pre">0x084</span></code>) register. The corresponding bit for such an
+interrupt will read as 1. Disabled or interrupts for which no events have been
+recorded will read as 0. Also if at least one interrupt has been recorded and is
+enabled the external <code class="docutils literal notranslate"><span class="pre">irq</span></code> signal will be asserted to signal the IRQ event to
+the upstream IRQ controller.</p>
+<p>A recorded interrupt event can be cleared (or acknowledged) by writing a 1 to
+the corresponding bit to either the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> or <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register.
+It is possible to clear multiple interrupt events at the same time by setting
+multiple bits in a single write operation.</p>
+<p>For more details regarding interrupt operation see the
+<a class="reference internal" href="#axi-jesd204-tx-interrupts"><span class="std std-ref">interrupts section</span></a> of this document.</p>
+</section>
+<section id="link-control">
+<h4>Link Control<a class="headerlink" href="#link-control" title="Permalink to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x0c0</span></code>) register is used to control the link state and
+switch between enabled and disabled. While the link is disabled its state
+machine will remain in reset and it will not react to any external event like
+the <code class="docutils literal notranslate"><span class="pre">SYSREF</span></code> or <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signals.</p>
+<p>Writing a 0 to the <code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code> register will enable the link. While the
+link state is changing from disabled to enabled it will go through a short
+initialization procedure, which will take a few clock cycles. To check whether
+the initialization procedure has completed and the link is fully operational the
+<code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x0c4</span></code>) register can be checked. This register will contain a
+0 when the link is fully enabled and will contain a 1 while it is disabled or
+going through the initialization procedure.</p>
+<p>Writing a 1 to the <code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code> register will immediately disable the link.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">EXTERNAL_RESET</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit in the <code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code> register indicates
+whether the external link reset signal is asserted (<code class="docutils literal notranslate"><span class="pre">1</span></code>) or de-asserted
+(<code class="docutils literal notranslate"><span class="pre">0</span></code>). When the external link reset is asserted the link is disabled
+regardless of the setting of <code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code>. The external link reset is
+controlled by the fabric and might be asserted if the link clock is not stable
+yet.</p>
+</section>
+<section id="multi-link-control">
+<h4>Multi-link Control<a class="headerlink" href="#multi-link-control" title="Permalink to this heading">#</a></h4>
+<p>A multi-link is a link where multiple converter devices are connected to a
+single logic device (FPGA). All links involved in a multi-link are synchronous
+and established at the same time. For an 8B/10B TX link, this means that the
+FPGA receives multiple SYNC signals, one for each link.</p>
+<p>For a 8B/10B link the <code class="docutils literal notranslate"><span class="pre">MULTI_LINK_DISABLE</span></code> register allows activating or
+deactivating each <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> lines independently. This is useful when depending
+on the use case profile some converter devices are supposed to be disabled.</p>
+</section>
+<section id="link-configuration">
+<h4>Link Configuration<a class="headerlink" href="#link-configuration" title="Permalink to this heading">#</a></h4>
+<p>The link configuration registers control certain aspects of the runtime behavior
+of the peripheral. Since the JESD204 standard does now allow changes to link
+configuration while the link is active the link configuration registers can only
+be modified while the link is disabled. As soon as it is enabled the
+configuration registers turn read-only and any writes to them will be ignored.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LANES_DISABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">0x200</span></code>) register allows to disable individual lanes.
+Each bit in the register corresponds to a particular lane and indicates whether
+that lane is enabled or disabled. Bit 0 corresponds to the first lane, bit 1 to
+the second lane and so on. A value of 0 for a specific bit means the
+corresponding lane is enabled, a value of 1 means the lane is disabled. A
+disabled lane will not transmit any data when the link is otherwise active. By
+default, all lanes are enabled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_CONF0</span></code> register configures the octets-per-frame and
+frames-per-multi-frame settings of the link. The <code class="docutils literal notranslate"><span class="pre">OCTETS_PER_FRAME</span></code>
+(<code class="docutils literal notranslate"><span class="pre">[18:16]</span></code>) field should be set to the number of octets-per-frame minus 1 (F -
+1). The <code class="docutils literal notranslate"><span class="pre">OCTETS_PER_MULTIFRAME</span></code> (<code class="docutils literal notranslate"><span class="pre">[9:0]</span></code>) field should be set to the number
+of octets-per-frame multiplied by the number of frames-per-multi-frame minus 1
+(FxK - 1). For correct operation FxK must be a multiple of <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code>.
+In 64B/66B mode this field matches and also represents the number of octets per
+extended multiblock (Ex32x8 - 1).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_CONF1</span></code> register controls the optional link level processing stages.
+The <code class="docutils literal notranslate"><span class="pre">SCRAMBLER_DISABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit controls whether scrambling of the
+transmitted user data is enabled or disabled. A value of 0 enables scrambling
+and a value of 1 disables it. In 64B/66B mode scrambling must be always enabled.
+The <code class="docutils literal notranslate"><span class="pre">CHAR_REPLACEMENT_DISABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit controls whether alignment
+character replacement is performed or not. A value of 0 enables character
+replacement and a value of 1 disables it. For correct operation, character
+replacement must be disabled when scrambling is disabled otherwise undefined
+behavior might occur.</p>
+<p>Both the transmitter as well as receiver device on the JESD204 link need to be
+configured with the same settings for scrambling/descrambling and character
+replacement for correct operation.</p>
+<p>It is recommended to leave both scrambling as well as alignment character
+replacement enabled during normal operation and only disable it for debugging or
+testing purposes.</p>
+<p>Character replacement is used only in 8B/10B links and completely disregarded in
+64B/66B mode.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_CONF2</span></code> (<code class="docutils literal notranslate"><span class="pre">0x240</span></code>) register contains configuration data that affects
+the transitions of the <a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">link state machine</span></a>. If the
+<code class="docutils literal notranslate"><span class="pre">CONTINUOUS_CGS</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit is set the state machine will remain in the CGS
+phase indefinitely and send repeated <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>.
+If the <code class="docutils literal notranslate"><span class="pre">CONTINUOUS_ILAS</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit is set the state machine will remain
+in the ILAS phase indefinitely and send repeated ILAS sequences. If the
+<code class="docutils literal notranslate"><span class="pre">SKIP_ILAS</span></code> (<code class="docutils literal notranslate"><span class="pre">[2]</span></code>) bit is set the state machine will directly transition
+to the DATA phase from the CGS phase without going through the ILAS phase.
+The <code class="docutils literal notranslate"><span class="pre">LINK_CONFIG2</span></code> register is used only in 8B/10B links and completely
+disregarded in 64B/66B mode.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_CONF3</span></code> (<code class="docutils literal notranslate"><span class="pre">0x244</span></code>) register configures the duration of the ILAS
+sequence in number of multi-frames. Its value is equal to the number of
+multi-frames minus one. In the current iteration of the peripheral, this
+register is read-only and the ILAS will always last for four multi-frames. The
+<code class="docutils literal notranslate"><span class="pre">LINK_CONFIG3</span></code> register is used only in 8B/10B links and completely
+disregarded in 64B/66B mode.</p>
+</section>
+<section id="ilas-configuration-data">
+<h4>ILAS Configuration Data<a class="headerlink" href="#ilas-configuration-data" title="Permalink to this heading">#</a></h4>
+<p>For 8B/10B link layer the ILAS configuration data registers contain the
+configuration data that is sent during the ILAS phase. Similar to the link
+configuration registers, the ILAS configuration data registers can only be
+modified while the link is disabled and turn read-only as soon as it is enabled.</p>
+<p>For each lane there is a set of four registers (<code class="docutils literal notranslate"><span class="pre">LANEn_ILAS0</span></code>,
+<code class="docutils literal notranslate"><span class="pre">LANEn_ILAS1</span></code>, <code class="docutils literal notranslate"><span class="pre">LANEn_ILAS2</span></code>, <code class="docutils literal notranslate"><span class="pre">LANEn_ILAS3</span></code>) that allow access to the 14
+configuration data octets. Aside from the <code class="docutils literal notranslate"><span class="pre">LID</span></code> and <code class="docutils literal notranslate"><span class="pre">FCHK</span></code> fields all fields
+for each of the lanes map to the same internal storage. This means only the
+<code class="docutils literal notranslate"><span class="pre">LID</span></code> and <code class="docutils literal notranslate"><span class="pre">FCHK</span></code> fields can be configured with per-lane configuration data,
+all other fields must be set to the same value for all lanes.</p>
+</section>
+<section id="sysref-handling">
+<h4>SYSREF Handling<a class="headerlink" href="#sysref-handling" title="Permalink to this heading">#</a></h4>
+<p>The external SYSREF signal is used to align the internal local multiframe clocks
+(LMFC)/ local-multiblock-clock (LEMC) between multiple devices on the same link.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYSREF_CONF</span></code> (<code class="docutils literal notranslate"><span class="pre">0x100</span></code>) register controls the behavior of the SYSREF
+capture circuitry. Setting the <code class="docutils literal notranslate"><span class="pre">SYSREF_DISABLE</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit to 1 disables
+the SYSREF handling. All external SYSREF events are ignored and the LMFC/LEMC is
+generated internally. For Subclass 1 operation SYSREF handling should be enabled
+and for Subclass 0 operation it should be disabled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYSREF_LMFC_OFFSET</span></code> (<code class="docutils literal notranslate"><span class="pre">0x104</span></code>) register allows modifying the offset
+between the SYSREF rising edge and the rising edge of the LMFC/LEMC. Must be a
+multiple of <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code>.</p>
+<p>For optimal operation, it is recommended that all device on a JESD204 link
+should be configured in a way so that the total offset between</p>
+<p>The value of the <code class="docutils literal notranslate"><span class="pre">SYSREF_LMFC_OFFSET</span></code> register must be set to a value smaller
+than the configured number of octets-per-multiframe (<code class="docutils literal notranslate"><span class="pre">OCTETS_PER_MULTIFRAME</span></code>),
+otherwise undefined behavior might occur.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYSREF_STATUS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x108</span></code>) register allows monitoring the status of the
+SYSREF signals. <code class="docutils literal notranslate"><span class="pre">SYSREF_DETECTED</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit indicates that the peripheral
+as observed a SYSREF event. The <code class="docutils literal notranslate"><span class="pre">SYSREF_ALIGNMENT_ERROR</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit
+indicates that a SYSREF event has been observed which was unaligned, in regards
+to the LMFC period, to a previously recorded SYSREF event.</p>
+<p>All bits in the <code class="docutils literal notranslate"><span class="pre">SYSREF_STATUS</span></code> register are write-to-clear. All bits will
+also be cleared when the link is disabled.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">SYSREF_STATUS</span></code> register will not record any events if SYSREF
+operation is disabled or the JESD204 link is disabled.</p>
+</section>
+<section id="link-status">
+<h4>Link Status<a class="headerlink" href="#link-status" title="Permalink to this heading">#</a></h4>
+<p>All link status registers are read-only. While the link is disabled some of the
+link status registers might contain bogus values. Their content should be
+ignored until the link is fully enabled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">STATUS_STATE</span></code> (<code class="docutils literal notranslate"><span class="pre">[1:0]</span></code>) field of the <code class="docutils literal notranslate"><span class="pre">LINK_STATUS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x280</span></code>)
+register indicates the state of the
+<a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">8B/10B link state machine</span></a>
+or 64B/66B link state machine depending on the selected encoder. Possible
+values are:</p>
+<p>Possible values for a 8B/10B link are:</p>
+<ul class="simple">
+<li><p>0: WAIT phase;</p></li>
+<li><p>1: CGS phase;</p></li>
+<li><p>2: ILAS phase;</p></li>
+<li><p>3: DATA phase.</p></li>
+</ul>
+<p>Possible values for a 64B/66B link are:</p>
+<ul class="simple">
+<li><p>0: WAIT phase;</p></li>
+<li><p>3: DATA phase.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">STATUS_SYNC</span></code> (<code class="docutils literal notranslate"><span class="pre">[4]</span></code>) field represents the raw state of the external
+SYNC~ and can be used to monitor whether the JESD204B converter device has
+requested link synchronization. This is available only for 8B/10B links.</p>
+</section>
+<section id="manual-synchronization-request">
+<h4>Manual Synchronization Request<a class="headerlink" href="#manual-synchronization-request" title="Permalink to this heading">#</a></h4>
+<p>For 8B/10B links the <code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code> (<code class="docutils literal notranslate"><span class="pre">0x248</span></code>) register can be used to
+transition the link state from the WAIT phase to the CGS phase in the absence of
+an external synchronization request. This is useful for test cases where the
+peripheral is connected to signal analyzer instead of a JESD204B receiver
+device.</p>
+<p>Writing a 1 to this register will trigger a manual synchronization request.
+Writing the register while the link is disabled or writing a 0 to the register
+has no effect. The register is self-clearing and reading it will always return
+0.</p>
+<p>This feature is useful if the <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> is stuck high from some reason. Setting
+the <code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code> bit will bring out the Tx link peripheral from
+<code class="docutils literal notranslate"><span class="pre">CGS</span></code> and will continue with sending <code class="docutils literal notranslate"><span class="pre">ILAS</span></code> and <code class="docutils literal notranslate"><span class="pre">DATA</span></code> information. After
+this, the <code class="docutils literal notranslate"><span class="pre">SYNC_STATUS</span></code> bit would read high, and <code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code> would be
+<code class="docutils literal notranslate"><span class="pre">DATA</span></code>.</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> is stuck low, writing the <code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code> would not do
+too much, the link would stay in <code class="docutils literal notranslate"><span class="pre">CGS</span></code> and wait the de-assertion of <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code>
+which won’t happen. In this case the <code class="docutils literal notranslate"><span class="pre">SYNC_STATUS</span></code> would stay low and
+<code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code>would be <code class="docutils literal notranslate"><span class="pre">CGS</span></code>.</p>
+</section>
+<section id="clock-monitor">
+<h4>Clock Monitor<a class="headerlink" href="#clock-monitor" title="Permalink to this heading">#</a></h4>
+<p>The <code class="docutils literal notranslate"><span class="pre">LINK_CLK_FREQ</span></code> (<code class="docutils literal notranslate"><span class="pre">0x0c8</span></code>) register allows to determine the clock rate of
+the link clock (<code class="docutils literal notranslate"><span class="pre">clk</span></code>) relative to the AXI interface clock (<code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>).
+This can be used to verify that the link clock is running at the expected rate.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DEVICE_CLK_FREQ</span></code> (<code class="docutils literal notranslate"><span class="pre">0x0cc</span></code>) register allows to determine the clock rate
+of the device clock (<code class="docutils literal notranslate"><span class="pre">device_clk</span></code>) relative to the AXI interface clock
+(<code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>). This can be used to verify that the device clock is running at
+the expected rate.</p>
+<p>The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
+indicates that the link clock is currently not active.</p>
+</section>
+</section>
+<section id="interrupts">
+<span id="axi-jesd204-tx-interrupts"></span><h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<p>The core does not generate interrupts.</p>
+</section>
+</section>
+<section id="b-10b-link">
+<h2>8B/10B Link<a class="headerlink" href="#b-10b-link" title="Permalink to this heading">#</a></h2>
+<img alt="../../../_images/axi_jesd204_tx_204c_8b10b.svg" class="align-center" src="../../../_images/axi_jesd204_tx_204c_8b10b.svg" /><section id="b-10b-link-state-machine">
+<span id="axi-jesd204-tx-8b-10b-link-state-machine"></span><h3>8B/10B Link State Machine<a class="headerlink" href="#b-10b-link-state-machine" title="Permalink to this heading">#</a></h3>
+<img alt="../../../_images/jesd204_tx_state_machine.svg" class="align-right" src="../../../_images/jesd204_tx_state_machine.svg" /><p>The peripheral can be in one of four main operating phases: WAIT, CGS, ILAS or
+DATA. Upon reset the peripheral starts in the WAIT phase. The CGS and ILAS
+phases are used during the initialization of the JESD204B link. The DATA phase
+is used during normal operation when user data is transmitted across the
+JESD204B link.</p>
+<section id="wait-phase-wait">
+<h4>Wait Phase (WAIT)<a class="headerlink" href="#wait-phase-wait" title="Permalink to this heading">#</a></h4>
+<p>The WAIT phase is the default state entered during reset. While disabled the
+peripheral will stay in the WAIT phase. When enabled, the peripheral will stay
+in the WAIT phase until a synchronization request is received.</p>
+<p>A synchronization request can either be generated manually through the register
+map configuration interface or by one of the JESD204B receivers by asserting the
+<code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal. Once a synchronization request is received the peripheral
+transitions to the CGS phase.</p>
+<p>During the WAIT phase the peripheral will continuously transmit
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>
+on each of the <code class="docutils literal notranslate"><span class="pre">TX_PHYn</span></code> interfaces.</p>
+<p>If at any point the peripheral is disabled, it will automatically transition
+back to the WAIT state.</p>
+<p>Lanes that have been disabled in the register map configuration interface, will
+behave as if the link was in the WAIT state regardless of the actual state.</p>
+</section>
+<section id="code-group-synchronization-phase-cgs">
+<h4>Code Group Synchronization Phase (CGS)<a class="headerlink" href="#code-group-synchronization-phase-cgs" title="Permalink to this heading">#</a></h4>
+<p>During the CGS phase the peripheral will continuously transmit
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>
+on each of the <code class="docutils literal notranslate"><span class="pre">TX_PHYn</span></code> interfaces.</p>
+<p>The peripheral will stay in the CGS phase until all of following conditions are
+satisfied:</p>
+<ul class="simple">
+<li><p>The synchronization request is de-asserted;</p></li>
+<li><p>The CGS phase has lasted for at least the configured minimum CGS duration (1
+frame + 9 octets by default);</p></li>
+<li><p>The end of a multi-frame is reached (This means the next phase will start at
+the beginning of a multi-frame);</p></li>
+<li><p>The SYSREF signal has been captured and the LMFC is properly aligned.</p></li>
+</ul>
+<p>If the peripheral is configured for continuous CGS operation it will stay in the
+CGS phase indefinitely regardless of whether the above conditions are met or
+not.</p>
+<p>By default the peripheral will transition to the ILAS phase at the end of the
+CGS phase. If the core is configured to skip the ILAS phase it will instead
+directly transition to the DATA phase.</p>
+</section>
+<section id="initial-lane-alignment-sequence-phase-ilas">
+<h4>Initial Lane Alignment Sequence Phase (ILAS)<a class="headerlink" href="#initial-lane-alignment-sequence-phase-ilas" title="Permalink to this heading">#</a></h4>
+<p>During the ILAS phase the peripheral transmits the initial lane alignment
+sequence. The transmitted ILAS consists of four multi-frames. The first octet of
+each multi-frame is the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/R/ control character</a>
+and the last octet of each multi-frame is the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/A/ control character</a>.</p>
+<p>During the second multi-frame the link configuration data is transmitted from
+the 3rd to 16th octet. The second octet of the second multi-frame is the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/Q/ control character</a>
+to indicate that this multi-frame carries configuration data. The ILAS
+configuration data sequence can be programmed through the register map
+configuration interface.</p>
+<p>All other octets of the ILAS sequence will contain the numerical value
+corresponding to the position of the octet in the ILAS sequence (E.g. the fifth
+octet of the first multi-frame contains the value 4).</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+   signal:
+   [
+      { name: "ILAS",  wave: "x35x|.54378x|x5435x|.5435x|x54", data: ["/R/",
+      "D", "D", "/A/", "/R/", "/Q/", "C", "D", "/A/", "/R/", "D", "D",
+      "/A/", "/R/", "D", "D", "A"] },
+      { name: "LMFC", wave: 'pH..|l..H...|l..H..|l..H..|l..' },
+   ],
+   config: { skin: 'narrow' }
+}
+</script>
+</div>
+<p>By default the ILAS is transmitted for a duration of 4 multi-frames. After the
+last ILAS multi-frame the peripheral switches to the DATA phase.</p>
+<p>If the peripheral is configured for continuous ILAS operation it will instead
+remain in the ILAS phase indefinitely. In continuous ILAS mode the peripheral
+will transition back to the first multi-frame of the ILAS sequence after the
+last multi-frame has been transmitted.</p>
+<p>In accordance with the JESD204B standard the data transmitted during the ILAS
+phase is not scrambled regardless of whether scrambling is enabled or not.</p>
+</section>
+<section id="user-data-phase-data">
+<span id="axi-jesd204-tx-user-data-phase"></span><h4>User Data Phase (DATA)<a class="headerlink" href="#user-data-phase-data" title="Permalink to this heading">#</a></h4>
+<p>The DATA phase is the main operating mode of the peripheral. In this phase it
+will receive transport layer data at the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> port, split it onto the
+corresponding lanes and perform per-lane processing of the data according to the
+peripherals configuration. When the peripheral enters the DATA phase the
+<code class="docutils literal notranslate"><span class="pre">ready</span></code> signal of the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> will be asserted to indicate that transport
+layer data is now accepted.</p>
+<p>By default the data transmitted on each lane will be scrambled. Scrambling can
+optionally be disabled via the register map configuration interface. Scrambling
+is enabled or disabled for all lanes equally.</p>
+<p>Scrambling reduces data-dependent effects, which can affect both the analog
+performance of the data converter as well as the bit-error rate of JESD204B
+serial link, therefore it is highly recommended to enable scrambling.</p>
+<p>The peripheral also performs per-lane alignment character replacement. Alignment
+character replacement will replace under certain predictable conditions (i.e.
+the receiver can recover the replaced character) the last octet in a frame or
+multi-frame. Replaced characters at the end of a frame, that is also the end of
+a multi-frame, are replaced by the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/A/ character</a>.
+Replaced characters at the end of a frame, that is not the end of a
+multi-frame, are replaced by the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/F/ character</a>.
+Alignment characters can be used by the receiver to ensure proper frame
+and lane alignment.</p>
+<p>Alignment character replacement can optionally be disabled via the register map
+configuration interface. Alignment character replacement is enabled or disabled
+for all lanes equally. Alignment character replacement is only available when
+scrambling is enabled and must be disabled when scrambling is disabled,
+otherwise undefined behavior might occur.</p>
+<p>Data on the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> port corresponding to a disabled lane is ignored.</p>
+</section>
+</section>
+<section id="b-10b-multi-endpoint-tx-link-establishment">
+<h3>8B/10B Multi-endpoint TX link establishment<a class="headerlink" href="#b-10b-multi-endpoint-tx-link-establishment" title="Permalink to this heading">#</a></h3>
+<p>In a multi-endpoint configuration one link transmit peripheral connects to
+several endpoints/converter devices. In such cases the link is established
+only when all enabled endpoints reach the DATA phase. For that all endpoints
+must pass through CGS and ILAS stages. Depending on the software
+implementation that controls the converter devices the endpoints can be
+enabled at different moments. The link transmit peripheral will send CGS
+characters until all enabled endpoints succeeded character alignment and
+signalize that through the de-assertion of <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal.
+In the below example we have a multi-point link of four endpoints
+(<code class="docutils literal notranslate"><span class="pre">NUM_LINKS</span></code> = 4):</p>
+<img alt="../../../_images/quadmxfe_linkbringup_204b_dac.svg" class="align-center" src="../../../_images/quadmxfe_linkbringup_204b_dac.svg" /><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The physical layer is not depicted on purpose. JRXn represents the link
+layer counterpart in the converter device/endpoint <em>n</em>.</p>
+</div>
+<p>The steps of the link bring-up are presented below:</p>
+<ul class="simple">
+<li><p><strong>1</strong> - Link transmit peripheral is enabled, will start to send <code class="docutils literal notranslate"><span class="pre">CGS</span></code>
+characters on all lanes regardless of the state of the <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal;</p></li>
+<li><p><strong>2,3,4,5</strong> - JESD Receive block of ADC enabled, its corresponding <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code>
+pin is pulled low. The timing depends on the software implementation that
+controls the ADC;</p></li>
+<li><p><strong>6</strong> - In Subclass 1 (SC1) <code class="docutils literal notranslate"><span class="pre">SYSREF</span></code> is captured and <code class="docutils literal notranslate"><span class="pre">LMFC</span></code> in the
+FPGA and converter device is adjusted;</p></li>
+<li><p><strong>7</strong> - Once the <code class="docutils literal notranslate"><span class="pre">CGS</span></code> characters are received correctly, on the next
+Frame clock boundary in SC0 or <code class="docutils literal notranslate"><span class="pre">LMFC</span></code> boundary in SC1 the <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> is
+de-asserted;</p></li>
+<li><p><strong>8</strong> - Once all enabled endpoints (not masked by <code class="docutils literal notranslate"><span class="pre">MULTI_LINK_DISABLE</span></code>)
+de-assert the <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal, on the next Frame clock boundary for SC0 or
+the next <code class="docutils literal notranslate"><span class="pre">LMFC</span></code> boundary for SC1, the transmit peripheral will start
+sending the <code class="docutils literal notranslate"><span class="pre">ILAS</span></code> sequence, then <code class="docutils literal notranslate"><span class="pre">MFRAMES_PER_ILAS</span></code> (typically 4)
+<code class="docutils literal notranslate"><span class="pre">LMFC</span></code> periods later the actual <code class="docutils literal notranslate"><span class="pre">DATA</span></code>. <strong>In SC1 if</strong> <code class="docutils literal notranslate"><span class="pre">SYSREF</span></code> <strong>is not
+captured the link transmit peripheral will stay in CGS state.</strong></p></li>
+</ul>
+</section>
+<section id="diagnostics">
+<h3>Diagnostics<a class="headerlink" href="#diagnostics" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_troubleshooting">Troubleshooting JESD204B Tx links</a></p>
+</section>
+</section>
+<section id="b-66b-link">
+<h2>64B/66B Link<a class="headerlink" href="#b-66b-link" title="Permalink to this heading">#</a></h2>
+<img alt="../../../_images/axi_jesd204_tx_204c_64b66b.svg" class="align-center" src="../../../_images/axi_jesd204_tx_204c_64b66b.svg" /><p>The 64-bit wide datapath of the link layer is fairly simple, the only mandatory
+part of the 64B66B link layer datapath is the scrambler. This must be active
+during the operation of the link, however for debug purposes can be bypasses
+with a control register <code class="docutils literal notranslate"><span class="pre">SCRAMBLER_DISABLE</span></code>.</p>
+<p>The data is accepted from the upstream transport layer core once the local
+extended multiblock clock (LEMC) is adjusted to the captured SYSREF signal. Once
+this happened the data will be accepted without interruption until the link is
+disabled since there is no back-pressure from the physical layer.</p>
+<p>If the core does not receives at least one SYSREF pulse it will not pass any
+data from transport layer to physical layer.</p>
+<p>For each multiblock sent on the data interface a CRC is calculated which is sent
+on the 2-bit sync header stream during the next multiblock period. Beside the
+CRC the sync header stream contains synchronization information to mark the
+boundary of the multiblock and extended multiblocks.</p>
+</section>
+<section id="dual-clock-operation">
+<h2>Dual clock operation<a class="headerlink" href="#dual-clock-operation" title="Permalink to this heading">#</a></h2>
+<p>In case <code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code> parameter is set, a gearbox with 4:N (204B) or 8:N (204C)
+ratio is enabled in the link layer peripherals, where N depends on the F
+parameter of the link. The goal of the gearbox is to have at the transport
+layer interface a data width that contains an integer number of frames per
+every device clock cycle (each beat) so an integer number of samples can be
+delivered/consumed to/from the application layer aligned to SYSREF ensuring
+deterministic latency in modes where N’=12 or F!=1,2,4.</p>
+<img alt="../../../_images/dual_clock_operation1.svg" class="align-center" src="../../../_images/dual_clock_operation1.svg" /><p>The gearbox ratio corresponds with the ratio of the link layer interface data
+width towards physical layer and transport layer in octets. The interface width
+towards the physical layer in 8B/10B (204B) mode depends on the DATA_PATH_WIDTH
+synthesis parameter, and can be either 4 octets (default) or 8 octets. In 204B
+mode the util_adxcvr supports only data width of 4 octets. In 64b66b (aka 204C)
+mode the data width towards the physical interface is always 8 octets.</p>
+<p>The data path width towards the transport layer is defined by the
+TPL_DATA_PATH_WIDTH synthesis parameter.</p>
+<p>The following rules apply:</p>
+<ul class="simple">
+<li><p>TPL_DATA_PATH_WIDTH &gt;= DATA_PATH_WIDTH;</p></li>
+<li><p>TPL_DATA_PATH_WIDTH = m x F; where m is a positive integer, power of 2.</p></li>
+</ul>
+<p>The link clock and device clock ratio should be the inverse of the
+DATA_PATH_WIDTH : TPL_DATA_PATH_WIDTH ratio.</p>
+<p>In this context the link clock will be lane rate/40 or lane rate/80 for 204B
+depending on DATA_PATH_WIDTH and lane rate / 66 for 204C 64B/66B, however the
+device clock could vary based in the F parameter.</p>
+</section>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>To ensure correct operation it is highly recommended to use the
+Analog Devices provided JESD204B software packages for interfacing the
+peripheral. Analog Devices is not able to provide support in case issues arise
+from using custom low-level software for interfacing the peripheral.</p>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx">JESD204B Transmit Linux Driver Support</a></p></li>
+</ul>
+</section>
+<section id="restrictions">
+<h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this heading">#</a></h2>
+<p>During the design of the peripheral the deliberate decision was made to support
+only a subset of the features mandated by the JESD204B standard for transmitter
+logic devices. The reasoning here is that the peripheral has been designed to
+interface to Analog Devices JESD204B DAC converter devices and features that are
+either not required or not supported by those converter devices would otherwise
+lie dormant in peripheral and never be used. Instead the decision was made to
+not implement those unneeded features even when the JESD204B standard requires
+them for general purpose JESD204B transmitter logic devices. As Analog Devices
+DAC converter devices with new requirements are released the peripheral will be
+adjusted accordingly.</p>
+<p>This approach allows for a leaner design using less resources, allowing for
+lower pipeline latency and a higher maximum device clock frequency.</p>
+<p>The following lists where the peripheral deviates from the standard:</p>
+<ul class="simple">
+<li><p>No subclass 2 support. JESD204B subclass 2 has due to its implementation
+details restricted applicability and is seldom a viable option for a modern
+high-speed data converter system. To achieve deterministic latency it is
+recommend to use subclass 1 mode;</p></li>
+<li><p>Reduced number of octets-per-frame settings. The JESD204B standard allows for
+any value between 1 and 256 to be used for the number of octets-per-frame;</p></li>
+<li><p>The following octets-per-frame values are supported by the peripheral: 1, 2,
+4 and 8.(No longer applies starting from 1.06.a);</p></li>
+<li><p>Reduced number of frames-per-multi-frame settings. The following values are
+supported by the peripheral: 1-32, with the additional requirement that F*K
+is a multiple of 4. In addition F*K needs to be in the range of 4-256;</p></li>
+<li><p>No support for alignment character replacement when scrambling is
+disabled.(No longer applies starting from 1.06.a).</p></li>
+</ul>
+</section>
+<section id="supported-devices">
+<span id="axi-jesd204-tx-supported-devices"></span><h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
+<section id="jesd204b-digital-to-analog-converters">
+<h3>JESD204B Digital-to-Analog Converters<a class="headerlink" href="#jesd204b-digital-to-analog-converters" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9135">AD9135</a>: Dual, 11-Bit, high dynamic, 2.8 GSPS,
+TxDAC+® Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9136">AD9136</a>: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9144">AD9144</a>: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9152">AD9152</a>: Dual, 16-Bit, 2.25 GSPS, TxDAC+
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9154">AD9154</a>: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9161">AD9161</a>: 11-Bit, 12 GSPS, RF Digital-to-Analog
+Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9162">AD9162</a>: 16-Bit, 12 GSPS, RF Digital-to-Analog
+Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9163">AD9163</a>: 16-Bit, 12 GSPS, RF DAC and Digital
+Upconverter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-Bit, 12 GSPS, RF DAC and Direct Digital
+Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9172">AD9172</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9173">AD9173</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9174">AD9174</a>: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
+Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9175">AD9175</a>: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
+Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9176">AD9176</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9177">AD9177</a>: Quad, 16-Bit, 12 GSPS RF DAC with
+Wideband Channelizers</p></li>
+</ul>
+</section>
+<section id="jesd204b-rf-transceivers">
+<h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
+Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
+Observation Path and DPD</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
+with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
+Transmitter with Observation Path</p></li>
+</ul>
+</section>
+<section id="jesd204b-c-mixed-signal-front-ends">
+<h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+Quad, 12-Bit, 4GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+DUAL, 12-Bit, 6GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
+Observation Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
+</ul>
+</section>
+</section>
+<section id="technical-support">
+<h2>Technical Support<a class="headerlink" href="#technical-support" title="Permalink to this heading">#</a></h2>
+<p>Analog Devices will provide limited online support for anyone using the core
+with Analog Devices components (ADC, DAC, Clock, etc) via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> under the GPL license. If you would like
+deterministic support when using this core with an ADI component, please
+investigate a commercial license. Using a non-ADI JESD204 device with this core
+is possible under the GPL, but Analog Devices will not help with issues you may
+encounter.</p>
+</section>
+<section id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD204B High-Speed Serial Interface Support</span></a></p></li>
+<li><p><a class="reference internal" href="../../../user_guide/index.html#user-guide"><span class="std std-ref">HDL User Guide</span></a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../index.html" title="Previous document" class="prev">JESD204 Interface Framework</a>
+    <a href="../axi_jesd204_rx/index.html" title="Next document" class="next">JESD204B/C Link Receive Peripheral</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+
+  
+  <form action="" method="get" class="search-area">
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+    <button value="search"></button>
+    <span id="search-progress"></span>
+  </form>
+  
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
