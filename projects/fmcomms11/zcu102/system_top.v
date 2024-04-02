@@ -39,8 +39,6 @@ module system_top (
   input   [12:0]  gpio_bd_i,
   output  [ 7:0]  gpio_bd_o,
 
-  inout   [14:0]  gpio_bd,
-
   output          rx_sync_p,
   output          rx_sync_n,
   input   [ 7:0]  rx_data_p,
@@ -146,14 +144,7 @@ module system_top (
               ad9162_irq}));    // 32
 
   assign gpio_i[31:15] = gpio_o[31:15];
-
-  ad_iobuf #(
-    .DATA_WIDTH(15)
-  ) i_iobuf_bd (
-    .dio_t (gpio_t[14:0]),
-    .dio_i (gpio_o[14:0]),
-    .dio_o (gpio_i[14:0]),
-    .dio_p (gpio_bd));
+  assign gpio_i[14: 0] = gpio_o[14: 0];
 
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
