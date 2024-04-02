@@ -211,7 +211,9 @@ bus behavior.
      - Configures the polarity of CS. When 0 (default), CS is active-low as 
      - usual. If set to 1, CS will be active-high. Note that there's no need 
      - to change the commands: for cs_active_high=1, the value of CS will be 
-     - automatically inverted with respect to the command.
+     - automatically inverted with respect to the command. This was introduced
+     - in version 1.02.71 of the core, setting this bit on earlier versions has
+     - no effect.
    * - [2]
      - three_wire
      - Configures the output of the three_wire pin.

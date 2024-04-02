@@ -207,7 +207,7 @@ module spi_engine_execution #(
       cpha <= DEFAULT_SPI_CFG[0];
       cpol <= DEFAULT_SPI_CFG[1];
       three_wire <= DEFAULT_SPI_CFG[2];
-      cs_active_high   <=  DEFAULT_SPI_CFG[3];
+      cs_active_high <=  DEFAULT_SPI_CFG[3];
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
