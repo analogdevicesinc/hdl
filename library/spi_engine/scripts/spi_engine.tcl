@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}} {
+proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4} {num_wait_trig 0}} {
   puts "echo_sclk: $echo_sclk"
 
   create_bd_cell -type hier $name
@@ -14,6 +14,9 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   }
   if {$echo_sclk == 1} {
     create_bd_pin -dir I -type clk echo_sclk
+  }
+  if {$num_wait_trig != 0} {
+    create_bd_pin -dir I -from [expr $num_wait_trig-1] -to 0 wait_trig
   }
   create_bd_pin -dir I -type clk clk
   create_bd_pin -dir I -type rst resetn
@@ -34,6 +37,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_parameter $execution CONFIG.SDO_DEFAULT 1
   ad_ip_parameter $execution CONFIG.SDI_DELAY $sdi_delay
   ad_ip_parameter $execution CONFIG.ECHO_SCLK $echo_sclk
+  ad_ip_parameter $execution CONFIG.NUM_WAIT_TRIG $num_wait_trig
 
   ad_ip_instance axi_spi_engine $axi_regmap
   ad_ip_parameter $axi_regmap CONFIG.DATA_WIDTH $data_width
@@ -85,6 +89,10 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
 
   if {$echo_sclk == 1} {
     ad_connect echo_sclk $execution/echo_sclk
+  }
+
+  if {$num_wait_trig != 0} {
+    ad_connect wait_trig $execution/wait_trig
   }
 
   ad_connect $axi_regmap/spi_resetn $offload/spi_resetn

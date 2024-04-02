@@ -21,12 +21,16 @@ ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDI INTEGER 1
 ad_ip_parameter SDI_DELAY INTEGER 0
 ad_ip_parameter SDO_DEFAULT INTEGER 0
+ad_ip_parameter NUM_WAIT_TRIG INTEGER 0
 
 proc p_elaboration {} {
+
+  set disabled_intfs {}
 
   set data_width [get_parameter_value DATA_WIDTH]
   set num_of_sdi [get_parameter_value NUM_OF_SDI]
   set num_of_cs [get_parameter_value NUM_OF_CS]
+  set num_wait_trig [get_parameter_value NUM_WAIT_TRIG]
 
   # clock and reset interface
 
@@ -85,6 +89,18 @@ proc p_elaboration {} {
 
   ad_interface signal cs output 1
   ad_interface signal three_wire output 1
+
+  # advanced trigger interface 
+
+  ad_interface signal wait_trig input $num_wait_trig
+
+  if {!($num_wait_trig)} {
+    lappend disabled_intfs wait_trig
+  }
+
+  foreach interface $disabled_intfs {
+    set_interface_property $interface ENABLED false
+  }
 
 }
 

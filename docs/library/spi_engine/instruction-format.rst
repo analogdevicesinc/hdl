@@ -174,6 +174,78 @@ is the minimum, needed by the internal logic.
      - Time
      - The amount of time to wait.
 
+
+Wait Trigger Instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+== == == == == == = = = = = = = = = =
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+== == == == == == = = = = = = = = = =
+0  1  0  0  r  r  r a m m m m m m m m
+== == == == == == = = = = = = = = = =
+
+The Wait Trigger Instruction pauses further execution until a certain condition is 
+satisfied, depending on the value of the advanced trigger channels. The 
+instruction allows for selecting which channels to take into account, and 
+whether to wait for the AND or the OR of the channels. Use the Trigger Config 
+instruction to configure the triggering of each channel before using this 
+instruction.
+
+.. list-table::
+   :widths: 10 15 75
+   :header-rows: 1
+
+   * - Bits
+     - Name
+     - Description
+   * - r
+     - Reserved
+     - Must always be 0.
+   * - a
+     - AND/OR
+     - Select how the triggers will be combined. 1=AND, 0=OR.
+   * - m
+     - Mask
+     - Selects which trigger channels to wait for (1=active, 0=inactive).
+
+Trigger Config Instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+== == == == == == = = = = = = = = = =
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+== == == == == == = = = = = = = = = =
+0  1  0  1  r  r  r s c c c c c c c c
+== == == == == == = = = = = = = = = =
+
+The Trigger Config Instruction is used for configuring the triggering for the Wait Instruction.
+There are two configurations for each channel, each requires a separate invocation of this 
+instruction to be written. One is the Trigger Type, which selects between Edge-sensitive or
+Level-sensitive trigger per channel. The other is Trigger Polarity, which selects the 
+polarity of the event for each channel. For a given instance of this instruction, the 
+'c' configuration mask allows for selecting the values on a per-channel basis
+
+.. list-table::
+   :widths: 10 15 75
+   :header-rows: 1
+
+   * - Bits
+     - Name
+     - Description
+   * - r
+     - Reserved
+     - Must always be 0.
+   * - s
+     - Select
+     - Select whether currently writing the Trigger Type or Trigger Polarity. 1=Type, 0=Polarity.
+   * - c
+     - Configuration
+     - | The configuration to be written for each trigger channel. Value interpretation depends on 
+       | whether Trigger Type or Trigger Polarity is being written. For Trigger Type, it selects 
+       | for each channel whether the trigger is level trigger or edge sensitive (0=Level; 1=Edge).
+       | For Trigger Polarity, it selects the polarity of the event: a 1  in this field waits for a 
+       | rising edge or a high level, while a 0 in this field waits for a falling edge or a low level.
+
+
 .. _spi_engine configutarion-registers:
 
 Configuration Registers

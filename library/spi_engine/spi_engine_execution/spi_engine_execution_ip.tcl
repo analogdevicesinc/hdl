@@ -128,8 +128,23 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
 
+ ## NUM WAIT TRIG
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_user_parameters NUM_WAIT_TRIG -of_objects $cc]
+set_property -dict [list \
+  "value_format" "bool" \
+  "value" "false" \
+ ] \
+ [ipx::get_hdl_parameters NUM_WAIT_TRIG -of_objects $cc]
+
 ## echo_sclk should be active only when ECHO_SCLK is set
 adi_set_ports_dependency echo_sclk ECHO_SCLK 0
+
+## adv_trig should be active only when ECHO_SCLK is set
+adi_set_ports_dependency wait_trig NUM_WAIT_TRIG 0
 
 ## Customize IP Layout
 

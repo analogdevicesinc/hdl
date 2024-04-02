@@ -44,7 +44,8 @@ module spi_engine_execution #(
   parameter NUM_OF_SDI = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
-  parameter [1:0] SDI_DELAY = 2'b00
+  parameter [1:0] SDI_DELAY = 2'b00,
+  parameter NUM_WAIT_TRIG = 0
 ) (
   input clk,
   input resetn,
@@ -73,13 +74,17 @@ module spi_engine_execution #(
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
-  output reg three_wire
+  output reg three_wire,
+
+  input [NUM_WAIT_TRIG-1:0] wait_trig
 );
 
-  localparam CMD_TRANSFER = 2'b00;
-  localparam CMD_CHIPSELECT = 2'b01;
-  localparam CMD_WRITE = 2'b10;
-  localparam CMD_MISC = 2'b11;
+  localparam CMD_TRANSFER = 4'b0000;
+  localparam CMD_CHIPSELECT = 4'b0001;
+  localparam CMD_WRITE = 4'b0010;
+  localparam CMD_MISC = 4'b0011;
+  localparam CMD_WAIT = 4'b0100;
+  localparam CMD_CFG_WAIT = 4'b0101;
 
   localparam MISC_SYNC = 1'b0;
   localparam MISC_SLEEP = 1'b1;
@@ -87,6 +92,12 @@ module spi_engine_execution #(
   localparam REG_CLK_DIV = 2'b00;
   localparam REG_CONFIG = 2'b01;
   localparam REG_WORD_LENGTH = 2'b10;
+
+  localparam TRIG_POLARITY = 1'b0;
+  localparam TRIG_TYPE = 1'b1;
+  localparam TRIG_TYPE_LEVEL  = 1'b0;
+  localparam TRIG_TYPE_EDGE   = 1'b1;
+  
 
   localparam BIT_COUNTER_WIDTH = DATA_WIDTH > 16 ? 5 :
                                  DATA_WIDTH > 8  ? 4 : 3;
@@ -111,6 +122,16 @@ module spi_engine_execution #(
   wire [(BIT_COUNTER_WIDTH-1):0] bit_counter = counter[BIT_COUNTER_WIDTH:1];
   wire [7:0] transfer_counter = counter[(BIT_COUNTER_WIDTH+8):(BIT_COUNTER_WIDTH+1)];
   wire ntx_rx = counter[0];
+
+  reg wait_trig_done = 1'b0;
+  reg [7:0] wait_trig_d;
+  reg [7:0] wait_trig_mask;
+  reg [7:0] wait_trig_pol;
+  reg [7:0] wait_trig_type; // 1 = edge, 0 = level;
+  reg wait_trig_andor; // 1 = and; 0 = or
+  reg [7:0] wait_trig_cond;
+  reg [7:0] wait_trig_cond_next;
+  reg [7:0] wait_trig_edge;
 
   reg trigger = 1'b0;
   reg trigger_next = 1'b0;
@@ -141,8 +162,8 @@ module spi_engine_execution #(
 
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-  wire [1:0] inst = cmd[13:12];
-  wire [1:0] inst_d1 = cmd_d1[13:12];
+  wire [1:0] inst = cmd[15:12];
+  wire [1:0] inst_d1 = cmd_d1[15:12];
 
   wire exec_cmd = cmd_ready && cmd_valid;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
@@ -151,6 +172,8 @@ module spi_engine_execution #(
   wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
   wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
   wire exec_sync_cmd = exec_misc_cmd && cmd[8] == MISC_SYNC;
+  wire exec_wait_cmd = exec_cmd && inst == CMD_WAIT;
+  wire exec_cfg_wait_cmd = exec_cmd && inst == CMD_CFG_WAIT;
 
   wire trigger_tx;
   wire trigger_rx;
@@ -224,6 +247,56 @@ module spi_engine_execution #(
     end
   end
 
+  // configurable trigger machine
+  always @(posedge clk) begin
+    if (resetn == 1'b0) begin
+      wait_trig_mask   <= 0;
+      wait_trig_pol  <= 0;
+      wait_trig_type   <= 0;
+      wait_trig_andor  <= 1'b0;
+      wait_trig_done   <= 1'b0;
+      wait_trig_d      <= 0;
+      wait_trig_cond   <= 0;
+    end else begin
+      wait_trig_d <= wait_trig;
+      wait_trig_cond <= wait_trig_cond_next;
+      if (exec_cfg_wait_cmd == 1'b1) begin
+        if (cmd[8] == TRIG_POLARITY) begin
+          wait_trig_pol  <= cmd[7:0];
+        end else if (cmd[8] == TRIG_TYPE) begin
+          wait_trig_type  <= cmd[7:0];
+        end
+      end else if (exec_wait_cmd == 1'b1) begin
+        wait_trig_mask   <= cmd[7:0];
+        wait_trig_andor  <= cmd[8];
+        wait_trig_done   <= (NUM_WAIT_TRIG == 0) ? 1'b1 : 1'b0;
+      end else if (wait_trig_done == 1'b0) begin      
+        wait_trig_done <= (wait_trig_andor) ? &wait_trig_cond : |wait_trig_cond;
+      end
+    end
+  end
+  integer idx;
+  always @(*) begin
+    wait_trig_edge = wait_trig_d ^ wait_trig;
+    
+    for (idx = 0; idx<8 ;idx=idx+1 ) begin
+      // the trigger calculations propper should synthesize down to a single lut level in most architectures
+      // (mask+level+type+trigger signal+ delayed trigger signal = 5 inputs, most modern FPGAs are LUT6 or LUT8)
+      if (idx>=NUM_WAIT_TRIG) begin
+        wait_trig_cond_next[idx] = 1'b1;
+      end else if (wait_trig_mask[idx] == 1'b1) begin 
+        if (wait_trig_type == TRIG_TYPE_LEVEL) begin
+          wait_trig_cond_next[idx] = (wait_trig[idx] == wait_trig_pol[idx]);
+        end else if (wait_trig_type == TRIG_TYPE_EDGE) begin
+          wait_trig_cond_next[idx] = (wait_trig_edge[idx] == wait_trig_pol[idx]);
+        end
+      end else begin 
+        wait_trig_cond_next[idx] = 1'b1;
+      end
+    end
+  end
+
+
   always @(posedge clk) begin
     if ((clk_div_last == 1'b0 && idle == 1'b0 && wait_for_io == 1'b0 &&
       clk_div_counter == 'h01) || clk_div == 'h00)
@@ -277,7 +350,7 @@ module spi_engine_execution #(
     if (resetn == 1'b0) begin
       idle <= 1'b1;
     end else begin
-      if (exec_transfer_cmd || exec_chipselect_cmd || exec_misc_cmd) begin
+      if (exec_transfer_cmd || exec_chipselect_cmd || exec_misc_cmd || exec_wait_cmd) begin
         idle <= 1'b0;
       end else begin
         case (inst_d1)
@@ -287,6 +360,10 @@ module spi_engine_execution #(
         end
         CMD_CHIPSELECT: begin
           if ((cs_sleep_counter_compare && cs_sleep_repeat) || cs_sleep_early_exit)
+            idle <= 1'b1;
+        end
+        CMD_WAIT: begin
+          if (wait_trig_done)
             idle <= 1'b1;
         end
         CMD_MISC: begin
