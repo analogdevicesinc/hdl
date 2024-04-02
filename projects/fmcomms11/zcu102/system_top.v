@@ -74,9 +74,9 @@ module system_top (
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
+  wire    [94:0]  gpio_i;
+  wire    [94:0]  gpio_o;
+  wire    [94:0]  gpio_t;
   wire    [ 2:0]  spi0_csn;
   wire            spi0_sclk;
   wire            spi0_mosi;
@@ -132,7 +132,7 @@ module system_top (
 
   assign spi_clk = spi0_sclk;
 
-  assign gpio_i[63:36] = gpio_o[63:36];
+  assign gpio_i[94:36] = gpio_o[94:36];
 
   ad_iobuf #(
     .DATA_WIDTH(4)

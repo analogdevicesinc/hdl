@@ -5,8 +5,8 @@
 
 # fmcomms11
 
-set_property -dict {PACKAGE_PIN L8  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports usr_clk_p]       ; ## B20  FMC0_GBTCLK1_M2C_C_P  MGTREFCLK0P_228
-set_property -dict {PACKAGE_PIN L7  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports usr_clk_n]       ; ## B21  FMC0_GBTCLK1_M2C_C_N  MGTREFCLK0N_228
+set_property -dict {PACKAGE_PIN L8  IOSTANDARD LVDS} [get_ports usr_clk_p]                      ; ## B20  FMC0_GBTCLK1_M2C_C_P  MGTREFCLK0P_228
+set_property -dict {PACKAGE_PIN L7  IOSTANDARD LVDS} [get_ports usr_clk_n]                      ; ## B21  FMC0_GBTCLK1_M2C_C_N  MGTREFCLK0N_228
 set_property -dict {PACKAGE_PIN G8}  [get_ports trx_ref_clk_p]                                  ; ## D4   FMC0_GBTCLK0_M2C_C_P  MGTREFCLK0P_229
 set_property -dict {PACKAGE_PIN G7}  [get_ports trx_ref_clk_n]                                  ; ## D5   FMC0_GBTCLK0_M2C_C_N  MGTREFCLK0N_229
 
@@ -67,5 +67,5 @@ set_property -dict {PACKAGE_PIN W4  IOSTANDARD LVCMOS18} [get_ports spi_sdio]   
 # clocks
 
 create_clock -name rx_ref_clk   -period  8 [get_ports trx_ref_clk_p]
-create_clock -name tx_div_clk   -period  4 [get_pins i_system_wrapper/system_i/util_fmcomms11_xcvr/inst/i_xch_0/i_gtxe2_channel/TXOUTCLK]
-create_clock -name rx_div_clk   -period  8 [get_pins i_system_wrapper/system_i/util_fmcomms11_xcvr/inst/i_xch_0/i_gtxe2_channel/RXOUTCLK]
+create_clock -name tx_div_clk   -period  4 [get_pins i_system_wrapper/system_i/util_fmcomms11_xcvr/inst/i_xch_0/i_gthe4_channel/TXOUTCLK]
+create_clock -name rx_div_clk   -period  8 [get_pins i_system_wrapper/system_i/util_fmcomms11_xcvr/inst/i_xch_0/i_gthe4_channel/RXOUTCLK]
