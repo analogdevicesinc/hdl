@@ -19,4 +19,3 @@ adi_project_files fmcomms11_zc706 [list \
 set_property part "xc7z045ffg900-3" [get_runs synth_1]
 set_property part "xc7z045ffg900-3" [get_runs impl_1]
 adi_project_run fmcomms11_zc706
-

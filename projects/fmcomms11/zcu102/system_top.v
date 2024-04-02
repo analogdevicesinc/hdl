@@ -36,6 +36,8 @@
 `timescale 1ns/100ps
 
 module system_top (
+  input   [12:0]  gpio_bd_i,
+  output  [ 7:0]  gpio_bd_o,
 
   inout   [14:0]  gpio_bd,
 
@@ -95,7 +97,7 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
-  IBUFDS_GTE2 i_ibufds_tx_ref_clk (
+  IBUFDS_GTE4 i_ibufds_tx_ref_clk (
     .CEB (1'd0),
     .I (trx_ref_clk_p),
     .IB (trx_ref_clk_n),
@@ -107,10 +109,12 @@ module system_top (
     .IB (tx_sync_n),
     .O (tx_sync));
 
-  IBUFDS i_ibufds_usr_clk (
+  IBUFDS_GTE4 i_ibufds_usr_clk (
+    .CEB (1'd0),
     .I (usr_clk_p),
     .IB (usr_clk_n),
-    .O (usr_clk));
+    .O (usr_clk),
+    .ODIV2 ());
 
   fmcomms11_spi i_spi (
     .spi_csn (spi0_csn),

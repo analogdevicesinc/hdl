@@ -15,7 +15,4 @@ adi_project_files fmcomms11_zcu102 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
-set_property part "xc7z045ffg900-3" [get_runs synth_1]
-set_property part "xc7z045ffg900-3" [get_runs impl_1]
-adi_project_run fmcomms11_zc706
-
+adi_project_run fmcomms11_zcu102
