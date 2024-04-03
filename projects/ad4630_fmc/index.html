@@ -176,17 +176,30 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD4630-FMC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/index.html">AD738X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
@@ -241,6 +254,12 @@ timing requirements and simplify the use of digital isolators.</p>
 integrates all critical power supply and reference bypass capacitors, reducing
 the footprint and system component count, and lessening sensitivity to board
 layout.</p>
+<p>The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain
+solution that reduces the development cycle of a precision measurement system
+by transferring the signal chain design challenge of component selection,
+optimization, and layout from the designer to the device. With a guaranteed
+maximum ±TBD ppm INL and no missing codes at 24 bits, the ADAQ4224 achieves
+unparalleled precision from −40°C to +85°C.</p>
 <p>The HDL reference design for the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630_FMCZ">EVAL-AD4630_FMCZ</a> and
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030_FMCZ">EVAL-AD4030_FMCZ</a> provides all the interfaces that are necessary to
 interact with the device using a Xilinx FPGA development board. The design has
@@ -268,6 +287,8 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030-24FMCZ">EVAL-AD4030-24FMCZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-16FMCZ">EVAL-AD4630-16FMCZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-24FMCZ">EVAL-AD4630-24FMCZ</a></p></li>
+<li><p>EVAL-ADAQ4224-FMCZ &lt;EVAL-ADAQ4224&gt;</p></li>
+<li><p>EVAL-ISO-4224-FMCZ &lt;EVAL-ISO-ADAQ4224&gt;</p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -276,6 +297,7 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
+<li><p>ADAQ4224</p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -315,6 +337,7 @@ trigger signals are generated by the AXI PWM GEN core. The reason for using two
 PWM outputs instead of a common one is to accommodate for the averaging mode
 where the two signals will have different frequencies.</p>
 <a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm0_cz2_1.svg"><img alt="AD4630_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm0_cz2_1.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm0_cz2_1.svg"><img alt="ADAQ4224_FMC SPI mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm0_cz2_1.svg" width="800" /></a>
 </section>
 <section id="echo-clock-mode-transfer-zone-2">
 <h4>Echo clock mode - transfer zone 2<a class="headerlink" href="#echo-clock-mode-transfer-zone-2" title="Permalink to this heading">#</a></h4>
@@ -324,6 +347,7 @@ driving the SPI signals except it is no longer reading the data. For this
 purpose, the Data Capture IP is used. This also allows for reading data in DDR
 mode.</p>
 <a class="reference internal image-reference" href="../../_images/ad463x_hdl_cm1_cz2_1.svg"><img alt="AD4630_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/ad463x_hdl_cm1_cz2_1.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/adaq42xx_hdl_cm1_cz2_1.svg"><img alt="ADAQ4224_FMC Echo clock mode - transfer zone 2 block diagram" class="align-center" src="../../_images/adaq42xx_hdl_cm1_cz2_1.svg" width="800" /></a>
 <p>The design supports the following interface and clock modes both in SDR and DDR:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -389,8 +413,17 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <tr class="row-odd"><td><p>cnv_generator</p></td>
 <td><p>0x44B0_0000</p></td>
 </tr>
+<tr class="row-even"><td><p>sync_generator*</p></td>
+<td><p>0x44C0_0000</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated, but only used for ADAQ4224 with isolated power supply</p></li>
+</ul>
 </div>
 </section>
 <section id="i2c-connections">
@@ -419,14 +452,26 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>0x4162_0000</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>PL</p></td>
-<td><p>iic_main</p></td>
-<td><p>axi_iic_main</p></td>
-<td><p>0x4160_0000</p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td><p>0x50</p></td>
+<td><p>eeprom</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td><p>0x5F</p></td>
+<td><p>temperature sensor  *</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> Temperature Sensor HW Monitor is present only in ADAQ4224</p></li>
+</ul>
 </div>
 </section>
 <section id="spi-connections">
@@ -488,8 +533,30 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
+<tr class="row-even"><td><p>adaq42xx_pgia_mux[0]*</p></td>
+<td><p>INOUT</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>adaq42xx_pgia_mux[1]*</p></td>
+<td><p>INOUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>max17687_rst**</p></td>
+<td><p>INOUT</p></td>
+<td><p>35</p></td>
+<td><p>89</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated, but used for ADAQ4224 only</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated, but used for ADAQ4224 with isolated power supply</p></li>
+</ul>
 </div>
 </section>
 <section id="interrupts">
