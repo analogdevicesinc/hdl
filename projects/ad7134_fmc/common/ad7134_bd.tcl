@@ -41,17 +41,39 @@ ad_ip_parameter axi_ad7134_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 # odr generator
 
+# ad_ip_instance axi_pwm_gen odr_generator
+# ad_ip_parameter odr_generator CONFIG.N_PWMS 2
+# ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD 85
+# ad_ip_parameter odr_generator CONFIG.PULSE_0_WIDTH 1
+# ad_ip_parameter odr_generator CONFIG.PULSE_0_OFFSET 3
+# ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
+# ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
+
 ad_ip_instance axi_pwm_gen odr_generator
-ad_ip_parameter odr_generator CONFIG.N_PWMS 2
-ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD 85
-ad_ip_parameter odr_generator CONFIG.PULSE_0_WIDTH 1
-ad_ip_parameter odr_generator CONFIG.PULSE_0_OFFSET 3
-ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
-ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
+# ad_ip_parameter odr_generator CONFIG.ASYNC_CLK_EN 1
+ad_ip_parameter odr_generator CONFIG.N_PWMS 1
+ad_ip_parameter odr_generator CONFIG.PULSE_0_PERIOD 10000
+ad_ip_parameter odr_generator CONFIG.PULSE_0_WIDTH 3
+# ad_ip_parameter odr_generator CONFIG.ASYNC_CLK_EN 0
+
+create_bd_cell -type module -reference sync_bits busy_sync
+create_bd_cell -type module -reference ad_edge_detect busy_capture
+set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
 
 ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
-ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
-ad_connect odr_generator/pwm_1 ad713x_odr
+#ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
+#ad_connect odr_generator/pwm_1 ad713x_odr
+ad_connect odr_generator/pwm_0 ad713x_odr
+
+ad_connect axi_ad7134_clkgen/clk_0 busy_capture/clk
+ad_connect axi_ad7134_clkgen/clk_0 busy_sync/out_clk
+ad_connect busy_capture/rst GND
+# ad_connect $hier_spi_engine/resetn busy_sync/out_resetn
+ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
+
+ad_connect ad713x_odr busy_sync/in_bits
+ad_connect busy_sync/out_bits busy_capture/signal_in
+ad_connect busy_capture/signal_out $hier_spi_engine/trigger
 
 # sdpclk clock generator - default clk0_out is 50 MHz
 

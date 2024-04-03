@@ -110,11 +110,11 @@ module axi_dmac #(
   output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
 
   // Write data
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
+ (* mark_debug = "true" *)  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
   output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
-  input                                    m_dest_axi_wready,
-  output                                   m_dest_axi_wvalid,
-  output                                   m_dest_axi_wlast,
+ (* mark_debug = "true" *)  input                                    m_dest_axi_wready,
+ (* mark_debug = "true" *)  output                                   m_dest_axi_wvalid,
+ (* mark_debug = "true" *)  output                                   m_dest_axi_wlast,
   output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
 
   // Write response
