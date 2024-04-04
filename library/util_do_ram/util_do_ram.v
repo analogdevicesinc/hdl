@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -93,6 +93,7 @@ module util_do_ram #(
 
   wire  wr_enable;
   wire  [DST_DATA_WIDTH-1:0] rd_data;
+  wire  [DST_DATA_WIDTH/8-1:0] rd_keep;
   wire  [1:0] rd_fifo_room;
   wire        rd_enable;
   wire        rd_last_beat;
@@ -102,6 +103,7 @@ module util_do_ram #(
   reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
   reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
   reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
+  reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
   reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
   reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
   reg rd_pending = 1'b0;
@@ -168,7 +170,7 @@ module util_do_ram #(
     .A_DATA_WIDTH (SRC_DATA_WIDTH),
     .B_ADDRESS_WIDTH (DST_ADDRESS_WIDTH),
     .B_DATA_WIDTH (DST_DATA_WIDTH)
-  ) i_mem (
+  ) i_mem_data (
     .clka (s_axis_aclk),
     .wea (wr_enable),
     .addra (wr_addr),
@@ -178,6 +180,22 @@ module util_do_ram #(
     .reb (1'b1),
     .addrb (rd_addr),
     .doutb (rd_data));
+
+  ad_mem_asym #(
+    .A_ADDRESS_WIDTH (SRC_ADDRESS_WIDTH),
+    .A_DATA_WIDTH (SRC_DATA_WIDTH/8),
+    .B_ADDRESS_WIDTH (DST_ADDRESS_WIDTH),
+    .B_DATA_WIDTH (DST_DATA_WIDTH/8)
+  ) i_mem_keep (
+    .clka (s_axis_aclk),
+    .wea (wr_enable),
+    .addra (wr_addr),
+    .dina (s_axis_keep),
+
+    .clkb (m_axis_aclk),
+    .reb (1'b1),
+    .addrb (rd_addr),
+    .doutb (rd_keep));
 
   reg rd_active = 1'b0;
   reg [1:0] rd_req_cnt = 2'b0;
@@ -238,9 +256,14 @@ module util_do_ram #(
   always @(posedge m_axis_aclk) begin
     if (rd_valid_l1)
       rd_data_l2 <= rd_data;
-   end
+  end
 
-   always @(posedge m_axis_aclk) begin
+  always @(posedge m_axis_aclk) begin
+    if (rd_valid_l1)
+      rd_keep_l2 <= rd_keep;
+  end
+
+  always @(posedge m_axis_aclk) begin
     if (rd_valid_l1)
       rd_valid_l2 <= 1'b1;
     else if (rd_fifo_s_ready)
@@ -254,31 +277,33 @@ module util_do_ram #(
 
   // Read datapath to AXIS logic
   util_axis_fifo #(
-    .DATA_WIDTH(DST_DATA_WIDTH+1),
+    .DATA_WIDTH(DST_DATA_WIDTH),
     .ADDRESS_WIDTH(2),
     .ASYNC_CLK(0),
-    .M_AXIS_REGISTERED(0)
+    .M_AXIS_REGISTERED(0),
+    .TLAST_EN(1),
+    .TKEEP_EN(1)
   ) i_rd_fifo (
     .s_axis_aclk(m_axis_aclk),
     .s_axis_aresetn(m_axis_aresetn & rd_request_enable),
     .s_axis_valid(rd_fifo_s_valid),
     .s_axis_ready(rd_fifo_s_ready),
     .s_axis_full(),
-    .s_axis_data({rd_last_l2,rd_data_l2}),
+    .s_axis_data(rd_data_l2),
     .s_axis_room(rd_fifo_room),
-    .s_axis_tkeep(),
-    .s_axis_tlast(),
+    .s_axis_tkeep(rd_keep_l2),
+    .s_axis_tlast(rd_last_l2),
     .s_axis_almost_full(),
 
     .m_axis_aclk(m_axis_aclk),
     .m_axis_aresetn(m_axis_aresetn & rd_request_enable),
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
-    .m_axis_data({m_axis_last,m_axis_data}),
+    .m_axis_data(m_axis_data),
     .m_axis_level(),
     .m_axis_empty(),
-    .m_axis_tkeep(),
-    .m_axis_tlast(),
+    .m_axis_tkeep(m_axis_keep),
+    .m_axis_tlast(m_axis_last),
     .m_axis_almost_empty());
 
 endmodule
