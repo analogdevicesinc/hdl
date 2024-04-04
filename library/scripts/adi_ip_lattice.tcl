@@ -885,12 +885,7 @@ namespace eval ipl {
         set expression $opt(-expression)
 
         foreach port $portlist {
-            set dir [ipl::getatt ip_desc/lsccip:ports $port dir $ip]
-            if {$dir == "dir=\"in\""} {
-                set ip [ipl::setport -ip $ip -name $port -stick_low $expression]
-            } else {
-                set ip [ipl::setport -ip $ip -name $port -dangling $expression]
-            }
+            set ip [ipl::setport -ip $ip -name $port -dangling $expression]
         }
         return $ip
     }
@@ -1403,7 +1398,7 @@ namespace eval ipl {
                 set from [dict get $data from]
                 set to [dict get $data to]
                 set ip [ipl::setport -ip $ip -name $name \
-                    -dir $dir -range "$op$from,$to$cl" \
+                    -dir $dir -range "${op}int$op$from$cl,$to$cl" \
                     -conn_port $name \
                     -conn_mod $mod_name]
             } else {
@@ -1549,12 +1544,12 @@ namespace eval ipl {
         return $file_list
     }
 
-    proc tw {} {
-        set mod_data [ipl::getmod axi_dmac.v]
+    proc axidmac {} {
+        set mod_data [ipl::getmod ../axi_dmac/axi_dmac.v]
         set ip $::ipl::ip
 
         set ip [ipl::addports -ip $ip -mod_data $mod_data]
-        set ip [ipl::addpars -ip $ip -mod_data $mod_data]
+        # set ip [ipl::addpars -ip $ip -mod_data $mod_data]
 
         set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
         set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
@@ -1570,16 +1565,24 @@ namespace eval ipl {
             -max_radiant_version "2023.2" \
             -min_esi_version "2022.1" -ip $ip]
 
-        set ip [ipl::generator -name blabla -generator eval/blabla.py -ip $ip]
+        # set ip [ipl::generator -name blabla -generator eval/blabla.py -ip $ip]
 
         set ip [ipl::mmap -ip $ip \
             -name "axi_dmac_mem_map" \
             -description "axi_dmac_mem_map" \
             -baseAddress 0 \
-            -range 4096 \
+            -range 65536 \
             -width 32]
         set ip [ipl::addressp -ip $ip \
             -name "m_dest_axi_aspace" \
+            -range 0x100000000 \
+            -width 32]
+        set ip [ipl::addressp -ip $ip \
+            -name "m_src_axi_aspace" \
+            -range 0x100000000 \
+            -width 32]
+        set ip [ipl::addressp -ip $ip \
+            -name "m_sg_axi_aspace" \
             -range 0x100000000 \
             -width 32]
         
@@ -1590,10 +1593,6 @@ namespace eval ipl {
             -master_slave slave \
             -mmap_ref axi_dmac_mem_map \
             -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
-        # set ip [ipl::igiports -ip $ip \
-        #     -mod_data $mod_data \
-        #     -v_name s_axi \
-        #     -expression true]
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_dest_axi \
             -exept_pl [list m_dest_axi_aclk m_dest_axi_aresetn] \
             -iname m_dest_axi \
@@ -1608,6 +1607,7 @@ namespace eval ipl {
             -display_name m_src_axi \
             -description m_src_axi \
             -master_slave master \
+            -aspace_ref m_src_axi_aspace \
             -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
         set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_sg_axi \
             -exept_pl [list m_sg_axi_aclk m_sg_axi_aresetn] \
@@ -1615,6 +1615,7 @@ namespace eval ipl {
             -display_name m_sg_axi \
             -description m_sg_axi \
             -master_slave master \
+            -aspace_ref m_sg_axi_aspace \
             -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
 
         set if [ipl::createcif -vendor analog.com \
@@ -1623,7 +1624,7 @@ namespace eval ipl {
             -version 1.0 \
             -directConnection true \
             -isAddressable false \
-            -description "ADI fifo interface" \
+            -description "ADI fifo wr interface" \
             -ports {
                 {-n DATA -d out -p required}
                 {-n EN -d out -p required -w 1}
@@ -1634,6 +1635,7 @@ namespace eval ipl {
         global env
         set ifp "${env(TOOLRTF)}/ip/interfaces"
         ipl::genif $if $ifp
+
         set ip [ipl::addif -ip $ip \
             -iname fifo_wr \
             -display_name fifo_wr \
@@ -1647,19 +1649,51 @@ namespace eval ipl {
                 {"fifo_wr_xfer_req" "XFER_REQ"} \
             } \
             -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+        # set ip [ipl::addif -ip $ip \
+        #     -iname fifo_wr_m \
+        #     -display_name fifo_wr_m \
+        #     -description fifo_wr_m \
+        #     -master_slave master \
+        #     -portmap { \
+        #         {"fifo_wr_m_en" "EN"} \
+        #         {"fifo_wr_m_dout" "DATA"} \
+        #         {"fifo_wr_m_overflow" "OVERFLOW"} \
+        #         {"fifo_wr_m_sync" "SYNC"} \
+        #         {"fifo_wr_m_xfer_req" "XFER_REQ"} \
+        #     } \
+        #     -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+
+        set if [ipl::createcif -vendor analog.com \
+            -library ADI \
+            -name fifo_rd \
+            -version 1.0 \
+            -directConnection true \
+            -isAddressable false \
+            -description "ADI fifo rd interface" \
+            -ports {
+                {-n DATA -d in -p required}
+                {-n EN -d out -p required -w 1}
+                {-n UNDERFLOW -d in -p optional -w 1}
+                {-n VALID -d in -p optional -w 1}
+                {-n XFER_REQ -d in -p optional -w 1}
+            }]
+        global env
+        set ifp "${env(TOOLRTF)}/ip/interfaces"
+        ipl::genif $if $ifp
+
         set ip [ipl::addif -ip $ip \
-            -iname fifo_wr_m \
-            -display_name fifo_wr_m \
-            -description fifo_wr_m \
-            -master_slave master \
-            -portmap { \
-                {"fifo_wr_m_en" "EN"} \
-                {"fifo_wr_m_dout" "DATA"} \
-                {"fifo_wr_m_overflow" "OVERFLOW"} \
-                {"fifo_wr_m_sync" "SYNC"} \
-                {"fifo_wr_m_xfer_req" "XFER_REQ"} \
+            -iname fifo_rd \
+            -display_name fifo_rd \
+            -description fifo_rd \
+            -master_slave slave \
+            -portmap 	{
+                {"fifo_rd_en" "EN"} \
+                {"fifo_rd_dout" "DATA"} \
+                {"fifo_rd_valid" "VALID"} \
+                {"fifo_rd_underflow" "UNDERFLOW"} \
             } \
-            -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+            -vendor analog.com -library ADI -name fifo_rd -version 1.0]
+
         set ip [ipl::addif -ip $ip \
             -iname s_axis \
             -display_name s_axis \
@@ -1691,19 +1725,454 @@ namespace eval ipl {
                             {"m_axis_last" "TLAST"}] \
             -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
-        # -ip
-        # -spath
-        # -sdepth
-        # -regex
-        # -extl {*.v}
-        # -dpath "rtl"
-        set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
-        set ip [ipl::addfiles -spath ./ -dpath eval -extl {blabla.py} -ip $ip]
-        # set ip [ipl::addfiles -spath ./ -dpath plugin -extl {blabla.py} -ip $ip]
-        ipl::genip $ip
+        set ip [ipl::addif -ip $ip \
+            -iname IRQ \
+            -display_name IRQ \
+            -description IRQ \
+            -master_slave master \
+            -portmap [list {"irq" "IRQ"}] \
+            -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
+        # Do not use a port name as interface name except if you use case differences.
+        set ip [ipl::setport -ip $ip -name irq -bus_interface IRQ]
 
-        # return $ip
-        # ipl::getaxi [ipl::getmod axi_dmac.v]
+        set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
+        set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+        set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
+            -extl {ad_rst.v
+                   up_axi.v
+                   ad_mem.v
+                   ad_mem_asym.v}]
+        set ip [ipl::addfiles -spath ../util_axis_fifo -dpath rtl -ip $ip \
+            -extl {util_axis_fifo.v
+                   util_axis_fifo_address_generator.v}]
+
+        # set ip [ipl::addfiles -spath ./ -dpath eval -extl {blabla.py} -ip $ip]
+        # set ip [ipl::addfiles -spath ./ -dpath plugin -extl {blabla.py} -ip $ip]
+
+        # source
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_TYPE_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Type} \
+            -options {[('Memory-Mapped AXI', 0), ('Streaming AXI', 1), ('FIFO Interface', 2)]} \
+            -default 2 \
+            -output_formatter nostr \
+            -group1 {Source} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_AXI_PROTOCOL_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {AXI Protocol} \
+            -options {[('AXI4', 0), ('AXI3', 1)]} \
+            -editable {(DMA_TYPE_SRC == 0)} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Source} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_DATA_WIDTH_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Bus Width} \
+            -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} \
+            -default 64 \
+            -output_formatter nostr \
+            -group1 {Source} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id AXI_SLICE_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Insert Register Slice} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Source} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id SYNC_TRANSFER_START \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Transfer Start Synchronization Support} \
+            -options {[(True, 1), (False, 0)]} \
+            -editable {not(DMA_TYPE_SRC == 0)} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Source} \
+            -group2 Config]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name m_src_axi \
+            -expression {not(DMA_TYPE_SRC == 0)}]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name s_axis \
+            -expression {not(DMA_TYPE_SRC == 1)}]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name fifo_rd \
+            -expression {not(DMA_TYPE_SRC == 2)}]
+
+        # destination
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_TYPE_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Type} \
+            -default 2 \
+            -options {[('Memory-Mapped AXI', 0), ('Streaming AXI', 1), ('FIFO Interface', 2)]} \
+            -output_formatter nostr \
+            -group1 {Destination} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_AXI_PROTOCOL_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {AXI Protocol} \
+            -options {[('AXI4', 0), ('AXI3', 1)]} \
+            -editable {(DMA_TYPE_DEST == 0)} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Destination} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_DATA_WIDTH_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Bus Width} \
+            -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} \
+            -default 64 \
+            -output_formatter nostr \
+            -group1 {Destination} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id AXI_SLICE_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Insert Register Slice} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Destination} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id CACHE_COHERENT_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Assume cache coherent} \
+            -options {[(True, 1), (False, 0)]} \
+            -editable {(DMA_TYPE_DEST == 0)} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Destination} \
+            -group2 Config]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name m_dest_axi \
+            -expression {not(DMA_TYPE_DEST == 0)}]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name m_axis \
+            -expression {not(DMA_TYPE_DEST == 1)}]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name fifo_wr \
+            -expression {not(DMA_TYPE_DEST == 2)}]
+
+        # scatter gather
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_AXI_PROTOCOL_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {AXI Protocol} \
+            -editable {(DMA_SG_TRANSFER == 1)} \
+            -options {[('AXI4', 0), ('AXI3', 1)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Scatter-Gather} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_DATA_WIDTH_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Bus Width} \
+            -editable {(DMA_SG_TRANSFER == 1)} \
+            -options {[64]} \
+            -default 64 \
+            -output_formatter nostr \
+            -group1 {Scatter-Gather} \
+            -group2 Config]
+        set ip [ipl::igiports -ip $ip \
+            -mod_data $mod_data \
+            -v_name m_sg_axi \
+            -expression {(DMA_SG_TRANSFER == 0)}]
+
+        # general
+        set ip [ipl::settpar -ip $ip \
+            -id ID \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Core ID} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {General Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_LENGTH_WIDTH \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {DMA Transfer Length Register Width} \
+            -default 24 \
+            -output_formatter nostr \
+            -group1 {General Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id FIFO_SIZE \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Store-and-Forward Memory Size (In Bursts)} \
+            -options {[2, 4, 8, 16, 32]} \
+            -default 8 \
+            -output_formatter nostr \
+            -group1 {General Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id MAX_BYTES_PER_BURST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Maximum Bytes per Burst} \
+            -default 128 \
+            -output_formatter nostr \
+            -group1 {General Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_AXI_ADDR_WIDTH \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {DMA AXI Address Width} \
+            -default 32 \
+            -output_formatter nostr \
+            -group1 {General Configuration} \
+            -group2 Config]
+
+        # features
+        set ip [ipl::settpar -ip $ip \
+            -id CYCLIC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Cyclic Transfer Support} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Features} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_2D_TRANSFER \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {2D Transfer Support} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Features} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id DMA_SG_TRANSFER \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {SG Transfer Support} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Features} \
+            -group2 Config]
+
+        # clock domain configuration
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_REQ_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Request and Source Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_SRC_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Source and Destination Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_DEST_REQ \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Destination and Request Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_REQ_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Request and Scatter-Gather Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_SRC_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Source and Scatter-Gather Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ASYNC_CLK_DEST_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Destination and Scatter-Gather Clock Asynchronous} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Clock Domain Configuration} \
+            -group2 Config]
+
+        # debug
+        set ip [ipl::settpar -ip $ip \
+            -id DISABLE_DEBUG_REGISTERS \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Disable Debug Registers} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Debug} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -id ENABLE_DIAGNOSTICS_IF \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title {Enable Diagnostics Interface} \
+            -options {[(True, 1), (False, 0)]} \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Debug} \
+            -group2 Config]
+        set ip [ipl::igports -ip $ip \
+            -portlist {dest_diag_level_bursts} \
+            -expression {(ENABLE_DIAGNOSTICS_IF == 0)}]
+
+        # hidden
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id AXI_ID_WIDTH_SRC \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title AXI_ID_WIDTH_SRC \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id AXI_ID_WIDTH_DEST \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title AXI_ID_WIDTH_DEST \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id AXI_ID_WIDTH_SG \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title AXI_ID_WIDTH_SG \
+            -default 1 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id DMA_AXIS_ID_W \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title DMA_AXIS_ID_W \
+            -default 8 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id DMA_AXIS_DEST_W \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title DMA_AXIS_DEST_W \
+            -default 4 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+        set ip [ipl::settpar -ip $ip \
+            -hidden True \
+            -id ALLOW_ASYM_MEM \
+            -type param \
+            -value_type int \
+            -conn_mod axi_dmac \
+            -title ALLOW_ASYM_MEM \
+            -default 0 \
+            -output_formatter nostr \
+            -group1 {Hidden} \
+            -group2 Config]
+
+        ipl::genip $ip
     }
 
     # to do check the ports to select the interface type
@@ -1855,9 +2324,12 @@ namespace eval ipl {
         set ip [ipl::settpar -ip $ip -id EXT_ASYNC_SYNC -options {[(True, 1), (False, 0)]}]
         set ip [ipl::settpar -ip $ip -id EXT_ASYNC_SYNC -hidden {(PWM_EXT_SYNC == 0)}]
 
-        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen.sv} -ip $ip]
-        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_1.v} -ip $ip]
-        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_regmap.sv} -ip $ip]
+        set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -ip $ip \
+        -extl {axi_pwm_gen.sv
+                axi_pwm_gen_1.v
+                axi_pwm_gen_regmap.sv}]
+        # set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_1.v} -ip $ip]
+        # set ip [ipl::addfiles -spath ../axi_pwm_gen -dpath rtl -extl {axi_pwm_gen_regmap.sv} -ip $ip]
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {ad_rst.v} -ip $ip]
         set ip [ipl::addfiles -spath ../common -dpath rtl -extl {up_axi.v} -ip $ip]
         set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
