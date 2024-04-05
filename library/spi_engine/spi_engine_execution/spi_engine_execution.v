@@ -94,7 +94,7 @@ module spi_engine_execution #(
   localparam BIT_COUNTER_CARRY = 2** (BIT_COUNTER_WIDTH + 1);
   localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
 
-  reg sclk_int = 1'b0;
+(* mark_debug = "true" *)  reg sclk_int = 1'b0;
   wire sdo_int_s;
   reg sdo_t_int = 1'b0;
 

@@ -65,6 +65,7 @@ ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
 #ad_connect odr_generator/pwm_1 ad713x_odr
 ad_connect odr_generator/pwm_0 ad713x_odr
 
+
 ad_connect axi_ad7134_clkgen/clk_0 busy_capture/clk
 ad_connect axi_ad7134_clkgen/clk_0 busy_sync/out_clk
 ad_connect busy_capture/rst GND
