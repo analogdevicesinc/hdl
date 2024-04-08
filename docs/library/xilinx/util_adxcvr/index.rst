@@ -51,7 +51,7 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-  
+
   * - XCVR_TYPE
     - | Define the current GT type:
       | GTXE2(0), GTHE3(1), GTHE4(2)
@@ -112,7 +112,7 @@ Microprocessor clock and reset
    * - ``up_clk``
      - ``input``
      - System clock, running on 100 MHz
-   * - ``up_rstn`` 
+   * - ``up_rstn``
      - ``input``
      - System reset, the same as AXI memory map subordinate interface reset
 
@@ -141,7 +141,7 @@ RX interface
    * - Pin
      - Type
      - Description
-   * - ``rx_*_p`` 
+   * - ``rx_*_p``
      - ``input``
      - Positive differential serial data input
    * - ``rx_*_n``
@@ -178,7 +178,7 @@ TX interface
    * - Pin
      - Type
      - Description
-   * - ``tx_*_p`` 
+   * - ``tx_*_p``
      - ``output``
      - Positive differential serial output
    * - ``tx_*_n``
@@ -253,8 +253,8 @@ Design Guidelines
 --------------------------------------------------------------------------------
 
 .. note::
-  Please refer to :dokuwiki:`AMD Xilinx FPGAs Transceivers Wizard <resources/fpga/docs/xgt_wizard>` 
-  to generate the optimal parameters needed to configure the transceivers for 
+  Please refer to :dokuwiki:`AMD Xilinx FPGAs Transceivers Wizard <resources/fpga/docs/xgt_wizard>`
+  to generate the optimal parameters needed to configure the transceivers for
   your project.
 
 Physical constraints considerations
@@ -275,7 +275,7 @@ util_adxcvr:
 .. image:: xcvr_mapping_example.svg
    :align: center
 
-So in this case we end up with a conflict during implementation: 
+So in this case we end up with a conflict during implementation:
 
 .. image:: xcvr_conflict.svg
    :align: center

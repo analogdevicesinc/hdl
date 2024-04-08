@@ -16,7 +16,6 @@ SPI Engine
    Instruction Set Specification<instruction-format>
    Pipeline Delays<pipeline-delays>
    Tutorial - PulSAR ADC<tutorial>
-   
 
 SPI Engine is a highly flexible and powerful SPI controller framework.
 It consist out of multiple sub-modules which communicate over well defined

@@ -5,7 +5,7 @@ JESD204 Interface Framework
 
 .. toctree::
    :hidden:
-   
+
    JESD204B/C Link Transmit Peripheral <axi_jesd204_tx/index>
    JESD204B/C Link Receive Peripheral <axi_jesd204_rx/index>
    ADC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_adc/index>
@@ -245,7 +245,7 @@ Example Projects
    -  :git-hdl:`AMD Xilinx KCU105 <projects/adrv9371x/kcu105>`
    -  :git-hdl:`AMD Xilinx ZC706 <projects/adrv9371x/zc706>`
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9371x/zcu102>`
-   
+
 -  :dokuwiki:`ADRV9009 Reference Design <resources/eval/user-guides/adrv9009>`
 
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9009/zcu102>`
@@ -294,43 +294,43 @@ Example Projects
    -  :git-hdl:`AMD Xilinx VCU118 <projects/ad9213_evb/vcu118>`
 
 -  :dokuwiki:`AD6676-EBZ Reference Design <resources/eval/user-guides/ad6676-ebz/software/baremetal>`
-  
+
    -  :git-hdl:`AMD Xilinx VC707 <projects/ad6676evb/vc707>`
    -  :git-hdl:`AMD Xilinx ZC706 <projects/ad6676evb/zc706>`
 
 -  :dokuwiki:`AD9083-FMC <resources/eval/user-guides/ad9083/ad9083_evb_reference_hdl>`
-  
+
    -  :git-hdl:`Intel A10SOC <projects/ad9083_evb/a10soc>`
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/ad9083_evb/zcu102>`
- 
+
 -  :dokuwiki:`AD9208-DUAL-EBZ reference design <resources/eval/user-guides/ad9208_dual_ebz/ad9208_dual_ebz_hdl>`
-  
+
    -  :git-hdl:`AMD Xilinx VCU118 <projects/ad9208_dual_ebz/vcu118>`
 
 -  :dokuwiki:`AD9209-FMCA-EBZ reference design <resources/eval/user-guides/ad9209_fmca_ebz/ad9209_fmca_ebz>`
-  
+
    -  :git-hdl:`AMD Xilinx VCK190 <projects/ad9209_fmca_ebz/vck190>`
 
 -  :dokuwiki:`AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
-  
+
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/ad9656_fmc/zcu102>`
 
 -  :dokuwiki:`AD9695-FMC reference design <resources/eval/user-guides/ad9695_fmc>`
-  
+
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/ad9695_fmc/zcu102>`
 
 -  :dokuwiki:`AD-QUADMXFE1-EBZ reference design <resources/eval/user-guides/ad_quadmxfe1_ebz/ad_quadmxfe1_ebz_hdl>`
-  
+
    -  :git-hdl:`AMD Xilinx VCU118 <projects/ad_quadmxfe1_ebz/vcu118>`
 
 -  :dokuwiki:`AD-FMCLIDAR1-EBZ reference design <resources/eval/user-guides/ad-fmclidar1-ebz>`
-  
+
    -  :git-hdl:`Intel A10SOC (RETIRED) <projects/ad_fmclidar1_ebz/a10soc>`
    -  :git-hdl:`AMD Xilinx ZC706 (RETIRED)<projects/ad_fmclidar1_ebz/zc706>`
    -  :git-hdl:`AMD Xilinx ZCU102 (RETIRED)<projects/ad_fmclidar1_ebz/zcu102>`
 
 -  :dokuwiki:`ADRV9026 reference design <resources/eval/user-guides/adrv9026/ad9026_hdl>`
-  
+
    -  :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9026/zcu102>`
 
 Additional Information
@@ -382,7 +382,7 @@ JESD204B Analog-to-Digital Converters
    Dual Analog-to-Digital Converter
 -  :adi:`AD9209 <en/products/AD9209>`: 12-Bit, 4GSPS, JESD204B/C, Quad
    Analog-to-Digital Converter
--  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF 
+-  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF
    Analog-to-Digital Converter
 -  :adi:`AD9234 <en/products/AD9234>`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
    Analog-to-Digital Converter
