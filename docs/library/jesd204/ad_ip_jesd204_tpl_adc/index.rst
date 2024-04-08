@@ -6,7 +6,7 @@ ADC JESD204B/C Transport Peripheral
 .. hdl-component-diagram::
 
 The ADC JESD204B/C Transport Peripheral implements the transport level handling
-of a JESD204B/C transmitter device. It is compatible with a 
+of a JESD204B/C transmitter device. It is compatible with a
 :ref:`wide range of Analog Devices high-speed analog-to-digital converters <ad_ip_jesd204_tpl_adc_supported_devices>`.
 
 The core handles the JESD204B/C deframing of the payload data.
@@ -137,8 +137,8 @@ the device and query the features supported by the device.
 Link layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The link layer interface description can be found in the 
-:ref:`User Data Interface <axi_jesd204_rx_user_data>` section of the 
+The link layer interface description can be found in the
+:ref:`User Data Interface <axi_jesd204_rx_user_data>` section of the
 :ref:`JESD204B/C Link Receive Peripheral <axi_jesd204_rx>` IP.
 
 Application layer interface
@@ -154,7 +154,7 @@ layout:
 ::
 
        MSB                                                               LSB
-     [ MmSn, ..., MmS1, MnS0, ..., M1Sn, ... M1S1, M1S0, M0Sn, ... M0S1, M0S0 ] 
+     [ MmSn, ..., MmS1, MnS0, ..., M1Sn, ... M1S1, M1S0, M0Sn, ... M0S1, M0S0 ]
 
 Where MjSi refers to the i-th sample of the j-th converter. With m being the
 number of converters and n the number of samples per converter per beat.
@@ -188,7 +188,7 @@ The block can monitor and compare the incoming deframed raw data against
 PN9, PN23 and PN7, PN15 (if enabled) patterns selected by the ``ADC_PN_SEL``
 field of ``CHAN_CNTRL_3`` register.
 
-.. 
+..
   it is missing PN31, because it does not exist on the source code
 
 .. list-table::
@@ -209,7 +209,7 @@ field of ``CHAN_CNTRL_3`` register.
    * - 5
      - PN15
      - PN15_ENABLE
-      
+
 .. *-7
 .. -PN31
 .. -PN31_ENABLE
@@ -254,7 +254,7 @@ Software Support
 Restrictions
 --------------------------------------------------------------------------------
 
-Reduced number of octets-per-frame (``F``) settings. The following values are 
+Reduced number of octets-per-frame (``F``) settings. The following values are
 supported by the peripheral: 1, 2, 4
 
 -  Starting from
@@ -282,7 +282,7 @@ JESD204B Analog-to-Digital Converters
    Dual Analog-to-Digital Converter
 -  :adi:`AD9209 <en/products/AD9209>`: 12-Bit, 4GSPS, JESD204B/C, Quad
    Analog-to-Digital Converter
--  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF 
+-  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF
    Analog-to-Digital Converter
 -  :adi:`AD9234 <en/products/AD9234>`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
    Analog-to-Digital Converter

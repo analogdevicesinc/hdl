@@ -17,9 +17,9 @@ Instruction Execution
 Every instruction requires 1 cycle minimum for communication between the offload
 module and the execution module. Additionally, the Chip Select, Sleep, Transfer
 and Sync instructions require another cycle for checking the idle condition
-(total 2 fixed delay for these). 
+(total 2 fixed delay for these).
 
-The exact values are, counting from the execution 
+The exact values are, counting from the execution
 module:
 
 .. list-table::
@@ -55,9 +55,9 @@ Detailed Delays
 
 This section lists the delays inside the SPI Engine architecture. To make use of
 this information, one needs some degree of familiarity with the hdl
-implementation (knowledge of the sub-modules and the way they communicate). 
+implementation (knowledge of the sub-modules and the way they communicate).
 
-See also: :ref:`spi_engine control-interface`, 
+See also: :ref:`spi_engine control-interface`,
 :ref:`spi_engine offload-control-interface`.
 
 Offload Module
@@ -67,10 +67,10 @@ All the delays measured for this module are in terms of SPI Engine clock cycles.
 * Trigger input to command valid output: 1 + 1-2(from a 2FF CDC, 0 if not
   asynchronous) cycles.
 * Trigger in to sdo_data_valid: 1 + 1-2(from a 2FF CDC, 0 if not asynchronous)
-  cycles.  
+  cycles.
 * Maximum command throughput: 1 command per cycle.
 * sdi_data_valid to offload_sdi_valid: 0 cycles.
-  
+
 Interconnect Module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 All the delays measured for this module are in terms of SPI Engine clock cycles.
@@ -93,7 +93,7 @@ sync handshake back to the manager is completed to free the channel.
 * m_sdi_valid to s0/s1_sdi_valid:  0 if already "owned" by the sink (s0 or s1).
   Otherwise has to wait until s0/s1 owns the channel.
 
-Execution Module 
+Execution Module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 All the delays measured for this module are in terms of SPI Engine clock cycles.
 See above: :ref:`instruction_execution_times`
@@ -101,8 +101,8 @@ See above: :ref:`instruction_execution_times`
 * Every instruction requires 1 cycle minimum for communication between the
   Offload Module and the Execution Module. Additionally, the Chip Select, Sleep,
   Transfer and Sync instructions require another cycle for checking the idle
-  condition (total 2 fixed delay for these). 
-  
+  condition (total 2 fixed delay for these).
+
   * Chip Select, Sleep and Transfer have additional cycle requirements due to
     intentional delays in execution. This is better detailed at
     :ref:`instruction_execution_times`.
@@ -120,18 +120,18 @@ AXI Module
 
 * Throughput: 4 cycles (AXI clock) per transaction.
 * Command FIFO delay: depends on parametrization:
-  
+
   * Synchronous, 1 deep: 1 clk (AXI clock = SPI Engine clock).
   * Asynchronous, 1 deep: 1 (AXI clock), + 1-2 (SPI Engine clock) (2FF CDC)
     input to output; + 1-2 (AXI clock) (2FF CDC) until ready to accept next.
   * Asynchronous, true FIFO: 2 (AXI clock) (mem write + bin2gray addr), + 1-2
     (SPI Engine clock) (2FF CDC), + 2 (SPI Engine clock) (gray2bin + valid) .
-  
+
 * AXI transaction start to command valid (total for async FIFO case): 3 AXI
   clock + 3-4 SPI Engine clock.
 * SDO Data FIFO delay: same as Command FIFO.
 * SDI Data FIFO delay: depends on parametrization:
-  
+
   * Synchronous, 1 deep: 1 clk (AXI clock = SPI Engine clock).
   * Asynchronous, 1 deep: 1 (SPI Engine clock), + 1-2 (AXI clock) (2FF CDC)
     input to output; + 1-2 (SPI Engine clock) (2FF CDC) until ready to accept

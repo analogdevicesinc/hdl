@@ -7,7 +7,7 @@ DAC JESD204B/C Transport Peripheral
 
 The DAC JESD204B/C Transport Peripheral (AD-IP-JESD204-TRANSPORT-DAC) implements
 the transport level handling of a JESD204B/C transmitter device. It is
-compatible with a 
+compatible with a
 :ref:`wide range of Analog Devices high-speed digital-to-analog converters <ad_ip_jesd204_tpl_dac_supported_devices>`.
 
 The core handles the JESD204B/C framing of the user-provided payload data. In
@@ -75,7 +75,7 @@ Signal and Interface Pins
 --------------------------------------------------------------------------------
 
 .. hdl-interfaces::
-    
+
     * - s_axi_aclk
       - All ``S_AXI`` signals and ``irq`` are synchronous to this clock.
     * - s_axi_aresetn
@@ -85,7 +85,7 @@ Signal and Interface Pins
     * - link
       - link_data: Framed transmit data towards link layer.
     * - link_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
+      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
         for the JESD204B/C interface. Must be line clock/40 for 204B correct operation.
         Must be line clock/66 for correct 204C operation.
     * - enable
@@ -147,7 +147,7 @@ the following layout:
 ::
 
        MSB                                                               LSB
-     [ MmSn, ..., MmS1, MnS0, ..., M1Sn, ... M1S1, M1S0, M0Sn, ... M0S1, M0S0 ] 
+     [ MmSn, ..., MmS1, MnS0, ..., M1Sn, ... M1S1, M1S0, M0Sn, ... M0S1, M0S0 ]
 
 
 Where MjSi refers to the i-th sample of the j-th converter. With m being the
@@ -160,8 +160,8 @@ regardless if the channels are enabled or not.
 Link layer interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The link layer interface description can be found in the 
-:ref:`User Data Interface <axi_jesd204_tx_user_data>` section of the 
+The link layer interface description can be found in the
+:ref:`User Data Interface <axi_jesd204_tx_user_data>` section of the
 :ref:`JESD204B/C Link Transmit Peripheral <axi_jesd204_tx>` IP.
 
 Clock Monitor
@@ -209,14 +209,14 @@ Restrictions
 Reduced number of octets-per-frame (``F``) settings. The following values are
 supported by the peripheral: 1, 2, 4
 
--  Starting from 
+-  Starting from
    `this <https://github.com/analogdevicesinc/hdl/commit/454b900f90081fb95be857114e768f662178c8bd>`__
    commit this restriction no longer applies
 
 Software Support
 --------------------------------------------------------------------------------
 
-.. warning:: 
+.. warning::
   To ensure correct operation it is highly recommended to use the Analog
   Devices provided JESD204B/C software packages for interfacing the peripheral.
   Analog Devices is not able to provide support in case issues arise from using

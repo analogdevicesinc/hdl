@@ -602,7 +602,7 @@ the following order:
      - id
      - This field corresponds to an identifier of the descriptor.
    * - 64‑bit
-     - dest_addr 
+     - dest_addr
      - This field contains the destination address of the transfer.
    * - 64‑bit
      - src_addr
@@ -617,7 +617,7 @@ the following order:
      - x_len
      - This field contains the number of bytes to transfer, minus one.
    * - 32‑bit
-     - src_stride 
+     - src_stride
      - This field contains the number of bytes between the start of one row and
        the next row for the source address.
    * - 32-bit
