@@ -10,7 +10,7 @@ handling of a JESD204 transmit logic device. Implements the 8B/10B based link
 layer defined in JESD204C standard that is similar to the link layer defined in
 JESD204B. This includes handling of the SYSREF and SYNC~ and controlling the
 :ref:`link state machine <axi_jesd204_tx_8b_10b_link_state_machine>` accordingly
-as well as performing per lane scrambling and character replacement. It has 
+as well as performing per lane scrambling and character replacement. It has
 been designed for interoperability with
 :ref:`Analog Devices JESD204B DAC converter products <axi_jesd204_tx_supported_devices>`.
 Implements the 64B/66B based link layer defined in the JESD204C standard.
@@ -44,7 +44,7 @@ Features
    --------------------------------------------------------------------------------
 
    .. collapsible:: Detailed Utilization
-    
+
     +---------------+---------+----+---+
     |Device Family  |NUM_LANES|LUTs|FFs|
     +===============+=========+====+===+
@@ -165,11 +165,11 @@ AXI JESD204 TX Signal and Interface Pins
       - Interrupt output of the module. Is asserted when at least one of the
         modules interrupt is pending and enabled.
     * - device_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
+      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
         for the JESD204 interface. Its frequency must be link clock \* ``DATA_PATH_WIDTH`` /
         ``TPL_DATA_PATH_WIDTH``
     * - device_reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
 
 JESD204 TX Signal and Interface Pins
@@ -179,11 +179,11 @@ JESD204 TX Signal and Interface Pins
     :path: library/jesd204/jesd204_tx
 
     * - clk
-      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
-        for the JESD204 interface. Must be line clock/40 for correct 
+      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+        for the JESD204 interface. Must be line clock/40 for correct
         operation in 8B/10B mode, line clock/66 in 64B/66B mode.
     * - reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
     * - tx_data
       - Transmit data.
@@ -333,9 +333,9 @@ section are read-only and write to them will be ignored.
 
 The ``VERSION`` (``0x000``) register contains the version of the peripheral. The
 version determines the register map layout and general features supported by the
-peripheral. The version number follows `semantic versioning <http://semver.org/>`__. 
-Increments in the major number indicate backward incompatible changes, 
-increments in the minor number indicate backward compatible changes, patch 
+peripheral. The version number follows `semantic versioning <http://semver.org/>`__.
+Increments in the major number indicate backward incompatible changes,
+increments in the minor number indicate backward compatible changes, patch
 letter increments indicate a bug fix.
 
 The ``PERIPHERAL_ID`` (``0x004``) register contains the value of the ``ID`` HDL
@@ -404,7 +404,7 @@ the corresponding bit to either the ``IRQ_SOURCE`` or ``IRQ_PENDING`` register.
 It is possible to clear multiple interrupt events at the same time by setting
 multiple bits in a single write operation.
 
-For more details regarding interrupt operation see the 
+For more details regarding interrupt operation see the
 :ref:`interrupts section <axi_jesd204_tx_interrupts>` of this document.
 
 Link Control
@@ -568,9 +568,9 @@ link status registers might contain bogus values. Their content should be
 ignored until the link is fully enabled.
 
 The ``STATUS_STATE`` (``[1:0]``) field of the ``LINK_STATUS`` (``0x280``)
-register indicates the state of the 
+register indicates the state of the
 :ref:`8B/10B link state machine <axi_jesd204_tx_8b_10b_link_state_machine>`
-or 64B/66B link state machine depending on the selected encoder. Possible 
+or 64B/66B link state machine depending on the selected encoder. Possible
 values are:
 
 Possible values for a 8B/10B link are:
@@ -595,7 +595,7 @@ Manual Synchronization Request
 For 8B/10B links the ``MANUAL_SYNC_REQUEST`` (``0x248``) register can be used to
 transition the link state from the WAIT phase to the CGS phase in the absence of
 an external synchronization request. This is useful for test cases where the
-peripheral is connected to signal analyzer instead of a JESD204B receiver 
+peripheral is connected to signal analyzer instead of a JESD204B receiver
 device.
 
 Writing a 1 to this register will trigger a manual synchronization request.
@@ -682,7 +682,7 @@ behave as if the link was in the WAIT state regardless of the actual state.
 Code Group Synchronization Phase (CGS)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-During the CGS phase the peripheral will continuously transmit 
+During the CGS phase the peripheral will continuously transmit
 :dokuwiki:`/K/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 on each of the ``TX_PHYn`` interfaces.
 
@@ -709,13 +709,13 @@ Initial Lane Alignment Sequence Phase (ILAS)
 
 During the ILAS phase the peripheral transmits the initial lane alignment
 sequence. The transmitted ILAS consists of four multi-frames. The first octet of
-each multi-frame is the 
+each multi-frame is the
 :dokuwiki:`/R/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
-and the last octet of each multi-frame is the 
+and the last octet of each multi-frame is the
 :dokuwiki:`/A/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 
 During the second multi-frame the link configuration data is transmitted from
-the 3rd to 16th octet. The second octet of the second multi-frame is the 
+the 3rd to 16th octet. The second octet of the second multi-frame is the
 :dokuwiki:`/Q/ control character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 to indicate that this multi-frame carries configuration data. The ILAS
 configuration data sequence can be programmed through the register map
@@ -773,10 +773,10 @@ The peripheral also performs per-lane alignment character replacement. Alignment
 character replacement will replace under certain predictable conditions (i.e.
 the receiver can recover the replaced character) the last octet in a frame or
 multi-frame. Replaced characters at the end of a frame, that is also the end of
-a multi-frame, are replaced by the 
+a multi-frame, are replaced by the
 :dokuwiki:`/A/ character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 Replaced characters at the end of a frame, that is not the end of a
-multi-frame, are replaced by the 
+multi-frame, are replaced by the
 :dokuwiki:`/F/ character <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`.
 Alignment characters can be used by the receiver to ensure proper frame
 and lane alignment.

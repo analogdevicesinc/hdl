@@ -18,9 +18,9 @@ descrambling, CRC checking of data blocks and error monitoring.
 The type of link layer is selectable during implementation phase through the
 ``LINK_MODE`` synthesis parameter.
 
-It has been designed for interoperability with 
-:ref:`Analog Devices JESD204 ADC converter products <axi_jesd204_rx_supported_devices>`. 
-To form a complete JESD204 receive logic device, it has to be combined with a 
+It has been designed for interoperability with
+:ref:`Analog Devices JESD204 ADC converter products <axi_jesd204_rx_supported_devices>`.
+To form a complete JESD204 receive logic device, it has to be combined with a
 :ref:`PHY layer <jesd204_physical_layer>` and
 :ref:`transport layer <jesd204_transport_layer>` peripheral.
 
@@ -45,7 +45,7 @@ Features
    --------------------------------------------------------------------------------
 
    .. collapsible:: Detailed Utilization
-    
+
     +---------------+---------+----+---+
     |Device Family  |NUM_LANES|LUTs|FFs|
     +===============+=========+====+===+
@@ -166,11 +166,11 @@ AXI JESD204 RX Signal and Interface Pins
       - Interrupt output of the module. Is asserted when at least one of the
         modules interrupt is pending and enabled.
     * - device_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
+      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
         for the JESD204 interface. Its frequency must be link clock
         \* ``DATA_PATH_WIDTH`` / ``TPL_DATA_PATH_WIDTH``
     * - device_reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
 
 JESD204 RX Signal and Interface Pins
@@ -180,11 +180,11 @@ JESD204 RX Signal and Interface Pins
     :path: library/jesd204/jesd204_rx
 
     * - clk
-      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>` 
-        for the JESD204 interface. Must be line clock/40 for correct operation 
+      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+        for the JESD204 interface. Must be line clock/40 for correct operation
         in 8B/10B mode, line clock/66 in 64B/66B mode.
     * - reset
-      - Reset active high synchronous with the 
+      - Reset active high synchronous with the
         :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
     * - rx_data
       - Received data.
@@ -198,7 +198,7 @@ JESD204 RX Signal and Interface Pins
     * - phy_en_char_align
       - Enable transceiver character alignment.
 
-.. it was optimized out because it is always 1 in the source code    
+.. it was optimized out because it is always 1 in the source code
 .. * - phy_ready
      - phy_ready Transceiver status.
 
@@ -265,7 +265,7 @@ The physical layer is responsible for clock recovery, character alignment,
 de-serialization as well an 8b10b decoding.
 
 .. _axi_jesd204_rx_user_data:
- 
+
 User Data Interface (RX_DATA)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -341,9 +341,9 @@ section are read-only and write access to them will be ignored.
 
 The ``VERSION`` (``0x000``) register contains the version of the peripheral. The
 version determines the register map layout and general features supported by the
-peripheral. The version number follows `semantic versioning <http://semver.org/>`__. 
-Increments in the major number indicate backward incompatible changes, 
-increments in the minor number indicate backward compatible changes, patch 
+peripheral. The version number follows `semantic versioning <http://semver.org/>`__.
+Increments in the major number indicate backward incompatible changes,
+increments in the minor number indicate backward compatible changes, patch
 letter increments indicate bug fix.
 
 The ``PERIPHERAL_ID`` (``0x004``) register contains the value of the ``ID`` HDL
@@ -418,7 +418,7 @@ the corresponding bit to either the ``IRQ_SOURCE`` or ``IRQ_PENDING`` register.
 It is possible to clear multiple interrupt events at the same time by setting
 multiple bits in a single write operation.
 
-For more details regarding interrupt operation see the 
+For more details regarding interrupt operation see the
 :ref:`interrupts section <axi_jesd204_rx_interrupts>` of this document.
 
 Link Control
@@ -492,7 +492,7 @@ always enabled. The ``CHAR_REPLACEMENT_DISABLE`` (``[1]``) bit controls whether
 alignment character replacement is performed or not. A value of 0 enables
 character replacement and a value of 1 disables it. If character replacement is
 disabled and an alignment character is received
-(:dokuwiki:`/F/ <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>` 
+(:dokuwiki:`/F/ <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`
 or
 :dokuwiki:`/A/ <resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters>`)
 a unexpected K-character error is raised.
@@ -559,8 +559,8 @@ The ``SYSREF_LMFC_OFFSET`` (``0x104``) register allows to modify the offset
 between the SYSREF rising edge and the rising edge of the LMFC/LEMC.
 
 For optimal operation it is recommended that all device on a JESD204 link should
-be configured in a way so that the total offset between the value of the 
-``SYSREF_LMFC_OFFSET`` register must be set to a value smaller than the 
+be configured in a way so that the total offset between the value of the
+``SYSREF_LMFC_OFFSET`` register must be set to a value smaller than the
 configured number of octets-per-multiframe (``OCTETS_PER_MULTIFRAME``),
 otherwise undefined behavior might occur.
 
@@ -584,9 +584,9 @@ link status registers might contain bogus values. Their content should be
 ignored until the link is fully enabled.
 
 The ``STATUS_STATE`` (``[1:0]``) field of the ``LINK_STATUS`` (``0x280``)
-register indicates the state of the 
-:ref:`8B/10B link state machine <axi_jesd204_rx_8b10b_link_state_machine>` or 
-:ref:`64B/66B link state machine <axi_jesd204_rx_64b66b_link_state_machine>` 
+register indicates the state of the
+:ref:`8B/10B link state machine <axi_jesd204_rx_8b10b_link_state_machine>` or
+:ref:`64B/66B link state machine <axi_jesd204_rx_64b66b_link_state_machine>`
 depending on the selected decoder.
 
 Possible values for a 8B/10B link are:
@@ -609,7 +609,7 @@ Possible values for a 64B/66B link are:
 -  DATA (0x3): All enabled lanes reached the multi-block synchronization phase,
    elastic buffer released the data and the link is properly established.
 
-The state of each individual lane can be queried from the 
+The state of each individual lane can be queried from the
 :ref:`lane status <axi_jesd204_rx_lane_status>` registers.
 
 .. _axi_jesd204_rx_lane_status:
@@ -798,7 +798,7 @@ In the below example we have a multi-point link of four endpoints
    :align: center
 
 .. note::
-    
+
     The physical layer is not depicted on purpose. JTXn represents the link
     layer counterpart in the converter device/endpoint *n*
 
@@ -999,7 +999,7 @@ Once the slowest lane delay is identified, before enabling the links, SW needs
 to set the register ``BUFFER_DELAY`` (0x240) from all parallel Rx links if
 exists based on the following formula:
 
-.. math:: 
+.. math::
    Buffer Delay = \frac{(F*K - min(latency regs) + 32)}{TPLDW} + 4
 
 Where:
@@ -1086,7 +1086,7 @@ JESD204B Analog-to-Digital Converters
    Dual Analog-to-Digital Converter
 -  :adi:`AD9209 <en/products/AD9209>`: 12-Bit, 4GSPS, JESD204B/C, Quad
    Analog-to-Digital Converter
--  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF 
+-  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF
    Analog-to-Digital Converter
 -  :adi:`AD9234 <en/products/AD9234>`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
    Analog-to-Digital Converter
