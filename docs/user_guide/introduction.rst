@@ -5,7 +5,7 @@ Introduction
 
 The main purpose of this user guide is to help the user understand and use
 (modify or otherwise) the HDL resources provided by `Analog Devices, Inc.`_,
-and to provide advices and instructions for using these resources.
+and to provide advice and instructions for using these resources.
 These resources are found on the GitHub, the
 :git-hdl:`/`.
 

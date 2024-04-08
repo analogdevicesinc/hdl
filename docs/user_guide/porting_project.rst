@@ -93,13 +93,8 @@ Example with an AMD Xilinx board
 In this section, we are presenting all the necessary steps to create a base
 design for the AMD :xilinx:`ZCU102` development board.
 
-First, you need to create a new directory in ``hdl/projects/common`` with the name
-of the carrier.
-
-.. code:: bash
-
-   ~/hdl$ cd projects/common
-   ~/hdl/projects/common$ mkdir zcu102
+First, you need to create a new directory in ``hdl/projects/common`` with the
+name of the carrier.
 
 The **zcu102** directory must contain the following files:
 
@@ -113,8 +108,8 @@ The **zcu102** directory must contain the following files:
 
 You should define the board and its device in the project flow script
 :git-hdl:`projects/scripts/adi_project_xilinx.tcl`
-by adding the following lines to the beginning of the **adi_project_create**
-process:
+by adding the following lines after the last device specified in
+the **adi_project_create** process:
 
 .. code:: tcl
 
@@ -141,18 +136,21 @@ The **sys_zynq** constant variable should be set in the following way:
 Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To create a new base design for a given Intel FPGA carrier board, the following
-steps should be taken (the `A10SoC`_ carrier was used as an example).
+In this section, we are presenting all the necessary steps to create a base
+design for the Intel Arria 10 SoC development board (abbreviated, `A10SoC`_).
 
-The following files should be created or copied into the directory:
+First, you need to create a new directory in ``hdl/projects/common`` with the
+name of the carrier.
+
+The **a10soc** directory must contain the following files:
 
 - **a10soc_system_assign.tcl** - global and I/O assignments of the base design
 - **a10soc_system_qsys.tcl** - the QSYS base design
 
 You should define the board and its device in the flow script
 :git-hdl:`projects/scripts/adi_project_intel.tcl`,
-by adding the following lines to the beginning of the **adi_project_altera**
-process:
+by adding the following lines after the last device specified in
+the **adi_project** process:
 
 .. code:: tcl
 

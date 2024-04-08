@@ -149,6 +149,14 @@ Building the projects
    proper tools. See `Tools`_ section on what you need to download and
    `Environment`_ section on how to set-up your environment.
 
+Simply put, to build a project you just run ``make`` in your Linux terminal
+or in Cygwin. For more details, please read the rest of the documentation.
+
+To clean only the project or a specific library before building it again,
+run ``make clean``.
+To clean both the built libraries which the project depends on and the project,
+run ``make clean-all``.
+
 Building an Intel project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -331,8 +339,6 @@ Running the command below will create a folder named **LVDSCMOSN1**.
 .. code-block:: bash
 
    make LVDS_CMOS_N=1
-
-
 
 Enabling Out-of-Context synthesis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -691,8 +697,8 @@ Windows environment setup
 
 The best option on Windows is to use
 `Cygwin <https://www.cygwin.com>`__. When installing it, select the
-``make`` and ``git`` packages. The manual changes to your **.bashrc** do a lot
-look like that of the Linux environment.
+``make`` and ``git`` packages. You should do changes to your **.bashrc**
+in a similar manner to the Linux environment.
 
 .. code-block:: bash
 
@@ -700,8 +706,8 @@ look like that of the Linux environment.
    export PATH=$PATH:/cygdrive/d/intelFPGA_pro/2x.x/quartus/bin64
 
 A very good alternative to Cygwin is
-`WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. The
-manual changes to your **.bashrc** should look like:
+`WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. The changes
+to your **.bashrc** should look like:
 
 .. code-block:: bash
 

@@ -68,9 +68,19 @@ Release branches
      - List of supported projects and IP cores
    * - :git-hdl:`main <main:/>`
      - Quartus Pro 23.2
-     - Vivado 2023.1
+     - Vivado 2023.2
      -
      -
+   * - :git-hdl:`hdl_2022_r2 patch1 <2022_r2_p1:>`
+     - Quartus Pro 22.4
+     - Vivado 2022.2
+     - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_r2_p1>`
+     - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`_
+   * - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:>`
+     - Quartus Pro 22.4
+     - Vivado 2022.2
+     - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_R2>`
+     - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`_
    * - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:>`
      - Quartus Pro 21.4
      - Vivado 2021.2
