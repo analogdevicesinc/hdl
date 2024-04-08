@@ -36,8 +36,8 @@ the *base design first*, then the *board design*.
 Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Take `AD-FMCOMMS2-EBZ`_ with ZedBoard; the ``system_bd.tcl`` will look like the
-following:
+Take :adi:`AD-FMCOMMS2 <EVAL-ADFMCOMMS2>` with ZedBoard;
+the ``system_bd.tcl`` will look like the following:
 
 .. code-block:: bash
 
@@ -47,7 +47,7 @@ following:
 Typical project diagram
 -------------------------------------------------------------------------------
 
-|HDL overall system|
+.. image:: ./sources/base_platform.svg
 
 Base Design
 -------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ HDMI
 
 There is HDMI support for all the carriers which are using the ADV7511
 as HDMI transmitter. The HDMI transmitter core can be found
-:git-hdl:`here <library/axi_hdmi_tx>`.
+:git-hdl:`here (axi_hdmi_tx) <library/axi_hdmi_tx>`.
 
 GPIOs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -220,8 +220,8 @@ inputs not being assigned to.
 Depending on the processor type, add these values to the GPIO number
 from the HDL project to obtain the final number used in software:
 
--  PS7 EMIO offset = 54
--  PS8 EMIO offset = 78
+-  PS7 EMIO offset = **54**
+-  PS8 EMIO offset = **78**
 
 Connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -286,7 +286,7 @@ AMD platforms
      - FMC connector 2
      - VADJ FMC connector
      - Family
-   * - `AC701 <https://www.xilinx.com/products/boards-and-kits/ek-a7-ac701-g.html>`__
+   * - `AC701 <https://www.xilinx.com/products/boards-and-kits/ek-a7-ac701-g.html>`__ **
      - JTAG
      - HPC (2 GTP @ 6.6 Gbps)
      - ---
@@ -310,7 +310,7 @@ AMD platforms
      - LPC (1 GTH @ 16.3 Gbps)
      - **\*1.8V**/1.5V/1.2V
      - Kintex UltraScale
-   * - `Microzed <http://zedboard.org/product/microzed>`__
+   * - `Microzed <http://zedboard.org/product/microzed>`__ **
      - JTAG
      - ---
      - ---
@@ -322,7 +322,7 @@ AMD platforms
      - HPC (8 GTX @ 12.5 Gbps)
      - **\*1.8V**/1.5V/1.2V
      - Virtex-7
-   * - `VC709 <https://www.xilinx.com/products/boards-and-kits/dk-v7-vc709-g.html>`__
+   * - `VC709 <https://www.xilinx.com/products/boards-and-kits/dk-v7-vc709-g.html>`__ **
      - JTAG
      - HPC (10 GTH @ 13.1 Gbps)
      - ---
@@ -392,6 +392,11 @@ AMD platforms
 
 .. note::
 
+   \*\* = not supported anymore, but projects with these carriers can be found
+   in older releases
+
+.. note::
+
    **(\* bold**) = default VADJ
    FMC1 & FMC2 columns -> depending on the power supply of the device
    connected to the FMC, the custom VADJ will have the value supported by
@@ -405,17 +410,28 @@ Intel platforms
    :header-rows: 1
 
    * - Board name
-     - FMC connector 1
-     - FMC connector 2
-   * - `A10GX <https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-a10-gx-fpga.html>`__
-     - LPC ()
-     - HPC (8 x 17.4 Gbps)
+     - Connector 1
+     - Connector 2
+   * - `A10GX <https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-a10-gx-fpga.html>`__ **
+     - FMC LPC ()
+     - FMC HPC (8 x 17.4 Gbps)
    * - `A10SoC <https://www.altera.com/products/boards_and_kits/dev-kits/altera/arria-10-soc-development-kit.html>`__
-     - HPC (8)
-     - LPC (8)
+     - FMC HPC (8)
+     - FMC LPC (8)
    * - `S10SoC <https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`__
      - FMC+ (24 @ 28.3 Gbps)
      - FMC+ (24 @ 28.3 Gbps)
+   * - `C5SoC <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=819>`__
+     - HSMC
+     - ---
+   * - `DE10Nano <https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`__
+     - Arduino shield
+     - ---
+
+.. note::
+
+   \*\* = not supported anymore, but projects with these carriers can be found
+   in older releases
 
 VADJ values
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -437,11 +453,12 @@ VADJ values
      - **\*3.3V**/1.8V/1.2V
      - **\*3.3V**/1.8V/1.2V
 
-(**\* bold**) = default VADJ
-FMC1 & FMC2 columns -> depending on the power supply of the device
-connected to the FMC, the custom VADJ will have the value supported by
-both the carrier and the device(s)
+.. note::
 
+   (**\* bold**) = default VADJ
+   FMC1 & FMC2 columns -> depending on the power supply of the device
+   connected to the FMC, the custom VADJ will have the value supported by
+   both the carrier and the device(s)
 
 File structure of a project
 -------------------------------------------------------------------------------
@@ -526,7 +543,3 @@ has constraints file for both PL side and PS side:
 
 -  a10soc_plddr4_assign.tcl --- constraints file for the PL
 -  a10soc_system_assign.tcl --- constraints file for the PS
-
-.. _AD-FMCOMMS2-EBZ: https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCOMMS2.html
-
-.. |HDL overall system| image:: ./sources/base_platform.svg

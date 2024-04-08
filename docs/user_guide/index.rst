@@ -14,7 +14,7 @@ User Guide
    IP cores <ip_cores/index>
    Porting reference designs <porting_project>
    Customize HDL projects <customize_hdl>
-   HDL coding guideline <hdl_coding_guideline>
+   HDL coding guidelines <hdl_coding_guidelines>
    Documentation guidelines <docs_guidelines>
    Third party forks <third_party>
 
@@ -35,7 +35,7 @@ Contents
 #. :ref:`user_guide ip_cores`: List of IP cores and IP guides.
 #. :ref:`porting_project`: How to port a project to a non-supported carrier
 #. :ref:`customize_hdl`: Using and modifying the HDL design
-#. :ref:`hdl_coding_guideline`: The Verilog/VHDL coding guidelines that the
+#. :ref:`hdl_coding_guidelines`: The Verilog/VHDL coding guidelines that the
    HDL team follows
 #. :ref:`docs_guidelines`: Documentation guidelines
 #. :ref:`third_party`: Third party forks with derived work

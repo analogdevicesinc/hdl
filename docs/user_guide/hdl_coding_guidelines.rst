@@ -1,6 +1,6 @@
-.. _hdl_coding_guideline:
+.. _hdl_coding_guidelines:
 
-ADI HDL coding guideline
+ADI HDL coding guidelines
 ===============================================================================
 
 1. Introduction
@@ -420,11 +420,11 @@ or registers.
    localparam   LOCAL_PARAM2;
 
    reg  [ 3:0]  my_signal1;
-   reg  [ 4:0]  my_signal2;         
-   reg          my_signal3;         
+   reg  [ 4:0]  my_signal2;
+   reg          my_signal3;
 
-   wire [ 2:0]  my_wire1;          
-   wire         my_wire2;          
+   wire [ 2:0]  my_wire1;
+   wire         my_wire2;
 
 B. Naming Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
