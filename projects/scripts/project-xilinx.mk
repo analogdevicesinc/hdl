@@ -118,7 +118,7 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 $(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
 FORCE:
 $(HDL_LIBRARY_PATH)%/component.xml: FORCE
-	flock $(dir $@).lock -c " \
+	flock $(dir $@).lock sh -c " \
 	if [ -n \"${REQUIRED_VIVADO_VERSION}\" ]; then \
 		$(MAKE) -C $(dir $@) $(TARGET) REQUIRED_VIVADO_VERSION=${REQUIRED_VIVADO_VERSION}; \
 	else \
