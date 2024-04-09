@@ -72,7 +72,7 @@ module axi_dac_interpolate_reg(
   // internal registers
 
   reg     [31:0]  up_version = {16'h0002,     /* MAJOR */
-                                 8'h03,       /* MINOR */
+                                 8'h04,       /* MINOR */
                                  8'h00};      /* PATCH */
   reg     [31:0]  up_scratch = 32'h0;
 
