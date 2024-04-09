@@ -85,12 +85,10 @@ module axi_dac_interpolate_filter #(
   reg               cic_change_rate;
   reg     [31:0]    interpolation_counter;
 
-  reg               dma_data_valid = 1'b0;
-  reg               dma_data_valid_adjacent = 1'b0;
-
   reg               filter_enable = 1'b0;
   reg     [15:0]    dma_valid_m = 16'd0;
   reg               stop_transfer = 1'd0;
+  reg               clear_stop_flag = 1'd0;
 
   reg               transfer = 1'd0;
   reg     [ 1:0]    transfer_sm = 2'd0;
@@ -196,11 +194,12 @@ module axi_dac_interpolate_filter #(
   assign transfer_ready =  start_sync_channels ?
                              dma_valid & dma_valid_adjacent :
                              dma_valid;
-  assign transfer_start = !(en_start_trigger ^ trigger) & transfer_ready;
+  assign transfer_start = !(en_start_trigger ^ trigger) &
+                          transfer_ready & !dma_transfer_suspend;
 
   always @(posedge dac_clk) begin
     stop_transfer <= transfer_sm == IDLE ? 1'b0 :
-                     stop_transfer |
+                     (stop_transfer & !clear_stop_flag) |
                      dma_transfer_suspend |
                      (en_stop_trigger & trigger) |
                      (sync_stop_channels & dma_valid & dma_valid_adjacent);
@@ -211,17 +210,19 @@ module axi_dac_interpolate_filter #(
     case (transfer_sm)
       IDLE: begin
         transfer <= 1'b0;
-        if (dac_int_ready) begin
+        if (dac_int_ready & !dma_transfer_suspend) begin
           transfer_sm_next <= WAIT;
         end
       end
       WAIT: begin
         transfer <= 1'b0;
         if (transfer_start) begin
+          clear_stop_flag <= 1'b1;
           transfer_sm_next <= TRANSFER;
         end
       end
       TRANSFER: begin
+        clear_stop_flag <= 1'b0;
         transfer <= 1'b1;
         if (stop_transfer) begin
           if (flush_dma_in) begin
