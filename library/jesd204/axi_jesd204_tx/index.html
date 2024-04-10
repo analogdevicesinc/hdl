@@ -7,8 +7,8 @@
 
     <title>JESD204B/C Link Transmit Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=7196d5a4" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e974aa45" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
@@ -477,84 +477,104 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [13:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>in</p></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [13:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -575,12 +595,14 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -601,12 +623,14 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -624,72 +648,89 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_lanes_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">lanes_disable</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_links_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">links_disable</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_octets_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">octets_per_multiframe</span></code></td>
-<td><p>out</p></td>
+<td><p>out [9:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_octets_per_frame</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">octets_per_frame</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_continuous_cgs</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">continuous_cgs</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_continuous_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">continuous_ilas</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_skip_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">skip_ilas</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_mframes_per_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">mframes_per_ilas</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_disable_char_replacement</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">disable_char_replacement</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_cfg_disable_scrambler</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">disable_scrambler</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_octets_per_multiframe</span></code></td>
-<td><p>out</p></td>
+<td><p>out [9:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_frame</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_octets_per_frame</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_beats_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_beats_per_multiframe</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_lmfc_offset</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_lmfc_offset</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_oneshot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_sysref_oneshot</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_sysref_disable</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -700,27 +741,31 @@ peripheral.</p></td>
 <section id="bus-interface-tx_ilas_config">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="0c85a5367bcd08b776aa4a43fcdb4487a25fae80" name="0c85a5367bcd08b776aa4a43fcdb4487a25fae80" type="checkbox"></input><label for="0c85a5367bcd08b776aa4a43fcdb4487a25fae80"><div><p>tx_ilas_config</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_rd</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">rd</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_addr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ilas_config_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -738,16 +783,19 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_alignment_error</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sysref_alignment_error</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_edge</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sysref_edge</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -765,28 +813,34 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_status_state</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">state</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">core_status_sync</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params0</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params1</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params2</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -797,19 +851,21 @@ peripheral.</p></td>
 <section id="bus-interface-tx_ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="3d58407ad66d45e28bc5cfcf120de286fb14e90d" name="3d58407ad66d45e28bc5cfcf120de286fb14e90d" type="checkbox"></input><label for="3d58407ad66d45e28bc5cfcf120de286fb14e90d"><div><p>tx_ctrl</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">core_ctrl_manual_sync_request</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">manual_sync_request</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -830,12 +886,14 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">irq</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">INTERRUPT</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -916,20 +974,24 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -947,72 +1009,89 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_lanes_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">lanes_disable</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_links_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">links_disable</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_octets_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">octets_per_multiframe</span></code></td>
-<td><p>in</p></td>
+<td><p>in [9:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_octets_per_frame</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">octets_per_frame</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_continuous_cgs</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">continuous_cgs</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_continuous_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">continuous_ilas</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_skip_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">skip_ilas</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_mframes_per_ilas</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">mframes_per_ilas</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cfg_disable_char_replacement</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">disable_char_replacement</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cfg_disable_scrambler</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">disable_scrambler</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_octets_per_multiframe</span></code></td>
-<td><p>in</p></td>
+<td><p>in [9:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_octets_per_frame</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_octets_per_frame</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_beats_per_multiframe</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_beats_per_multiframe</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_lmfc_offset</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_lmfc_offset</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_oneshot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_sysref_oneshot</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_cfg_sysref_disable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">device_sysref_disable</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1023,27 +1102,31 @@ peripheral.</p></td>
 <section id="bus-interface-tx_ilas_config">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="bfa887a6d3df77f6f20bf2e8edf787d048f027bb" name="bfa887a6d3df77f6f20bf2e8edf787d048f027bb" type="checkbox"></input><label for="bfa887a6d3df77f6f20bf2e8edf787d048f027bb"><div><p>tx_ilas_config</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_rd</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">rd</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_addr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ilas_config_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1061,16 +1144,19 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_alignment_error</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sysref_alignment_error</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">device_event_sysref_edge</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sysref_edge</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1088,28 +1174,34 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_state</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">state</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_sync</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params0</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params1</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_synth_params2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">synth_params2</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1120,19 +1212,21 @@ peripheral.</p></td>
 <section id="bus-interface-tx_ctrl">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2" name="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2" type="checkbox"></input><label for="6fe556d1a1fbd2d5be72a16d4eca6a7689d647e2"><div><p>tx_ctrl</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_manual_sync_request</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">manual_sync_request</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1143,7 +1237,7 @@ peripheral.</p></td>
 <section id="bus-interface-tx_phy*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="16344675ab72b01569a4ccc8418e106c54e679b2" name="16344675ab72b01569a4ccc8418e106c54e679b2" type="checkbox"></input><label for="16344675ab72b01569a4ccc8418e106c54e679b2"><div><p>tx_phy*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 31)</span><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 92)</span><section>
 <p>n-th lane of the JESD204 interface (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">NUM_LANES</span></code>).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1153,20 +1247,24 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">phy_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">txdata</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">phy_charisk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">txcharisk</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">phy_header</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">txheader</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1239,7 +1337,7 @@ peripheral.</p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 <td class="description"><section>
 <p>sync[m-1:0] is JESD204B SYNC~ (or SYNC_N) signal, available in 8B/10B mode. (<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">n</span> <span class="pre">&lt;</span> <span class="pre">NUM_LINKS</span></code>)</p>
@@ -1247,22 +1345,22 @@ peripheral.</p></td>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_eof</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_sof</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_somf</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_eomf</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>

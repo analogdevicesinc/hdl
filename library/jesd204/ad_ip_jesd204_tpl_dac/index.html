@@ -7,8 +7,8 @@
 
     <title>DAC JESD204B/C Transport Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=7196d5a4" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e974aa45" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
@@ -427,84 +427,104 @@ register map.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [12:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>in</p></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [12:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -525,12 +545,14 @@ register map.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -551,12 +573,14 @@ register map.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -577,20 +601,24 @@ register map.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">link_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">link_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">link_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [127:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -621,7 +649,7 @@ register map.</p>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">enable</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Request signal for each channel.</p>
@@ -629,7 +657,7 @@ register map.</p>
 </td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_valid</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Qualifier signal for each channel. Always ‘1’.</p>
@@ -637,7 +665,7 @@ register map.</p>
 </td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_ddata</span></code></td>
-<td><p>in</p></td>
+<td><p>in [127:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Raw application layer data, every channel concatenated.</p>

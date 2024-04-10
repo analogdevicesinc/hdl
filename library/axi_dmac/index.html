@@ -7,8 +7,8 @@
 
     <title>High-Speed DMA Controller &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
@@ -614,84 +614,104 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [10:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>in</p></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>in</p></td>
+<td><p>in [10:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>in</p></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -712,12 +732,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -738,12 +760,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -754,7 +778,7 @@ like high-speed converters.</p>
 <section id="bus-interface-m_dest_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f" name="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f" type="checkbox"></input><label for="0f20b218e7ce8e8cf2d79db6b4f9f3dd224b5b2f"><div><p>m_dest_axi</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -764,152 +788,189 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WLAST</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RLAST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -920,7 +981,7 @@ like high-speed converters.</p>
 <section id="bus-interface-m_sg_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="78dde761cd273177c6018777495e019f77eebe9a" name="78dde761cd273177c6018777495e019f77eebe9a" type="checkbox"></input><label for="78dde761cd273177c6018777495e019f77eebe9a"><div><p>m_sg_axi</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span></code> parameter is set.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -930,152 +991,189 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WLAST</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_bid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RLAST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1086,7 +1184,7 @@ like high-speed converters.</p>
 <section id="bus-interface-m_src_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="9b29b7d093e63d683542d08cee35ef8b95e8be01" name="9b29b7d093e63d683542d08cee35ef8b95e8be01" type="checkbox"></input><label for="9b29b7d093e63d683542d08cee35ef8b95e8be01"><div><p>m_src_axi</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-MM (0).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1096,152 +1194,189 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awaddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_awready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wstrb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WLAST</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_wready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_bready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_araddr</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>out</p></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arlen</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLEN</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arsize</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARSIZE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arburst</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARBURST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arlock</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARLOCK</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arcache</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARCACHE</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arprot</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>out</p></td>
+<td><p>out [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_arready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">Disabled</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rdata</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rresp</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RLAST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rvalid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_rready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1262,12 +1397,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_clk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1288,12 +1425,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_clk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1314,12 +1453,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1340,12 +1481,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1366,12 +1509,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1392,12 +1537,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1418,12 +1565,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1444,12 +1593,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_dest_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1470,12 +1621,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_sg_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_SG_TRANSFER</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1496,12 +1649,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_src_axi_aresetn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1512,7 +1667,7 @@ like high-speed converters.</p>
 <section id="bus-interface-s_axis">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c" name="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c" type="checkbox"></input><label for="baa67ecfe3c1e03d09191bcbf2e0f3ad581ace6c"><div><p>s_axis</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1522,44 +1677,54 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_strb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TSTRB</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_keep</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_user</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TUSER</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_id</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TID</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_dest</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDEST</span></code></td>
-<td><p>in</p></td>
+<td><p>in [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_last</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1570,7 +1735,7 @@ like high-speed converters.</p>
 <section id="bus-interface-m_axis">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="0c3e872b3877f59e05ac68e14bd0ccd3a005a788" name="0c3e872b3877f59e05ac68e14bd0ccd3a005a788" type="checkbox"></input><label for="0c3e872b3877f59e05ac68e14bd0ccd3a005a788"><div><p>m_axis</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to AXI-Streaming (1).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1580,44 +1745,54 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_strb</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TSTRB</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_keep</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_user</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TUSER</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_id</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TID</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_dest</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDEST</span></code></td>
-<td><p>out</p></td>
+<td><p>out [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_last</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1628,7 +1803,7 @@ like high-speed converters.</p>
 <section id="bus-interface-fifo_wr">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80" name="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80" type="checkbox"></input><label for="8611b89da00fbdd1a9dca5bf8fab0f0b0abc0e80"><div><p>fifo_wr</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter is set to FIFO (2).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1638,28 +1813,34 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_en</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EN</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_din</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA</span></code></td>
-<td><p>in</p></td>
+<td><p>in [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_overflow</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OVERFLOW</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_sync</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_wr_xfer_req</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">XFER_REQ</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1670,7 +1851,7 @@ like high-speed converters.</p>
 <section id="bus-interface-fifo_rd">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="59c18f00313be83786888e32a4044c820cf1bb60" name="59c18f00313be83786888e32a4044c820cf1bb60" type="checkbox"></input><label for="59c18f00313be83786888e32a4044c820cf1bb60"><div><p>fifo_rd</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code><span>.</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code><span>. </span><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter is set to FIFO (2).</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1680,24 +1861,29 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_en</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EN</span></code></td>
 <td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_dout</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [63:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VALID</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">fifo_rd_underflow</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UNDERFLOW</span></code></td>
 <td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span> <span class="pre">=</span> <span class="pre">2</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -1718,12 +1904,14 @@ like high-speed converters.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">irq</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">INTERRUPT</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1761,7 +1949,7 @@ like high-speed converters.</p>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dest_diag_level_bursts</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
 <td class="description"><section>
 <p>Only present when <code class="docutils literal notranslate"><span class="pre">ENABLE_DIAGNOSTICS_IF</span></code> parameter is set.</p>

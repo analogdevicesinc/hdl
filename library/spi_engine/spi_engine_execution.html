@@ -7,8 +7,8 @@
 
     <title>SPI Engine Execution Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
@@ -151,17 +151,30 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
@@ -308,56 +321,69 @@ into low-level SPI bus transactions.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_ready</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_valid</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_ready</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_valid</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -378,32 +404,39 @@ into low-level SPI bus transactions.</p>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sclk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sclk</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdi</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi</span></code></td>
-<td><p>in</p></td>
+<td><p>in [0:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdo</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_t</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_t</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">three_wire</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">three_wire</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cs</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cs</span></code></td>
-<td><p>out</p></td>
+<td><p>out [0:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>

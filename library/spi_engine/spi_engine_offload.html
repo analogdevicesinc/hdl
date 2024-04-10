@@ -7,8 +7,8 @@
 
     <title>SPI Engine Offload Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=7196d5a4" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e974aa45" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
@@ -306,56 +306,69 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_ready</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_valid</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_ready</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_valid</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -376,48 +389,59 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_cmd_wr_en</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_wr_en</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ctrl_cmd_wr_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">cmd_wr_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_sdo_wr_en</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_wr_en</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ctrl_sdo_wr_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sdo_wr_data</span></code></td>
-<td><p>in</p></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_enable</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">enable</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ctrl_enabled</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">enabled</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ctrl_mem_reset</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">mem_reset</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_sync_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">status_sync_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">status_sync_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -438,20 +462,24 @@ peripheral.</p></td>
 <tr class="row-odd"><th class="head"><p>Physical Port</p></th>
 <th class="head"><p>Logical Port</p></th>
 <th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload_sdi_valid</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
 <td><p>out</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload_sdi_ready</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload_sdi_data</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>out</p></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
