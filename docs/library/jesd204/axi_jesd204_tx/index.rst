@@ -907,6 +907,8 @@ Software Support
 
 -  :dokuwiki:`JESD204B Transmit Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx>`
 
+.. _axi_jesd204_tx restrictions:
+
 Restrictions
 --------------------------------------------------------------------------------
 

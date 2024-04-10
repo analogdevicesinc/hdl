@@ -28,7 +28,7 @@ Contents
    AD7606X-FMC <ad7606x_fmc/index>
    AD7616-SDZ <ad7616_sdz/index>
    AD7768-EVB <ad7768evb/index>
-   AD9081-FMCA-EBZ/AD9082-FMCA-EBZ <ad9081_fmca_ebz/index>
+   AD9081/AD9082/AD9986/AD9988 <ad9081_fmca_ebz/index>
    AD9434-FMC <ad9434_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
