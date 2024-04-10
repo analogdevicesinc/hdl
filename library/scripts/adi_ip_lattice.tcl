@@ -1205,21 +1205,27 @@ namespace eval ipl {
                         }
                     }
                 } else {
-                    set sep {[}
-                    set values [split $line $sep]
-                    set sep {]}
-                    set values [split [lindex $values 1] $sep]
+                    if {[regexp {^.+\[.+$} $line]} {
+                        set sep {[}
+                        set values [split $line $sep]
+                        set sep {]}
+                        set values [split [lindex $values 1] $sep]
 
-                    set range [string map {" " ""} [lindex $values 0]]
-                    set from_to [split $range ":"]
-                    set from [string map {" " ""} [lindex $from_to 0]]
-                    set to [string map {" " ""} [lindex $from_to 1]]
-                    set portname [string map {" " ""} [lindex $values 1]]
+                        set range [string map {" " ""} [lindex $values 0]]
+                        set from_to [split $range ":"]
+                        set from [string map {" " ""} [lindex $from_to 0]]
+                        set to [string map {" " ""} [lindex $from_to 1]]
+                        set portname [string map {" " ""} [lindex $values 1]]
 
-                    set portdata [list type $type name $portname from $from to $to]
-                    set portlist [list {*}$portlist $portdata]
-                    if {$debug} {
-                        puts "$type\t$from\t:\t$to\t$portname"
+                        set portdata [list type $type name $portname from $from to $to]
+                        set portlist [list {*}$portlist $portdata]
+                        if {$debug} {
+                            puts "$type\t$from\t:\t$to\t$portname"
+                        }
+                    } else {
+                        set portname [string map {" " ""} [lindex $values 1]]
+                        set portdata [list type $type name $portname]
+                        set portlist [list {*}$portlist $portdata]
                     }
                 }
             }
@@ -1725,6 +1731,7 @@ namespace eval ipl {
                             {"m_axis_last" "TLAST"}] \
             -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
+        # Do not use a port name as interface name except if you use case differences.
         set ip [ipl::addif -ip $ip \
             -iname IRQ \
             -display_name IRQ \
@@ -1732,8 +1739,6 @@ namespace eval ipl {
             -master_slave master \
             -portmap [list {"irq" "IRQ"}] \
             -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
-        # Do not use a port name as interface name except if you use case differences.
-        set ip [ipl::setport -ip $ip -name irq -bus_interface IRQ]
 
         set ip [ipl::addfiles -spath ../axi_dmac -dpath rtl -extl {*.v *.vh} -ip $ip]
         set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
