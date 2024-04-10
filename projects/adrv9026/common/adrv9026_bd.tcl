@@ -119,7 +119,7 @@ ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
 ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV 40
 ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 6
+ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 5
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_INVERT 15
 
 # xcvr interfaces
@@ -133,14 +133,14 @@ ad_connect  $sys_cpu_resetn util_adrv9026_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_adrv9026_xcvr/up_clk
 
 # Tx
-ad_xcvrcon util_adrv9026_xcvr axi_adrv9026_tx_xcvr axi_adrv9026_tx_jesd {2 3 1 0} core_clk
+ad_xcvrcon util_adrv9026_xcvr axi_adrv9026_tx_xcvr axi_adrv9026_tx_jesd {3 2 1 0} core_clk
 ad_xcvrpll $tx_ref_clk util_adrv9026_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9026_tx_xcvr/up_pll_rst util_adrv9026_xcvr/up_qpll_rst_0
 ad_xcvrpll $tx_ref_clk util_adrv9026_xcvr/qpll_ref_clk_4
 ad_xcvrpll axi_adrv9026_tx_xcvr/up_pll_rst util_adrv9026_xcvr/up_qpll_rst_4
 
 # Rx
-ad_xcvrcon  util_adrv9026_xcvr axi_adrv9026_rx_xcvr axi_adrv9026_rx_jesd {} core_clk
+ad_xcvrcon  util_adrv9026_xcvr axi_adrv9026_rx_xcvr axi_adrv9026_rx_jesd {1 0 2 3} core_clk
 for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
   set ch [expr $i]
   ad_xcvrpll  $rx_ref_clk util_adrv9026_xcvr/cpll_ref_clk_$ch
