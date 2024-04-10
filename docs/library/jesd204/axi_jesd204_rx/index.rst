@@ -1027,6 +1027,8 @@ Software Support
 
 -  :dokuwiki:`JESD204 Receive Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`
 
+.. _axi_jesd204_rx restrictions:
+
 Restrictions
 --------------------------------------------------------------------------------
 
