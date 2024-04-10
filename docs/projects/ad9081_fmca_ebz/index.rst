@@ -1,6 +1,6 @@
 .. _ad9081_fmca_ebz:
 
-AD9081-FMCA-EBZ/AD9082-FMCA-EBZ HDL project
+AD9081/AD9082/AD9986/AD9988 HDL project
 ===============================================================================
 
 Overview
@@ -9,19 +9,23 @@ Overview
 The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.
+This reference design works with :adi:`EVAL-AD9986 <EVAL-AD9986>` and
+:adi:`EVAL-AD9988 <EVAL-AD9988>` as well.
 The design consists from a receive and a transmit chain.
 
 The receive chain transports the captured samples from ADC to the system
 memory (DDR). Before transferring the data to DDR the samples are stored
 in a buffer implemented on block rams from the FPGA fabric
-(util_adc_fifo). The space allocated in the buffer for each channel
+(:git-hdl:`util_adcfifo <library/util_adcfifo>`).
+The space allocated in the buffer for each channel
 depends on the number of currently active channels. It goes up to M x
 64k samples if a single channel is selected or 64k samples per channel
 if all channels are selected.
 
 The transmit chain transports samples from the system memory to the DAC
 devices. Before streaming out the data to the DAC through the JESD link
-the samples first are loaded into a buffer (util_dac_fifo) which will
+the samples first are loaded into a buffer
+(:git-hdl:`util_dacfifo <library/util_dacfifo>`) which will
 cyclically stream the samples at the tx_device_clk data rate. The space
 allocated in the transmit buffer for each channel depends on the number
 of currently active channels. It goes up to M x 64k samples if a single
@@ -40,6 +44,8 @@ Supported boards
 
 -  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
 -  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+-  :adi:`EVAL-AD9988 <EVAL-AD9988>`
+-  :adi:`EVAL-AD9986 <EVAL-AD9986>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -54,6 +60,18 @@ Supported devices
 
 Supported carriers
 -------------------------------------------------------------------------------
+
+.. note::
+
+   :adi:`EVAL-AD9988 <EVAL-AD9988>` can be an alternative to
+   :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` and :adi:`EVAL-AD9986 <EVAL-AD9986>`
+   can be an alternative to :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`.
+
+   Both :adi:`AD9081` and :adi:`AD9988` have MxFE Quad, 16-bit, 12 GSPS RF DAC
+   & Quad, 12-bit, 4 GSPS RF ADC,
+
+   The same goes for :adi:`AD9082` and :adi:`AD9986`, both have MxFE Quad,
+   16-bit, 12 GSPS RF DAC & Dual, 12-bit, 6 GSPS RF ADC.
 
 .. list-table::
    :widths: 35 35 30
@@ -100,6 +118,22 @@ Supported carriers
    * -
      - :xilinx:`ZC706`
      - FMC HPC
+
+.. warning::
+
+   For `A10SoC`_ setups, the following reworks are required on the evaluation
+   board:
+
+   -  To avoid using an external clock source and fully rely on the HMC7044
+      clock chip, rotate the C6D/C4D caps in C5D/C3D position
+      (Please note: In the latest version of the board, this is now the
+      default configuration, so this configuration step **might not
+      be needed anymore**).
+   -  If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M
+      and populate R2M**
+
+   For the carrier, `A10SoC`_, the following reworks are mandatory:
+   :dokuwiki:`[Wiki] FMC Pin Connection Configuration <resources/eval/user-guides/ad9081/quickstart/a10soc#fmc_pin_connection_configuration_change>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -305,8 +339,8 @@ Limitations
 
    -  NP = 8, 12, 16
    -  F = 1, 2, 3, 4, 6, 8
-   -  https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions
-   -  https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions
+   -  :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
+   -  :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -480,8 +514,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
 
    -  NP = 8, 12, 16
    -  F = 1, 2, 3, 4, 6, 8
-   -  https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx#restrictions
-   -  https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx#restrictions
+   -  :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
+   -  :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
 
    ``NP`` notation is equivalent with ``N'``
 
@@ -668,7 +702,8 @@ Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
--  Here you can find all the quick start guides on wiki documentation:dokuwiki:`[Wiki] AD9081 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+-  Here you can find all the quick start guides on wiki documentation
+   :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -682,7 +717,7 @@ Here you can find the quick start guides available for these evaluation boards:
      - Microblaze
      - Versal
      - Arria 10
-   * - AD9081/AD9082-FMCA-EBZ
+   * - AD9081/AD9082/AD9986/AD9988
      - :dokuwiki:`ZC706 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynq>`
      - :dokuwiki:`ZCU102 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynqmp>`
      - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/microblaze>`
@@ -731,28 +766,28 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
    * - UTIL_ADXCVR for AMD
      - :git-hdl:`library/xilinx/util_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_xcvr>`
+     - :ref:`util_adxcvr`
    * - AXI_ADXCVR for Intel
      - :git-hdl:`library/intel/axi_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+     - :ref:`AXI_ADXCVR for Intel devices <axi_adxcvr intel>`
    * - AXI_ADXCVR for AMD
      - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
+     - :ref:`AXI_ADXCVR for AMD devices <axi_adxcvr amd>`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
+     - :ref:`axi_jesd204_rx`
    * - AXI_JESD204_TX
      - :git-hdl:`library/jesd204/axi_jesd204_tx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
+     - :ref:`axi_jesd204_tx`
    * - JESD204_TPL_ADC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
+     - :ref:`ad_ip_jesd204_tpl_adc`
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
+     - :ref:`ad_ip_jesd204_tpl_dac`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`
+-  :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
