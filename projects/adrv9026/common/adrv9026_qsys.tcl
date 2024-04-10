@@ -39,7 +39,8 @@ set_instance_parameter_value adrv9026_tx_jesd204 {LANE_RATE} {9840}
 set_instance_parameter_value adrv9026_tx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value adrv9026_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value adrv9026_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
-set_instance_parameter_value adrv9026_tx_jesd204 {LANE_MAP} {0 3 2 1}
+set_instance_parameter_value adrv9026_tx_jesd204 {LANE_MAP} {3 2 1 0}
+set_instance_parameter_value adrv9026_tx_jesd204 {LANE_INVERT} {0x5}
 
 add_connection sys_clk.clk adrv9026_tx_jesd204.sys_clk
 add_connection sys_clk.clk_reset adrv9026_tx_jesd204.sys_resetn
@@ -62,7 +63,8 @@ set_instance_parameter_value adrv9026_rx_jesd204 {LANE_RATE} {9840}
 set_instance_parameter_value adrv9026_rx_jesd204 {REFCLK_FREQUENCY} {246}
 set_instance_parameter_value adrv9026_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value adrv9026_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
-set_instance_parameter_value adrv9026_rx_jesd204 {INPUT_PIPELINE_STAGES} {1}
+set_instance_parameter_value adrv9026_rx_jesd204 {LANE_MAP} {1 0 2 3}
+set_instance_parameter_value adrv9026_rx_jesd204 {LANE_INVERT} {0xF}
 
 add_connection sys_clk.clk adrv9026_rx_jesd204.sys_clk
 add_connection sys_clk.clk_reset adrv9026_rx_jesd204.sys_resetn
@@ -191,8 +193,8 @@ set_instance_parameter_value axi_adrv9026_rx_dma {SYNC_TRANSFER_START} {1}
 set_instance_parameter_value axi_adrv9026_rx_dma {CYCLIC} {0}
 set_instance_parameter_value axi_adrv9026_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value axi_adrv9026_rx_dma {DMA_TYPE_SRC} {2}
-set_instance_parameter_value axi_adrv9026_rx_dma {FIFO_SIZE} {16}
-add_connection adrv9026_rx_jesd204.link_clk axi_adrv9026_rx_dma.if_fifo_wr_clk
+set_instance_parameter_value axi_adrv9026_rx_dma {FIFO_SIZE} {32}
+add_connection device_clk.out_clk axi_adrv9026_rx_dma.if_fifo_wr_clk
 add_connection axi_adrv9026_rx_cpack.if_packed_fifo_wr_en axi_adrv9026_rx_dma.if_fifo_wr_en
 add_connection axi_adrv9026_rx_cpack.if_packed_fifo_wr_sync axi_adrv9026_rx_dma.if_fifo_wr_sync
 add_connection axi_adrv9026_rx_cpack.if_packed_fifo_wr_data axi_adrv9026_rx_dma.if_fifo_wr_din

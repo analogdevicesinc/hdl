@@ -21,23 +21,23 @@ set_location_assignment PIN_F5  -to "core_clk(n)"          ; ## H5   FMCA_CLK0_M
 set_instance_assignment -name IO_STANDARD LVDS -to ref_clk
 set_instance_assignment -name IO_STANDARD LVDS -to core_clk
 
-set_location_assignment PIN_R33 -to rx_serial_data[0]      ; ## A2   FMCA_DP01_M2C_P     GXBL1H_RX_CH1p,GXBL1H_REFCLK1p
-set_location_assignment PIN_R32 -to "rx_serial_data[0](n)" ; ## A3   FMCA_DP01_M2C_N     GXBL1H_RX_CH1n,GXBL1H_REFCLK1n
-set_location_assignment PIN_T31 -to rx_serial_data[1]      ; ## C6   FMCA_DP00_M2C_P     GXBL1H_RX_CH0p,GXBL1H_REFCLK0p
-set_location_assignment PIN_T30 -to "rx_serial_data[1](n)" ; ## C7   FMCA_DP00_M2C_N     GXBL1H_RX_CH0n,GXBL1H_REFCLK0n
-set_location_assignment PIN_P35 -to rx_serial_data[2]      ; ## A6   FMCA_DP02_M2C_P     GXBL1H_RX_CH2p,GXBL1H_REFCLK2p
-set_location_assignment PIN_P34 -to "rx_serial_data[2](n)" ; ## A7   FMCA_DP02_M2C_N     GXBL1H_RX_CH2n,GXBL1H_REFCLK2n
-set_location_assignment PIN_P31 -to rx_serial_data[3]      ; ## A10  FMCA_DP03_M2C_P     GXBL1H_RX_CH3p,GXBL1H_REFCLK3p
-set_location_assignment PIN_P30 -to "rx_serial_data[3](n)" ; ## A11  FMCA_DP03_M2C_N     GXBL1H_RX_CH3n,GXBL1H_REFCLK3n
+set_location_assignment PIN_T31 -to rx_serial_data[0]      ; ## C6   FMCA_DP00_M2C_P     GXBL1H_RX_CH0p,GXBL1H_REFCLK0p   (rx_serial_data_n[1])
+set_location_assignment PIN_T30 -to "rx_serial_data[0](n)" ; ## C7   FMCA_DP00_M2C_N     GXBL1H_RX_CH0n,GXBL1H_REFCLK0n   (rx_serial_data_p[1])
+set_location_assignment PIN_R33 -to rx_serial_data[1]      ; ## A2   FMCA_DP01_M2C_P     GXBL1H_RX_CH1p,GXBL1H_REFCLK1p   (rx_serial_data_n[0])
+set_location_assignment PIN_R32 -to "rx_serial_data[1](n)" ; ## A3   FMCA_DP01_M2C_N     GXBL1H_RX_CH1n,GXBL1H_REFCLK1n   (rx_serial_data_p[0])
+set_location_assignment PIN_P35 -to rx_serial_data[2]      ; ## A6   FMCA_DP02_M2C_P     GXBL1H_RX_CH2p,GXBL1H_REFCLK2p   (rx_serial_data_n[2])
+set_location_assignment PIN_P34 -to "rx_serial_data[2](n)" ; ## A7   FMCA_DP02_M2C_N     GXBL1H_RX_CH2n,GXBL1H_REFCLK2n   (rx_serial_data_p[2])
+set_location_assignment PIN_P31 -to rx_serial_data[3]      ; ## A10  FMCA_DP03_M2C_P     GXBL1H_RX_CH3p,GXBL1H_REFCLK3p   (rx_serial_data_n[3])
+set_location_assignment PIN_P30 -to "rx_serial_data[3](n)" ; ## A11  FMCA_DP03_M2C_N     GXBL1H_RX_CH3n,GXBL1H_REFCLK3n   (rx_serial_data_p[3])
 
-set_location_assignment PIN_M39 -to tx_serial_data[0]      ; ## A22  FMCA_DP01_C2M_P     GXBL1H_TX_CH1p
-set_location_assignment PIN_M38 -to "tx_serial_data[0](n)" ; ## A23  FMCA_DP01_C2M_N     GXBL1H_TX_CH1n
-set_location_assignment PIN_N37 -to tx_serial_data[1]      ; ## C2   FMCA_DP00_C2M_P     GXBL1H_TX_CH0p
-set_location_assignment PIN_N36 -to "tx_serial_data[1](n)" ; ## C3   FMCA_DP00_C2M_N     GXBL1H_TX_CH0n
-set_location_assignment PIN_L37 -to tx_serial_data[2]      ; ## A26  FMCA_DP02_C2M_P     GXBL1H_TX_CH2p
-set_location_assignment PIN_L36 -to "tx_serial_data[2](n)" ; ## A27  FMCA_DP02_C2M_N     GXBL1H_TX_CH2n
-set_location_assignment PIN_K39 -to tx_serial_data[3]      ; ## A30  FMCA_DP03_C2M_P     GXBL1H_TX_CH3p
-set_location_assignment PIN_K38 -to "tx_serial_data[3](n)" ; ## A31  FMCA_DP03_C2M_N     GXBL1H_TX_CH3n
+set_location_assignment PIN_N37 -to tx_serial_data[0]      ; ## C2   FMCA_DP00_C2M_P     GXBL1H_TX_CH0p  (tx_serial_data_n[3])
+set_location_assignment PIN_N36 -to "tx_serial_data[0](n)" ; ## C3   FMCA_DP00_C2M_N     GXBL1H_TX_CH0n  (tx_serial_data_p[3])
+set_location_assignment PIN_M39 -to tx_serial_data[1]      ; ## A22  FMCA_DP01_C2M_P     GXBL1H_TX_CH1p  (tx_serial_data_p[2])
+set_location_assignment PIN_M38 -to "tx_serial_data[1](n)" ; ## A23  FMCA_DP01_C2M_N     GXBL1H_TX_CH1n  (tx_serial_data_n[2])
+set_location_assignment PIN_L37 -to tx_serial_data[2]      ; ## A26  FMCA_DP02_C2M_P     GXBL1H_TX_CH2p  (tx_serial_data_n[1])
+set_location_assignment PIN_L36 -to "tx_serial_data[2](n)" ; ## A27  FMCA_DP02_C2M_N     GXBL1H_TX_CH2n  (tx_serial_data_p[1])
+set_location_assignment PIN_K39 -to tx_serial_data[3]      ; ## A30  FMCA_DP03_C2M_P     GXBL1H_TX_CH3p  (tx_serial_data_p[0])
+set_location_assignment PIN_K38 -to "tx_serial_data[3](n)" ; ## A31  FMCA_DP03_C2M_N     GXBL1H_TX_CH3n  (tx_serial_data_n[0])
 
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_serial_data
 set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_serial_data
@@ -173,5 +173,9 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn_ad9528
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_mosi
+
+# set optimization to get a better timing closure
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 1.2
 
 execute_flow -compile

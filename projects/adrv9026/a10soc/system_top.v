@@ -170,6 +170,7 @@ module system_top (
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
   wire              dac_fifo_bypass;
+  wire              rx_sync_inv;
 
   // assignments
 
@@ -211,6 +212,7 @@ module system_top (
   // peripheral reset
 
   assign sys_resetn_s = sys_resetn & sys_hps_resetn;
+  assign rx_sync = !rx_sync_inv;
 
   // instantiations
 
@@ -319,7 +321,7 @@ module system_top (
     .tx_sysref_export (sysref),
     .rx_serial_data_rx_serial_data (rx_serial_data),
     .rx_ref_clk_clk (ref_clk),
-    .rx_sync_export (rx_sync),
+    .rx_sync_export (rx_sync_inv),
     .pr_rom_data_nc_rom_data('h0),
     .rx_sysref_export (sysref));
 
