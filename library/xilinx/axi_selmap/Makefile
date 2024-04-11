@@ -9,6 +9,7 @@ LIBRARY_NAME := axi_selmap
 GENERIC_DEPS += ../../common/up_axi.v
 GENERIC_DEPS += axi_selmap.v
 GENERIC_DEPS += axi_selmap_regmap.v
+GENERIC_DEPS += async_cdc_fifo.v
 
 XILINX_DEPS += axi_selmap_constr.ttcl
 XILINX_DEPS += axi_selmap_ip.tcl

@@ -12,6 +12,7 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_selmap
 adi_ip_files axi_selmap [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "async_cdc_fifo.v" \
   "axi_selmap_regmap.v" \
   "axi_selmap.v"]
 

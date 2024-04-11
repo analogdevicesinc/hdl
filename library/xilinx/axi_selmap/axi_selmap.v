@@ -36,7 +36,10 @@
 `timescale 1ns/100ps
 
 module axi_selmap #(
-  parameter DATA_WIDTH = 8
+  parameter DATA_WIDTH = 8,
+  parameter CLK_DIV = 91,
+  parameter FIFO_DEPTH = (CLK_DIV <= 2) ? 4 : 2 ** $clog2(CLK_DIV)
+  // parameter FIFO_DEPTH = 4
 ) (
 
   // select map interface
@@ -93,13 +96,28 @@ module axi_selmap #(
   wire                    up_csi_b;
   wire                    up_program_b;
   wire                    up_cclk;
+  wire   [DATA_WIDTH-1:0] up_data_swapped;
+  wire   [DATA_WIDTH-1:0] data_sync;
+  wire                    rd_valid;
+  reg                     up_cclk_div;
   reg                     up_init_b;
   reg                     up_device_ready;
   reg                     up_done;
-
   reg                     prev_init_b;
+  reg    [$clog2(CLK_DIV)-1:0] counter = 0;
 
-  assign up_cclk = up_clk; // For now use the axi clk
+  assign up_cclk = (CLK_DIV > 1) ? up_cclk_div : up_clk;
+
+  always @(posedge up_clk) begin
+    if (CLK_DIV > 1) begin
+      counter <= counter + 1'b1;
+      if (counter >= (CLK_DIV - 1))
+        counter <= 0;
+      up_cclk_div <= (counter < CLK_DIV / 2) ? 1'b1 : 1'b0;
+    end else begin
+      up_cclk_div <= 1'b0;
+    end
+  end
 
   always @(posedge up_clk) begin
     if (!up_rstn || !up_reset) begin
@@ -174,27 +192,49 @@ module axi_selmap #(
   assign rdwr_b    = 1'b0;
   assign csi_b     = up_csi_b;
   assign program_b = up_program_b;
-  assign cclk      = up_cclk & up_data_written;
 
   /* Selmap bit mapping */
   genvar i;
   generate if (DATA_WIDTH >= 8) begin
     for (i = 0; i < 8; i = i + 1) begin
-      assign data[7-i] = up_data[i];
+      assign up_data_swapped[7-i] = up_data[i];
     end
   end
   endgenerate
   generate if (DATA_WIDTH >= 16) begin
     for (i = 0; i < 8; i = i + 1) begin
-      assign data[15-i] = up_data[8+i];
+      assign up_data_swapped[15-i] = up_data[8+i];
     end
   end
   endgenerate
   generate if (DATA_WIDTH == 32) begin
     for (i = 0; i < 8; i = i + 1) begin
-      assign data[23-i] = up_data[16+i];
-      assign data[31-i] = up_data[24+i];
+      assign up_data_swapped[23-i] = up_data[16+i];
+      assign up_data_swapped[31-i] = up_data[24+i];
     end
   end
   endgenerate
+
+  /*Add async_fifo in case of CLK_DIV*/
+  generate if (CLK_DIV > 1) begin
+    async_cdc_fifo #(
+      .DATA_WIDTH(DATA_WIDTH),
+      .CLK_DIV (CLK_DIV),
+      .FIFO_DEPTH(FIFO_DEPTH)
+    ) i_cdc_fifo (
+      .wr_clk (up_clk),
+      .rd_clk (up_cclk),
+      .rstn (up_rstn),
+      .wr_en (up_data_written),
+      .wr_data (up_data_swapped),
+      .fifo_full (full_flag),
+      .rd_en (~empty_flag),
+      .rd_data (data_sync),
+      .fifo_empty (empty_flag),
+      .rd_data_valid (rd_valid));
+  end
+  endgenerate
+
+  assign data = (CLK_DIV > 1) ? data_sync : up_data_swapped;
+  assign cclk = (CLK_DIV > 1) ? (up_cclk & rd_valid) : (up_cclk & up_data_written);
 endmodule
