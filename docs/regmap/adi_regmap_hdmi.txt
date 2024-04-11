@@ -387,7 +387,7 @@ ENDFIELD
 
 TITLE
 HDMI Receive (axi_hdmi_rx)
-hdmi_rx
+HDMI_RX
 ENDTITLE
 
 ############################################################################################
