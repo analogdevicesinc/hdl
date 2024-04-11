@@ -8,7 +8,7 @@ ENDTITLE
 
 REG
 0x0010
-REG_RSTN
+RSTN
 Interface Control & Status
 ENDREG
 
@@ -32,7 +32,7 @@ ENDFIELD
 
 REG
 0x0011
-REG_CLK_SEL
+CLK_SEL
 Clock Select
 ENDREG
 
@@ -49,7 +49,7 @@ ENDFIELD
 
 REG
 0x0017
-REG_MMCM_STATUS
+MMCM_STATUS
 MMCM Status
 ENDREG
 
@@ -65,7 +65,7 @@ ENDFIELD
 
 REG
 0x001c
-REG_DRP_CNTRL
+DRP_CNTRL
 ADC Interface Control & Status
 ENDREG
 
@@ -80,7 +80,7 @@ FIELD
 [27:16] 0x000
 DRP_ADDRESS[11:0]
 RW
-DRP address, designs that contain more than one DRP accessible primitives 
+DRP address, designs that contain more than one DRP accessible primitives
 have selects based on the most significant bits (does not include GTX lanes).
 ENDFIELD
 
@@ -96,7 +96,7 @@ ENDFIELD
 
 REG
 0x001d
-REG_DRP_STATUS
+DRP_STATUS
 MMCM Status
 ENDREG
 
@@ -111,7 +111,7 @@ FIELD
 [16] 0x0
 DRP_STATUS
 RO
-If set indicates busy (access pending). The read data may not be valid if 
+If set indicates busy (access pending). The read data may not be valid if
 this bit is set (does not include GTX lanes).
 ENDFIELD
 
@@ -127,7 +127,7 @@ ENDFIELD
 
 REG
 0x0050
-REG_FPGA_VOLTAGE
+FPGA_VOLTAGE
 FPGA device voltage information
 ENDREG
 
