@@ -5,8 +5,9 @@ AXI SPI Engine Module
 
 .. hdl-component-diagram::
 
-The AXI SPI Engine peripheral allows asynchronous interrupt-driven memory-mapped
-access to a SPI Engine Control Interface.
+The :git-hdl:`AXI SPI Engine <library/spi_engine/axi_spi_engine>` IP core
+allows asynchronous interrupt-driven memory-mapped access to a SPI Engine Control
+Interface.
 This is typically used in combination with a software program to dynamically
 generate SPI transactions.
 

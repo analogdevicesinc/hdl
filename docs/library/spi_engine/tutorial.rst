@@ -154,7 +154,7 @@ AD7984 Timing diagram
 
 The operation mode that will be implemented using the SPI Engine in offload mode
 is the :math:`\overline{CS}` Mode, 3-Wire with Busy Indicator Serial Interface Timing (SDI High),
-as shown in :datasheet:`AD7984:[{"num"%3A51%2C"gen"%3A0}%2C{"name"%3A"XYZ"}%2C52%2C713%2C0]`,
+as shown in :adi:`AD7984 <media/en/technical-documentation/data-sheets/AD7984.pdf>`,
 page 18, figure 30.
 
 Key timing characteristics:
