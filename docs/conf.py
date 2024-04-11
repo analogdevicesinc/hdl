@@ -9,7 +9,6 @@ author = 'Analog Devices, Inc.'
 
 extensions = [
     "sphinx.ext.todo",
-    "sphinx.ext.intersphinx",
     "sphinxcontrib.wavedrom",
     "adi_doctools"
 ]
@@ -23,9 +22,7 @@ source_suffix = '.rst'
 
 # -- External docs configuration ----------------------------------------------
 
-intersphinx_mapping = {
-    'doctools': ('https://analogdevicesinc.github.io/doctools', None)
-}
+interref_repos = ['doctools']
 
 # -- Custom extensions configuration ------------------------------------------
 
