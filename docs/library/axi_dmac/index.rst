@@ -1,13 +1,13 @@
 .. _axi_dmac:
 
-High-Speed DMA Controller
+AXI DMAC
 ================================================================================
 
 .. hdl-component-diagram::
 
-The AXI DMAC is a high-speed, high-throughput, general purpose DMA controller
-intended to be used to transfer data between system memory and other peripherals
-like high-speed converters.
+The :git-hdl:`AXI DMA Controller <library/axi_dmac>` IP core is a high-speed,
+high-throughput, general purpose DMA controller intended to be used to transfer
+data between system memory and other peripherals like high-speed converters.
 
 Features
 --------------------------------------------------------------------------------
