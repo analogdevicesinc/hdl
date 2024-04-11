@@ -8,7 +8,7 @@ ENDTITLE
 
 REG
 0x00080
-REG_TPL_CNTRL
+TPL_CNTRL
 JESD, TPL Control
 ENDREG
 
@@ -25,7 +25,7 @@ ENDFIELD
 
 REG
 0x00081
-REG_TPL_STATUS
+TPL_STATUS
 JESD, TPL Status
 ENDREG
 
@@ -40,9 +40,10 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x00090
-REG_TPL_DESCRIPTOR_1
-JESD, TPL descriptor for profile 0
+0x00090 + n*2
+WHERE n IS 0.2
+TPL_DESCRIPTORn_1
+JESD, TPL descriptor for profile n
 ENDREG
 
 FIELD
@@ -77,9 +78,10 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x00091
-REG_TPL_DESCRIPTOR_2
-JESD, TPL descriptor for profile 0
+0x00091 + n*2
+WHERE n IS 0.2
+TPL_DESCRIPTORn_2
+JESD, TPL descriptor for profile n
 ENDREG
 
 FIELD
@@ -98,15 +100,3 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
-
-REG
-0x00092
-REG_*
-Profile 1, similar to registers 0x00010 to 0x00011.
-ENDREG
-
-REG
-0x00094
-REG_*
-Profile 2, similar to registers 0x00010 to 0x00011.
-ENDREG

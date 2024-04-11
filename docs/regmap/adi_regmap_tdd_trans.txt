@@ -8,12 +8,12 @@ ENDTITLE
 
 REG
 0x0010
-REG_TDD_CONTROL_0
+TDD_CONTROL_0
 TDD Control & Status
 ENDREG
 
 FIELD
-[5] 0x0
+[5] 0x00000000
 TDD_GATED_TX_DMAPATH
 RW
 If this bit is set, the core requests data from the TX DMA, just when the data path is active.
@@ -22,7 +22,7 @@ facilitate debug. This bit must be SET to preserve data integrity.
 ENDFIELD
 
 FIELD
-[4] 0x0
+[4] 0x00000000
 TDD_GATED_RX_DMAPATH
 RW
 If this bit is set, the core provides data for the RX DMA, just when the data path is active.
@@ -31,7 +31,7 @@ facilitate debug. This bit must be SET to preserve data integrity.
 ENDFIELD
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 TDD_TXONLY
 RW
 If this bit is set- the TDD controller ignores all the TX_* timing registers 
@@ -39,7 +39,7 @@ below and assumes continuous receive operation within a frame.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 TDD_RXONLY
 RW
 If this bit is set- the TDD controller ignores all the RX_* timing registers 
@@ -47,7 +47,7 @@ below and assumes continuous transmit operation within a frame.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TDD_SECONDARY
 RW
 Enable the secondary transmit/receive on the active frame. If this bit is clear -
@@ -56,7 +56,7 @@ the controller uses the _1 and _2 timing registers below.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 TDD_ENABLE
 RW
 If set, enables the TDD controller- software must set this bit after programming 
@@ -71,12 +71,12 @@ ENDFIELD
 
 REG
 0x0011
-REG_TDD_CONTROL_1
+TDD_CONTROL_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[7:0] 0x00
+[7:0] 0x00000000
 TDD_BURST_COUNT
 RW
 If set to 0x0 and enabled (TDD_ENABLE is set) - the controller operates in TDD mode
@@ -89,12 +89,12 @@ ENDFIELD
 
 REG
 0x0012
-REG_TDD_CONTROL_2
+TDD_CONTROL_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_COUNTER_INIT
 RW
 The controller sets the frame counter to this value when starting TDD operation. 
@@ -106,12 +106,12 @@ ENDFIELD
 
 REG
 0x0013
-REG_TDD_FRAME_LENGTH
+TDD_FRAME_LENGTH
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_FRAME_LENGTH
 RW
 The frame length is the terminal count for the 10ms counter running at the digital 
@@ -123,12 +123,12 @@ ENDFIELD
 
 REG
 0x0014
-REG_TDD_SYNC_TERMINAL_TYPE
+TDD_SYNC_TERMINAL_TYPE
 TDD Control & Status
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 TDD_SYNC_TERMINAL_TYPE
 RW
 Set this bit, if the current terminal will generate the syncronization pulse, reset otherwise.
@@ -139,19 +139,19 @@ ENDFIELD
  
 REG
 0x0018
-REG_TDD_STATUS
+TDD_STATUS
 TDD Control & Status
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 TDD_RXTX_VCO_OVERLAP
 RO
 This bit is asserted, if exist a time interval when both the TX and RX VCOs are powered up.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TDD_RXTX_RF_OVERLAP
 RO
 This bit is asserted, if exist a time interval when both the TX and RX RF datapath are powered up.
@@ -162,12 +162,12 @@ ENDFIELD
  
 REG
 0x0020
-REG_TDD_VCO_RX_ON_1
+TDD_VCO_RX_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_RX_ON_1
 RW
 Defines the offset (from frame count equal zero), when the RX VCO powers up at the first time. 
@@ -181,12 +181,12 @@ ENDFIELD
 
 REG
 0x0021
-REG_TDD_VCO_RX_OFF_1
+TDD_VCO_RX_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_RX_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the RX VCO powers down at the first 
@@ -200,12 +200,12 @@ ENDFIELD
 
 REG
 0x0022
-REG_TDD_VCO_TX_ON_1
+TDD_VCO_TX_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_TX_ON_1
 RW
 Defines the offset (from frame count equal zero), when the TX VCO powers up at the first time. 
@@ -218,12 +218,12 @@ ENDFIELD
 
 REG
 0x0023
-REG_TDD_VCO_TX_OFF_1
+TDD_VCO_TX_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_TX_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the TX VCO powers down at the first 
@@ -237,12 +237,12 @@ ENDFIELD
 
 REG
 0x0024
-REG_TDD_RX_ON_1
+TDD_RX_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_ON_1
 RW
 Defines the offset (from frame count equal zero), when the RX data path is activated at the 
@@ -255,12 +255,12 @@ ENDFIELD
 
 REG
 0x0025
-REG_TDD_RX_OFF_1
+TDD_RX_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the RX data path is deactivated the 
@@ -274,12 +274,12 @@ ENDFIELD
 
 REG
 0x0026
-REG_TDD_TX_ON_1
+TDD_TX_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_ON_1
 RW
 Defines the offset (from frame count equal zero), when the TX data path is activated at the 
@@ -294,12 +294,12 @@ ENDFIELD
 
 REG
 0x0027
-REG_TDD_TX_OFF_1
+TDD_TX_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the TX data path is deactivated at the 
@@ -314,12 +314,12 @@ ENDFIELD
 
 REG
 0x0028
-REG_TDD_RX_DP_ON_1
+TDD_RX_DP_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_DP_ON_1
 RW
 Defines the offset (from frame count equal zero), when the controller starts to accept data from 
@@ -331,12 +331,12 @@ ENDFIELD
 
 REG
 0x0029
-REG_TDD_RX_DP_OFF_1
+TDD_RX_DP_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_DP_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the controller stops to accept data from 
@@ -349,12 +349,12 @@ ENDFIELD
 
 REG
 0x002A
-REG_TDD_TX_DP_ON_1
+TDD_TX_DP_ON_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_DP_ON_1
 RW
 Defines the offset (from frame count equal zero), when the controller starts to request data from the system
@@ -366,12 +366,12 @@ ENDFIELD
 
 REG
 0x002B
-REG_TDD_TX_DP_OFF_1
+TDD_TX_DP_OFF_1
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_DP_OFF_1
 RW
 Defines the offset (from frame count equal zero), when the controller stop requesting data from the system
@@ -383,12 +383,12 @@ ENDFIELD
 
 REG
 0x0030
-REG_TDD_VCO_RX_ON_2
+TDD_VCO_RX_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_RX_ON_2
 RW
 The secondary pointer for VCO_RX_ON. 
@@ -399,12 +399,12 @@ ENDFIELD
 
 REG
 0x0031
-REG_TDD_VCO_RX_OFF_2
+TDD_VCO_RX_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_RX_OFF_2
 RW
 The secondary pointer for VCO_RX_OFF.
@@ -415,12 +415,12 @@ ENDFIELD
 
 REG
 0x0032
-REG_TDD_VCO_TX_ON_2
+TDD_VCO_TX_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_TX_ON_2
 RW
 The secondary pointer for VCO_TX_ON.
@@ -431,12 +431,12 @@ ENDFIELD
 
 REG
 0x0033
-REG_TDD_VCO_TX_OFF_2
+TDD_VCO_TX_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_VCO_TX_OFF_2
 RW
 The secondary pointer for VCO_TX_OFF.
@@ -447,12 +447,12 @@ ENDFIELD
 
 REG
 0x0034
-REG_TDD_RX_ON_2
+TDD_RX_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_ON_2
 RW
 The secondary pointer for RX_ON.
@@ -463,12 +463,12 @@ ENDFIELD
 
 REG
 0x0035
-REG_TDD_RX_OFF_2
+TDD_RX_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_OFF_2
 RW
 The secondary pointer for RX_OFF.
@@ -479,12 +479,12 @@ ENDFIELD
 
 REG
 0x0036
-REG_TDD_TX_ON_2
+TDD_TX_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_ON_2
 RW
 The secondary pointer for TX_ON.
@@ -495,12 +495,12 @@ ENDFIELD
 
 REG
 0x0037
-REG_TDD_TX_OFF_2
+TDD_TX_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_OFF_2
 RW
 The secondary pointer for TX_OFF.
@@ -511,12 +511,12 @@ ENDFIELD
 
 REG
 0x0038
-REG_TDD_RX_DP_ON_2
+TDD_RX_DP_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_DP_ON_2
 RW
 The secondary pointer for RX_DP_ON.
@@ -527,12 +527,12 @@ ENDFIELD
 
 REG
 0x0039
-REG_TDD_RX_DP_OFF_2
+TDD_RX_DP_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_RX_DP_OFF_2
 RW
 The secondary pointer for RX_DP_OFF.
@@ -543,12 +543,12 @@ ENDFIELD
 
 REG
 0x003A
-REG_TDD_TX_DP_ON_2
+TDD_TX_DP_ON_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_DP_ON_2
 RW
 The secondary pointer for TX_DP_ON.
@@ -559,12 +559,12 @@ ENDFIELD
 
 REG
 0x003B
-REG_TDD_TX_DP_OFF_2
+TDD_TX_DP_OFF_2
 TDD Control & Status
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[23:0] 0x00000000
 TDD_TX_DP_OFF_2
 RW
 The secondary pointer for TX_DP_OFF.
@@ -572,4 +572,3 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
-

@@ -1,4 +1,3 @@
-
 TITLE
 Base (common to all cores)
 COMMON
@@ -9,13 +8,13 @@ ENDTITLE
 
 REG
 0x0000
-REG_VERSION
+VERSION
 Version and Scratch Registers
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-VERSION[31:0]
+VERSION
 RO
 Version number. Unique to all cores.
 ENDFIELD
@@ -25,13 +24,13 @@ ENDFIELD
 
 REG
 0x0001
-REG_ID
+ID
 Version and Scratch Registers
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-ID[31:0]
+ID
 RO
 Instance identifier number.
 ENDFIELD
@@ -41,13 +40,13 @@ ENDFIELD
 
 REG
 0x0002
-REG_SCRATCH
+SCRATCH
 Version and Scratch Registers
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-SCRATCH[31:0]
+SCRATCH
 RW
 Scratch register.
 ENDFIELD
@@ -57,75 +56,75 @@ ENDFIELD
 
 REG
 0x0003
-REG_CONFIG
+CONFIG
 Version and Scratch Registers
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 IQCORRECTION_DISABLE
 RO
 If set, indicates that the IQ Correction module was not implemented. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 DCFILTER_DISABLE
 RO
 If set, indicates that the DC Filter module was not implemented. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 DATAFORMAT_DISABLE
 RO
 If set, indicates that the Data Format module was not implemented. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 USERPORTS_DISABLE
 RO
 If set, indicates that the logic related to the User Data Format (e.g. decimation) was not implemented. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[4] 0x0
+[4] 0x00000000
 MODE_1R1T
 RO
 If set, indicates that the core was implemented in 1 channel mode. (e.g. refer to AD9361 data sheet)
 ENDFIELD
 
 FIELD
-[5] 0x0
+[5] 0x00000000
 DELAY_CONTROL_DISABLE
 RO
 If set, indicates that the delay control is disabled for this IP. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[6] 0x0
+[6] 0x00000000
 DDS_DISABLE
 RO
 If set, indicates that the DDS is disabled for this IP. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[7] 0x0
+[7] 0x00000000
 CMOS_OR_LVDS_N
 RO
 CMOS or LVDS mode is used for the interface. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[8] 0x0
+[8] 0x00000000
 PPS_RECEIVER_ENABLE
 RO
 If set, indicates the PPS receiver is enabled. (as a result of a configuration of the IP instance)
 ENDFIELD
 
 FIELD
-[9] 0x0
+[9] 0x00000000
 SCALECORRECTION_ONLY
 RO
 If set, indicates that the IQ Correction module implements only scale correction.
@@ -133,14 +132,14 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 ENDFIELD
 
 FIELD
-[12] 0x0
+[12] 0x00000000
 EXT_SYNC
 RO
 If set the transport layer cores (ADC/DAC) have implemented the support for external synchronization signal.
 ENDFIELD
 
 FIELD
-[13] 0x0
+[13] 0x00000000
 RD_RAW_DATA
 RO
 If set, the ADC has the capability to read raw data in register REG_CHAN_RAW_DATA from adc_channel.
@@ -151,12 +150,12 @@ ENDFIELD
 
 REG
 0x0004
-REG_PPS_IRQ_MASK
+PPS_IRQ_MASK
 PPS Interrupt mask
 ENDREG
 
 FIELD
-[0] 0x1
+[0] 0x00000001
 PPS_IRQ_MASK
 RW
 Mask bit for the 1PPS receiver interrupt
@@ -167,39 +166,40 @@ ENDFIELD
 
 REG
 0x0007
-REG_FPGA_INFO
+FPGA_INFO
 FPGA device information
 :git-hdl:`library/scripts/adi_intel_device_info_enc.tcl` (Intel encoded values)
 :git-hdl:`library/scripts/adi_xilinx_device_info_enc.tcl` (Xilinx encoded values)
 ENDREG
 
 FIELD
-[31:24] 0x0
+[31:24] 0x00000000
 FPGA_TECHNOLOGY
 RO
 Encoded value describing the technology/generation of the FPGA device (arria 10/7series)
 ENDFIELD
 
 FIELD
-[23:16] 0x0
+[23:16] 0x00000000
 FPGA_FAMILY
 RO
 Encoded value describing the family variant of the FPGA device(e.g., SX, GX, GT or zynq, kintex, virtex)
 ENDFIELD
 
 FIELD
-[15:8] 0x0
+[15:8] 0x00000000
 SPEED_GRADE
 RO
 Encoded value describing the FPGA's speed-grade
 ENDFIELD
 
 FIELD
-[7:0] 0x0
+[7:0] 0x00000000
 DEV_PACKAGE
 RO
 Encoded value describing the device package. The package might affect high-speed interfaces
 ENDFIELD
+
 ############################################################################################
 ############################################################################################
 
