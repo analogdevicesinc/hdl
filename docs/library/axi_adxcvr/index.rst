@@ -6,7 +6,7 @@ AXI_ADXCVR
 .. hdl-component-diagram::
    :path: library/xilinx/axi_adxcvr
 
-The AXI_ADXCVR is a utility core used to control and configure the highspeed
+The AXI_ADXCVR IP core is used to control and configure the highspeed
 transceivers.
 There are separate AXI_ADXCVR cores for Intel and AMD Xilinx designs, due to the
 small differences between the AMD Xilinx's and Intel's transceivers architecture.
