@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Template Interface &#8212; HDL  documentation</title>
+    <title>I3C Controller &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,6 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="I3C Controller Host Interface" href="i3c_controller_host_interface.html" />
+    <link rel="prev" title="High-Speed DMA Controller" href="../axi_dmac/index.html" />
    
   
     <meta name="robots" content="noindex">
@@ -82,9 +84,10 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Template Interface</a><ul>
-<li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#signal-pins">Signal Pins</a></li>
+<li><a class="reference internal" href="#">I3C Controller</a><ul>
+<li><a class="reference internal" href="#sub-modules">Sub-modules</a></li>
+<li><a class="reference internal" href="#interfaces">Interfaces</a></li>
+<li><a class="reference internal" href="#software">Software</a></li>
 </ul>
 </li>
 </ul>
@@ -119,7 +122,7 @@ Content on this topic
 </div>
 <div class="toc-tree">
   <html>
-  <body><ul>
+  <body><ul class="current">
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
@@ -134,12 +137,12 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1" checked=""/><div class="collapse"><a class="current reference internal" href="#">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interface.html">Interface</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
@@ -202,67 +205,45 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="template-interface">
-<span id="template-framework-interface"></span><h1>Template Interface<a class="headerlink" href="#template-interface" title="Permalink to this heading">#</a></h1>
-<p>The {interface name} is used to {brief description}.</p>
-<p>The interface consists of {#} streams:</p>
+  <section id="i3c-controller">
+<span id="id1"></span><h1>I3C Controller<a class="headerlink" href="#i3c-controller" title="Permalink to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>I3C Controller is subset of the I3C-basic specification to interface peripherals
+such as ADCs through I3C.</p>
+<p>It consist out of two sub-modules which communicate over well defined interfaces.
+The <a class="reference internal" href="i3c_controller_core.html#i3c-controller-core"><span class="std std-ref">I3C Controller Core</span></a> is a lean but powerful execution module, which
+implements the I3C bus control logic.
+It is controlled by a command stream generated by the <a class="reference internal" href="i3c_controller_host_interface.html#i3c-controller-host-interface"><span class="std std-ref">I3C Controller Host Interface</span></a>,
+which parses the <a class="reference internal" href="interface.html#i3c-controller-command-descriptors"><span class="std std-ref">Command Descriptors</span></a>.</p>
+<p>The <a class="reference internal" href="interface.html#i3c-controller-offload-interface"><span class="std std-ref">Offload Interface</span></a> operation mode allows to execute
+a pre-programmed command stream when triggered by an external event, allowing for
+minimal latency.</p>
+<section id="sub-modules">
+<h2>Sub-modules<a class="headerlink" href="#sub-modules" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>The {stream name} stream which carries the {…}.</p></li>
+<li><p><a class="reference internal" href="i3c_controller_host_interface.html#i3c-controller-host-interface"><span class="std std-ref">I3C Controller Host Interface</span></a>: Memory mapped software accessible
+interface to a I3C Controller command stream and/or offload cores.</p></li>
+<li><p><a class="reference internal" href="i3c_controller_core.html#i3c-controller-core"><span class="std std-ref">I3C Controller Core</span></a>: Main module which executes a I3C Controller command
+stream and implements the I3C bus interface logic.</p></li>
 </ul>
-<p>{brief description, handshaking info}</p>
-<section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/interfaces/spi_engine_ctrl_rtl.xml">library/spi_engine/interfaces/spi_engine_ctrl_rtl.xml</a></p></td>
-<td><p>Interface definition file</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </section>
-<section id="signal-pins">
-<h2>Signal Pins<a class="headerlink" href="#signal-pins" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 10.0%" />
-<col style="width: 10.0%" />
-<col style="width: 10.0%" />
-<col style="width: 70.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Width</p></th>
-<th class="head"><p>Name</p></th>
-<th class="head"><p>Direction (Master)</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></p></td>
-<td><p>Input</p></td>
-<td><p>Ready signal of the CMD stream</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Valid signal of the CMD stream</p></td>
-</tr>
-<tr class="row-even"><td><p>[15:0]</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></p></td>
-<td><p>Output</p></td>
-<td><p>Data signal of the CMD stream</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<section id="interfaces">
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="interface.html#i3c-controller-control-interface"><span class="std std-ref">Control Interface</span></a>: Command descriptors.</p></li>
+<li><p><a class="reference internal" href="interface.html#i3c-controller-offload-interface"><span class="std std-ref">Offload Interface</span></a>: Command descriptors for cyclic operation,
+with SDI data generally consumed by a DMA.</p></li>
+</ul>
+</section>
+<section id="software">
+<h2>Software<a class="headerlink" href="#software" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/i3c/drivers/i3c/master/adi-i3c-master.c">Linux Driver</a>:
+Linux driver for the I3C Controller.</p></li>
+<li><p><a class="reference internal" href="interface.html#i3c-controller-instruction-format"><span class="std std-ref">Instruction Set Specification</span></a>: Overview of the I3C Controller
+instruction format.</p></li>
+</ul>
 </section>
 </section>
 
@@ -276,8 +257,8 @@ Content on this topic
           </div>
               <div class="related">
                 &nbsp;
-    <div></div>
-    <div></div>
+    <a href="../axi_dmac/index.html" title="Previous document" class="prev">High-Speed DMA Controller</a>
+    <a href="i3c_controller_host_interface.html" title="Next document" class="next">I3C Controller Host Interface</a>
               </div>
           
         </div>
