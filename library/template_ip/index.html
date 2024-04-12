@@ -68,6 +68,7 @@
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
     </div>
@@ -121,6 +122,7 @@ Content on this topic
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
 </div>
@@ -495,28 +497,18 @@ Content on this topic
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_enable_0</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_enable_1</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_ddata_0</span></code></td>
-<td><p>in [63:0]</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_ddata_1</span></code></td>
-<td><p>in [63:0]</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_dunf</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_enable_*</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_ddata_*</span></code></td>
+<td><p>in [63:0]</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
@@ -552,7 +544,7 @@ basic monitoring and control of the ADC’s channel.</p>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-regmap">
-<section id="register-map-Base (common to all cores)">
+<section id="hdl-regmap-COMMON">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="d7c6517c369404a97b27fd3e5b1a469dc88d1687" name="d7c6517c369404a97b27fd3e5b1a469dc88d1687" type="checkbox"></input><label for="d7c6517c369404a97b27fd3e5b1a469dc88d1687"><p>Base (common to all cores) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -831,7 +823,7 @@ basic monitoring and control of the ADC’s channel.</p>
 </section>
 </section>
 </div><div><section id="hdl-regmap">
-<section id="register-map-ADC Common (axi_ad*)">
+<section id="hdl-regmap-ADC_COMMON">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="66315c6cc66bb3c6a34c8f1aaa297da527f718a5" name="66315c6cc66bb3c6a34c8f1aaa297da527f718a5" type="checkbox"></input><label for="66315c6cc66bb3c6a34c8f1aaa297da527f718a5"><p>ADC Common (axi_ad*) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1564,7 +1556,7 @@ basic monitoring and control of the ADC’s channel.</p>
 </section>
 </section>
 </div><div><section id="hdl-regmap">
-<section id="register-map-ADC Channel (axi_ad*)">
+<section id="hdl-regmap-ADC_CHANNEL">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="7f0db353838a5f89ff609c34020cd94a071fac64" name="7f0db353838a5f89ff609c34020cd94a071fac64" type="checkbox"></input><label for="7f0db353838a5f89ff609c34020cd94a071fac64"><p>ADC Channel (axi_ad*) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1990,12 +1982,18 @@ basic monitoring and control of the ADC’s channel.</p>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x120</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x480</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_*</span></code></td>
-<td class="description bold"><p></p></td>
+<td class="description bold"><section>
+<p>Channel 2, similar to register 0x100 to 0x10f.</p>
+</section>
+</td>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1f0</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x7c0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_*</span></code></td>
-<td class="description bold"><p></p></td>
+<td class="description bold"><section>
+<p>Channel 15, similar to register 0x100 to 0x10f.</p>
+</section>
+</td>
 </tr>
 </tbody>
 </table>

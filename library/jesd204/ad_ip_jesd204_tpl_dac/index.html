@@ -70,6 +70,7 @@
   <a href="../../../../no-OS/index.html">no-OS</a>
   <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
     </div>
@@ -139,6 +140,7 @@ Content on this topic
   <a href="../../../../no-OS/index.html">no-OS</a>
   <a href="../../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
 </div>
@@ -710,7 +712,7 @@ register map.</p>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-regmap">
-<section id="register-map-Base (common to all cores)">
+<section id="hdl-regmap-COMMON">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="d7c6517c369404a97b27fd3e5b1a469dc88d1687" name="d7c6517c369404a97b27fd3e5b1a469dc88d1687" type="checkbox"></input><label for="d7c6517c369404a97b27fd3e5b1a469dc88d1687"><p>Base (common to all cores) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -989,7 +991,7 @@ register map.</p>
 </section>
 </section>
 </div><div><section id="hdl-regmap">
-<section id="register-map-DAC Common (axi_ad)">
+<section id="hdl-regmap-DAC_COMMON">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ee92c39f58818bbf00d87f6cfc1fb1ee71657370" name="ee92c39f58818bbf00d87f6cfc1fb1ee71657370" type="checkbox"></input><label for="ee92c39f58818bbf00d87f6cfc1fb1ee71657370"><p>DAC Common (axi_ad) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1588,7 +1590,7 @@ register map.</p>
 </section>
 </section>
 </div><div><section id="hdl-regmap">
-<section id="register-map-JESD TPL (up_tpl_common)">
+<section id="hdl-regmap-JESD_TPL">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ed2afc2b2b6a9473c2e7578ae1dd09ffdcebbfba" name="ed2afc2b2b6a9473c2e7578ae1dd09ffdcebbfba" type="checkbox"></input><label for="ed2afc2b2b6a9473c2e7578ae1dd09ffdcebbfba"><p>JESD TPL (up_tpl_common) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1758,7 +1760,10 @@ register map.</p>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x94</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x250</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_*</span></code></td>
-<td class="description bold"><p></p></td>
+<td class="description bold"><section>
+<p>Profile 2, similar to registers 0x00010 to 0x00011.</p>
+</section>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1768,7 +1773,7 @@ register map.</p>
 </section>
 </section>
 </div><div><section id="hdl-regmap">
-<section id="register-map-DAC Channel (axi_ad*)">
+<section id="hdl-regmap-DAC_CHANNEL">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="988df3881dd6e54e1dc4feb84da7d989941d5164" name="988df3881dd6e54e1dc4feb84da7d989941d5164" type="checkbox"></input><label for="988df3881dd6e54e1dc4feb84da7d989941d5164"><p>DAC Channel (axi_ad*) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -2186,12 +2191,18 @@ register map.</p>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x120</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x480</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_*</span></code></td>
-<td class="description bold"><p></p></td>
+<td class="description bold"><section>
+<p>Channel 2, similar to registers 0x100 to 0x10f.</p>
+</section>
+</td>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1f0</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x7c0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_*</span></code></td>
-<td class="description bold"><p></p></td>
+<td class="description bold"><section>
+<p>Channel 15, similar to registers 0x100 to 0x10f.</p>
+</section>
+</td>
 </tr>
 </tbody>
 </table>

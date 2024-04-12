@@ -70,6 +70,7 @@
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
     </div>
@@ -138,6 +139,7 @@ Content on this topic
   <a href="../../../no-OS/index.html">no-OS</a>
   <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
 </div>
@@ -568,7 +570,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 <section id="bus-interface-m_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ef4ddc674664a84b16e2a8970546ebf78dae0ac1" name="ef4ddc674664a84b16e2a8970546ebf78dae0ac1" type="checkbox"></input><label for="ef4ddc674664a84b16e2a8970546ebf78dae0ac1"><div><p>m_axi</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -708,7 +710,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 <section id="bus-interface-up_cm_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed" name="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed" type="checkbox"></input><label for="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed"><div><p>up_cm_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 82)</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 8)</span><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -719,32 +721,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -758,7 +735,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 <section id="bus-interface-up_es_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="3de7768838ca07975e7f1b6f5bf97ead2c292420" name="3de7768838ca07975e7f1b6f5bf97ead2c292420" type="checkbox"></input><label for="3de7768838ca07975e7f1b6f5bf97ead2c292420"><div><p>up_es_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 92)</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">*</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 9)</span><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -769,37 +746,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_reset_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">reset</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -813,7 +760,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 <section id="bus-interface-up_ch_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8" name="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8" type="checkbox"></input><label for="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8"><div><p>up_ch_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 92)</span><section>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 9)</span><span>.</span><section>
 <p>Connect logical port <code class="docutils literal notranslate"><span class="pre">pll_locked</span></code> to the fPLL’s <strong>pll_locked</strong> pin;
 Connect logical port <code class="docutils literal notranslate"><span class="pre">ready</span></code> to PHY reset controller.</p>
 </section>
@@ -828,122 +775,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_pll_locked_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">pll_locked</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rst_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rst</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_user_ready_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">user_ready</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rst_done_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rst_done</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbsforceerr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbsforceerr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbssel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbssel</span></code></td>
-<td><p>out [3:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbscntreset_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbscntreset</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbserr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbserr</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbslocked_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbslocked</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_bufstatus_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">bufstatus</span></code></td>
-<td><p>in [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_bufstatus_rst_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">bufstatus_rst</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_lpm_dfe_n_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">lpm_dfe_n</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rate_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rate</span></code></td>
-<td><p>out [2:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_sys_clk_sel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">sys_clk_sel</span></code></td>
-<td><p>out [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_out_clk_sel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">out_clk_sel</span></code></td>
-<td><p>out [2:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_diffctrl_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_diffctrl</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_postcursor_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_postcursor</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_precursor_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_precursor</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -983,7 +815,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <section id="register-map">
 <h3>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h3>
 <div><section id="hdl-regmap">
-<section id="register-map-Intel XCVR (axi_xcvr)">
+<section id="hdl-regmap-INTEL_XCVR">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="22af7368d30d039beff3957d069b06f3ddc34764" name="22af7368d30d039beff3957d069b06f3ddc34764" type="checkbox"></input><label for="22af7368d30d039beff3957d069b06f3ddc34764"><p>Intel XCVR (axi_xcvr) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
@@ -1676,7 +1508,7 @@ configured and programmed identically.</p>
 <section id="bus-interface-m_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ef4ddc674664a84b16e2a8970546ebf78dae0ac1" name="ef4ddc674664a84b16e2a8970546ebf78dae0ac1" type="checkbox"></input><label for="ef4ddc674664a84b16e2a8970546ebf78dae0ac1"><div><p>m_axi</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span></code><span>. </span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1816,7 +1648,7 @@ configured and programmed identically.</p>
 <section id="bus-interface-up_cm_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed" name="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed" type="checkbox"></input><label for="e3bc6f3ec1b797529e72e0a16deaacbb660a80ed"><div><p>up_cm_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 82)</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 8)</span><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1827,32 +1659,7 @@ configured and programmed identically.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_cm_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_cm_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -1866,7 +1673,7 @@ configured and programmed identically.</p>
 <section id="bus-interface-up_es_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="3de7768838ca07975e7f1b6f5bf97ead2c292420" name="3de7768838ca07975e7f1b6f5bf97ead2c292420" type="checkbox"></input><label for="3de7768838ca07975e7f1b6f5bf97ead2c292420"><div><p>up_es_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">0</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 92)</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span> <span class="pre">=</span> <span class="pre">*</span> <span class="pre">and</span>&#160; <span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 9)</span><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1877,37 +1684,7 @@ configured and programmed identically.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_reset_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">reset</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_es_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_es_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -1921,7 +1698,7 @@ configured and programmed identically.</p>
 <section id="bus-interface-up_ch_*">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8" name="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8" type="checkbox"></input><label for="a4a83b2c26c56f00d06ca8830cbeeb4b1e7cbea8"><div><p>up_ch_*</p>
-<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>. </span><span>, where ‘*’ is the instance (up to 92)</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code><span>, where ‘*’ is the instance (up to 9)</span><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1932,122 +1709,7 @@ configured and programmed identically.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_pll_locked_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">pll_locked</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rst_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rst</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_user_ready_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">user_ready</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rst_done_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rst_done</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbsforceerr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbsforceerr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbssel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbssel</span></code></td>
-<td><p>out [3:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbscntreset_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbscntreset</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbserr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbserr</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_prbslocked_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">prbslocked</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_bufstatus_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">bufstatus</span></code></td>
-<td><p>in [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_bufstatus_rst_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">bufstatus_rst</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_lpm_dfe_n_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">lpm_dfe_n</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rate_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rate</span></code></td>
-<td><p>out [2:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_sys_clk_sel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">sys_clk_sel</span></code></td>
-<td><p>out [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_out_clk_sel_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">out_clk_sel</span></code></td>
-<td><p>out [2:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_diffctrl_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_diffctrl</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_postcursor_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_postcursor</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_tx_precursor_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">tx_precursor</span></code></td>
-<td><p>out [4:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_enb_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">enb</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_addr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">addr</span></code></td>
-<td><p>out [11:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_wr_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wr</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_wdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">wdata</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_ch_rdata_*</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">rdata</span></code></td>
-<td><p>in [15:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_ch_ready_*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">*</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ready</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -2087,7 +1749,7 @@ configured and programmed identically.</p>
 <section id="register-map-1">
 <span id="id4"></span><h3>Register Map<a class="headerlink" href="#register-map-1" title="Permalink to this heading">#</a></h3>
 <div><section id="hdl-regmap">
-<section id="register-map-Xilinx XCVR (axi_xcvr)">
+<section id="hdl-regmap-XCVR">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="5788f409a9f6b4426b459cce671884ca49b7a19e" name="5788f409a9f6b4426b459cce671884ca49b7a19e" type="checkbox"></input><label for="5788f409a9f6b4426b459cce671884ca49b7a19e"><p>Xilinx XCVR (axi_xcvr) register map</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
