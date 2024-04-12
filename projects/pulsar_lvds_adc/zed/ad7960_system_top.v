@@ -83,8 +83,6 @@ module system_top (
 
   input         otg_vbusoc,
 
-  input         ref_clk_p,
-  input         ref_clk_n,
   output        clk_p,
   output        clk_n,
   input         dco_p,
@@ -113,7 +111,6 @@ module system_top (
   wire [ 1:0] iic_mux_sda_o_s;
   wire        iic_mux_sda_t_s;
 
-  wire        clk_s;
   wire        cnv_s;
   wire        cnv;
   wire        clk_gate;
@@ -134,15 +131,6 @@ module system_top (
             en0_fmc}));   // 86
 
   // instantiations
-
-  ad_data_clk #(
-    .SINGLE_ENDED (0)
-  ) i_ref_clk (
-    .rst (1'b0),
-    .locked (),
-    .clk_in_p (ref_clk_p),
-    .clk_in_n (ref_clk_n),
-    .clk (clk_s));
 
   ODDR #(
     .DDR_CLK_EDGE ("SAME_EDGE")
@@ -245,7 +233,6 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
-    .ref_clk (clk_s),
     .sampling_clk (sampling_clk_s),
     .dco_p (dco_p),
     .dco_n (dco_n),

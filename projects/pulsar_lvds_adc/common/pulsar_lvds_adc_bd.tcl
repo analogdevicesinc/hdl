@@ -9,8 +9,6 @@ puts "build parameters: RESOLUTION_16_18N: $RESOLUTION_16_18N"
 set ADC_DATA_WIDTH [expr {$RESOLUTION_16_18N == 1 ? 16 : 18}]
 set BITS_PER_SAMPLE [expr {$RESOLUTION_16_18N == 1 ? 16 : 32}]
 
-# ltc2387
-create_bd_port -dir I ref_clk
 create_bd_port -dir O sampling_clk
 create_bd_port -dir I dco_p
 create_bd_port -dir I dco_n
@@ -70,9 +68,7 @@ ad_connect d_p        axi_pulsar_lvds/d_p
 ad_connect d_n        axi_pulsar_lvds/d_n
 
 ad_connect reference_clkgen/clk_0    axi_pulsar_lvds_dma/fifo_wr_clk
-ad_connect axi_pulsar_lvds/adc_valid axi_pulsar_lvds_dma/fifo_wr_en
-ad_connect axi_pulsar_lvds/adc_data  axi_pulsar_lvds_dma/fifo_wr_din
-ad_connect axi_pulsar_lvds/adc_dovf  axi_pulsar_lvds_dma/fifo_wr_overflow
+ad_connect axi_pulsar_lvds/fifo_wr   axi_pulsar_lvds_dma/fifo_wr
 
 ad_connect cnv                    axi_pwm_gen/pwm_0
 ad_connect clk_gate               axi_pwm_gen/pwm_1
@@ -85,7 +81,8 @@ ad_connect sys_cpu_clk            axi_pwm_gen/s_axi_aclk
 ad_cpu_interconnect 0x44A00000 axi_pulsar_lvds
 ad_cpu_interconnect 0x44A30000 axi_pulsar_lvds_dma
 ad_cpu_interconnect 0x44A60000 axi_pwm_gen
-ad_cpu_interconnect 0x44a80000 reference_clkgen
+ad_cpu_interconnect 0x44A80000 reference_clkgen
+
 # interconnect (adc)
 
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2

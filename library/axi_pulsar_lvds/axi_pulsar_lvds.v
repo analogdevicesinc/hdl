@@ -36,7 +36,6 @@
 `timescale 1ns/100ps
 
 module axi_pulsar_lvds #(
-
   parameter ID = 0,
   parameter FPGA_TECHNOLOGY = 0,
   parameter FPGA_FAMILY = 0,
@@ -65,7 +64,7 @@ module axi_pulsar_lvds #(
   // dma interface
 
   output        adc_valid,
-  output [31:0] adc_data,
+  output [BITS_PER_SAMPLE-1:0] adc_data,
   input         adc_dovf,
 
   // axi interface

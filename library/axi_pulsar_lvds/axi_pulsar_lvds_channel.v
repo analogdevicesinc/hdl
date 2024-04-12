@@ -53,7 +53,7 @@ module axi_pulsar_lvds_channel #(
 
   output        adc_enable,
   output        adc_valid,
-  output [31:0] adc_data,
+  output [BITS_PER_SAMPLE-1:0] adc_data,
 
   // error monitoring
 

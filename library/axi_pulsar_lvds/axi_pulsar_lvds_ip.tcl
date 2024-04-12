@@ -30,6 +30,16 @@ adi_ip_files axi_pulsar_lvds [list \
 
 adi_ip_properties axi_pulsar_lvds
 
+adi_add_bus "fifo_wr" "master" \
+        "analog.com:interface:fifo_wr_rtl:1.0" \
+        "analog.com:interface:fifo_wr:1.0" \
+        { \
+                {"adc_valid" "EN"} \
+                {"adc_data" "DATA"} \
+                {"adc_dovf" "OVERFLOW"} \
+        }
+adi_add_bus_clock "fifo_wr_clk" "fifo_wr"
+
 adi_init_bd_tcl
 adi_ip_bd axi_pulsar_lvds "bd/bd.tcl"
 

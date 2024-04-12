@@ -14,3 +14,4 @@ How to use over-writable parameters from the environment:
 ```
 hdl/projects/pulsar_lvds_adc/zed> make RESOLUTION_16_18N=0
 RESOLUTION_16_18N  - Defines the resolution of the ADC: 0 - 18 BITS, 1 - 16 BITS.
+```
