@@ -99,9 +99,9 @@ The axi_dac_interpolate also controls the data flow, being the middle man
 between axi_ad9963 as the main data flow controller(consumer) and the DMA a
 subordinate in the path. This control is done through registers:
 
--  0x50 REG_FLAGS - Control flags
--  0x60 REG_TRIGGER_CONFIG - Trigger configuration
--  0x64 REG_RAW_CHANNEL_DATA - Raw data to transmit
+-  0x50 FLAGS - Control flags
+-  0x60 TRIGGER_CONFIG - Trigger configuration
+-  0x64 RAW_CHANNEL_DATA - Raw data to transmit
 
 The actual control consists in fetching data from the DMA:
 

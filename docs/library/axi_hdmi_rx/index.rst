@@ -91,10 +91,10 @@ through several processing blocks (see :ref:`axi_hdmi_rx block-diagram`):
   24 bit video information, has no impact on the video quality.
 * CSC (Color Space Conversion) –converts the video information from YCbCr color
   space to RGB color space. If YCbCr is the desired output color space the CSC
-  block can be bypassed by setting to 1 the value of CSC_BYPASS in REG_CNTRL register.
+  block can be bypassed by setting to 1 the value of CSC_BYPASS in ``CNTRL`` register.
 * Sync monitoring - monitors the recovered hsync and vsync against the programmed
   expected resolution. Asserts out of sync and resolutions mismatch indicators
-  in the ``REG_TPM_STATUS2`` register.
+  in the ``TPM_STATUS2`` register.
 
 Register Map
 -------------------------------------------------------------------------------

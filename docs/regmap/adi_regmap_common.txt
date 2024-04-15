@@ -142,7 +142,7 @@ FIELD
 [13] 0x00000000
 RD_RAW_DATA
 RO
-If set, the ADC has the capability to read raw data in register REG_CHAN_RAW_DATA from adc_channel.
+If set, the ADC has the capability to read raw data in register CHAN_RAW_DATA from adc_channel.
 ENDFIELD
 
 ############################################################################################

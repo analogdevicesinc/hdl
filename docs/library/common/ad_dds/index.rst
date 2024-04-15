@@ -194,7 +194,7 @@ The value can be calculated by:
 Where:
 
 #. f_out is the generated output frequency
-#. phaseDW (``DDS_PHASE_DW``) value can be found in ``REG_CHAN_CNTRL_1`` in case
+#. phaseDW (``DDS_PHASE_DW``) value can be found in ``CHAN_CNTRL_1`` in case
    ``DDS_PHASE_DW`` is not eq. 16
 #. f_if is the frequency of the digital interface
 #. clock_ratio is the ratio between the sampling clock and the interface clock.

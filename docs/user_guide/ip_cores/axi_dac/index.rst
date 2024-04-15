@@ -219,11 +219,15 @@ Typical Register Map base addresses
    :no-type-info:
 
 .. hdl-regmap::
+   :name: DAC_COMMON
+   :no-type-info:
+
+.. hdl-regmap::
    :name: JESD_TPL
    :no-type-info:
 
 .. hdl-regmap::
-   :name: DAC_COMMON
+   :name: DAC_CHANNEL
    :no-type-info:
 
 .. hdl-regmap::

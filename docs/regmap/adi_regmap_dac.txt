@@ -108,7 +108,7 @@ FIELD
 [14] 0x00000000
 SYMB_8_16B
 RW
-Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b) 
+Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b)
 ENDFIELD
 
 FIELD
@@ -239,7 +239,7 @@ FIELD
 [0] 0x00000000
 STATUS
 RO
-Interface status, if set indicates no errors. If not set, there 
+Interface status, if set indicates no errors. If not set, there
 are errors, software may try resetting the cores.
 ENDFIELD
 
@@ -297,7 +297,7 @@ FIELD
 [27:16] 0x00000000
 DRP_ADDRESS
 RW
-DRP address, designs that contain more than one DRP accessible primitives 
+DRP address, designs that contain more than one DRP accessible primitives
 have selects based on the most significant bits (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).
 ENDFIELD
@@ -329,7 +329,7 @@ FIELD
 [16] 0x00000000
 DRP_STATUS
 RO
-If set indicates busy (access pending). The read data may not be valid if 
+If set indicates busy (access pending). The read data may not be valid if
 this bit is set (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).
 ENDFIELD
@@ -470,7 +470,7 @@ FIELD
 [7:0] 0x00000000
 USR_CHANMAX
 RW
-This indicates the maximum number of inputs for the channel data multiplexers. User may add 
+This indicates the maximum number of inputs for the channel data multiplexers. User may add
 different processing modules as inputs to the dac.
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
@@ -530,17 +530,17 @@ FIELD
 DDS_PHASE_DW
 R
 The DDS phase data width offers the HDL parameter configuration with the same
-name. This information is used in conjunction with REG_CHAN_CNTRL_9 and REG_CHAN_CNTRL_10.
-More info at https://wiki.analog.com/resources/fpga/docs/dds
+name. This information is used in conjunction with CHAN_CNTRL_9 and CHAN_CNTRL_10.
+More info at :ref:`ad_dds`.
 ENDFIELD
 
 FIELD
 [15:0] 0x00000000
 DDS_SCALE_1
 RW
-The DDS scale for tone 1. Sets the amplitude of the tone. The format is 1.1.14 
-fixed point (signed, integer, fractional). The DDS in general runs on 16-bits, 
-note that if you do use both channels and set both scale to 0x4000, it is 
+The DDS scale for tone 1. Sets the amplitude of the tone. The format is 1.1.14
+fixed point (signed, integer, fractional). The DDS in general runs on 16-bits,
+note that if you do use both channels and set both scale to 0x4000, it is
 over-range. The final output is (tone_1_fullscale * scale_1) +
 (tone_2_fullscale * scale_2). NOT-APPLICABLE if DDS_DISABLE is set (0x1).
 ENDFIELD
@@ -559,7 +559,7 @@ FIELD
 [31:16] 0x00000000
 DDS_INIT_1
 RW
-The DDS phase initialization for tone 1. Sets the initial phase offset 
+The DDS phase initialization for tone 1. Sets the initial phase offset
 of the tone. NOT-APPLICABLE if DDS_DISABLE is set (0x1).
 ENDFIELD
 
@@ -567,12 +567,12 @@ FIELD
 [15:0] 0x00000000
 DDS_INCR_1
 RW
-Sets the frequency of the phase accumulator. Its value can be calculated 
-by <m>INCR = (f_out * 2^16) * clkratio / f_if</m>; where f_out is the 
-generated output frequency, and f_if is the frequency of the digital 
-interface, and clock_ratio is the ratio between the sampling clock and 
-the interface clock. If DDS_PHASE_DW is greater than 16(from REG_CHAN_CNTRL_1),
-the phase increment for tone 1 is extended in REG_CHAN_CNTRL_9. NOT-APPLICABLE 
+Sets the frequency of the phase accumulator. Its value can be calculated
+by :math:`INCR = (f_{out} * 2^{16}) * clkratio / f_{if}`; where f_out is the
+generated output frequency, and f_if is the frequency of the digital
+interface, and clock_ratio is the ratio between the sampling clock and
+the interface clock. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1),
+the phase increment for tone 1 is extended in CHAN_CNTRL_9. NOT-APPLICABLE
 if DDS_DISABLE is set (0x1).
 ENDFIELD
 
@@ -590,11 +590,11 @@ FIELD
 [15:0] 0x00000000
 DDS_SCALE_2
 RW
-The DDS scale for tone 2. Sets the amplitude of the tone. The format 
-is 1.1.14 fixed point (signed, integer, fractional). 
-The DDS in general runs on 16-bits, note that if you do use both 
-channels and set both scale to 0x4000, it is over-range. The final 
-output is (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2). 
+The DDS scale for tone 2. Sets the amplitude of the tone. The format
+is 1.1.14 fixed point (signed, integer, fractional).
+The DDS in general runs on 16-bits, note that if you do use both
+channels and set both scale to 0x4000, it is over-range. The final
+output is (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2).
 NOT-APPLICABLE if DDS_DISABLE is set (0x1).
 ENDFIELD
 
@@ -612,9 +612,9 @@ FIELD
 [31:16] 0x00000000
 DDS_INIT_2
 RW
-The DDS phase initialization for tone 2. Sets the initial phase offset of the 
-tone. If DDS_PHASE_DW is greater than 16(from REG_CHAN_CNTRL_1), the phase init 
-for tone 2 is extended in REG_CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is 
+The DDS phase initialization for tone 2. Sets the initial phase offset of the
+tone. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase init
+for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is
 set (0x1).
 ENDFIELD
 
@@ -622,12 +622,12 @@ FIELD
 [15:0] 0x00000000
 DDS_INCR_2
 RW
-Sets the frequency of the phase accumulator. Its value can be calculated by 
-<m>INCR = (f_out * 2^16) * clkratio / f_if</m>; where f_out is the generated 
-output frequency, and f_if is the frequency of the digital interface, and 
-clock_ratio is the ratio between the sampling clock and the interface clock. 
-If DDS_PHASE_DW is greater than 16(from REG_CHAN_CNTRL_1), the phase increment 
-for tone 2 is extended in REG_CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is 
+Sets the frequency of the phase accumulator. Its value can be calculated by
+:math:`INCR = (f_{out} * 2^{16}) * clkratio / f_{if}`; where f_out is the generated
+output frequency, and f_if is the frequency of the digital interface, and
+clock_ratio is the ratio between the sampling clock and the interface clock.
+If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase increment
+for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is
 set (0x1).
 ENDFIELD
 
@@ -815,7 +815,7 @@ FIELD
 USR_INTERPOLATION_M
 RW
 This holds the user interpolation M value of the channel that is currently being
-selected on the multiplexer above. The total interpolation factor is of the 
+selected on the multiplexer above. The total interpolation factor is of the
 form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
@@ -842,7 +842,7 @@ FIELD
 [0] 0x00000000
 DAC_IQ_MODE
 RW
-Enable complex mode. In this mode the driven data to the DAC must be a sequence 
+Enable complex mode. In this mode the driven data to the DAC must be a sequence
 of I and Q sample pairs.
 ENDFIELD
 
@@ -850,7 +850,7 @@ FIELD
 [1] 0x00000000
 DAC_IQ_SWAP
 RW
-Allows IQ swapping in complex mode. Only takes effect if complex mode 
+Allows IQ swapping in complex mode. Only takes effect if complex mode
 is enabled.
 ENDFIELD
 
@@ -868,9 +868,9 @@ FIELD
 [31:16] 0x00000000
 DDS_INIT_1_EXTENDED
 RW
-The extended DDS phase initialization for tone 1. Sets the initial phase offset 
-of the tone. The extended init(phase) value should be calculated according to 
-DDS_PHASE_DW value from REG_CHAN_CNTRL_1 NOT-APPLICABLE if DDS_DISABLE is 
+The extended DDS phase initialization for tone 1. Sets the initial phase offset
+of the tone. The extended init(phase) value should be calculated according to
+DDS_PHASE_DW value from CHAN_CNTRL_1 NOT-APPLICABLE if DDS_DISABLE is
 set (0x1).
 ENDFIELD
 
@@ -878,11 +878,11 @@ FIELD
 [15:0] 0x00000000
 DDS_INCR_1_EXTENDED
 RW
-Sets the frequency of tone 1's phase accumulator. Its value can be calculated 
-by <m>INCR = (f_out * 2^phaseDW) * clkratio / f_if</m>; Where f_out is the 
-generated output frequency, DDS_PHASE_DW value can be found in REG_CHAN_CNTRL_1
-in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface, 
-and clock_ratio is the ratio between the sampling clock and the interface clock. 
+Sets the frequency of tone 1's phase accumulator. Its value can be calculated
+by :math:`INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}`; Where f_out is the
+generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_1
+in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface,
+and clock_ratio is the ratio between the sampling clock and the interface clock.
 NOT-APPLICABLE if DDS_DISABLE is set (0x1).
 ENDFIELD
 
@@ -900,9 +900,9 @@ FIELD
 [31:16] 0x00000000
 DDS_INIT_2_EXTENDED
 RW
-The extended DDS phase initialization for tone 2. Sets the initial phase offset 
-of the tone. The extended init(phase)  value should be calculated according to 
-DDS_PHASE_DW value from REG_CHAN_CNTRL_2 NOT-APPLICABLE if DDS_DISABLE is 
+The extended DDS phase initialization for tone 2. Sets the initial phase offset
+of the tone. The extended init(phase)  value should be calculated according to
+DDS_PHASE_DW value from CHAN_CNTRL_2 NOT-APPLICABLE if DDS_DISABLE is
 set (0x1).
 ENDFIELD
 
@@ -910,11 +910,11 @@ FIELD
 [15:0] 0x00000000
 DDS_INCR_2_EXTENDED
 RW
-Sets the frequency of tone 2's phase accumulator. Its value can be calculated 
-by <m>INCR = (f_out * 2^phaseDW) * clkratio / f_if</m>; Where f_out is the 
-generated output frequency, DDS_PHASE_DW value can be found in REG_CHAN_CNTRL_2 
-in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface, 
-and clock_ratio is the ratio between the sampling clock and the interface clock. 
+Sets the frequency of tone 2's phase accumulator. Its value can be calculated
+by :math:`INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}`; Where f_out is the
+generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_2
+in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface,
+and clock_ratio is the ratio between the sampling clock and the interface clock.
 NOT-APPLICABLE if DDS_DISABLE is set (0x1).
 ENDFIELD
 

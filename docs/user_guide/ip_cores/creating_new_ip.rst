@@ -32,7 +32,7 @@ One file can have more than one register map, and they are bounded by the header
 .. code::
 
    TITLE
-   USING <regmap_to_inherit>
+   [USING <regmap_to_inherit>]
    <title> (<ip_name>)
    <unique_id>
    ENDTITLE
@@ -47,7 +47,7 @@ Example:
    ENDTITLE
 
 The ``USING`` line is only present if the register map imports other register
-map for look-up.
+map :ref:`for look-up <hdl-regmap-using>`.
 
 The register and fields are defined with the following syntax:
 
@@ -56,12 +56,14 @@ The register and fields are defined with the following syntax:
 
    REG
    0x00000000
+   [WHERE n IS ...]
    <name>
    <description>
    ENDREG
 
    FIELD
-   [31:0] 0x01
+   [31:0] 0x00000000
+   [WHERE n IS ...]
    <description>
    <access>
    ENDFIELD
@@ -78,22 +80,24 @@ For example:
    ENDREG
 
    FIELD
-   [31:16] 0x01
+   [31:16] 0x00000001
    VERSION_MAJOR
    RO
    ENDFIELD
 
    FIELD
-   [15:8] 0x01
+   [15:8] 0x00000001
    VERSION_MINOR
    RO
    ENDFIELD
 
    FIELD
-   [7:0] 0x71
+   [7:0] 0x00000071
    VERSION_PATCH
    RO
    ENDFIELD
+
+The ``WHERE`` line is only present if using ranged :ref:`register/fields <hdl-regmap-ranged>`.
 
 Noticed that the description can be multi-line and can also include Sphinx
 syntax, parsed during build
@@ -111,6 +115,16 @@ quotes ``''``, e.g.
    In case of multiple instances, each instance will have a unique ID.
    ENDFIELD
 
+Examples:
+
+* :git-hdl:`docs/regmap/adi_regmap_spi_engine.txt`
+* :git-hdl:`docs/regmap/adi_regmap_adc.txt`, uses ``WHERE``
+* :git-hdl:`docs/regmap/adi_regmap_axi_ad3552r.txt`, uses ``USING``
+
+.. _hdl-regmap-using:
+
+Importing with Using Method
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If using the ``USING`` method for look-up, registers and fields are imported
 with the following syntax:
@@ -130,7 +144,7 @@ For example:
 .. code::
 
    REG
-   REG_CNTRL_1
+   CNTRL_1
    ENDREG
 
    FIELD
@@ -146,11 +160,35 @@ Some considerations:
   unique.
 * Multiple fields can be imported from a single ``FIELD`` group.
 
-Examples:
+.. _hdl-regmap-ranged:
 
-* :git-hdl:`docs/regmap/adi_regmap_adc.txt`
-* :git-hdl:`docs/regmap/adi_regmap_spi_engine.txt`
-* :git-hdl:`docs/regmap/adi_regmap_axi_ad3552r.txt`, uses ``USING``
+Ranged Registers and Fields
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Registers and fields can use a special ``n`` variable and the ``WHERE`` method
+to define an incrementing/repeating register/field.
+The syntax is ``WHERE n IS FROM <lower> TO <UPPER>``, for example, for registers:
+
+.. code::
+
+    REG
+    0x0102 + 0x16*n
+    WHERE n IS FROM 0 TO 15
+    CHAN_CNTRLn_3
+    DAC Channel Control & Status (channel - 0)
+    ENDREG
+
+and for fields:
+
+.. code::
+
+   FIELD
+   [n]
+   WHERE n IS FROM 0 TO 31
+   ES_RESETn
+   RW
+   Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n.
+   ENDFIELD
 
 Xilinx
 --------------------------------------------------------------------------------

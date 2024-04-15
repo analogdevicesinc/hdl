@@ -49,7 +49,7 @@ FIELD
 CSC_BYPASS
 RW
 If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the
-default value of color space boundaries is set in the REG_CLIPP_MAX and REG_CLIPP_MIN registers.
+default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN registers.
 ENDFIELD
 
 ############################################################################################
