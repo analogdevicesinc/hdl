@@ -72,7 +72,7 @@ ENDFIELD
 
 REG
 0x0010 + n
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 CLOCK_n
 Measured clock_n
 ENDREG

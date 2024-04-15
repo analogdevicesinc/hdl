@@ -533,7 +533,7 @@ ENDREG
 
 FIELD
 [n]
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 ES_RESETn
 RW
 Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n.

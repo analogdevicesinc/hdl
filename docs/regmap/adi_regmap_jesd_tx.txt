@@ -385,7 +385,7 @@ ENDREG
 
 FIELD
 [n] 0x00000000
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LANE_DISABLEn
 RW
 Enable/Disable n-th lane (0 = enabled, 1 = disabled).
@@ -469,7 +469,7 @@ ENDREG
 
 FIELD
 [n] 0x00000000
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LINK_DISABLEn
 RW
 Enable/Disable n-th link (0 = enabled, 1 = disabled).
@@ -621,7 +621,7 @@ ENDFIELD
 
 REG
 0xc4 + 0x08*n
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LANEn_ILAS0
 ILAS config data for the n-th lane. Valid for 8B/10B link.
 ENDREG
@@ -657,7 +657,7 @@ ENDFIELD
 
 REG
 0xc5 + 0x08*n
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LANEn_ILAS1
 ILAS config data for the n-th lane. Valid for 8B/10B link.
 ENDREG
@@ -720,7 +720,7 @@ ENDFIELD
 
 REG
 0xc6 + 0x08*n
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LANEn_ILAS2
 ILAS config data for the n-th lane. Valid for 8B/10B link.
 ENDREG
@@ -785,7 +785,7 @@ ENDFIELD
 
 REG
 0xc7 + 0x08*n
-WHERE n IS 0.31
+WHERE n IS FROM 0 TO 31
 LANEn_ILAS3
 ILAS config data for the n-th lane. Valid for 8B/10B link.
 ENDREG

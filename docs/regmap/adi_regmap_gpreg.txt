@@ -8,7 +8,7 @@ ENDTITLE
 
 REG
 0x0100 + n*16
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 IO_ENBn
 IO control register
 ENDREG
@@ -25,7 +25,7 @@ ENDFIELD
 
 REG
 0x0101 + n*16
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 IO_OUTn
 IO output register
 ENDREG
@@ -43,7 +43,7 @@ ENDFIELD
 
 REG
 0x0102 + n*16
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 IO_INn
 IO input register
 ENDREG
@@ -60,7 +60,7 @@ ENDFIELD
 
 REG
 0x0200 + n*16
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 CM_RESETn
 Reset register
 ENDREG
@@ -77,7 +77,7 @@ ENDFIELD
 
 REG
 0x0202 + n*16
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 CM_COUNTn
 Clock count register
 ENDREG

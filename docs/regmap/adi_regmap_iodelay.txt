@@ -8,7 +8,7 @@ ENDTITLE
 
 REG
 0x00 + n
-WHERE n IS 0.15
+WHERE n IS FROM 0 TO 15
 DELAY_CONTROL_n
 Delay Control & Status
 ENDREG
