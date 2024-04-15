@@ -633,7 +633,7 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x0100 + n*16
+0x0100 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn
 ADC Interface Control & Status
@@ -732,7 +732,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0101 + n*16
+0x0101 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_STATUSn
 ADC Interface Control & Status
@@ -782,7 +782,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0102 + n*16
+0x0102 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_RAW_DATAn
 ADC Raw Data Reading
@@ -799,7 +799,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0104 + n*16
+0x0104 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_1
 ADC Interface Control & Status
@@ -827,7 +827,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0105 + n*16
+0x0105 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_2
 ADC Interface Control & Status
@@ -859,7 +859,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0106 + n*16
+0x0106 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_3
 ADC Interface Control & Status
@@ -894,7 +894,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0108 + n*16
+0x0108 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_USR_CNTRLn_1
 ADC Interface Control & Status
@@ -946,7 +946,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0109 + n*16
+0x0109 + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_USR_CNTRLn_2
 ADC Interface Control & Status
@@ -974,7 +974,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x010A + n*16
+0x010A + 0x16*n
 WHERE n IS FROM 0 TO 15
 CHAN_CNTRLn_4
 ADC Interface Control & Status

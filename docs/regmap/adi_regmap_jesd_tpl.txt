@@ -40,7 +40,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x00090 + n*2
+0x00090 + 0x2*n
 WHERE n IS FROM 0 TO 2
 TPL_DESCRIPTORn_1
 JESD, TPL descriptor for profile n
@@ -78,7 +78,7 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x00091 + n*2
+0x00091 + 0x2*n
 WHERE n IS FROM 0 TO 2
 TPL_DESCRIPTORn_2
 JESD, TPL descriptor for profile n
