@@ -60,20 +60,16 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 # clocks
 
-set_property IDELAY_VALUE 2 [get_cells -hier -filter {name =~ *da_iddr/i_rx_data_idelay*}]
+set_property IDELAY_VALUE 1 [get_cells -hier -filter {name =~ *da_iddr/i_rx_data_idelay*}]
+set_property IDELAY_VALUE 1 [get_cells -hier -filter {name =~ *db_iddr/i_rx_data_idelay*}]
 
 create_clock -period 2.500 -name dco_clk [get_ports dco_p]
-#
-# set input_clock  dco_clk;
-# set data_delay   1.000;
-# set input_ports  {da_p db_p};
-#
-# set_input_delay -clock $input_clock -max $data_delay [get_ports $input_ports];
-# set_input_delay -clock $input_clock -min $data_delay [get_ports $input_ports];
-# set_input_delay -clock $input_clock -max $data_delay [get_ports $input_ports] -clock_fall -add_delay;
-# set_input_delay -clock $input_clock -min $data_delay [get_ports $input_ports] -clock_fall -add_delay;
-#
 
+set input_clock  dco_clk;
+set data_delay   1.000;
+set input_ports  {da_p db_p};
 
-
-
+set_input_delay -clock $input_clock -max  $data_delay [get_ports $input_ports];
+set_input_delay -clock $input_clock -min -$data_delay [get_ports $input_ports];
+set_input_delay -clock $input_clock -max  $data_delay [get_ports $input_ports] -clock_fall -add_delay;
+set_input_delay -clock $input_clock -min -$data_delay [get_ports $input_ports] -clock_fall -add_delay;

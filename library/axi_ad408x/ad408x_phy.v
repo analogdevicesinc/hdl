@@ -56,14 +56,11 @@ module ad408x_phy #(
   input                             cnv_in_p,
   input                             cnv_in_n,
 
-  // Assumption:
-
-
- (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
- (* MARK_DEBUG = "TRUE" *) input                             self_sync,
- (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
- (* MARK_DEBUG = "TRUE" *) input                             filter_enable,
- (* MARK_DEBUG = "TRUE" *) input                             filter_rdy_n,
+  input        [4:0]                num_lanes,
+  input                             self_sync,
+  input                             bitslip_enable,
+  input                             filter_enable,
+  input                             filter_rdy_n,
 
   // delay interface(for IDELAY macros)
 
@@ -82,12 +79,12 @@ module ad408x_phy #(
  
   // Output data 
 
- (* MARK_DEBUG = "TRUE" *) output        [31:0]             adc_data,
- (* MARK_DEBUG = "TRUE" *) output                           adc_valid,
+  output        [31:0]             adc_data,
+  output                           adc_valid,
 
   // Synchronization signals used when CNV signal is not present 
 
- (* MARK_DEBUG = "TRUE" *) output                            sync_status
+  output                            sync_status
 );
 
   localparam  SEVEN_SERIES     = 1;
@@ -102,39 +99,40 @@ module ad408x_phy #(
   wire   [ 1:0]  delay_locked_s;
   wire   [19:0]  pattern_value;
 
-  (* MARK_DEBUG = "TRUE" *)  wire           rx_data_b_p;
-  (* MARK_DEBUG = "TRUE" *)  wire           rx_data_b_n;
-  (* MARK_DEBUG = "TRUE" *)  wire           rx_data_a_p;
-  (* MARK_DEBUG = "TRUE" *)  wire           rx_data_a_n;
+  wire           rx_data_b_p;
+  wire           rx_data_b_n;
+  wire           rx_data_a_p;
+  wire           rx_data_a_n;
 
-  (* MARK_DEBUG = "TRUE" *)  wire           single_lane;
-  (* MARK_DEBUG = "TRUE" *)  wire           cnv_in_io_s;
-  (* MARK_DEBUG = "TRUE" *)  wire           cnv_in_io;
-  (* MARK_DEBUG = "TRUE" *)  wire           rise_cnv;
-  (* MARK_DEBUG = "TRUE" *)  wire           rise_slip;
-  (* MARK_DEBUG = "TRUE" *)  wire           slip;
-  (* MARK_DEBUG = "TRUE" *)  wire           filter_rdy_n_s;
-  (* MARK_DEBUG = "TRUE" *)  wire           fall_filter_ready;
+  wire           single_lane;
+  wire           cnv_in_io_s;
+  wire           cnv_in_io;
+  wire           rise_cnv;
+  wire           rise_slip;
+  wire           slip;
+  wire           filter_rdy_n_s;
+  wire           fall_filter_ready;
 
-    wire           adc_clk_phy;
-    wire           adc_clk_data; 
-    wire           dclk_s;
-    (* MARK_DEBUG = "TRUE" *) reg            filter_cycle        = 'b1;
-    (* MARK_DEBUG = "TRUE" *) reg            sync_status_int_d   = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg            sync_status_int_dd  = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg            sync_status_int     = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p          = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p_d        = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_d          = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_dd         = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [ 3:0]  adc_cnt_p           = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg            adc_valid_p         = 'd0;
-    (* MARK_DEBUG = "TRUE" *) reg     [1:0]  slip_d              = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg            cycle_done          = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state      = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state_next = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg    [ 1:0]  cnv_in_io_d         = 'b0;
-    (* MARK_DEBUG = "TRUE" *) reg            filter_rdy_n_d      = 'b0;
+  wire           adc_clk_phy;
+  wire           adc_clk_data; 
+  wire           dclk_s;
+
+  reg            filter_cycle        = 'b1;
+  reg            sync_status_int_d   = 'b0;
+  reg            sync_status_int_dd  = 'b0;
+  reg            sync_status_int     = 'b0;
+  reg    [19:0]  adc_data_p          = 'b0;
+  reg    [19:0]  adc_data_p_d        = 'b0;
+  reg    [19:0]  adc_data_d          = 'b0;
+  reg    [19:0]  adc_data_dd         = 'b0;
+  reg    [ 3:0]  adc_cnt_p           = 'b0;
+  reg            adc_valid_p         = 'd0;
+  reg     [1:0]  slip_d              = 'b0;
+  reg            cycle_done          = 'b0;
+  reg    [ 2:0]  transfer_state      = 'b0;
+  reg    [ 2:0]  transfer_state_next = 'b0;
+  reg    [ 1:0]  cnv_in_io_d         = 'b0;
+  reg            filter_rdy_n_d      = 'b0;
 
   assign single_lane   = num_lanes[0];
   assign delay_locked  = &delay_locked_s;
@@ -143,7 +141,6 @@ module ad408x_phy #(
   assign adc_valid     = adc_valid_p_d[3] | adc_valid_p_d[2]; 
   assign pattern_value = 'hac5d6;
   assign adc_clk       = adc_clk_data;
-
 
   IBUFDS i_cnv_in_ibuf(
     .I(cnv_in_p),
@@ -156,8 +153,8 @@ module ad408x_phy #(
     .IB(dclk_in_n));
 
   BUFH BUFH_inst (
-     .O(adc_clk_phy),
-     .I(dclk_s));
+   .O(adc_clk_phy),
+   .I(dclk_s));
 
   generate
     if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
@@ -188,7 +185,6 @@ module ad408x_phy #(
     sync_status_int_dd <= sync_status_int_d;
   end
 
-
 // compensate the delay added by the sync_event 
 reg [3:0] adc_valid_p_d = 'b0;
 
@@ -201,7 +197,6 @@ reg [3:0] adc_valid_p_d = 'b0;
       adc_data_d <= adc_data_d;
     end
   end
- 
 
 assign cnv_in_io           =  cnv_in_io_s    & ~self_sync;
 assign slip                =  bitslip_enable &  self_sync;
@@ -223,8 +218,6 @@ always @(posedge adc_clk_phy) begin
     transfer_state <= transfer_state_next;
   end
 end 
-
-
 
 // FSM next state logic
 
