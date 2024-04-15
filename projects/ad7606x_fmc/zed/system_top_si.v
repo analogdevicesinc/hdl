@@ -38,78 +38,80 @@
 module system_top #(
   parameter NUM_OF_SDI = 2
 ) (
-  inout       [14:0]      ddr_addr,
-  inout       [ 2:0]      ddr_ba,
-  inout                   ddr_cas_n,
-  inout                   ddr_ck_n,
-  inout                   ddr_ck_p,
-  inout                   ddr_cke,
-  inout                   ddr_cs_n,
-  inout       [ 3:0]      ddr_dm,
-  inout       [31:0]      ddr_dq,
-  inout       [ 3:0]      ddr_dqs_n,
-  inout       [ 3:0]      ddr_dqs_p,
-  inout                   ddr_odt,
-  inout                   ddr_ras_n,
-  inout                   ddr_reset_n,
-  inout                   ddr_we_n,
+  inout  [14:0] ddr_addr,
+  inout  [ 2:0] ddr_ba,
+  inout         ddr_cas_n,
+  inout         ddr_ck_n,
+  inout         ddr_ck_p,
+  inout         ddr_cke,
+  inout         ddr_cs_n,
+  inout  [ 3:0] ddr_dm,
+  inout  [31:0] ddr_dq,
+  inout  [ 3:0] ddr_dqs_n,
+  inout  [ 3:0] ddr_dqs_p,
+  inout         ddr_odt,
+  inout         ddr_ras_n,
+  inout         ddr_reset_n,
+  inout         ddr_we_n,
 
-  inout                   fixed_io_ddr_vrn,
-  inout                   fixed_io_ddr_vrp,
-  inout       [53:0]      fixed_io_mio,
-  inout                   fixed_io_ps_clk,
-  inout                   fixed_io_ps_porb,
-  inout                   fixed_io_ps_srstb,
+  inout         fixed_io_ddr_vrn,
+  inout         fixed_io_ddr_vrp,
+  inout  [53:0] fixed_io_mio,
+  inout         fixed_io_ps_clk,
+  inout         fixed_io_ps_porb,
+  inout         fixed_io_ps_srstb,
 
-  inout       [31:0]      gpio_bd,
+  inout  [31:0] gpio_bd,
 
-  output                  hdmi_out_clk,
-  output                  hdmi_vsync,
-  output                  hdmi_hsync,
-  output                  hdmi_data_e,
-  output      [15:0]      hdmi_data,
+  output        hdmi_out_clk,
+  output        hdmi_vsync,
+  output        hdmi_hsync,
+  output        hdmi_data_e,
+  output [15:0] hdmi_data,
 
-  output                  i2s_mclk,
-  output                  i2s_bclk,
-  output                  i2s_lrclk,
-  output                  i2s_sdata_out,
-  input                   i2s_sdata_in,
+  output        i2s_mclk,
+  output        i2s_bclk,
+  output        i2s_lrclk,
+  output        i2s_sdata_out,
+  input         i2s_sdata_in,
 
-  output                  spdif,
+  output        spdif,
 
-  inout                   iic_scl,
-  inout                   iic_sda,
-  inout       [1:0]       iic_mux_scl,
-  inout       [1:0]       iic_mux_sda,
+  inout         iic_scl,
+  inout         iic_sda,
+  inout  [1:0]  iic_mux_scl,
+  inout  [1:0]  iic_mux_sda,
 
-  input                   otg_vbusoc,
+  input         otg_vbusoc,
 
-  output                  ad7606_spi_cs,
-  output                  ad7606_spi_sclk,
+  output        ad7606_spi_cs,
+  output        ad7606_spi_sclk,
   input  [NUM_OF_SDI-1:0] ad7606_spi_sdi,
-  output                  ad7606_spi_sdo,
+  output        ad7606_spi_sdo,
 
-  inout                   adc_serpar,
-  input                   adc_busy,
-  output                  adc_cnvst_n,
-  inout                   adc_first_data,
-  output                  adc_reset,
-  output      [2:0]       adc_os,
-  output                  adc_stby,
-  output                  adc_range
+  inout         adc_serpar,
+  input         adc_busy,
+  output        adc_cnvst_n,
+  inout         adc_first_data,
+  output        adc_reset,
+  output [2:0]  adc_os,
+  output        adc_stby,
+  output        adc_range
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
+  wire [ 1:0] iic_mux_scl_i_s;
+  wire [ 1:0] iic_mux_scl_o_s;
+  wire        iic_mux_scl_t_s;
+  wire [ 1:0] iic_mux_sda_i_s;
+  wire [ 1:0] iic_mux_sda_o_s;
+  wire        iic_mux_sda_t_s;
+
+  assign gpio_i[63:40] = gpio_o[63:40];
 
     // instantiations
 
@@ -133,8 +135,6 @@ module system_top #(
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
-
-  assign gpio_i[63:40] = gpio_o[63:40];
 
   ad_iobuf #(
     .DATA_WIDTH(2)
