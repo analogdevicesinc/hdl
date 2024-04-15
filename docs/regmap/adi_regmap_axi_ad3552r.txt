@@ -35,7 +35,7 @@ REG_DAC_CUSTOM_WR
 ENDREG
 
 FIELD
-[23:0] 0x0000
+[23:0] 0x00000000
 DATA_WRITE
 RW
 Configuration data for the AD3552R device registers. 8/16 LSB are used depending on the
@@ -61,7 +61,7 @@ REG_DAC_CUSTOM_CTRL
 ENDREG
 
 FIELD
-[31:24] 0x00
+[31:24] 0x00000000
 ADDRESS
 RW
 Register address when the AD3552R is configured or stream start address when the
@@ -69,7 +69,7 @@ FSM is in stream state.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 STREAM
 RW
 Setting this bit will trigger a stream transfer based on the SDR/DDR
@@ -77,7 +77,7 @@ configuration and address.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 TRANSFER_DATA
 RW
 Setting this bit will trigger a single transfer based on the SDR/DDR,
@@ -114,7 +114,7 @@ DAC Channel Control & Status (channel - 1)
 ENDREG
 
 FIELD
-[3:0] 0x00
+[3:0] 0x00000000
 DAC_DDS_SEL
 RW
 Select internal data sources (available only if the DAC supports it).

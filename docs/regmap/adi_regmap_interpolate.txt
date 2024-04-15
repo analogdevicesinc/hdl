@@ -13,19 +13,19 @@ Version of the peripheral. Follows semantic versioning. Current version 2.3.0.
 ENDREG
 
 FIELD
-[31:16] 0x02
+[31:16] 0x00000002
 VERSION_MAJOR
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0x03
+[15:8] 0x00000003
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x00
+[7:0] 0x00000000
 VERSION_PATCH
 RO
 ENDFIELD
@@ -255,7 +255,7 @@ Rising edge triggering for TRIGGER[0](Ti) or TRIGGER[1](To) pin
 ENDFIELD
 
 FIELD
-[5:4]]
+[5:4]
 ANY_EDGE
 RW
 Any edge triggering for TRIGGER[0](Ti) or TRIGGER[1](To) pin
