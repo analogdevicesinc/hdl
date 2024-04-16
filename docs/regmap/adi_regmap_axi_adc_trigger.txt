@@ -13,7 +13,7 @@ Version Register
 ENDREG
 
 FIELD
-[31:0] 0x030000
+[31:0] 0x00030000
 VERSION
 RO
 Version number
@@ -29,7 +29,7 @@ Scratch Register
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 SCRATCH
 RW
 Scratch register
@@ -45,17 +45,17 @@ Control TRIGGER_O Value
 ENDREG
 
 FIELD
-[1] 0x0
-TRIGGER_O[1]
+[1] 0x00000000
+TRIGGER_O_1
 RW
-Set TRIGGER_O[1] value
+Set TRIGGER_O_1 value
 ENDFIELD
 
 FIELD
-[0] 0x0
-TRIGGER_O[0]
+[0] 0x00000000
+TRIGGER_O_0
 RW
-Set TRIGGER_O[0] value
+Set TRIGGER_O_0 value
 ENDFIELD
 
 ############################################################################################
@@ -68,39 +68,39 @@ Control Trigger Pins Direction
 ENDREG
 
 FIELD
-[7:5] 0x0
-TRIGGER_O[1] (To PIN)
+[7:5] 0x00000000
+TRIGGER_O_1
 RW
-Select output trigger pin 1:
+Select output trigger pin 1 (To PIN):
 
-0: SOFTWARE TRIGGER - TRRIGER_O[1](0x0004)
-1: TRIGGER_I[1] (PIN)
-2: TRIGGER_I[0] (PIN)
+0: SOFTWARE TRIGGER - TRRIGER_O_1(0x0004)
+1: TRIGGER_I_1 (PIN)
+2: TRIGGER_I_0 (PIN)
 3: TRIGGER_OUT (axi_adc_trigger) 4: TRIGGER_IN (Logic analyzer)
 ENDFIELD
 
 FIELD
-[4:2] 0x0
-TRIGGER_O[0] (Ti PIN)
+[4:2] 0x00000000
+TRIGGER_O_0
 RW
-Select output trigger pin 0:
+Select output trigger pin 0 (Ti PIN):
 
-0: SOFTWARE TRIGGER - TRRIGER_O[0](0x0004)
-1: TRIGGER_I[0] (PIN)
-2: TRIGGER_I[1] (PIN)
+0: SOFTWARE TRIGGER - TRRIGER_O_0(0x0004)
+1: TRIGGER_I_0 (PIN)
+2: TRIGGER_I_1 (PIN)
 3: TRIGGER_OUT (axi_adc_trigger) 4: TRIGGER_IN (Logic analyzer)
 ENDFIELD
 
 FIELD
-[1] 0x0
-IO_SELECTION[1]
+[1] 0x00000000
+IO_SELECTION_1
 RW
 Drives the TRIGGER_T[1](To) pin.
 ENDFIELD
 
 FIELD
-[0] 0x0
-IO_SELECTION[0]
+[0] 0x00000000
+IO_SELECTION_0
 RW
 Drives the TRIGGER_T[0](Ti) pin.
 ENDFIELD
@@ -115,35 +115,35 @@ Configure Digital Triggering
 ENDREG
 
 FIELD
-[9:8] 0x0
+[9:8] 0x00000000
 FALL_EDGE
 RW
 Enable falling edge triggering for TRIGGER[0] or TRIGGER[1] pin.
 ENDFIELD
 
 FIELD
-[7:6] 0x0
+[7:6] 0x00000000
 RISE_EDGE
 RW
 Enable rising edge triggering for TRIGGER[0] or TRIGGER[1] pin.
 ENDFIELD
 
 FIELD
-[5:4] 0x0
+[5:4] 0x00000000
 ANY_EDGE
 RW
 Enable any edge triggering for TRIGGER[0] or TRIGGER[1] pin.
 ENDFIELD
 
 FIELD
-[3:2] 0x0
+[3:2] 0x00000000
 HIGH_LEVEL
 RW
 Enable high level triggering for TRIGGER[0] or TRIGGER[1] pin.
 ENDFIELD
 
 FIELD
-[1:0] 0x0
+[1:0] 0x00000000
 LOW_LEVEL
 RW
 Enable low level triggering for TRIGGER[0] or TRIGGER[1] pin.
@@ -159,7 +159,7 @@ Analog Trigger Level for Channel
 ENDREG
 
 FIELD
-[15:0] 0x0
+[15:0] 0x00000000
 LIMIT_A
 RW
 Analog trigger level for channel A. 2's complement.
@@ -175,7 +175,7 @@ Analog Triggering Function
 ENDREG
 
 FIELD
-[1:0] 0x0
+[1:0] 0x00000000
 TRIGGER_FUNCTION_A
 RW
 Analog triggering function for channel A:
@@ -196,7 +196,7 @@ Analog Trigger Hysteresis for Channel
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 HYSTERESIS_A
 RW
 Used for the passthrough functions.
@@ -212,7 +212,7 @@ Trigger Selection for Path
 ENDREG
 
 FIELD
-[3:0] 0x0
+[3:0] 0x00000000
 TRIGGER_MUX_A
 RW
 Selects trigger a mode:
@@ -239,7 +239,7 @@ Analog Trigger Level for Channel
 ENDREG
 
 FIELD
-[15:0] 0x0
+[15:0] 0x00000000
 LIMIT_B
 RW
 Analog trigger level for channel B. 2's complement.
@@ -255,7 +255,7 @@ Analog Triggering Function
 ENDREG
 
 FIELD
-[1:0] 0x0
+[1:0] 0x00000000
 TRIGGER_FUNCTION_B
 RW
 Analog triggering function for channel B:
@@ -276,7 +276,7 @@ Analog Trigger Hysteresis for Channel
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 HYSTERESIS_B
 RW
 Used for the passthrough functions.
@@ -292,7 +292,7 @@ Trigger Selection for Path
 ENDREG
 
 FIELD
-[3:0] 0x0
+[3:0] 0x00000000
 TRIGGER_MUX_B
 RW
 Selects trigger a mode:
@@ -319,7 +319,7 @@ Selection Multiplexer and embedded trigger selection
 ENDREG
 
 FIELD
-[16] 0x0
+[16] 0x00000000
 EMBEDDED_TRIGGER
 RW
 When set the bit 15 of the out channel data will be the trigger.
@@ -329,7 +329,7 @@ When set a util_extract module is required in the system.
 ENDFIELD
 
 FIELD
-[3:0] 0x0
+[3:0] 0x00000000
 TRIGGER_MUX_OUT
 RW
 Final Trigger Selection Multiplexer.
@@ -356,7 +356,7 @@ Controls the Dynamic Depth of the History FIFO
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 FIFO_DEPTH
 RW
 Controls the depth of the history FIFO. Should be less than the maximum FIFO depth.
@@ -373,7 +373,7 @@ Indicates Triggering Status
 ENDREG
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TRIGGERED
 RW1C
 Indicates if the trigger has been triggered since the last time this register has been
@@ -390,7 +390,7 @@ Control the Trigger Delay
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 TRIGGER_DELAY
 RW
 Delays the start of data capture with TRIGGER_DELAY number of samples after the trigger.
@@ -406,7 +406,7 @@ Controls Streaming Mode
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 STREAMING
 RW
 If the streaming bit is set, after the trigger condition is met data will be continuously
@@ -423,7 +423,7 @@ Controls hold off time
 ENDREG
 
 FIELD
-[31:0] 0x0
+[31:0] 0x00000000
 TRIGGER_HOLDOFF
 RW
 Defines the time interval, after a trigger event, where the next trigger events will be
@@ -442,7 +442,7 @@ Controls external trigger hold time
 ENDREG
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TRIGGER_OUT_HOLD_PINS
 RW
 Defines a time period, in which the external trigger pins, configured as outputs, will hold

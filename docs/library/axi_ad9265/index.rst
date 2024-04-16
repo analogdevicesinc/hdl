@@ -127,7 +127,7 @@ The channel module implements:
 
 The data analyzed by the PRBS monitor is raw data received from the interface,
 before being processed in any way. Selection between PN9 and PN23 sequences
-can be done by programming the REG_CHAN_CNTRL_3 register.
+can be done by programming the CHAN_CNTRL_3 register.
 
 ``up_adc_common`` module implements the ADC COMMON register map, allowing for basic
 monitoring and control of the ADC.

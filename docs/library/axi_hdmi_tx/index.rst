@@ -127,7 +127,8 @@ through several processing blocks (see :ref:`axi_hdmi_tx block-diagram`):
   space to YCbCr color space. If RGB is the desired output color space the CSC
   block can be bypassed by setting to 1 the value of CSC_BYPASS register.
 * **Data Clipping** bloc gives the possibility of limiting the minimum and
-  maximum color range values. This block is controlled by FULL_RANGE, REG_CLIPP_MAX and REG_CLIPP_MIN registers.
+  maximum color range values. This block is controlled by FULL_RANGE, CLIPP_MAX
+  and CLIPP_MIN registers.
 * **Chroma subsampling** block as its name suggests, samples the video
   information to obtain a video information that requires less bandwidth and
   has a minimum impact on the video quality experienced by human eyes.

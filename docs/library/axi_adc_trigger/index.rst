@@ -58,7 +58,7 @@ Submodules
 
    -  Channel A
 
-      -  Amplitude limit - REG_LIMIT_A (0x0014) - Defines the threshold level for
+      -  Amplitude limit - LIMIT_A (0x0014) - Defines the threshold level for
          the ADC trigger
       -  Function - TRIGGER_FUNCTION_A (0x0018) - Lower, higher than limit; pass
          through limit
@@ -67,7 +67,7 @@ Submodules
 
    -  Channel B
 
-      -  Amplitude limit - REG_LIMIT_A (0x0024) - Defines the threshold level for
+      -  Amplitude limit - LIMIT_A (0x0024) - Defines the threshold level for
          the ADC trigger
       -  Function - TRIGGER_FUNCTION_A (0x0028) - Lower, higher than limit; pass
          through limit
@@ -77,7 +77,7 @@ Submodules
 -  **External trigger**
 
    -  Pin 0 (Ti)
-      Configurations - REG_CONFIG_TRIGGER_I (0x004) allows for:
+      Configurations - CONFIG_TRIGGER_I (0x004) allows for:
 
       -  falling edge (bit 8)
       -  rising edge (bit 6)
@@ -86,7 +86,7 @@ Submodules
       -  low level (bit 0)
 
    -  Pin 1 (To)
-      Configurations - REG_CONFIG_TRIGGER_I (0x004) allows for:
+      Configurations - CONFIG_TRIGGER_I (0x004) allows for:
 
       -  falling edge (bit 9)
       -  rising edge (bit 7)
@@ -100,25 +100,25 @@ Submodules
    for input and one for output. This is for the ease of configuring a
    daisy-chain of M2k's.
    The hardware and software support both pins to be configured as input
-   or output in REG_IO_SELECTION (0x000c).
+   or output in IO_SELECTION (0x000c).
 
--  **Channel A MUX** - REG_TRIGGER_MUX_A(0x0020) - Selects between a combination
+-  **Channel A MUX** - TRIGGER_MUX_A(0x0020) - Selects between a combination
    of ADC trigger and the external trigger
--  **Channel B MUX** - REG_TRIGGER_MUX_B(0x0030) - Selects between a combination
+-  **Channel B MUX** - TRIGGER_MUX_B(0x0030) - Selects between a combination
    of ADC trigger and the external trigger
 
--  **Output MUX** - REG_TRIGGER_OUT_CONTROL(0x0034) - Selects a combination
+-  **Output MUX** - TRIGGER_OUT_CONTROL(0x0034) - Selects a combination
    between the channel A and/or B MUX's and the input of the instrument trigger
--  **Holdoff counter** (32 bit) - REG_TRIGGER_HOLDOFF(0x0048) - Controls the
+-  **Holdoff counter** (32 bit) - TRIGGER_HOLDOFF(0x0048) - Controls the
    trigger out silent period after an event.
--  **Delay counter** (32 bit) - REG_TRIGGER_DELAY(0x0040) - Controls the trigger
+-  **Delay counter** (32 bit) - TRIGGER_DELAY(0x0040) - Controls the trigger
    delay
 
 -  **External trigger control**
 
-   * REG_IO_SELECTION(0x000c) - Controls the direction of the external trigger pins,
+   * IO_SELECTION(0x000c) - Controls the direction of the external trigger pins,
      and the source(for each pin configured as output)
-   * REG_TRIGGER_OUT_HOLD_PINS(0x004c) - Controls the hold period after a
+   * TRIGGER_OUT_HOLD_PINS(0x004c) - Controls the hold period after a
      transition to a new logic level.
 
 Configuration Parameters

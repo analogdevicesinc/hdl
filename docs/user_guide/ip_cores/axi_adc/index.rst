@@ -227,11 +227,15 @@ Typical Register Map base addresses
    :no-type-info:
 
 .. hdl-regmap::
+   :name: ADC_COMMON
+   :no-type-info:
+
+.. hdl-regmap::
    :name: JESD_TPL
    :no-type-info:
 
 .. hdl-regmap::
-   :name: ADC_COMMON
+   :name: ADC_CHANNEL
    :no-type-info:
 
 .. hdl-regmap::

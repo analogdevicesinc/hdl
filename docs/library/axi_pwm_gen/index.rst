@@ -22,7 +22,7 @@ The offset feature will synchronize counters 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 
 The AXI PWM Generator core can be synchronized by an external signal.
 The offset counter will wait for a HIGH -> LOW transition of the synchronization
-pulse. 
+pulse.
 
 If another synchronization is needed, the ``external_sync`` signal should be set
 HIGH and the ``load_config`` should be toggled (by register write). This will
@@ -132,4 +132,4 @@ Register Map
 --------------------------------------------------------------------------------
 
 .. hdl-regmap::
-   :name: axi_pwm_gen
+   :name: AXI_PWM_GEN

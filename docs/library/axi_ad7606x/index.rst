@@ -110,7 +110,7 @@ description of each generic register map.
    :no-type-info:
 
 .. hdl-regmap::
-   :name: axi_pwm_gen
+   :name: AXI_PWM_GEN
    :no-type-info:
 
 Theory of operation

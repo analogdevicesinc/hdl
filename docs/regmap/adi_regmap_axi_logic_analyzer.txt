@@ -13,19 +13,19 @@ Version of the peripheral. Follows semantic versioning. Current version 2.1.0.
 ENDREG
 
 FIELD
-[31:16] 0x02
+[31:16] 0x00000002
 VERSION_MAJOR
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0x01
+[15:8] 0x00000001
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x00
+[7:0] 0x00000000
 VERSION_PATCH
 RO
 ENDFIELD
@@ -110,7 +110,7 @@ ENDREG
 
 FIELD
 [17:16]
-TRIGGER[1:0]
+TRIGGER
 RW
 Enables any edge detection triggering based on the trigger pins
 ENDFIELD
@@ -133,14 +133,14 @@ ENDREG
 
 FIELD
 [17:16]
-TRIGGER[1:0]
+TRIGGER
 RW
 Enables rise edge detection triggering based on the trigger pins
 ENDFIELD
 
 FIELD
 [15:0]
-DATA[15:0]
+DATA
 RW
 Enables rise edge detection triggering based on the data pins
 ENDFIELD
@@ -156,14 +156,14 @@ ENDREG
 
 FIELD
 [17:16]
-TRIGGER[1:0]
+TRIGGER
 RW
 Enables fall edge detection triggering based on the trigger pins
 ENDFIELD
 
 FIELD
 [15:0]
-DATA[15:0]
+DATA
 RW
 Enables fall edge detection triggering based on the data pins
 ENDFIELD
@@ -179,14 +179,14 @@ ENDREG
 
 FIELD
 [17:16]
-TRIGGER[1:0]
+TRIGGER
 RW
 Enables low level triggering based on the trigger pins
 ENDFIELD
 
 FIELD
 [15:0]
-DATA[15:0]
+DATA
 RW
 Enables low level triggering based on the data pins
 ENDFIELD
@@ -202,14 +202,14 @@ ENDREG
 
 FIELD
 [17:16]
-TRIGGER[1:0]
+TRIGGER
 RW
 Enables high level triggering based on the trigger pins
 ENDFIELD
 
 FIELD
 [15:0]
-DATA[15:0]
+DATA
 RW
 Enables high level triggering based on the data pins
 ENDFIELD
