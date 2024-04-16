@@ -466,7 +466,7 @@ OPS_STATUS_NOP
 RO
 This bit is set to 1 when the bus is not executing any procedure.
 It is not idle bus condition since it set right after the Stop.
-ENDIELD
+ENDFIELD
 
 FIELD
 [6:5] 0x0
@@ -585,6 +585,7 @@ ENDFIELD
 
 REG
 0xb0 + 0x01*n
+WHERE n IS FROM 0 TO 15
 OFFLOAD_CMD_n
 Offload command memory. Write commands in sequence to these addresses and update the
 OFFLOAD_CMD_LENGTH register.
@@ -602,6 +603,7 @@ ENDFIELD
 
 REG
 0xc0 + 0x01*n
+WHERE n IS FROM 0 TO 15
 OFFLOAD_SDO_n
 Offload SDO memory.
 Dual access memory sector used to store the SDO payload for the offload execution.
