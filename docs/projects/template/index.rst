@@ -615,7 +615,7 @@ Systems related
 **THIS IS JUST AN EXAMPLE**
 
 -  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
--  Here you can find all the quick start guides on wiki documentation:dokuwiki:`[Wiki] AD9081 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+-  Here you can find all the quick start guides on wiki documentation :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -699,21 +699,21 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_adxcvr>`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_rx>`
+     - :ref:`axi_jesd204_rx`
    * - AXI_JESD204_TX
      - :git-hdl:`library/jesd204/axi_jesd204_tx`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/axi_jesd204_tx>`
+     - :ref:`axi_jesd204_tx`
    * - JESD204_TPL_ADC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_adc>`
+     - :ref:`ad_ip_jesd204_tpl_adc`
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/jesd204/jesd204_tpl_dac>`
+     - :ref:`ad_ip_jesd204_tpl_dac`
 
 \**\* MENTION THESE for JESD reference designs \**\*
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :dokuwiki:`[Wiki] JESD204B High-Speed Serial Interface Support <resources/fpga/peripherals/jesd204>`
+-  :ref:`jesd204`
 
 \**\* MENTION THIS for SPI Engine reference designs \**\*
 
