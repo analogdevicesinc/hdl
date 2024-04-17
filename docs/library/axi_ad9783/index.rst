@@ -239,12 +239,16 @@ Interface
        1/4 compared to the reference input clock
    * - dac_rst
      - Core reset signal
-   * - dac_enable_*
-     - If set, the channel is enabled (one for each channel)
+   * - dac_enable_0
+     - If set, channel 0 is enabled
+   * - dac_enable_1
+     - If set, channel 1 is enabled
    * - dac_valid
      - Indicates valid data request for all channels
-   * - dac_ddata_*
-     - Transmitted data output (one for each channel)
+   * - dac_ddata_0
+     - Transmitted data output for channel 0
+   * - dac_ddata_1
+     - Transmitted data output for channel 1
    * - dac_dunf
      - Data underflow, must be connected to the DMA
    * - s_axi
