@@ -1086,7 +1086,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane). For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.</p>
+<p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane).  For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.</p>
 </section>
 </td>
 </tr>
@@ -1292,7 +1292,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_DELAY_CNTRL</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_DELAY_CNTRL</span> </code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status(‘’Deprecated from version 9’’)</p>
 </section>
@@ -1340,7 +1340,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x19</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x64</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_DELAY_STATUS</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_DELAY_STATUS</span> </code></td>
 <td class="description bold"><section>
 <p>ADC Interface Control &amp; Status(‘’Deprecated from version 9’’)</p>
 </section>
@@ -1390,7 +1390,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>ADC synchronization status. Will be set to 1 after the synchronization has been completed or while waiting for the synchronization signal in JESD204 systems.</p>
+<p>ADC synchronization status. Will be set to 1 after the synchronization has been completed  or while waiting for the synchronization signal in JESD204 systems.</p>
 </section>
 </td>
 </tr>
@@ -2156,7 +2156,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used, this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits). If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel with the format 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used, this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits). If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel  with the format 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2184,7 +2184,7 @@ and interfaces are synchronous to the device_clk clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Selects the PN monitor sequence type (available only if ADC supports it). \ - 0x0: pn9a (device specific, modified pn9) \ - 0x1: pn23a (device specific, modified pn23) \ - 0x4: pn7 (standard O.150) \ - 0x5: pn15 (standard O.150) \ - 0x6: pn23 (standard O.150) \ - 0x7: pn31 (standard O.150) \ - 0x9: pnX (device specific, e.g. ad9361) \ - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \ - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p>
+<p>Selects the PN monitor sequence type (available only if ADC supports it). \  - 0x0: pn9a (device specific, modified pn9) \  - 0x1: pn23a (device specific, modified pn23) \  - 0x4: pn7 (standard O.150) \  - 0x5: pn15 (standard O.150) \  - 0x6: pn23 (standard O.150) \  - 0x7: pn31 (standard O.150) \  - 0x9: pnX (device specific, e.g. ad9361) \  - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \  - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p>
 </section>
 </td>
 </tr>
