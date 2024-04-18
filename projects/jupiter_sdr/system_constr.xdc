@@ -48,8 +48,8 @@ set_property  -dict {PACKAGE_PIN U6    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100} 
 
 set_property  -dict {PACKAGE_PIN J1    IOSTANDARD LVDS}                          [get_ports tx1_dclk_out_n]     ; ## IO_L15N_65_TX1_DCLK_IN_N
 set_property  -dict {PACKAGE_PIN K1    IOSTANDARD LVDS}                          [get_ports tx1_dclk_out_p]     ; ## IO_L15P_65_TX1_DCLK_IN_P
-set_property  -dict {PACKAGE_PIN L3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx1_dclk_in_n]      ; ## IO_L13N_65_TX1_DCLK_OUT_N
-set_property  -dict {PACKAGE_PIN M3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx1_dclk_in_p]      ; ## IO_L13P_65_TX1_DCLK_OUT_P
+set_property  -dict {PACKAGE_PIN N3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx1_dclk_in_n]      ; ## IO_L13N_65_TX1_DCLK_OUT_N
+set_property  -dict {PACKAGE_PIN N4    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx1_dclk_in_p]      ; ## IO_L13P_65_TX1_DCLK_OUT_P
 set_property  -dict {PACKAGE_PIN J2    IOSTANDARD LVDS}                          [get_ports tx1_idata_out_n]    ; ## IO_L17N_65_TX1_IDATA_IN_N
 set_property  -dict {PACKAGE_PIN J3    IOSTANDARD LVDS}                          [get_ports tx1_idata_out_p]    ; ## IO_L17P_65_TX1_IDATA_IN_P
 set_property  -dict {PACKAGE_PIN K2    IOSTANDARD LVDS}                          [get_ports tx1_qdata_out_n]    ; ## IO_L18N_65_TX1_QDATA_IN_N
@@ -59,8 +59,8 @@ set_property  -dict {PACKAGE_PIN M2    IOSTANDARD LVDS}                         
 
 set_property  -dict {PACKAGE_PIN L5    IOSTANDARD LVDS}                          [get_ports tx2_dclk_out_n]     ; ## IO_L19N_65_TX2_DCLK_IN_N
 set_property  -dict {PACKAGE_PIN M6    IOSTANDARD LVDS}                          [get_ports tx2_dclk_out_p]     ; ## IO_L19P_65_TX2_DCLK_IN_P
-set_property  -dict {PACKAGE_PIN N3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx2_dclk_in_n]      ; ## IO_L14N_65_TX2_DCLK_OUT_N
-set_property  -dict {PACKAGE_PIN N4    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx2_dclk_in_p]      ; ## IO_L14P_65_TX2_DCLK_OUT_P
+set_property  -dict {PACKAGE_PIN L3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx2_dclk_in_n]      ; ## IO_L14N_65_TX2_DCLK_OUT_N
+set_property  -dict {PACKAGE_PIN M3    IOSTANDARD LVDS  DIFF_TERM_ADV TERM_100}  [get_ports tx2_dclk_in_p]      ; ## IO_L14P_65_TX2_DCLK_OUT_P
 set_property  -dict {PACKAGE_PIN K5    IOSTANDARD LVDS}                          [get_ports tx2_idata_out_n]    ; ## IO_L21N_65_TX2_IDATA_IN_N
 set_property  -dict {PACKAGE_PIN K6    IOSTANDARD LVDS}                          [get_ports tx2_idata_out_p]    ; ## IO_L21P_65_TX2_IDATA_IN_P
 set_property  -dict {PACKAGE_PIN K7    IOSTANDARD LVDS}                          [get_ports tx2_qdata_out_n]    ; ## IO_L22N_65_TX2_QDATA_IN_N
