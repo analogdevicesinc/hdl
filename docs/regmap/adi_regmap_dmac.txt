@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x000
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 4.05.61.
+Version of the peripheral. Follows semantic versioning. Current version 4.05.62.
 ENDREG
 
 FIELD
@@ -25,7 +25,7 @@ RO
 ENDFIELD
 
 FIELD
-[7:0] 0x61
+[7:0] 0x62
 VERSION_PATCH
 RO
 ENDFIELD
@@ -80,7 +80,7 @@ ENDFIELD
 
 REG
 0x004
-INTERFACE_DESCRIPTION
+INTERFACE_DESCRIPTION_1
 ENDREG
 
 FIELD
@@ -118,6 +118,35 @@ R
 Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
 The starting address of the transfer must be aligned with ''MAX_BYTES_PER_BURST'' to avoid crossing
 the 4kB address boundary.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x005
+INTERFACE_DESCRIPTION_2
+ENDREG
+
+FIELD
+[0] ''CACHE_COHERENT''
+CACHE_COHERENT
+R
+Value of ''CACHE_COHERENT'' parameter.(0 - Disabled, 1 -  Enabled )
+ENDFIELD
+
+FIELD
+[7:4] ''AXI_AXCACHE''
+AXI_AXCACHE
+R
+Value of ''AXI_AXCACHE'' parameter.
+ENDFIELD
+
+FIELD
+[10:8] ''AXI_AXPROT''
+AXI_AXPROT
+R
+Value of ''AXI_AXPROT'' parameter.
 ENDFIELD
 
 ############################################################################################
