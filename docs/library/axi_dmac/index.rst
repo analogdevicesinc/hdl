@@ -670,6 +670,25 @@ flag signal. For the AXI-Streaming interface the synchronization flag is carried
 in ``s_axis_user[0]``. In both cases the synchronization flag is qualified by
 the same control signal as the data.
 
+Cache Coherency
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To enable Cache Coherency between the DMA and the CPU, the ``CACHE_COHERENT``
+HDL synthesis configuration parameter must be set.
+
+Two additional parameters are used to configure the Cache Coherent transactions:
+
+-  ``AXI_AXCACHE`` sets the ARCACHE/AWCACHE AXI cache support signals;
+-  ``AXI_AXPROT`` sets the ARPROT/AWPROT AXI access permission signals.
+
+They are initially set to the following default values through ``CACHE_COHERENT``:
+
+-  ``AXI_AXCACHE`` = ``CACHE_COHERENT`` ? ``4'b1111`` : ``4'b0011``
+-  ``AXI_AXPROT`` = ``CACHE_COHERENT`` ? ``3'b010``  : ``3'b000``
+
+If Cache Coherency is enabled, the ``AXI_AXCACHE`` and ``AXI_AXPROT`` values can
+be changed to support systems with different caching policies.
+
 Diagnostics interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
