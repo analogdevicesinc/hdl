@@ -39,6 +39,7 @@ module axi_adrv9001_rx #(
   parameter   ID = 0,
   parameter   ENABLED = 1,
   parameter   CMOS_LVDS_N = 0,
+  parameter   USE_RX_CLK_FOR_TX = 0,
   parameter   COMMON_BASE_ADDR = 'h00,
   parameter   CHANNEL_BASE_ADDR = 'h01,
   parameter   MODE_R1 = 1,
@@ -136,9 +137,14 @@ module axi_adrv9001_rx #(
 
   end else begin : core_enabled
 
+    // This bit lets the sw know that this feature is available
+    localparam  SELECTABLE_CLK = 1;
+
     // configuration settings
 
-    localparam  CONFIG =  (CMOS_LVDS_N * 128) +
+    localparam  CONFIG =  (SELECTABLE_CLK * 16384) +
+                          (USE_RX_CLK_FOR_TX[0] * 1024) +
+                          (CMOS_LVDS_N * 128) +
                           (MODE_R1 * 16) +
                           (DATAFORMAT_DISABLE * 4) +
                           (DCFILTER_DISABLE * 2) +
