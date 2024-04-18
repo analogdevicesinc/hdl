@@ -6,7 +6,7 @@
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-source ../common/pulsar_adc_pmdz_bd.tcl
+source ../common/pulsar_adc_bd.tcl
 
 #system ID
 

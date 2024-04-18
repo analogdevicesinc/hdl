@@ -6,7 +6,7 @@
 
 PROJECT_NAME := pulsar_adc_pmdz_coraz7s
 
-M_DEPS += ../common/pulsar_adc_pmdz_bd.tcl
+M_DEPS += ../common/pulsar_adc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_ps7.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_constr.xdc
