@@ -42,12 +42,15 @@ module axi_adrv9001_if #(
   parameter DRP_WIDTH = 5,
   parameter RX_USE_BUFG = 0,
   parameter TX_USE_BUFG = 0,
+  parameter DISABLE_RX1_SSI = 0,
+  parameter DISABLE_TX1_SSI = 0,
   parameter DISABLE_RX2_SSI = 0,
   parameter DISABLE_TX2_SSI = 0,
   parameter IODELAY_CTRL = 1,
   parameter IODELAY_ENABLE = 1,
   parameter IO_DELAY_GROUP = "dev_if_delay_group",
-  parameter USE_RX_CLK_FOR_TX = 0
+  parameter USE_RX_CLK_FOR_TX1 = 0,
+  parameter USE_RX_CLK_FOR_TX2 = 0
 ) (
   input             ref_clk,
   input             tx_output_enable,
@@ -203,7 +206,16 @@ module axi_adrv9001_if #(
   wire  [7:0] dac_2_data_clk;
   wire        dac_2_data_valid;
 
+  wire        ext_tx1_clk_div;
+  wire        ext_tx1_clk;
+  wire        ext_tx1_ssi_rst;
+  wire        ext_tx2_clk_div;
+  wire        ext_tx2_clk;
+  wire        ext_tx2_ssi_rst;
+
   wire        rx_ssi_sync_out;
+  generate
+  if (DISABLE_RX1_SSI == 0) begin
 
   adrv9001_rx #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
@@ -270,13 +282,24 @@ module axi_adrv9001_if #(
     .rx_symb_op (rx1_symb_op),
     .rx_symb_8_16b (rx1_symb_8_16b));
 
-  generate if (DISABLE_RX2_SSI == 0) begin
+  end else begin
+    assign delay_rx1_locked = 1'b1;
+    assign up_rx1_drdata = 'h0;
+    assign rx1_clk = 1'b0;
+    assign adc_1_clk_div = 1'b0;
+    assign adc_1_clk = 1'b0;
+    assign rx1_data_valid = 1'b0;
+    assign rx1_data_i = 16'b0;
+    assign rx1_data_q = 16'b0;
+  end
+
+  if (DISABLE_RX2_SSI == 0) begin
     adrv9001_rx #(
       .CMOS_LVDS_N (CMOS_LVDS_N),
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
-      .IODELAY_CTRL (0),
+      .IODELAY_CTRL (DISABLE_RX1_SSI),
       .IODELAY_ENABLE (IODELAY_ENABLE),
       .USE_BUFG (RX_USE_BUFG),
       .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
@@ -337,18 +360,35 @@ module axi_adrv9001_if #(
     assign delay_rx2_locked = 1'b1;
     assign up_rx2_drdata = 'h0;
     assign rx2_clk = 1'b0;
+    assign adc_2_clk_div = 1'b0;
+    assign adc_2_clk = 1'b0;
     assign rx2_data_valid = 1'b0;
     assign rx2_data_i = 16'b0;
     assign rx2_data_q = 16'b0;
   end
-  endgenerate
+
+  if (DISABLE_TX1_SSI == 0) begin
+
+    if (USE_RX_CLK_FOR_TX1 == 1) begin
+      assign ext_tx1_clk_div = adc_1_clk_div;
+      assign ext_tx1_clk = adc_1_clk;
+      assign ext_tx1_ssi_rst = adc_1_ssi_rst;
+    end else if (USE_RX_CLK_FOR_TX1 == 2) begin
+      assign ext_tx1_clk_div = adc_2_clk_div;
+      assign ext_tx1_clk = adc_2_clk;
+      assign ext_tx1_ssi_rst = adc_2_ssi_rst;
+    end else begin
+      assign ext_tx1_clk_div = 1'b0;
+      assign ext_tx1_clk = 1'b0;
+      assign ext_tx1_ssi_rst = 1'b0;
+    end
 
   adrv9001_tx #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .NUM_LANES (TX_NUM_LANES),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .USE_BUFG (TX_USE_BUFG),
-    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+    .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX1)
   ) i_tx_1_phy (
     .ref_clk (ref_clk),
     .up_clk (up_clk),
@@ -366,9 +406,9 @@ module axi_adrv9001_if #(
     .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
     .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
 
-    .rx_clk_div (adc_1_clk_div),
-    .rx_clk (adc_1_clk),
-    .rx_ssi_rst (adc_1_ssi_rst),
+    .rx_clk_div (ext_tx1_clk_div),
+    .rx_clk (ext_tx1_clk),
+    .rx_ssi_rst (ext_tx1_ssi_rst),
 
     .dac_rst (tx1_rst),
     .dac_clk_div (dac_1_clk_div),
@@ -407,14 +447,40 @@ module axi_adrv9001_if #(
     .tx_single_lane (tx1_single_lane),
     .tx_symb_op (tx1_symb_op),
     .tx_symb_8_16b (tx1_symb_8_16b));
+  end else begin
+    assign tx1_clk = 1'b0;
+    assign tx1_dclk_out_n_NC = 1'b0;
+    assign tx1_dclk_out_p_dclk_out = 1'b0;
+    assign tx1_idata_out_n_idata0 = 1'b0;
+    assign tx1_idata_out_p_idata1 = 1'b0;
+    assign tx1_qdata_out_n_qdata2 = 1'b0;
+    assign tx1_qdata_out_p_qdata3 = 1'b0;
+    assign tx1_strobe_out_n_NC = 1'b0;
+    assign tx1_strobe_out_p_strobe_out = 1'b0;
+  end
 
-  generate if (DISABLE_TX2_SSI == 0) begin
+  if (DISABLE_TX2_SSI == 0) begin
+
+    if (USE_RX_CLK_FOR_TX2 == 1) begin
+      assign ext_tx2_clk_div = adc_1_clk_div;
+      assign ext_tx2_clk = adc_1_clk;
+      assign ext_tx2_ssi_rst = adc_1_ssi_rst;
+    end else if (USE_RX_CLK_FOR_TX2 == 2) begin
+      assign ext_tx2_clk_div = adc_2_clk_div;
+      assign ext_tx2_clk = adc_2_clk;
+      assign ext_tx2_ssi_rst = adc_2_ssi_rst;
+    end else begin
+      assign ext_tx2_clk_div = 1'b0;
+      assign ext_tx2_clk = 1'b0;
+      assign ext_tx2_ssi_rst = 1'b0;
+    end
+
     adrv9001_tx #(
       .CMOS_LVDS_N (CMOS_LVDS_N),
       .NUM_LANES (TX_NUM_LANES),
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
       .USE_BUFG (TX_USE_BUFG),
-      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX)
+      .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX2)
     ) i_tx_2_phy (
       .ref_clk (ref_clk),
       .up_clk (up_clk),
@@ -432,9 +498,9 @@ module axi_adrv9001_if #(
       .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
       .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
 
-      .rx_clk_div (adc_2_clk_div),
-      .rx_clk (adc_2_clk),
-      .rx_ssi_rst (adc_2_ssi_rst),
+      .rx_clk_div (ext_tx2_clk_div),
+      .rx_clk (ext_tx2_clk),
+      .rx_ssi_rst (ext_tx2_ssi_rst),
 
       .dac_rst (tx2_rst),
       .dac_clk_div (dac_2_clk_div),
