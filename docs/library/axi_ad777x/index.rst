@@ -6,8 +6,8 @@ AXI AD777x
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD777x <library/axi_ad777x>` IP core
-can be used to interface the :adi:`AD777x` ADC, in 1, 2, or 4
-data lines active.
+can be used to interface the :adi:`AD7770`, :adi:`AD7771` and :adi:`AD7779` 
+converters using an FPGA in 1, 2, or 4 data lines active.
 More about the generic framework interfacing ADCs, that contains the
 ``up_adc_channel`` and ``up_adc_common modules``, can be read in :ref:`axi_adc`.
 
@@ -30,10 +30,12 @@ Files
      - Description
    * - :git-hdl:`library/axi_ad777x/axi_ad777x.v`
      - Verilog source for the AXI AD777x.
-   * - :git-hdl:`library/common/up_adc_common.v`
-     - Verilog source for the ADC Common regmap.
-   * - :git-hdl:`library/common/up_adc_channel.v`
-     - Verilog source for the ADC Channel regmap.
+   * - :git-hdl:`library/axi_ad777x/axi_ad777x_if.v`
+     - Verilog source for the AXI AD777x interface module.
+   * - :git-hdl:`library/axi_ad777x/axi_ad777x_ip.tcl`
+     - TCL script to generate the Vivado IP-integrator project.
+   * - :git-hdl:`library/axi_ad777x/axi_ad777x_hw.tcl`
+     - TCL script to generate the Quartus IP-integrator project.
 
 Block Diagram
 --------------------------------------------------------------------------------
@@ -55,31 +57,33 @@ Interface
 .. hdl-interfaces::
 
    * - clk_in
-     - input clock
+     - Input clock.
    * - ready_in
-     - input ready signal
+     - Input ready signal.
    * - data_in
-     - serial input data
+     - Serial input data.
    * - adc_dovf
-     - Data overflow input, from the DMA
+     - Data overflow input, from the DMA.
    * - adc_clk
      - This is the clock domain that most of the modules of the core run on.
    * - adc_reset
-     - Output reset, on the adc_clk domain
+     - Output reset, on the adc_clk domain.
    * - adc_enable_*
-     - Set when the channel is enabled, activated by software
+     - Set when the channel is enabled, activated by software.
    * - adc_valid_*
-     - Set when valid data is available on the bus
+     - Set when valid data is available on the bus.
+   * - adc_valid
+     - Set when valid data is available on the bus.
    * - adc_data_*
-     - Channel parallel output data
+     - Channel parallel output data.
    * - adc_crc_ch_mismatch
-     - Channels CRC mismatch flags register
+     - Channels CRC mismatch flags register.
    * - sync_adc_miso
-     - syncronization input signal
+     - Syncronization input signal.
    * - sync_adc_mosi
-     - syncronization output signal
+     - Syncronization output signal.
    * - s_axi
-     - Standard AXI Slave Memory Map interface
+     - Standard AXI Slave Memory Map interface.
 
 Detailed Architecture
 --------------------------------------------------------------------------------
@@ -92,12 +96,12 @@ Detailed Description
 
 The top module, axi_ad777x, instantiates:
 
-* The ad777x interface module
+* The AD777x interface module
 * The ADC channel register map
 * The ADC common register map
 * The AXI handling interface
 
-The ad777x interface module has as input the serial data lines, the ready_in
+The AD777x interface module has as input the serial data lines, the ready_in
 signal and the interface clock. Data is deserialized according to the number
 of active lanes. The interface module also implements a parallel CRC check
 algorithm.
@@ -151,7 +155,9 @@ References
 -------------------------------------------------------------------------------
 
 * :git-hdl:`library/axi_ad777x`
-* :adi:`AD777x`
+* :adi:`AD7770`
+* :adi:`AD7771`
+* :adi:`AD7779`
 * :git-linux:`/`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`

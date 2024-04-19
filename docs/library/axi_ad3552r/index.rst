@@ -14,7 +14,7 @@ Features
 --------------------------------------------------------------------------------
 
 * AXI-based configuration
-* Vivado and Quartus compatible
+* Vivado compatible
 * 8b register read/write SDR/DDR
 * 16b register read/write SDR/DDR
 * data stream SDR/DDR ( clk_in/8 or clk_in/4 update rate)
@@ -35,10 +35,18 @@ Files
      - Description
    * - :git-hdl:`library/axi_ad3552r/axi_ad3552r.v`
      - Verilog source for the AXI AD3552R.
-   * - :git-hdl:`library/common/up_dac_common.v`
-     - Verilog source for the DAC Common regmap.
-   * - :git-hdl:`library/common/up_dac_channel.v`
-     - Verilog source for the DAC Channel regmap.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_channel.v`
+     - Verilog source for the AXI AD3552R channel.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_core.v`
+     - Verilog source for the AXI AD3552R core.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_if.v`
+     - Verilog source for the AD3552R interface module.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_if_tb.v`
+     - Verilog source for the AD3552R interface module testbench.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_if_tb`
+     - Setup script for the AD3552R interface module testbench.
+   * - :git-hdl:`library/axi_ad3552r/axi_ad3552r_ip.tcl`
+     - TCL script to generate the Vivado IP-integrator project.
 
 Block Diagram
 --------------------------------------------------------------------------------
@@ -74,25 +82,25 @@ Interface
    * - dac_clk
      - Reference clock
    * - dma_data
-     - Data from the DMAC when input source is set to DMA_DATA
+     - Data from the DMAC when input source is set to DMA_DATA.
    * - valid_in_dma
-     - Valid from the DMAC
+     - Valid from the DMAC.
    * - dac_data_ready
-     - Data ready signal for the DMAC
+     - Data ready signal for the DMAC.
    * - data_in_a
-     - Data for channel 1 when input source is set to ADC_DATA
+     - Data for channel 1 when input source is set to ADC_DATA.
    * - data_in_b
-     - Data for channel 2 when input source is set to ADC_DATA
+     - Data for channel 2 when input source is set to ADC_DATA.
    * - valid_in_a
-     - Valid for channel 1
+     - Valid for channel 1.
    * - valid_in_b
-     - Valid for channel 2
+     - Valid for channel 2.
    * - valid_in_dma_sec
-     - Valid from a secondary DMAC if synchronization is needed
+     - Valid from a secondary DMAC if synchronization is needed.
    * - external_sync
-     - External synchronization flag from another axi_ad3552r IP
+     - External synchronization flag from another axi_ad3552r IP.
    * - sync_ext_device
-     - Start_symc external device to another axi_ad3552r IP
+     - Start_sync external device to another axi_ad3552r IP.
    * - dac_sclk
      - Serial clock.
    * - dac_csn
@@ -104,7 +112,7 @@ Interface
    * - sdio_t
      - I/O buffer control signal.
    * - s_axi
-     - Standard AXI Slave Memory Map interface
+     - Standard AXI Slave Memory Map interface.
 
 Detailed Architecture
 --------------------------------------------------------------------------------
@@ -162,8 +170,8 @@ The *DAC interface* must be connected to an IO buffer.
 The example design uses a DMA to move the data from the memory to the CHIP quad
 SPI interface.
 
-If the data needs to be processed in HDL before moving to the memory, it can be
-done at the output of the IP (at the system level) or inside the axi_ad3552r_if
+If the data needs to be processed in HDL before moving to DAC's output, it can be
+done at the input of the IP (at the system level) or inside the axi_ad3552r_if
 interface module (at the IP level).
 
 The example design uses a processor to program all the registers. If no
@@ -178,7 +186,7 @@ Linux is supported using
 
 References
 --------------------------------------------------------------------------------
-
+* :adi:`AD3552R`
 * :git-hdl:`projects/ad3552r_evb`
 * :git-hdl:`library/axi_ad3552r`
 * :git-linux:`/`
