@@ -31,10 +31,17 @@ Files
      - Description
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092.v`
      - Verilog source for the AXI ADAQ8092.
-   * - :git-hdl:`library/common/up_adc_common.v`
-     - Verilog source for the ADC Common regmap.
-   * - :git-hdl:`library/common/up_adc_channel.v`
-     - Verilog source for the ADC Channel regmap.
+   * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_apb_decode.v`
+     - Verilog source for the module that implements the alternate bit polarity.
+       decoding.
+   * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_channel.v`
+     - Verilog source for the AXI ADAQ8092 channel.
+   * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_if.v`
+     - Verilog source for the AXI ADAQ8092 interface module.
+   * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_rand_decode.v`
+     - Verilog source for the module that implements the randomize decoding.
+   * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_ip.tcl`
+     - TCL script to generate the Quartus IP-integrator project.
 
 Block Diagram
 --------------------------------------------------------------------------------
@@ -63,47 +70,47 @@ Interface
 .. hdl-interfaces::
 
    * - adc_clk_in_p
-     - LVDS input clock
+     - LVDS input clock.
    * - adc_clk_in_n
-     - LVDS input clock
+     - LVDS input clock.
    * - lvds_adc_data_in1_p
-     - Channel 1 LVDS input data
+     - Channel 1 LVDS input data.
    * - lvds_adc_data_in1_n
-     - Channel 1 LVDS input data
+     - Channel 1 LVDS input data.
    * - lvds_adc_data_in2_p
-     - Channel 2 LVDS input data
+     - Channel 2 LVDS input data.
    * - lvds_adc_data_in2_n
-     - Channel 2 LVDS input data
+     - Channel 2 LVDS input data.
    * - lvds_adc_or_in_p
-     - LVDS input over range
+     - LVDS input over range.
    * - lvds_adc_or_in_n
-     - LVDS input over range
+     - LVDS input over range.
    * - cmos_adc_data_in1
-     - Channel 1 CMOS DDR or SDR input data
+     - Channel 1 CMOS DDR or SDR input data.
    * - cmos_adc_data_in2
-     - Channel 2 CMOS DDR or SDR input data
+     - Channel 2 CMOS DDR or SDR input data.
    * - cmos_adc_or_in_*
-     - CMOS input over range
+     - CMOS input over range.
    * - delay_clk
-     - Clock used by the IDELAYCTRL. Connect to 200MHz
+     - Clock used by the IDELAYCTRL. Connect to 200MHz.
    * - adc_clk
      - The input clock is passed through an IBUFGDS and a BUFG primitive and
        adc_clk reults. This is the clock domain that most of the modules of
-       the core run on
+       the core run on.
    * - adc_rst
-     - Output reset, on the adc_clk domain
+     - Output reset, on the adc_clk domain.
    * - adc_enable_*
-     - Set when the channel is enabled, activated by software
+     - Set when the channel is enabled, activated by software.
    * - adc_valid
-     - Set when valid data is available on the bus
+     - Set when valid data is available on the bus.
    * - adc_data_channel1
-     - Channel 1 data bus
+     - Channel 1 data bus.
    * - adc_data_channel2
-     - Channel 2 data bus
+     - Channel 2 data bus.
    * - adc_dovf
-     - Data overflow input, from the DMA
+     - Data overflow input, from the DMA.
    * - s_axi
-     - Standard AXI Slave Memory Map interface
+     - Standard AXI Slave Memory Map interface.
 
 Detailed Architecture
 --------------------------------------------------------------------------------
