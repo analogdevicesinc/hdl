@@ -30,10 +30,12 @@ Files
      - Description
    * - :git-hdl:`library/axi_ad7768/axi_ad7768.v`
      - Verilog source for the AXI AD7768.
-   * - :git-hdl:`library/common/up_adc_common.v`
-     - Verilog source for the ADC Common regmap.
-   * - :git-hdl:`library/common/up_adc_channel.v`
-     - Verilog source for the ADC Channel regmap.
+   * - :git-hdl:`library/axi_ad7768/axi_ad7768_if.v`
+     - Verilog source for the AXI AD7768 interface module.
+   * - :git-hdl:`library/axi_ad7768/axi_ad7768_ip.tcl`
+     - TCL script to generate the Vivado IP-integrator project.
+   * - :git-hdl:`library/axi_ad7768/axi_ad7768_hw.tcl`
+     - TCL script to generate the Quartus IP-integrator project.   
 
 Block Diagram
 --------------------------------------------------------------------------------
@@ -57,33 +59,35 @@ Interface
 .. hdl-interfaces::
 
    * - clk_in
-     - input clock
+     - Input clock.
    * - ready_in
-     - input ready signal
+     - Input ready signal.
    * - data_in
-     - serial input data
+     - Serial input data.
    * - adc_dovf
-     - Data overflow input, from the DMA
+     - Data overflow input, from the DMA.
    * - adc_clk
      - This is the clock domain that most of the modules of the core run on.
    * - adc_reset
-     - Output reset, on the adc_clk domain
+     - Output reset, on the adc_clk domain.
+   * - adc_sshot
+     - Single shot conversion.
    * - adc_enable_*
-     - Set when the channel is enabled, activated by software
+     - Set when the channel is enabled, activated by software.
    * - adc_valid_*
-     - Set when valid channel data is available on the bus
+     - Set when valid channel data is available on the bus.
    * - adc_data_*
-     - Channel parallel output data
+     - Channel parallel output data.
    * - adc_data
-     - Serial output data
+     - Serial output data.
    * - adc_valid
-     - Set when valid data is available in the serial output
+     - Set when valid data is available in the serial output.
    * - adc_sync
-     - Start of transfer flag for serial data
+     - Start of transfer flag for serial data.
    * - adc_crc_ch_mismatch
-     - Channels CRC mismatch flags register
+     - Channels CRC mismatch flags register.
    * - s_axi
-     - Standard AXI Slave Memory Map interface
+     - Standard AXI Slave Memory Map interface.
 
 
 Detailed Architecture
@@ -102,7 +106,7 @@ The top module, axi_ad7768, instantiates:
 * The ADC common register map
 * The AXI handling interface
 
-The ad7768 interface module has as input the serial data lines, the ready_in
+The AD7768 interface module has as input the serial data lines, the ready_in
 signal and the interface clock. Data is deserialized according to the number
 of active lanes. The interface module also implements a parallel CRC check
 algorithm.
@@ -130,7 +134,7 @@ Register Map
 Design Guidelines
 --------------------------------------------------------------------------------
 
-The control of the ad7768 chip is done through a SPI interface, which is needed
+The control of the AD7768 chip is done through a SPI interface, which is needed
 at system level.
 
 The *ADC interface signals* must be connected directly to the top file of the
@@ -157,6 +161,7 @@ References
 
 * :git-hdl:`library/axi_ad7768`
 * :adi:`AD7768`
+* :adi:`AD7768-4`
 * :git-linux:`/`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
