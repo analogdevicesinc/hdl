@@ -34,6 +34,14 @@ if {![info exists REQUIRED_QUARTUS_VERSION]} {
   set REQUIRED_QUARTUS_VERSION "23.2.0"
 }
 
+# Define the supported tool version
+set required_lattice_version "2023.2"
+if {[info exists ::env(REQUIRED_LATTICE_VERSION)]} {
+  set required_lattice_version $::env(REQUIRED_LATTICE_VERSION)
+} elseif {[info exists REQUIRED_LATTICE_VERSION]} {
+  set required_lattice_version $REQUIRED_LATTICE_VERSION
+}
+
 # This helper pocedure retrieves the value of varible from environment if exists,
 # other case returns the provided default value
 #  name - name of the environment variable
