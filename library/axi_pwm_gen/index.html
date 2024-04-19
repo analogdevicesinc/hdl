@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AXI PWM Generator &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=96350458"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="JESD204 Interface Framework" href="../jesd204/index.html" />
+    <link rel="prev" title="High-Speed DMA Controller" href="../axi_dmac/index.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <header>
+    <div class="header">
+      <div id="left">
+        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
+      </div>
+      <div id="right">
+        <span>
+          <a id="logo-org" href="https://analog.com"></a>
+              <a id="no-logo" href="../../index.html">
+                HDL
+              </a>
+        </span>
+        <span class="reverse">
+          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
+        </span>
+      </div>
+    </div>
+    <div class="repotoc-tree">
+      <root>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+    </div>
+  </header>
+
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AXI PWM Generator</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed Description</a><ul>
+<li><a class="reference internal" href="#channel-phase-alignment">Channel phase alignment</a></li>
+<li><a class="reference internal" href="#software-bringup-software-reset">Software bringup (software reset)</a></li>
+<li><a class="reference internal" href="#force-align">Force align</a></li>
+<li><a class="reference internal" href="#start-at-sync">Start at sync</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#timing-diagrams-and-examples">Timing Diagrams and examples</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+              <a id="no-logo" href="../../index.html">
+                HDL
+              </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI PWM Generator</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="axi-pwm-generator">
+<span id="axi-pwm-gen"></span><h1>AXI PWM Generator<a class="headerlink" href="#axi-pwm-generator" title="Permalink to this heading">#</a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262.79999999999995 210" width="262.79999999999995" height="210"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="226.79999999999998" height="156" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-ext_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">ext_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">ext_sync</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="226.79999999999998" y="54">pwm_*</text></a><g transform="translate(244.79999999999998,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="226.79999999999998" height="156" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="131.39999999999998" y="194">axi_pwm_gen</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen">AXI PWM Generator</a> core is used to generate
+a maximum of 16 configurable signals (Pulse-Width Modulations).
+The pulses are generated according to the state of a counter;
+there is one counter for each pulse.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Up to 16 configurable signals (period, width, offset)</p></li>
+<li><p>External synchronization</p></li>
+<li><p>External clock</p></li>
+</ul>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen.sv">library/axi_pwm_gen/axi_pwm_gen.sv</a></p></td>
+<td><p>SystemVerilog source for the top module</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_1.v">library/axi_pwm_gen/axi_pwm_gen_1.v</a></p></td>
+<td><p>Verilog source for a channel module</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_regmap.sv">library/axi_pwm_gen/axi_pwm_gen_regmap.sv</a></p></td>
+<td><p>SystemVerilog source for regmap</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_constr.ttcl">library/axi_pwm_gen/axi_pwm_gen_constr.ttcl</a></p></td>
+<td><p>Dynamic constraint file (AMD tools)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_constr.sdc">library/axi_pwm_gen/axi_pwm_gen_constr.sdc</a></p></td>
+<td><p>Constraint file (Intel tools)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_ip.tcl">library/axi_pwm_gen/axi_pwm_gen_ip.tcl</a></p></td>
+<td><p>IP definition file (AMD tools)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_pwm_gen/axi_pwm_gen_hw.tcl">library/axi_pwm_gen/axi_pwm_gen_hw.tcl</a></p></td>
+<td><p>IP definition file (Intel tools)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<img alt="AXI PWM Generator block diagram" src="../../_images/block_diagram1.svg" /></section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The pulse period, width and offset are set in number of clock cycles.
+The clock is the axi clock or if activated, the external clock.</p>
+</div>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Core ID should be unique for each IP in the system.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_EN</span></code></td>
+<td class="description"><section>
+<p>Use external clock, asynchronous to s_axi_aclk.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">N_PWMS</span></code></td>
+<td class="description"><section>
+<p>Number of pulses/pwms.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PWM_EXT_SYNC</span></code></td>
+<td class="description"><section>
+<p>PWM offset counter uses external sync.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXT_ASYNC_SYNC</span></code></td>
+<td class="description"><section>
+<p>The external sync for pulse 0 is asynchronous.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SOFTWARE_BRINGUP</span></code></td>
+<td class="description"><section>
+<p>Require software, to bring the core out if reset</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_PHASE_ALIGN</span></code></td>
+<td class="description"><section>
+<p>Set default flag value for external sync phase align feature</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FORCE_ALIGN</span></code></td>
+<td class="description"><section>
+<p>Set default flag value for force align feature</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">START_AT_SYNC</span></code></td>
+<td class="description"><section>
+<p>Set default flag value for start at sync feature</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_0_WIDTH</span></code></td>
+<td class="description"><p>PULSE 0 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_1_WIDTH</span></code></td>
+<td class="description"><p>PULSE 1 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_2_WIDTH</span></code></td>
+<td class="description"><p>PULSE 2 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_3_WIDTH</span></code></td>
+<td class="description"><p>PULSE 3 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_4_WIDTH</span></code></td>
+<td class="description"><p>PULSE 4 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_5_WIDTH</span></code></td>
+<td class="description"><p>PULSE 5 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_6_WIDTH</span></code></td>
+<td class="description"><p>PULSE 6 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_7_WIDTH</span></code></td>
+<td class="description"><p>PULSE 7 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_8_WIDTH</span></code></td>
+<td class="description"><p>PULSE 8 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_9_WIDTH</span></code></td>
+<td class="description"><p>PULSE 9 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_10_WIDTH</span></code></td>
+<td class="description"><p>PULSE 10 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_11_WIDTH</span></code></td>
+<td class="description"><p>PULSE 11 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_12_WIDTH</span></code></td>
+<td class="description"><p>PULSE 12 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_13_WIDTH</span></code></td>
+<td class="description"><p>PULSE 13 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_14_WIDTH</span></code></td>
+<td class="description"><p>PULSE 14 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_15_WIDTH</span></code></td>
+<td class="description"><p>PULSE 15 width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">7</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_0_PERIOD</span></code></td>
+<td class="description"><p>PULSE 0 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_1_PERIOD</span></code></td>
+<td class="description"><p>PULSE 1 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_2_PERIOD</span></code></td>
+<td class="description"><p>PULSE 2 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_3_PERIOD</span></code></td>
+<td class="description"><p>PULSE 3 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_4_PERIOD</span></code></td>
+<td class="description"><p>PULSE 4 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_5_PERIOD</span></code></td>
+<td class="description"><p>PULSE 5 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_6_PERIOD</span></code></td>
+<td class="description"><p>PULSE 6 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_7_PERIOD</span></code></td>
+<td class="description"><p>PULSE 7 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_8_PERIOD</span></code></td>
+<td class="description"><p>PULSE 8 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_9_PERIOD</span></code></td>
+<td class="description"><p>PULSE 9 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_10_PERIOD</span></code></td>
+<td class="description"><p>PULSE 10 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_11_PERIOD</span></code></td>
+<td class="description"><p>PULSE 11 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_12_PERIOD</span></code></td>
+<td class="description"><p>PULSE 12 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_13_PERIOD</span></code></td>
+<td class="description"><p>PULSE 13 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_14_PERIOD</span></code></td>
+<td class="description"><p>PULSE 14 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_15_PERIOD</span></code></td>
+<td class="description"><p>PULSE 15 period.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">10</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_0_OFFSET</span></code></td>
+<td class="description"><p>PULSE 0 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_1_OFFSET</span></code></td>
+<td class="description"><p>PULSE 1 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_2_OFFSET</span></code></td>
+<td class="description"><p>PULSE 2 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_3_OFFSET</span></code></td>
+<td class="description"><p>PULSE 3 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_4_OFFSET</span></code></td>
+<td class="description"><p>PULSE 4 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_5_OFFSET</span></code></td>
+<td class="description"><p>PULSE 5 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_6_OFFSET</span></code></td>
+<td class="description"><p>PULSE 6 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_7_OFFSET</span></code></td>
+<td class="description"><p>PULSE 7 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_8_OFFSET</span></code></td>
+<td class="description"><p>PULSE 8 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_9_OFFSET</span></code></td>
+<td class="description"><p>PULSE 9 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_10_OFFSET</span></code></td>
+<td class="description"><p>PULSE 10 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_11_OFFSET</span></code></td>
+<td class="description"><p>PULSE 11 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_12_OFFSET</span></code></td>
+<td class="description"><p>PULSE 12 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_13_OFFSET</span></code></td>
+<td class="description"><p>PULSE 13 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PULSE_14_OFFSET</span></code></td>
+<td class="description"><p>PULSE 14 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PULSE_15_OFFSET</span></code></td>
+<td class="description"><p>PULSE 15 offset.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 2147483647.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interface">
+<span id="axi-pwm-gen-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e" name="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e" type="checkbox"></input><label for="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e"><div><p>s_axi</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="82b92611fc8b0a4c4b173bed7bf17db176f50ace" name="82b92611fc8b0a4c4b173bed7bf17db176f50ace" type="checkbox"></input><label for="82b92611fc8b0a4c4b173bed7bf17db176f50ace"><div><p>s_axi_aclk</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="98adefe4f479cb81add88aa41b94446e3a6a45ed" name="98adefe4f479cb81add88aa41b94446e3a6a45ed" type="checkbox"></input><label for="98adefe4f479cb81add88aa41b94446e3a6a45ed"><div><p>s_axi_aresetn</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-ext_clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="313de9b7e0fe655ed20febed58df46bcf15fff98" name="313de9b7e0fe655ed20febed58df46bcf15fff98" type="checkbox"></input><label for="313de9b7e0fe655ed20febed58df46bcf15fff98"><div><p>ext_clk</p>
+<section>
+<p>External clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ext_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_EN</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="db5f158a3d260e1cee4d725586a59348dd5e1a8d" name="db5f158a3d260e1cee4d725586a59348dd5e1a8d" type="checkbox"></input><label for="db5f158a3d260e1cee4d725586a59348dd5e1a8d"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ext_sync</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">PWM_EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
+<td class="description"><section>
+<p>External sync signal, synchronizes pulses to an external signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">pwm_*</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">N_PWMS</span> <span class="pre">&gt;</span> <span class="pre">*</span> </code></td>
+<td class="description"><section>
+<p>Output PWM, up to 16, indexed from 0 to 15.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="detailed-description">
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<p>Let’s start with some base notions:</p>
+<ul class="simple">
+<li><p>The pulse generators are based on incrementing counters.</p></li>
+<li><p>The pulse period starts on the high level interval and ends on the low level.</p></li>
+<li><p>By default, all counters start at the same time. When a different phase (delay)
+is needed between the pulses, we can set an offset.</p></li>
+<li><p>The offset feature can synchronize channels 0 to 15 relative to an offset
+counter.</p></li>
+<li><p>The offset counter will wait for a HIGH -&gt; LOW transition of the
+synchronization pulse (‘’load_config’’ or ‘’ext_sync’’).
+For more info see the below channel phase alignment feature.</p></li>
+<li><p>To <strong>disable a PWM channel</strong>, write 0 to its <code class="docutils literal notranslate"><span class="pre">period</span></code> register.</p></li>
+<li><p>The duty cycle is the ratio between pulse width over pulse period.</p></li>
+</ul>
+<p>The following features can be enabled by setting a flag in the
+register REG_UP_CONTROL(0x18):</p>
+<section id="channel-phase-alignment">
+<h3>Channel phase alignment<a class="headerlink" href="#channel-phase-alignment" title="Permalink to this heading">#</a></h3>
+<p>The AXI PWM Generator core can be synchronized by an external signal on the
+HIGH -&gt; LOW transition of the ext_sync signal.</p>
+<p>The external sync can be used in two modes, based on the external sync align
+feature.</p>
+<ul class="simple">
+<li><p>external_sync_align flag is set(1) the ext_sync will trigger a phase align
+at each neg-edge.</p></li>
+<li><p>otherwise the phase align must be armed by a load config toggle, while
+the external sync must be held HIGH.</p></li>
+</ul>
+</section>
+<section id="software-bringup-software-reset">
+<h3>Software bringup (software reset)<a class="headerlink" href="#software-bringup-software-reset" title="Permalink to this heading">#</a></h3>
+<p>If set, the software must bring the core out of reset, after a system reset,
+for the pwm signals to be generated.</p>
+</section>
+<section id="force-align">
+<h3>Force align<a class="headerlink" href="#force-align" title="Permalink to this heading">#</a></h3>
+<p>If set, the current active pulses are immediately stopped and realigned.
+Otherwise, the synchronized pulses will start only after all running pulse
+periods end. Software overwritable at runtime.</p>
+</section>
+<section id="start-at-sync">
+<h3>Start at sync<a class="headerlink" href="#start-at-sync" title="Permalink to this heading">#</a></h3>
+<p>If active, the pulses will start after the trigger event.
+Otherwise each pulse will start after a period equal to the one for which
+it is set. Software over writable at runtime.</p>
+<p>This flags are software overwritable at runtime. Default value is given at build time.</p>
+<ul class="simple">
+<li><p>software bringup = 1</p></li>
+<li><p>start at sync = 1</p></li>
+<li><p>force align = 0</p></li>
+<li><p>ext sync align = 0</p></li>
+</ul>
+</section>
+</section>
+<section id="timing-diagrams-and-examples">
+<h2>Timing Diagrams and examples<a class="headerlink" href="#timing-diagrams-and-examples" title="Permalink to this heading">#</a></h2>
+<p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
+force sync and force start disabled.</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{ "signal" : [
+  { "name": "clk", "wave": "P.............................."},
+  { "name": "pwm_1 period", "wave": "9.............9................","data":["8","10"]},
+  { "name": "pwm_1 pulse",  "wave": "9.............9................","data":["3","5"]},
+  { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","0"]},
+  { "name": "pwm_2 period", "wave": "6.............6................","data":["8","10"]},
+  { "name": "pwm_2 pulse",  "wave": "6.............6................","data":["3","5"]},
+  { "name": "pwm_2 offset", "wave": "6.............6................","data":["5","4"]},
+  { "name": "load_config", "wave": "0............10................",phase: 0,},
+  { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
+  { "name": "counter 0", "wave": "45555555544444=6666666666333333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6"]},
+  { "name": "pwm 0", "wave": "lh..l....h...l.h....l....h....l"},
+  { "name": "counter 1", "wave": "44444555555554=...6666666666333","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
+  { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
+],
+foot: {text: ['tspan', 'load_config force_sync and start at sync e.g.'],
+}}
+</script>
+</div>
+<p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
+force sync disabled and force start enabled.</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{ "signal" : [
+  { "name": "clk", "wave": "P.............................."},
+  { "name": "pwm_1 period", "wave": "9...........9..................","data":["8","10"]},
+  { "name": "pwm_1 pulse",  "wave": "9...........9..................","data":["3","5"]},
+  { "name": "pwm_1 offset", "wave": "9...........9..................","data":["1","0"]},
+  { "name": "pwm_2 period", "wave": "6...........6..................","data":["8","10"]},
+  { "name": "pwm_2 pulse",  "wave": "6...........6..................","data":["3","5"]},
+  { "name": "pwm_2 offset", "wave": "6...........6..................","data":["5","4"]},
+  { "name": "load_config", "wave": "0..........10..................",phase: 0,},
+  { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
+  { "name": "counter 0", "wave": "45555555544444444=6666666666333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2","3"]},
+  { "name": "pwm 0", "wave": "lh..l....h...l....h....l....h.."},
+  { "name": "counter 1", "wave": "4444455555555=.......6666666666","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10"]},
+  { "name": "pwm 1", "wave": "l....h..l............h....l...."},
+],
+foot: {text: ['tspan', 'load_config with start at sync(default)'],
+}}
+</script>
+</div>
+<p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
+force sync and force start enabled.</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{ "signal" : [
+  { "name": "clk", "wave": "P.............................."},
+  { "name": "pwm_1 period", "wave": "9.............9................","data":["8","10"]},
+  { "name": "pwm_1 pulse",  "wave": "9.............9................","data":["3","5"]},
+  { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","0"]},
+  { "name": "pwm_2 period", "wave": "6.............6................","data":["8","10"]},
+  { "name": "pwm_2 pulse",  "wave": "6.............6................","data":["3","5"]},
+  { "name": "pwm_2 offset", "wave": "6.............6................","data":["5","4"]},
+  { "name": "load_config", "wave": "0............10................",phase: 0,},
+  { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
+  { "name": "counter 0", "wave": "45555555544444=6666666666333333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6"]},
+  { "name": "pwm 0", "wave": "lh..l....h...l.h....l....h....l"},
+  { "name": "counter 1", "wave": "44444555555554=...6666666666333","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
+  { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
+],
+foot: {text: ['tspan', 'load_config force_sync and start at sync e.g.'],
+}}
+</script>
+</div>
+<p>The below timing diagrams, shows the <code class="docutils literal notranslate"><span class="pre">external_sync</span></code> functionality:</p>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{ "signal" : [
+  { "name": "clk", "wave": "P............................"},
+  { "name": "pwm_1 period", "wave": "9............................","data":["8"]},
+  { "name": "pwm_1 pulse", "wave": "9............................","data":["3"]},
+  { "name": "pwm_1 offset", "wave": "9............................","data":["1"]},
+  { "name": "pwm_2 period", "wave": "6............................","data":["8"]},
+  { "name": "pwm_2 pulse", "wave": "6............................","data":["3"]},
+  { "name": "pwm_2 offset", "wave": "6............................","data":["5"]},
+  { "name": "external_sync", "wave": "1....0.......................",phase: 0.5,},
+  { "name": "offset counter", "wave": "=.....7777777777777777777777=","data":["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"]},
+  { "name": "counter 0", "wave": "=......444444455555555444444=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2","3","4","5","6"]},
+  { "name": "pwm 0", "wave": "l......h..l....h..l....h..l.."},
+  { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
+  { "name": "pwm 1", "wave": "l..........h..l....h..l....h."},
+],
+foot: {text: ['tspan', 'External sync, start at sync (default) e.g.'],
+}}
+</script>
+</div>
+
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{ "signal" : [
+  { "name": "clk", "wave": "P............................"},
+  { "name": "pwm_1 period", "wave": "9............................","data":["8"]},
+  { "name": "pwm_1 pulse", "wave": "9............................","data":["3"]},
+  { "name": "pwm_1 offset", "wave": "9............................","data":["1"]},
+  { "name": "pwm_2 period", "wave": "6............................","data":["8"]},
+  { "name": "pwm_2 pulse", "wave": "6............................","data":["3"]},
+  { "name": "pwm_2 offset", "wave": "6............................","data":["5"]},
+  { "name": "external_sync", "wave": "1....0.......................",phase: 0.5,},
+  { "name": "offset counter", "wave": "=.....7777777777777777777777=","data":["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"]},
+  { "name": "counter 0", "wave": "=......444444455555555444444=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2","3","4","5","6"]},
+  { "name": "pwm 0", "wave": "l.............h..l....h..l..."},
+  { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
+  { "name": "pwm 1", "wave": "l.................h..l....h.."},
+],
+foot: {text: ['tspan', 'External sync without start at sync e.g.'],
+}}
+</script>
+</div>
+</section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-axi_pwm_gen">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="23902361f1f766927dcc0a7bee20e5476aef628e" name="23902361f1f766927dcc0a7bee20e5476aef628e" type="checkbox"></input><label for="23902361f1f766927dcc0a7bee20e5476aef628e"><p>PWM Generator (axi_pwm_gen) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00020100</span></code></td>
+<td class="description"><section>
+<p>Version number. Unique to all cores.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_ID</span></code></td>
+<td class="description bold"><section>
+<p>Core ID</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ID[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Instance identifier number.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_SCRATCH</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CORE_MAGIC</span></code></td>
+<td class="description bold"><section>
+<p>Identification number</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x504C5347</span></code></td>
+<td class="description"><section>
+<p>Identification number.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_RSTN</span></code></td>
+<td class="description bold"><section>
+<p>Reset and load values</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LOAD_CONFIG</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Loads the new values written in the config registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reset, default is (0x0).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CONFIG</span></code></td>
+<td class="description bold"><section>
+<p>Features enable register</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ALIGN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If active the ext_sync will trigger a phase align at each neg-edge. Otherwise the phase align will be armed by a load config toggle.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FORCE_ALIGN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If active the current active pulses are immediately stopped and realigned. Otherwise, the synchronized pulses will start only after all running pulse periods end.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">START_AT_SYNC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="description"><section>
+<p>If active, the pulses will start after the trigger event. Otherwise each pulse will start after a period equal to the one for which it is set. Default valew can be overwritten at build time through parameters.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_NB_PULSES</span></code></td>
+<td class="description bold"><section>
+<p>Number of pulses</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NB_PULSES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Number of configurable pulses.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_PERIOD</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x period</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_PERIOD[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">period</span> <span class="pre">-</span> <span class="pre">'h4C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Pulse x duration, defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_WIDTH</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x width</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_WIDTH[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">width</span> <span class="pre">-</span> <span class="pre">'h8C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Pulse x width (high time), defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_OFFSET</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x offset</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_OFFSET[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">offset</span> <span class="pre">-</span> <span class="pre">'hCC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Pulse x offset, defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-even"><td><p>WO</p></td>
+<td><p>Write-only</p></td>
+<td><p>Writes will change the current register value. Reads have no effect.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../axi_dmac/index.html" title="Previous document" class="prev">High-Speed DMA Controller</a>
+    <a href="../jesd204/index.html" title="Next document" class="next">JESD204 Interface Framework</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+
+  
+  <form action="" method="get" class="search-area">
+    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+    <button value="search"></button>
+    <span id="search-progress"></span>
+  </form>
+  
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
