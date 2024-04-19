@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -228,8 +228,8 @@ module axi_ad9963_if #(
     .R (dac_rst),
     .S (1'b0),
     .C (dac_clk),
-    .D1 (tx_data_p[l_inst]),
-    .D2 (tx_data_n[l_inst]),
+    .D1 (tx_data_n[l_inst]),
+    .D2 (tx_data_p[l_inst]),
     .Q (tx_data[l_inst]));
     end
   endgenerate
@@ -243,8 +243,8 @@ module axi_ad9963_if #(
     .R (dac_rst),
     .S (1'b0),
     .C (dac_clk),
-    .D1 (1'b1),
-    .D2 (1'b0),
+    .D1 (1'b0),
+    .D2 (1'b1),
     .Q (tx_iq));
 
 endmodule
