@@ -64,7 +64,8 @@
 `include "i3c_controller_word.vh"
 
 module i3c_controller_framing #(
-  parameter MAX_DEVS = 16
+  parameter MAX_DEVS = 16,
+  parameter CLK_MOD = 0
 ) (
   input         clk,
   input         reset_n,
@@ -114,7 +115,9 @@ module i3c_controller_framing #(
   input  [3:0]  rmap_dev_char_data
 );
 
-  localparam IDLE_BUS_WIDTH = 7;
+  // Defines the bus available condition width (> 1us for target)
+  // Setting around 0.64us for the controller.
+  localparam BUS_AVAIL = CLK_MOD ? 4 : 5;
 
   localparam [2:0] SM_SETUP       = 0;
   localparam [2:0] SM_VALIDATE    = 1;
@@ -126,7 +129,7 @@ module i3c_controller_framing #(
   localparam [6:0] CCC_ENTDAA = 'h07;
 
   reg [`CMDW_HEADER_WIDTH:0] st;
-  reg [IDLE_BUS_WIDTH:0] idle_bus_reg;
+  reg [BUS_AVAIL:0] bus_avail_reg;
   reg        cmdp_ccc_reg;
   reg        cmdp_ccc_bcast_reg;
   reg [6:0]  cmdp_ccc_id_reg;
@@ -147,9 +150,9 @@ module i3c_controller_framing #(
   reg        error_nack_resp ;
   reg [2:0]  sm;
 
-  wire        idle_bus;
+  wire        bus_avail;
   wire        ibi_enable;
-  wire        ibi_auto;
+  wire        ibi_listen;
   wire        cmdp_rnw;
   wire [6:0]  cmdp_da;
   wire [11:0] cmdp_buffer_len;
@@ -202,7 +205,7 @@ module i3c_controller_framing #(
             // Direct is CCC_BCAST 1'b1
             sm <= cmdp_ccc & ~cmdp_ccc_bcast ? SM_TRANSFER : SM_VALIDATE;
             ctrl_validate <= 1'b0;
-          end else if (ibi_auto & ibi_enable & rx === 1'b0 & idle_bus) begin
+          end else if (ibi_listen & rx === 1'b0 & bus_avail) begin
             st <= `CMDW_BCAST_7E_W0;
             sm <= SM_TRANSFER;
             ibi_requested_auto <= 1'b1;
@@ -362,7 +365,7 @@ module i3c_controller_framing #(
             // At the word module, was ACKed if IBI is enabled and DA is known, if not, NACKed.
             if (ibi_requested) begin
               // Receive MSB if IBI is enabled, dev is known and BCR[2] is 1'b1.
-              if (dev_is_attached & ibi_enable & ibi_bcr_2) begin
+              if (ibi_enable & dev_is_attached & ibi_bcr_2) begin
                 st <= `CMDW_IBI_MDB;
               end else begin
                 st <= cmdp_valid_reg ? `CMDW_START : `CMDW_STOP_OD;
@@ -386,16 +389,15 @@ module i3c_controller_framing #(
     error_nack_bcast <= cmdw_nack_bcast;
   end
 
-  // Idle bus condition
-
+  // Bus available condition
   always @(posedge clk) begin
     if (!reset_n || !nop) begin
-      idle_bus_reg <= 0;
-    end else if (!idle_bus) begin
-      idle_bus_reg <= idle_bus_reg + 1;
+      bus_avail_reg <= 0;
+    end else if (!bus_avail) begin
+      bus_avail_reg <= bus_avail_reg + 1;
     end
   end
-  assign idle_bus = &idle_bus_reg;
+  assign bus_avail = &bus_avail_reg;
 
   // Device characteristics look-up.
 
@@ -412,7 +414,7 @@ module i3c_controller_framing #(
   assign cmdw_valid = sm == SM_TRANSFER;
 
   assign ibi_enable = rmap_ibi_config[0];
-  assign ibi_auto   = rmap_ibi_config[1];
+  assign ibi_listen = rmap_ibi_config[1];
 
   assign cmdp_rnw          = cmdp[0];
   assign cmdp_da           = cmdp[7:1];

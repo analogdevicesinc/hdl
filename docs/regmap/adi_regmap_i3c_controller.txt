@@ -466,7 +466,7 @@ OPS_STATUS_NOP
 RO
 This bit is set to 1 when the bus is not executing any procedure.
 It is not idle bus condition since it set right after the Stop.
-ENDIELD
+ENDFIELD
 
 FIELD
 [6:5] 0x0
@@ -505,12 +505,12 @@ ENDREG
 
 FIELD
 [1] 0x0
-IBI_CONFIG_AUTO
+IBI_CONFIG_LISTEN
 WO
-Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during quiet times).
+Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during bus available).
 After the IBI request is resolved, the controller returns to idle, since it is was not doing
 a cmd transfer.
-IBI_CONFIG_ENABLE must be set 1.
+This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is disabled.
 ENDFIELD
 
 FIELD
@@ -521,8 +521,10 @@ Set this bit to accept (ACK) IBI requests.
 If disabled, the controller will NACK IBI requests.
 If enabled, the controller will ACK the IBI request and receive the MDB.
 In both cases, the controller will proceed with the cmd transfer after resolving the IBI
-request.
-Accepted IBIs fill the IBI_FIFO and generate an interruption in the PS.
+request, if any.
+Accepted IBIs fill the IBI_FIFO and generate an interrupt to the PS.
+IBI_CONFIG_LISTEN set to 1 and IBI_CONFIG_ENABLE set to 0 ensures that incoming IBIs are
+rejected as they come.
 ENDFIELD
 
 ############################################################################################
@@ -552,9 +554,9 @@ ENDFIELD
 
 FIELD
 [3] 0x0
-DEV_CHAR_HAS_IBI_MDB
+DEV_CHAR_HAS_IBI_PAYLOAD
 RW
-Indicates if the device sends an MDB during the IBI.
+Indicates if the device sends at least MDB during the IBI.
 0 does not, 1 does.
 ENDFIELD
 
