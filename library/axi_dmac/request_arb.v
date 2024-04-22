@@ -50,6 +50,7 @@ module request_arb #(
   parameter ASYNC_CLK_DEST_REQ = 1,
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
+  parameter AXIS_TUSER_SYNC = 1,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter FIFO_SIZE = 8,
@@ -71,6 +72,7 @@ module request_arb #(
   input [DMA_LENGTH_WIDTH-1:0] req_length,
   input req_xlast,
   input req_sync_transfer_start,
+  input req_sync,
 
   output eot,
   output [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length,
@@ -147,7 +149,6 @@ module request_arb #(
   input                               fifo_wr_en,
   input  [DMA_DATA_WIDTH_SRC-1:0]     fifo_wr_din,
   output                              fifo_wr_overflow,
-  input                               fifo_wr_sync,
   output                              fifo_wr_xfer_req,
 
   // Input FIFO interface
@@ -507,6 +508,8 @@ module request_arb #(
 
     .req_valid(dest_req_valid),
     .req_ready(dest_req_ready),
+    .req_sync_transfer_start(req_sync_transfer_start),
+    .req_sync(req_sync),
     .req_xlast(dest_req_xlast),
 
     .response_valid(dest_response_valid),
@@ -568,6 +571,8 @@ module request_arb #(
 
     .req_valid(dest_req_valid),
     .req_ready(dest_req_ready),
+    .req_sync_transfer_start(req_sync_transfer_start),
+    .req_sync(req_sync),
 
     .response_valid(dest_response_valid),
     .response_ready(dest_response_ready),
@@ -705,6 +710,7 @@ module request_arb #(
   src_axi_stream #(
     .ID_WIDTH(ID_WIDTH),
     .S_AXIS_DATA_WIDTH(DMA_DATA_WIDTH_SRC),
+    .S_AXIS_USER_SYNC(AXIS_TUSER_SYNC),
     .BEATS_PER_BURST_WIDTH(BEATS_PER_BURST_WIDTH_SRC)
   ) i_src_dma_stream (
     .s_axis_aclk(s_axis_aclk),
@@ -717,6 +723,7 @@ module request_arb #(
     .req_ready(src_req_ready),
     .req_last_burst_length(src_req_last_burst_length),
     .req_sync_transfer_start(src_req_sync_transfer_start),
+    .req_sync(req_sync),
     .req_xlast(src_req_xlast),
 
     .request_id(src_throttled_request_id),
@@ -840,6 +847,7 @@ module request_arb #(
     .req_ready(src_req_ready),
     .req_last_burst_length(src_req_last_burst_length),
     .req_sync_transfer_start(src_req_sync_transfer_start),
+    .req_sync(req_sync),
 
     .request_id(src_throttled_request_id),
     .response_id(src_response_id),
@@ -857,7 +865,6 @@ module request_arb #(
     .en(fifo_wr_en),
     .din(fifo_wr_din),
     .overflow(fifo_wr_overflow),
-    .sync(fifo_wr_sync),
     .xfer_req(fifo_wr_xfer_req));
 
   assign src_valid_bytes = {BYTES_PER_BEAT_WIDTH_SRC{1'b1}};

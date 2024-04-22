@@ -55,6 +55,7 @@ module axi_dmac_transfer #(
   parameter ASYNC_CLK_REQ_SG = 1,
   parameter AXI_SLICE_DEST = 0,
   parameter AXI_SLICE_SRC = 0,
+  parameter AXIS_TUSER_SYNC = 1,
   parameter MAX_BYTES_PER_BURST = 128,
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter FIFO_SIZE = 8,
@@ -85,6 +86,7 @@ module axi_dmac_transfer #(
   input [DMA_LENGTH_WIDTH-1:0] req_dest_stride,
   input [DMA_LENGTH_WIDTH-1:0] req_src_stride,
   input req_sync_transfer_start,
+  input req_sync,
   input req_last,
 
   output req_eot,
@@ -180,7 +182,6 @@ module axi_dmac_transfer #(
   input fifo_wr_en,
   input [DMA_DATA_WIDTH_SRC-1:0] fifo_wr_din,
   output fifo_wr_overflow,
-  input fifo_wr_sync,
   output fifo_wr_xfer_req,
 
   // Input FIFO interface
@@ -495,6 +496,7 @@ module axi_dmac_transfer #(
     .ASYNC_CLK_DEST_REQ (ASYNC_CLK_DEST_REQ),
     .AXI_SLICE_DEST (AXI_SLICE_DEST),
     .AXI_SLICE_SRC (AXI_SLICE_SRC),
+    .AXIS_TUSER_SYNC(AXIS_TUSER_SYNC),
     .MAX_BYTES_PER_BURST (MAX_BYTES_PER_BURST),
     .BYTES_PER_BURST_WIDTH (BYTES_PER_BURST_WIDTH),
     .FIFO_SIZE (FIFO_SIZE),
@@ -516,6 +518,7 @@ module axi_dmac_transfer #(
     .req_length (dma_req_length),
     .req_xlast (dma_req_last),
     .req_sync_transfer_start (dma_req_sync_transfer_start),
+    .req_sync (req_sync),
 
     .eot (dma_req_eot),
     .measured_burst_length(dma_req_measured_burst_length),
@@ -597,7 +600,6 @@ module axi_dmac_transfer #(
     .fifo_wr_en (fifo_wr_en),
     .fifo_wr_din (fifo_wr_din),
     .fifo_wr_overflow (fifo_wr_overflow),
-    .fifo_wr_sync (fifo_wr_sync),
     .fifo_wr_xfer_req (fifo_wr_xfer_req),
 
     .fifo_rd_clk (fifo_rd_clk),

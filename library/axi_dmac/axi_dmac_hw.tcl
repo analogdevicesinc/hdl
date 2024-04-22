@@ -166,8 +166,17 @@ foreach {suffix group} { \
   set_parameter_property AXI_SLICE_$suffix GROUP $group
 }
 
+add_parameter AXIS_TUSER_SYNC INTEGER 1
+set_parameter_property AXIS_TUSER_SYNC DISPLAY_NAME "TUSER Synchronization"
+set_parameter_property AXIS_TUSER_SYNC DESCRIPTION "Transfer Start Synchronization on TUSER"
+set_parameter_property AXIS_TUSER_SYNC DISPLAY_HINT boolean
+set_parameter_property AXIS_TUSER_SYNC HDL_PARAMETER true
+set_parameter_property AXIS_TUSER_SYNC GROUP "Source"
+
 # FIFO interface
 set_parameter_property DMA_TYPE_SRC DEFAULT_VALUE 2
+
+add_display_item "Endpoint Configuration" "Scatter-Gather" "group"
 
 # Scatter-Gather interface
 add_parameter DMA_AXI_PROTOCOL_SG INTEGER 1
@@ -175,7 +184,7 @@ set_parameter_property DMA_AXI_PROTOCOL_SG DISPLAY_NAME "AXI Protocol"
 set_parameter_property DMA_AXI_PROTOCOL_SG HDL_PARAMETER true
 set_parameter_property DMA_AXI_PROTOCOL_SG ALLOWED_RANGES { "0:AXI4" "1:AXI3" }
 set_parameter_property DMA_AXI_PROTOCOL_SG VISIBLE true
-set_parameter_property DMA_AXI_PROTOCOL_SG GROUP $group
+set_parameter_property DMA_AXI_PROTOCOL_SG GROUP "Scatter-Gather"
 
 add_parameter DMA_DATA_WIDTH_SG INTEGER 64
 set_parameter_property DMA_DATA_WIDTH_SG DISPLAY_NAME "Bus Width"
@@ -183,7 +192,7 @@ set_parameter_property DMA_DATA_WIDTH_SG UNITS Bits
 set_parameter_property DMA_DATA_WIDTH_SG HDL_PARAMETER true
 set_parameter_property DMA_DATA_WIDTH_SG ALLOWED_RANGES {64}
 set_parameter_property DMA_DATA_WIDTH_SG VISIBLE true
-set_parameter_property DMA_DATA_WIDTH_SG GROUP $group
+set_parameter_property DMA_DATA_WIDTH_SG GROUP "Scatter-Gather"
 
 set group "Features"
 
@@ -302,6 +311,7 @@ proc axi_dmac_validate {} {
   set auto_clk [get_parameter_value AUTO_ASYNC_CLK]
   set type_src [get_parameter_value DMA_TYPE_SRC]
   set type_dest [get_parameter_value DMA_TYPE_DEST]
+  set sync_start [get_parameter_value SYNC_TRANSFER_START]
 
   set max_burst 32768
 
@@ -375,6 +385,9 @@ proc axi_dmac_validate {} {
   }
 
   set_parameter_property MAX_BYTES_PER_BURST ALLOWED_RANGES "1:$max_burst"
+
+  set_parameter_property AXIS_TUSER_SYNC ENABLED [expr {$type_src == 1 && $sync_start == 1} ? true : false]
+  set_parameter_property AXIS_TUSER_SYNC VISIBLE [expr {$type_src == 1} ? true : false]
 
   set cache_coherent [get_parameter_value CACHE_COHERENT]
   set axcache_auto [get_parameter_value AXI_AXCACHE_AUTO]
@@ -472,8 +485,9 @@ ad_interface clock   fifo_wr_clk       input   1                       clk
 ad_interface signal  fifo_wr_en        input   1                       valid
 ad_interface signal  fifo_wr_din       input   DMA_DATA_WIDTH_SRC      data
 ad_interface signal  fifo_wr_overflow  output  1                       ovf
-ad_interface signal  fifo_wr_sync      input   1                       sync
 ad_interface signal  fifo_wr_xfer_req  output  1                       xfer_req
+
+ad_interface signal  sync              input   1                       sync
 
 proc add_axi_master_interface {axi_type port suffix} {
   add_interface $port $axi_type start
@@ -630,19 +644,19 @@ proc axi_dmac_elaborate {} {
   if {[get_parameter_value DMA_TYPE_DEST] != 2} {
     lappend disabled_intfs \
       if_fifo_rd_clk if_fifo_rd_en if_fifo_rd_valid if_fifo_rd_dout \
-	  if_fifo_rd_underflow if_fifo_rd_xfer_req
+      if_fifo_rd_underflow if_fifo_rd_xfer_req
   }
 
   if {[get_parameter_value DMA_TYPE_SRC] != 2} {
     lappend disabled_intfs \
       if_fifo_wr_clk if_fifo_wr_en if_fifo_wr_din if_fifo_wr_overflow \
-      if_fifo_wr_sync if_fifo_wr_xfer_req
+      if_fifo_wr_xfer_req
   }
 
-  if {[get_parameter_value DMA_TYPE_SRC] == 2 &&
-      [get_parameter_value SYNC_TRANSFER_START] == 0} {
-    set_port_property fifo_wr_sync termination true
-    set_port_property fifo_wr_sync termination_value 1
+  if {[get_parameter_value SYNC_TRANSFER_START] == 0 || \
+     ([get_parameter_value DMA_TYPE_SRC] == 1 && \
+      [get_parameter_value AXIS_TUSER_SYNC] == 1)} {
+    lappend disabled_intfs if_sync
   }
 
   if {[get_parameter_value ENABLE_DIAGNOSTICS_IF] != 1} {
