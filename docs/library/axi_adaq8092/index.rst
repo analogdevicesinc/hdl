@@ -32,14 +32,14 @@ Files
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092.v`
      - Verilog source for the AXI ADAQ8092.
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_apb_decode.v`
-     - Verilog source ffor the module that implements the alternate bit polarity 
+     - Verilog source for the module that implements the alternate bit polarity.
        decoding.
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_channel.v`
      - Verilog source for the AXI ADAQ8092 channel.
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_if.v`
      - Verilog source for the AXI ADAQ8092 interface module.
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_rand_decode.v`
-     - Verilog source ffor the module that implements the randomize decoding.
+     - Verilog source for the module that implements the randomize decoding.
    * - :git-hdl:`library/axi_adaq8092/axi_adaq8092_ip.tcl`
      - TCL script to generate the Quartus IP-integrator project.
 
