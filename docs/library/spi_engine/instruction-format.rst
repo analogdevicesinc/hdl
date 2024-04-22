@@ -4,7 +4,7 @@ SPI Engine Instruction Set Specification
 ================================================================================
 
 The SPI Engine instruction set is a simple 16-bit instruction set of which
-12-bit is currently allocated (bits 15,14,11,10 are always 0).
+13-bit is currently allocated (bits 15,11,10 are always 0).
 
 Instructions
 --------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ accepted/becomes available.
      - Length
      - n + 1 number of words that will be transferred.
 
-Chip-select Instruction
+Chip-Select Instruction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 == == == == == == = = = = = = = = = =
@@ -60,10 +60,11 @@ Chip-select Instruction
 The chip-select instruction updates the value chip-select output signal of the
 SPI Engine execution module.
 
-If the cs_active_high bit of the :ref:`spi_engine spi-configuration-register` 
-is set to 1, the actual values on each pin will be inverted relative to the 
-command. Thus, if the last 8 bits of this instruction are 0xFE, CS[0] will be 
-active regardless of polarity, and transparently to the programmer.
+The actual values on each pin might be inverted relative to the command
+according to the mask set by :ref:`spi_engine cs-invert-mask-instruction`. The
+Invert Mask acts only on the output registers of the Chip-Select pins. Thus, if
+the last 8 bits of this instruction are 0xFE, CS[0] will be active regardless of
+polarity, and transparently to the programmer.
 
 Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
@@ -103,7 +104,7 @@ Configuration Write Instruction
 == == == == == == = = = = = = = = = =
 
 The configuration writes instruction updates a
-:ref:`spi_engine configutarion-registers`
+:ref:`spi_engine configuration-registers`
 of the SPI Engine execution module with a new value.
 
 .. list-table::
@@ -179,7 +180,40 @@ is the minimum, needed by the internal logic.
      - Time
      - The amount of time to wait.
 
-.. _spi_engine configutarion-registers:
+.. _spi_engine cs-invert-mask-instruction:
+
+CS Invert Mask Instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+== == == == == == = = = = = = = = = =
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+== == == == == == = = = = = = = = = =
+0  1  0  0  r  r  r r m m m m m m m m
+== == == == == == = = = = = = = = = =
+
+The CS Invert Mask Instructions allows the user to select on a per-pin basis
+whether the Chip Select will be active-low (default) or active-high (inverted).
+Note that the Chip-Select instructions should remain the same because the value
+of CS is inverted at the output register, and additional logic (eg. reset
+counters) occurs when the CS active state is asserted. This was introduced in
+version 1.02.00 of the core.
+
+.. list-table::
+   :widths: 10 15 75
+   :header-rows: 1
+
+   * - Bits
+     - Name
+     - Description
+   * - r
+     - reserved
+     - Reserved for future use. Must always be set to 0.
+   * - m
+     - Mask 
+     - Mask for selecting inverted CS channels. For the bits set to 1, the
+       corresponding channel will be inverted at the output. 
+
+.. _spi_engine configuration-registers:
 
 Configuration Registers
 --------------------------------------------------------------------------------
@@ -202,18 +236,9 @@ bus behavior.
    * - Bits
      - Name
      - Description
-   * - [7:4]
+   * - [7:3]
      - reserved
      - Must always be 0.
-   * - [3]
-     - cs_active_high
-     - Configures the polarity of CS. When 0 (default), CS is active-low as 
-       usual. If set to 1, CS will be active-high. Note that the command 
-       instructions should remain the same because the value of CS is inverted 
-       at the output register and additional logic (eg. reset counters) occurs 
-       when the CS active state is asserted. 
-       This was introduced in version 1.02.00 of the core, setting this bit on 
-       earlier versions has no effect.
    * - [2]
      - three_wire
      - Configures the output of the three_wire pin.

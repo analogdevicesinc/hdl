@@ -76,10 +76,11 @@ module spi_engine_execution #(
   output reg three_wire
 );
 
-  localparam CMD_TRANSFER = 2'b00;
-  localparam CMD_CHIPSELECT = 2'b01;
-  localparam CMD_WRITE = 2'b10;
-  localparam CMD_MISC = 2'b11;
+  localparam CMD_TRANSFER = 3'b000;
+  localparam CMD_CHIPSELECT = 3'b001;
+  localparam CMD_WRITE = 3'b010;
+  localparam CMD_MISC = 3'b011;
+  localparam CMD_CS_INV = 3'b100;
 
   localparam MISC_SYNC = 1'b0;
   localparam MISC_SLEEP = 1'b1;
@@ -133,7 +134,8 @@ module spi_engine_execution #(
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
   reg [7:0] clk_div = DEFAULT_CLK_DIV;
-  reg cs_active_high = DEFAULT_SPI_CFG[3];
+
+  reg [NUM_OF_CS-1:0] cs_inv_mask_reg = 'h0;
 
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
@@ -142,12 +144,12 @@ module spi_engine_execution #(
 
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
 
-  wire [1:0] inst = cmd[13:12];
-  wire [1:0] inst_d1 = cmd_d1[13:12];
+  wire [2:0] inst = cmd[14:12];
+  wire [2:0] inst_d1 = cmd_d1[14:12];
 
   wire exec_cmd = cmd_ready && cmd_valid;
   wire exec_transfer_cmd = exec_cmd && inst == CMD_TRANSFER;
-
+  wire exec_cs_inv_cmd = exec_cmd && inst == CMD_CS_INV;
   wire exec_write_cmd = exec_cmd && inst == CMD_WRITE;
   wire exec_chipselect_cmd = exec_cmd && inst == CMD_CHIPSELECT;
   wire exec_misc_cmd = exec_cmd && inst == CMD_MISC;
@@ -207,7 +209,6 @@ module spi_engine_execution #(
       cpha <= DEFAULT_SPI_CFG[0];
       cpol <= DEFAULT_SPI_CFG[1];
       three_wire <= DEFAULT_SPI_CFG[2];
-      cs_active_high <=  DEFAULT_SPI_CFG[3];
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
@@ -216,7 +217,6 @@ module spi_engine_execution #(
         cpha <= cmd[0];
         cpol <= cmd[1];
         three_wire <= cmd[2];
-        cs_active_high <= cmd[3];
       end else if (cmd[9:8] == REG_CLK_DIV) begin
         clk_div <= cmd[7:0];
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
@@ -309,11 +309,21 @@ module spi_engine_execution #(
     end
   end
 
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      cs_inv_mask_reg <= 'h0;
+    end else begin
+      if (exec_cs_inv_cmd == 1'b1) begin
+        cs_inv_mask_reg <= cmd[NUM_OF_CS-1:0];
+      end
+    end
+  end
+
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
       cs <= 'hff;
     end else if (cs_gen) begin
-      cs <= (cs_active_high) ? ~cmd_d1[NUM_OF_CS-1:0] : cmd_d1[NUM_OF_CS-1:0];
+      cs <= cmd_d1[NUM_OF_CS-1:0]^cs_inv_mask_reg[NUM_OF_CS-1:0];
     end
   end
 
