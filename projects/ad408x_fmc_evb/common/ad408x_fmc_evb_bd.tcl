@@ -55,7 +55,7 @@ ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
 
 ad_connect axi_ad4080_adc/adc_data  axi_ad4080_dma/fifo_wr_din
 ad_connect axi_ad4080_adc/adc_valid axi_ad4080_dma/fifo_wr_en
-
+ad_connect axi_ad4080_adc/adc_dovf  axi_ad4080_dma/fifo_wr_overflow
 # system runs on phy's received clock
 
 ad_connect axi_ad4080_adc/adc_clk axi_ad4080_dma/fifo_wr_clk
