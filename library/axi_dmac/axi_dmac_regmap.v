@@ -123,7 +123,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-  localparam PCORE_VERSION = 'h00040562;
+  localparam PCORE_VERSION = 'h00040563;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 

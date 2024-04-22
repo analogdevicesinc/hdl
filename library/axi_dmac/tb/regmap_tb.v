@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -169,7 +169,7 @@ module regmap_tb;
     for (i = 0; i < NUM_REGS; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00040361); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00040563); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h444d4143); /* PCORE magic register */
     set_reset_reg_value('h10, 32'h00002101); /* Interface Description*/
     set_reset_reg_value('h80, 'h3); /* IRQ mask */

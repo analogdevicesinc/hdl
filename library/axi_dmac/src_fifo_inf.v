@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -58,7 +58,6 @@ module src_fifo_inf #(
   input en,
   input [DATA_WIDTH-1:0] din,
   output reg overflow,
-  input sync,
   output xfer_req,
 
   output fifo_valid,
@@ -68,15 +67,17 @@ module src_fifo_inf #(
   input req_valid,
   output req_ready,
   input [BEATS_PER_BURST_WIDTH-1:0] req_last_burst_length,
-  input req_sync_transfer_start
+  input req_sync_transfer_start,
+  input req_sync
 );
 
   wire ready;
+  wire sync;
   wire valid;
 
   assign enabled = enable;
-
-  assign valid = en & ready;
+  assign sync = req_sync;
+  assign valid = en;
 
   always @(posedge clk)
   begin
@@ -101,9 +102,18 @@ module src_fifo_inf #(
     .response_id(response_id),
     .eot(eot),
 
+    .rewind_req_valid(),
+    .rewind_req_ready(1'b0),
+    .rewind_req_data(),
+
     .bl_valid(bl_valid),
     .bl_ready(bl_ready),
     .measured_last_burst_length(measured_last_burst_length),
+
+    .block_descr_to_dst(),
+
+    .source_id(),
+    .source_eot(),
 
     .req_valid(req_valid),
     .req_ready(req_ready),
@@ -119,6 +129,7 @@ module src_fifo_inf #(
 
     .m_axi_valid(fifo_valid),
     .m_axi_data(fifo_data),
-    .m_axi_last(fifo_last));
+    .m_axi_last(fifo_last),
+    .m_axi_partial_burst());
 
 endmodule

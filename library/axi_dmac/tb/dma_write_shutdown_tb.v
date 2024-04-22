@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -155,12 +155,12 @@ module dma_write_shutdown_tb;
     .req_dest_stride(24'h00),
     .req_src_stride(24'h00),
     .req_sync_transfer_start(1'b0),
+    .req_sync(1'b1),
     .req_last(1'b0),
 
     .fifo_wr_clk(fifo_clk),
     .fifo_wr_en(1'b1),
     .fifo_wr_din(32'h00),
-    .fifo_wr_sync(1'b1),
     .fifo_wr_xfer_req(),
 
     .dbg_status(dbg_status));
