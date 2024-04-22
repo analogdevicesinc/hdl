@@ -151,7 +151,7 @@ module system_top (
   wire            filter_data_ready_n;
   wire            sys_cpu_out_clk;
 
-  reg             ad9508_sync_s = 1'b0;
+  reg             ad9508_sync_s = 1'b1;
   reg     [ 3:0]  sync_req_d    = 4'b0;
   reg     [26:0]  dbg_cnt       =  'b0;
   reg     [26:0]  dbg_cnt_f     =  'b0;
@@ -171,14 +171,14 @@ module system_top (
   assign sync_req = gpio_o[42];
   assign pd_v33b  = 1'b1;
 
-  always @(posedge sys_cpu_out_clk) begin
-    sync_req_d <= {sync_req_d[2:0],sync_req};
-    if (sync_req_d[2] & ~sync_req_d[3]) begin
-      ad9508_sync_s <= 1'b0;
-    end else if (~sync_req_d[2] & sync_req_d[3]) begin
-      ad9508_sync_s <= 1'b1;
-    end
-  end
+  // always @(posedge sys_cpu_out_clk) begin
+    // sync_req_d <= {sync_req_d[2:0],sync_req};
+    // if (sync_req_d[2] & ~sync_req_d[3]) begin
+      // ad9508_sync_s <= 1'b0;
+    // end else if (~sync_req_d[2] & sync_req_d[3]) begin
+      // ad9508_sync_s <= 1'b1;
+    // end
+  // end
 
   // Dummy function to prevent sys_cpu_out_clk optimization
   // Even if the clock is not used the diff termination should help signal

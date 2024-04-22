@@ -111,30 +111,30 @@ module axi_dmac #(
   input                                    m_dest_axi_aresetn,
 
   // Write address
-  output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_awaddr,
-  output [7-(4*DMA_AXI_PROTOCOL_DEST):0]   m_dest_axi_awlen,
-  output [ 2:0]                            m_dest_axi_awsize,
-  output [ 1:0]                            m_dest_axi_awburst,
-  output [ 2:0]                            m_dest_axi_awprot,
-  output [ 3:0]                            m_dest_axi_awcache,
-  output                                   m_dest_axi_awvalid,
-  input                                    m_dest_axi_awready,
-  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_awid,
-  output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
+  (* MARK_DEBUG = "TRUE" *) output [DMA_AXI_ADDR_WIDTH-1:0]          m_dest_axi_awaddr,
+  (* MARK_DEBUG = "TRUE" *) output [7-(4*DMA_AXI_PROTOCOL_DEST):0]   m_dest_axi_awlen,
+  (* MARK_DEBUG = "TRUE" *) output [ 2:0]                            m_dest_axi_awsize,
+  (* MARK_DEBUG = "TRUE" *) output [ 1:0]                            m_dest_axi_awburst,
+  (* MARK_DEBUG = "TRUE" *) output [ 2:0]                            m_dest_axi_awprot,
+  (* MARK_DEBUG = "TRUE" *) output [ 3:0]                            m_dest_axi_awcache,
+  (* MARK_DEBUG = "TRUE" *) output                                   m_dest_axi_awvalid,
+  (* MARK_DEBUG = "TRUE" *) input                                    m_dest_axi_awready,
+  (* MARK_DEBUG = "TRUE" *) output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_awid,
+  (* MARK_DEBUG = "TRUE" *) output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
 
   // Write data
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
-  output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
-  input                                    m_dest_axi_wready,
-  output                                   m_dest_axi_wvalid,
-  output                                   m_dest_axi_wlast,
-  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
+ (* MARK_DEBUG = "TRUE" *)  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
+ (* MARK_DEBUG = "TRUE" *)  output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
+ (* MARK_DEBUG = "TRUE" *)  input                                    m_dest_axi_wready,
+ (* MARK_DEBUG = "TRUE" *)  output                                   m_dest_axi_wvalid,
+ (* MARK_DEBUG = "TRUE" *)  output                                   m_dest_axi_wlast,
+ (* MARK_DEBUG = "TRUE" *)  output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
 
   // Write response
-  input                                    m_dest_axi_bvalid,
-  input  [ 1:0]                            m_dest_axi_bresp,
-  output                                   m_dest_axi_bready,
-  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_bid,
+ (* MARK_DEBUG = "TRUE" *)  input                                    m_dest_axi_bvalid,
+ (* MARK_DEBUG = "TRUE" *)  input  [ 1:0]                            m_dest_axi_bresp,
+ (* MARK_DEBUG = "TRUE" *)  output                                   m_dest_axi_bready,
+ (* MARK_DEBUG = "TRUE" *)  input  [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_bid,
 
   // Unused read interface
   output                                   m_dest_axi_arvalid,
@@ -281,11 +281,11 @@ module axi_dmac #(
 
   // Output FIFO interface
   input                                    fifo_rd_clk,
-  input                                    fifo_rd_en,
-  output                                   fifo_rd_valid,
-  output [DMA_DATA_WIDTH_DEST-1:0]         fifo_rd_dout,
-  output                                   fifo_rd_underflow,
-  output                                   fifo_rd_xfer_req,
+  (* MARK_DEBUG = "TRUE" *) input                                    fifo_rd_en,
+  (* MARK_DEBUG = "TRUE" *) output                                   fifo_rd_valid,
+  (* MARK_DEBUG = "TRUE" *) output [DMA_DATA_WIDTH_DEST-1:0]         fifo_rd_dout,
+  (* MARK_DEBUG = "TRUE" *) output                                   fifo_rd_underflow,
+  (* MARK_DEBUG = "TRUE" *) output                                   fifo_rd_xfer_req,
 
   // Diagnostics interface
   output  [7:0] dest_diag_level_bursts
@@ -404,16 +404,16 @@ module axi_dmac #(
   wire up_response_valid;
   wire up_response_ready;
 
-  wire ctrl_enable;
-  wire ctrl_pause;
-  wire ctrl_hwdesc;
+ (* MARK_DEBUG = "TRUE" *) wire ctrl_enable;
+ (* MARK_DEBUG = "TRUE" *) wire ctrl_pause;
+ (* MARK_DEBUG = "TRUE" *) wire ctrl_hwdesc;
 
   wire up_dma_req_valid;
   wire up_dma_req_ready;
-  wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_req_dest_address;
+  (* MARK_DEBUG = "TRUE" *) wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_req_dest_address;
   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] up_dma_req_src_address;
   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG] up_dma_req_sg_address;
-  wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
+  (* MARK_DEBUG = "TRUE" *) wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_x_length;
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;

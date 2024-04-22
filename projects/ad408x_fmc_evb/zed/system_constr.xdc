@@ -65,11 +65,14 @@ set_property IDELAY_VALUE 1 [get_cells -hier -filter {name =~ *db_iddr/i_rx_data
 
 create_clock -period 2.500 -name dco_clk [get_ports dco_p]
 
-set input_clock  dco_clk;
-set data_delay   1.000;
-set input_ports  {da_p db_p};
 
-set_input_delay -clock $input_clock -max  $data_delay [get_ports $input_ports];
-set_input_delay -clock $input_clock -min -$data_delay [get_ports $input_ports];
-set_input_delay -clock $input_clock -max  $data_delay [get_ports $input_ports] -clock_fall -add_delay;
-set_input_delay -clock $input_clock -min -$data_delay [get_ports $input_ports] -clock_fall -add_delay;
+set_input_delay -clock dco_clk -max 1.000 [get_ports {da_p db_p}]
+set_input_delay -clock dco_clk -min -1.000 [get_ports {da_p db_p}]
+set_input_delay -clock dco_clk -clock_fall -max -add_delay 1.000 [get_ports {da_p db_p}]
+set_input_delay -clock dco_clk -clock_fall -min -add_delay -1.000 [get_ports {da_p db_p}]
+
+
+
+
+
+
