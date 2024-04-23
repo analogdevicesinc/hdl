@@ -1,3 +1,8 @@
+###############################################################################
+## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
