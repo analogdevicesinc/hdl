@@ -46,40 +46,40 @@
 
 import axi_vip_pkg::*;
 import axi4stream_vip_pkg::*;
-import `PKGIFY(`TH, `M_DMAC)::*;
-import `PKGIFY(`TH, `S_DMAC)::*;
-import `PKGIFY(`TH, `MNG_AXI)::*;
-import `PKGIFY(`TH, `DDR_AXI)::*;
-import `PKGIFY(`TH, `SRC_AXI_STRM)::*;
-import `PKGIFY(`TH, `DST_AXI_STRM)::*;
+import `PKGIFY(test_harness, master_dma)::*;
+import `PKGIFY(test_harness, slave_dma)::*;
+import `PKGIFY(test_harness, mng_axi_vip)::*;
+import `PKGIFY(test_harness, ddr_axi_vip)::*;
+import `PKGIFY(test_harness, src_axis_vip)::*;
+import `PKGIFY(test_harness, dst_axis_vip)::*;
 `ifdef HAS_VDMA
-import `PKGIFY(`TH, `REF_SRC_AXI_STRM)::*;
-import `PKGIFY(`TH, `REF_DST_AXI_STRM)::*;
+import `PKGIFY(test_harness, ref__axis_vip)::*;
+import `PKGIFY(test_harness, ref_dst_axis_vip)::*;
 `endif
 
 class environment;
 
   // Agents
-  `AGENT(`TH, `MNG_AXI, mst_t) mng_agent;
-  `AGENT(`TH, `DDR_AXI, slv_mem_t) ddr_axi_agent;
-  `AGENT(`TH, `SRC_AXI_STRM, mst_t) src_axis_agent;
-  `AGENT(`TH, `DST_AXI_STRM, slv_t) dst_axis_agent;
+  `AGENT(test_harness, mng_axi_vip, mst_t) mng_agent;
+  `AGENT(test_harness, ddr_axi_vip, slv_mem_t) ddr_axi_agent;
+  `AGENT(test_harness, src_axis_vip, mst_t) src_axis_agent;
+  `AGENT(test_harness, dst_axis_vip, slv_t) dst_axis_agent;
   `ifdef HAS_VDMA
-  `AGENT(`TH, `REF_SRC_AXI_STRM, mst_t) ref_src_axis_agent;
-  `AGENT(`TH, `REF_DST_AXI_STRM, slv_t) ref_dst_axis_agent;
+  `AGENT(test_harness, ref__axis_vip, mst_t) ref_src_axis_agent;
+  `AGENT(test_harness, ref_dst_axis_vip, slv_t) ref_dst_axis_agent;
   `endif
   // Sequencers
-  m_axi_sequencer #(`AGENT(`TH, `MNG_AXI, mst_t)) mng;
-  s_axi_sequencer #(`AGENT(`TH, `DDR_AXI, slv_mem_t)) ddr_axi_seq;
-  m_axis_sequencer #(`AGENT(`TH, `SRC_AXI_STRM, mst_t),
-                     `AXIS_VIP_PARAMS(`TH, `SRC_AXI_STRM)
+  m_axi_sequencer #(`AGENT(test_harness, mng_axi_vip, mst_t)) mng;
+  s_axi_sequencer #(`AGENT(test_harness, ddr_axi_vip, slv_mem_t)) ddr_axi_seq;
+  m_axis_sequencer #(`AGENT(test_harness, src_axis_vip, mst_t),
+                     `AXIS_VIP_PARAMS(test_harness, src_axis_vip)
                     ) src_axis_seq;
-  s_axis_sequencer #(`AGENT(`TH, `DST_AXI_STRM, slv_t)) dst_axis_seq;
+  s_axis_sequencer #(`AGENT(test_harness, dst_axis_vip, slv_t)) dst_axis_seq;
   `ifdef HAS_VDMA
-  m_axis_sequencer #(`AGENT(`TH, `REF_SRC_AXI_STRM, mst_t),
-                     `AXIS_VIP_PARAMS(`TH, `REF_SRC_AXI_STRM)
+  m_axis_sequencer #(`AGENT(test_harness, ref__axis_vip, mst_t),
+                     `AXIS_VIP_PARAMS(test_harness, ref__axis_vip)
                     ) ref_src_axis_seq;
-  s_axis_sequencer #(`AGENT(`TH, `REF_DST_AXI_STRM, slv_t)) ref_dst_axis_seq;
+  s_axis_sequencer #(`AGENT(test_harness, ref_dst_axis_vip, slv_t)) ref_dst_axis_seq;
   `endif
 
   // Register accessors
@@ -95,14 +95,14 @@ class environment;
   // Constructor
   //============================================================================
   function new(
-    virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(`TH, `MNG_AXI)) mng_vip_if,
-    virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(`TH, `DDR_AXI)) ddr_vip_if,
+    virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(test_harness, mng_axi_vip)) mng_vip_if,
+    virtual interface axi_vip_if #(`AXI_VIP_IF_PARAMS(test_harness, ddr_axi_vip)) ddr_vip_if,
   `ifdef HAS_VDMA
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `REF_SRC_AXI_STRM)) ref_src_axis_vip_if,
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `REF_DST_AXI_STRM)) ref_dst_axis_vip_if,
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(test_harness, ref__axis_vip)) ref_src_axis_vip_if,
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(test_harness, ref_dst_axis_vip)) ref_dst_axis_vip_if,
   `endif
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `SRC_AXI_STRM)) src_axis_vip_if,
-    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(`TH, `DST_AXI_STRM)) dst_axis_vip_if
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(test_harness, src_axis_vip)) src_axis_vip_if,
+    virtual interface axi4stream_vip_if #(`AXIS_VIP_IF_PARAMS(test_harness, dst_axis_vip)) dst_axis_vip_if
   );
 
     // Creating the agents
@@ -127,12 +127,12 @@ class environment;
 
     // Creating the register accessors
     m_dmac_api = new(mng,
-             `M_DMAC_BA,
-             {`DMAC_PARAMS(`TH, `M_DMAC)}
+             'h44A00000,
+             {`DMAC_PARAMS(test_harness, master_dma)}
             );
     s_dmac_api = new(mng,
-             `S_DMAC_BA,
-             {`DMAC_PARAMS(`TH, `S_DMAC)}
+             'h44A10000,
+             {`DMAC_PARAMS(test_harness, slave_dma)}
             );
 
     scrb = new;

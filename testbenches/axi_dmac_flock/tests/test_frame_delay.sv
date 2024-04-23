@@ -40,31 +40,31 @@ import axi_vip_pkg::*;
 import axi4stream_vip_pkg::*;
 import logger_pkg::*;
 
-import `PKGIFY(`TH, `M_DMAC)::*;
-import `PKGIFY(`TH, `S_DMAC)::*;
-import `PKGIFY(`TH, `SRC_AXI_STRM)::*;
+import `PKGIFY(test_harness, master_dma)::*;
+import `PKGIFY(test_harness, slave_dma)::*;
+import `PKGIFY(test_harness, src_axis_vip)::*;
 
 program test_frame_delay;
   //declaring environment instance
   environment env;
   int frame_count;
-  int max_frames = `GETPARAM(`TH,`M_DMAC,MAX_NUM_FRAMES);
-  int has_sfsync = `GETPARAM(`TH,`M_DMAC,USE_EXT_SYNC);
-  int has_dfsync = `GETPARAM(`TH,`S_DMAC,USE_EXT_SYNC);
-  int has_sautorun = `GETPARAM(`TH,`S_DMAC,HAS_AUTORUN);
-  int has_dautorun = `GETPARAM(`TH,`M_DMAC,HAS_AUTORUN);
+  int max_frames = `GETPARAM(test_harness,master_dma,MAX_NUM_FRAMES);
+  int has_sfsync = `GETPARAM(test_harness,master_dma,USE_EXT_SYNC);
+  int has_dfsync = `GETPARAM(test_harness,slave_dma,USE_EXT_SYNC);
+  int has_sautorun = `GETPARAM(test_harness,slave_dma,HAS_AUTORUN);
+  int has_dautorun = `GETPARAM(test_harness,master_dma,HAS_AUTORUN);
   int sync_gen_en;
 
   initial begin
     //creating environment
-    env = new(`TH.`MNG_AXI.inst.IF,
-              `TH.`DDR_AXI.inst.IF,
+    env = new(test_harness.mng_axi_vip.inst.IF,
+              test_harness.ddr_axi_vip.inst.IF,
               `ifdef HAS_VDMA
-              `TH.`REF_SRC_AXI_STRM.inst.IF,
-              `TH.`REF_DST_AXI_STRM.inst.IF,
+              test_harness.ref_src_axis_vip.inst.IF,
+              test_harness.ref_dst_axis_vip.inst.IF,
               `endif
-              `TH.`SRC_AXI_STRM.inst.IF,
-              `TH.`DST_AXI_STRM.inst.IF
+              test_harness.src_axis_vip.inst.IF,
+              test_harness.dst_axis_vip.inst.IF
     );
 
     #2ps;
@@ -114,8 +114,8 @@ program test_frame_delay;
       int autorun_num_of_buffers;
       int autorun_frame_distance;
 
-      autorun_num_of_buffers =  `GETPARAM(`TH,`S_DMAC,DMAC_DEF_FLOCK_CFG) & 'hFF;
-      autorun_frame_distance = ((`GETPARAM(`TH,`S_DMAC,DMAC_DEF_FLOCK_CFG) >> 16) & 'hFF)+1;
+      autorun_num_of_buffers =  `GETPARAM(test_harness,slave_dma,DMAC_DEF_FLOCK_CFG) & 'hFF;
+      autorun_frame_distance = ((`GETPARAM(test_harness,slave_dma,DMAC_DEF_FLOCK_CFG) >> 16) & 'hFF)+1;
       singleTest(
         .frame_num(10),
         .num_of_buffers(autorun_num_of_buffers),
@@ -167,19 +167,19 @@ program test_frame_delay;
     env.ddr_axi_agent.wr_driver.send_wready(wready_gen);
 
     // Configure external sync to drive mode.
-    `TH.`SRC_SYNC_IO.inst.set_driver_mode();
-    `TH.`DST_SYNC_IO.inst.set_driver_mode();
+    test_harness.`SRC_SYNC_IO.inst.set_driver_mode();
+    test_harness.`DST_SYNC_IO.inst.set_driver_mode();
 
     m_seg = new;
-    m_seg.set_params({`DMAC_PARAMS(`TH, `M_DMAC)});
+    m_seg.set_params({`DMAC_PARAMS(test_harness, master_dma)});
 
     baseaddress = 0;
     x_length = 1024;
     y_length = 8;
     if (has_autorun) begin
-      baseaddress = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_DEST_ADDR);
-      x_length = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_X_LENGTH) + 1;
-      y_length = `GETPARAM(`TH,`M_DMAC,DMAC_DEF_Y_LENGTH) + 1;
+      baseaddress = `GETPARAM(test_harness,master_dma,DMAC_DEF_DEST_ADDR);
+      x_length = `GETPARAM(test_harness,master_dma,DMAC_DEF_X_LENGTH) + 1;
+      y_length = `GETPARAM(test_harness,master_dma,DMAC_DEF_Y_LENGTH) + 1;
     end
 
     rand_succ = m_seg.randomize() with { dst_addr == baseaddress;
@@ -194,7 +194,7 @@ program test_frame_delay;
     m_seg.flock_wait_master = 1;
 
     s_seg = m_seg.toSlaveSeg();
-    s_seg.set_params({`DMAC_PARAMS(`TH, `S_DMAC)});
+    s_seg.set_params({`DMAC_PARAMS(test_harness, slave_dma)});
 
     env.src_axis_seq.configure(.mode(0),.rand_valid(0));
     env.src_axis_seq.enable();
@@ -345,17 +345,17 @@ program test_frame_delay;
 
   // Set the writer AXIS side clock frequency
   task set_writer_clock(int freq);
-    `TH.clk_rst_gen.`SRC_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
+    test_harness.clk_rst_gen.`SRC_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
   endtask
 
   // Set the reader AXIS side clock frequency
   task set_reader_clock(int freq);
-    `TH.clk_rst_gen.`DST_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
+    test_harness.clk_rst_gen.`DST_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
   endtask
 
   // Set the MM AXI side DDR clock frequency
   task set_ddr_clock(int freq);
-    `TH.clk_rst_gen.`DDR_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
+    test_harness.clk_rst_gen.`DDR_CLK.inst.IF.set_clk_frq(.user_frequency(freq));
   endtask
 
   // Start all clocks
@@ -364,38 +364,38 @@ program test_frame_delay;
      set_reader_clock(100000000);
      set_ddr_clock(500000000);
 
-    `TH.clk_rst_gen.`SRC_CLK.inst.IF.start_clock;
-    `TH.clk_rst_gen.`DST_CLK.inst.IF.start_clock;
-    `TH.clk_rst_gen.`MNG_CLK.inst.IF.start_clock;
-    `TH.clk_rst_gen.`DDR_CLK.inst.IF.start_clock;
+    test_harness.clk_rst_gen.`SRC_CLK.inst.IF.start_clock;
+    test_harness.clk_rst_gen.`DST_CLK.inst.IF.start_clock;
+    test_harness.clk_rst_gen.`MNG_CLK.inst.IF.start_clock;
+    test_harness.clk_rst_gen.`DDR_CLK.inst.IF.start_clock;
     #100;
   endtask
 
   // Stop all clocks
   task stop_clocks;
-    `TH.clk_rst_gen.`SRC_CLK.inst.IF.stop_clock;
-    `TH.clk_rst_gen.`DST_CLK.inst.IF.stop_clock;
-    `TH.clk_rst_gen.`MNG_CLK.inst.IF.stop_clock;
-    `TH.clk_rst_gen.`DDR_CLK.inst.IF.stop_clock;
+    test_harness.clk_rst_gen.`SRC_CLK.inst.IF.stop_clock;
+    test_harness.clk_rst_gen.`DST_CLK.inst.IF.stop_clock;
+    test_harness.clk_rst_gen.`MNG_CLK.inst.IF.stop_clock;
+    test_harness.clk_rst_gen.`DDR_CLK.inst.IF.stop_clock;
   endtask
 
   // Asserts all the resets for 100 ns
   task sys_reset;
-    `TH.clk_rst_gen.`RST.inst.IF.assert_reset;
+    test_harness.clk_rst_gen.`RST.inst.IF.assert_reset;
     #100
-    `TH.clk_rst_gen.`RST.inst.IF.deassert_reset;
+    test_harness.clk_rst_gen.`RST.inst.IF.deassert_reset;
   endtask
 
   // Assert external sync for one clock cycle
   task assert_writer_ext_sync;
-    `TH.`SRC_SYNC_IO.inst.IF.setw_io(1);
-    `TH.`SRC_SYNC_IO.inst.IF.setw_io(0);
+    test_harness.`SRC_SYNC_IO.inst.IF.setw_io(1);
+    test_harness.`SRC_SYNC_IO.inst.IF.setw_io(0);
   endtask
 
   // Assert external sync for one clock cycle
   task assert_reader_ext_sync;
-    `TH.`DST_SYNC_IO.inst.IF.setw_io(1);
-    `TH.`DST_SYNC_IO.inst.IF.setw_io(0);
+    test_harness.`DST_SYNC_IO.inst.IF.setw_io(1);
+    test_harness.`DST_SYNC_IO.inst.IF.setw_io(0);
   endtask
 
   // Generate external sync pulse for input frames
@@ -405,7 +405,7 @@ program test_frame_delay;
       assert_writer_ext_sync();
     end
     // Calculate and wait one input frame duration plus a margin
-    incycles = bytes_to_transfer / (`GETPARAM(`TH,`SRC_AXI_STRM,VIP_DATA_WIDTH)/8) * 1.8;
+    incycles = bytes_to_transfer / (`GETPARAM(test_harness,src_axis_vip,VIP_DATA_WIDTH)/8) * 1.8;
     fperiod = (incycles*1000000000)/ clk_period;
     #fperiod;
   endtask
@@ -417,7 +417,7 @@ program test_frame_delay;
       assert_reader_ext_sync();
     end
     // Calculate and wait one output frame duration plus a margin
-    incycles = bytes_to_transfer / (`GETPARAM(`TH,`DST_AXI_STRM,VIP_DATA_WIDTH)/8) * 1.8;
+    incycles = bytes_to_transfer / (`GETPARAM(test_harness,dst_axis_vip,VIP_DATA_WIDTH)/8) * 1.8;
     fperiod = (incycles*1000000000)/ clk_period;
     #fperiod;
   endtask
