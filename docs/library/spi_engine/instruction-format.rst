@@ -4,7 +4,7 @@ SPI Engine Instruction Set Specification
 ================================================================================
 
 The SPI Engine instruction set is a simple 16-bit instruction set of which
-13-bit is currently allocated (bits 15,11,10 are always 0).
+13-bits are currently allocated (bits 15,11,10 are always 0).
 
 Instructions
 --------------------------------------------------------------------------------
@@ -48,6 +48,9 @@ accepted/becomes available.
      - Length
      - n + 1 number of words that will be transferred.
 
+
+.. _spi_engine cs-instruction:
+
 Chip-Select Instruction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -60,11 +63,11 @@ Chip-Select Instruction
 The chip-select instruction updates the value chip-select output signal of the
 SPI Engine execution module.
 
-The actual values on each pin might be inverted relative to the command
+The physical outputs on each pin may be inverted relative to the command
 according to the mask set by :ref:`spi_engine cs-invert-mask-instruction`. The
 Invert Mask acts only on the output registers of the Chip-Select pins. Thus, if
-the last 8 bits of this instruction are 0xFE, CS[0] will be active regardless of
-polarity, and transparently to the programmer.
+the last 8 bits of the Chip-Select instruction are 0xFE, only CS[0] will be
+active regardless of polarity, and transparently to the programmer.
 
 Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
@@ -195,7 +198,18 @@ The CS Invert Mask Instructions allows the user to select on a per-pin basis
 whether the Chip Select will be active-low (default) or active-high (inverted).
 Note that the Chip-Select instructions should remain the same because the value
 of CS is inverted at the output register, and additional logic (eg. reset
-counters) occurs when the CS active state is asserted. This was introduced in
+counters) occurs when the CS active state is asserted. 
+
+Since the physical values on the pins are inverted at the output, the current
+Invert Mask should not affect the use of the :ref:`spi_engine cs-instruction`.
+As an example, a Chip-Select Instruction with the 's' field equal to 0xFE will
+always result in only CS[0] being active. For an Invert Mask of 0xFF, this would
+result on only CS[0] being high. For an Invert Mask of 0x00, this would result
+on only CS[0] being low. For an Invert Mask of 0x01, this would result on all CS
+pins being high, but only CS[0] is active in this case (since it's the only one
+currently treated as active-high).
+
+This was introduced in
 version 1.02.00 of the core.
 
 .. list-table::
