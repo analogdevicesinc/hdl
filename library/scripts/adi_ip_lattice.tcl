@@ -7,7 +7,7 @@ namespace eval ipl {
     #node: {name attributes content childs}
     set ip_desc {{lsccip:ip} {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip" xmlns:xi="http://www.w3.org/2001/XInclude" version="1.0" platform="radiant" platform_version="2023.2"}} {} {
             {lsccip:general} {{lsccip:general} {} {} {
-                    {lsccip:vendor} {{lsccip:vendor} {} {latticesemi.com} {}}
+                    {lsccip:vendor} {{lsccip:vendor} {} {analog.com} {}}
                     {lsccip:library} {{lsccip:library} {} {ip} {}}
                     {lsccip:name} {{lsccip:name} {} {} {}}
                     {lsccip:display_name} {{lsccip:display_name} {} {} {}}
@@ -626,7 +626,7 @@ namespace eval ipl {
 
     proc general {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -vendor "latticesemi.com" \
+            -vendor "analog.com" \
             -library "ip" \
             -name "" \
             -display_name "" \
@@ -1562,7 +1562,7 @@ namespace eval ipl {
         set ip [ipl::general -ip $ip -supported_products {*}]
         set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
         set ip [ipl::general -ip $ip -href "https://wiki.analog.com/resources/fpga/docs/axi_dmac"]
-        set ip [ipl::general  -vendor "latticesemi.com" \
+        set ip [ipl::general  -vendor "analog.com" \
             -library "ip" \
             -version "1.0" \
             -category "ADI" \
@@ -2221,7 +2221,7 @@ namespace eval ipl {
             -supported_products {*} \
             -supported_platforms {esi radiant} \
             -href "https://wiki.analog.com/resources/fpga/docs/axi_clock_monitor" \
-            -vendor "latticesemi.com" \
+            -vendor "analog.com" \
             -library "ip" \
             -version "1.0" \
             -category "ADI" \
@@ -2284,7 +2284,7 @@ namespace eval ipl {
             -supported_products {*} \
             -supported_platforms {esi radiant} \
             -href "https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen" \
-            -vendor "latticesemi.com" \
+            -vendor "analog.com" \
             -library "ip" \
             -version "1.0" \
             -category "ADI" \
