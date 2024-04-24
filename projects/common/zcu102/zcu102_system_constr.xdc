@@ -29,6 +29,25 @@ set_property  -dict {PACKAGE_PIN  AH13  IOSTANDARD LVCMOS33} [get_ports gpio_bd_
 set_property  -dict {PACKAGE_PIN  AH14  IOSTANDARD LVCMOS33} [get_ports gpio_bd_o[6]]           ; ## GPIO_LED_6
 set_property  -dict {PACKAGE_PIN  AL12  IOSTANDARD LVCMOS33} [get_ports gpio_bd_o[7]]           ; ## GPIO_LED_7
 
+##### ad469x DEBUG PINS ########
+
+set_property  -dict {PACKAGE_PIN  A20   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_cnv]            ; ## "PMOD0_0"
+set_property  -dict {PACKAGE_PIN  B20   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_csb]            ; ## "PMOD0_1"
+set_property  -dict {PACKAGE_PIN  A22   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_sck]            ; ## "PMOD0_2"
+set_property  -dict {PACKAGE_PIN  A21   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_sdi]            ; ## "PMOD0_3"
+set_property  -dict {PACKAGE_PIN  B21   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_sdo]            ; ## "PMOD0_4"
+set_property  -dict {PACKAGE_PIN  C21   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_sof_cnv_pulse]  ; ## "PMOD0_5"
+set_property  -dict {PACKAGE_PIN  C22   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_pad_dig_resetn] ; ## "PMOD0_6"
+set_property  -dict {PACKAGE_PIN  D21   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_gpio_0]         ; ## "PMOD0_7"
+set_property  -dict {PACKAGE_PIN  D20   IOSTANDARD LVCMOS33} [get_ports  pmod_spi_hb_led]         ; ## "PMOD1_0"
+
+
+
+
+set_false_path  -to [get_cells -hier -filter {name =~ *system_i/my_ila/inst/ila_core_inst* }]
+
+##### ad469x DEBUG PINS ########
+
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
 create_clock -name spi1_clk      -period 40   [get_pins -hier */EMIOSPI1SCLKO]

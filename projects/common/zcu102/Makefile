@@ -13,5 +13,6 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
+LIB_DEPS += axi_clkgen
 
 include ../../scripts/project-xilinx.mk

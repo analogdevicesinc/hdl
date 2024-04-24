@@ -20,6 +20,30 @@ create_bd_port -dir I -from 94 -to 0 gpio_i
 create_bd_port -dir O -from 94 -to 0 gpio_o
 create_bd_port -dir O -from 94 -to 0 gpio_t
 
+# adding clocks
+
+create_bd_port -dir O clk_8MHz
+create_bd_port -dir I clk_4MHz
+
+create_bd_port -dir I debug_probe0
+create_bd_port -dir I debug_probe1
+create_bd_port -dir I debug_probe2
+create_bd_port -dir I debug_probe3
+create_bd_port -dir I debug_probe4
+create_bd_port -dir I debug_probe5
+create_bd_port -dir I debug_probe6
+create_bd_port -dir I debug_probe7
+create_bd_port -dir I debug_probe8
+create_bd_port -dir I debug_probe9
+create_bd_port -dir I debug_probe10
+create_bd_port -dir I debug_probe11
+create_bd_port -dir I debug_probe12
+create_bd_port -dir I debug_probe13
+create_bd_port -dir I debug_probe14
+create_bd_port -dir I debug_probe15
+create_bd_port -dir I debug_probe16
+create_bd_port -dir I debug_probe17
+
 # instance: sys_ps8
 
 ad_ip_instance zynq_ultra_ps_e sys_ps8
@@ -65,6 +89,78 @@ ad_ip_instance proc_sys_reset sys_250m_rstgen
 ad_ip_parameter sys_250m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_500m_rstgen
 ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
+
+# adding clock generator
+
+ad_ip_instance  axi_clkgen axi_clkgen
+ad_ip_parameter axi_clkgen CONFIG.ID 1
+ad_ip_parameter axi_clkgen CONFIG.CLKIN_PERIOD 10
+ad_ip_parameter axi_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter axi_clkgen CONFIG.VCO_MUL 8
+ad_ip_parameter axi_clkgen CONFIG.CLK0_DIV 100
+
+
+ad_connect axi_clkgen/clk    sys_cpu_clk
+ad_connect axi_clkgen/clk_0  clk_8MHz
+
+
+
+# adding ILA
+
+set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 my_ila]
+   set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $my_ila
+   set_property -dict [list CONFIG.C_NUM_OF_PROBES {20}]  $my_ila
+   set_property -dict [list CONFIG.C_TRIGIN_EN {false}]   $my_ila
+   set_property -dict [list CONFIG.C_DATA_DEPTH {8192}]   $my_ila
+   set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}]    $my_ila
+   set_property -dict [list CONFIG.C_ADV_TRIGGER {true} ] $my_ila
+   set_property -dict [list CONFIG.C_PROBE1_MU_CNT {2} ]  $my_ila
+   set_property -dict [list CONFIG.C_PROBE0_MU_CNT {2} ]  $my_ila
+   set_property -dict [list CONFIG.ALL_PROBE_SAME_MU_CNT {2}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE0_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE1_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE2_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE3_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE4_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE5_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE6_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE7_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE8_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE9_WIDTH  {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE10_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE11_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE12_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE13_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE14_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE15_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE16_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE17_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE18_WIDTH {1}] $my_ila
+   set_property -dict [list CONFIG.C_PROBE19_WIDTH {1}] $my_ila
+
+
+   
+   ad_connect my_ila/clk sys_cpu_clk
+   ad_connect my_ila/probe0 debug_probe0
+   ad_connect my_ila/probe1 debug_probe1
+   ad_connect my_ila/probe2 debug_probe2
+   ad_connect my_ila/probe3 debug_probe3
+   ad_connect my_ila/probe4 debug_probe4
+   ad_connect my_ila/probe5 debug_probe5
+   ad_connect my_ila/probe6 debug_probe6
+   ad_connect my_ila/probe7 debug_probe7
+   ad_connect my_ila/probe8 debug_probe8
+   ad_connect my_ila/probe9 debug_probe9
+   ad_connect my_ila/probe10 debug_probe10
+   ad_connect my_ila/probe11 debug_probe11
+   ad_connect my_ila/probe12 debug_probe12
+   ad_connect my_ila/probe13 debug_probe13
+   ad_connect my_ila/probe14 debug_probe14
+   ad_connect my_ila/probe15 debug_probe15
+   ad_connect my_ila/probe16 debug_probe16
+   ad_connect my_ila/probe17 debug_probe17
+   ad_connect my_ila/probe18 axi_clkgen/clk_0
+   ad_connect my_ila/probe19 clk_4MHz
 
 # system reset/clock definitions
 
@@ -143,6 +239,8 @@ ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
 ad_connect  sys_cpu_clk                 rom_sys_0/clk
 
 ad_cpu_interconnect 0x45000000 axi_sysid_0
+ad_cpu_interconnect 0x44A00000 axi_clkgen
+
 # interrupts	
 
 ad_ip_instance xlconcat sys_concat_intc_0
