@@ -16,7 +16,7 @@ set ip [ipl::general -ip $ip -display_name "AXI SPI Engine AXIS Reorder ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
 set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/spi_engine/index.html#"]
-set ip [ipl::general  -vendor "latticesemi.com" \
+set ip [ipl::general  -vendor "analog.com" \
     -library "ip" \
     -version "1.0" \
     -category "ADI" \
