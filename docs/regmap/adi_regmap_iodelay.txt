@@ -7,7 +7,7 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x00 + n
+0x00 + 0x01*n
 WHERE n IS FROM 0 TO 15
 DELAY_CONTROL_n
 Delay Control & Status

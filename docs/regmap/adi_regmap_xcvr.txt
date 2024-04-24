@@ -418,7 +418,6 @@ ENDFIELD
 
 REG
 0x002a
-0x00a8
 ES_CONTROL_2
 Transceiver eye-scan Control Register
 ENDREG
