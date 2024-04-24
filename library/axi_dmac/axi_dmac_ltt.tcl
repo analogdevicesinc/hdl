@@ -15,7 +15,7 @@ set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
 set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
-set ip [ipl::general -ip $ip -href "https://wiki.analog.com/resources/fpga/docs/axi_dmac"]
+set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/axi_dmac/index.html"]
 set ip [ipl::general  -vendor "analog.com" \
     -library "ip" \
     -version "1.0" \
