@@ -16,7 +16,7 @@ set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
 set ip [ipl::general -ip $ip -display_name "AXI SPI Engine ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
-set ip [ipl::general -ip $ip -href "https://wiki.analog.com/resources/fpga/docs/axi_spi_engine"]
+set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/spi_engine/axi_spi_engine.html#spi-engine-axi"]
 set ip [ipl::general  -vendor "analog.com" \
     -library "ip" \
     -version "1.0" \
