@@ -1147,14 +1147,14 @@ namespace eval ipl {
         set data [read $file]
         close $file
 
-        if {[regexp {module\s+[^#(\n]+} $data match]} {
+        if {[regexp {\n\s*module\s+[^#(\n]+} $data match]} {
             set mod_name [string map {" " ""} [lindex $match 1]]
         } else {
             puts {ERROR, no module found in the verilog file!}
             exit 2
         }
         
-        set lines [regexp -all -inline {parameter[^,\n]+|input[^,\n]+|output[^,\n]+|inout[^,\n]+} $data]
+        set lines [regexp -all -inline {\n\s*parameter[^,\n]+|\n\s*input[^,\n]+|\n\s*output[^,\n]+|\n\s*inout[^,\n]+} $data]
         set portlist {}
         set parlist {}
         foreach line $lines {
