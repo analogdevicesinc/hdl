@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -107,7 +107,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = 31'b0;
+  assign gpio_i[63:33] = gpio_o[63:33];
 
   ad_iobuf #(
     .DATA_WIDTH(1)
@@ -202,11 +202,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .ad40xx_spi_sdo (ad40xx_spi_sdo),
-    .ad40xx_spi_sdo_t (),
-    .ad40xx_spi_sdi (ad40xx_spi_sdi),
-    .ad40xx_spi_cs (ad40xx_spi_cs),
-    .ad40xx_spi_sclk (ad40xx_spi_sclk),
+    .pulsar_adc_spi_cs(ad40xx_spi_cs),
+    .pulsar_adc_spi_sclk(ad40xx_spi_sclk),
+    .pulsar_adc_spi_sdi(ad40xx_spi_sdi),
+    .pulsar_adc_spi_sdo(ad40xx_spi_sdo),
+    .pulsar_adc_spi_sdo_t(),
+    .pulsar_adc_spi_three_wire(),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
