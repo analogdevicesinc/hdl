@@ -140,7 +140,7 @@ set ip [ipl::addif -ip $ip \
 set ip [ipl::addfiles -spath ./ -dpath rtl -extl {*.v} -ip $ip]
 set ip [ipl::addfiles -spath ../../util_cdc -dpath rtl -extl {*.v} -ip $ip]
 set ip [ipl::addfiles -spath ../../util_axis_fifo -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
+set ip [ipl::addfiles -spath ../../common -dpath rtl -ip $ip \
     -extl {up_axi.v
            ad_rst.v}]
 
