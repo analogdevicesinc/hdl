@@ -17,9 +17,6 @@
 # Code owners for ad3552r_evb folder
 /projects/ad3552r_evb/     paul.pop@analog.com  adrian.costina@analog.com
 
-# Code owners for ad40xx_fmc folder
-/projects/ad40xx_fmc/      pop.ioan-daniel@analog.com  paul.pop@analog.com
-
 # Code owners for ad4110 folder
 /projects/ad4110/          sergiu.arpadi@analog.com  adrian.costina@analog.com
 
