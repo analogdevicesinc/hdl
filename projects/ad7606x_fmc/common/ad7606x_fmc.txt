@@ -1,6 +1,6 @@
 FMC_pin   FMC_port         Schematic_name   System_top_name     IOSTANDARD    Termination
-# ad7606x  
-  
+# ad7606x
+
 G7        FMC_LA00_CC_N    DOUTA_1          ad7606_spi_sdi[0]   LVCMOS25      #N/A
 C11       FMC_LA06_N       DOUTB_1          ad7606_spi_sdi[1]   LVCMOS25      #N/A
 D11       FMC_LA05_P       DOUTC_1          ad7606_spi_sdi[2]   LVCMOS25      #N/A
@@ -42,5 +42,5 @@ G15       FMC_LA12_P       OS0              adc_os[0]           LVCMOS25      #N
 H7        FMC_LA02_P       OS1              adc_os[1]           LVCMOS25      #N/A
 H16       FMC_LA11_P       OS2              adc_os[2]           LVCMOS25      #N/A
 C15       FMC_LA10_N       STBY             adc_stby            LVCMOS25      #N/A
-D15       FMC_LA09_N       RANGE_1          adc_range           LVCMOS25      #N/A  
+D15       FMC_LA09_N       RANGE_1          adc_range           LVCMOS25      #N/A
 D12       FMC_LA05_N       CNVST_SDP        adc_cnvst_n         LVCMOS25      #N/A

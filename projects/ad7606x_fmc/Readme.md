@@ -10,7 +10,7 @@ Here are some pointers to help you:
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmc/hdl
   * NO-OS Drivers: [AD7606 - No-OS Driver](https://wiki.analog.com/resources/tools-software/uc-drivers/ad7606)
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl
-## Building, Generating Bit Files 
+## Building, Generating Bit Files
 
 IMPORTANT: Set AD7606X device model, ADC Read Mode option and external clock option
 

@@ -54,7 +54,7 @@ switch $INTF {
     # axi_pwm_gen
     ad_ip_parameter ad7606_pwm_gen CONFIG.ASYNC_CLK_EN 0
     ad_ip_parameter ad7606_pwm_gen CONFIG.N_PWMS 1
-    if {$DEV_CONFIG == 0} { 
+    if {$DEV_CONFIG == 0} {
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 124
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 125
     } else {
@@ -96,7 +96,7 @@ switch $INTF {
     ad_connect rx_db_t axi_ad7606x/rx_db_t
     ad_connect rx_rd_n axi_ad7606x/rx_rd_n
     ad_connect rx_wr_n axi_ad7606x/rx_wr_n
-    
+
     ad_connect rx_cs_n axi_ad7606x/rx_cs_n
     ad_connect rx_cnvst_n ad7606_pwm_gen/pwm_0
     ad_connect rx_busy axi_ad7606x/rx_busy

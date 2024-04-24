@@ -7,8 +7,8 @@ source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 adi_project_files ad7606x_fmc_zed [list \
-	"$ad_hdl_dir/library/common/ad_edge_detect.v" \
-	"$ad_hdl_dir/library/util_cdc/sync_bits.v"]
+  "$ad_hdl_dir/library/common/ad_edge_detect.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v"]
 
 source ../common/ad7606x_bd.tcl
 

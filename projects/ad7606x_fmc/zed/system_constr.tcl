@@ -33,12 +33,12 @@ switch $INTF {
     set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25} [get_ports adc_cs_n];   ## H10 FMC_LPC_LA04_P
     set_property -dict {PACKAGE_PIN K20 IOSTANDARD LVCMOS25} [get_ports adc_refsel]; ## C19 FMC_LPC_LA14_N
     }
-  1 {  
+  1 {
 
     if {![info exists NUM_OF_SDI]} {
       set NUM_OF_SDI $::env(NUM_OF_SDI)
     }
-    
+
     switch $NUM_OF_SDI {
       1 {
         set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdi[0]]; ## G07 FMC_LPC_LA00_CC_N
@@ -64,11 +64,11 @@ switch $INTF {
         set_property -dict {PACKAGE_PIN J22 IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdi[7]]; ## G13 FMC_LPC_LA08_N
       }
     }
-    
+
     set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sclk]; ## G06 FMC_LPC_LA00_CC_P
     set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25} [get_ports ad7606_spi_sdo];  ## G09 FMC_LPC_LA03_P
     set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25} [get_ports ad7606_spi_cs];   ## H10 FMC_LPC_LA04_P
-    
+
     # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
     # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
     create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
