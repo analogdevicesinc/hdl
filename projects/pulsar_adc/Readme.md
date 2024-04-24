@@ -35,7 +35,7 @@ Here are some pointers to help you:
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7476a
 
 ## Supported parts
-  
+
   * AD7942
   * AD7946
   * AD7988-1
