@@ -149,7 +149,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {SPI Configuration} \
     -group2 Config]
 set ip [ipl::settpar -ip $ip \
-    -id ASYNC_SPI_CLK \
+    -id DEFAULT_CLK_DIV \
     -type param \
     -value_type int \
     -conn_mod spi_engine_execution \
