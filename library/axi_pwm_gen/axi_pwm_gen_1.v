@@ -71,6 +71,8 @@ module axi_pwm_gen_1 #(
   reg                          pulse_i = 1'b0;
   reg                          run_sm = ARM;
   reg                          run_sm_next = ARM;
+  reg                          pulse_start;
+  reg                          pulse_stop;
 
   // internal wires
 
@@ -81,7 +83,6 @@ module axi_pwm_gen_1 #(
   wire                         pulse_enable;
   wire                         align_pulse;
   wire                         align_period;
-  wire                         pulse_start;
   wire                         start_at_sync;
 
   // enable pwm
@@ -177,14 +178,21 @@ module axi_pwm_gen_1 #(
   assign end_of_pulse = (pulse_period_cnt == pulse_width_d) ? 1'b1 : 1'b0;
 
   assign start_at_sync = start_at_sync_en == 1 ? ~run_sm & ~sync : 1'b0;
-  assign pulse_start = end_of_period == 1'b1 && phase_align_armed == 1'b0 ||
-                       start_at_sync == 1'b1 || pulse_period_d == pulse_width_d;
-  assign pulse_stop = rstn == 1'b0 || end_of_pulse == 1'b1 || align_pulse == 1 ||
-                      pulse_enable == 1'b0 || pulse_width_d == 32'd0;
+
+  always @(posedge clk) begin
+    pulse_start <= start_at_sync == 1'b1 ||
+                   end_of_period & !phase_align_armed & |pulse_width_d;
+
+    pulse_stop <= rstn == 1'b0 ||
+                  align_pulse == 1'b1 ||
+                  pulse_enable == 1'b0 ||
+                  pulse_width_d == 32'd0 ||
+                  end_of_pulse ? !end_of_period : 1'b0;
+  end
 
   // generate pulse with a specified width
 
-  always @ (posedge clk) begin
+  always @(posedge clk) begin
     if (pulse_stop) begin
       pulse_i <= 1'b0;
     end else if (pulse_start) begin
