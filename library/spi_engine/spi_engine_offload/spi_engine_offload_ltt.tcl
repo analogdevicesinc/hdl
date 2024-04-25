@@ -38,7 +38,7 @@ set if [ipl::createcif -vendor analog.com \
         {-n CMD_WR_EN -p required -w 1 -d out}
         {-n CMD_WR_DATA -p required -w 16 -d out}
         {-n SDO_WR_EN -p required -w 1 -d out}
-        {-n SDO_WR_DATA -p required -w 8 -d out}
+        {-n SDO_WR_DATA -p required -d out}
         {-n ENABLE -p required -w 1 -d out}
         {-n MEM_RESET -p required -w 1 -d out}
         {-n ENABLED -p required -w 1 -d in}
