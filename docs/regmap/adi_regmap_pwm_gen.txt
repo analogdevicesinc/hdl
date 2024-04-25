@@ -13,7 +13,7 @@ Version and Scratch Registers
 ENDREG
 
 FIELD
-[31:0] 0x00020100
+[31:0] 0x00020101
 VERSION[31:0]
 RO
 Version number. Unique to all cores.
