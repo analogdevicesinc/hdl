@@ -7,7 +7,10 @@ source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source ../common/adrv9001_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
-ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX [expr $ad_project_params(CMOS_LVDS_N) == 0]
+if { [expr $ad_project_params(CMOS_LVDS_N) == 0] } {
+  ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 1
+  ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 2
+}
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

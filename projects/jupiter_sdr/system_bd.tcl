@@ -306,10 +306,14 @@ create_bd_port -dir I s_1v8_mgtravtt_sns_n
 
 # adrv9001
 
+set USE_RX_CLK_FOR_TX1 $ad_project_params(USE_RX_CLK_FOR_TX1)
+set USE_RX_CLK_FOR_TX2 $ad_project_params(USE_RX_CLK_FOR_TX2)
+
 ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
-ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX 0
 ad_ip_parameter axi_adrv9001 CONFIG.EXT_SYNC 1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 $USE_RX_CLK_FOR_TX1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 $USE_RX_CLK_FOR_TX2
 
 # dma for rx1
 
@@ -639,6 +643,6 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "DEVICE=$p_device"
-
+set sys_cstring "USE_RX_CLK_FOR_TX1=$USE_RX_CLK_FOR_TX1,\
+USE_RX_CLK_FOR_TX2=$USE_RX_CLK_FOR_TX2"
 sysid_gen_sys_init_file $sys_cstring
