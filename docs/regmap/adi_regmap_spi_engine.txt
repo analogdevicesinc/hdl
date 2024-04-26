@@ -13,19 +13,19 @@ Version of the peripheral. Follows semantic versioning. Current version 1.02.00.
 ENDREG
 
 FIELD
-[31:16] 0x01
+[31:16] 0x00000001
 VERSION_MAJOR
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0x02
+[15:8] 0x00000002
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x0
+[7:0] 0x00000000
 VERSION_PATCH
 RO
 ENDFIELD
