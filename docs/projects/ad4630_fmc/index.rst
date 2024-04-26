@@ -170,7 +170,7 @@ Configuration modes
 The CLK_MODE configuration parameter defines clocking mode of the device's
 digital interface: Options: 0 - SPI mode, 1 - Echo-clock or Master clock mode
 
-The NUM_OF_SDI configutation parameter defines the number of MOSI lines of the
+The NUM_OF_SDI configuration parameter defines the number of MOSI lines of the
 SPI interface: Options: 1 - Interleaved mode, 2 - 1 lane per channel,
 4 - 2 lanes per channel, 8 - 4 lanes per channel
 
