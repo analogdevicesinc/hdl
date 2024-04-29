@@ -211,16 +211,16 @@ end
   always @(*) begin
     case (transfer_state)
       IDLE : begin
-        transfer_state_next = (filter_rdy_n_s & filter_cycle) ? FILTER_COUNT :((!filter_enable && (rise_cnv || self_sync )) ?  COUNT : IDLE );
+        transfer_state_next = (rise_slip) ? SYNC :((filter_rdy_n_s & filter_cycle) ? FILTER_COUNT :((!filter_enable && (rise_cnv || self_sync )) ?  COUNT : IDLE ));
       end
       COUNT : begin
         transfer_state_next = (rise_slip) ? SYNC :((cycle_done)  ? ((filter_rdy_n_s & filter_cycle)  ? FILTER_COUNT : COUNT ) : COUNT );
       end
       FILTER_COUNT : begin
-        transfer_state_next = (cycle_done)  ? IDLE : FILTER_COUNT;
+        transfer_state_next = (rise_slip) ? SYNC :((cycle_done)  ? IDLE : FILTER_COUNT);
       end
       SYNC: begin
-        transfer_state_next = (cycle_done) ? ((filter_rdy_n_s & filter_cycle) ? FILTER_COUNT : COUNT ) : SYNC;
+        transfer_state_next = (cycle_done) ? ((filter_rdy_n_s & filter_cycle) ? FILTER_COUNT :(filter_enable) ? IDLE : COUNT ) : SYNC;
       end
       default : begin
         transfer_state_next = IDLE;
@@ -236,6 +236,7 @@ end
       end
       COUNT : begin
         cycle_done          = (single_lane) ? (adc_cnt_p == 4'h9) : (adc_cnt_p == 4'h4);
+        filter_cycle        = (fall_filter_ready)  ? 1'b1 : filter_cycle;
       end
       FILTER_COUNT : begin
         filter_cycle        = (cycle_done)  ? 1'b0 : filter_cycle;
@@ -260,18 +261,27 @@ end
   end
 
   always @(posedge adc_clk_phy) begin
-    if (transfer_state == IDLE || transfer_state == SYNC || adc_rst == 1'b1 ) begin
+
+    if (transfer_state == SYNC || adc_rst == 1'b1 || adc_cnt_p >= 4'h9) begin
       adc_cnt_p   <= 4'b0;
+    end else if (transfer_state == COUNT || transfer_state == FILTER_COUNT || transfer_state == IDLE ) begin
+      if (cycle_done) begin
+        adc_cnt_p   <= 4'b0;
+      end else  begin
+        adc_cnt_p   <= adc_cnt_p + 4'b1;
+      end
+    end
+
+    if (transfer_state == IDLE || transfer_state == SYNC || adc_rst == 1'b1 ) begin
       adc_valid_p <= 1'b0;
     end else if (transfer_state == COUNT || transfer_state == FILTER_COUNT ) begin
       if (cycle_done) begin
-        adc_cnt_p   <= 4'b0;
         adc_valid_p <= 1'b1;
       end else  begin
-        adc_cnt_p   <= adc_cnt_p + 4'b1;
         adc_valid_p <= 1'b0;
       end
     end
+
   end
 
   always @(posedge adc_clk_phy) begin
