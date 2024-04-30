@@ -110,7 +110,8 @@ module i3c_controller_core #(
   wire i2c_mode;
 
   i3c_controller_framing #(
-    .MAX_DEVS(MAX_DEVS)
+    .MAX_DEVS(MAX_DEVS),
+    .CLK_MOD(CLK_MOD)
   ) i_i3c_controller_framing (
     .reset_n(reset_n),
     .clk(clk),

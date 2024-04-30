@@ -22,6 +22,10 @@ Files
      - Verilog source for the peripheral.
    * - :git-hdl:`master:library/i3c_controller/i3c_controller_core/i3c_controller_core.tcl`
      - TCL script to generate the Vivado IP-integrator project for the peripheral.
+   * - :git-hdl:`master:library/i3c_controller/i3c_controller_core/i3c_controller_core_ip.tcl`
+     - TCL script to generate the Vivado IP-integrator project for the peripheral.
+   * - :git-hdl:`master:library/i3c_controller/i3c_controller_core/i3c_controller_core_hw.tcl`
+     - TCL script to generate the Quartus IP-integrator project for the peripheral.
 
 
 Configuration Parameters
@@ -38,7 +42,3 @@ Signal and Interface Pins
 --------------------------------------------------------------------------------
 
 .. hdl-interfaces::
-
-Theory of Operation
---------------------------------------------------------------------------------
-

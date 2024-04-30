@@ -66,7 +66,7 @@ the following subsections.
 
 .. note::
 
-  CCC always broadcast header after an idle bus, therefore "Bcast. header"
+  CCC always broadcast header after a bus available, therefore "Bcast. header"
   is ignored for CCC\s.
 
 .. _i3c_controller ccc:
@@ -231,8 +231,11 @@ On software, check bit:
 In-Band Interrupts
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IBI\s are accepted autonomously during bus idle if the feature is enabled.
-The accepted IBI\s fill the IBI FIFO and generate an interrupt to the
+IBI's are resolved autonomously during bus available per specification,
+if they are accepted or rejected depends if the feature itself is enabled;
+see I3C Controller's :ref:`i3c_controller regmap` register ``IBI_CONFIG`` for
+more info.
+The accepted IBI's fill the IBI FIFO and generate an interrupt to the
 PS.
 
 The structure of the received IBI is:

@@ -25,8 +25,10 @@ Files
      - Description
    * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v`
      - Verilog source for the peripheral.
-   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.tcl`
+   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project for the peripheral.
+   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl`
+     - TCL script to generate the Quartus IP-integrator project for the peripheral.
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -64,6 +66,8 @@ Signal and Interface Pins
    * - rmap
      - Interface give the :ref:`i3c_controller core` access to some register map
        addresses.
+
+.. _i3c_controller regmap:
 
 Register Map
 --------------------------------------------------------------------------------

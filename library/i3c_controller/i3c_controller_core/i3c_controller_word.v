@@ -376,7 +376,7 @@ module i3c_controller_word (
                 ibi_requested <= i < 6 & rx === 1'b0 ? 1'b1 : ibi_requested;
                 if (i[2:0] == 7) begin
                   arbitration_valid <= 1'b1;
-                  if (ibi_dev_is_attached & ibi_requested & ~ibi_bcr_2) begin
+                  if (ibi_enable & ibi_requested & ibi_dev_is_attached & ~ibi_bcr_2) begin
                     ibi_tick <= 1'b1;
                   end
                 end
