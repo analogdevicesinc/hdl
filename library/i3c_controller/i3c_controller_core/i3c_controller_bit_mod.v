@@ -62,7 +62,7 @@ module i3c_controller_bit_mod #(
   // Mux to alternative logic to support I²C devices.
   input  i2c_mode,
   // Indicates that the bus is not transferring,
-  // is *not* bus idle condition because does not wait 200us after P.
+  // is *not* bus available condition because does not wait 1s after P.
   output nop,
   // 0:  1.56MHz
   // 1:  3.12MHz
