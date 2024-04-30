@@ -303,7 +303,7 @@ specification<a class="footnote-reference brackets" href="#f1" id="id1" role="do
 the following subsections.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>CCC always broadcast header after an idle bus, therefore “Bcast. header”
+<p>CCC always broadcast header after a bus available, therefore “Bcast. header”
 is ignored for CCCs.</p>
 </div>
 <section id="ccc-instruction">
@@ -574,8 +574,11 @@ a transfer, when the controller sends the broadcast address 7’h7e.</p>
 </section>
 <section id="in-band-interrupts">
 <span id="i3c-controller-ibi"></span><h3>In-Band Interrupts<a class="headerlink" href="#in-band-interrupts" title="Permalink to this heading">#</a></h3>
-<p>IBIs are accepted autonomously during bus idle if the feature is enabled.
-The accepted IBIs fill the IBI FIFO and generate an interrupt to the
+<p>IBI’s are resolved autonomously during bus available per specification,
+if they are accepted or rejected depends if the feature itself is enabled;
+see I3C Controller’s <a class="reference internal" href="i3c_controller_host_interface.html#i3c-controller-regmap"><span class="std std-ref">Register Map</span></a> register <code class="docutils literal notranslate"><span class="pre">IBI_CONFIG</span></code> for
+more info.
+The accepted IBI’s fill the IBI FIFO and generate an interrupt to the
 PS.</p>
 <p>The structure of the received IBI is:</p>
 <div class="table-wrapper docutils container">

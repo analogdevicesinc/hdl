@@ -125,6 +125,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#transfer-start-synchronization">Transfer Start Synchronization</a></li>
+<li><a class="reference internal" href="#cache-coherency">Cache Coherency</a></li>
 <li><a class="reference internal" href="#diagnostics-interface">Diagnostics interface</a></li>
 <li><a class="reference internal" href="#limitations">Limitations</a><ul>
 <li><a class="reference internal" href="#axi-4kbyte-address-boundary">AXI 4kByte Address Boundary</a></li>
@@ -600,9 +601,19 @@ like high-speed converters.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT_DEST</span></code></td>
-<td class="description"><p>Assume cache coherent.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></td>
+<td class="description"><p>Cache Coherent.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></td>
+<td class="description"><p>ARCACHE/AWCACHE.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b0011</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></td>
+<td class="description"><p>ARPROT/AWPROT.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">'b000</span></code></td>
 <td class="range"><p></p></td>
 </tr>
 </tbody>
@@ -2004,7 +2015,7 @@ like high-speed converters.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td class="description bold"><section>
-<p>Version of the peripheral. Follows semantic versioning. Current version 4.05.61.</p>
+<p>Version of the peripheral. Follows semantic versioning. Current version 4.05.62.</p>
 </section>
 </td>
 </tr>
@@ -2026,7 +2037,7 @@ like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x62</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -2079,7 +2090,7 @@ like high-speed converters.</p>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">INTERFACE_DESCRIPTION</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">INTERFACE_DESCRIPTION_1</span></code></td>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
@@ -2144,6 +2155,50 @@ like high-speed converters.</p>
 </td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code> interface parameter. Log2 of the real <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code>. The starting address of the transfer must be aligned with <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> to avoid crossing the 4kB address boundary.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">INTERFACE_DESCRIPTION_2</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></p>
+</section>
+</td>
+<td class="description"><section>
+<p>Value of <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code> parameter.(0 - Disabled, 1 -  Enabled )</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></p>
+</section>
+</td>
+<td class="description"><section>
+<p>Value of <code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code> parameter.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[10:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><section>
+<p><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></p>
+</section>
+</td>
+<td class="description"><section>
+<p>Value of <code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code> parameter.</p>
 </section>
 </td>
 </tr>
@@ -3129,6 +3184,23 @@ ignored by the DMA controller.</p>
 flag signal. For the AXI-Streaming interface the synchronization flag is carried
 in <code class="docutils literal notranslate"><span class="pre">s_axis_user[0]</span></code>. In both cases the synchronization flag is qualified by
 the same control signal as the data.</p>
+</section>
+<section id="cache-coherency">
+<h3>Cache Coherency<a class="headerlink" href="#cache-coherency" title="Permalink to this heading">#</a></h3>
+<p>To enable Cache Coherency between the DMA and the CPU, the <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code>
+HDL synthesis configuration parameter must be set.</p>
+<p>Two additional parameters are used to configure the Cache Coherent transactions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code> sets the ARCACHE/AWCACHE AXI cache support signals;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code> sets the ARPROT/AWPROT AXI access permission signals.</p></li>
+</ul>
+<p>They are initially set to the following default values through <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code> = <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code> ? <code class="docutils literal notranslate"><span class="pre">4'b1111</span></code> : <code class="docutils literal notranslate"><span class="pre">4'b0011</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code> = <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code> ? <code class="docutils literal notranslate"><span class="pre">3'b010</span></code>  : <code class="docutils literal notranslate"><span class="pre">3'b000</span></code></p></li>
+</ul>
+<p>If Cache Coherency is enabled, the <code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code> and <code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code> values can
+be changed to support systems with different caching policies.</p>
 </section>
 <section id="diagnostics-interface">
 <h3>Diagnostics interface<a class="headerlink" href="#diagnostics-interface" title="Permalink to this heading">#</a></h3>

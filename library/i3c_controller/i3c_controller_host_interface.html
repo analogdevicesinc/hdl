@@ -251,8 +251,11 @@ runtime.</p>
 <tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v</a></p></td>
 <td><p>Verilog source for the peripheral.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.tcl</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl</a></p></td>
 <td><p>TCL script to generate the Vivado IP-integrator project for the peripheral.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl</a></p></td>
+<td><p>TCL script to generate the Quartus IP-integrator project for the peripheral.</p></td>
 </tr>
 </tbody>
 </table>
@@ -728,7 +731,7 @@ runtime.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<span id="i3c-controller-regmap"></span><h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-i3c_controller_host_interface">
 <div class="collapsible docutils container">
@@ -1264,11 +1267,21 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set to 1 when the bus is not executing any procedure. It is not idle bus condition since it set right after the Stop. ENDIELD  FIELD [6:5] 0x0 OPS_SPEED_GRADE RW Sets the speed grade in push-pull mode. Speed with 100MHz driver clock are: 00:  1.56MHz (default) 01:  3.12MHz 10:  6.25MHz 11: 12.50MHz</p>
+<p>This bit is set to 1 when the bus is not executing any procedure. It is not idle bus condition since it set right after the Stop.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OPS_SPEED_GRADE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Sets the speed grade in push-pull mode. Speed with 100MHz driver clock are: 00:  1.56MHz (default) 01:  3.12MHz 10:  6.25MHz 11: 12.50MHz</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_OFFLOAD_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1278,7 +1291,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1288,7 +1301,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x50</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x50</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x140</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG</span></code></td>
 <td class="description bold"><section>
@@ -1296,27 +1309,27 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_AUTO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_LISTEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during quiet times). After the IBI request is resolved, the controller returns to idle, since it is was not doing a cmd transfer. IBI_CONFIG_ENABLE must be set 1.</p>
+<p>Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during bus available). After the IBI request is resolved, the controller returns to idle, since it is was not doing a cmd transfer. This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is disabled.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Set this bit to accept (ACK) IBI requests. If disabled, the controller will NACK IBI requests. If enabled, the controller will ACK the IBI request and receive the MDB. In both cases, the controller will proceed with the cmd transfer after resolving the IBI request. Accepted IBIs fill the IBI_FIFO and generate an interruption in the PS.</p>
+<p>Set this bit to accept (ACK) IBI requests. If disabled, the controller will NACK IBI requests. If enabled, the controller will ACK the IBI request and receive the MDB. In both cases, the controller will proceed with the cmd transfer after resolving the IBI request, if any. Accepted IBIs fill the IBI_FIFO and generate an interrupt to the PS. IBI_CONFIG_LISTEN set to 1 and IBI_CONFIG_ENABLE set to 0 ensures that incoming IBIs are rejected as they come.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x180</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DEV_CHAR</span></code></td>
 <td class="description bold"><section>
@@ -1324,7 +1337,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_ADDR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1334,7 +1347,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_WEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
@@ -1344,17 +1357,17 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_HAS_IBI_MDB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_HAS_IBI_PAYLOAD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates if the device sends an MDB during the IBI. 0 does not, 1 does.</p>
+<p>Indicates if the device sends at least MDB during the IBI. 0 does not, 1 does.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_IBI_CAPABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1364,7 +1377,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_ATTACHED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1374,7 +1387,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD_n</span></code></td>
 <td class="description bold"><section>
@@ -1382,7 +1395,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1392,7 +1405,7 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_n</span></code></td>
 <td class="description bold"><section>
@@ -1400,28 +1413,28 @@ runtime.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
