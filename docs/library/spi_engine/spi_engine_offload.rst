@@ -57,12 +57,12 @@ Signal and Interface Pins
      - When asserted the stored command and data stream is send out on the
        ``spi_engine_ctrl`` interface.
    * - spi_engine_offload_ctrl
-     - :ref:`spi_engine offload-control-interface` slave.
+     - :ref:`spi_engine offload-control-interface` subordinate.
        Control interface which allows to re-program the stored command and SDO
        data stream.
    * - spi_engine_ctrl
-     - :ref:`spi_engine control-interface` master.
+     - :ref:`spi_engine control-interface` controller.
        SPI Engine Control stream that contains commands and data.
    * - offload_sdi
-     - Streaming AXI master
+     - Streaming AXI controller
        Output stream of the received SPI data.

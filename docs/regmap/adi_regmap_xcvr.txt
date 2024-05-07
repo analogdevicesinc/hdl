@@ -159,14 +159,14 @@ ENDFIELD
 
 FIELD
 [10:8]
-RATE[2:0]
+RATE
 RW
 Transceiver primitive control, refer Xilinx documentation.
 ENDFIELD
 
 FIELD
 [5:4]
-SYSCLK_SEL[1:0]
+SYSCLK_SEL
 RW
 For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver refer to
 Xilinx documentation.
@@ -177,7 +177,7 @@ ENDFIELD
 
 FIELD
 [2:0]
-OUTCLK_SEL[2:0]
+OUTCLK_SEL
 RW
 Transceiver primitive control :ref:`Table 2 <axi_adxcvr table_two_label>`,
 refer Xilinx documentation.
@@ -201,7 +201,7 @@ ENDFIELD
 
 FIELD
 [19:16]
-XCVR_TYPE[3:0]
+XCVR_TYPE
 RO
 :git-hdl:`Xilinx encoded values <library/scripts/adi_xilinx_device_info_enc.tcl>`.
 ENDFIELD
@@ -408,7 +408,7 @@ ENDREG
 
 FIELD
 [4:0]
-ES_PRESCALE[4:0]
+ES_PRESCALE
 RW
 Transceiver eye-scan control, refer Xilinx documentation.
 ENDFIELD
@@ -533,7 +533,8 @@ ENDREG
 
 FIELD
 [n]
-ES_RESET
+WHERE n IS FROM 0 TO 31
+ES_RESETn
 RW
 Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n.
 ENDFIELD
@@ -667,13 +668,13 @@ ENDTITLE
 
 REG
 0x0000
-REG_VERSION
+VERSION
 Version Register
 ENDREG
 
 FIELD
 [31:0]
-VERSION[31:0]
+VERSION
 RO
 Version number.
 ENDFIELD
@@ -683,13 +684,13 @@ ENDFIELD
 
 REG
 0x0001
-REG_ID
+ID
 Instance Identification Register
 ENDREG
 
 FIELD
 [31:0]
-ID[31:0]
+ID
 RO
 Instance identifier number.
 ENDFIELD
@@ -699,13 +700,13 @@ ENDFIELD
 
 REG
 0x0002
-REG_SCRATCH
+SCRATCH
 Scratch (GP R/W) Register
 ENDREG
 
 FIELD
 [31:0]
-SCRATCH[31:0]
+SCRATCH
 RW
 Scratch register.
 ENDFIELD
@@ -731,7 +732,7 @@ ENDFIELD
 
 REG
 0x0005
-REG_STATUS
+STATUS
 Status Reporting Register
 ENDREG
 
@@ -747,7 +748,7 @@ ENDFIELD
 
 REG
 0x0006
-REG_STATUS_32
+STATUS_32
 Status Reporting Register
 ENDREG
 
@@ -777,7 +778,7 @@ ENDFIELD
 
 REG
 0x0007
-REG_FPGA_INFO
+FPGA_INFO
 FPGA device information :git-hdl:`Intel Encoded Values <library/scripts/adi_intel_device_info_enc.tcl>`
 ENDREG
 
@@ -814,7 +815,7 @@ ENDFIELD
 
 REG
 0x0009
-REG_GENERIC_INFO
+GENERIC_INFO
 Physical layer info
 ENDREG
 
@@ -827,7 +828,7 @@ ENDFIELD
 
 FIELD
 [27:24]
-XCVR_TYPE[3:0]
+XCVR_TYPE
 RO
 Refers to the transceiver speed grade 0-9.
 ENDFIELD
@@ -865,7 +866,7 @@ ENDFIELD
 
 REG
 0x0050
-REG_FPGA_VOLTAGE
+FPGA_VOLTAGE
 FPGA device voltage information
 ENDREG
 
@@ -875,3 +876,6 @@ FPGA_VOLTAGE
 RO
 The voltage of the FPGA device in mv
 ENDFIELD
+
+############################################################################################
+############################################################################################

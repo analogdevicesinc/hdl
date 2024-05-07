@@ -24,7 +24,7 @@ Signal Pins
    :header-rows: 1
 
    * - Name
-     - Direction (Master)
+     - Direction (Controller)
      - Description
    * - ``sclk``
      - Output
