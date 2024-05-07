@@ -9,23 +9,23 @@ ENDTITLE
 REG
 0x00
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 1.00.a.
+Version of the peripheral. Follows semantic versioning. Current version 1.0.61.
 ENDREG
 
 FIELD
-[31:16] 0x0001
+[31:16] 0x00000001
 VERSION_MAJOR
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00
+[15:8] 0x00000000
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x61
+[7:0] 0x00000061
 VERSION_PATCH
 RO
 ENDFIELD
@@ -84,28 +84,28 @@ IRQ_MASK
 ENDREG
 
 FIELD
-[3] 0x1
+[3] 0x00000001
 NEW_TACHO_MEASUREMENT
 RW
 Masks the TACHO_MEASUREMENT_DONE IRQ.
 ENDFIELD
 
 FIELD
-[2] 0x1
+[2] 0x00000001
 TEMP_INCREASE
 RW
 Masks the TEMP_INCREASE IRQ.
 ENDFIELD
 
 FIELD
-[1] 0x1
+[1] 0x00000001
 TACHO_ERR
 RW
 Masks the TACHO_ERR IRQ.
 ENDFIELD
 
 FIELD
-[0] 0x1
+[0] 0x00000001
 PWM_CHANGED
 RW
 Masks the PWM_CHANGED IRQ.
@@ -120,7 +120,7 @@ IRQ_PENDING
 ENDREG
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 NEW_TACHO_MEASUREMENT
 RW1C
 This bit will be asserted when the hardware has written a new value to the
@@ -129,7 +129,7 @@ register is not set.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 TEMP_INCREASE
 RW1C
 This bit will be asserted whenever the HW decides to increase the PWM
@@ -138,7 +138,7 @@ the IRQ_MASK register is not set.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TACHO_ERR
 RW1C
 This bit will be asserted when a fault related to the tacho signal is detected.
@@ -148,7 +148,7 @@ Also, the TACHO_ERR bit in the IRQ_MASK register must not be set.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 PWM_CHANGED
 RW1C
 This bit will be asserted when a 5 second delay expires after the PWM width was
@@ -165,7 +165,7 @@ IRQ_SOURCE
 ENDREG
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 NEW_TACHO_MEASUREMENT
 RO
 This bit will be asserted when the hardware has written a new value to the
@@ -173,7 +173,7 @@ TACHO_MEASUREMENT register.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 TEMP_INCREASE
 RO
 This bit will be asserted whenever the hardware decides to increase the PWM
@@ -181,7 +181,7 @@ duty-cycle indicating a rise in temperature.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 TACHO_ERR
 RO
 This bit will be asserted when a fault related to the tacho signal is detected.
@@ -190,7 +190,7 @@ period of the tacho signal is no longer whithin the defined valid interval.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 PWM_CHANGED
 RO
 This bit will be asserted when a 5 second delay expires after the PWM width was
@@ -202,11 +202,11 @@ ENDFIELD
 
 REG
 0x20
-REG_RSTN
+RSTN
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 RSTN
 RW
 Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
@@ -294,7 +294,7 @@ PWM_PERIOD
 ENDREG
 
 FIELD
-[31:0] 0x4E20
+[31:0] 0x00004E20
 PWM_PERIOD
 RO
 This register contains the period for the PWM output signal. Derived from the
@@ -522,7 +522,7 @@ TACHO_25_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T25'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+[31:0] ''TACHO_T25''*''TACHO_TOL_PERCENT''/100
 TACHO_25_TOL
 RW
 Tolerance for the 25% PWM tacho period
@@ -537,7 +537,7 @@ TACHO_50_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T50'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+[31:0] ''TACHO_T50''*''TACHO_TOL_PERCENT''/100
 TACHO_50_TOL
 RW
 Tolerance for the 50% PWM tacho period
@@ -552,7 +552,7 @@ TACHO_75_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T75'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+[31:0] ''TACHO_T75''*''TACHO_TOL_PERCENT''/100
 TACHO_75_TOL
 RW
 Tolerance for the 75% PWM tacho period
@@ -567,7 +567,7 @@ TACHO_100_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T100'' \\ ''*TACHO_TOL_PERCENT'' \\ ''/100''
+[31:0] ''TACHO_T100''*''TACHO_TOL_PERCENT''/100
 TACHO_100_TOL
 RW
 Tolerance for the 100% PWM tacho period
