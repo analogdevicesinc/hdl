@@ -112,7 +112,7 @@ Let's start with some base notions:
 - The duty cycle is the ratio between pulse width over pulse period.
 
 The following features can be enabled by setting a flag in the
-register REG_UP_CONTROL(0x18):
+register ``UP_CONTROL`` (0x18):
 
 Channel phase alignment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,4 +272,4 @@ Register Map
 --------------------------------------------------------------------------------
 
 .. hdl-regmap::
-   :name: axi_pwm_gen
+   :name: AXI_PWM_GEN
