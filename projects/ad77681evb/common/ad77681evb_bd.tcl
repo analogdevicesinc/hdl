@@ -12,7 +12,7 @@ set async_spi_clk 1
 set num_cs        1
 set num_sdi       1
 set num_sdo       1
-set sdi_delay     0
+set sdi_delay     1
 set echo_sclk     0
 
 set hier_spi_engine spi_ad77681
