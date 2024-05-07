@@ -75,17 +75,6 @@ Register Map
 .. hdl-regmap::
    :name: i3c_controller_host_interface
 
-Theory of Operation
---------------------------------------------------------------------------------
-
-FIFOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-Synchronization Events
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 .. _i3c_controller interrupts:
 
 Interrupts

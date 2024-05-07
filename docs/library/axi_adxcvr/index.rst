@@ -6,7 +6,7 @@ AXI_ADXCVR
 .. hdl-component-diagram::
    :path: library/xilinx/axi_adxcvr
 
-The AXI_ADXCVR is a utility core used to control and configure the highspeed
+The AXI_ADXCVR IP core is used to control and configure the highspeed
 transceivers.
 There are separate AXI_ADXCVR cores for Intel and AMD Xilinx designs, due to the
 small differences between the AMD Xilinx's and Intel's transceivers architecture.
@@ -137,7 +137,7 @@ Parameters
    * - LPM_OR_DFE_N
      - Chosing between LPM or DFE of modes for the RX Equalizer
    * - RATE
-     - Defines the initial values for Transceiver Control Register (REG_CONTROL
+     - Defines the initial values for Transceiver Control Register (CONTROL
        0x0008)
    * - TX_DIFFCTRL
      - Driver Swing Control(TX Configurable Driver)
@@ -279,7 +279,7 @@ QPLL0 or QPLL1 refclk.
 Physical layer PRBS testing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The REG_PRBS_CNTRL and REG_PRBS_STATUS registers expose controls of internal
+The PRBS_CNTRL and PRBS_STATUS registers expose controls of internal
 PRBS generators and checkers allowing the testing the multi-gigabit serial link
 at the physical layer without the need of the link layer bringup.
 
@@ -288,13 +288,13 @@ TX link procedure
 
 #. Configure the reference clock and device clocks for under test lane rate.
    Bring XCVR out from reset.
-#. In the REG_PRBS_CNTRL registers set PRBSSEL to a non-zero value. See the
+#. In the PRBS_CNTRL registers set PRBSSEL to a non-zero value. See the
    transceiver guides for exact values, different transceiver families may have
    different encoding for the same pattern.
 #. On the receiving side of the link, set the checker for the same pattern and
    reset the error counters.
 #. No error should be recorded on the receiver side.
-#. Set the PRBSFORCEERR bit in the REG_PRBS_CNTRL register to force the error
+#. Set the PRBSFORCEERR bit in the PRBS_CNTRL register to force the error
    injection into the stream of bits.
 #. The error should be detected and recorded on the receiver side.
 
@@ -305,9 +305,9 @@ RX link procedure
    Bring XCVR out from reset.
 #. On the transmit side of the link, set a test pattern that is available in the
    receiving transceiver. Consult the transceiver documentation for details.
-#. In the REG_PRBS_CNTRL registers set PRBSSEL to the corresponding pattern.
+#. In the PRBS_CNTRL registers set PRBSSEL to the corresponding pattern.
    Reset the error counters with PRBSCNTRESET.
-#. Check REG_PRBS_STATUS fields for results. If the check is successful for
+#. Check PRBS_STATUS fields for results. If the check is successful for
    non-GTX transceivers the PRBSLOCKED bit must appear as set and PRBSERR must
    stay low. For GTX transceivers the PRBSLOCKED bit can be ignored and checking
    the PRBSERR alone is sufficient. If PRBSERR is set, check with DRP accesses

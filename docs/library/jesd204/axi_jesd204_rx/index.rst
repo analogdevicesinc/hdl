@@ -996,7 +996,7 @@ slowest arrival lane (min value of the register). If multiple parallel links
 must be synchronized all lanes from all links must be included in the process.
 
 Once the slowest lane delay is identified, before enabling the links, SW needs
-to set the register ``BUFFER_DEALY`` (0x240) from all parallel Rx links if
+to set the register ``BUFFER_DELAY`` (0x240) from all parallel Rx links if
 exists based on the following formula:
 
 .. math:: 
