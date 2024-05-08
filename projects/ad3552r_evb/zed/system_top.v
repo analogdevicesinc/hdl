@@ -91,9 +91,12 @@ module system_top (
   inout           ad3552r_gpio_7,
   inout           ad3552r_gpio_8,
   inout           ad3552r_gpio_9,
-  inout   [ 3:0]  ad3552r_spi_sdio,
+
   output          ad3552r_resetn,
   output          ad3552r_qspi_sel,
+
+  input           ad3552r_spi_miso,
+  output          ad3552r_spi_mosi,
   output          ad3552r_spi_cs,
   output          ad3552r_spi_sclk
 );
@@ -113,18 +116,11 @@ module system_top (
   wire    [ 3:0]  ad3552r_spi_sdi;
   wire            ad3552r_spi_t;
 
-  assign gpio_i[63:39] = gpio_o[63:39];
+  assign gpio_i[63:40] = gpio_o[63:40];
 
-  assign ad3552r_qspi_sel = 1'b1;
+  assign ad3552r_qspi_sel = gpio_o[39];
   assign ad3552r_resetn   = gpio_o[38];
 
-  ad_iobuf #(
-    .DATA_WIDTH(4)
-  ) i_dac_0_spi_iobuf (
-    .dio_t({4{ad3552r_spi_t}}),
-    .dio_i(ad3552r_spi_sdo),
-    .dio_o(ad3552r_spi_sdi),
-    .dio_p(ad3552r_spi_sdio));
 
   ad_iobuf #(
     .DATA_WIDTH(6)
@@ -216,14 +212,14 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
 
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (),
-    .spi0_csn_0_o (),
+    .spi0_clk_o (ad3552r_spi_sclk),
+    .spi0_csn_0_o (ad3552r_spi_cs),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (1'b0),
+    .spi0_sdi_i (ad3552r_spi_miso),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (),
+    .spi0_sdo_o (ad3552r_spi_mosi),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -236,9 +232,9 @@ module system_top (
 
     //dac interface
 
-    .dac_sclk(ad3552r_spi_sclk),
-    .dac_csn(ad3552r_spi_cs),
-    .dac_spi_sdi(ad3552r_spi_sdi),
-    .dac_spi_sdo(ad3552r_spi_sdo),
-    .dac_spi_sdo_t(ad3552r_spi_t));
+    .dac_sclk(),
+    .dac_csn(),
+    .dac_spi_sdi(),
+    .dac_spi_sdo(),
+    .dac_spi_sdo_t());
 endmodule
