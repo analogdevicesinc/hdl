@@ -5,7 +5,7 @@ SPI Engine Interconnect Module
 
 .. hdl-component-diagram::
 
-The :git-hdl:`SPI Engine Interconnect <library/spi_engine/spi_engine_interconnect`
+The :git-hdl:`SPI Engine Interconnect <library/spi_engine/spi_engine_interconnect>`
 allows connecting multiple :ref:`spi_engine control-interface` controllers to a single
 :ref:`spi_engine control-interface` subordinate.
 This enables multiple command stream generators to connect to a single
