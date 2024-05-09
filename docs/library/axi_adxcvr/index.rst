@@ -73,7 +73,7 @@ Interfaces
   * - s_axi_aresetn
     - System reset.
   * - s_axi
-    - Slave AXI4 Lite Memory Mapped interface
+    - Subordinate AXI4 Lite Memory Mapped interface
   * - up_ch_*
     - | Connect logical port ``pll_locked`` to the fPLL’s **pll_locked** pin;
       | Connect logical port ``ready`` to PHY reset controller.

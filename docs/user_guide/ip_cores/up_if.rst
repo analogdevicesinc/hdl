@@ -9,8 +9,8 @@ To avoid complicated interconnections inside the IP, using the
 :git-hdl:`up_axi.v <library/common/up_axi.v>` module, the AXI Memory Mapped
 interface is converted into a so called **Microprocessor interface** or
 **uP interface**. This interface has an independent write and read channel,
-and each channel contains an address bus, a data bus, a request (driven by master)
-and an acknowledge (driven by slave) control signals.
+and each channel contains an address bus, a data bus, a request (driven by manager)
+and an acknowledge (driven by subordinate) control signals.
 All the uP interface signals names have a ``up_`` prefix, this differentiate
 themselves clearly from other internal signals.
 
@@ -67,7 +67,7 @@ uP interface and signals
 
 .. note::
 
-   The directions of the signals are defined from the masters (microprocessor)
+   The directions of the signals are defined from the managers (microprocessor)
    perspective.
 
 Timing diagram

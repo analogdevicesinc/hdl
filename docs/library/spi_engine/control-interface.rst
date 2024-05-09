@@ -9,12 +9,12 @@ synchronization points as well as the SPI bus transmit and receive data.
 
 The interface consists of four streams:
 
-* The CMD stream which carries the SPI Engine commands. (Controller to Subordinate)
+* The CMD stream which carries the SPI Engine commands. (Manager to Subordinate)
 * The SDO stream which carries the to be transmitted data for the SPI bus.
-  (Controller to Subordinate)
+  (Manager to Subordinate)
 * The SDI stream which carries the received data from the SPI bus. (Subordinate to
-  Controller)
-* The SYNC stream which carries the synchronization events. (Subordinate to Controller)
+  Manager)
+* The SYNC stream which carries the synchronization events. (Subordinate to Manager)
 
 Each of the streams has a valid, ready and data signal. They follow the
 handshaking protocol as defined by the AXI standard. Meaning the controller asserts
@@ -42,7 +42,7 @@ Signal Pins
 
    * - Width
      - Name
-     - Direction (Controller)
+     - Direction (Manager)
      - Description
    * -
      - ``cmd_ready``

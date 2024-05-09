@@ -256,7 +256,7 @@ De-assertion of the reset signal should by synchronous to ``s_axi_aclk``.
 Data Interfaces
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-AXI-Streaming slave
+AXI-Streaming subordinate
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 The interface back-pressures through the ``s_axis_ready`` signal. If the core is

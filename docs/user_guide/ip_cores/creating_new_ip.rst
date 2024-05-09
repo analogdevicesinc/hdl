@@ -365,7 +365,7 @@ If you want to see the whole file, here is an example named axi_led_control_inte
      $ad_hdl_dir/library/common/up_axi.v \
      axi_led_control_intel.v]
 
-   #axi4 slave
+   #axi4 subordinate
    ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 10
 
    #output led
