@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -82,12 +82,9 @@ module system_top (
 
   input                   otg_vbusoc,
 
-  output                  scki_p,
-  output                  scki_n,
-  input                   scko_p,
-  input                   scko_n,
-  input                   sdo_p,
-  input                   sdo_n,
+  output                  scki,
+  input                   scko,
+  input       [ 3:0]      sdo,
 
   input                   busy,
   output                  cnv,
@@ -112,12 +109,13 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire            spiad_sck_s;
+  wire            spiad_csn_s;
+
+  reg     [ 4:0]  cnt_cs_up = 3'd0;
+
   assign gpio_i[63:32] = gpio_o[63:32];
   assign pd = gpio_o[32];
-
-  wire                    spiad_sck_s;
-  wire                    spiad_csn_s;
-  reg           [ 4:0]    cnt_cs_up = 3'd0;
 
   always @(posedge cpu_clk) begin
     csck <= spiad_sck_s;
@@ -224,12 +222,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .scki_p (scki_p),
-    .scki_n (scki_n),
-    .scko_p (scko_p),
-    .scko_n (scko_n),
-    .sdo_p (sdo_p),
-    .sdo_n (sdo_n),
+    .scki (scki),
+    .scko (scko),
+    .adc_lane_0 (sdo[0]),
+    .adc_lane_1 (sdo[1]),
+    .adc_lane_2 (sdo[2]),
+    .adc_lane_3 (sdo[3]),
     .busy (busy),
     .cnv (cnv),
     .lvds_cmos_n (lvds_cmos_n));
