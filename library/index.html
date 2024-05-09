@@ -7,14 +7,14 @@
 
     <title>Libraries &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=b4b07c60" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
-    <script defer="" src="../_static/app.umd.js?v=96350458"></script>
+    <script defer="" src="../_static/app.umd.js?v=a4c09003"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -24,6 +24,7 @@
   
     <meta name="robots" content="noindex">
   
+  <meta name="repo" content="hdl">
   
 
 
@@ -43,39 +44,54 @@
   }
 </style>
   </head><body>
+  <div class="banner"></div>
   <input type="checkbox" id="input-show-toc">
   <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
   <header>
-    <div class="header">
-      <div id="left">
-        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
-      </div>
-      <div id="right">
-        <span>
-          <a id="logo-org" href="https://analog.com"></a>
-              <a id="no-logo" href="../index.html">
-                HDL
-              </a>
-        </span>
-        <span class="reverse">
-          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
-        </span>
-      </div>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
     </div>
-    <div class="repotoc-tree">
-      <root>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
   <a href="../../documentation/eval/index.html">Evaluation Boards</a>
   <a href="../../documentation/university/index.html">University Program</a>
   <a href="../index.html" class="current">HDL</a>
   <a href="../../no-OS/index.html">no-OS</a>
-  <a href="../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
   <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
-    </div>
-  </header>
-
+  </div>
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
@@ -97,9 +113,9 @@
   
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-              <a id="no-logo" href="../index.html">
-                HDL
-              </a><input id="input-switch-toc" type="checkbox">
+    <a id="no-logo" href="../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
 <label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
@@ -112,8 +128,9 @@ Content on this topic
   <a href="../../documentation/university/index.html">University Program</a>
   <a href="../index.html" class="current">HDL</a>
   <a href="../../no-OS/index.html">no-OS</a>
-  <a href="../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../doctools/index.html">Doctools</a>
   <a href="../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
@@ -240,8 +257,8 @@ format.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../user_guide/third_party.html" title="Previous document" class="prev">Third party forks</a>
-    <a href="i3c_controller/index.html" title="Next document" class="next">I3C Controller</a>
+    <a href="../user_guide/third_party.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Third party forks</a>
+    <a href="i3c_controller/index.html" title="Next document (Ctrl+RightArrow)" class="next">I3C Controller</a>
               </div>
           
         </div>
@@ -252,14 +269,6 @@ format.</p>
 
   <label id="cancel-area-show-toc" for="input-show-toc"></label>
   <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
-
-  
-  <form action="" method="get" class="search-area">
-    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
-    <button value="search"></button>
-    <span id="search-progress"></span>
-  </form>
-  
     <footer>
       &#169;2024, Analog Devices, Inc.
       

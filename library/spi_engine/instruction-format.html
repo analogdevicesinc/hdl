@@ -7,14 +7,14 @@
 
     <title>SPI Engine Instruction Set Specification &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=cf8483f0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=96350458"></script>
+    <script defer="" src="../../_static/app.umd.js?v=a4c09003"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -25,6 +25,7 @@
   
     <meta name="robots" content="noindex">
   
+  <meta name="repo" content="hdl">
   
 
 
@@ -44,39 +45,54 @@
   }
 </style>
   </head><body>
+  <div class="banner"></div>
   <input type="checkbox" id="input-show-toc">
   <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
   <header>
-    <div class="header">
-      <div id="left">
-        <label id="show-sidebar" for="input-show-toc" title="Show/hide index"></label>
-      </div>
-      <div id="right">
-        <span>
-          <a id="logo-org" href="https://analog.com"></a>
-              <a id="no-logo" href="../../index.html">
-                HDL
-              </a>
-        </span>
-        <span class="reverse">
-          <label id="show-localtoc" for="input-show-localtoc" title="Show/hide contents"></label>
-        </span>
-      </div>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
     </div>
-    <div class="repotoc-tree">
-      <root>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
   <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
   <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
-  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../doctools/index.html">Doctools</a>
   <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
-    </div>
-  </header>
-
+  </div>
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
@@ -88,10 +104,11 @@
 <li><a class="reference internal" href="#">SPI Engine Instruction Set Specification</a><ul>
 <li><a class="reference internal" href="#instructions">Instructions</a><ul>
 <li><a class="reference internal" href="#transfer-instruction">Transfer Instruction</a></li>
-<li><a class="reference internal" href="#chip-select-instruction">Chip-select Instruction</a></li>
+<li><a class="reference internal" href="#chip-select-instruction">Chip-Select Instruction</a></li>
 <li><a class="reference internal" href="#configuration-write-instruction">Configuration Write Instruction</a></li>
 <li><a class="reference internal" href="#synchronize-instruction">Synchronize Instruction</a></li>
 <li><a class="reference internal" href="#sleep-instruction">Sleep Instruction</a></li>
+<li><a class="reference internal" href="#cs-invert-mask-instruction">CS Invert Mask Instruction</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration-registers">Configuration Registers</a><ul>
@@ -111,9 +128,9 @@
   
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-              <a id="no-logo" href="../../index.html">
-                HDL
-              </a><input id="input-switch-toc" type="checkbox">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
 <label id="show-repotoc" for="input-switch-toc">
 All content
 </label>
@@ -126,8 +143,9 @@ Content on this topic
   <a href="../../../documentation/university/index.html">University Program</a>
   <a href="../../index.html" class="current">HDL</a>
   <a href="../../../no-OS/index.html">no-OS</a>
-  <a href="../../../pyadi-iio/index.html">pyadi-iio</a>
+  <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../doctools/index.html">Doctools</a>
   <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
 </root>
 
@@ -223,7 +241,7 @@ Content on this topic
   <section id="spi-engine-instruction-set-specification">
 <span id="spi-engine-instruction-format"></span><h1>SPI Engine Instruction Set Specification<a class="headerlink" href="#spi-engine-instruction-set-specification" title="Permalink to this heading">#</a></h1>
 <p>The SPI Engine instruction set is a simple 16-bit instruction set of which
-12-bit is currently allocated (bits 15,14,11,10 are always 0).</p>
+13-bits are currently allocated (bits 15,11,10 are always 0).</p>
 <section id="instructions">
 <h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this heading">#</a></h2>
 <section id="transfer-instruction">
@@ -313,7 +331,7 @@ the SDO pin.</p></td>
 </div>
 </section>
 <section id="chip-select-instruction">
-<h3>Chip-select Instruction<a class="headerlink" href="#chip-select-instruction" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-cs-instruction"></span><h3>Chip-Select Instruction<a class="headerlink" href="#chip-select-instruction" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -358,6 +376,12 @@ the SDO pin.</p></td>
 </div>
 <p>The chip-select instruction updates the value chip-select output signal of the
 SPI Engine execution module.</p>
+<p>The physical outputs on each pin may be inverted relative to the command
+according to the mask set by <a class="reference internal" href="#spi-engine-cs-invert-mask-instruction"><span class="std std-ref">CS Invert Mask Instruction</span></a>. The
+Invert Mask acts only on the output registers of the Chip-Select pins. Thus, if
+the last 8 bits of the Chip-Select instruction are 0xFE, only CS[0] will be
+active regardless of polarity. The polarity inversion process (if needed) is
+transparent to the programmer.</p>
 <p>Before and after the update is performed the execution module is paused for the
 specified delay. The length of the delay depends on the module clock frequency,
 the setting of the prescaler register and the parameter <span class="math notranslate nohighlight">\(t\)</span> of the
@@ -440,7 +464,7 @@ prescaled) before for the internal logic.</p>
 </table>
 </div>
 <p>The configuration writes instruction updates a
-<a class="reference internal" href="#spi-engine-configutarion-registers"><span class="std std-ref">Configuration Registers</span></a>
+<a class="reference internal" href="#spi-engine-configuration-registers"><span class="std std-ref">Configuration Registers</span></a>
 of the SPI Engine execution module with a new value.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -617,9 +641,95 @@ is the minimum, needed by the internal logic.</p>
 </table>
 </div>
 </section>
+<section id="cs-invert-mask-instruction">
+<span id="spi-engine-cs-invert-mask-instruction"></span><h3>CS Invert Mask Instruction<a class="headerlink" href="#cs-invert-mask-instruction" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>15</p></th>
+<th class="head"><p>14</p></th>
+<th class="head"><p>13</p></th>
+<th class="head"><p>12</p></th>
+<th class="head"><p>11</p></th>
+<th class="head"><p>10</p></th>
+<th class="head"><p>9</p></th>
+<th class="head"><p>8</p></th>
+<th class="head"><p>7</p></th>
+<th class="head"><p>6</p></th>
+<th class="head"><p>5</p></th>
+<th class="head"><p>4</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>r</p></td>
+<td><p>r</p></td>
+<td><p>r</p></td>
+<td><p>r</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+<td><p>m</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The CS Invert Mask Instructions allows the user to select on a per-pin basis
+whether the Chip Select will be active-low (default) or active-high (inverted).
+Note that the Chip-Select instructions should remain the same because the value
+of CS is inverted at the output register, and additional logic (e.g. reset
+counters) occurs when the CS active state is asserted.</p>
+<p>Since the physical values on the pins are inverted at the output, the current
+Invert Mask does not affect the use of the <a class="reference internal" href="#spi-engine-cs-instruction"><span class="std std-ref">Chip-Select Instruction</span></a>. As
+an example, a Chip-Select Instruction with the ‘s’ field equal to 0xFE will
+always result in only CS[0] being active. For an Invert Mask of 0xFF, this would
+result on only CS[0] being high. For an Invert Mask of 0x00, this would result
+on only CS[0] being low. For an Invert Mask of 0x01, this would result on all CS
+pins being high, but only CS[0] is active in this case (since it’s the only one
+currently treated as active-high).</p>
+<p>This was introduced in
+version 1.02.00 of the core.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 15.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bits</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>r</p></td>
+<td><p>reserved</p></td>
+<td><p>Reserved for future use. Must always be set to 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p>m</p></td>
+<td><p>Mask</p></td>
+<td><p>Mask for selecting inverted CS channels. For the bits set to 1, the
+corresponding channel will be inverted at the output.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="configuration-registers">
-<span id="spi-engine-configutarion-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading">#</a></h2>
+<span id="spi-engine-configuration-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine execution module has a set of 8-bit configuration registers which
 can be used to dynamically modify the behavior of the module at runtime.</p>
 <section id="spi-configuration-register">
@@ -730,8 +840,8 @@ supported by the target device.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="spi-bus-interface.html" title="Previous document" class="prev">SPI Bus Interface</a>
-    <a href="pipeline-delays.html" title="Next document" class="next">SPI Engine Pipeline Delays</a>
+    <a href="spi-bus-interface.html" title="Previous document (Ctrl+LeftArrow)" class="prev">SPI Bus Interface</a>
+    <a href="pipeline-delays.html" title="Next document (Ctrl+RightArrow)" class="next">SPI Engine Pipeline Delays</a>
               </div>
           
         </div>
@@ -742,14 +852,6 @@ supported by the target device.</p>
 
   <label id="cancel-area-show-toc" for="input-show-toc"></label>
   <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
-
-  
-  <form action="" method="get" class="search-area">
-    <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
-    <button value="search"></button>
-    <span id="search-progress"></span>
-  </form>
-  
     <footer>
       &#169;2024, Analog Devices, Inc.
       
