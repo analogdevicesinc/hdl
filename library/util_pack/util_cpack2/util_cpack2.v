@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -178,8 +178,8 @@ module util_cpack2 #(
 
   output packed_fifo_wr_en,
   input packed_fifo_wr_overflow,
-  output packed_fifo_wr_sync,
-  output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data
+  output [2**$clog2(NUM_OF_CHANNELS)*SAMPLE_DATA_WIDTH*SAMPLES_PER_CHANNEL-1:0] packed_fifo_wr_data,
+  output packed_sync
 );
 
   localparam CHANNEL_DATA_WIDTH = SAMPLE_DATA_WIDTH * SAMPLES_PER_CHANNEL;
@@ -296,6 +296,6 @@ module util_cpack2 #(
     .packed_fifo_wr_en (packed_fifo_wr_en),
     .packed_fifo_wr_overflow (packed_fifo_wr_overflow),
     .packed_fifo_wr_data (packed_fifo_wr_data),
-    .packed_fifo_wr_sync (packed_fifo_wr_sync));
+    .packed_sync (packed_sync));
 
 endmodule
