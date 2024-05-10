@@ -11,6 +11,7 @@ adi_ip_create rtp_engine
 adi_ip_files rtp_engine [list \
   "rtp_engine.sv" \
   "../common/up_axi.v" \
+  "axis_fifo.v" \
   "rtp_engine_regmap.sv" \
   "rtp_engine_package.sv" ]
 
@@ -52,6 +53,7 @@ adi_add_bus "rtp_engine_master" "master" \
 		{"m_axis_tdata" "TDATA"} \
 		{"m_axis_tlast" "TLAST"} \
 		{"m_axis_tready" "TREADY"} \
+		{"m_axis_tkeep" "TKEEP"} \
 	}
 
 adi_add_bus_clock "aclk" "rtp_engine_slave" "aresetn"

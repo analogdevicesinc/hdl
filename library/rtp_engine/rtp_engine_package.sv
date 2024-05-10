@@ -56,17 +56,9 @@ package rtp_engine_package;
     logic [14:0]  offset_l1;
   } rtp_payload_header;
 
- // total - 12B(RTP_H)+8B(RTP_P_H)+8B(UDP_H)+20B(IPv4 - without options _H) + 14B eth header
- // - 48B header
+  // total - 12B(RTP_H)+8B(RTP_P_H)+8B(UDP_H)+20B(IPv4 - without options _H) + 14B eth header
+  // - 48B header
 
-  typedef enum logic [0:0] {
-    IDLE = 'h0,
-    F_COUNT = 'h1} state_vid_fr;
-
-  typedef enum logic [0:0] {
-    IDLE_RTP = 'h0,
-    PIX_COUNT = 'h1} state_rtp_pckt;
-    
   typedef enum logic [2:0] {
     IDLE_TRANSM = 'h0,
     HEADER_TRANSM_P1 = 'h1,

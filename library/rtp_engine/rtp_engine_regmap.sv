@@ -40,17 +40,8 @@ module rtp_engine_regmap #(
 
   // control and status signals
 
-  output     [15:0]       seq_number_h,
-  output     [15:0]       seq_number_l,
   output                  start_transfer,
   output                  stop_transfer,
-  input      [31:0]       f_32b_rtp_h,
-  input      [31:0]       m_32b_rtp_h,
-  input      [31:0]       l_32b_rtp_h,
-  input      [31:0]       f_32b_rtpp_h,
-  input      [31:0]       l_32b_rtpp_h,
-  input      [31:0]       f_32b_tdata,
-  input      [31:0]       l_32b_tdata,
 
   // processor interface
 
@@ -68,18 +59,15 @@ module rtp_engine_regmap #(
 
   // internal registers
 
-  reg     [31:0]  up_seq_number = 'h0; // initial random-based sequence number assigned at the start of the transfer
   reg             up_start_transfer  = 'h0;
   reg             up_stop_transfer  = 'h0;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_seq_number <= 'd0;
+      up_start_transfer <= 'h0;
+      up_stop_transfer <= 'h0;
     end else begin
       up_wack <= up_wreq;
-      if ((up_wreq == 1'b1) && (up_waddr == 14'h1)) begin
-        up_seq_number <= up_wdata;
-      end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
         up_start_transfer <= up_wdata;
       end
@@ -99,16 +87,8 @@ module rtp_engine_regmap #(
         if (up_raddr[13:4] == 10'd0) begin
           case (up_raddr)
             14'h0: up_rdata <= VERSION;
-            14'h1: up_rdata <= up_seq_number;
             14'h2: up_rdata <= up_start_transfer;
             14'h3: up_rdata <= up_stop_transfer;
-	    14'h4: up_rdata <= f_32b_rtp_h;
-	    14'h5: up_rdata <= m_32b_rtp_h;
-	    14'h6: up_rdata <= l_32b_rtp_h;
-	    14'h7: up_rdata <= f_32b_rtpp_h;
-	    14'h8: up_rdata <= l_32b_rtpp_h;
-	    14'h9: up_rdata <= f_32b_tdata;
-	    14'hA: up_rdata <= l_32b_tdata;
             default: up_rdata <= 0;
           endcase
         end else begin
@@ -118,8 +98,6 @@ module rtp_engine_regmap #(
     end
   end
 
-  assign seq_number_h = up_seq_number[31:16]; // high part of sequence number in rtp payload header - rfc4175 payload for raw data
-  assign seq_number_l = up_seq_number[15:0]; //low part of sequence number in the rtp header
   assign start_transfer = up_start_transfer;
   assign stop_transfer = up_stop_transfer;
 

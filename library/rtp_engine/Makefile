@@ -10,6 +10,7 @@ GENERIC_DEPS += rtp_engine.sv
 GENERIC_DEPS += rtp_engine_package.sv
 GENERIC_DEPS += rtp_engine_regmap.sv
 GENERIC_DEPS += ../common/up_axi.v
+GENERIC_DEPS += axis_fifo.v
 
 XILINX_DEPS += rtp_engine_ip.tcl
 
