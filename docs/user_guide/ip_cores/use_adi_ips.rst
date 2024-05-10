@@ -163,9 +163,9 @@ Let's start with sourcing the spi_engine.tcl script inside your ``<project>_db.t
 
    source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-The SPI engine has 4 modules: Execution, interconnect, regmap and offload.
+The SPI engine has 4 modules: execution, interconnect, regmap and offload.
 
-All of the modules are instantiated inside the ``spi_engine_create``` function.
+All of the modules are instantiated inside the ``spi_engine_create`` function.
 This function requires 7 parameters. The default values for them are as follow,
 but feel free to configure it as you want:
 
