@@ -17,10 +17,10 @@ The interface consists of four streams:
 * The SYNC stream which carries the synchronization events. (Subordinate to Manager)
 
 Each of the streams has a valid, ready and data signal. They follow the
-handshaking protocol as defined by the AXI standard. Meaning the controller asserts
+handshaking protocol as defined by the AXI standard. Meaning the manager asserts
 valid when the data on the data signal is valid and the subordinate asserts ready
 when it is able to accept new data. If both valid and ready are asserted at the same
-time the data has been transmitted from the controller to the subordinate.
+time the data has been transmitted from the manager to the subordinate.
 
 Files
 --------------------------------------------------------------------------------
