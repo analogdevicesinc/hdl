@@ -166,14 +166,14 @@ Let's start with sourcing the spi_engine.tcl script inside your ``<project>_db.t
 The SPI engine has 4 modules: execution, interconnect, regmap and offload.
 
 All of the modules are instantiated inside the ``spi_engine_create`` function.
-This function requires 7 parameters. The default values for them are as follow,
+This function requires 13 parameters. The default values for them are as follow,
 but feel free to configure it as you want:
 
 .. code:: tcl
 
-   {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {sdi_delay 0} {echo_sclk 0}}
+   {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {num_cs 1} {num_sdi 1} {num_sdo 1} {sdi_delay 0} {echo_sclk 0} {cmd_mem_addr_width 4} {data_mem_addr_width 4} {sdi_fifo_addr_width 5} {sdo_fifo_addr_width 5} {sync_fifo_addr_width 4} {cmd_fifo_addr_width 4}} 
 
-An example of instantiation:
+An example of instantiation, using the default values for ``cmd_mem_addr_width``, ``data_mem_addr_width``, ``sdi_fifo_addr_width``, ``sdo_fifo_addr_width``, ``sync_fifo_addr_width`` and ``cmd_fifo_addr_width``:
 
 .. code:: tcl
 
