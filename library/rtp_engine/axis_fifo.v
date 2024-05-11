@@ -109,7 +109,7 @@ module axis_fifo #
     output wire [ID_WIDTH-1:0]    m_axis_tid,
     output wire [DEST_WIDTH-1:0]  m_axis_tdest,
     output wire [USER_WIDTH-1:0]  m_axis_tuser,
-//    output wire                   dropped_pkt,
+    output wire                   dropped_pkt,
 
     /*
      * Status
@@ -231,12 +231,10 @@ always @(posedge clk) begin
             // full, packet overflow, or currently dropping frame
             // drop frame
             drop_frame_reg <= 1'b1;
-            //dropped_pkt_r <= 1'b1;
             if (s_axis_tlast) begin
                 // end of frame, reset write pointer
                 wr_ptr_cur_reg <= wr_ptr_reg;
                 drop_frame_reg <= 1'b0;
-                //dropped_pkt_r <= 1'b0;
                 overflow_reg <= 1'b1;
             end
         end else begin
@@ -269,7 +267,6 @@ always @(posedge clk) begin
         wr_ptr_cur_reg <= {ADDR_WIDTH+1{1'b0}};
 
         drop_frame_reg <= 1'b0;
-	//dropped_pkt_r <= 1'b0;
         send_frame_reg <= 1'b0;
         overflow_reg <= 1'b0;
         bad_frame_reg <= 1'b0;
@@ -277,7 +274,7 @@ always @(posedge clk) begin
     end
 end
 
-//assign dropped_pkt = dropped_pkt_r;
+assign dropped_pkt = drop_frame_reg;
 
 // Read logic
 integer j;

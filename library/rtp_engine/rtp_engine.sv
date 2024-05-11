@@ -49,7 +49,7 @@ module rtp_engine #(
   input  logic                          aclk,
   input  logic                          aresetn,
 
-  /* input axi stream slave interface */
+  // input axi stream slave interface
 
   input  logic                          s_axis_tvalid,
   input  logic [(S_TDATA_WIDTH-1):0]    s_axis_tdata,
@@ -58,13 +58,16 @@ module rtp_engine #(
   input  logic [(S_TUSER_WIDTH-1):0]    s_axis_tuser,
   output logic                          s_axis_tready,
 
-  /* output axi stream master interface */
+  // output axi stream master interface
 
   output  logic                         m_axis_tvalid,
   output  logic [(M_TDATA_WIDTH-1):0]   m_axis_tdata,
   output  logic                         m_axis_tlast,
   input   logic                         m_axis_tready,
   output  logic [(M_TKEEP_WIDTH-1):0]   m_axis_tkeep,
+
+  // dropped packet indication
+  input   logic                         dropped_pkt,
 
   // axi interface
 
@@ -167,8 +170,10 @@ module rtp_engine #(
   reg                        end_of_frame = 1'b0;
   reg                        end_of_frame_r = 1'b0;
   reg                        end_of_line = 1'b0;
+  reg                        dropped_pkt_r = 1'b0;
 
   wire                       negedge_eof;
+  wire                       posedge_dropped_pkt;
 
   // RTP header/PD header related regs - wires
   reg  [15:0]                ext_seq_num_r = 'h0;
@@ -388,7 +393,18 @@ module rtp_engine #(
   end
 
   assign negedge_eof = ~end_of_frame & end_of_frame_r;
-  
+
+  always @(posedge aclk) begin
+    if (!aresetn) begin
+      dropped_pkt_r <= 'h0;
+    end else begin
+      dropped_pkt_r <= dropped_pkt;
+    end
+  end
+
+  //streched dropped_pkt indication
+  assign posedge_dropped_pkt = dropped_pkt & ~dropped_pkt_r;
+
   always @(posedge aclk) begin
     if (!aresetn) begin
       counter_lines <= 'h0;
@@ -396,7 +412,11 @@ module rtp_engine #(
       if (rtp_transm_state == PAYLOAD_TRANSM && valid_reg) begin
         if (counter_lines != (NUM_LINES)) begin
           if (m_axis_cam_tlast & m_axis_cam_tvalid) begin
-            counter_lines <= counter_lines + 1;
+            if (posedge_dropped_pkt) begin // skip one line number when a dropped_pkt indication is captured
+              counter_lines <= counter_lines + 2;
+            end else begin
+              counter_lines <= counter_lines + 1;
+            end
           end else begin
             counter_lines <= counter_lines;
           end
