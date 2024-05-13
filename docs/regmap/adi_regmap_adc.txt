@@ -8,12 +8,12 @@ ENDTITLE
 
 REG
 0x0010
-REG_RSTN
+RSTN
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 CE_N
 RW
 Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of
@@ -21,7 +21,7 @@ the module to control clock enables
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 MMCM_RSTN
 RW
 MMCM reset only (required for DRP access).
@@ -29,7 +29,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 RSTN
 RW
 Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.
@@ -40,55 +40,55 @@ ENDFIELD
 
 REG
 0x0011
-REG_CNTRL
+CNTRL
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[16] 0x0
+[16] 0x00000000
 SDR_DDR_N
 RW
 Interface type (1 represents SDR, 0 represents DDR)
 ENDFIELD
 
 FIELD
-[15] 0x0
+[15] 0x00000000
 SYMB_OP
 RW
 Select symbol data format mode (0x1)
 ENDFIELD
 
 FIELD
-[14] 0x0
+[14] 0x00000000
 SYMB_8_16B
 RW
 Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b)
 ENDFIELD
 
 FIELD
-[12:8] 0x0
-NUM_LANES[4:0]
+[12:8] 0x00000000
+NUM_LANES
 RW
 Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane). 
 For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.
 ENDFIELD
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 SYNC
 RW
 Initialize synchronization between multiple ADCs
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 R1_MODE
 RW
 Select number of RF channels 1 (0x1) or 2 (0x0).
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 DDR_EDGESEL
 RW
 Select rising edge (0x0) or falling edge (0x1) for the first part
@@ -98,7 +98,7 @@ from the incoming data post DDR registers.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 PIN_MODE
 RW
 Select interface pin mode to be clock multiplexed (0x1) or pin
@@ -112,12 +112,12 @@ ENDFIELD
 
 REG
 0x0012
-REG_CNTRL_2
+CNTRL_2
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 EXT_SYNC_ARM
 RW
 Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
@@ -127,7 +127,7 @@ This bit self clears.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 EXT_SYNC_DISARM
 RW
 Setting this bit will disarm the trigger mechanism sensitive to an external sync signal.
@@ -136,7 +136,7 @@ This bit self clears.
 ENDFIELD
 
 FIELD
-[8] 0x0
+[8] 0x00000000
 MANUAL_SYNC_REQUEST
 RW
 Setting this bit will issue an external sync event if it is hooked up inside the fabric.
@@ -149,19 +149,19 @@ ENDFIELD
 
 REG
 0x0013
-REG_CNTRL_3
+CNTRL_3
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[8] 0x0
+[8] 0x00000000
 CRC_EN
 RW
 Setting this bit will enable the CRC generation.
 ENDFIELD
 
 FIELD
-[7:0] 0x00
+[7:0] 0x00000000
 CUSTOM_CONTROL
 RW
 Select output format decode mode.(for ADAQ8092: bit 0 - enables digital output randomizer decode
@@ -173,13 +173,13 @@ ENDFIELD
 
 REG
 0x0015
-REG_CLK_FREQ
+CLK_FREQ
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[31:0] 0x0000
-CLK_FREQ[31:0]
+[31:0] 0x00000000
+CLK_FREQ
 RO
 Interface clock frequency. This is relative to the processor clock and in many cases is
 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
@@ -194,13 +194,13 @@ ENDFIELD
 
 REG
 0x0016
-REG_CLK_RATIO
+CLK_RATIO
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[31:0] 0x0000
-CLK_RATIO[31:0]
+[31:0] 0x00000000
+CLK_RATIO
 RO
 Interface clock ratio - as a factor actual received clock. This is implementation specific
 and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).
@@ -211,40 +211,40 @@ ENDFIELD
 
 REG
 0x0017
-REG_STATUS
+STATUS
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[4] 0x0
+[4] 0x00000000
 ADC_CTRL_STATUS
 RO
 If set, indicates that the device'​s register data is available on the data bus.
 ENDFIELD
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 PN_ERR
 RO
 If set, indicates pn error in one or more channels.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 PN_OOS
 RO
 If set, indicates pn oos in one or more channels.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 OVER_RANGE
 RO
 If set, indicates over range in one or more channels.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 STATUS
 RO
 Interface status, if set indicates no errors. If not set, there
@@ -256,12 +256,12 @@ ENDFIELD
 
 REG
 0x0018
-REG_DELAY_CNTRL 
+DELAY_CNTRL 
 ADC Interface Control & Status(''Deprecated from version 9'')
 ENDREG
 
 FIELD
-[17] 0x0
+[17] 0x00000000
 DELAY_SEL
 RW
 Delay select, a 0x0 to 0x1 transition in this register initiates
@@ -269,7 +269,7 @@ a delay access controlled by the registers below.
 ENDFIELD
 
 FIELD
-[16] 0x0
+[16] 0x00000000
 DELAY_RWN
 RW
 Delay read (0x1) or write (0x0), the delay is accessed directly
@@ -278,16 +278,16 @@ and data corresponding to the total delay.
 ENDFIELD
 
 FIELD
-[15:8] 0x00
-DELAY_ADDRESS[7:0]
+[15:8] 0x00000000
+DELAY_ADDRESS
 RW
 Delay address, the range depends on the interface pins, data pins
 are usually at the lower range.
 ENDFIELD
 
 FIELD
-[4:0] 0x0
-DELAY_WDATA[4:0]
+[4:0] 0x00000000
+DELAY_WDATA
 RW
 Delay write data, a value of 1 corresponds to (1/200)ns for most devices.
 ENDFIELD
@@ -297,12 +297,12 @@ ENDFIELD
 
 REG
 0x0019
-REG_DELAY_STATUS 
+DELAY_STATUS 
 ADC Interface Control & Status(''Deprecated from version 9'')
 ENDREG
 
 FIELD
-[9] 0x0
+[9] 0x00000000
 DELAY_LOCKED
 RO
 Indicates delay locked (0x1) state. If this bit is read 0x0, delay control
@@ -310,7 +310,7 @@ has failed to calibrate the elements.
 ENDFIELD
 
 FIELD
-[8] 0x0
+[8] 0x00000000
 DELAY_STATUS
 RO
 If set, indicates busy status (access pending). The read data may not be
@@ -318,8 +318,8 @@ valid if this bit is set.
 ENDFIELD
 
 FIELD
-[4:0] 0x0
-DELAY_RDATA[4:0]
+[4:0] 0x00000000
+DELAY_RDATA
 RO
 Delay read data, current delay value in the elements
 ENDFIELD
@@ -329,12 +329,12 @@ ENDFIELD
 
 REG
 0x001A
-REG_SYNC_STATUS
+SYNC_STATUS
 ADC Synchronization Status register
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 ADC_SYNC
 RO
 ADC synchronization status. Will be set to 1 after the synchronization has been completed 
@@ -346,12 +346,12 @@ ENDFIELD
 
 REG
 0x001C
-REG_DRP_CNTRL
+DRP_CNTRL
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[28] 0x0
+[28] 0x00000000
 DRP_RWN
 RW
 DRP read (0x1) or write (0x0) select (does not include GTX lanes).
@@ -359,8 +359,8 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[27:16] 0x00
-DRP_ADDRESS[11:0]
+[27:16] 0x00000000
+DRP_ADDRESS
 RW
 DRP address, designs that contain more than one DRP accessible primitives
 have selects based on the most significant bits (does not include GTX lanes).
@@ -368,8 +368,8 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:0] 0x0000
-RESERVED[15:0]
+[15:0] 0x00000000
+RESERVED
 RO
 Reserved for backward compatibility.
 ENDFIELD
@@ -379,19 +379,19 @@ ENDFIELD
 
 REG
 0x001D
-REG_DRP_STATUS
+DRP_STATUS
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[17] 0x0
+[17] 0x00000000
 DRP_LOCKED
 RO
 If set indicates that the DRP has been locked.
 ENDFIELD
 
 FIELD
-[16] 0x0
+[16] 0x00000000
 DRP_STATUS
 RO
 If set indicates busy (access pending). The read data may not be valid if
@@ -400,8 +400,8 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:0] 0x00
-RESERVED[15:0]
+[15:0] 0x00000000
+RESERVED
 RO
 Reserved for backward compatibility.
 ENDFIELD
@@ -411,13 +411,13 @@ ENDFIELD
 
 REG
 0x001E
-REG_DRP_WDATA
+DRP_WDATA
 ADC DRP Write Data
 ENDREG
 
 FIELD
-[15:0] 0x00
-DRP_WDATA[15:0]
+[15:0] 0x00000000
+DRP_WDATA
 RW
 DRP write data (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).
@@ -428,13 +428,13 @@ ENDFIELD
 
 REG
 0x001F
-REG_DRP_RDATA
+DRP_RDATA
 ADC DRP Read Data
 ENDREG
 
 FIELD
-[15:0] 0x00
-DRP_RDATA[15:0]
+[15:0] 0x00000000
+DRP_RDATA
 RO
 DRP read data (does not include GTX lanes).
 ENDFIELD
@@ -444,13 +444,13 @@ ENDFIELD
 
 REG
 0x0020
-REG_ADC_CONFIG_WR
+ADC_CONFIG_WR
 ADC Write Configuration ​Data
 ENDREG
 
 FIELD
-[31:0] 0x0000
-ADC_CONFIG_WR[31:0]
+[31:0] 0x00000000
+ADC_CONFIG_WR
 RW
 Custom ​Write to the available registers.
 ENDFIELD
@@ -460,13 +460,13 @@ ENDFIELD
 
 REG
 0x0021
-REG_ADC_CONFIG_RD
+ADC_CONFIG_RD
 ADC Read Configuration ​Data
 ENDREG
 
 FIELD
-[31:0] 0x0000
-ADC_CONFIG_RD[31:0]
+[31:0] 0x00000000
+ADC_CONFIG_RD
 RO
 Custom read of the available registers.
 ENDFIELD
@@ -476,12 +476,12 @@ ENDFIELD
 
 REG
 0x0022
-REG_UI_STATUS
+UI_STATUS
 User Interface Status
 ENDREG
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 UI_OVF
 RW1C
 User Interface overflow. If set, indicates an overflow occurred during data transfer at
@@ -490,7 +490,7 @@ bit.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 UI_UNF
 RW1C
 User Interface underflow. If set, indicates an underflow occurred during data transfer at
@@ -499,7 +499,7 @@ bit.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 UI_RESERVED
 RW1C
 Reserved for backward compatibility.
@@ -510,13 +510,13 @@ ENDFIELD
 
 REG
 0x0023
-REG_ADC_CONFIG_CTRL
+ADC_CONFIG_CTRL
 ADC RD/WR configuration
 ENDREG
 
 FIELD
-[31:0] 0x0000
-ADC_CONFIG_CTRL[31:​0]
+[31:0] 0x00000000
+ADC_CONFIG_CTRL
 RW
 Control RD/WR requests to the device'​s register map: bit 1 - RD ('b1) , WR ('b0), bit 0 - enable WR/RD operation.
 ENDFIELD
@@ -526,13 +526,13 @@ ENDFIELD
 
 REG
 0x0028
-REG_USR_CNTRL_1
+USR_CNTRL_1
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[7:0] 0x00
-USR_CHANMAX[7:0]
+[7:0] 0x00000000
+USR_CHANMAX
 RW
 This indicates the maximum number of inputs for the channel data multiplexers. User may add
 different processing modules post data capture as another input to this common multiplexer.
@@ -544,13 +544,13 @@ ENDFIELD
 
 REG
 0x0029
-REG_ADC_START_CODE
+ADC_START_CODE
 ADC Synchronization start word
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-ADC_START_CODE[31:0]
+ADC_START_CODE
 RW
 This sets the startcode that is used by the ADCs for synchronization
 NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).
@@ -561,52 +561,61 @@ ENDFIELD
 
 REG
 0x002E
-REG_ADC_GPIO_IN
+ADC_GPIO_IN
 ADC GPIO inputs
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-ADC_GPIO_IN[31:0]
+ADC_GPIO_IN
 RO
 This reads auxiliary GPI pins of the ADC core
 ENDFIELD
 
+############################################################################################
+############################################################################################
+
 REG
 0x002F
-REG_ADC_GPIO_OUT
+ADC_GPIO_OUT
 ADC GPIO outputs
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-ADC_GPIO_OUT[31:0]
+ADC_GPIO_OUT
 RW
 This controls auxiliary GPO pins of the ADC core
 NOT-APPLICABLE if GPIO_DISABLE is set (0x1).
 ENDFIELD
 
+############################################################################################
+############################################################################################
+
 REG
 0x0030
-REG_PPS_COUNTER
+PPS_COUNTER
 PPS Counter register
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-PPS_COUNTER[31:0]
+PPS_COUNTER
 RO
 Counts the core clock cycles (can be a device clock or interface clock) between two 1PPS pulse.
 ENDFIELD
 
+############################################################################################
+############################################################################################
+
 REG
 0x0031
-REG_PPS_STATUS
+PPS_STATUS
 PPS Status register
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 PPS_STATUS
 RO
 If this bit is asserted there is no incomming 1PPS signal. Maybe the source is out of sync or it's not active.
@@ -624,20 +633,21 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x0100
-REG_CHAN_CNTRL
+0x0100 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_CNTRLn
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[11] 0x0
+[11] 0x00000000
 ADC_LB_OWR
 RW
 If set, forces ADC_DATA_SEL to 1, enabling data loopback
 ENDFIELD
 
 FIELD
-[10] 0x0
+[10] 0x00000000
 ADC_PN_SEL_OWR
 RW
 If set, forces ADC_PN_SEL to 0x9, device specific pn (e.g. ad9361)
@@ -645,7 +655,7 @@ If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored
 ENDFIELD
 
 FIELD
-[9] 0x0
+[9] 0x00000000
 IQCOR_ENB
 RW
 if set, enables IQ correction or scale correction.
@@ -653,7 +663,7 @@ NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[8] 0x0
+[8] 0x00000000
 DCFILT_ENB
 RW
 if set, enables DC filter (to disable DC offset, set offset value to 0x0).
@@ -661,7 +671,7 @@ NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[6] 0x0
+[6] 0x00000000
 FORMAT_SIGNEXT
 RW
 if set, enables sign extension (applicable only in 2's complement mode). The data is
@@ -670,7 +680,7 @@ NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[5] 0x0
+[5] 0x00000000
 FORMAT_TYPE
 RW
 Select offset binary (0x1) or 2's complement (0x0) data type. This sets the incoming
@@ -679,7 +689,7 @@ NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[4] 0x0
+[4] 0x00000000
 FORMAT_ENABLE
 RW
 Enable data format conversion (see register bits above).
@@ -687,21 +697,21 @@ NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[3] 0x0
+[3] 0x00000000
 RESERVED
 RO
 Reserved for backward compatibility.
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 RESERVED
 RO
 Reserved for backward compatibility.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 ADC_PN_TYPE_OWR
 RW
 If set, forces ADC_PN_SEL to 0x1, modified pn23
@@ -709,7 +719,7 @@ If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 ENABLE
 RW
 If set, enables channel. A 0x0 to 0x1 transition transfers all the control signals
@@ -722,27 +732,28 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0101
-REG_CHAN_STATUS
+0x0101 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_STATUSn
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[12] 0x0
+[12] 0x00000000
 CRC_ERR
 RW1C
 CRC errors. If set, indicates CRC error. Software must first clear this bit before initiating a transfer and monitor afterwards.
 ENDFIELD
 
 FIELD
-[11:4] 0x00
+[11:4] 0x00000000
 STATUS_HEADER
 RO
 The status header sent by the ADC.(compatible with AD7768/AD7768-4/AD777x).
 ENDFIELD
 
 FIELD
-[2] 0x0
+[2] 0x00000000
 PN_ERR
 RW1C
 PN errors. If set, indicates spurious mismatches in sync state. This bit is cleared
@@ -750,7 +761,7 @@ if OOS is set and is only indicates errors when OOS is cleared.
 ENDFIELD
 
 FIELD
-[1] 0x0
+[1] 0x00000000
 PN_OOS
 RW1C
 PN Out Of Sync. If set, indicates an OOS status. OOS is set, if 64 consecutive patterns
@@ -759,7 +770,7 @@ the expected pattern.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 OVER_RANGE
 RW1C
 If set, indicates over range. Note that over range is independent of the data path,
@@ -769,15 +780,17 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
+
 REG
-0x0102
-REG_CHAN_RAW_DATA
+0x0102 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_RAW_DATAn
 ADC Raw Data Reading
 ENDREG
 
 FIELD
-[31:0] 0x0000
-ADC_READ_DATA[31:0]
+[31:0] 0x00000000
+ADC_READ_DATA
 RO
 Raw data read from the ADC.
 ENDFIELD
@@ -786,14 +799,15 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0104
-REG_CHAN_CNTRL_1
+0x0104 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_CNTRLn_1
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[31:16] 0x0000
-DCFILT_OFFSET[15:0]
+[31:16] 0x00000000
+DCFILT_OFFSET
 RW
 DC removal (if equipped) offset. This is a 2's complement number added to the incoming
 data to remove a known DC offset.
@@ -801,8 +815,8 @@ NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:0] 0x0000
-DCFILT_COEFF[15:0]
+[15:0] 0x00000000
+DCFILT_COEFF
 RW
 DC removal filter (if equipped) coefficient. The format is 1.1.14 (sign, integer and
 fractional bits).
@@ -813,14 +827,15 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0105
-REG_CHAN_CNTRL_2
+0x0105 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_CNTRLn_2
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[31:16] 0x0000
-IQCOR_COEFF_1[15:0]
+[31:16] 0x00000000
+IQCOR_COEFF_1
 RW
 IQ correction (if equipped) coefficient. If scale & offset is implemented, this is the scale value
 and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
@@ -831,8 +846,8 @@ NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:0] 0x0000
-IQCOR_COEFF_2[15:0]
+[15:0] 0x00000000
+IQCOR_COEFF_2
 RW
 IQ correction (if equipped) coefficient. If scale & offset is implemented, this is the offset value
 and the format is 2's complement. If matrix multiplication is used, this is the channel Q coefficient
@@ -844,14 +859,15 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0106
-REG_CHAN_CNTRL_3
+0x0106 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_CNTRLn_3
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[19:16] 0x0
-ADC_PN_SEL[3:0]
+[19:16] 0x00000000
+ADC_PN_SEL
 RW
 Selects the PN monitor sequence type (available only if ADC supports it). \\
  - 0x0: pn9a (device specific, modified pn9) \\
@@ -866,8 +882,8 @@ Selects the PN monitor sequence type (available only if ADC supports it). \\
 ENDFIELD
 
 FIELD
-[3:0] 0x0
-ADC_DATA_SEL[3:0]
+[3:0] 0x00000000
+ADC_DATA_SEL
 RW
 Selects the data source to DMA.
 0x0: input data (ADC)
@@ -878,13 +894,14 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0108
-REG_CHAN_USR_CNTRL_1
+0x0108 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_USR_CNTRLn_1
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[25] 0x0
+[25] 0x00000000
 USR_DATATYPE_BE
 RO
 The user data type format- if set, indicates big endian (default is little endian).
@@ -892,7 +909,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[24] 0x0
+[24] 0x00000000
 USR_DATATYPE_SIGNED
 RO
 The user data type format- if set, indicates signed (2's complement) data (default is unsigned).
@@ -900,8 +917,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[23:16] 0x00
-USR_DATATYPE_SHIFT[7:0]
+[23:16] 0x00000000
+USR_DATATYPE_SHIFT
 RO
 The user data type format- the amount of right shift for actual samples within the total number
 of bits.
@@ -909,8 +926,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:8] 0x00
-USR_DATATYPE_TOTAL_BITS[7:0]
+[15:8] 0x00000000
+USR_DATATYPE_TOTAL_BITS
 RO
 The user data type format- number of total bits used for a sample. The total number of bits must
 be an integer multiple of 8 (byte aligned).
@@ -918,8 +935,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[7:0] 0x00
-USR_DATATYPE_BITS[7:0]
+[7:0] 0x00000000
+USR_DATATYPE_BITS
 RO
 The user data type format- number of bits in a sample. This indicates the actual sample data bits.
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
@@ -929,14 +946,15 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0109
-REG_CHAN_USR_CNTRL_2
+0x0109 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_USR_CNTRLn_2
 ADC Interface Control & Status
 ENDREG
 
 FIELD
-[31:16] 0x0000
-USR_DECIMATION_M[15:0]
+[31:16] 0x00000000
+USR_DECIMATION_M
 RW
 This holds the user decimation M value of the channel that is currently being selected on
 the multiplexer above. The total decimation factor is of the form M/N.
@@ -944,8 +962,8 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).
 ENDFIELD
 
 FIELD
-[15:0] 0x0000
-USR_DECIMATION_N[15:0]
+[15:0] 0x00000000
+USR_DECIMATION_N
 RW
 This holds the user decimation N value of the channel that is currently being selected on
 the multiplexer above. The total decimation factor is of the form M/N.
@@ -956,46 +974,25 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x010A
-REG_CHAN_CNTRL_4
+0x010A + 0x16*n
+WHERE n IS FROM 0 TO 15
+CHAN_CNTRLn_4
 ADC Interface Control & Status
 ENDREG
 
 FIELD
 [31:3] 0x00000000
-RESERVED[28:0]
+RESERVED
 RO
 Reserved for backward compatibility.
 ENDFIELD
 
 FIELD
-[2:0] 0x7
-SOFTSPAN [2:0]
+[2:0] 0x00000007
+SOFTSPAN
 RW
 Softspan configuration register.
 ENDFIELD
 
 ############################################################################################
 ############################################################################################
-
-REG
-0x0110
-REG_*
-Channel 1, similar to register 0x100 to 0x10f.
-ENDREG
-
-REG
-0x0120
-REG_*
-Channel 2, similar to register 0x100 to 0x10f.
-ENDREG
-
-REG
-0x01F0
-REG_*
-Channel 15, similar to register 0x100 to 0x10f.
-ENDREG
-
-############################################################################################
-############################################################################################
-

@@ -27,7 +27,7 @@ Signal Pins
    :header-rows: 1
 
    * - Name
-     - Direction (Master)
+     - Direction (Manager)
      - Description
    * - ``cmd_wr_en``
      - Output

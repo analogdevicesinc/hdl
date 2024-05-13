@@ -75,17 +75,17 @@ Interconnect Module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 All the delays measured for this module are in terms of SPI Engine clock cycles.
 
-The interconnect will only accept one master at a time, and will wait until a
-sync handshake back to the master is completed to free the channel.
+The interconnect will only accept one manager at a time, and will wait until a
+sync handshake back to the manager is completed to free the channel.
 
 * Command valid input to command valid output (s0/s1 to m): 1 cycle if idle, 0
   if already "owned" by the source (s0 or s1).
-* Sync valid from m side to s0/s1 sync valid (back to originating master): 0
+* Sync valid from m side to s0/s1 sync valid (back to originating manager): 0
   cycle.
 * Sync ready to idle (delay after finishing transaction response): 1 cycle
-* Thus, 2 cycles per command minimum if changing masters, 3 if accounting for
+* Thus, 2 cycles per command minimum if changing managers, 3 if accounting for
   sync (this is the worst case).
-* 1 cycle per command (can accept back to back) if from same master.
+* 1 cycle per command (can accept back to back) if from same manager.
 * Thus, :math:`2+N_{cmd}` minimum cycles per :math:`N_{cmd}` "burst" from same
   source.
 * s0/s1_sdo_valid to m_sdo_valid:  0 if already "owned" by the source (s0 or
@@ -116,7 +116,7 @@ AXI Module
 
   * Meaning: if counting delay to other parts of the design (e.g. command fifo),
     this is the AXI delay. Other AXI delays affect only AXI throughput, creating
-    backpressure for the AXI master.
+    backpressure for the AXI manager.
 
 * Throughput: 4 cycles (AXI clock) per transaction.
 * Command FIFO delay: depends on parametrization:

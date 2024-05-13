@@ -114,7 +114,7 @@ Microprocessor clock and reset
      - System clock, running on 100 MHz
    * - ``up_rstn`` 
      - ``input``
-     - System reset, the same as AXI memory map slave interface reset
+     - System reset, the same as AXI memory map subordinate interface reset
 
 PLL reference clock
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

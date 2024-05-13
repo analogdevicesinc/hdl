@@ -159,14 +159,14 @@ ENDFIELD
 
 FIELD
 [10:8]
-RATE[2:0]
+RATE
 RW
 Transceiver primitive control, refer Xilinx documentation.
 ENDFIELD
 
 FIELD
 [5:4]
-SYSCLK_SEL[1:0]
+SYSCLK_SEL
 RW
 For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver refer to
 Xilinx documentation.
@@ -177,7 +177,7 @@ ENDFIELD
 
 FIELD
 [2:0]
-OUTCLK_SEL[2:0]
+OUTCLK_SEL
 RW
 Transceiver primitive control :ref:`Table 2 <axi_adxcvr table_two_label>`,
 refer Xilinx documentation.
@@ -201,7 +201,7 @@ ENDFIELD
 
 FIELD
 [19:16]
-XCVR_TYPE[3:0]
+XCVR_TYPE
 RO
 :git-hdl:`Xilinx encoded values <library/scripts/adi_xilinx_device_info_enc.tcl>`.
 ENDFIELD
@@ -408,7 +408,7 @@ ENDREG
 
 FIELD
 [4:0]
-ES_PRESCALE[4:0]
+ES_PRESCALE
 RW
 Transceiver eye-scan control, refer Xilinx documentation.
 ENDFIELD
@@ -418,7 +418,6 @@ ENDFIELD
 
 REG
 0x002a
-0x00a8
 ES_CONTROL_2
 Transceiver eye-scan Control Register
 ENDREG
@@ -533,13 +532,15 @@ ENDREG
 
 FIELD
 [n]
-ES_RESET
+WHERE n IS FROM 0 TO 31
+ES_RESETn
 RW
 Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n.
 ENDFIELD
 
 ############################################################################################
 ############################################################################################
+
 REG
 0x0030
 TX_DIFFCTRL
@@ -656,222 +657,3 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
-
-TITLE
-Intel XCVR (axi_xcvr)
-INTEL_XCVR
-ENDTITLE
-
-############################################################################################
-############################################################################################
-
-REG
-0x0000
-REG_VERSION
-Version Register
-ENDREG
-
-FIELD
-[31:0]
-VERSION[31:0]
-RO
-Version number.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0001
-REG_ID
-Instance Identification Register
-ENDREG
-
-FIELD
-[31:0]
-ID[31:0]
-RO
-Instance identifier number.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0002
-REG_SCRATCH
-Scratch (GP R/W) Register
-ENDREG
-
-FIELD
-[31:0]
-SCRATCH[31:0]
-RW
-Scratch register.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0004
-RESETN
-Reset Control Register
-ENDREG
-
-FIELD
-[0]
-RESETN
-RW
-If clear, link is held in reset, set this bit to 0x1 to activate link. Note that the reference clock must be active before setting this bit.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0005
-REG_STATUS
-Status Reporting Register
-ENDREG
-
-FIELD
-[0]
-STATUS
-RO
-After setting the RESETN bit above, wait for this bit to set. If set, indicates successful link activation.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0006
-REG_STATUS_32
-Status Reporting Register
-ENDREG
-
-FIELD
-[31:NUM_OF_LANES]
-RESERVED
-RO
-0
-ENDFIELD
-
-FIELD
-[NUM_OF_LANES]
-UP_PLL_LOCKED
-RO
-After setting the RESETN bit above, wait for this bit be to set.
-ENDFIELD
-
-FIELD
-[NUM_OF_LANES-1:0]
-CHANNEL_N_READY
-RO
-After setting the RESETN bit above, wait for this registers to be set.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0007
-REG_FPGA_INFO
-FPGA device information :git-hdl:`Intel Encoded Values <library/scripts/adi_intel_device_info_enc.tcl>`
-ENDREG
-
-FIELD
-[31:24]
-FPGA_TECHNOLOGY
-RO
-Encoded value describing the technology/generation of the FPGA device (e.g., cyclone V, arria 10, stratix 10)
-ENDFIELD
-
-FIELD
-[23:16]
-FPGA_FAMILY
-RO
-Encoded value describing the family variant of the FPGA device(e.g., SX, GX, GT or zynq, kintex, virtex)
-ENDFIELD
-
-FIELD
-[15:8]
-SPEED_GRADE
-RO
-Encoded value describing the FPGA's speed-grade
-ENDFIELD
-
-FIELD
-[7:0]
-DEV_PACKAGE
-RO
-Encoded value describing the device package. The package might affect high-speed interfaces
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0009
-REG_GENERIC_INFO
-Physical layer info
-ENDREG
-
-FIELD
-[31:28]
-RESERVED
-RO
-0
-ENDFIELD
-
-FIELD
-[27:24]
-XCVR_TYPE[3:0]
-RO
-Refers to the transceiver speed grade 0-9.
-ENDFIELD
-
-FIELD
-[23:12]
-RESERVED
-RO
-0
-ENDFIELD
-
-FIELD
-[11:9]
-RESERVED
-RO
-0
-ENDFIELD
-
-FIELD
-[8]
-TX_OR_RX_N
-RO
-Transceiver type (transmit or receive)
-ENDFIELD
-
-FIELD
-[7:0]
-NUM_OF_LANES
-RO
-Physical layer number of lanes.
-ENDFIELD
-
-############################################################################################
-############################################################################################
-
-REG
-0x0050
-REG_FPGA_VOLTAGE
-FPGA device voltage information
-ENDREG
-
-FIELD
-[15:0]
-FPGA_VOLTAGE
-RO
-The voltage of the FPGA device in mv
-ENDFIELD

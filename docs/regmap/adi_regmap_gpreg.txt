@@ -7,8 +7,9 @@ ENDTITLE
 ############################################################################################
 
 REG
-0x0100
-REG_IO_ENB
+0x0100 + 0x16*n
+WHERE n IS FROM 0 TO 15
+IO_ENBn
 IO control register
 ENDREG
 
@@ -23,14 +24,15 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0101
-REG_IO_OUT
+0x0101 + 0x16*n
+WHERE n IS FROM 0 TO 15
+IO_OUTn
 IO output register
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-IO_ENB
+IO_OUT
 RW
 IO output register.
 ENDFIELD
@@ -40,8 +42,9 @@ ENDFIELD
 
 
 REG
-0x0102
-REG_IO_IN
+0x0102 + 0x16*n
+WHERE n IS FROM 0 TO 15
+IO_INn
 IO input register
 ENDREG
 
@@ -56,34 +59,14 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0110
-REG_*
-Channel 1, similar to register 0x100 to 0x10f.
-ENDREG
-
-REG
-0x0120
-REG_*
-Channel 2, similar to register 0x100 to 0x10f.
-ENDREG
-
-REG
-0x01f0
-REG_*
-Channel 15, similar to register 0x100 to 0x10f.
-ENDREG
-
-############################################################################################
-############################################################################################
-
-REG
-0x0200
-REG_CM_RESET
+0x0200 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CM_RESETn
 Reset register
 ENDREG
 
 FIELD
-[0] 0x0
+[0] 0x00000000
 CM_RESET_N
 RW
 Reset register (write a 0x01 to bring core out of reset).
@@ -93,8 +76,9 @@ ENDFIELD
 ############################################################################################
 
 REG
-0x0202
-REG_CM_COUNT
+0x0202 + 0x16*n
+WHERE n IS FROM 0 TO 15
+CM_COUNTn
 Clock count register
 ENDREG
 
@@ -109,26 +93,3 @@ ENDFIELD
 
 ############################################################################################
 ############################################################################################
-
-REG
-0x0210
-REG_*
-Channel 1, similar to register 0x200 to 0x20f.
-ENDREG
-
-REG
-0x0220
-REG_*
-Channel 2, similar to register 0x200 to 0x20f.
-ENDREG
-
-REG
-0x02f0
-REG_*
-Channel 15, similar to register 0x200 to 0x20f.
-ENDREG
-
-############################################################################################
-############################################################################################
-
-

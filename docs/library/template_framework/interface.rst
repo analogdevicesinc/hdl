@@ -31,7 +31,7 @@ Signal Pins
 
    * - Width
      - Name
-     - Direction (Master)
+     - Direction (Manager)
      - Description
    * -
      - ``cmd_ready``

@@ -23,11 +23,11 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v`
+   * - :git-hdl:`library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v`
      - Verilog source for the peripheral.
-   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl`
+   * - :git-hdl:`library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project for the peripheral.
-   * - :git-hdl:`master:library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl`
+   * - :git-hdl:`library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl`
      - TCL script to generate the Quartus IP-integrator project for the peripheral.
 
 Configuration Parameters
@@ -46,7 +46,7 @@ Signal and Interface Pins
      - Synchronous active-low reset.
        Resets the internal state of the peripheral.
    * - s_axi
-     - AXI-Lite bus slave.
+     - AXI-Lite bus subordinate.
        Memory-mapped AXI-lite bus that provides access to modules register map.
    * - irq
      - Level-High Interrupt.
@@ -74,17 +74,6 @@ Register Map
 
 .. hdl-regmap::
    :name: i3c_controller_host_interface
-
-Theory of Operation
---------------------------------------------------------------------------------
-
-FIFOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-Synchronization Events
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 .. _i3c_controller interrupts:
 

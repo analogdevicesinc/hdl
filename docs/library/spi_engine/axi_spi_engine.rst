@@ -5,8 +5,9 @@ AXI SPI Engine Module
 
 .. hdl-component-diagram::
 
-The AXI SPI Engine peripheral allows asynchronous interrupt-driven memory-mapped
-access to a SPI Engine Control Interface.
+The :git-hdl:`AXI SPI Engine <library/spi_engine/axi_spi_engine>` IP core
+allows asynchronous interrupt-driven memory-mapped access to a SPI Engine Control
+Interface.
 This is typically used in combination with a software program to dynamically
 generate SPI transactions.
 
@@ -55,7 +56,7 @@ Signal and Interface Pins
      - Synchronous active-low reset.
        Resets the internal state of the peripheral.
    * - s_axi
-     - AXI-Lite bus slave.
+     - AXI-Lite bus subordinate.
        Memory-mapped AXI-lite bus that provides access to modules register map.
    * - irq
      - Level-High Interrupt.
@@ -64,7 +65,7 @@ Signal and Interface Pins
    * - spi_clk
      - ``spi_resetn`` is synchronous to this clock.
    * - spi_engine_ctrl
-     - :ref:`spi_engine control-interface` slave.
+     - :ref:`spi_engine control-interface` subordinate.
        SPI Engine Control stream that contains commands and data for the
        execution module.
    * - spi_resetn

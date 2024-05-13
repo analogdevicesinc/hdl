@@ -108,12 +108,12 @@ from the interface module.
 Software Guidelines
 --------------------------------------------------------------------------------
 
-Linux is supported also using :git-linux:`master:/`.
+Linux is supported also using :git-linux:`/`.
 
 References
 --------------------------------------------------------------------------------
 
 * :git-hdl:`/`, :git-hdl:`library/axi_ad777x` library.
-* :git-linux:`master:/`.
+* :git-linux:`/`.
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`.
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`.
