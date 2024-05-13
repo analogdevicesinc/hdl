@@ -62,7 +62,7 @@ module axi_ad9747 #(
     // dma interface
     
     output                  dac_div_clk,
-    output                  dac_rst,
+    input                   dac_rst,
     output                  dac_valid,
     output                  dac_enable_0,
     output                  dac_enable_1,
@@ -128,7 +128,7 @@ module axi_ad9747 #(
     // temp: singals used in the AXI IP
     assign up_clk  = s_axi_aclk;
     assign up_rstn = s_axi_aresetn;
-    assign dac_rst = dac_rst_s;
+    //assign dac_rst = dac_rst_s;
 
     // device interface
 
@@ -141,7 +141,7 @@ module axi_ad9747 #(
     .dac_clk_out_n (dac_clk_out_n),
     .dac_data_out_p (dac_data_out_p),
     .dac_data_out_n (dac_data_out_n),
-    .dac_rst (dac_rst_s),
+    .dac_rst (dac_rst),
     .dac_div_clk (dac_div_clk),
     .dac_status (dac_status_s),
     .dac_data_a0 (dac_data_a0_s),
@@ -167,7 +167,7 @@ module axi_ad9747 #(
     .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)
   ) i_core (
     .dac_div_clk (dac_div_clk),
-    .dac_rst (dac_rst_s),
+    .dac_rst (dac_rst),
     .dac_data_a0 (dac_data_a0_s),
     .dac_data_a1 (dac_data_a1_s),
     .dac_data_a2 (dac_data_a2_s),
