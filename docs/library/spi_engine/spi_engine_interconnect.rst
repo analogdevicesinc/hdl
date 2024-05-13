@@ -5,9 +5,9 @@ SPI Engine Interconnect Module
 
 .. hdl-component-diagram::
 
-The SPI Engine Interconnect module allows connecting multiple
-:ref:`spi_engine control-interface` masters to a single
-:ref:`spi_engine control-interface` slave.
+The :git-hdl:`SPI Engine Interconnect <library/spi_engine/spi_engine_interconnect>`
+allows connecting multiple :ref:`spi_engine control-interface` managers to a single
+:ref:`spi_engine control-interface` subordinate.
 This enables multiple command stream generators to connect to a single
 :ref:`spi_engine execution` and consequential give them access to the same SPI bus.
 The interconnect modules take care of properly arbitrating between the different
@@ -54,20 +54,22 @@ Signal and Interface Pins
    * - resetn
      - Synchronous active-low reset.
        Resets the internal state of the module.
-   * - s*_ctrl
-     - :ref:`spi_engine control-interface` slave.
-       | ``s0_ctrl`` connects to the first control interface master.
-       | ``s1_ctrl`` connects to the second control interface master.
+   * - s0_ctrl
+     - | :ref:`spi_engine control-interface` subordinate.
+       | Connects to the first control interface manager.
+   * - s1_ctrl
+     - | :ref:`spi_engine control-interface` subordinate.
+       | Connects to the second control interface manager.
    * - m_ctrl
-     - | :ref:`spi_engine control-interface` master.
-       | Connects to the control interface slave.
+     - | :ref:`spi_engine control-interface` manager.
+       | Connects to the control interface subordinate.
 
 Theory of Operation
 --------------------------------------------------------------------------------
 
 The SPI Engine Interconnect module has multiple
-:ref:`spi_engine control-interface` slave ports and a single
-:ref:`spi_engine control-interface` master port.
+:ref:`spi_engine control-interface` subordinate ports and a single
+:ref:`spi_engine control-interface` manager port.
 It can be used to connect multiple command stream generators to a single command
 execution engine. Arbitration between the streams is done on a priority
 basis, streams with a lower index have higher priority. This means if commands

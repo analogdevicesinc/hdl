@@ -167,7 +167,7 @@ The link layer interface description can be found in the
 Clock Monitor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The ``REG_STATUS`` (``0x054``) register ``CLK_FREQ`` field allows to determine
+The ``STATUS`` (``0x054``) register ``CLK_FREQ`` field allows to determine
 the clock rate of the device clock (``link_clk``) relative to the AXI interface
 clock (``s_axi_aclk``). This can be used to verify that the device clock is
 running at the expected rate.
@@ -189,9 +189,9 @@ PRBS logic.
 The external synchronization signal should be synchronous with the DAC clock.
 Synchronization will be done on the rising edge of the signal.
 
-The self clearing ``SYNC`` control bit from the ``REG_CNTRL_1`` (``0x44``)
+The self clearing ``SYNC`` control bit from the ``CNTRL_1`` (``0x44``)
 register will arm the trigger logic to wait for the external sync signal. The
-``DAC_SYNC_STATUS`` status bit from the ``REG_SYNC_STATUS`` (``0x68``) register
+``DAC_SYNC_STATUS`` status bit from the ``SYNC_STATUS`` (``0x68``) register
 will show that the synchronization is armed but the synchronization signal has
 not yet been received.
 

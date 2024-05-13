@@ -9,18 +9,18 @@ synchronization points as well as the SPI bus transmit and receive data.
 
 The interface consists of four streams:
 
-* The CMD stream which carries the SPI Engine commands. (Master to Slave)
+* The CMD stream which carries the SPI Engine commands. (Manager to Subordinate)
 * The SDO stream which carries the to be transmitted data for the SPI bus.
-  (Master to Slave)
-* The SDI stream which carries the received data from the SPI bus. (Slave to
-  Master)
-* The SYNC stream which carries the synchronization events. (Slave to Master)
+  (Manager to Subordinate)
+* The SDI stream which carries the received data from the SPI bus. (Subordinate to
+  Manager)
+* The SYNC stream which carries the synchronization events. (Subordinate to Manager)
 
 Each of the streams has a valid, ready and data signal. They follow the
-handshaking protocol as defined by the AXI standard. Meaning the master asserts
-valid when the data on the data signal is valid and the slave asserts ready when
-it is able to accept new data. If both valid and ready are asserted at the same
-time the data has been transmitted from the master to the slave.
+handshaking protocol as defined by the AXI standard. Meaning the manager asserts
+valid when the data on the data signal is valid and the subordinate asserts ready
+when it is able to accept new data. If both valid and ready are asserted at the same
+time the data has been transmitted from the manager to the subordinate.
 
 Files
 --------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Signal Pins
 
    * - Width
      - Name
-     - Direction (Master)
+     - Direction (Manager)
      - Description
    * -
      - ``cmd_ready``
