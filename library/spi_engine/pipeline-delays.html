@@ -152,7 +152,14 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
@@ -160,16 +167,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
@@ -307,17 +314,17 @@ cycles.</p></li>
 <section id="interconnect-module">
 <h3>Interconnect Module<a class="headerlink" href="#interconnect-module" title="Permalink to this heading">#</a></h3>
 <p>All the delays measured for this module are in terms of SPI Engine clock cycles.</p>
-<p>The interconnect will only accept one master at a time, and will wait until a
-sync handshake back to the master is completed to free the channel.</p>
+<p>The interconnect will only accept one manager at a time, and will wait until a
+sync handshake back to the manager is completed to free the channel.</p>
 <ul class="simple">
 <li><p>Command valid input to command valid output (s0/s1 to m): 1 cycle if idle, 0
 if already “owned” by the source (s0 or s1).</p></li>
-<li><p>Sync valid from m side to s0/s1 sync valid (back to originating master): 0
+<li><p>Sync valid from m side to s0/s1 sync valid (back to originating manager): 0
 cycle.</p></li>
 <li><p>Sync ready to idle (delay after finishing transaction response): 1 cycle</p></li>
-<li><p>Thus, 2 cycles per command minimum if changing masters, 3 if accounting for
+<li><p>Thus, 2 cycles per command minimum if changing managers, 3 if accounting for
 sync (this is the worst case).</p></li>
-<li><p>1 cycle per command (can accept back to back) if from same master.</p></li>
+<li><p>1 cycle per command (can accept back to back) if from same manager.</p></li>
 <li><p>Thus, <span class="math notranslate nohighlight">\(2+N_{cmd}\)</span> minimum cycles per <span class="math notranslate nohighlight">\(N_{cmd}\)</span> “burst” from same
 source.</p></li>
 <li><p>s0/s1_sdo_valid to m_sdo_valid:  0 if already “owned” by the source (s0 or
@@ -352,7 +359,7 @@ Transfer instruction finishes and the next command is accepted).</p></li>
 <ul>
 <li><p>Meaning: if counting delay to other parts of the design (e.g. command fifo),
 this is the AXI delay. Other AXI delays affect only AXI throughput, creating
-backpressure for the AXI master.</p></li>
+backpressure for the AXI manager.</p></li>
 </ul>
 </li>
 <li><p>Throughput: 4 cycles (AXI clock) per transaction.</p></li>

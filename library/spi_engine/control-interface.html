@@ -145,7 +145,14 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
@@ -153,16 +160,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
@@ -231,18 +238,18 @@ cores within the SPI Engine framework. It is used to exchange the commands and
 synchronization points as well as the SPI bus transmit and receive data.</p>
 <p>The interface consists of four streams:</p>
 <ul class="simple">
-<li><p>The CMD stream which carries the SPI Engine commands. (Master to Slave)</p></li>
+<li><p>The CMD stream which carries the SPI Engine commands. (Manager to Subordinate)</p></li>
 <li><p>The SDO stream which carries the to be transmitted data for the SPI bus.
-(Master to Slave)</p></li>
-<li><p>The SDI stream which carries the received data from the SPI bus. (Slave to
-Master)</p></li>
-<li><p>The SYNC stream which carries the synchronization events. (Slave to Master)</p></li>
+(Manager to Subordinate)</p></li>
+<li><p>The SDI stream which carries the received data from the SPI bus. (Subordinate to
+Manager)</p></li>
+<li><p>The SYNC stream which carries the synchronization events. (Subordinate to Manager)</p></li>
 </ul>
 <p>Each of the streams has a valid, ready and data signal. They follow the
-handshaking protocol as defined by the AXI standard. Meaning the master asserts
-valid when the data on the data signal is valid and the slave asserts ready when
-it is able to accept new data. If both valid and ready are asserted at the same
-time the data has been transmitted from the master to the slave.</p>
+handshaking protocol as defined by the AXI standard. Meaning the manager asserts
+valid when the data on the data signal is valid and the subordinate asserts ready
+when it is able to accept new data. If both valid and ready are asserted at the same
+time the data has been transmitted from the manager to the subordinate.</p>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
 <div class="table-wrapper docutils container">
@@ -273,7 +280,7 @@ time the data has been transmitted from the master to the slave.</p>
 <thead>
 <tr class="row-odd"><th class="head"><p>Width</p></th>
 <th class="head"><p>Name</p></th>
-<th class="head"><p>Direction (Master)</p></th>
+<th class="head"><p>Direction (Manager)</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>

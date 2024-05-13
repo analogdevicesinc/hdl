@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ADC JESD204B/C Transport Peripheral &#8212; HDL  documentation</title>
+    <title>Generic AXI ADC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=b4b07c60" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="DAC JESD204B/C Transport Peripheral" href="../ad_ip_jesd204_tpl_dac/index.html" />
-    <link rel="prev" title="JESD204B/C Link Receive Peripheral" href="../axi_jesd204_rx/index.html" />
+    <link rel="next" title="Generic AXI DAC" href="../axi_dac/index.html" />
+    <link rel="prev" title="Microprocessor interface" href="../up_if.html" />
    
   
     <meta name="robots" content="noindex">
@@ -100,36 +100,20 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADC JESD204B/C Transport Peripheral</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#">Generic AXI ADC</a><ul>
 <li><a class="reference internal" href="#files">Files</a></li>
-<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
-<li><a class="reference internal" href="#synthesis-configuration-parameters">Synthesis Configuration Parameters</a></li>
-<li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
-<li><a class="reference internal" href="#register-map">Register Map</a></li>
-<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
-<li><a class="reference internal" href="#interfaces-and-signals">Interfaces and Signals</a><ul>
-<li><a class="reference internal" href="#configuration-interface">Configuration Interface</a></li>
-<li><a class="reference internal" href="#link-layer-interface">Link layer interface</a></li>
-<li><a class="reference internal" href="#application-layer-interface">Application layer interface</a></li>
-<li><a class="reference internal" href="#clock-monitor">Clock Monitor</a></li>
-<li><a class="reference internal" href="#data-formatter">Data Formatter</a></li>
-<li><a class="reference internal" href="#prbs-check">PRBS Check</a></li>
-<li><a class="reference internal" href="#external-synchronization">External synchronization</a></li>
+<li><a class="reference internal" href="#architecture">Architecture</a><ul>
+<li><a class="reference internal" href="#receive-phy">Receive PHY</a></li>
+<li><a class="reference internal" href="#adc-channel">ADC Channel</a></li>
+<li><a class="reference internal" href="#adc-core">ADC Core</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a><ul>
+<li><a class="reference internal" href="#typical-register-map-base-addresses">Typical Register Map base addresses</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#software-support">Software Support</a></li>
-<li><a class="reference internal" href="#restrictions">Restrictions</a></li>
-<li><a class="reference internal" href="#supported-devices">Supported Devices</a><ul>
-<li><a class="reference internal" href="#jesd204b-analog-to-digital-converters">JESD204B Analog-to-Digital Converters</a></li>
-<li><a class="reference internal" href="#jesd204b-rf-transceivers">JESD204B RF Transceivers</a></li>
-<li><a class="reference internal" href="#jesd204b-c-mixed-signal-front-ends">JESD204B/C Mixed-Signal Front Ends</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#more-information">More Information</a></li>
-<li><a class="reference internal" href="#technical-support">Technical Support</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -166,59 +150,59 @@ Content on this topic
 <div class="toc-tree">
   <html>
   <body><ul class="current">
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/introduction.html">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository.html">Git repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl.html">Build an HDL project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture.html">HDL architecture</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../architecture.html">HDL architecture</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/porting_project.html">Porting reference designs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/third_party.html">Third party forks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../third_party.html">Third party forks</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/index.html">AXI DMAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_core.html">Core Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/interface.html">Interface</a></li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../../library/index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/i3c_controller/interface.html">Interface</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">ADC JESD204B/C Transport Peripheral</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_execution.html">Execution Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/axi_spi_engine.html">AXI Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_offload.html">Offload Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/control-interface.html">Control Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
 </ul>
@@ -258,475 +242,258 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="adc-jesd204b-c-transport-peripheral">
-<span id="ad-ip-jesd204-tpl-adc"></span><h1>ADC JESD204B/C Transport Peripheral<a class="headerlink" href="#adc-jesd204b-c-transport-peripheral" title="Permalink to this heading">#</a></h1>
-<div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 522.0 282" width="522.0" height="282"><style>
-                a {
-                    text-decoration: none;
-                }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="486.0" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">link_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">link_sof</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">adc_dovf</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">adc_sync_in</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">adc_sync_manual_req_in</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-link"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="54">link</text></a><g transform="translate(504.0,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="78">enable</text></a><g transform="translate(504.0,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="102">adc_valid</text></a><g transform="translate(504.0,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="126">adc_data</text></a><g transform="translate(504.0,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="150">adc_sync_manual_req_out</text></a><g transform="translate(504.0,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="486.0" y="174">adc_rst</text></a><g transform="translate(504.0,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="486.0" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="261.0" y="266">ad_ip_jesd204_tpl_adc</text></svg></section>
-</div><p>The ADC JESD204B/C Transport Peripheral implements the transport level handling
-of a JESD204B/C transmitter device. It is compatible with a
-<a class="reference internal" href="#ad-ip-jesd204-tpl-adc-supported-devices"><span class="std std-ref">wide range of Analog Devices high-speed analog-to-digital converters</span></a>.</p>
-<p>The core handles the JESD204B/C deframing of the payload data.</p>
-<p>The peripheral can be configured at runtime through a AXI4-Lite memory mapped
-register map.</p>
-<section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>ADI high-speed ADC compatible JESD204B/C data deframing;</p></li>
-<li><p>Test-pattern checker;</p></li>
-<li><p>Per-channel data formatting (sign extension, two’s complement to offset
-binary);</p></li>
-<li><p>Runtime reconfigurability through memory-mapped register interface
-(AXI4-Lite).</p></li>
-</ul>
-</section>
+  <section id="generic-axi-adc">
+<span id="axi-adc"></span><h1>Generic AXI ADC<a class="headerlink" href="#generic-axi-adc" title="Permalink to this heading">#</a></h1>
+<p>This page presents a generic framework, which is used to design
+and develop an AXI based IP core for interfacing an Analog to Digital Converter
+(ADC) device with a high speed serial (JESD204B) or source synchronous parallel
+interface (LVDS/CMOS).
+This is a generic framework, there can be minor differences on each and every IP,
+the user should study this wiki page along with the IP’s wiki page.</p>
+<p>The main role of this page to ease the understanding of each ADC IP, and to
+provide a base knowledge which can be used to develop new IPs for currently
+unsupported devices.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Any kind of feedback regarding the ADC IP architecture or the following
+document is highly appreciated and can be addressed through the <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>
+community forum.</p>
+</div>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v">ad_ip_jesd204_tpl_adc.v</a></p>
-</section>
-<section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="../../../_images/ad_ip_jesd204_transport_adc.svg" class="align-center" src="../../../_images/ad_ip_jesd204_transport_adc.svg" /></section>
-<section id="synthesis-configuration-parameters">
-<h2>Synthesis Configuration Parameters<a class="headerlink" href="#synthesis-configuration-parameters" title="Permalink to this heading">#</a></h2>
-<div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Default Value</p></th>
-<th class="head"><p>Choices/Range</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
-<td class="description"><section>
-<p>Instance identification number.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/up_adc_common.v">library/common/up_adc_common.v</a></p></td>
+<td><p>Verilog source for the ADC Common regmap.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
-<td class="description"><p>Fpga Technology.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p>Unknown (0), 7series (1), ultrascale (2), ultrascale+ (3), versal (4)</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
-<td class="description"><p>Fpga Family.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p>Unknown (0), artix (1), kintex (2), virtex (3), zynq (4), versalprime (5), versalaicore (6), versalpremium (7)</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
-<td class="description"><p>Speed Grade.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p>Unknown (0), -1 (10), -1L (11), -1H (12), -1HV (13), -1LV (14), -2 (20), -2L (21), -2LV (22), -2MP (23), -2LVC (24), -2LVI (25), -3 (30)</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
-<td class="description"><p>Dev Package.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p>Unknown (0), rf (1), fl (2), ff (3), fb (4), hc (5), fh (6), cs (7), cp (8), ft (9), fg (10), sb (11), rb (12), rs (13), cl (14), sf (15), ba (16), fa (17), fs (18), fi (19), vs (20), ls (21)</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code></td>
-<td class="description"><section>
-<p>Number of lanes supported by the peripheral. Equivalent to JESD204 <code class="docutils literal notranslate"><span class="pre">L</span></code> parameter.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p>1, 2, 3, 4, 6, 8, 12, 16, 24, 32</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_CHANNELS</span></code></td>
-<td class="description"><section>
-<p>Number of converters supported by the peripheral. Equivalent to JESD204 <code class="docutils literal notranslate"><span class="pre">M</span></code> parameter.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
-<td class="range"><p>1, 2, 4, 6, 8, 16, 32, 64</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SAMPLES_PER_FRAME</span></code></td>
-<td class="description"><section>
-<p>Number of samples per frame. Equivalent to JESD204 <code class="docutils literal notranslate"><span class="pre">S</span></code> parameter.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p>1, 2, 3, 4, 6, 8, 12, 16</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CONVERTER_RESOLUTION</span></code></td>
-<td class="description"><section>
-<p>Resolution of the converter. Equivalent to JESD204 <code class="docutils literal notranslate"><span class="pre">N</span></code> parameter.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">14</span></code></td>
-<td class="range"><p>8, 11, 12, 14, 16</p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">BITS_PER_SAMPLE</span></code></td>
-<td class="description"><section>
-<p>Number of bits per sample. Equivalent to JESD204 <code class="docutils literal notranslate"><span class="pre">NP</span></code> parameter.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">16</span></code></td>
-<td class="range"><p>8, 12, 16</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DMA_BITS_PER_SAMPLE</span></code></td>
-<td class="description"><p>DMA Bits per Sample.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">16</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">OCTETS_PER_BEAT</span></code></td>
-<td class="description"><section>
-<p>Number of bytes per beat for each link.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
-<td class="range"><p>4, 6, 8, 12, 16, 32, 64</p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EN_FRAME_ALIGN</span></code></td>
-<td class="description"><p>En Frame Align.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TWOS_COMPLEMENT</span></code></td>
-<td class="description"><section>
-<p>PRBS data format.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
-<td class="description"><p>Enable external sync.</p></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PN7_ENABLE</span></code></td>
-<td class="description"><section>
-<p>Enable PN7 check.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">PN15_ENABLE</span></code></td>
-<td class="description"><section>
-<p>Enable PN15 check.</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-<td class="range"><p></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/up_adc_channel.v">library/common/up_adc_channel.v</a></p></td>
+<td><p>Verilog source for the ADC Channel regmap.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-</div></section>
-<section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
-<div><section id="bus-interface-s_axi">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="82c0ff44213726cd552f14c06642543283db4787" name="82c0ff44213726cd552f14c06642543283db4787" type="checkbox"></input><label for="82c0ff44213726cd552f14c06642543283db4787"><div><p>s_axi</p>
-<section>
-<p>Memory mapped AXI-lite bus that provides access to modules register map.</p>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading">#</a></h2>
+<p>The main function of an AXI ADC IP is to handle all the low level signalling,
+which is defined by the device’s digital data interface, and to forward the
+received data to a more simple FIFO interface. Beside this functionality there
+are a few processing modules inside the data path of the core, which can be used
+for signal conditioning. All these processing modules are optional, the are
+enabled or disabled by setting the appropriate parameters.
+The following block diagram presents a generic AXI ADC IP cores data path.</p>
+<img alt="AXI ADC Datapath" src="../../../_images/adc_datapath.svg" /><section id="receive-phy">
+<h3>Receive PHY<a class="headerlink" href="#receive-phy" title="Permalink to this heading">#</a></h3>
+<p>The most important part of the core is the Receive PHY module.
+This module contains all the IO primitive instantiations and all the control
+logic required to receive data from the device.</p>
+<p>Currently the Receive PHY supports two different receive interface:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/ssd_if">Source synchronous (CMOS or LVDS) interface</a></p></li>
+<li><p><a class="reference internal" href="../../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a> <a class="footnote-reference brackets" href="#f1" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+</ul>
+<p>All these interfaces are supported on both Altera (Intel) and Xilinx devices.</p>
+<p>This module is perfect choice for those, who wants a HDL logic for the device
+interface, with a minimal resource footprint.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="f1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>The receive module contains just the Transport Layer of the JESD204B
+interface. Lower layers are implemented by other cores.</p>
+</aside>
+</aside>
 </section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
+<section id="adc-channel">
+<span id="axi-adc-adc-channel"></span><h3>ADC Channel<a class="headerlink" href="#adc-channel" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Data format module</p></li>
+<li><p>DC Offset correction module</p></li>
+<li><p>IQ correction module</p></li>
+<li><p>PN Monitor</p></li>
+</ul>
+</section>
+<section id="adc-core">
+<h3>ADC Core<a class="headerlink" href="#adc-core" title="Permalink to this heading">#</a></h3>
+<p>The ADC core is the top file of the IP core, the naming convention of this file
+is: <code class="docutils literal notranslate"><span class="pre">axi_&lt;device_name&gt;.v</span></code>.
+Here are instantiated all the internal module discussed above, and a wrapper
+module (up_axi), which converts the AXI interface into a more simplistic
+addressable, memory mapped interface, so called <a class="reference internal" href="../up_if.html#up-if"><span class="std std-ref">Microprocessor interface</span></a> or uP interface.
+This interface is used to interconnect the different memory mapped module pieces.</p>
+</section>
+</section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<p>A generic AXI ADC core have at least three different interfaces:</p>
+<ul class="simple">
+<li><p>The physical data interface (<a class="reference external" href="https://en.wikipedia.org/wiki/LVDS">LVDS</a> or
+<a class="reference external" href="https://en.wikipedia.org/wiki/CMOS">CMOS</a>) or the JESD204B data interface
+from the link layer.</p></li>
+<li><p>Read FIFO interface of the receiver or sink module (e.g. DMA).</p></li>
+<li><p>AXI Slave Memory Mapped interface for register map access.</p></li>
+</ul>
+<div class="table-wrapper docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">LVDS or CMOS RX interface</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
-<td><p>in [12:0]</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Type</p></td>
+<td><p>Description</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
-<td><p>in [2:0]</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_clk_in_[p|n]</span></code></p></td>
+<td><p>clock input</p></td>
+<td><p>clock input</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_data_in_[p|n]</span></code></p></td>
+<td><p>input[resolution-1:0]</p></td>
+<td><p>parallel data input</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_frame_in_[p|n]</span></code></p></td>
+<td><p>input</p></td>
+<td><p>frame input signal (optional/device specific)</p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
-<td><p>in [3:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
-<td><p>out [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
-<td><p>in [12:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
-<td><p>in [2:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
-<td><p>out [31:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
-<td><p>out [1:0]</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_or_in_[p|n]</span></code></p></td>
+<td><p>input</p></td>
+<td><p>over range input (optional/device specific)g</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
-<section id="bus-interface-s_axi_aclk">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="083ee6587f028a97dc84183d58008d584ae40dc6" name="083ee6587f028a97dc84183d58008d584ae40dc6" type="checkbox"></input><label for="083ee6587f028a97dc84183d58008d584ae40dc6"><div><p>s_axi_aclk</p>
-<section>
-<p>All <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> signals are synchronous to this clock.</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
+<div class="table-wrapper docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">JESD RX interface</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Type</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_clk</span></code></p></td>
+<td><p>clock inputg</p></td>
+<td><p>core clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_sof</span></code></p></td>
+<td><p>input[3:0]g</p></td>
+<td><p>start of frame signal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_data</span></code></p></td>
+<td><p>input[DW-1:0]</p></td>
+<td><p>data input; <code class="docutils literal notranslate"><span class="pre">DW=32*MAX_LANE_NO</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rx_ready</span></code></p></td>
+<td><p>outputg</p></td>
+<td><p>ready, core always ready (tied to HIGH)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rx_valid</span></code></p></td>
+<td><p>inputg</p></td>
+<td><p>data validg</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
-<section id="bus-interface-s_axi_aresetn">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="406c13ce5361a5c16903c582326efc6411d6fb45" name="406c13ce5361a5c16903c582326efc6411d6fb45" type="checkbox"></input><label for="406c13ce5361a5c16903c582326efc6411d6fb45"><div><p>s_axi_aresetn</p>
-<section>
-<p>Resets the internal state of the peripheral.</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
+<div class="table-wrapper docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Write FIFO interface</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Type</p></td>
+<td><p>Description</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adc_clk</span></code></p></td>
+<td><p>clock output</p></td>
+<td><p>Interface’s clock signal</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adc_enable_0</span></code></p></td>
+<td><p>output</p></td>
+<td><p>Enable signal for the first channel, asserted if channel is active</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adc_valid_0</span></code></p></td>
+<td><p>output</p></td>
+<td><p>Data valid signal for the first channel, to validate data on the bus</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adc_data_0</span></code></p></td>
+<td><p>input[DW-1:0]</p></td>
+<td><p>Data signal for the first channel</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adc_enable_x</span></code></p></td>
+<td><p>output</p></td>
+<td><p>Enable signal for the channel x, asserted if channel is active</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adc_valid_x</span></code></p></td>
+<td><p>output</p></td>
+<td><p>Data valid signal for the channel x, to validate data on the bus</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adc_data_x</span></code></p></td>
+<td><p>output[DW-1:0]</p></td>
+<td><p>Data signal for the channel x</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">adc_dovf</span></code></p></td>
+<td><p>input</p></td>
+<td><p>Data overflow signal from the receiver or sink module (e.g DMA)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adc_dunf</span></code></p></td>
+<td><p>input</p></td>
+<td><p>Data underflow signal from the receiver or sink module (e.g DMA)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
-<section id="bus-interface-link">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="f3c2201ed826fb1f8ffb252e4a147d4b4b055c8f" name="f3c2201ed826fb1f8ffb252e4a147d4b4b055c8f" type="checkbox"></input><label for="f3c2201ed826fb1f8ffb252e4a147d4b4b055c8f"><div><p>link</p>
-<section>
-<p>link_data: JESD204 link data interface (link layer interface).</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
+<div class="table-wrapper docutils container" id="id5">
+<table class="docutils align-default" id="id5">
+<caption><span class="caption-text">AXI Memory Map Slave</span><a class="headerlink" href="#id5" title="Permalink to this table">#</a></caption>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">link_ready</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p>Pin</p></td>
+<td><p>Type</p></td>
+<td><p>Description</p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">link_valid</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">link_data</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
-<td><p>in [31:0]</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">s_axi_*</span></code></p></td>
+<td></td>
+<td><p>Standard AXI Slave Memory Map interface for register map access</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</div>
-</section>
-<section id="ports">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="e4f6f3fea61ecb99966b5341350c471d168609eb" name="e4f6f3fea61ecb99966b5341350c471d168609eb" type="checkbox"></input><label for="e4f6f3fea61ecb99966b5341350c471d168609eb"><p>Ports</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">link_clk</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a> for the JESD204B interface of the Link Layer Interface. Must be line clock/40 for correct 204B operation. Must be line clock/66 for correct 64b66b 204C operation. Bus <code class="docutils literal notranslate"><span class="pre">link</span></code> is synchronous to this clock domain.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">link_sof</span></code></td>
-<td><p>in [3:0]</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">enable</span></code></td>
-<td><p>out [3:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Channel enable indicator of the Application layer Interface</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_valid</span></code></td>
-<td><p>out [3:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Qualifier signal for each channel of the Application layer interface. Always ‘1’.</p>
-</section>
-</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_data</span></code></td>
-<td><p>out [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Raw application layer data, every channel concatenated (Application layer interface).</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_dovf</span></code></td>
-<td><p>in</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Application layer overflow of the Application layer interface.</p>
-</section>
-</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_sync_in</span></code></td>
-<td><p>in</p></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_sync_manual_req_out</span></code></td>
-<td><p>out</p></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_sync_manual_req_in</span></code></td>
-<td><p>in</p></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_rst</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-</div><p>The S_AXI interface is synchronous to the s_axi_aclk clock. All other signals
-and interfaces are synchronous to the device_clk clock.</p>
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<p>The following block diagram presents the different register maps physical
+location in the core. These register maps are generic and can be found in each
+AXI ADC core.</p>
+<img alt="AXI ADC Register Map" src="../../../_images/adc_regmap.svg" /><p>The base and <strong>ADC common</strong> register map is implemented in the same verilog file.
+It contains registers which controls and monitors the overall core, like:</p>
+<ul class="simple">
+<li><p>Reset bits</p></li>
+<li><p>Attributes of the receiver interface module</p></li>
+<li><p>DRP (Dynamic Reconfiguration Port) access for different IO resources (Clock
+Management Units, PLLs, Gigabit Transceivers etc.)</p></li>
+<li><p>Status registers (PN Monitor status, frequency of the interface clock)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ADC Common register map is implemented in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/up_adc_common.v">library/common/up_adc_common.v</a> verilog file.
+To find the instantiation of this module search for <code class="docutils literal notranslate"><span class="pre">up_adc_common</span></code> inside
+the IP’s directory.</p>
+</div>
+<p>The ADC Channel register map controls and monitors channel specific attributes.
+Each channel of the core has an individual channel register map. It contains all
+the registers, which are necessary to control and monitor the processing modules
+of the data path. For detailed description of the available processing modules
+see <a class="reference internal" href="#axi-adc-adc-channel"><span class="std std-ref">ADC Channel</span></a> section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ADC Channel register map is implemented in the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/up_adc_channel.v">library/common/up_adc_channel.v</a> verilog file.
+To find the instantiation of this module search for <code class="docutils literal notranslate"><span class="pre">up_adc_channel</span></code> inside
+the IP’s directory.</p>
+</div>
+<section id="typical-register-map-base-addresses">
+<h3>Typical Register Map base addresses<a class="headerlink" href="#typical-register-map-base-addresses" title="Permalink to this heading">#</a></h3>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-COMMON">
 <div class="collapsible docutils container">
@@ -2329,219 +2096,62 @@ and interfaces are synchronous to the device_clk clock.</p>
 </div>
 </section>
 </section>
-</div></section>
-<section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
-<section id="interfaces-and-signals">
-<h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Permalink to this heading">#</a></h3>
-<section id="configuration-interface">
-<h4>Configuration Interface<a class="headerlink" href="#configuration-interface" title="Permalink to this heading">#</a></h4>
-<p>The Peripheral features a register map configuration interface that can be
-accessed through the AXI4-Lite <code class="docutils literal notranslate"><span class="pre">S_AXI</span></code> port. The register map can be used to
-configure the Peripheral’s operational parameters, query the current status of
-the device and query the features supported by the device.</p>
-</section>
-<section id="link-layer-interface">
-<h4>Link layer interface<a class="headerlink" href="#link-layer-interface" title="Permalink to this heading">#</a></h4>
-<p>The link layer interface description can be found in the
-<a class="reference internal" href="../axi_jesd204_rx/index.html#axi-jesd204-rx-user-data"><span class="std std-ref">User Data Interface</span></a> section of the
-<a class="reference internal" href="../axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a> IP.</p>
-</section>
-<section id="application-layer-interface">
-<h4>Application layer interface<a class="headerlink" href="#application-layer-interface" title="Permalink to this heading">#</a></h4>
-<p>The application layer is connected to the deframer block output. The deframer
-module creates sample data from the lane mapped and formatted JESD204 link data
-based on the specified deframer configuration.</p>
-<p>The data in the application layer interface <code class="docutils literal notranslate"><span class="pre">adc_data</span></code> has the following
-layout:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">MSB</span>                                                               <span class="n">LSB</span>
-<span class="p">[</span> <span class="n">MmSn</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">MmS1</span><span class="p">,</span> <span class="n">MnS0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">M1Sn</span><span class="p">,</span> <span class="o">...</span> <span class="n">M1S1</span><span class="p">,</span> <span class="n">M1S0</span><span class="p">,</span> <span class="n">M0Sn</span><span class="p">,</span> <span class="o">...</span> <span class="n">M0S1</span><span class="p">,</span> <span class="n">M0S0</span> <span class="p">]</span>
-</pre></div>
-</div>
-<p>Where MjSi refers to the i-th sample of the j-th converter. With m being the
-number of converters and n the number of samples per converter per beat.</p>
-<p>The core asserts the <code class="docutils literal notranslate"><span class="pre">enable</span></code> signal for each channel that is enabled by the
-software.</p>
-</section>
-<section id="clock-monitor">
-<h4>Clock Monitor<a class="headerlink" href="#clock-monitor" title="Permalink to this heading">#</a></h4>
-<p>The <code class="docutils literal notranslate"><span class="pre">STATUS</span></code> (<code class="docutils literal notranslate"><span class="pre">0x054</span></code>) register <code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code> field allows to determine
-the clock rate of the device clock (<code class="docutils literal notranslate"><span class="pre">link_clk</span></code>) relative to the AXI interface
-clock (<code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code>). This can be used to verify that the device clock is
-running at the expected rate.</p>
-<p>The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
-clock, this corresponds to a resolution of 1.523kHz per LSB. A raw value of 0
-indicates that the link clock is currently not active.</p>
-</section>
-<section id="data-formatter">
-<h4>Data Formatter<a class="headerlink" href="#data-formatter" title="Permalink to this heading">#</a></h4>
-<p>The component is configured by the <code class="docutils literal notranslate"><span class="pre">CHAN_CNTRL</span></code> register
-<code class="docutils literal notranslate"><span class="pre">FORMAT_SIGNEXT,FORMAT_TYPE,FORMAT_ENABLE</span></code> fields. The block introduces one
-clock cycle latency.</p>
-</section>
-<section id="prbs-check">
-<h4>PRBS Check<a class="headerlink" href="#prbs-check" title="Permalink to this heading">#</a></h4>
-<p>The block can monitor and compare the incoming deframed raw data against
-PN9, PN23 and PN7, PN15 (if enabled) patterns selected by the <code class="docutils literal notranslate"><span class="pre">ADC_PN_SEL</span></code>
-field of <code class="docutils literal notranslate"><span class="pre">CHAN_CNTRL_3</span></code> register.</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
+</div><div><section id="hdl-regmap">
+<section id="hdl-regmap-IO_DELAY_CNTRL">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="097ed4b93619eb3706e865145e11b37a97522a7e" name="097ed4b93619eb3706e865145e11b37a97522a7e" type="checkbox"></input><label for="097ed4b93619eb3706e865145e11b37a97522a7e"><p>IO Delay Control (axi_ad*) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>ADC_PN_SEL</p></th>
-<th class="head"><p>PN</p></th>
-<th class="head"><p>ENABLE</p></th>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>0</p></td>
-<td><p>PN9</p></td>
-<td><p>1</p></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_n</span></code></td>
+<td class="description bold"><section>
+<p>Delay Control &amp; Status Where n is from 0 to 15.</p>
+</section>
+</td>
 </tr>
-<tr class="row-odd"><td><p>1</p></td>
-<td><p>PN23</p></td>
-<td><p>1</p></td>
-</tr>
-<tr class="row-even"><td><p>4</p></td>
-<td><p>PN7</p></td>
-<td><p>PN7_ENABLE</p></td>
-</tr>
-<tr class="row-odd"><td><p>5</p></td>
-<td><p>PN15</p></td>
-<td><p>PN15_ENABLE</p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_IO_n</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Tap value for input/output delay primitive of the n’th interface line. If the delay controller is not locked (indicate issues with delay_clk), the read-back value of this register will be 0xFFFFFFFF.  Otherwise will be the last set up value.</p>
+</section>
+</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Before performing these tests you need to make sure that the ADC OUTPUT FORMAT
-is set according to the <code class="docutils literal notranslate"><span class="pre">TWOS_COMPLEMENT</span></code> synthesis parameter.</p>
-<p>For each channel, mismatches are reported in <code class="docutils literal notranslate"><span class="pre">PN_ERR</span></code> and <code class="docutils literal notranslate"><span class="pre">PN_OOS</span></code> fields of
-the <code class="docutils literal notranslate"><span class="pre">CHAN_STATUS</span></code> register.</p>
-</section>
-<section id="external-synchronization">
-<h4>External synchronization<a class="headerlink" href="#external-synchronization" title="Permalink to this heading">#</a></h4>
-<p>An external synchronization signal <code class="docutils literal notranslate"><span class="pre">adc_sync_in</span></code> can be used to trigger data
-movement from the link layer to user application layer.</p>
-<p>The external synchronization signal should be synchronous with the ADC clock.
-Synchronization will be done on the rising edge of the signal.</p>
-<p>The self clearing <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> control bit from the <code class="docutils literal notranslate"><span class="pre">CNTRL</span> <span class="pre">(0x44)</span></code> register,
-will arm the trigger logic to wait for the external sync signal. The
-<code class="docutils literal notranslate"><span class="pre">ADC_SYNC</span></code> status bit from <code class="docutils literal notranslate"><span class="pre">SYNC_STATUS</span> <span class="pre">(0x68)</span></code> register, will show that
-the synchronization is armed, but the synchronization signal has not yet been
-received.</p>
-<p>Once the sync signal is received, the data will start to flow and the
-<code class="docutils literal notranslate"><span class="pre">ADC_SYNC</span></code> status bit will reflect that with a deassertion.</p>
-<p>While the synchronization mechanism is armed, the <code class="docutils literal notranslate"><span class="pre">adc_rst</span></code> output signal is
-set such that downstream logic can be cleared, to have a fresh start once the
-trigger is received.</p>
-</section>
-</section>
-</section>
-<section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>To ensure correct operation, it is highly recommended to use the
-Analog Devices provided JESD204B/C software packages for interfacing the
-peripheral. Analog Devices is not able to provide support in case issues arise
-from using custom low-level software for interfacing the peripheral.</p>
+</div>
 </div>
 </section>
-<section id="restrictions">
-<h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this heading">#</a></h2>
-<p>Reduced number of octets-per-frame (<code class="docutils literal notranslate"><span class="pre">F</span></code>) settings. The following values are
-supported by the peripheral: 1, 2, 4</p>
+</section>
+</div></section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Starting from
-<a class="reference external" href="https://github.com/analogdevicesinc/hdl/commit/454b900f90081fb95be857114e768f662178c8bd">this</a>
-commit this restriction no longer applies.</p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9361">AXI_AD9361 IP Description</a></p></li>
 </ul>
-</section>
-<section id="supported-devices">
-<span id="ad-ip-jesd204-tpl-adc-supported-devices"></span><h2>Supported Devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
-<section id="jesd204b-analog-to-digital-converters">
-<h3>JESD204B Analog-to-Digital Converters<a class="headerlink" href="#jesd204b-analog-to-digital-converters" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6676">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6677">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6684">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6688">AD6688</a>: RF Diversity and 1.2GHz BW Observation
-Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9207">AD9207</a>: 12-Bit, 6 GSPS, JESD204B/JESD204C
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9208">AD9208</a>: 14-Bit, 3GSPS, JESD204B,
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9209">AD9209</a>: 12-Bit, 4GSPS, JESD204B/C, Quad
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9213">AD9213</a>: 12-Bit, 10.25 GSPS, JESD204B, RF
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9234">AD9234</a>: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9250">AD9250</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9625">AD9625</a>: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
-1.3 V/2.5 V Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9656">AD9656</a>: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9680">AD9680</a>: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
-MSPS JESD204B, Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9683">AD9683</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9690">AD9690</a>: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9691">AD9691</a>: 14-Bit, 1.25 GSPS JESD204B,
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9694">AD9694</a>: 14-Bit, 500 MSPS JESD204B, Quad
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9695">AD9695</a>: 14-Bit, 1300 MSPS/625 MSPS,
-JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9083">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9094">AD9094</a>: 8-Bit, 1 GSPS, JESD204B, Quad
-Analog-to-Digital Converter</p></li>
-</ul>
-</section>
-<section id="jesd204b-rf-transceivers">
-<h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path and DPD</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
-with Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
-Transmitter with Observation Path</p></li>
-</ul>
-</section>
-<section id="jesd204b-c-mixed-signal-front-ends">
-<h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
-Quad, 12-Bit, 4GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
-DUAL, 12-Bit, 6GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
-Observation Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
-</ul>
-</section>
-</section>
-<section id="more-information">
-<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary">Glossary of terms</a></p></li>
-<li><p><a class="reference internal" href="../../../user_guide/index.html#user-guide"><span class="std std-ref">HDL User Guide</span></a></p></li>
-</ul>
-</section>
-<section id="technical-support">
-<h2>Technical Support<a class="headerlink" href="#technical-support" title="Permalink to this heading">#</a></h2>
-<p>Analog Devices will provide limited online support for anyone using the core
-with Analog Devices components (ADC, DAC, Video, Audio, etc) via the
-<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
 </section>
 </section>
 
@@ -2555,8 +2165,8 @@ with Analog Devices components (ADC, DAC, Video, Audio, etc) via the
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../axi_jesd204_rx/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">JESD204B/C Link Receive Peripheral</a>
-    <a href="../ad_ip_jesd204_tpl_dac/index.html" title="Next document (Ctrl+RightArrow)" class="next">DAC JESD204B/C Transport Peripheral</a>
+    <a href="../up_if.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Microprocessor interface</a>
+    <a href="../axi_dac/index.html" title="Next document (Ctrl+RightArrow)" class="next">Generic AXI DAC</a>
               </div>
           
         </div>

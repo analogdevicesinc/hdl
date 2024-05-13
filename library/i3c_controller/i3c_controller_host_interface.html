@@ -105,11 +105,6 @@
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
-<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
-<li><a class="reference internal" href="#fifos">FIFOs</a></li>
-<li><a class="reference internal" href="#synchronization-events">Synchronization Events</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a><ul>
 <li><a class="reference internal" href="#fifo-threshold-interrupts">FIFO Threshold Interrupts</a></li>
 <li><a class="reference internal" href="#pending-interrupts">Pending Interrupts</a></li>
@@ -157,7 +152,14 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/ip_cores.html">IP cores</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
@@ -165,16 +167,16 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Libraries</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="i3c_controller_core.html">Core Module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="interface.html">Interface</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">High-Speed DMA Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
@@ -265,13 +267,13 @@ runtime.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface.v</a></p></td>
 <td><p>Verilog source for the peripheral.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl</a></p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_ip.tcl</a></p></td>
 <td><p>TCL script to generate the Vivado IP-integrator project for the peripheral.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/master/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl</a></p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl">library/i3c_controller/i3c_controller_host_interface/i3c_controller_host_interface_hw.tcl</a></p></td>
 <td><p>TCL script to generate the Quartus IP-integrator project for the peripheral.</p></td>
 </tr>
 </tbody>
@@ -317,7 +319,7 @@ runtime.</p>
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ea9561b869275cae96759586842a48260d5a22f2" name="ea9561b869275cae96759586842a48260d5a22f2" type="checkbox"></input><label for="ea9561b869275cae96759586842a48260d5a22f2"><div><p>s_axi</p>
 <section>
-<p>AXI-Lite bus slave. Memory-mapped AXI-lite bus that provides access to modules register map.</p>
+<p>AXI-Lite bus subordinate. Memory-mapped AXI-lite bus that provides access to modules register map.</p>
 </section>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
@@ -1408,7 +1410,7 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD_n</span></code></td>
 <td class="description bold"><section>
-<p>Offload command memory. Write commands in sequence to these addresses and update the OFFLOAD_CMD_LENGTH register.</p>
+<p>Offload command memory. Write commands in sequence to these addresses and update the OFFLOAD_CMD_LENGTH register. Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -1426,7 +1428,7 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_n</span></code></td>
 <td class="description bold"><section>
-<p>Offload SDO memory. Dual access memory sector used to store the SDO payload for the offload execution. The SDO is read by the parsing the OFFLOAD_CMD commands. For example, if the first command on OFFLOAD_CMD is a write with length 3 and the next with length 2, 3 bytes from OFFLOAD_SDO_0 are sent, then 2 bytes from OFFLOAD_SDO_1 are sent. If OPS_OFFLOAD_LENGTH is 2, then the burst concludes and the “pointer” resets to OFFLOAD_SDO_0, otherwise, the execution continues until all commands are resolved, always bounded by OPS_OFFLOAD_LENGTH.</p>
+<p>Offload SDO memory. Dual access memory sector used to store the SDO payload for the offload execution. The SDO is read by the parsing the OFFLOAD_CMD commands. For example, if the first command on OFFLOAD_CMD is a write with length 3 and the next with length 2, 3 bytes from OFFLOAD_SDO_0 are sent, then 2 bytes from OFFLOAD_SDO_1 are sent. If OPS_OFFLOAD_LENGTH is 2, then the burst concludes and the “pointer” resets to OFFLOAD_SDO_0, otherwise, the execution continues until all commands are resolved, always bounded by OPS_OFFLOAD_LENGTH. Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -1490,15 +1492,6 @@ runtime.</p>
 </section>
 </section>
 </div></section>
-<section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
-<section id="fifos">
-<h3>FIFOs<a class="headerlink" href="#fifos" title="Permalink to this heading">#</a></h3>
-</section>
-<section id="synchronization-events">
-<h3>Synchronization Events<a class="headerlink" href="#synchronization-events" title="Permalink to this heading">#</a></h3>
-</section>
-</section>
 <section id="interrupts">
 <span id="i3c-controller-interrupts"></span><h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h2>
 <p>The I3C Controller Host Interface peripheral has 8 internal interrupts, which are
