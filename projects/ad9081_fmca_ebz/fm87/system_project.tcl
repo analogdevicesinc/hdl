@@ -28,6 +28,8 @@ source ../../scripts/adi_project_intel.tcl
 adi_project ad9081_fmca_ebz_fm87 [list \
   RX_LANE_RATE       [get_env_param RX_LANE_RATE       4 ] \
   TX_LANE_RATE       [get_env_param TX_LANE_RATE       4 ] \
+  REF_CLK_RATE       [get_env_param REF_CLK_RATE     200 ] \
+  DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  100 ] \
   RX_JESD_M          [get_env_param RX_JESD_M          8 ] \
   RX_JESD_L          [get_env_param RX_JESD_L          8 ] \
   RX_JESD_S          [get_env_param RX_JESD_S          1 ] \
@@ -44,14 +46,10 @@ adi_project ad9081_fmca_ebz_fm87 [list \
 
 source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
 
-set_global_assignment -name ENABLE_SIGNALTAP ON
-set_global_assignment -name USE_SIGNALTAP_FILE stp4.stp
-
 # files
 
 set_global_assignment -name VERILOG_FILE ../../../library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE ../../common/fm87/gpio_slave.v
-set_global_assignment -name VERILOG_FILE ./mr_rate_detect.v
 
 # Note: This projects requires a hardware rework to function correctly.
 # The rework connects FMC header pins directly to the FPGA so that they can be
@@ -71,21 +69,12 @@ set_global_assignment -name VERILOG_FILE ./mr_rate_detect.v
 #  R576: R0 -> DNI
 #  R575: R0 -> DNI
 
-# set_instance_assignment -name IO_STANDARD "HCSL" -to fpga_refclk_in
-# set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to clkin6
-# set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncin_0
-# set_instance_assignment -name IO_STANDARD "HSTL-12" -to fpga_syncout_0
-# # set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to fpga_syncout_0
-# set_instance_assignment -name IO_STANDARD "TRUE DIFFERENTIAL SIGNALING" -to sysref2
-# set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
-# # set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncout_0
-# set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
-
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to fpga_syncin_0
-set_instance_assignment -name IO_STANDARD "Differential 1.2-V HSTL" -to fpga_syncout_0
+set_instance_assignment -name IO_STANDARD "Differential 1.2-V HSTL"     -to fpga_syncout_0
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to sysref2
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to clkin6
-set_instance_assignment -name IO_STANDARD "CML" -to fpga_refclk_in
+set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to clkin10
+set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"    -to fpga_refclk_in
 
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
 set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
@@ -100,76 +89,43 @@ set_location_assignment PIN_J46    -to "agc3[0]"             ; ## H25  LA21_P
 set_location_assignment PIN_K47    -to "agc3[1]"             ; ## H26  LA21_N
 set_location_assignment PIN_T43    -to "clkin6(n)"           ; ## G03  CLK1_M2C_N
 set_location_assignment PIN_U42    -to "clkin6"              ; ## G02  CLK1_M2C_P
-# set_location_assignment PIN_BD57   -to "fpga_refclk_in(n)"   ; ## D05  GBTCLK0_M2C_N
+set_location_assignment PIN_P47    -to "clkin10(n)"          ; ## G07  LA00_P_CC
+set_location_assignment PIN_R46    -to "clkin10"             ; ## G06  LA00_N_CC
 set_location_assignment PIN_BB57   -to "fpga_refclk_in"      ; ## D04  GBTCLK0_M2C_P
 
 set_location_assignment PIN_AP69   -to "rx_data[0]"          ; ## C06  DP0_M2C_P
-set_location_assignment PIN_AR68   -to "rx_data[0](n)"       ; ## C07  DP0_M2C_N
+set_location_assignment PIN_AR68   -to "rx_data_n[0]"       ; ## C07  DP0_M2C_N
 set_location_assignment PIN_AU66   -to "rx_data[1]"          ; ## A02  DP1_M2C_P
-set_location_assignment PIN_AT65   -to "rx_data[1](n)"       ; ## A03  DP1_M2C_N
+set_location_assignment PIN_AT65   -to "rx_data_n[1]"       ; ## A03  DP1_M2C_N
 set_location_assignment PIN_AV69   -to "rx_data[2]"          ; ## A06  DP2_M2C_P
-set_location_assignment PIN_AW68   -to "rx_data[2](n)"       ; ## A07  DP2_M2C_N
+set_location_assignment PIN_AW68   -to "rx_data_n[2]"       ; ## A07  DP2_M2C_N
 set_location_assignment PIN_BA66   -to "rx_data[3]"          ; ## A10  DP3_M2C_P
-set_location_assignment PIN_AY65   -to "rx_data[3](n)"       ; ## A11  DP3_M2C_N
+set_location_assignment PIN_AY65   -to "rx_data_n[3]"       ; ## A11  DP3_M2C_N
 set_location_assignment PIN_BB69   -to "rx_data[4]"          ;
-set_location_assignment PIN_BC68   -to "rx_data[4](n)"       ;
+set_location_assignment PIN_BC68   -to "rx_data_n[4]"       ;
 set_location_assignment PIN_BE66   -to "rx_data[5]"          ;
-set_location_assignment PIN_BD65   -to "rx_data[5](n)"       ;
+set_location_assignment PIN_BD65   -to "rx_data_n[5]"       ;
 set_location_assignment PIN_BF69   -to "rx_data[6]"          ;
-set_location_assignment PIN_BG68   -to "rx_data[6](n)"       ;
+set_location_assignment PIN_BG68   -to "rx_data_n[6]"       ;
 set_location_assignment PIN_BJ66   -to "rx_data[7]"          ;
-set_location_assignment PIN_BH65   -to "rx_data[7](n)"       ;
+set_location_assignment PIN_BH65   -to "rx_data_n[7]"       ;
 
 set_location_assignment PIN_AP63   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
-set_location_assignment PIN_AR62   -to "tx_data[0](n)"       ; ## C03  DP0_C2M_N
+set_location_assignment PIN_AR62   -to "tx_data_n[0]"       ; ## C03  DP0_C2M_N
 set_location_assignment PIN_AU60   -to "tx_data[1]"          ; ## A22  DP1_C2M_P
-set_location_assignment PIN_AT59   -to "tx_data[1](n)"       ; ## A23  DP1_C2M_N
+set_location_assignment PIN_AT59   -to "tx_data_n[1]"       ; ## A23  DP1_C2M_N
 set_location_assignment PIN_AV63   -to "tx_data[2]"          ; ## A26  DP2_C2M_P
-set_location_assignment PIN_AW62   -to "tx_data[2](n)"       ; ## A27  DP2_C2M_N
+set_location_assignment PIN_AW62   -to "tx_data_n[2]"       ; ## A27  DP2_C2M_N
 set_location_assignment PIN_BA60   -to "tx_data[3]"          ; ## A30  DP3_C2M_P
-set_location_assignment PIN_AY59   -to "tx_data[3](n)"       ; ## A31  DP3_C2M_N
+set_location_assignment PIN_AY59   -to "tx_data_n[3]"       ; ## A31  DP3_C2M_N
 set_location_assignment PIN_BB63   -to "tx_data[4]"          ;
-set_location_assignment PIN_BC62   -to "tx_data[4](n)"       ;
+set_location_assignment PIN_BC62   -to "tx_data_n[4]"       ;
 set_location_assignment PIN_BE60   -to "tx_data[5]"          ;
-set_location_assignment PIN_BD59   -to "tx_data[5](n)"       ;
+set_location_assignment PIN_BD59   -to "tx_data_n[5]"       ;
 set_location_assignment PIN_BF63   -to "tx_data[6]"          ;
-set_location_assignment PIN_BG62   -to "tx_data[6](n)"       ;
+set_location_assignment PIN_BG62   -to "tx_data_n[6]"       ;
 set_location_assignment PIN_BJ60   -to "tx_data[7]"          ;
-set_location_assignment PIN_BH59   -to "tx_data[7](n)"       ;
-
-# set_location_assignment PIN_DH13   -to "rx_data[3](n)"       ; ## A11  DP3_M2C_N
-# set_location_assignment PIN_DJ12   -to "rx_data[3]"          ; ## A10  DP3_M2C_P
-# set_location_assignment PIN_BW2    -to "rx_data[2](n)"       ; ## A07  DP2_M2C_N
-# set_location_assignment PIN_BY1    -to "rx_data[2]"          ; ## A06  DP2_M2C_P
-# set_location_assignment PIN_DJ16   -to "rx_data[1](n)"       ; ## A03  DP1_M2C_N
-# set_location_assignment PIN_BK15   -to "rx_data[1]"          ; ## A02  DP1_M2C_P
-# set_location_assignment PIN_BP5    -to "rx_data[0](n)"       ; ## C07  DP0_M2C_N
-# set_location_assignment PIN_BN4    -to "rx_data[0]"          ; ## C06  DP0_M2C_P
-# set_location_assignment PIN_CC2    -to "rx_data[7](n)"       ; ## B13  DP7_M2C_N
-# set_location_assignment PIN_CD1    -to "rx_data[7]"          ; ## B12  DP7_M2C_P
-# set_location_assignment PIN_CF5    -to "rx_data[6](n)"       ; ## B17  DP6_M2C_N
-# set_location_assignment PIN_CE4    -to "rx_data[6]"          ; ## B16  DP6_M2C_P
-# set_location_assignment PIN_DD9    -to "rx_data[5](n)"       ; ## A19  DP5_M2C_N
-# set_location_assignment PIN_DC10   -to "rx_data[5]"          ; ## A18  DP5_M2C_P
-# set_location_assignment PIN_DE12   -to "rx_data[4](n)"       ; ## A15  DP4_M2C_N
-# set_location_assignment PIN_DD13   -to "rx_data[4]"          ; ## A14  DP4_M2C_P
-
-# set_location_assignment PIN_DM13   -to "tx_data[3](n)"       ; ## A31  DP3_C2M_N
-# set_location_assignment PIN_DN12   -to "tx_data[3]"          ; ## A30  DP3_C2M_P
-# set_location_assignment PIN_BW8    -to "tx_data[2](n)"       ; ## A27  DP2_C2M_N
-# set_location_assignment PIN_BY7    -to "tx_data[2]"          ; ## A26  DP2_C2M_P
-# set_location_assignment PIN_DG6    -to "tx_data[1](n)"       ; ## A23  DP1_C2M_N
-# set_location_assignment PIN_DF7    -to "tx_data[1]"          ; ## A22  DP1_C2M_P
-# set_location_assignment PIN_BV11   -to "tx_data[0](n)"       ; ## C03  DP0_C2M_N
-# set_location_assignment PIN_BU10   -to "tx_data[0]"          ; ## C02  DP0_C2M_P
-# set_location_assignment PIN_CB11   -to "tx_data[7](n)"       ; ## B33  DP7_C2M_N
-# set_location_assignment PIN_CA10   -to "tx_data[7]"          ; ## B32  DP7_C2M_P
-# set_location_assignment PIN_BR8    -to "tx_data[6](n)"       ; ## B37  DP6_C2M_N
-# set_location_assignment PIN_BT7    -to "tx_data[6]"          ; ## B36  DP6_C2M_P
-# set_location_assignment PIN_DH9    -to "tx_data[5](n)"       ; ## A39  DP5_C2M_N
-# set_location_assignment PIN_DG10   -to "tx_data[5]"          ; ## A38  DP5_C2M_P
-# set_location_assignment PIN_DL10   -to "tx_data[4](n)"       ; ## A35  DP4_C2M_N
-# set_location_assignment PIN_DM9    -to "tx_data[4]"          ; ## A34  DP4_C2M_P
+set_location_assignment PIN_BH59   -to "tx_data_n[7]"       ;
 
 set_location_assignment PIN_AB47   -to "fpga_syncin_0(n)"    ; ## H08  LA02_N
 set_location_assignment PIN_AA46   -to "fpga_syncin_0"       ; ## H07  LA02_P
@@ -209,31 +165,22 @@ set_location_assignment PIN_E54    -to "sysref2"             ; ## H04  CLK0_M2C_
 set_location_assignment PIN_J54    -to "txen[0]"             ; ## D14  LA09_P
 set_location_assignment PIN_K55    -to "txen[1]"             ; ## D15  LA09_N
 
-# set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to rx_data
-# set_instance_assignment -name XCVR_VCCR_VCCT_VOLTAGE 1_0V -to tx_data
+set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data[*]
+set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data[*]
+set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data_n[*]
+set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[*]
 
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to tx_data[*]
-set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to rx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35" -to tx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35" -to tx_data_n[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5" -to tx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5" -to tx_data_n[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0" -to tx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0" -to tx_data_n[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data_n[*]
 
-set common_lanes 8
-# set common_lanes [get_env_param RX_JESD_L 8]
-# if {$common_lanes > [get_env_param TX_JESD_L 8]} {
-#   set common_lanes [get_env_param TX_JESD_L 8]
-# }
-
-# Merge RX and TX into single transceiver
-for {set i 0} {$i < $common_lanes} {incr i} {
-  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to rx_data*[${i}]
-  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_data*[${i}]
-}
-
-# set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to fpga_syncin_0
-# set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to fpga_syncin_1_p
-# set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL" -to fpga_syncout_0
-# set_instance_assignment -name IO_STANDARD "DIFFERENTIAL 1.2-V HSTL" -to fpga_syncout_1_p
-# set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to sysref2
-# set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to fpga_syncin_0
-# set_instance_assignment -name INPUT_TERMINATION DIFFERENTIAL -to sysref2
+set_instance_assignment -name HSSI_PARAMETER "rx_ac_couple_enable=ENABLE" -to rx_data[*]
+set_instance_assignment -name HSSI_PARAMETER "rx_onchip_termination=RX_ONCHIP_TERMINATION_R_2" -to rx_data[*]
 
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[1]
@@ -270,19 +217,12 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to spi1_sclk
 set_instance_assignment -name IO_STANDARD "1.2 V" -to spi1_sdio
 set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[1]
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to fpga_syncin_0
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncin_0(n)"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncin_1_n"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncin_1_p"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncout_0"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncout_0(n)"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncout_1_n"
-# set_instance_assignment -name IO_STANDARD "1.2 V" -to "fpga_syncout_1_p"
-
 
 # set optimization to get a better timing closure
 set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
 
 # set_global_assignment -name PRESERVE_UNUSED_XCVR_CHANNEL ON
+
+# set_global_assignment -name QIP_FILE support_logic/ad9081_fmca_ebz_fm87_auto_tiles.qip
 
 execute_flow -compile

@@ -411,7 +411,7 @@ proc jesd204_compose {} {
     add_connection sys_clock.clk_reset link_pll_reset_control.reset
     add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
-  } elseif {$device_family == "Stratix 10" && $sip_tile == "H-Tile"} {
+  } elseif {$device_family == "Stratix 10" && $sip_tile == "{H-Tile}"} {
 
     send_message info "Instantiate a fpll_s10_htile for link_pll."
     add_instance link_pll altera_xcvr_fpll_s10_htile
@@ -539,8 +539,9 @@ proc jesd204_compose {} {
     } else {
       add_connection axi_xcvr.rx_lockedtodata phy.rx_lockedtodata
     }
-    add_connection axi_xcvr.ready phy.ready
-    add_connection axi_xcvr.reset phy.reset
+    add_connection axi_xcvr.ready     phy.ready
+    add_connection axi_xcvr.reset     phy.reset
+    add_connection axi_xcvr.reset_ack phy.reset_ack
 
     add_connection axi_xcvr.if_up_rst phy.link_reset
 
@@ -659,7 +660,8 @@ proc jesd204_compose {} {
   add_interface serial_data conduit end
   set_interface_property serial_data EXPORT_OF phy.serial_data
 
-  # add_interface serial_data_n conduit end
-  # set_interface_property serial_data_n EXPORT_OF phy.serial_data_n
-
+  if {$device_family == "Agilex 7"} {
+    add_interface serial_data_n conduit end
+    set_interface_property serial_data_n EXPORT_OF phy.serial_data_n
+  }
 }

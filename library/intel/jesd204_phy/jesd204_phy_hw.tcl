@@ -342,7 +342,7 @@ proc jesd204_phy_composition_callback {} {
     }
 
     # export ${tx_rx}_serial_data, ${tx_rx}_serial_data_n
-    foreach x {serial_data} {
+    foreach x {serial_data serial_data_n} {
       add_interface ${x} conduit end
       set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
     }

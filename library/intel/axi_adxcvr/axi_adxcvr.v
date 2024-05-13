@@ -58,6 +58,7 @@ module axi_adxcvr #(
   input    [LOCKED_W-1 : 0]     up_pll_locked,
   input    [NUM_OF_LANES-1:0]   up_rx_lockedtodata,
   input    [READY_W-1  : 0]     up_ready,
+  input    [READY_W-1  : 0]     up_reset_ack,
 
   output                        xcvr_reset,
 
@@ -122,6 +123,7 @@ module axi_adxcvr #(
     .up_pll_locked (&up_pll_locked),
     .up_rx_lockedtodata (&up_rx_lockedtodata),
     .up_ready (up_ready),
+    .up_reset_ack (up_reset_ack),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

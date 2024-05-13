@@ -55,12 +55,10 @@ genvar i;
 if (REGISTER_INPUTS > 0) begin
   reg                                     patternalign_en_r;
   reg [NUM_LANES*DATA_PATH_WIDTH*10-1:0]  data_r;
-  (*preserve*) reg data_valid;
 
   always @(posedge clk) begin
     patternalign_en_r <= patternalign_en;
     data_r  <= IFC_TYPE == 0 ? data : {data[59:40],data[19:0]};
-    data_valid <= IFC_TYPE == 0 ? 1'b1 : data[38];
   end
   assign patternalign_en_s = patternalign_en_r;
   assign data_s = data_r;
