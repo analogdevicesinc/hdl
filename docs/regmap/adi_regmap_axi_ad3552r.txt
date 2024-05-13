@@ -1,0 +1,155 @@
+TITLE
+USING DAC_COMMON
+AXI AD3552R DAC Common (axi_ad3552r_dac_common)
+AXI_AD3552R_DAC_COMMON
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+CNTRL_1
+ENDREG
+
+FIELD
+EXT_SYNC_ARM
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+CNTRL_2
+ENDREG
+
+FIELD
+SDR_DDR_N
+SYMB_8_16B
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+DAC_CUSTOM_WR
+ENDREG
+
+FIELD
+[23:0] 0x00000000
+DATA_WRITE
+RW
+Configuration data for the AD3552R device registers. 8/16 LSB are used depending on the
+8b/16b configuration.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+UI_STATUS
+ENDREG
+
+FIELD
+IF_BUSY
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+DAC_CUSTOM_CTRL
+ENDREG
+
+FIELD
+[31:24] 0x00000000
+ADDRESS
+RW
+Register address when the AD3552R is configured or stream start address when the
+FSM is in stream state.
+ENDFIELD
+
+FIELD
+[1] 0x00000000
+STREAM
+RW
+Setting this bit will trigger a stream transfer based on the SDR/DDR
+configuration and address.
+ENDFIELD
+
+FIELD
+[0] 0x00000000
+TRANSFER_DATA
+RW
+Setting this bit will trigger a single transfer based on the SDR/DDR,
+8b/16b configuration, address, and data_write.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+TITLE
+USING DAC_CHANNEL
+AXI AD3552R DAC Channel (axi_ad3552r_dac_channel)
+AXI_AD3552R_DAC_CHANNEL
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0100
+CHAN_CNTRL0_7
+DAC Channel Control & Status (channel - 0)
+ENDREG
+
+FIELD
+[3:0] 0x00000000
+DAC_DDS_SEL
+RW
+Select internal data sources (available only if the DAC supports it).
+
+* 0x00: internal tone (DDS)
+* 0x01: pattern (SED)
+* 0x02: input data (DMA)
+* 0x03: 0x00
+* 0x04: inverted pn7
+* 0x05: inverted pn15
+* 0x06: pn7 (standard O.150)
+* 0x07: pn15 (standard O.150)
+* 0x08: loopback data (ADC)
+* 0x09: pnX (Device specific e.g. ad9361)
+* 0x0A: Nibble ramp (Device specific e.g. adrv9001)
+* 0x0B: 16 bit ramp (Device specific e.g. adrv9001)
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0116
+CHAN_CNTRL1_7
+DAC Channel Control & Status (channel - 1)
+ENDREG
+
+FIELD
+[3:0] 0x00000000
+DAC_DDS_SEL
+RW
+Select internal data sources (available only if the DAC supports it).
+
+* 0x00: internal tone (DDS)
+* 0x01: pattern (SED)
+* 0x02: input data (DMA)
+* 0x03: 0x00
+* 0x04: inverted pn7
+* 0x05: inverted pn15
+* 0x06: pn7 (standard O.150)
+* 0x07: pn15 (standard O.150)
+* 0x08: loopback data (ADC)
+* 0x09: pnX (Device specific e.g. ad9361)
+* 0x0A: Nibble ramp (Device specific e.g. adrv9001)
+* 0x0B: 16 bit ramp (Device specific e.g. adrv9001)
+ENDFIELD
+
+############################################################################################
+############################################################################################
