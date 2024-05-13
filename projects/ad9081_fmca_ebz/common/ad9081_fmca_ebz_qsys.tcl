@@ -53,7 +53,7 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / 
 set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
 set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
 
-# Reference Clock Rate = Lane Rate / 40 for A10soc or Lane Rate / 20 for Agilex 7
+# Reference Clock Rate = Lane Rate / 40
 set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
 
 # Device Clock Rate

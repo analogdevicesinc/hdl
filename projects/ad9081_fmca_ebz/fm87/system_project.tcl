@@ -26,10 +26,10 @@ source ../../scripts/adi_project_intel.tcl
 #
 
 adi_project ad9081_fmca_ebz_fm87 [list \
-  RX_LANE_RATE       [get_env_param RX_LANE_RATE       4 ] \
-  TX_LANE_RATE       [get_env_param TX_LANE_RATE       4 ] \
-  REF_CLK_RATE       [get_env_param REF_CLK_RATE     200 ] \
-  DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  100 ] \
+  RX_LANE_RATE       [get_env_param RX_LANE_RATE      15 ] \
+  TX_LANE_RATE       [get_env_param TX_LANE_RATE      15 ] \
+  REF_CLK_RATE       [get_env_param REF_CLK_RATE     375 ] \
+  DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  375 ] \
   RX_JESD_M          [get_env_param RX_JESD_M          8 ] \
   RX_JESD_L          [get_env_param RX_JESD_L          8 ] \
   RX_JESD_S          [get_env_param RX_JESD_S          1 ] \
