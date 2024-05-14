@@ -165,6 +165,7 @@ module spi_engine_execution #(
   reg cs_sleep_repeat;
   reg cs_activate;
   reg cs_active;
+  wire cs_activate_s;
 
   wire io_ready1;
   wire io_ready2;
@@ -405,7 +406,7 @@ module spi_engine_execution #(
   // Load the SDO parallel data into the SDO shift register. In case of a custom
   // data width, additional bit shifting must done at load.
   always @(posedge clk) begin
-    if (((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) || (exec_transfer_cmd && !cmd[8])) begin
+    if (((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) || (exec_transfer_cmd && !cmd[8]) || (cs_activate_s)) begin
       data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
       if (first_bit == 1'b1)
@@ -449,6 +450,8 @@ module spi_engine_execution #(
       end
     end
   end
+
+  assign cs_activate_s = ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
 
   genvar i;
 
