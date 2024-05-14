@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -33,6 +33,8 @@ source ../../scripts/adi_project_intel.tcl
 adi_project ad9081_fmca_ebz_a10soc [list \
   RX_LANE_RATE       [get_env_param RX_LANE_RATE      10 ] \
   TX_LANE_RATE       [get_env_param TX_LANE_RATE      10 ] \
+  REF_CLK_RATE       [get_env_param REF_CLK_RATE     250 ] \
+  DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  250 ] \
   RX_JESD_M          [get_env_param RX_JESD_M          8 ] \
   RX_JESD_L          [get_env_param RX_JESD_L          4 ] \
   RX_JESD_S          [get_env_param RX_JESD_S          1 ] \
@@ -43,8 +45,8 @@ adi_project ad9081_fmca_ebz_a10soc [list \
   TX_JESD_S          [get_env_param TX_JESD_S          1 ] \
   TX_JESD_NP         [get_env_param TX_JESD_NP        16 ] \
   TX_NUM_LINKS       [get_env_param TX_NUM_LINKS       1 ] \
-  RX_KS_PER_CHANNEL  [get_env_param RX_KS_PER_CHANNEL 32 ] \
-  TX_KS_PER_CHANNEL  [get_env_param TX_KS_PER_CHANNEL 32 ] \
+  RX_KS_PER_CHANNEL  [get_env_param RX_KS_PER_CHANNEL 16 ] \
+  TX_KS_PER_CHANNEL  [get_env_param TX_KS_PER_CHANNEL 16 ] \
 ]
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl

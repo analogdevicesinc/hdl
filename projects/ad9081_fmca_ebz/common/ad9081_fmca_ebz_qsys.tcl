@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -50,8 +50,14 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_TPL_DATA_PATH_WIDTH / 
                                 ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
 # Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L
-set TX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
-set RX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
+set RX_LANE_RATE [expr $ad_project_params(RX_LANE_RATE)*1000]
+set TX_LANE_RATE [expr $ad_project_params(TX_LANE_RATE)*1000]
+
+# Reference Clock Rate = Lane Rate / 40
+set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
+
+# Device Clock Rate
+set DEVICE_CLK_RATE [expr $ad_project_params(DEVICE_CLK_RATE)*1000000]
 
 set adc_fifo_name mxfe_adc_fifo
 set adc_data_width [expr 8*$RX_TPL_DATA_PATH_WIDTH*$RX_NUM_OF_LANES*$RX_DMA_SAMPLE_WIDTH/$RX_SAMPLE_WIDTH]
@@ -66,10 +72,10 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 # JESD204B clock bridges
 
 add_instance tx_device_clk altera_clock_bridge
-set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} {250000000}
+set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
 
 add_instance rx_device_clk altera_clock_bridge
-set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} {250000000}
+set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
 
 #
 ## IP instantions and configuration
@@ -83,11 +89,12 @@ set_instance_parameter_value mxfe_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value mxfe_rx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value mxfe_rx_jesd204 {LANE_RATE} $RX_LANE_RATE
 set_instance_parameter_value mxfe_rx_jesd204 {SYSCLK_FREQUENCY} {100.0}
-set_instance_parameter_value mxfe_rx_jesd204 {REFCLK_FREQUENCY} {250.0}
+set_instance_parameter_value mxfe_rx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value mxfe_rx_jesd204 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value mxfe_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value mxfe_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value mxfe_rx_jesd204 {TPL_DATA_PATH_WIDTH} $RX_TPL_DATA_PATH_WIDTH
+# set_instance_parameter_value mxfe_rx_jesd204 {LANE_MAP} {5 7 0 1 2 3 4 6}
 
 
 add_instance mxfe_rx_tpl ad_ip_jesd204_tpl_adc
@@ -108,10 +115,11 @@ set_instance_parameter_value mxfe_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value mxfe_tx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value mxfe_tx_jesd204 {LANE_RATE} $TX_LANE_RATE
 set_instance_parameter_value mxfe_tx_jesd204 {SYSCLK_FREQUENCY} {100.0}
-set_instance_parameter_value mxfe_tx_jesd204 {REFCLK_FREQUENCY} {250.0}
+set_instance_parameter_value mxfe_tx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value mxfe_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value mxfe_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value mxfe_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TX_TPL_DATA_PATH_WIDTH
+# set_instance_parameter_value mxfe_tx_jesd204 {LANE_MAP} {5 7 0 1 2 3 4 6}
 
 
 add_instance mxfe_tx_tpl ad_ip_jesd204_tpl_dac
@@ -178,14 +186,14 @@ set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
 
 # mxfe gpio
 
-add_instance avl_mxfe_gpio altera_avalon_pio
-set_instance_parameter_value avl_mxfe_gpio {direction} {Bidir}
-set_instance_parameter_value avl_mxfe_gpio {generateIRQ} {1}
-set_instance_parameter_value avl_mxfe_gpio {width} {19}
-add_connection sys_clk.clk avl_mxfe_gpio.clk
-add_connection sys_clk.clk_reset avl_mxfe_gpio.reset
+add_instance mxfe_gpio altera_avalon_pio
+set_instance_parameter_value mxfe_gpio {direction} {Input}
+set_instance_parameter_value mxfe_gpio {generateIRQ} {1}
+set_instance_parameter_value mxfe_gpio {width} {15}
+add_connection sys_clk.clk mxfe_gpio.clk
+add_connection sys_clk.clk_reset mxfe_gpio.reset
 add_interface mxfe_gpio conduit end
-set_interface_property mxfe_gpio EXPORT_OF avl_mxfe_gpio.external_connection
+set_interface_property mxfe_gpio EXPORT_OF mxfe_gpio.external_connection
 
 #
 ## clocks and resets
@@ -267,6 +275,14 @@ set_interface_property tx_sync          EXPORT_OF mxfe_tx_jesd204.sync
 set_interface_property tx_serial_data   EXPORT_OF mxfe_tx_jesd204.serial_data
 set_interface_property tx_device_clk    EXPORT_OF tx_device_clk.in_clk
 
+if {$TRANSCEIVER_TYPE == "F-Tile"} {
+  add_interface tx_serial_data_n   conduit end
+  add_interface rx_serial_data_n   conduit end
+
+  set_interface_property rx_serial_data_n   EXPORT_OF mxfe_rx_jesd204.serial_data_n
+  set_interface_property tx_serial_data_n   EXPORT_OF mxfe_tx_jesd204.serial_data_n
+}
+
 #
 ## Data interface / data path
 #
@@ -304,21 +320,22 @@ add_connection mxfe_tx_dma.m_axis $dac_fifo_name.s_axis
 # TX dma to HPS
 ad_dma_interconnect mxfe_tx_dma.m_src_axi
 
-# reconfiguration interface sharing
+# reconfiguration interface sharing for A10soc
 
-set MAX_NUM_OF_LANES $TX_NUM_OF_LANES
-if {$RX_NUM_OF_LANES > $TX_NUM_OF_LANES} {
-  set MAX_NUM_OF_LANES $RX_NUM_OF_LANES
-}
-for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
-  add_instance avl_adxcfg_${i} avl_adxcfg
-  add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
-  add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
-  add_connection avl_adxcfg_${i}.rcfg_m0 mxfe_tx_jesd204.phy_reconfig_${i}
-  add_connection avl_adxcfg_${i}.rcfg_m1 mxfe_rx_jesd204.phy_reconfig_${i}
+if {$TRANSCEIVER_TYPE != "F-Tile"} {
+  set MAX_NUM_OF_LANES $TX_NUM_OF_LANES
+  if {$RX_NUM_OF_LANES > $TX_NUM_OF_LANES} {
+    set MAX_NUM_OF_LANES $RX_NUM_OF_LANES
+  }
+  for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
+    add_instance avl_adxcfg_${i} avl_adxcfg
+    add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
+    add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
+    add_connection avl_adxcfg_${i}.rcfg_m0 mxfe_tx_jesd204.phy_reconfig_${i}
+    add_connection avl_adxcfg_${i}.rcfg_m1 mxfe_rx_jesd204.phy_reconfig_${i}
 
-  set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
-
+    set_instance_parameter_value avl_adxcfg_${i} {ADDRESS_WIDTH} $xcvr_reconfig_addr_width
+  }
 }
 
 #
@@ -328,36 +345,42 @@ for {set i 0} {$i < $MAX_NUM_OF_LANES} {incr i} {
 ## NOTE: if bridge is used, the address will be bridge_base_addr + peripheral_base_addr
 #
 
-ad_cpu_interconnect 0x00020000 mxfe_rx_jesd204.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
-if {$RX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 3} {ad_cpu_interconnect 0x00006000 avl_adxcfg_3.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 4} {ad_cpu_interconnect 0x00008000 avl_adxcfg_4.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s0    "avl_mm_bridge_0"}
-if {$RX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s0    "avl_mm_bridge_0"}
+if {$TRANSCEIVER_TYPE == "F-Tile"} {
+  ad_cpu_interconnect 0x00000000 mxfe_rx_jesd204.phy_reconfig "avl_mm_bridge_0" 0x10000000 25
+  ad_cpu_interconnect 0x00800000 mxfe_tx_jesd204.phy_reconfig "avl_mm_bridge_0"
+} else {
+  ad_cpu_interconnect 0x00020000 mxfe_rx_jesd204.link_pll_reconfig "avl_mm_bridge_0" 0x00040000
+  if {$RX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 3} {ad_cpu_interconnect 0x00006000 avl_adxcfg_3.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 4} {ad_cpu_interconnect 0x00008000 avl_adxcfg_4.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s0    "avl_mm_bridge_0"}
+  if {$RX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s0    "avl_mm_bridge_0"}
 
-ad_cpu_interconnect 0x00020000 mxfe_tx_jesd204.link_pll_reconfig "avl_mm_bridge_1" 0x00080000
-if {$TX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 3} {ad_cpu_interconnect 0x00006000 avl_adxcfg_3.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 4} {ad_cpu_interconnect 0x00008000 avl_adxcfg_4.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s1    "avl_mm_bridge_1"}
-if {$TX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s1    "avl_mm_bridge_1"}
+  ad_cpu_interconnect 0x00020000 mxfe_tx_jesd204.link_pll_reconfig "avl_mm_bridge_1" 0x00080000
+  if {$TX_NUM_OF_LANES > 0} {ad_cpu_interconnect 0x00000000 avl_adxcfg_0.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 1} {ad_cpu_interconnect 0x00002000 avl_adxcfg_1.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 2} {ad_cpu_interconnect 0x00004000 avl_adxcfg_2.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 3} {ad_cpu_interconnect 0x00006000 avl_adxcfg_3.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 4} {ad_cpu_interconnect 0x00008000 avl_adxcfg_4.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 5} {ad_cpu_interconnect 0x0000A000 avl_adxcfg_5.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 6} {ad_cpu_interconnect 0x0000C000 avl_adxcfg_6.rcfg_s1    "avl_mm_bridge_1"}
+  if {$TX_NUM_OF_LANES > 7} {ad_cpu_interconnect 0x0000E000 avl_adxcfg_7.rcfg_s1    "avl_mm_bridge_1"}
+
+  ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
+}
 
 ad_cpu_interconnect 0x000C0000 mxfe_rx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000C4000 mxfe_rx_jesd204.link_management
 ad_cpu_interconnect 0x000C8000 mxfe_tx_jesd204.link_reconfig
 ad_cpu_interconnect 0x000CC000 mxfe_tx_jesd204.link_management
-ad_cpu_interconnect 0x000D0000 mxfe_tx_jesd204.lane_pll_reconfig
 ad_cpu_interconnect 0x000D2000 mxfe_rx_tpl.s_axi
 ad_cpu_interconnect 0x000D4000 mxfe_tx_tpl.s_axi
 ad_cpu_interconnect 0x000D8000 mxfe_rx_dma.s_axi
 ad_cpu_interconnect 0x000DC000 mxfe_tx_dma.s_axi
-ad_cpu_interconnect 0x000E0000 avl_mxfe_gpio.s1
+ad_cpu_interconnect 0x000E0000 mxfe_gpio.s1
 
 #
 ## interrupts
@@ -367,6 +390,4 @@ ad_cpu_interrupt 11  mxfe_rx_dma.interrupt_sender
 ad_cpu_interrupt 12  mxfe_tx_dma.interrupt_sender
 ad_cpu_interrupt 13  mxfe_rx_jesd204.interrupt
 ad_cpu_interrupt 14  mxfe_tx_jesd204.interrupt
-ad_cpu_interrupt 15  avl_mxfe_gpio.irq
-
-
+ad_cpu_interrupt 15  mxfe_gpio.irq

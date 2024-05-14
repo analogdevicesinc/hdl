@@ -4,14 +4,15 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad9081_fmca_ebz_a10soc
+PROJECT_NAME := ad9081_fmca_ebz_fm87
 
 M_DEPS += ../common/ad9081_fmca_ebz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/intel/dacfifo_qsys.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
-M_DEPS += ../../common/a10soc/a10soc_system_qsys.tcl
-M_DEPS += ../../common/a10soc/a10soc_system_assign.tcl
+M_DEPS += ../../common/fm87/fm87_system_qsys.tcl
+M_DEPS += ../../common/fm87/fm87_system_assign.tcl
+M_DEPS += ../../common/fm87/gpio_slave.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_dmac
