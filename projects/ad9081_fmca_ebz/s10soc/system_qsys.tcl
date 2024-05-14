@@ -13,6 +13,7 @@ source $ad_hdl_dir/projects/common/s10soc/s10soc_system_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
 source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
+set TRANSCEIVER_TYPE "H-Tile"
 if [info exists ad_project_dir] {
   source ../../common/ad9081_fmca_ebz_qsys.tcl
 } else {
