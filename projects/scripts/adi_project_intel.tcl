@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -85,6 +85,12 @@ proc adi_project {project_name {parameter_list {}}} {
   if [regexp "_a5gt" $project_name] {
     set family "Arria V"
     set device 5AGTFD7K3F40I3
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
+  }
+
+  if [regexp "fm87" $project_name] {
+    set family "Agilex 7"
+    set device AGIB027R31B1E1V
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
@@ -237,4 +243,3 @@ proc adi_project {project_name {parameter_list {}}} {
     set_parameter -name $param $value
   }
 }
-
