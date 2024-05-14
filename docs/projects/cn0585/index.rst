@@ -1,8 +1,6 @@
-:orphan:
+.. _cn0585:
 
-.. _cn0585_fmcz:
-
-CN0585-FMCZ HDL project
+CN0585 HDL project
 ================================================================================
 
 Overview
@@ -28,7 +26,7 @@ Supported devices
 -  :adi:`ADAQ23876`
 -  :adi:`AD7291`
 -  :adi:`ADG5421F`
--  :adi:`MAX7301ATL`
+-  :adi:`MAX7301`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -52,16 +50,15 @@ interface IPs and four LTC2387 analog-to-digital converter interface
 IPs. All these IPs utilize an 120MHz reference clock, which is produced by 
 an axi_clkgen IP.
 
-
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../cn0585_fmcz/cn0585_zed_block_diagram.svg
+.. image:: ../cn0585/cn0585_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: CN0585_FMCZ/ZedBoard block diagram
+   :alt: CN0585/ZedBoard block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,10 +107,7 @@ I2C connections
      - ---
 
 SPI connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-THESE ARE JUST EXAMPLES!!!
-USE WHICHEVER FITS BEST YOUR CASE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :widths: 25 25 25 25
@@ -125,7 +119,7 @@ USE WHICHEVER FITS BEST YOUR CASE
      - CS
    * - PL
      - max_spi
-     - MAX7301ATL
+     - MAX7301
      - 0
 
 GPIOs
@@ -197,10 +191,9 @@ the HDL repository.
 
 .. code-block::
    :linenos:
-   :emphasize-lines: 2, 6
 
-   user@analog:~$ cd hdl/projects/cn0585_fmcz/zed
-   user@analog:~/hdl/projects/cn0585_fmcz/zed$ make 
+   user@analog:~$ cd hdl/projects/cn0585/zed
+   user@analog:~/hdl/projects/cn0585/zed$ make 
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -209,7 +202,6 @@ Resources
 
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 -  :dokuwiki:`[Wiki] EVAL-CN0585-FMCZ User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0585>`
 -  :dokuwiki:`[Wiki] CN0584 User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0584>`
@@ -222,14 +214,14 @@ Hardware related
    -  :adi:`ADAQ23876`
    -  :adi:`AD3552R`
    -  :adi:`AD7291`
-   -  :adi:`MAX7301ATL`
+   -  :adi:`MAX7301`
 -  `Circuit Note CN-0585 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0585.pdf>`__
 -  `Circuit Note CN-0584 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0584.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0585_FMCZ HDL project source code <projects/cn0585_fmcz>`
+-  :git-hdl:`CN0585 HDL project source code <projects/cn0585>`
 
 .. list-table::
    :widths: 30 35 35
@@ -238,6 +230,12 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
+   * - AXI_AD3552R
+     - :git-hdl:`library/axi_ad3552r`
+     - :ref:`here <axi_ad3552r>`
+   * - AXI_LTC2387
+     - :git-hdl:`library/axi_ltc2387`
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ltc2387>`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
@@ -252,7 +250,7 @@ HDL related
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
+     - :ref:`here <axi_pwm_gen>`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
@@ -268,12 +266,6 @@ HDL related
    * - UTIL_PACK/UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
      - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
-   * - AXI_AD3552R
-     - :git-hdl:`library/axi_ad3552r`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ad3552r>`
-   * - AXI_LTC2387
-     - :git-hdl:`library/axi_ltc2387`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ltc2387>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

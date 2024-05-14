@@ -5,7 +5,7 @@
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
-source ../common/cn0585_fmcz_bd.tcl
+source ../common/cn0585_bd.tcl
 
 #system ID
 

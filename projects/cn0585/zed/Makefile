@@ -4,9 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := cn0585_fmcz_zed
+PROJECT_NAME := cn0585_zed
 
-M_DEPS += ../common/cn0585_fmcz_bd.tcl
+M_DEPS += ../common/cn0585_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
