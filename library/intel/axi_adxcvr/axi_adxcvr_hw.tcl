@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -60,24 +60,52 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 ad_interface reset up_rst output 1 s_axi_clock
 set_interface_property if_up_rst associatedResetSinks s_axi_reset
 
-add_interface core_pll_locked conduit end
-add_interface_port core_pll_locked up_pll_locked pll_locked Input 1
-
 # name changes
 
 proc p_axi_adxcvr {} {
 
+  set fpga_technology [get_parameter_value FPGA_TECHNOLOGY]
   set m_tx_or_rx_n [get_parameter_value TX_OR_RX_N]
   set m_num_of_lanes [get_parameter_value NUM_OF_LANES]
 
-  if {$m_tx_or_rx_n == 1} {
-    add_interface ready conduit end
-    add_interface_port ready up_ready tx_ready input $m_num_of_lanes
+  if {$m_tx_or_rx_n} {
+    set rx_tx "tx"
+  } else {
+    set rx_tx "rx"
   }
 
-  if {$m_tx_or_rx_n == 0} {
+  # 105 = Agilex, see adi_intel_device_info_enc.tcl
+  if {$fpga_technology == 105} {
+    add_interface core_pll_locked conduit end
+    add_interface_port core_pll_locked up_pll_locked ${rx_tx}_pll_locked Input $m_num_of_lanes
+
     add_interface ready conduit end
-    add_interface_port ready up_ready rx_ready input $m_num_of_lanes
+    add_interface_port ready up_ready ${rx_tx}_ready input 1
+
+    add_interface reset conduit start
+    add_interface_port reset xcvr_reset ${rx_tx}_reset output 1
+
+    add_interface reset_ack conduit end
+    add_interface_port reset_ack up_reset_ack ${rx_tx}_reset_ack input 1
+
+    if {$m_tx_or_rx_n == 0} {
+      add_interface rx_lockedtodata conduit end
+      add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+    }
+
+  } else {
+
+    add_interface core_pll_locked conduit end
+    add_interface_port core_pll_locked up_pll_locked pll_locked Input 1
+
+    if {$m_tx_or_rx_n == 1} {
+      add_interface ready conduit end
+      add_interface_port ready up_ready tx_ready input $m_num_of_lanes
+    }
+
+    if {$m_tx_or_rx_n == 0} {
+      add_interface ready conduit end
+      add_interface_port ready up_ready rx_ready input $m_num_of_lanes
+    }
   }
 }
-

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2022, 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -18,6 +18,8 @@ ad_ip_files jesd204_tx [list \
   jesd204_tx.v \
   jesd204_tx_ctrl.v \
   jesd204_tx_lane.v \
+  jesd204_tx_lane_64b.v \
+  jesd204_tx_header.v \
   jesd204_tx_gearbox.v \
   jesd204_tx_constr.sdc \
   ../jesd204_common/jesd204_eof_generator.v \
@@ -25,6 +27,7 @@ ad_ip_files jesd204_tx [list \
   ../jesd204_common/jesd204_frame_mark.v \
   ../jesd204_common/jesd204_lmfc.v \
   ../jesd204_common/jesd204_scrambler.v \
+  ../jesd204_common/jesd204_scrambler_64b.v \
   ../jesd204_common/pipeline_stage.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_event.v \
@@ -34,6 +37,12 @@ ad_ip_files jesd204_tx [list \
 ]
 
 # parameters
+
+ad_ip_parameter LINK_MODE INTEGER 1 true { \
+  DISPLAY_NAME "Link Layer mode" \
+  ALLOWED_RANGES {"1:8B10B" "2:64B66B"} \
+  HDL_PARAMETER true \
+}
 
 add_parameter NUM_LANES INTEGER 1
 set_parameter_property NUM_LANES DISPLAY_NAME "Number of Lanes"
@@ -53,6 +62,12 @@ set_parameter_property NUM_OUTPUT_PIPELINE HDL_PARAMETER true
 add_parameter ASYNC_CLK BOOLEAN false
 set_parameter_property ASYNC_CLK DISPLAY_NAME "Link and device clock asynchronous"
 set_parameter_property ASYNC_CLK HDL_PARAMETER true
+
+ad_ip_parameter DATA_PATH_WIDTH INTEGER 4 true { \
+  DISPLAY_NAME "Physical layer datapath widthin" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {4 8} \
+}
 
 ad_ip_parameter TPL_DATA_PATH_WIDTH INTEGER 4 true { \
   DISPLAY_NAME "Transport layer datapath width" \
@@ -187,6 +202,7 @@ set_port_property lmfc_edge TERMINATION TRUE
 proc jesd204_tx_elaboration_callback {} {
   set num_lanes [get_parameter_value "NUM_LANES"]
   set tpl_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
+  set phy_width [get_parameter_value "DATA_PATH_WIDTH"]
 
   # tx_data interface
 
@@ -204,11 +220,22 @@ proc jesd204_tx_elaboration_callback {} {
     add_interface tx_phy${i} conduit start
 #    set_interface_property tx_phy${i} associatedClock clock
 #    set_interface_property tx_phy${i} associatedReset reset
-    add_interface_port tx_phy${i} tx_phy${i}_data char Output 32
+
+    add_interface_port tx_phy${i} tx_phy${i}_data char Output [expr 8*$phy_width]
     set_port_property tx_phy${i}_data fragment_list \
-      [format "phy_data(%d:%d)" [expr 32*$i+31] [expr 32*$i]]
-    add_interface_port tx_phy${i} tx_phy${i}_charisk charisk Output 4
-    set_port_property tx_phy${i}_charisk fragment_list \
-      [format "phy_charisk(%d:%d)" [expr 4*$i+3] [expr 4*$i]]
+      [format "phy_data(%d:%d)" [expr (8*$phy_width)*($i+1)-1] [expr 8*$phy_width*$i]]
+
+    if {[get_parameter_value "LINK_MODE"]==1} {
+      add_interface_port tx_phy${i} tx_phy${i}_charisk charisk Output $phy_width
+      set_port_property tx_phy${i}_charisk fragment_list \
+        [format "phy_charisk(%d:%d)" [expr $phy_width*($i+1)-1] [expr $phy_width*$i]]
+    }
+
+    if {[get_parameter_value "LINK_MODE"]==2} {
+      add_interface_port tx_phy${i} tx_phy${i}_header header Output 2
+      set_port_property tx_phy${i}_header fragment_list \
+        [format "phy_header(%d:%d)" [expr 2*($i+1)-1] [expr 2*$i]]
+    }
   }
+
 }
