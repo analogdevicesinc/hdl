@@ -123,22 +123,32 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  // instantiations
+  wire    [1:0]   cs;
+  wire            resetn;
 
-  assign gpio_i[63:50] = gpio_o[63:50];
+  // instantiations
+  assign ad713x_spi_cs = gpio_o[50] ? {cs[0], cs[0]} : cs;
+  assign gpio_i[63:51] = gpio_o[63:51];
   ad_iobuf #(
-    .DATA_WIDTH(18)
+    .DATA_WIDTH(16)
   ) i_iobuf_ad713x_gpio (
-    .dio_t(gpio_t[49:32]),
-    .dio_i(gpio_o[49:32]),
-    .dio_o(gpio_i[49:32]),
+    .dio_t(gpio_t[49:34]),
+    .dio_i(gpio_o[49:34]),
+    .dio_o(gpio_i[49:34]),
     .dio_p({ad713x_dclkmode,    // [49]
             ad713x_pinbspi,     // [48]
             ad713x_dclkio,      // [47:46]
             ad713x_gpio,        // [45:38]
             ad713x_mode,        // [37:36]
-            ad713x_pdn,         // [35:34]
-            ad713x_resetn}));   // [33:32]
+            ad713x_pdn }));     // [35:34]
+
+    ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_iobuf_ad713x_resetn (
+    .dio_t({gpio_t[32], gpio_t[32]}),
+    .dio_i({gpio_o[32], gpio_o[32]}),
+    .dio_o(gpio_i[33:32]),
+    .dio_p(ad713x_resetn));      // [33:32]
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -209,8 +219,8 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .spi0_clk_i (ad713x_spi_sclk),
     .spi0_clk_o (ad713x_spi_sclk),
-    .spi0_csn_0_o (ad713x_spi_cs[0]),
-    .spi0_csn_1_o (ad713x_spi_cs[1]),
+    .spi0_csn_0_o (cs[0]),
+    .spi0_csn_1_o (cs[1]),
     .spi0_csn_i (1'b1),
     .spi0_sdi_i (ad713x_spi_sdi),
     .spi0_sdo_i (ad713x_spi_sdo),
