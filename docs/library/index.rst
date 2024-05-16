@@ -43,6 +43,7 @@ Contents
    axi_pwm_gen/index
    axi_sysid/index
    axi_tdd/index
+   data_offload/index
    i3c_controller/index
    jesd204/index
    spi_engine/index
