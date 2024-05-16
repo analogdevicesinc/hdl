@@ -112,7 +112,7 @@ Value of ''DMA_TYPE_SRC'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIF
 ENDFIELD
 
 FIELD
-[19:16] ''BYTES_PER_BURST_WIDTH''
+[19:16] ''log2(min(min((if(''DMA_TYPE_DEST''==0)?(if(''DMA_AXI_PROTOCOL_DEST''==1)?16:256):1024) * ''DMA_DATA_WIDTH_DEST'' / 8, (if(''DMA_TYPE_SRC''==0)?(if(''DMA_AXI_PROTOCOL_SRC''==1)?16:256):1024) * ''DMA_DATA_WIDTH_SRC'' / 8), ''MAX_BYTES_PER_BURST''))''
 BYTES_PER_BURST_WIDTH
 R
 Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
