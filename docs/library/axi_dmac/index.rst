@@ -25,6 +25,8 @@ Features
 - Cyclic transfers
 - 2D transfers
 - Scatter-Gather transfers
+- Framelock
+- AutoRun
 
 Utilization
 --------------------------------------------------------------------------------
@@ -481,6 +483,19 @@ from the internal buffer will be cleared/lost. In case of AXIS the DMAC will
 wait for data to be accepted if valid is high since it can't just de-assert
 valid without breaking the interface semantics
 
+AutoRun mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When the ``AUTORUN`` parameter is set the DMAC can initiate transfers without
+software intervention. Once the core comes out of reset, the core will operate
+on a transfer defined through the ``AUTORUN_*`` synthesis parameters.
+This is useful mostly in ``CYCLIC`` mode.
+In non cyclic mode, once the initial
+transfer is done the core will go to idle state and will wait for software
+interaction if that exists.
+In this mode the s_axi AXI configuration interface
+is optional.
+
 .. _axi_dmac interrupts:
 
 Interrupts
@@ -654,6 +669,68 @@ interrupt events as the simple transfers. However, the scatter-gather transfers
 have the distinct advantage of generating fewer interrupts by treating the
 chained descriptor transfers as a single transfer, thus improving the performance
 of the application.
+
+External Synchronization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This feature allows external components to throttle the consumption of
+descriptors queued by the software. A transfer will start only after the
+assertion of the external sync signal for at least one clock cycle.
+
+The sync signal can be either in source or destination clock domain or both.
+This feature does not ensure fixed latency from the assertion of external sync
+signal and the availability of the data at the destination interface.
+
+Framelock Synchronization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This feature adds support for multiple 2D frame buffers, which are used in a
+cyclic way. On the same set of buffers, a second DMAC core can operate.
+The "Framelock" mechanism ensures no buffer is accessed by two DMACs at the same
+time.
+
+The core can operate in two roles:
+
+* Writer mode - available in s2mm configuration.
+* Reader mode - available in mm2s configuration.
+
+And two modes:
+
+* Frame conversion (dynamic mode):
+
+  - Writer mode - the writer will always skip the current in-use reader's buffer.
+  - Reader mode - the reader will stay behind the writer's buffer by either
+    repeating or skipping buffers according to the speed relationship of the two cores.
+
+* Output delay (simple mode):
+
+  - Writer mode - the writer will cycle through the buffers regardless of the reader.
+  - Reader mode - the reader will always read a buffer at a predefined distance
+    from the one currently accessed by the writer.
+
+Also, in simple mode:
+
+* If 'wait for writer' is enabled the reader will output a frame only after
+  the master wrote one to the memory
+* If the 'wait for writer' is not enabled the slave will start reading a
+  buffer whenever it completed a previous buffer and receives an external sync
+  signal if the external synchronization support is enabled.
+
+.. caution::
+
+   In dynamic mode, the reader can still read a buffer being currently accessed
+   by the writer if the number of frames and distance are close.
+   Still, the distance is mainly used in output delay mode.
+
+The writer and reader DMAC cores must be connected through the dedicated
+"framelock" interface. They must be programmed with similar settings regarding
+the buffers size, start address and stride through the ``FRAMELOCK_CONFIG`` and
+``FRAMELOCK_STRIDE`` registers.
+
+Notice that the reader DMA will start to read the frames only after the writer
+finished to store in the DDR at least ``FRAMELOCK_CONFIG_DISTANCE+1`` frames.
+This means that while the FRAMELOCK_CONFIG_DISTANCE+1 frames are written into the
+memory, the reader DMA won’t output anything.
 
 Transfer Start Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
