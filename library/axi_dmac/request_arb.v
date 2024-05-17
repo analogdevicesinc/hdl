@@ -60,7 +60,8 @@ module request_arb #(
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
   parameter [3:0] AXI_AXCACHE = 4'b0011,
-  parameter [2:0] AXI_AXPROT = 3'b000
+  parameter [2:0] AXI_AXPROT = 3'b000,
+  parameter USE_EXT_SYNC = 0
 ) (
   input req_clk,
   input req_resetn,
@@ -71,11 +72,12 @@ module request_arb #(
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
   input [DMA_LENGTH_WIDTH-1:0] req_length,
   input req_xlast,
+  input req_islast,
   input req_sync_transfer_start,
   input req_sync,
 
   output eot,
-  output [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH:0] measured_burst_length,
   output response_partial,
   output response_valid,
   input response_ready,
@@ -141,6 +143,7 @@ module request_arb #(
   input                               m_axis_ready,
   output                              m_axis_valid,
   output [DMA_DATA_WIDTH_DEST-1:0]    m_axis_data,
+  output [0:0]                        m_axis_user,
   output                              m_axis_last,
   output                              m_axis_xfer_req,
 
@@ -182,6 +185,13 @@ module request_arb #(
   input src_enable,
   output src_enabled,
 
+  // External sync interface
+  input src_ext_sync,
+  input dest_ext_sync,
+
+  output ext_sync_ready,
+  input ext_sync_valid,
+
   // Diagnostics interface
   output  [7:0] dest_diag_level_bursts
 );
@@ -210,6 +220,9 @@ module request_arb #(
   wire [ID_WIDTH-1:0] source_id;
   wire [ID_WIDTH-1:0] response_id;
 
+  wire enabled_src;
+  wire enabled_dest;
+
   wire req_gen_valid;
   wire req_gen_ready;
   wire src_dest_valid;
@@ -221,6 +234,7 @@ module request_arb #(
   wire dest_req_ready;
   wire [DMA_ADDRESS_WIDTH_DEST-1:0] dest_req_dest_address;
   wire dest_req_xlast;
+  wire dest_req_islast;
 
   wire dest_response_valid;
   wire dest_response_ready;
@@ -253,9 +267,11 @@ module request_arb #(
   wire [BYTES_PER_BEAT_WIDTH_SRC-1:0] src_req_last_beat_bytes;
   wire src_req_sync_transfer_start;
   wire src_req_xlast;
+  wire src_req_islast;
 
   reg [DMA_ADDRESS_WIDTH_DEST-1:0] src_req_dest_address_cur = 'h0;
   reg src_req_xlast_cur = 1'b0;
+  reg src_req_islast_cur = 1'b0;
 
   /* TODO
   wire src_response_valid;
@@ -308,6 +324,7 @@ module request_arb #(
   wire [ID_WIDTH+3-1:0] rewind_req_data;
 
   reg src_throttler_enabled = 1'b1;
+  wire src_throttler_enable;
   wire rewind_state;
 
   /* Unused for now
@@ -511,6 +528,7 @@ module request_arb #(
     .req_sync_transfer_start(req_sync_transfer_start),
     .req_sync(req_sync),
     .req_xlast(dest_req_xlast),
+    .req_islast(dest_req_islast),
 
     .response_valid(dest_response_valid),
     .response_ready(dest_response_ready),
@@ -532,6 +550,7 @@ module request_arb #(
     .m_axis_valid(m_axis_valid),
     .m_axis_ready(m_axis_ready),
     .m_axis_data(m_axis_data),
+    .m_axis_user(m_axis_user),
     .m_axis_last(m_axis_last));
 
   end else begin
@@ -540,6 +559,7 @@ module request_arb #(
   assign m_axis_last = 1'b0;
   assign m_axis_xfer_req = 1'b0;
   assign m_axis_data = 'h00;
+  assign m_axis_user = 'h00;
 
   end
 
@@ -1015,7 +1035,7 @@ module request_arb #(
   assign req_ready = req_gen_ready & req_src_ready;
 
   util_axis_fifo #(
-    .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 1),
+    .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + 2),
     .ADDRESS_WIDTH(0),
     .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
   ) i_dest_req_fifo (
@@ -1026,7 +1046,8 @@ module request_arb #(
     .s_axis_full(),
     .s_axis_data({
       src_req_dest_address_cur,
-      src_req_xlast_cur}),
+      src_req_xlast_cur,
+      src_req_islast_cur}),
     .s_axis_room(),
 
     .m_axis_aclk(dest_clk),
@@ -1035,12 +1056,13 @@ module request_arb #(
     .m_axis_ready(dest_req_ready),
     .m_axis_data({
       dest_req_dest_address,
-      dest_req_xlast}),
+      dest_req_xlast,
+      dest_req_islast}),
     .m_axis_level(),
     .m_axis_empty());
 
   util_axis_fifo #(
-    .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 2),
+    .DATA_WIDTH(DMA_ADDRESS_WIDTH_DEST + DMA_ADDRESS_WIDTH_SRC + BYTES_PER_BURST_WIDTH + 3),
     .ADDRESS_WIDTH(0),
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
   ) i_src_req_fifo (
@@ -1054,7 +1076,8 @@ module request_arb #(
       req_src_address,
       req_length[BYTES_PER_BURST_WIDTH-1:0],
       req_sync_transfer_start,
-      req_xlast}),
+      req_xlast,
+      req_islast}),
     .s_axis_room(),
 
     .m_axis_aclk(src_clk),
@@ -1067,7 +1090,8 @@ module request_arb #(
       src_req_last_burst_length,
       src_req_last_beat_bytes,
       src_req_sync_transfer_start,
-      src_req_xlast}),
+      src_req_xlast,
+      src_req_islast}),
     .m_axis_level(),
     .m_axis_empty());
 
@@ -1077,6 +1101,7 @@ module request_arb #(
     if (src_req_valid == 1'b1 && src_req_ready == 1'b1) begin
       src_req_dest_address_cur <= src_req_dest_address;
       src_req_xlast_cur <= src_req_xlast;
+      src_req_islast_cur <= src_req_islast;
     end
   end
 
@@ -1177,5 +1202,27 @@ module request_arb #(
     .completion_req_ready(completion_req_ready),
     .completion_req_last(completion_req_last),
     .completion_transfer_id(completion_transfer_id));
+
+  axi_dmac_ext_sync #(
+   .USE_EXT_SYNC (USE_EXT_SYNC),
+   .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
+   .ASYNC_CLK_DEST_REQ (ASYNC_CLK_DEST_REQ)
+  ) i_ext_sync (
+    .req_clk (req_clk),
+    .req_resetn (req_resetn),
+
+    .src_clk (src_clk),
+    .src_resetn (src_resetn),
+
+    .dest_clk (dest_clk),
+    .dest_resetn (dest_resetn),
+
+    // External sync interface
+    .src_ext_sync (src_ext_sync),
+    .dest_ext_sync (dest_ext_sync),
+
+    // Interface to requester
+    .ext_sync_ready (ext_sync_ready),
+    .ext_sync_valid (ext_sync_valid));
 
 endmodule

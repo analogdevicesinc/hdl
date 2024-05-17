@@ -60,7 +60,7 @@ module axi_dmac_response_manager #(
   input req_resetn,
 
   output response_eot,
-  output reg [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length = 'h0,
+  output reg [BYTES_PER_BURST_WIDTH:0] measured_burst_length = 'h0,
   output response_partial,
   output reg response_valid = 1'b0,
   input response_ready,
@@ -174,9 +174,9 @@ module axi_dmac_response_manager #(
   always @(posedge req_clk)
   begin
     if (state == STATE_ZERO_COMPL) begin
-      measured_burst_length <= {BYTES_PER_BURST_WIDTH{1'b1}};
+      measured_burst_length <= {BYTES_PER_BURST_WIDTH+1{1'b1}};
     end else if (state == STATE_ACC) begin
-      measured_burst_length <= req_response_dest_data_burst_length;
+      measured_burst_length <= {1'b0,req_response_dest_data_burst_length};
     end
   end
 
