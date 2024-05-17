@@ -84,24 +84,40 @@ INTERFACE_DESCRIPTION_1
 ENDREG
 
 FIELD
-[3:0] log2(''DMA_DATA_WIDTH_DEST''/8)
-BYTES_PER_BEAT_DEST_LOG2
+[31:27] ''MAX_NUM_FRAMES''
+MAX_NUM_FRAMES
 R
-Width of data bus on destination interface. Log2 of interface data widths in bytes.
+Max number of frames.
 ENDFIELD
 
 FIELD
-[5:4] ''DMA_TYPE_DEST''
-DMA_TYPE_DEST
+[26] ''DMA_2D_TLAST_MODE''
+DMA_2D_TLAST_MODE
 R
-Value of ''DMA_TYPE_DEST'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
+TLAST behaviour for 2D transfer (0 - End of Frame; 1 - End of Line).
 ENDFIELD
 
 FIELD
-[11:8] log2(''DMA_DATA_WIDTH_SRC''/8)
-BYTES_PER_BEAT_SRC_LOG2
+[25] ''USE_EXT_SYNC''
+USE_EXT_SYNC
 R
-Width of data bus on source interface. Log2 of interface data widths in bytes.
+Use external sync.
+ENDFIELD
+
+FIELD
+[24] ''AUTORUN''
+AUTORUN
+R
+Run in the AUTORUN_* configuration.
+ENDFIELD
+
+FIELD
+[19:16] ''BYTES_PER_BURST_WIDTH''
+BYTES_PER_BURST_WIDTH
+R
+Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
+The starting address of the transfer must be aligned with ''MAX_BYTES_PER_BURST'' to avoid crossing
+the 4kB address boundary.
 ENDFIELD
 
 FIELD
@@ -112,12 +128,24 @@ Value of ''DMA_TYPE_SRC'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIF
 ENDFIELD
 
 FIELD
-[19:16] ''BYTES_PER_BURST_WIDTH''
-BYTES_PER_BURST_WIDTH
+[11:8] log2(''DMA_DATA_WIDTH_SRC''/8)
+BYTES_PER_BEAT_SRC_LOG2
 R
-Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
-The starting address of the transfer must be aligned with ''MAX_BYTES_PER_BURST'' to avoid crossing
-the 4kB address boundary.
+Width of data bus on source interface. Log2 of interface data widths in bytes.
+ENDFIELD
+
+FIELD
+[5:4] ''DMA_TYPE_DEST''
+DMA_TYPE_DEST
+R
+Value of ''DMA_TYPE_DEST'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
+ENDFIELD
+
+FIELD
+[3:0] log2(''DMA_DATA_WIDTH_DEST''/8)
+BYTES_PER_BEAT_DEST_LOG2
+R
+Width of data bus on destination interface. Log2 of interface data widths in bytes.
 ENDFIELD
 
 ############################################################################################
@@ -132,7 +160,7 @@ FIELD
 [0] ''CACHE_COHERENT''
 CACHE_COHERENT
 R
-Value of ''CACHE_COHERENT'' parameter.(0 - Disabled, 1 -  Enabled )
+Value of ''CACHE_COHERENT'' parameter. (0 - Disabled, 1 -  Enabled)
 ENDFIELD
 
 FIELD
@@ -193,7 +221,7 @@ FIELD
 TRANSFER_QUEUED
 RW1C
 This bit will be asserted if a transfer has been queued and it is possible to queue
-the next transfer. It can be masked out by setting the TRANSFER_QUEUED bit in the 
+the next transfer. It can be masked out by setting the TRANSFER_QUEUED bit in the
 IRQ_MASK register.
 ENDFIELD
 
@@ -298,29 +326,43 @@ FLAGS
 ENDREG
 
 FIELD
-[0] ''CYCLIC''
-CYCLIC
+[3] ''AUTORUN_FLAGS[3]''
+FRAMELOCK
 RW
-Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
-the controller will re-start a transfer again once it has finished. In cyclic
-mode no end-of-transfer interrupts will be generated.
+Setting this field to 1 puts the DMA transfer into framelock mode.
+In framelock mode the data is hold to compensate frames rates mismatch between source and
+sink channels.
+Parameter ``FRAMELOCK`` must 1 to writing to this register to have an effect.
+If ``AUTORUN`` is unset, the default value of the field is 0x0.
 ENDFIELD
 
 FIELD
-[1] 0x00000001
+[2] ''AUTORUN_FLAGS[2]''
+PARTIAL_REPORTING_EN
+RW
+When setting this bit the length of partial transfers caused eventually by TLAST will be recorded.
+If ``AUTORUN`` is unset, the default value of the field is 0x0.
+ENDFIELD
+
+FIELD
+[1] ''AUTORUN_FLAGS[1]''
 TLAST
 RW
 When setting this bit for a MM to AXIS transfer the TLAST signal
 will be asserted during the last beat of the transfer.
 For AXIS to MM transfers the TLAST signal from the AXIS interface is monitored.
 After its occurrence all descriptors are ignored until this bit is set.
+If ``AUTORUN`` is unset, the default value of the field is 0x1.
 ENDFIELD
 
 FIELD
-[2] 0x00000000
-PARTIAL_REPORTING_EN
+[0] ''AUTORUN_FLAGS[0]''
+CYCLIC
 RW
-When setting this bit the length of partial transfers caused eventually by TLAST will be recorded.
+Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
+the controller will re-start a transfer again once it has finished. In cyclic
+mode no end-of-transfer interrupts will be generated.
+If ``AUTORUN`` is unset, the default value of the field is ''CYCLIC''.
 ENDFIELD
 
 ############################################################################################
@@ -332,12 +374,13 @@ DEST_ADDRESS
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_DEST_ADDR''
 DEST_ADDRESS
 RW
 This register contains the destination address of the transfer. The address needs to be aligned
 to the bus width.
 
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 This register is only valid if the DMA channel has been configured for write to memory support.
 ENDFIELD
 
@@ -350,12 +393,13 @@ SRC_ADDRESS
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_SRC_ADDR''
 SRC_ADDRESS
 RW
 This register contains the source address of the transfer. The address needs to be aligned
 to the bus width.
 
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 This register is only valid if the DMA channel has been configured for read from memory support.
 ENDFIELD
 
@@ -372,6 +416,7 @@ FIELD
 X_LENGTH
 RW
 Number of bytes to transfer - 1.
+If ``AUTORUN`` is set, the default value of the field is ''AUTORUN_FRAMELOCK_X_LENGTH''.
 ENDFIELD
 
 ############################################################################################
@@ -383,10 +428,11 @@ Y_LENGTH
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_FRAMELOCK_Y_LENGTH''
 Y_LENGTH
 RW
 Number of rows to transfer - 1.
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 
 Note, this field is only valid if the DMA channel has been configured with 2D transfer support.
 ENDFIELD
@@ -400,12 +446,13 @@ DEST_STRIDE
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_DEST_STRIDE''
 DEST_STRIDE
 RW
 The number of bytes between the start of one row and the next row for the
 destination address. Needs to be aligned to the bus width.
 
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 Note, this field is only valid if the DMA channel has been configured with 2D
 transfer support and write to memory support.
 ENDFIELD
@@ -419,12 +466,13 @@ SRC_STRIDE
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_SRC_STRIDE''
 SRC_STRIDE
 RW
 The number of bytes between the start of one row and the next row for the source
 address. Needs to be aligned to the bus width.
 
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 Note, this field is only valid if the DMA channel has been configured with 2D
 transfer and read from memory support.
 ENDFIELD
@@ -606,6 +654,71 @@ DESCRIPTOR_ID
 RO
 ID of the descriptor that points to the current memory segment being transferred.
 If HWDESC is set to 0, then this register returns 0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x116
+FRAMELOCK_CONFIG
+Configure the Framelock feature.
+If ``AUTORUN`` is unset, the default value of all fields are 0x00000000.
+ENDREG
+
+FIELD
+[23:16] ''AUTORUN_FRAMELOCK_CONFIG[23:16]''
+DISTANCE
+RW
+Applicable only in output delay mode. Set the output delay in frames.
+Should be set in interval 0 to flock, FRAMENUM - 2.
+ENDFIELD
+
+FIELD
+[9] ''AUTORUN_FRAMELOCK_CONFIG[9]''
+WAIT_WRITER
+RW
+If WAIT_WRITER is unset, enable the generation of new request right away.
+In Simple Flock when WAIT_WRITER is set, the reader must wait until the writer completes a
+buffer. In Dynamic Flock just wait until the required number of buffers are filled, then
+enable the request generation regardless of the writer.
+ENDFIELD
+
+FIELD
+[8] ''AUTORUN_FRAMELOCK_CONFIG[8]''
+MODE
+RW
+Select operating mode of the framebuffer.
+(0 - Frame rate conversion mode (dynamic), 1 - Output delay mode (simple))
+ENDFIELD
+
+FIELD
+[7:0] ''AUTORUN_FRAMELOCK_CONFIG[7:0]''
+FRAMENUM
+RW
+The total number of video frame buffers.
+Related to MAX_NUM_FRAMES synthesis parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x117
+FRAMELOCK_STRIDE
+Configure the Framelock feature.
+ENDREG
+
+FIELD
+[31:0] ''AUTORUN_FRAMELOCK_STRIDE''
+STRIDE
+RW
+The number of bytes between the start of one row and the next row for the
+framelock.
+
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
+Note, this field is only valid if the DMA channel has been configured with 2D
+transfer support, framelock support, and write to memory support.
 ENDFIELD
 
 ############################################################################################
