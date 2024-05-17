@@ -586,8 +586,9 @@ proc adi_if_define {name} {
 # \param[width] - Port width
 # \param[name] - Port logical name
 # \param[type] - Type of the port (default "none")
+# \param[default_value] - Default drive value of the port (default "none")
 #
-proc adi_if_ports {dir width name {type none}} {
+proc adi_if_ports {dir width name {type none} {default_value none}} {
 
   ipx::add_bus_abstraction_port $name [ipx::current_busabs]
   set m_intf [ipx::get_bus_abstraction_ports $name -of_objects [ipx::current_busabs]]
@@ -608,6 +609,10 @@ proc adi_if_ports {dir width name {type none}} {
 
   if {$type ne "none"} {
     set_property is_${type} true $m_intf
+  }
+
+  if {$default_value ne "none"} {
+    set_property default_value $default_value $m_intf
   }
 
   ipx::save_bus_definition [ipx::current_busdef]
