@@ -15,6 +15,8 @@ adi_ip_files axi_dmac [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "inc_id.vh" \
   "resp.vh" \
+  "axi_dmac_ext_sync.v" \
+  "axi_dmac_framelock.v" \
   "axi_dmac_burst_memory.v" \
   "axi_dmac_regmap.v" \
   "axi_dmac_regmap_request.v" \
@@ -239,6 +241,31 @@ foreach port {"s_axis_user" "sync"} {
 # Infer interrupt
 ipx::infer_bus_interface irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 
+adi_if_infer_bus analog.com:interface:if_framelock master m_framelock [list \
+  "s2m_framelock  m_frame_in " \
+  "m2s_framelock  m_frame_out" \
+]
+
+adi_set_bus_dependency "m_framelock" "m_framelock" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) != 0 and \
+    spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) = 0 and \
+    spirit:decode(id('MODELPARAM_VALUE.FRAMELOCK')) = 1)"
+
+adi_if_infer_bus analog.com:interface:if_framelock slave s_framelock [list \
+  "m2s_framelock  s_frame_in " \
+  "s2m_framelock  s_frame_out" \
+]
+
+adi_set_bus_dependency "s_framelock" "s_framelock" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_SRC')) = 0 and \
+    spirit:decode(id('MODELPARAM_VALUE.DMA_TYPE_DEST')) != 0 and \
+    spirit:decode(id('MODELPARAM_VALUE.FRAMELOCK')) = 1)"
+
+adi_set_ports_dependency "src_ext_sync" \
+  "spirit:decode(id('MODELPARAM_VALUE.USE_EXT_SYNC')) = 1"
+adi_set_ports_dependency "dest_ext_sync" \
+  "spirit:decode(id('MODELPARAM_VALUE.USE_EXT_SYNC')) = 1"
+
 set cc [ipx::current_core]
 
 # The core does not issue narrow bursts
@@ -274,6 +301,7 @@ foreach {k v} { \
   "CYCLIC" "false" \
   "DMA_SG_TRANSFER" "false" \
   "DMA_2D_TRANSFER" "false" \
+  "FRAMELOCK" "false" \
   "SYNC_TRANSFER_START" "false" \
   "AXI_SLICE_SRC" "false" \
   "AXI_SLICE_DEST" "false" \
@@ -281,6 +309,8 @@ foreach {k v} { \
   "DISABLE_DEBUG_REGISTERS" "false" \
   "ENABLE_DIAGNOSTICS_IF" "false" \
   "CACHE_COHERENT" "false" \
+  "USE_EXT_SYNC" "false" \
+  "AUTORUN" "false" \
   } { \
   set_property -dict [list \
     "value_format" "bool" \
@@ -291,6 +321,11 @@ foreach {k v} { \
     "value" $v \
   ] [ipx::get_hdl_parameters $k -of_objects $cc]
 }
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
+] \
+[ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
 
 foreach dir {"SRC" "DEST"} {
   set_property -dict [list \
@@ -314,7 +349,28 @@ foreach dir {"SRC" "DEST"} {
   ] [ipx::get_user_parameters DMA_TYPE_${dir} -of_objects $cc]
 }
 
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DMA_2D_TRANSFER == true" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"End of Frame" "0" "End of Line" "1"} \
+] \
+[ipx::get_user_parameters DMA_2D_TLAST_MODE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DMA_2D_TRANSFER == true && \$CYCLIC == true" \
+] \
+[ipx::get_user_parameters FRAMELOCK -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$FRAMELOCK == true" \
+  "value_validation_type" "list" \
+  "value_validation_list" "4 8 16 32" \
+] \
+[ipx::get_user_parameters MAX_NUM_FRAMES -of_objects $cc]
+
+# Set up page layout
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
+set_property display_name {General settings} $page0
 set g [ipgui::add_group -name {DMA Endpoint Configuration} -component $cc \
   -parent $page0 -display_name {DMA Endpoint Configuration} \
   -layout "horizontal"]
@@ -480,6 +536,44 @@ set_property -dict [list \
   "enablement_tcl_expr" "\$DMA_TYPE_SRC == 0 || \$DMA_TYPE_DEST == 0" \
 ] [ipx::get_user_parameters CACHE_COHERENT -of_objects $cc]
 
+set feature_group_2d [ipgui::add_group -name "2D Settings" -component $cc \
+  -parent $feature_group -display_name "2D Settings"]
+
+set p [ipgui::get_guiparamspec -name "DMA_2D_TLAST_MODE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $feature_group_2d
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "AXIS TLAST function" \
+  "tooltip" "AXI Stream TLAST port function" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "FRAMELOCK" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $feature_group_2d
+set_property -dict [list \
+  "display_name" "Frame Locking Support" \
+  "tooltip" "Requires Cyclic mode" \
+] $p
+
+set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $feature_group_2d
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "Max Number Of Frame Buffers" \
+] $p
+
+set_property -dict [list \
+  "enablement_value" "false" \
+  "value_tcl_expr" {log($MAX_NUM_FRAMES)/log(2)} \
+] [ipx::get_user_parameters MAX_NUM_FRAMES_WIDTH -of_objects $cc]
+set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES_WIDTH" -component $cc]
+ipgui::remove_param -component [ipx::current_core] $p
+
+set p [ipgui::get_guiparamspec -name "USE_EXT_SYNC" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $feature_group
+set_property -dict [list \
+  "display_name" "External Synchronization Support" \
+] $p
+
 set clk_group [ipgui::add_group -name {Clock Domain Configuration} -component $cc \
   -parent $page0 -display_name {Clock Domain Configuration}]
 
@@ -534,12 +628,64 @@ set_property -dict [list \
   "display_name" "Enable Diagnostics Interface" \
 ] $p
 
+ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXI_ADDR_WIDTH" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SRC" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_DEST" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ID_WIDTH_SG" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "ALLOW_ASYM_MEM" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_ID_W" -component $cc]
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "DMA_AXIS_DEST_W" -component $cc]
+
+# add registers default values config page
+set page1 [ipgui::add_page -name {Autorun settings} -component [ipx::current_core] -display_name {Autorun settings}]
+
+set p [ipgui::get_guiparamspec -name "AUTORUN" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $page1
+set_property -dict [list \
+  "display_name" "Enable AutoRun mode" \
+  "tooltip" "Start transfer after reset deassertion" \
+] $p
+
+set group [ipgui::add_group -name "Register Defaults" -component $cc \
+  -parent $page1 -display_name "Register Defaults"]
+
+set defaults [list \
+  "AUTORUN_FLAGS"            "Flags" \
+  "AUTORUN_SRC_ADDR"         "Source address" \
+  "AUTORUN_DEST_ADDR"        "Destination address" \
+  "AUTORUN_X_LENGTH"         "X length" \
+  "AUTORUN_Y_LENGTH"         "Y length" \
+  "AUTORUN_SRC_STRIDE"       "Source stride" \
+  "AUTORUN_DEST_STRIDE"      "Destination stride" \
+  "AUTORUN_FRAMELOCK_CONFIG" "Framelock config" \
+  "AUTORUN_FRAMELOCK_STRIDE" "Framelock stride" \
+]
+set order 0
+foreach {param desc} $defaults {
+  set_property -dict [list \
+    "enablement_tcl_expr" "\$AUTORUN == true" \
+    "value" "0x00000000" \
+    "value_bit_string_length" "32" \
+    "value_format" "bitString" \
+  ] [ipx::get_user_parameters $param -of_objects $cc]
+
+  set_property -dict [list \
+    "value" "0x00000000" \
+    "value_bit_string_length" "32" \
+    "value_format" "bitString" \
+  ] [ipx::get_hdl_parameters $param -of_objects $cc]
+
+  set p [ipgui::get_guiparamspec -name $param -component $cc]
+  set_property -dict [list \
+    "display_name" $desc \
+    "tooltip" "\[$p\] $desc" \
+    "widget" "hexEdit" \
+  ] $p
+
+  ipgui::move_param $p -component $cc -order $order -parent $group
+
+  incr order
+}
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core $cc
