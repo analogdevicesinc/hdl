@@ -3,6 +3,11 @@
 AXI DMAC
 ================================================================================
 
+.. toctree::
+   :hidden:
+
+   Triple Buffer <triple-buffer>
+
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI DMA Controller <library/axi_dmac>` IP core is a high-speed,
@@ -731,6 +736,9 @@ Notice that the reader DMA will start to read the frames only after the writer
 finished to store in the DDR at least ``FRAMELOCK_CONFIG_DISTANCE+1`` frames.
 This means that while the FRAMELOCK_CONFIG_DISTANCE+1 frames are written into the
 memory, the reader DMA won’t output anything.
+
+For a guide on setting a pipeline with the framelock synchronization
+see :ref:`triple_buffer`.
 
 Transfer Start Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
