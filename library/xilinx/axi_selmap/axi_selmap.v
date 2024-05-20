@@ -107,6 +107,7 @@ module axi_selmap #(
   reg    [$clog2(CLK_DIV)-1:0] counter = 0;
 
   assign up_cclk = (CLK_DIV > 1) ? up_cclk_div : up_clk;
+  reg    up_cclk_delayed;
 
   always @(posedge up_clk) begin
     if (CLK_DIV > 1) begin
@@ -117,6 +118,7 @@ module axi_selmap #(
     end else begin
       up_cclk_div <= 1'b0;
     end
+    up_cclk_delayed <= up_cclk;
   end
 
   always @(posedge up_clk) begin
@@ -223,12 +225,12 @@ module axi_selmap #(
       .FIFO_DEPTH(FIFO_DEPTH)
     ) i_cdc_fifo (
       .wr_clk (up_clk),
-      .rd_clk (up_cclk),
+      .rd_clk (up_clk),
       .rstn (up_rstn),
       .wr_en (up_data_written),
       .wr_data (up_data_swapped),
       .fifo_full (full_flag),
-      .rd_en (~empty_flag),
+      .rd_en (up_cclk),
       .rd_data (data_sync),
       .fifo_empty (empty_flag),
       .rd_data_valid (rd_valid));
@@ -236,5 +238,5 @@ module axi_selmap #(
   endgenerate
 
   assign data = (CLK_DIV > 1) ? data_sync : up_data_swapped;
-  assign cclk = (CLK_DIV > 1) ? (up_cclk & rd_valid) : (up_cclk & up_data_written);
+  assign cclk = (CLK_DIV > 1) ? (up_cclk_delayed & rd_valid) : (up_cclk & up_data_written);
 endmodule
