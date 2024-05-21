@@ -14,6 +14,11 @@ set_module_property INTERNAL true
 
 ad_ip_parameter INVERT_OUTPUTS INTEGER 0
 
+add_parameter          IFC_TYPE INTEGER 0
+set_parameter_property IFC_TYPE DISPLAY_NAME "Interface type"
+set_parameter_property IFC_TYPE HDL_PARAMETER true
+set_parameter_property IFC_TYPE ALLOWED_RANGES { "0:Legacy" "1:F-Type" }
+
 # files
 
 ad_ip_files jesd204_soft_pcs_tx [list \
@@ -45,4 +50,4 @@ add_interface_port tx_phy charisk charisk Input 4
 add_interface tx_raw_data conduit end
 #set_interface_property data associatedClock clock
 #set_interface_property data associatedReset reset
-add_interface_port tx_raw_data data raw_data Output 40
+add_interface_port tx_raw_data data raw_data Output "(IFC_TYPE+1)*40"
