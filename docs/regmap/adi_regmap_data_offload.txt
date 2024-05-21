@@ -1,0 +1,276 @@
+TITLE
+Data Offload Engine (data_offload)
+DO
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x000
+VERSION
+Version of the peripheral. Follows semantic versioning. Current version 1.00.61.
+ENDREG
+
+FIELD
+[31:16] 0x00000001
+VERSION_MAJOR
+RO
+ENDFIELD
+
+FIELD
+[15:8] 0x00000000
+VERSION_MINOR
+RO
+ENDFIELD
+
+FIELD
+[7:0] 0x00000061
+VERSION_PATCH
+RO
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x001
+PERIPHERAL_ID
+ENDREG
+
+FIELD
+[31:0] ''ID''
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x002
+SCRATCH
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH
+RW
+Scratch register useful for debug.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x003
+IDENTIFICATION
+ENDREG
+
+FIELD
+[31:0] 0x44414F46
+IDENTIFICATION
+RO
+Peripheral identification ('D', 'A', 'O', 'F').
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x004
+SYNTHESIS_CONFIG_1
+ENDREG
+
+FIELD
+[2] ''HAS_BYPASS''
+HAS_BYPASS
+RO
+If set the bypass logic is implemented.
+ENDFIELD
+
+FIELD
+[1] ''TX_OR_RXN_PATH''
+TX_OR_RXN_PATH
+RO
+If this device was configured for the TX path, this bit will be set to 1.
+Conversely, the bit will be 0 for the RX path.
+ENDFIELD
+
+FIELD
+[0] ''MEM_TYPE''
+MEMORY_TYPE
+RO
+This bit identifies the type of memory that was chosen during synthesis. A value of 1
+identifies external memory, while a value of zero indicates that block ram was used.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x005
+SYNTHESIS_CONFIG_2
+ENDREG
+
+FIELD
+[31:0] 1<<''MEM_SIZE_LOG2''
+MEM_SIZE_LSB
+RO
+32 bits (LSB) of the storage unit size. 
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x006
+SYNTHESIS_CONFIG_3
+ENDREG
+
+FIELD
+[1:0] (1<<''MEM_SIZE_LOG2'')>>32
+MEM_SIZE_MSB
+RO
+2 bits (MSB) of the storage unit size. 
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x007
+TRANSFER_LENGTH
+ENDREG
+
+FIELD
+[31:0] (2^''MEM_SIZE_LOG2''-1)>>6
+TRANSFER_LENGTH
+RW
+The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x020
+MEM_PHY_STATE
+ENDREG
+
+FIELD
+[5] 0x00000000
+UNDERFLOW
+RW1C
+Indicates that storage could not handle data rate during play. Available when core is in TX mode.
+ENDFIELD
+
+FIELD
+[4] 0x00000000
+OVERFLOW
+RW1C
+Indicates that storage could not handle data rate during capture. Available when core is in RX mode.
+ENDFIELD
+
+FIELD
+[0] 0x00000000
+CALIB_COMPLETE
+RO
+Indicates that the memory initialization and calibration have completed successfully.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x021
+RESET_OFFLOAD
+ENDREG
+
+FIELD
+[0] ''AUTO_BRINGUP''
+RESETN
+RW
+"Software Reset": Resets all the internal address registers and state machines.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x022
+CONTROL
+ENDREG
+
+FIELD
+[1] ~''TX_OR_RXN_PATH''
+ONESHOT_EN
+RW
+Enables oneshot mode. This means that the data offload will only play a received buffer once,
+and then stop. This mode is useful when you want to use the data offload for its synchronization
+features, but don't need the repeating output.
+ENDFIELD
+
+FIELD
+[0] 0x00000000
+OFFLOAD_BYPASS
+RW
+Enables bypass mode. In this mode pretty much **all** functionality of the data offload is bypassed,
+and the data offload will simply act as an asynchronous dual-port FIFO and forward your data stream.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x040
+SYNC_TRIGGER
+ENDREG
+
+FIELD
+[0] 0x00000000
+SYNC_TRIGGER
+RW1C
+Software trigger for software sync mode.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x041
+SYNC_CONFIG
+ENDREG
+
+FIELD
+[1:0] 0x00000000
+SYNC_CONFIG
+RW
+Synchronization mode: 0: Auto, 1: Hardware trigger, 2: Software trigger, 3: Reserved.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x080
+FSM_BDG
+ENDREG
+
+FIELD
+[11:8] 0xXXXXXXXX
+FSM_STATE_READ
+RO
+It force the Rx side offload state machine into the required state.
+ENDFIELD
+
+FIELD
+[4:0] 0xXXXXXXXX
+FSM_STATE_WRITE
+RO
+The current state of the offload state machine.
+ENDFIELD
+
+############################################################################################
+############################################################################################

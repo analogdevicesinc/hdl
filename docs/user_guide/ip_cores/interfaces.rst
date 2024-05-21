@@ -1,7 +1,12 @@
+.. _interfaces:
+
+Interfaces
+================================================================================
+
 .. _up_if:
 
-Microprocessor interface
-===============================================================================
+Microprocessor Interface
+--------------------------------------------------------------------------------
 
 All the ADI IP cores contains multiple AXI register map modules, which control
 a well specified part of the IP.
@@ -14,8 +19,8 @@ and an acknowledge (driven by subordinate) control signals.
 All the uP interface signals names have a ``up_`` prefix, this differentiate
 themselves clearly from other internal signals.
 
-uP interface and signals
-------------------------------------------------------------------------------
+uP Interface and Signals
+--------------------------------------------------------------------------------
 
 .. list-table:: Clock and reset
 
@@ -71,7 +76,7 @@ uP interface and signals
    perspective.
 
 Timing diagram
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 The following timing diagram illustrates the signals and functionality of the
 interface. It show a register write access and two consecutive register read access.
@@ -105,3 +110,17 @@ interface. It show a register write access and two consecutive register read acc
        ['tspan', {class:'info h3'}, 'UP interface']
     }
    }
+
+References
+--------------------------------------------------------------------------------
+
+AMBA AXI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* AMBA `Specification <https://www.arm.com/architecture/system-architectures/amba/amba-specifications>`__
+* Vivado Design Suite: `AXI Reference Guide <https://docs.amd.com/v/u/en-US/ug1037-vivado-axi-reference-guide>`__
+
+Avalon
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Avalon Interface `Specification <https://www.intel.com/content/www/us/en/docs/programmable/683091/22-3/introduction-to-the-interface-specifications.html>`__

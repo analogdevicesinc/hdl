@@ -15,7 +15,7 @@ Contents
 
    creating_new_ip
    use_adi_ips
-   up_if
+   interfaces
    axi_adc/index
    axi_dac/index
 
@@ -40,6 +40,11 @@ ADC/DAC
 -  :ref:`axi_ad9783`
 -  :ref:`axi_ad9963`
 -  :ref:`axi_adaq8092`
+
+Data Offload
+-------------------------------------------------------------------------------
+
+-  :ref:`data_offload`
 
 DMA
 -------------------------------------------------------------------------------
