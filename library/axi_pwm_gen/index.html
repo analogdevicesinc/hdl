@@ -7,7 +7,7 @@
 
     <title>AXI PWM Generator &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -18,7 +18,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="I3C Controller" href="../i3c_controller/index.html" />
+    <link rel="next" title="Data Offload" href="../data_offload/index.html" />
     <link rel="prev" title="AXI DMAC" href="../axi_dmac/index.html" />
    
   
@@ -160,7 +160,7 @@ Content on this topic
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -185,6 +185,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -1146,7 +1147,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x504C5347</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x504c5347</span></code></td>
 <td class="description"><section>
 <p>Identification number.</p>
 </section>
@@ -1161,7 +1162,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LOAD_CONFIG</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1171,7 +1172,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1189,7 +1190,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ALIGN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1199,7 +1200,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FORCE_ALIGN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1209,7 +1210,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">START_AT_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1230,7 +1231,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NB_PULSES</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Number of configurable pulses.</p>
 </section>
@@ -1248,7 +1249,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PULSE_X_PERIOD[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">period</span> <span class="pre">-</span> <span class="pre">'h4C</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pulse x duration, defined in number of clock cycles.</p>
 </section>
@@ -1266,7 +1267,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PULSE_X_WIDTH[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">width</span> <span class="pre">-</span> <span class="pre">'h8C</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pulse x width (high time), defined in number of clock cycles.</p>
 </section>
@@ -1284,7 +1285,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PULSE_X_OFFSET[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">offset</span> <span class="pre">-</span> <span class="pre">'hCC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pulse x offset, defined in number of clock cycles.</p>
 </section>
@@ -1335,7 +1336,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
               <div class="related">
                 &nbsp;
     <a href="../axi_dmac/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">AXI DMAC</a>
-    <a href="../i3c_controller/index.html" title="Next document (Ctrl+RightArrow)" class="next">I3C Controller</a>
+    <a href="../data_offload/index.html" title="Next document (Ctrl+RightArrow)" class="next">Data Offload</a>
               </div>
           
         </div>

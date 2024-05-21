@@ -7,7 +7,7 @@
 
     <title>AXI DMAC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -201,7 +201,7 @@ Content on this topic
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -226,6 +226,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -2057,21 +2058,21 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000004</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0004</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000005</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000062</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x62</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -2116,7 +2117,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x444D4143</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x444d4143</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘D’, ‘M’, ‘A’, ‘C’).</p>
 </section>
@@ -2132,7 +2133,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>/8)</p>
+<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_​DATA_​WIDTH_​DEST</span></code>/8)</p>
 </section>
 </td>
 <td class="description"><section>
@@ -2145,7 +2146,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">DMA_​TYPE_​DEST</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2158,7 +2159,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>/8)</p>
+<p>log2(<code class="docutils literal notranslate"><span class="pre">DMA_​DATA_​WIDTH_​SRC</span></code>/8)</p>
 </section>
 </td>
 <td class="description"><section>
@@ -2171,7 +2172,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">DMA_​TYPE_​SRC</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2184,7 +2185,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">BYTES_​PER_​BURST_​WIDTH</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2198,11 +2199,11 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">CACHE_​COHERENT</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2215,7 +2216,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">AXI_​AXCACHE</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2228,7 +2229,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">AXI_​AXPROT</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -2242,20 +2243,20 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TRANSFER_COMPLETED IRQ.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TRANSFER_QUEUED IRQ.</p>
 </section>
@@ -2267,20 +2268,20 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed and the TRANSFER_COMPLETED bit in the IRQ_MASK register is not set. Either if all bytes have been transferred or an error occurred during the transfer.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been queued and it is possible to queue the next transfer. It can be masked out by setting the TRANSFER_QUEUED bit in the  IRQ_MASK register.</p>
 </section>
@@ -2292,20 +2293,20 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed. Either if all bytes have been transferred or an error occurred during the transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been queued and it is possible to queue the next transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
 </section>
@@ -2317,30 +2318,30 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HWDESC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the scatter-gather transfers are enabled.  Note, this field is only valid if the DMA channel has been configured with SG transfer support.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAUSE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the currently active transfer is paused. It will be resumed once the bit is cleared again.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the DMA channel is enabled.</p>
 </section>
@@ -2355,7 +2356,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This register contains the ID of the next transfer. The ID is generated by the DMAC and after the transfer has been started can be used to check if the transfer has finished by checking the corresponding bit in the TRANSFER_DONE register. The contents of this register is only valid if TRANSFER_SUBMIT is 0.</p>
 </section>
@@ -2367,10 +2368,10 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once the transfer has been queued or the DMA channel is disabled.  Writing a 0 to this register has no effect.</p>
 </section>
@@ -2382,7 +2383,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><section>
@@ -2395,20 +2396,20 @@ data between system memory and other peripherals like high-speed converters.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>When setting this bit for a MM to AXIS transfer the TLAST signal will be asserted during the last beat of the transfer. For AXIS to MM transfers the TLAST signal from the AXIS interface is monitored. After its occurrence all descriptors are ignored until this bit is set.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_REPORTING_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When setting this bit the length of partial transfers caused eventually by TLAST will be recorded.</p>
 </section>
@@ -2454,7 +2455,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><section>
-<p>2^log2(max(<code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_SRC</span></code>, <code class="docutils literal notranslate"><span class="pre">DMA_DATA_WIDTH_DEST</span></code>)/8)-1</p>
+<p>2^log2(max(<code class="docutils literal notranslate"><span class="pre">DMA_​DATA_​WIDTH_​SRC</span></code>, <code class="docutils literal notranslate"><span class="pre">DMA_​DATA_​WIDTH_​DEST</span></code>)/8)-1</p>
 </section>
 </td>
 <td class="description"><section>
@@ -2471,7 +2472,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>Number of rows to transfer - 1.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support.</p>
 </section>
@@ -2486,7 +2487,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the destination address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer support and write to memory support.</p>
 </section>
@@ -2501,7 +2502,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the source address. Needs to be aligned to the bus width.  Note, this field is only valid if the DMA channel has been configured with 2D transfer and read from memory support.</p>
 </section>
@@ -2516,50 +2517,50 @@ data between system memory and other peripherals like high-speed converters.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_0_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 0 has been completed.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_1_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 1 has been completed.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_2_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 2 has been completed.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_3_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 3 has been completed.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[31]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:31]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set at least one partial transfer was transferred. This field will reset when the ENABLE control bit is reset or when all information on partial transfers was read through PARTIAL_TRANSFER_LENGTH and PARTIAL_TRANSFER_ID registers.</p>
 </section>
@@ -2574,7 +2575,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>ID of the currently active transfer. When no transfer is active this register will be equal to the TRANSFER_ID register.</p>
 </section>

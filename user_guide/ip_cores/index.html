@@ -7,7 +7,7 @@
 
     <title>ADI IP cores &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -104,6 +104,7 @@
 <li><a class="reference internal" href="#contents">Contents</a></li>
 <li><a class="reference internal" href="#frameworks">Frameworks</a></li>
 <li><a class="reference internal" href="#adc-dac">ADC/DAC</a></li>
+<li><a class="reference internal" href="#data-offload">Data Offload</a></li>
 <li><a class="reference internal" href="#dma">DMA</a></li>
 <li><a class="reference internal" href="#video">Video</a></li>
 <li><a class="reference internal" href="#utilities">Utilities</a></li>
@@ -152,7 +153,7 @@ Content on this topic
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="current reference internal" href="#">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -177,6 +178,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -255,7 +257,7 @@ Content on this topic
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l1"><a class="reference internal" href="up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -283,6 +285,12 @@ Content on this topic
 <li><p><a class="reference internal" href="../../library/axi_ad9783/index.html#axi-ad9783"><span class="std std-ref">AXI AD9783</span></a></p></li>
 <li><p><span class="xref std std-ref">axi_ad9963</span></p></li>
 <li><p><a class="reference internal" href="../../library/axi_adaq8092/index.html#axi-adaq8092"><span class="std std-ref">AXI ADAQ8092</span></a></p></li>
+</ul>
+</section>
+<section id="data-offload">
+<h2>Data Offload<a class="headerlink" href="#data-offload" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></li>
 </ul>
 </section>
 <section id="dma">

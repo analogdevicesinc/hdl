@@ -7,7 +7,7 @@
 
     <title>I3C Controller Host Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -155,7 +155,7 @@ Content on this topic
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -180,6 +180,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="i3c_controller_core.html">Core Module</a></li>
@@ -797,7 +798,7 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
@@ -853,7 +854,7 @@ runtime.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -868,7 +869,7 @@ runtime.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAA_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -878,7 +879,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -888,7 +889,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -898,7 +899,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -908,7 +909,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -918,7 +919,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -928,7 +929,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -938,7 +939,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1061,7 +1062,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[22]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[22:22]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_IS_CCC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
@@ -1071,7 +1072,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[21]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[21:21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BCAST_HEADER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
@@ -1081,7 +1082,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[20]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20:20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_SR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
@@ -1111,7 +1112,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_RNW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
@@ -1253,7 +1254,7 @@ runtime.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1263,7 +1264,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1273,7 +1274,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1291,7 +1292,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_STATUS_NOP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1321,7 +1322,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1339,7 +1340,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_LISTEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1349,7 +1350,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1377,7 +1378,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_WEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
@@ -1387,7 +1388,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_HAS_IBI_PAYLOAD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1397,7 +1398,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_IBI_CAPABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1407,7 +1408,7 @@ runtime.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_ATTACHED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1428,7 +1429,7 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The command to the I3C controller to execute.</p>
 </section>

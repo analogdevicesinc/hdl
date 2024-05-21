@@ -7,7 +7,7 @@
 
     <title>AXI_ADXCVR &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -172,7 +172,7 @@ Content on this topic
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -197,6 +197,7 @@ Content on this topic
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -893,10 +894,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Version number.</p>
 </section>
@@ -914,10 +912,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Instance identifier number.</p>
 </section>
@@ -935,10 +930,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Scratch register.</p>
 </section>
@@ -953,13 +945,10 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>If clear, link is held in reset, set this bit to 0x1 to activate link. Note that the reference clock must be active before setting this bit.</p>
 </section>
@@ -974,13 +963,10 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>After setting the RESETN bit above, wait for this bit to set. If set, indicates successful link activation.</p>
 </section>
@@ -998,23 +984,17 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:NUM_OF_LANES]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>0</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[NUM_OF_LANES]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[NUM_OF_LANES:NUM_OF_LANES]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_PLL_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>After setting the RESETN bit above, wait for this bit be to set.</p>
 </section>
@@ -1024,10 +1004,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[NUM_OF_LANES-1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHANNEL_N_READY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>After setting the RESETN bit above, wait for this registers to be set.</p>
 </section>
@@ -1045,10 +1022,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the technology/generation of the FPGA device (e.g., cyclone V, arria 10, stratix 10)</p>
 </section>
@@ -1058,10 +1032,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the family variant of the FPGA device(e.g., SX, GX, GT or zynq, kintex, virtex)</p>
 </section>
@@ -1071,10 +1042,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the FPGA’s speed-grade</p>
 </section>
@@ -1084,10 +1052,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the device package. The package might affect high-speed interfaces</p>
 </section>
@@ -1105,10 +1070,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[31:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>0</p>
 </section>
@@ -1118,10 +1080,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[27:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">XCVR_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Refers to the transceiver speed grade 0-9.</p>
 </section>
@@ -1131,10 +1090,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[23:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>0</p>
 </section>
@@ -1144,23 +1100,17 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[11:9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>0</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver type (transmit or receive)</p>
 </section>
@@ -1170,10 +1120,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Physical layer number of lanes.</p>
 </section>
@@ -1191,10 +1138,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_VOLTAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>The voltage of the FPGA device in mv</p>
 </section>
@@ -1827,10 +1771,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Version number.</p>
 </section>
@@ -1848,10 +1789,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Instance identifier number.</p>
 </section>
@@ -1869,10 +1807,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Scratch register.</p>
 </section>
@@ -1887,26 +1822,20 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BUFSTATUS_RST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Initially this flag is held in reset with value 0x1, in order for a user to see the RX BUFSTATUS, this flag needs to be set to 0x0.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>If clear, link is held in reset, set this bit to 0x1 to activate link. Note that the reference clock and DRP clock must be active before setting this bit.</p>
 </section>
@@ -1924,36 +1853,27 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BUFSTATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>BUFSTATUS provides status for either the RX buffer or the TX buffer. If BUFSTATUS is referring to the TX buffer, once BUFSTATUS is set High it remains High until RESETN is activated. Else if BUFSTATUS is referring to the RX buffer, once BUFSTSTATUS is High it can be cleared using BUFSTATUS_RST. If BUFTATUS[6] is 0x1 the internal FIFO overflows and when the BUFSTATUS[5] is 0x1 the internal FIFO underflows. Available from version 17.5.a. For more information consult the transceiver user guide(search for RXBUFSTATUS/TXBUFSTATUS).</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PLL_LOCK_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>After setting the RESETN bit above, this bit must clear. If does not clears, indicates the CPLL/QPLL did not locked. Available from version 17.4.a</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>After setting the RESETN bit above, wait for this bit to set. If set, indicates successful link activation.</p>
 </section>
@@ -1971,10 +1891,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the technology/generation of the FPGA device (e.g, 7series, ultrascale)</p>
 </section>
@@ -1984,10 +1901,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the family variant of the FPGA device(e.g., zynq, kintex, virtex)</p>
 </section>
@@ -1997,10 +1911,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the FPGA’s speed-grade</p>
 </section>
@@ -2010,10 +1921,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Encoded value describing the device package. The package might affect high-speed interfaces</p>
 </section>
@@ -2028,13 +1936,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LPM_DFE_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver primitive control, refer Xilinx documentation.</p>
 </section>
@@ -2044,10 +1949,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[10:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver primitive control, refer Xilinx documentation.</p>
 </section>
@@ -2057,10 +1959,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSCLK_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>For GTX drives directly the (RX/TX)SYSCLKSEL pin of the transceiver refer to Xilinx documentation. For GTH/GTY drives directly the (RX/TX)PLLCLKSEL pin of the transceiver and indirectly the (RX/TX)SYSCLKSEL pin of the transceiver see <a class="reference internal" href="#axi-adxcvr-table-one-label"><span class="std std-ref">Table 1</span></a>.</p>
 </section>
@@ -2070,10 +1969,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OUTCLK_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver primitive control <a class="reference internal" href="#axi-adxcvr-table-two-label"><span class="std std-ref">Table 2</span></a>, refer Xilinx documentation.</p>
 </section>
@@ -2088,13 +1984,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[20]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20:20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Using QPLL.</p>
 </section>
@@ -2104,10 +1997,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[19:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">XCVR_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/scripts/adi_xilinx_device_info_enc.tcl">Xilinx encoded values</a>.</p>
 </section>
@@ -2117,23 +2007,17 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Link layer mode : 01 - 8B10B decoder (aka 204B) 10 - 64B66B decoder (aka 204C); Available from version 17.3.a</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver type (transmit or receive)</p>
 </section>
@@ -2143,10 +2027,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_OF_LANES</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Physical layer number of lanes.</p>
 </section>
@@ -2164,10 +2045,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP sel, set to 0xff for broadcast.</p>
 </section>
@@ -2182,13 +2060,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_WR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP sel, set to 0x1 for write, 0x0 for read.</p>
 </section>
@@ -2198,10 +2073,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_ADDR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP read/write address.</p>
 </section>
@@ -2211,10 +2083,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_WDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP write data.</p>
 </section>
@@ -2229,13 +2098,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP access busy (0x1) or idle (0x0).</p>
 </section>
@@ -2245,10 +2111,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_RDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver common-DRP read data.</p>
 </section>
@@ -2266,10 +2129,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP sel, set to 0xff for broadcast.</p>
 </section>
@@ -2284,13 +2144,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_WR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP sel, set to 0x1 for write, 0x0 for read.</p>
 </section>
@@ -2300,10 +2157,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_ADDR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP read/write address.</p>
 </section>
@@ -2313,10 +2167,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_WDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP write data.</p>
 </section>
@@ -2331,13 +2182,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP access busy (0x1) or idle (0x0).</p>
 </section>
@@ -2347,10 +2195,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_RDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver channel-DRP read data.</p>
 </section>
@@ -2368,10 +2213,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan-DRP sel, set to 0xff for broadcast.</p>
 </section>
@@ -2386,13 +2228,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_REQ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan request, set this bit to initiate an eye-scan, this bit auto-clears when scan is complete.</p>
 </section>
@@ -2410,10 +2249,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_PRESCALE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2431,10 +2267,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[25:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_VOFFSET_RANGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2444,10 +2277,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_VOFFSET_STEP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2457,10 +2287,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_VOFFSET_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2470,10 +2297,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_VOFFSET_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2491,10 +2315,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_HOFFSET_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2504,10 +2325,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[11:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_HOFFSET_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2525,10 +2343,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[11:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_HOFFSET_STEP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, refer Xilinx documentation.</p>
 </section>
@@ -2546,10 +2361,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_STARTADDR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transceiver eye-scan control, DMA start address (ES data is written to this memory address).</p>
 </section>
@@ -2564,13 +2376,10 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>If set, indicates an error in ES DMA.</p>
 </section>
@@ -2588,10 +2397,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[n]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_RESETn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n. Where n is from 0 to 31.</p>
 </section>
@@ -2609,10 +2415,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_DIFFCTRL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>TX driver swing control.</p>
 </section>
@@ -2630,10 +2433,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_POSTCURSOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transmiter post-cursor TX pre-emphasis control.</p>
 </section>
@@ -2651,10 +2451,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_PRECURSOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Transmiter pre-cursor TX pre-emphasis control.</p>
 </section>
@@ -2672,10 +2469,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_VOLTAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>The voltage of the FPGA device in mv</p>
 </section>
@@ -2690,26 +2484,20 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSFORCEERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Valid for TX. If set, a single error is forced in the PRBS transmitter for every clock cycle. Can be used to test the PRBS checkers on the other side of the link.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSCNTRESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Valid for RX. Resets the PRBS error counter from the transceiver. Does not self clears. Value of error counter must be accessed via DRP.</p>
 </section>
@@ -2719,10 +2507,7 @@ configured and programmed identically.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSSEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>PRBS checker or generator test pattern control. All zeros will put the PRBS in bypass mode. For TX non-zero values will stop the normal dataflow from link layer and will inject a pattern instead. See transceiver guide for specific values.</p>
 </section>
@@ -2737,26 +2522,20 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>This sticky status output indicates that PRBS errors have occurred. Value of error counter must be accessed via DRP.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSLOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>NA</p>
-</section>
-</td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Ignore this bit for GTX transceivers. For others: Indicates that the RX PRBS checker has been error free for 15 XCLK cycles after reset. Once asserted High, it does not deassert until reset of the RX pattern checker via PRBSCNTRESET</p>
 </section>

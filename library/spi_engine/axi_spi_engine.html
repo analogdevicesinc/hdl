@@ -7,7 +7,7 @@
 
     <title>AXI SPI Engine Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -160,7 +160,7 @@ Content on this topic
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/up_if.html">Microprocessor interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -185,6 +185,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -867,21 +868,21 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000002</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x02</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -927,7 +928,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">NUM_​OF_​SDI</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -940,7 +941,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">DATA_WITH</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">DATA_​WITH</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -957,7 +958,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_MEM_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000004</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
 <p>Address width for the data (SDO) memory on the Offload Module. The size of the memory is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_MEM_ADDRESS_WIDTH</span></code> data words.</p>
 </section>
@@ -967,7 +968,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_MEM_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000004</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
 <p>Address width for the command memory on the Offload Module. The size of the command memory is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_MEM_ADDRESS_WIDTH</span></code> instructions.</p>
 </section>
@@ -982,7 +983,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000005</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><section>
 <p>Address width for the SDI FIFO. The size of the SDI FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDI_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
@@ -992,7 +993,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000005</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><section>
 <p>Address width for the SDO FIFO. The size of the SDO FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
@@ -1002,7 +1003,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_FIFO_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000004</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
 <p>Address width for the synchronization FIFO. The size of the synchronization FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SYNC_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
@@ -1012,7 +1013,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ADDRESS_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000004</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
 <p>Address width for the command FIFO. The size of the command FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
@@ -1039,50 +1040,50 @@ generate SPI transactions.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set to 0 the CMD_ALMOST_EMPTY interrupt is masked.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set to 0 the SDO_ALMOST_EMPTY interrupt is masked.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set to 0 the SDI_ALMOST_FULL interrupt is masked.</p>
 </section>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set to 0 the SYNC_EVENT interrupt is masked.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SYNC_ID_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set to 0 the OFFLOAD_SYNC_ID_PENDING interrupt is masked.</p>
 </section>
@@ -1158,7 +1159,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p>log2((2^``CMD_FIFO_ADDRESS_WIDTH``)-1)</p>
+<p>log2((2^ <code class="docutils literal notranslate"><span class="pre">CMD_​FIFO_​ADDRESS_​WIDTH</span></code>)-1)</p>
 </section>
 </td>
 <td class="description"><section>
@@ -1176,7 +1177,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p>log2((2^``SDO_FIFO_ADDRESS_WIDTH``)-1)</p>
+<p>log2((2^ <code class="docutils literal notranslate"><span class="pre">SDO_​FIFO_​ADDRESS_​WIDTH</span></code>)-1)</p>
 </section>
 </td>
 <td class="description"><section>
@@ -1359,7 +1360,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​0</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -1377,7 +1378,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​1</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -1395,7 +1396,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​2</span></code></p>
 </section>
 </td>
 <td class="description"><section>
@@ -1413,7 +1414,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_4</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><section>
-<p><code class="docutils literal notranslate"><span class="pre">CFG_INFO_3</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​3</span></code></p>
 </section>
 </td>
 <td class="description"><section>

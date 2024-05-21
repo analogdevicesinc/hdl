@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Microprocessor interface &#8212; HDL  documentation</title>
+    <title>Interfaces &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=b4b07c60" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -100,9 +100,15 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Microprocessor interface</a><ul>
-<li><a class="reference internal" href="#up-interface-and-signals">uP interface and signals</a></li>
+<li><a class="reference internal" href="#">Interfaces</a><ul>
+<li><a class="reference internal" href="#microprocessor-interface">Microprocessor Interface</a></li>
+<li><a class="reference internal" href="#up-interface-and-signals">uP Interface and Signals</a></li>
 <li><a class="reference internal" href="#timing-diagram">Timing diagram</a></li>
+<li><a class="reference internal" href="#references">References</a><ul>
+<li><a class="reference internal" href="#amba-axi">AMBA AXI</a></li>
+<li><a class="reference internal" href="#avalon">Avalon</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -148,7 +154,7 @@ Content on this topic
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="use_adi_ips.html">Use ADI IPs into your own project</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Microprocessor interface</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Interfaces</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_adc/index.html">Generic AXI ADC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
@@ -173,6 +179,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
@@ -241,8 +248,10 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="microprocessor-interface">
-<span id="up-if"></span><h1>Microprocessor interface<a class="headerlink" href="#microprocessor-interface" title="Permalink to this heading">#</a></h1>
+  <section id="interfaces">
+<span id="id1"></span><h1>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h1>
+<section id="microprocessor-interface">
+<span id="up-if"></span><h2>Microprocessor Interface<a class="headerlink" href="#microprocessor-interface" title="Permalink to this heading">#</a></h2>
 <p>All the ADI IP cores contains multiple AXI register map modules, which control
 a well specified part of the IP.
 To avoid complicated interconnections inside the IP, using the
@@ -253,11 +262,12 @@ and each channel contains an address bus, a data bus, a request (driven by manag
 and an acknowledge (driven by subordinate) control signals.
 All the uP interface signals names have a <code class="docutils literal notranslate"><span class="pre">up_</span></code> prefix, this differentiate
 themselves clearly from other internal signals.</p>
+</section>
 <section id="up-interface-and-signals">
-<h2>uP interface and signals<a class="headerlink" href="#up-interface-and-signals" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper docutils container" id="id1">
-<table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Clock and reset</span><a class="headerlink" href="#id1" title="Permalink to this table">#</a></caption>
+<h2>uP Interface and Signals<a class="headerlink" href="#up-interface-and-signals" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Clock and reset</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -274,9 +284,9 @@ themselves clearly from other internal signals.</p>
 </tbody>
 </table>
 </div>
-<div class="table-wrapper docutils container" id="id2">
-<table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Read interface</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Read interface</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -301,9 +311,9 @@ themselves clearly from other internal signals.</p>
 </tbody>
 </table>
 </div>
-<div class="table-wrapper docutils container" id="id3">
-<table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Write interface</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Write interface</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -369,6 +379,22 @@ interface. It show a register write access and two consecutive register read acc
 }
 </script>
 </div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<section id="amba-axi">
+<h3>AMBA AXI<a class="headerlink" href="#amba-axi" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>AMBA <a class="reference external" href="https://www.arm.com/architecture/system-architectures/amba/amba-specifications">Specification</a></p></li>
+<li><p>Vivado Design Suite: <a class="reference external" href="https://docs.amd.com/v/u/en-US/ug1037-vivado-axi-reference-guide">AXI Reference Guide</a></p></li>
+</ul>
+</section>
+<section id="avalon">
+<h3>Avalon<a class="headerlink" href="#avalon" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Avalon Interface <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/programmable/683091/22-3/introduction-to-the-interface-specifications.html">Specification</a></p></li>
+</ul>
+</section>
 </section>
 </section>
 
