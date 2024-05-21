@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AXI HDMI TX &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=8e0fb079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=7e1fdd13"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AXI HDMI RX" href="../axi_hdmi_rx/index.html" />
+    <link rel="prev" title="AXI DMAC" href="../axi_dmac/index.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="hdl">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../doctools/index.html">Doctools</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AXI HDMI TX</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interfaces">Interfaces</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed description</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#design-considerations">Design considerations</a></li>
+<li><a class="reference internal" href="#examples-for-different-data-width-configurations">Examples for different data width configurations</a></li>
+<li><a class="reference internal" href="#software-support">Software support</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../documentation/university/index.html">University Program</a>
+  <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../no-OS/index.html">no-OS</a>
+  <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../doctools/index.html">Doctools</a>
+  <a href="../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guideline.html">HDL coding guideline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ/AD9082-FMCA-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="axi-hdmi-tx">
+<span id="id1"></span><h1>AXI HDMI TX<a class="headerlink" href="#axi-hdmi-tx" title="Permalink to this heading">#</a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.8 570" width="358.8" height="570"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="322.8" height="516" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axis"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">s_axis</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-reference_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">reference_clk</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-vdma_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">vdma_clk</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-hdmi_out_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="54">hdmi_out_clk</text></a><g transform="translate(340.8,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-vga_out_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="78">vga_out_clk</text></a><g transform="translate(340.8,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="102">hdmi_16_hsync</text></a><g transform="translate(340.8,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="126">hdmi_16_vsync</text></a><g transform="translate(340.8,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="150">hdmi_16_data_e</text></a><g transform="translate(340.8,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="174">hdmi_16_data</text></a><g transform="translate(340.8,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="198">hdmi_16_es_data</text></a><g transform="translate(340.8,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="222">hdmi_24_hsync</text></a><g transform="translate(340.8,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="246">hdmi_24_vsync</text></a><g transform="translate(340.8,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="270">hdmi_24_data_e</text></a><g transform="translate(340.8,262.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="294">hdmi_24_data</text></a><g transform="translate(340.8,286.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="318">vga_hsync</text></a><g transform="translate(340.8,310.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="342">vga_vsync</text></a><g transform="translate(340.8,334.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="366">vga_red</text></a><g transform="translate(340.8,358.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="390">vga_green</text></a><g transform="translate(340.8,382.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="414">vga_blue</text></a><g transform="translate(340.8,406.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="438">hdmi_36_hsync</text></a><g transform="translate(340.8,430.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="462">hdmi_36_vsync</text></a><g transform="translate(340.8,454.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="486">hdmi_36_data_e</text></a><g transform="translate(340.8,478.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="322.8" y="510">hdmi_36_data</text></a><g transform="translate(340.8,502.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="322.8" height="516" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="179.4" y="554">axi_hdmi_tx</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">AXI HDMI TX</a> IP core can be used to interface
+the <a class="icon adi reference external" href="https://www.analog.com/ADV7511">ADV7511</a> and <a class="icon adi reference external" href="https://www.analog.com/ADV7123">ADV7123</a> devices using an FPGA.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>AXI based configuration</p></li>
+<li><p>Supports multiple resolution (max 1080p)</p></li>
+<li><p>Video transmission on 36/24/16 bits or 8 bits RGB</p></li>
+<li><p>Supports embedded sync (16bit data)</p></li>
+<li><p>YCbCr or RGB color space output</p></li>
+<li><p>Data clipping (min. and max. for each chroma/color value)</p></li>
+<li><p>Supports Xilinx 7 Series and Ultrascale devices.</p></li>
+<li><p>Supports Altera 5 Series SoC</p></li>
+</ul>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx/axi_hdmi_tx.v">library/axi_hdmi_tx/axi_hdmi_tx.v</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-diagram">
+<span id="axi-hdmi-tx-block-diagram"></span><h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram11.svg" /></section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Core ID should be unique for each axi_hdmi_tx IP in the system.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CR_CB_N</span></code></td>
+<td class="description"><section>
+<p>Used in the chroma subsampling process, selecting which of the red or blue
+data components will be transmitted first in-between green samples. 1 = red, 0 = blue</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
+<td class="description"><section>
+<p>Used to select the FPGA Technolgy; beyond the “Choices/Range” listed, also supports Altera 5 series (101) devices.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), 7series (1), ultrascale (2), ultrascale+ (3), versal (4)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span></code></td>
+<td class="description"><section>
+<p>Interface type towards the 7511. Available options: 16_BIT, 24_BIT, 36_BIT,
+16_BIT_EMBEDDED_SYNC, VGA_INTERFACE</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">16_BIT</span></code></td>
+<td class="range"><p>16_BIT, 24_BIT, 36_BIT, 16_BIT_EMBEDDED_SYNC, VGA_INTERFACE</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">OUT_CLK_POLARITY</span></code></td>
+<td class="description"><section>
+<p>0 = Launch on rising edge, 1 = Launch on falling edge.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interfaces">
+<h2>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc" name="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc" type="checkbox"></input><label for="cf4f14a41e89ae452e7f2f396b6e2550eeeebcfc"><div><p>s_axi</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="e8464ca245a1ea05e46abd4f3bbb7860008cc7d3" name="e8464ca245a1ea05e46abd4f3bbb7860008cc7d3" type="checkbox"></input><label for="e8464ca245a1ea05e46abd4f3bbb7860008cc7d3"><div><p>s_axi_aclk</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="2cf1f74a4aadb2621c96c4657499425c78f49099" name="2cf1f74a4aadb2621c96c4657499425c78f49099" type="checkbox"></input><label for="2cf1f74a4aadb2621c96c4657499425c78f49099"><div><p>s_axi_aresetn</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axis">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="3d2db161fa7fe6c3a3b7297c92d6c017f60b5187" name="3d2db161fa7fe6c3a3b7297c92d6c017f60b5187" type="checkbox"></input><label for="3d2db161fa7fe6c3a3b7297c92d6c017f60b5187"><div><p>s_axis</p>
+<section>
+<p>DMA AXIS interface (vdma).</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vdma_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">vdma_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vdma_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TDATA</span></code></td>
+<td><p>in [63:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">vdma_end_of_frame</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-reference_clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="a3946f06e7ba5c4444cbc688a1320ed72596d4a5" name="a3946f06e7ba5c4444cbc688a1320ed72596d4a5" type="checkbox"></input><label for="a3946f06e7ba5c4444cbc688a1320ed72596d4a5"><div><p>reference_clk</p>
+<section>
+<p>Pixel clock, generated by an axi_clkgen IP core (axi_hdmi_clkgen in reference design.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">reference_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-hdmi_out_clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="d313d3071149cd435d736f467727d9849dd34762" name="d313d3071149cd435d736f467727d9849dd34762" type="checkbox"></input><label for="d313d3071149cd435d736f467727d9849dd34762"><div><p>hdmi_out_clk</p>
+<section>
+<p>Output clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_out_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT&quot;</span> <span class="pre">||</span> <span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;24_BIT&quot;</span> <span class="pre">||</span> <span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;36_BIT&quot;</span> <span class="pre">||</span> <span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT_EMBEDDED_SYNC&quot;</span> </code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-vga_out_clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="b7988f68def433d312097605025c5bcdb3ac5caf" name="b7988f68def433d312097605025c5bcdb3ac5caf" type="checkbox"></input><label for="b7988f68def433d312097605025c5bcdb3ac5caf"><div><p>vga_out_clk</p>
+<section>
+<p>Output clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vga_out_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-vdma_clk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="6660fcf25884989db0ab1cf0aedeb38b4fd61834" name="6660fcf25884989db0ab1cf0aedeb38b4fd61834" type="checkbox"></input><label for="6660fcf25884989db0ab1cf0aedeb38b4fd61834"><div><p>vdma_clk</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vdma_clk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="358e1be483a985325ab324cd5095ff092015e8de" name="358e1be483a985325ab324cd5095ff092015e8de" type="checkbox"></input><label for="358e1be483a985325ab324cd5095ff092015e8de"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_16_hsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Horizontal sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_16_vsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Vertical sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_16_data_e</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Data enable signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_16_data</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>HDMI data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_16_es_data</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;16_BIT_EMBEDDED_SYNC&quot;</span></code></td>
+<td class="description"><section>
+<p>HDMI embedded sync data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_24_hsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;24_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Horizontal sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_24_vsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;24_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Vertical sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_24_data_e</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;24_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Data enable signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_24_data</span></code></td>
+<td><p>out [23:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;24_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>HDMI data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">vga_hsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+<td class="description"><section>
+<p>Horizontal sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vga_vsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+<td class="description"><section>
+<p>Vertical sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">vga_red</span></code></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+<td class="description"><section>
+<p>VGA red data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">vga_green</span></code></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+<td class="description"><section>
+<p>VGA green data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">vga_blue</span></code></td>
+<td><p>out [7:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;VGA_INTERFACE&quot;</span></code></td>
+<td class="description"><section>
+<p>VGA red data.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_36_hsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;36_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Horizontal sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_36_vsync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;36_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Vertical sync signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">hdmi_36_data_e</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;36_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>Data enable signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">hdmi_36_data</span></code></td>
+<td><p>out [35:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INTERFACE</span> <span class="pre">==</span> <span class="pre">&quot;36_BIT&quot;</span></code></td>
+<td class="description"><section>
+<p>HDMI data.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="detailed-description">
+<h2>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<p>The top module (<strong>axi_hdmi_tx</strong>), instantiates:</p>
+<ul class="simple">
+<li><p>axi_hdmi_tx_core module</p></li>
+<li><p>axi_hdmi_tx_vdma module</p></li>
+<li><p>the HDMI TX register map</p></li>
+<li><p>the AXI handling interface</p></li>
+</ul>
+<p>In <strong>axi_hdmi_tx_core</strong> module the video information is manipulated by passing
+through several processing blocks (see <a class="reference internal" href="#axi-hdmi-tx-block-diagram"><span class="std std-ref">Block Diagram</span></a>):</p>
+<ul class="simple">
+<li><p><strong>CSC (Color Space Converter)</strong> –converts the video information from RGB color
+space to YCbCr color space. If RGB is the desired output color space the CSC
+block can be bypassed by setting to 1 the value of CSC_BYPASS register.</p></li>
+<li><p><strong>Data Clipping</strong> bloc gives the possibility of limiting the minimum and
+maximum color range values. This block is controlled by FULL_RANGE, CLIPP_MAX
+and CLIPP_MIN registers.</p></li>
+<li><p><strong>Chroma subsampling</strong> block as its name suggests, samples the video
+information to obtain a video information that requires less bandwidth and
+has a minimum impact on the video quality experienced by human eyes.</p></li>
+<li><p><strong>Embedded Sync</strong> module interleaves the video synchronization signals with
+the video information, obtaining a more compact transmission path.</p></li>
+<li><p><strong>Sync Signals</strong> block is responsible for generating the video synchronization
+signals for video resolutions written in HDMI interface Control register.</p></li>
+</ul>
+<p>The <strong>axi_hdmi_tx_vdma</strong> module ensures the clock domain crossing circuit
+between the video source, typically a <a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a> core and the
+<strong>axi_hdmi_core</strong>, which works at different clock speeds depending on the
+required resolution.</p>
+</section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-HDMI_TX">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="07856b94d11c3ac97a4e1684f0b7d4b6eee352dd" name="07856b94d11c3ac97a4e1684f0b7d4b6eee352dd" type="checkbox"></input><label for="07856b94d11c3ac97a4e1684f0b7d4b6eee352dd"><p>HDMI Transmit (axi_hdmi_tx) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reset, a common reset is used for all the interface modules, The default is reset (0x0), software must write 0x1 to bring up the core.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x11</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x44</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CNTRL1</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SS_BYPASS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set (0x1) bypasses the chroma sub-sampler. This is primarily intended to be used to send the test-pattern directly to the HDMI transmitter without modifying it.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reserved</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CSC_BYPASS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x12</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x48</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CNTRL2</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SOURCE_SEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select the HDMI data source- register constant (0x3), incr-pattern (0x2), input (0x1) or disabled (0x0).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x13</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CNTRL3</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CONST_RGB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
+<td class="description"><section>
+<p>This is the RGB value transmitted, if the source is constant (see above).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x15</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x54</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x16</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x58</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x17</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
+<td class="description bold"><section>
+<p>ADC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Interface status, if set indicates no errors. If not set, there  are errors, software may try resetting the cores.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VDMA_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VDMA_OVF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates vdma overflow.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VDMA_UNF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates vdma underflow.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x19</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x64</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">TPM_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">HDMI_TPM_OOS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates TPM OOS at the HDMI interface.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VDMA_TPM_OOS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates TPM OOS at the VDMA interface.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1a</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x68</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLIPP_MAX</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">R_MAXorCR_MAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
+<td class="description"><section>
+<p>Defines the maximum value for clipping the red or red-difference chroma component. Default value are 0xf0 for red-difference chroma and 0xfe for red.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">G_MAXorY_MAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0eb</span></code></td>
+<td class="description"><section>
+<p>Defines the maximum value for clipping the green or luma component. Default values are 0xeb for luma and and 0xfe for green.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">B_MAXorCB_MAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
+<td class="description"><section>
+<p>Defines the maximum value for clipping the blue or blue-difference chroma component. Default value are 0xf0 for blue-difference chroma and 0xfe for blue.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1b</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLIPP_MIN</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">R_MINorCR_MIN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="description"><section>
+<p>Defines the minimum value for clipping the red or red-difference chroma component. Default value are 0x10 for red-difference chroma and 0x01 for red.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">G_MINorY_MIN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x010</span></code></td>
+<td class="description"><section>
+<p>Defines the minimum value for clipping the green or luma component. Default values are 0x10 for luma and and 0x01 for green.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">B_MINorCB_MIN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="description"><section>
+<p>Defines the minimum value for clipping the blue or blue-difference chroma component. Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">HSYNC_1</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">H_LINE_ACTIVE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the horizontal line active pixel width (active resolution length). e.g. 1920 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">H_LINE_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the horizontal line width (no. of pixel clocks per line). e.g. 2200 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">HSYNC_2</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">H_SYNC_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the horizontal sync width (no. of pixel clocks). e.g. 44 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">HSYNC_3</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">H_ENABLE_MAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the horizontal data enable maximum. It is the sum of H_ENABLE_MIN and the active pixel width. e.g. 2112 (192 + 1920) (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">H_ENABLE_MIN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the horizontal data enable minimum. It is the sum of horizontal back porch (number of clock cycles between the falling edge of HSYNC to the rising edge of DE) and the sync width. e.g. 192 (44 + 148) (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x110</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x440</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VSYNC_1</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">V_FRAME_ACTIVE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the vertical frame active line width (active resolution height). e.g. 1080 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">V_FRAME_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the vertical frame width (no. of lines per frame). e.g. 1125 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x111</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x444</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VSYNC_2</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">V_SYNC_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the vertical sync width (no. of lines). e.g. 5 (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x112</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x448</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VSYNC_3</span></code></td>
+<td class="description bold"><section>
+<p>HDMI Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">V_ENABLE_MAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the vertical data enable maximum. It is the sum of V_ENABLE_MIN and the active pixel height. e.g. 1121 (41 + 1080) (1080p)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">V_ENABLE_MIN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This is the vertical data enable minimum. It is the sum of vertical back porch (number of lines between the falling edge of VSYNC to the rising edge of DE) and the sync width. e.g. 41 (36 + 5) (1080p)</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>RW1C</p></td>
+<td><p>Read,write-1-to-clear</p></td>
+<td><p>Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+<section id="design-considerations">
+<h2>Design considerations<a class="headerlink" href="#design-considerations" title="Permalink to this heading">#</a></h2>
+<p>Additional IPs needed:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></li>
+<li><p><span class="xref std std-ref">axi_clkgen</span></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></li>
+</ul>
+<p><a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a> provides a high-bandwidth direct memory access for the video stream.
+The core is configured as follows:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_ip_instance</span><span class="w"> </span>axi_dmac<span class="w"> </span>axi_hdmi_dma
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>axi_hdmi_dma<span class="w"> </span>CONFIG.DMA_TYPE_SRC<span class="w"> </span><span class="mi">0</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>axi_hdmi_dma<span class="w"> </span>CONFIG.DMA_TYPE_DEST<span class="w"> </span><span class="mi">1</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>axi_hdmi_dma<span class="w"> </span>CONFIG.CYCLIC<span class="w"> </span>true
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>axi_hdmi_dma<span class="w"> </span>CONFIG.DMA_2D_TRANSFER<span class="w"> </span>true
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>axi_hdmi_dma<span class="w"> </span>CONFIG.DMA_DATA_WIDTH_DEST<span class="w"> </span><span class="mi">64</span>
+</pre></div>
+</div>
+<p>The audio path is separated from the video path, for audio <strong>axi_spdif_tx</strong> core
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">axi_spdif_tx</a>) is needed to transmit the audio
+information to the ADV7511 device.
+The whole system needs to be controlled by a processor (ARM or a soft core) that
+can programs the registers.
+<code class="docutils literal notranslate"><span class="pre">axi_clkgen</span></code> generates the clock frequency required for the desired resolution
+(pixel clock), the frequency is software configurable
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adv7511">Example adv7511_zc706 no-Os software</a>).</p>
+</section>
+<section id="examples-for-different-data-width-configurations">
+<h2>Examples for different data width configurations<a class="headerlink" href="#examples-for-different-data-width-configurations" title="Permalink to this heading">#</a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ADV7511_Hardware_Users_Guide.pdf">ADV7511</a>
+can accept video data from as few as eight pins (either YCbCr 4:2:2 double data
+rate [DDR] or YCbCr 4:2:2 with 2x pixel clock) to as many as 36 pins (RGB 4:4:4
+or YCbCr 4:4:4). In addition it can accept HSYNC, VSYNC and DE (Data Enable)</p>
+<p>The <strong>axi_hdmi_tx</strong> core support the following video input connections:</p>
+<ul class="simple">
+<li><p>36 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2017_r1/projects/adv7511/vc707">projects/adv7511/vc707</a> development board)</p></li>
+<li><p>24 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/adv7511/zc706">projects/adv7511/zc706</a> development board)</p></li>
+<li><p>16 bits with HSYNC, VSYNC and DE (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/adv7511/zed">projects/adv7511/zed</a>)</p></li>
+<li><p>16 bits with embedded SYNC (TX interface of the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/imageon">IMAGEON</a> board)</p></li>
+</ul>
+</section>
+<section id="software-support">
+<h2>Software support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<p>The core can be controlled by no-Os or Linux</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/drm/adv7511">Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/kc705/adv7511">Reference design with no-OS example</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/adv7511">projects/adv7511</a></p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">Zynq &amp; Altera SoC Quick Start Guide</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/fmc-imageon">FMC-IMAGEON Xilinx Reference Design</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/kc705/adv7511">ADV7511 Xilinx Evaluation Boards Reference Design</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../axi_dmac/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">AXI DMAC</a>
+    <a href="../axi_hdmi_rx/index.html" title="Next document (Ctrl+RightArrow)" class="next">AXI HDMI RX</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
