@@ -6,12 +6,14 @@ CN0585 HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-CN0585-FMCZ Low Latency Development Kit (LLDK) board is a development 
-board consisting of 4 x 16-bit ADC channels and 4 x 16-bit DAC channels that 
-are interfaced with an FPGA through the FMC Low Pin Count (LPC) Connector.
-Current revision of EVAL-CN0585-FMCZ is Rev B. EVAL-CN0585-FMCZ, 
-EVAL-CN0584-EBZ and ZedBoard are connected together to build a development 
-system setup.
+The :adi:`EVAL-CN0585-FMCZ <CN0585>` Low Latency Development Kit (LLDK) board
+is a development board consisting of 4 x 16-bit ADC channels and 4 x 16-bit
+DAC channels that are interfaced with an FPGA through the FMC Low Pin Count
+(LPC) Connector.
+Current revision of :adi:`EVAL-CN0585-FMCZ <CN0585>` is Rev B.
+:adi:`EVAL-CN0585-FMCZ <CN0585>`, :adi:`EVAL-CN0585-FMCZ <CN0584>` and
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` are connected
+together to build a development system setup.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -45,9 +47,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-The architecture is composed of two AD3552R digital-to-analog converter 
-interface IPs and four LTC2387 analog-to-digital converter interface 
-IPs. All these IPs utilize an 120MHz reference clock, which is produced by 
+The architecture is composed of two :adi:`AD3552R` digital-to-analog converter
+interface IPs and four :adi:`LTC2387-16` analog-to-digital converter interface
+IPs. All these IPs utilize an 120MHz reference clock, which is produced by
 an axi_clkgen IP.
 
 Block diagram
@@ -67,20 +69,20 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
 ==================== =======================
-Instance             Address Zynq/Microblaze 
+Instance             Address Zynq/Microblaze
 ==================== =======================
-  axi_ltc2387_0       0X44A0_0000 
-  axi_ltc2387_1       0X44A1_0000 
-  axi_ltc2387_2       0X44A2_0000 
-  axi_ltc2387_3       0X44A3_0000 
-  axi_ltc2387_dma     0X44A4_0000 
-  axi_clkgen          0X44B0_0000 
-  axi_pwm_gen         0X44B1_0000 
-  max_spi             0X44B2_0000 
-  axi_ad3552r_0       0X44D0_0000 
-  axi_dac_0_dma       0X44D3_0000 
-  axi_ad3552r_1       0X44E0_0000 
-  axi_dac_1_dma       0X44E3_0000 
+  axi_ltc2387_0       0X44A0_0000
+  axi_ltc2387_1       0X44A1_0000
+  axi_ltc2387_2       0X44A2_0000
+  axi_ltc2387_3       0X44A3_0000
+  axi_ltc2387_dma     0X44A4_0000
+  axi_clkgen          0X44B0_0000
+  axi_pwm_gen         0X44B1_0000
+  max_spi             0X44B2_0000
+  axi_ad3552r_0       0X44D0_0000
+  axi_dac_0_dma       0X44D3_0000
+  axi_ad3552r_1       0X44E0_0000
+  axi_dac_1_dma       0X44E3_0000
 ==================== =======================
 
 I2C connections
@@ -173,10 +175,10 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
 ================ === ========== ===========
-axi_ltc2387_dma  13  57         89         
-max_spi          8   52         84         
-axi_dac_0_dma    5   34         66         
-axi_dac_1_dma    4   33         65         
+axi_ltc2387_dma  13  57         89
+max_spi          8   52         84
+axi_dac_0_dma    5   34         66
+axi_dac_1_dma    4   33         65
 ================ === ========== ===========
 
 Building the HDL project
@@ -193,9 +195,10 @@ the HDL repository.
    :linenos:
 
    user@analog:~$ cd hdl/projects/cn0585/zed
-   user@analog:~/hdl/projects/cn0585/zed$ make 
+   user@analog:~/hdl/projects/cn0585/zed$ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user
+guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -273,7 +276,7 @@ Software related
 -  :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
 -  :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
 
--  Python support: 
+-  Python support:
 
    -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
 
