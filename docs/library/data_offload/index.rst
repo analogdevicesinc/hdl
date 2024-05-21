@@ -244,8 +244,8 @@ Supported Data Interfaces
 AXI4 Stream Interface (S_AXIS | M_AXIS)
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-* The AXI Stream Subordinate (S_AXIS) interface is used to receive AXI stream from the
-  transmit DMA or ADC device.
+* The AXI Stream Subordinate (S_AXIS) interface is used to receive AXI stream
+  from the transmit DMA or ADC device.
 * The AXI Stream Manager (M_AXIS) interface is used to transmit AXI stream to
   receive DMA or DAC device.
 
@@ -483,8 +483,9 @@ options:
 * ``adi,transfer-length`` is useful for RX instances, where the size of the receive
   buffer can be reduced from the default (All available storage).
 
-The latter is addressed by the integration into :git-linux:`cf_axi_dds.c
-<drivers/iio/frequency/cf_axi_dds.c>` and :git-linux:`cf_axi_dds_buffer_stream.c
-<drivers/iio/frequency/cf_axi_dds_buffer_stream.c>`, which allow the drivers to
-control the oneshot functionality of the data offload based on what was requested
-with the current IIO buffer, assuming that bypass was disabled.
+The latter is addressed by the integration into
+:git-linux:`cf_axi_dds.c <drivers/iio/frequency/cf_axi_dds.c>` and
+:git-linux:`cf_axi_dds_buffer_stream.c <drivers/iio/frequency/cf_axi_dds_buffer_stream.c>`,
+which allow the drivers to control the oneshot functionality of the data offload
+based on what was requested with the current IIO buffer, assuming that bypass
+was disabled.
