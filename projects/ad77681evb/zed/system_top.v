@@ -85,13 +85,15 @@ module system_top (
 
   inout           ad7768_reset,
   inout           ad7768_sync_out,
-  inout           ad7768_sync_in,
   inout   [ 3:0]  ad7768_gpio,
 
   input           ad7768_spi_miso,
   output          ad7768_spi_mosi,
   output          ad7768_spi_sclk,
   output          ad7768_spi_cs,
+
+  input           ad7768_sync_in,
+  input           ad7768_mclk_return,
   input           ad7768_drdy
 );
 
@@ -110,13 +112,12 @@ module system_top (
   // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(7)
+    .DATA_WIDTH(6)
   ) i_iobuf_ad7768_gpio (
-    .dio_t(gpio_t[38:32]),
-    .dio_i(gpio_o[38:32]),
-    .dio_o(gpio_i[38:32]),
+    .dio_t(gpio_t[37:32]),
+    .dio_i(gpio_o[37:32]),
+    .dio_o(gpio_i[37:32]),
     .dio_p({ad7768_gpio,
-            ad7768_sync_in,
             ad7768_sync_out,
             ad7768_reset}));
 
