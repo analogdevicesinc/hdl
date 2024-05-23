@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x000
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 4.05.62.
+Version of the peripheral. Follows semantic versioning. Current version 4.05.63.
 ENDREG
 
 FIELD
@@ -25,7 +25,7 @@ RO
 ENDFIELD
 
 FIELD
-[7:0] 0x00000062
+[7:0] 0x00000063
 VERSION_PATCH
 RO
 ENDFIELD
@@ -368,7 +368,7 @@ X_LENGTH
 ENDREG
 
 FIELD
-[23:0] 2^log2(max(''DMA_DATA_WIDTH_SRC'', ''DMA_DATA_WIDTH_DEST'')/8)-1
+[31:0] 2^log2(max(''DMA_DATA_WIDTH_SRC'', ''DMA_DATA_WIDTH_DEST'')/8)-1
 X_LENGTH
 RW
 Number of bytes to transfer - 1.
@@ -383,7 +383,7 @@ Y_LENGTH
 ENDREG
 
 FIELD
-[23:0] 0x00000000
+[31:0] 0x00000000
 Y_LENGTH
 RW
 Number of rows to transfer - 1.
@@ -400,7 +400,7 @@ DEST_STRIDE
 ENDREG
 
 FIELD
-[23:0] 0x00000000
+[31:0] 0x00000000
 DEST_STRIDE
 RW
 The number of bytes between the start of one row and the next row for the
@@ -419,7 +419,7 @@ SRC_STRIDE
 ENDREG
 
 FIELD
-[23:0] 0x00000000
+[31:0] 0x00000000
 SRC_STRIDE
 RW
 The number of bytes between the start of one row and the next row for the source
@@ -551,7 +551,7 @@ TRANSFER_PROGRESS
 ENDREG
 
 FIELD
-[23:0] 0x000000
+[31:0] 0x00000000
 TRANSFER_PROGRESS
 RO
 This field presents the number of bytes transferred to the destination for the current transfer.
