@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -35,9 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top  #(
-  parameter NUM_OF_SDI = 2
-) (
+`define ECHOED_CLK
+
+module system_top (
 
   input                   sys_rst,
   input                   sys_clk_p,
@@ -77,12 +77,13 @@ module system_top  #(
   inout                   iic_scl,
   inout                   iic_sda,
 
-  // FMC+ IOs AD9213
+  // AD9213 DATA INTERFACE
 
   input                   rx_ref_clk_p,
   input                   rx_ref_clk_n,
   input                   rx_ref_clk_replica_p,
   input                   rx_ref_clk_replica_n,
+
   input       [15:0]      rx_data_p,
   input       [15:0]      rx_data_n,
 
@@ -94,44 +95,76 @@ module system_top  #(
   output                  rx_sync_p,
   output                  rx_sync_n,
 
-  output                  fpga_sclk,
-  inout                   fpga_sdio,
-  output                  fpga_csb,
 
-  output                  adf4371_csb,
 
-  output                  hmc7044_sclk,
-  inout                   hmc7044_sdio,
+  // AD4080 DATA INTERFACE
+
+  input                   dco_p,
+  input                   dco_n,
+  input                   da_p,
+  input                   da_n,
+  input                   db_p,
+  input                   db_n,
+  input                   cnv_in_p,
+  input                   cnv_in_n,
+
+  // GPIOs
+  inout       [ 4:0]      ad9213_gpio,
+  output                  ad9213_rstb,
+  output                  ad9213_hmc_sync_req,
+
+  inout                   ad4080_gpio1_fmc,
+  inout                   ad4080_gpio2_fmc,
+  inout                   ad4080_gpio3_fmc,
+
+  inout                   adrf5203_ctrl_0,
+  inout                   adrf5203_ctrl_1,
+  inout                   adrf5203_ctrl_2,
+
+  inout                   adg5419_ctrl,
+  inout                   ada4945_disable,
+
+  inout                   adl5580_en,
+
+  inout                   dig_ext_p,
+  inout                   dig_ext_n,
+  inout                   dig_ext_hs_p,
+  inout                   dig_ext_hs_n,
+
+  inout                   ltc2644_ldac,
+  inout                   ltc2644_clr,
+  inout                   ltc2644_tgp,
+
+
+
+  // SPI ports
+
+  output                  ad9213_sclk,
+  output                  ad9213_csb,
+  inout                   ad9213_sdio,
+
+  output                  ad4080_sclk,
+  output                  ad4080_cs,
+  input                   ad4080_sdi,
+  output                  ad4080_sdo,
+
+
   output                  hmc7044_csb,
+  output                  adf4371_csb,
+  output                  hmc7044_adf4371_sclk,
+  inout                   hmc7044_adf4371_sdio,
 
-  inout       [ 4:0]      gpio,
+  output                  adl5580_sclk,
+  output                  adl5580_csb,
+  inout                   adl5580_sdio,
 
-  output                  rstb,
-  output                  hmc_sync_req,
-  
-  // ad463x SPI configuration interface
-
-  input [NUM_OF_SDI-1:0]  ad463x_spi_sdi,
-  output                  ad463x_spi_sdo,
-  output                  ad463x_spi_sclk,
-  output                  ad463x_spi_cs,
-
-  input                   ad463x_echo_sclk,
-  output                  ad463x_cnv,
-  input                   ad463x_busy,
-  inout                   ad463x_resetn
-);
+  output                  ltc2644_sclk,
+  output                  ltc2644_cs,
+  input                   ltc2644_sdi,
+  output                  ltc2644_sdo
+  );
 
   // internal signals
-  wire            ext_clk_s;
-
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
-  wire            ad463x_echo_sclk_s;
 
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
@@ -139,18 +172,72 @@ module system_top  #(
 
   wire            spi_miso;
   wire            spi_mosi;
-  wire            hmc7044_miso;
-  wire            hmc7044_mosi;
-  wire    [ 1:0]  hmc7044_csn;
+
+  wire            hmc7044_adf4371_miso;
+  wire            hmc7044_adf4371_mosi;
+
+  wire            adl5580_miso;
+  wire            adl5580_mosi;
 
   wire            rx_ref_clk;
   wire            rx_ref_clk_replica;
   wire            rx_sysref;
   wire            rx_sync;
 
-  assign iic_rstn = 1'b1;
-  assign hmc7044_csb = hmc7044_csn[0];
-  assign adf4371_csb = hmc7044_csn[1];
+
+
+
+
+
+  assign gpio_i[63:55] = gpio_o[63:55];
+  assign rstb          = gpio_o[38];
+  assign hmc_sync_req  = gpio_o[37];
+
+  ad_iobuf #(
+    .DATA_WIDTH(15)
+  ) i_gpio (
+    .dio_t(gpio_t[53:39]),
+    .dio_i(gpio_o[53:39]),
+    .dio_o(gpio_i[53:39]),
+    .dio_p({adrf5203_ctrl_0,
+            adrf5203_ctrl_1,
+            adrf5203_ctrl_2,
+            adg5419_ctrl,
+            ada4945_disable,
+            adl5580_en,
+            gpio3_fmc,
+            gpio2_fmc,
+            dig_ext_p,
+            dig_ext_n,
+            ltc2644_ldac,
+            ltc2644_clr,
+            ltc2644_tgp,
+            dig_ext_hs_p,
+            dig_ext_hs_n}));
+
+  ad_iobuf #(
+    .DATA_WIDTH(5)
+  ) i_iobuf (
+    .dio_t (gpio_t[36:32]),
+    .dio_i (gpio_o[36:32]),
+    .dio_o (gpio_i[36:32]),
+    .dio_p ({ad9213_gpio[4:0]}));   // 36-32
+
+  assign gpio_i[31:17] = gpio_o[31:17];
+
+  ad_iobuf #(
+    .DATA_WIDTH(17)
+  ) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
+    .dio_p (gpio_bd));
+
+
+
+
+
+
 
   // instantiations
 
@@ -187,29 +274,38 @@ module system_top  #(
     .I (glbl_clk_0),
     .O (glbl_clk_buf));
 
-  ad_iobuf #(
-    .DATA_WIDTH(22)
-  ) i_iobuf (
-    .dio_t (gpio_t[36:32]),
-    .dio_i (gpio_o[36:32]),
-    .dio_o (gpio_i[36:32]),
-    .dio_p ({gpio[4:0],     // 36-32
-             gpio_bd}));    // 31-16  
 
-  assign hmc_sync_req = gpio_o[37];
-  assign rstb         = gpio_o[38];
 
-  assign gpio_i[63:40] = gpio_o[63:40];
-  assign gpio_i[14:0] = gpio_o[14:0];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   ad_3w_spi #(
     .NUM_OF_SLAVES(2)
   ) i_hmc7044_spi (
-    .spi_csn (hmc7044_csn[1:0]),
-    .spi_clk (hmc7044_sclk),
-    .spi_mosi (hmc7044_mosi),
-    .spi_miso (hmc7044_miso),
-    .spi_sdio (hmc7044_sdio),
+    .spi_csn ({adf4371_csb,hmc7044_csb}),
+    .spi_clk (hmc7044_adf4371_sclk),
+    .spi_mosi (hmc7044_adf4371_mosi),
+    .spi_miso (hmc7044_adf4371_miso),
+    .spi_sdio (hmc7044_adf4371_sdio),
     .spi_dir ());
 
   ad_3w_spi #(
@@ -222,38 +318,47 @@ module system_top  #(
     .spi_sdio (fpga_sdio),
     .spi_dir ());
 
-  ad_data_clk #(
-    .SINGLE_ENDED (1)
-  ) i_echo_sclk (
-    .rst (1'b0),
-    .locked (),
-    .clk_in_p (ad463x_echo_sclk),
-    .clk_in_n (1'b0),
-    .clk (ad463x_echo_sclk_s));
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(1)
+  ) i_adl5580_spi (
+    .spi_csn (adl5580_csb),
+    .spi_clk (adl5580_sclk),
+    .spi_mosi (adl5580_mosi),
+    .spi_miso (adl5580_miso),
+    .spi_sdio (adl5580_sdio),
+    .spi_dir ());
+
+  // instantiations
 
   ad_iobuf #(
     .DATA_WIDTH(1)
-  ) i_ad463x_gpio_iobuf (
-    .dio_t(gpio_t[39]),
-    .dio_i(gpio_o[39]),
-    .dio_o(gpio_i[39]),
-    .dio_p(ad463x_resetn));
+  ) i_flt_rdy_ad4080 (
+    .dio_t(1'b1),
+    .dio_i(1'b0),
+    .dio_o(filter_data_ready_n),
+    .dio_p(gpio1_fmc));
 
-  ad_iobuf #(
-    .DATA_WIDTH(2)
-  ) i_iic_mux_scl (
-    .dio_t({iic_mux_scl_t_s, iic_mux_scl_t_s}),
-    .dio_i(iic_mux_scl_o_s),
-    .dio_o(iic_mux_scl_i_s),
-    .dio_p(iic_mux_scl));
 
-  ad_iobuf #(
-    .DATA_WIDTH(2)
-  ) i_iic_mux_sda (
-    .dio_t({iic_mux_sda_t_s, iic_mux_sda_t_s}),
-    .dio_i(iic_mux_sda_o_s),
-    .dio_o(iic_mux_sda_i_s),
-    .dio_p(iic_mux_sda));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -287,27 +392,13 @@ module system_top  #(
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .spi_clk_i (fpga_sclk),
-    .spi_clk_o (fpga_sclk),
-    .spi_csn_i (fpga_csb),
-    .spi_csn_o (fpga_csb),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
-    .hmc7044_clk_i (hmc7044_sclk),
-    .hmc7044_clk_o (hmc7044_sclk),
-    .hmc7044_csn_i (hmc7044_csn),
-    .hmc7044_csn_o (hmc7044_csn),
-    .hmc7044_sdi_i (hmc7044_miso),
-    .hmc7044_sdo_i (hmc7044_mosi),
-    .hmc7044_sdo_o (hmc7044_mosi),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-     // FMC+
+    // FMC+
     .rx_data_0_n  (rx_data_n[1]),
     .rx_data_0_p  (rx_data_p[1]),
     .rx_data_1_n  (rx_data_n[3]),
@@ -340,17 +431,59 @@ module system_top  #(
     .rx_data_14_p (rx_data_p[13]),
     .rx_data_15_n (rx_data_n[11]),
     .rx_data_15_p (rx_data_p[11]),
+
     .rx_ref_clk_0 (rx_ref_clk),
     .rx_ref_clk_1 (rx_ref_clk_replica),
     .glbl_clk_0 (glbl_clk_buf),
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
-    .ad463x_spi_sdo (ad463x_spi_sdo),
-    .ad463x_spi_sdi (ad463x_spi_sdi),
-    .ad463x_spi_cs (ad463x_spi_cs),
-    .ad463x_spi_sclk (ad463x_spi_sclk),
-    .ad463x_echo_sclk (ad463x_echo_sclk_s),
-    .ad463x_busy (ad463x_busy),
-    .ad463x_cnv (ad463x_cnv));
+
+    .ad4080_clk_i (1'b0),
+    .ad4080_clk_o (ad4080_sclk),
+    .ad4080_csn_i (1'b1),
+    .ad4080_csn_o (ad4080_cs),
+    .ad4080_sdi_i (ad4080_sdi),
+    .ad4080_sdo_o (ad4080_sdo),
+
+    .adl5580_clk_i (1'b0),
+    .adl5580_clk_o (adl5580_sclk),
+    .adl5580_csn_i (1'b1),
+    .adl5580_csn_o (adl5580_csb),
+    .adl5580_sdi_i (adl5580_miso),
+    .adl5580_sdo_o (adl5580_mosi),
+
+    .ltc2644_clk_i (1'b0),
+    .ltc2644_clk_o (ltc2644_sclk),
+    .ltc2644_csn_i (),
+    .ltc2644_csn_o (ltc2644_cs),
+    .ltc2644_sdi_i (ltc2644_sdi),
+    .ltc2644_sdo_o (ltc2644_sdo),
+
+    .spi_clk_i (fpga_sclk),
+    .spi_clk_o (fpga_sclk),
+    .spi_csn_i (fpga_csb),
+    .spi_csn_o (fpga_csb),
+    .spi_sdi_i (spi_miso),
+    .spi_sdo_i (spi_mosi),
+    .spi_sdo_o (spi_mosi),
+
+    .hmc7044_adf4371_clk_i (1'b0),
+    .hmc7044_adf4371_clk_o (hmc7044_adf4371_sclk),
+    .hmc7044_adf4371_csn_i (1'b1),
+    .hmc7044_adf4371_csn_o (hmc7044_adf4371_csn),
+    .hmc7044_adf4371_sdi_i (hmc7044_adf4371_miso),
+    .hmc7044_adf4371_sdo_i (1'b0),
+    .hmc7044_adf4371_sdo_o (hmc7044_adf4371_mosi),
+
+    // FMC
+    .dco_p (dco_p),
+    .dco_n (dco_n),
+    .da_p (da_p),
+    .da_n (da_n),
+    .db_p (db_p),
+    .db_n (db_n),
+    .cnv_in_p(cnv_in_p),
+    .cnv_in_n(cnv_in_n),
+    .filter_data_ready_n(filter_data_ready_n));
 
 endmodule
