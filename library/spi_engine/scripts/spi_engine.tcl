@@ -49,7 +49,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
 
   ad_ip_instance spi_engine_offload $offload
   ad_ip_parameter $offload CONFIG.DATA_WIDTH $data_width
-  ad_ip_parameter $offload CONFIG.ASYNC_SPI_CLK $async_spi_clk
+  ad_ip_parameter $offload CONFIG.ASYNC_SPI_CLK 0
   ad_ip_parameter $offload CONFIG.NUM_OF_SDI $num_sdi
   ad_ip_parameter $offload CONFIG.CMD_MEM_ADDRESS_WIDTH $cmd_mem_addr_width
   ad_ip_parameter $offload CONFIG.SDO_MEM_ADDRESS_WIDTH $data_mem_addr_width
