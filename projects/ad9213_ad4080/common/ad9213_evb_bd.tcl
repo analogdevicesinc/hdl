@@ -19,35 +19,35 @@ set adc_dma_data_width 512
 
 create_bd_port -dir I glbl_clk_0
 
-create_bd_port -dir O -from 1 -to 0 hmc7044_csn_o
-create_bd_port -dir I -from 1 -to 0 hmc7044_csn_i
-create_bd_port -dir I hmc7044_clk_i
-create_bd_port -dir O hmc7044_clk_o
-create_bd_port -dir I hmc7044_sdo_i
-create_bd_port -dir O hmc7044_sdo_o
-create_bd_port -dir I hmc7044_sdi_i
+create_bd_port -dir O -from 1 -to 0 hmc7044_adf4371_csn_o
+create_bd_port -dir I -from 1 -to 0 hmc7044_adf4371_csn_i
+create_bd_port -dir I               hmc7044_adf4371_clk_i
+create_bd_port -dir O               hmc7044_adf4371_clk_o
+create_bd_port -dir I               hmc7044_adf4371_sdo_i
+create_bd_port -dir O               hmc7044_adf4371_sdo_o
+create_bd_port -dir I               hmc7044_adf4371_sdi_i
 
-create_bd_port -dir O ad4080_csn_o
-create_bd_port -dir I ad4080_csn_i
-create_bd_port -dir I ad4080_clk_i
-create_bd_port -dir O ad4080_clk_o
-create_bd_port -dir O ad4080_sdo_o
-create_bd_port -dir I ad4080_sdi_i
+create_bd_port -dir O               ad4080_csn_o
+create_bd_port -dir I               ad4080_csn_i
+create_bd_port -dir I               ad4080_clk_i
+create_bd_port -dir O               ad4080_clk_o
+create_bd_port -dir O               ad4080_sdo_o
+create_bd_port -dir I               ad4080_sdi_i
 
-create_bd_port -dir O adl5580_csn_o
-create_bd_port -dir I adl5580_csn_i
-create_bd_port -dir I adl5580_clk_i
-create_bd_port -dir O adl5580_clk_o
-create_bd_port -dir I adl5580_sdo_i
-create_bd_port -dir O adl5580_sdo_o
-create_bd_port -dir I adl5580_sdi_i
+create_bd_port -dir O               adl5580_csn_o
+create_bd_port -dir I               adl5580_csn_i
+create_bd_port -dir I               adl5580_clk_i
+create_bd_port -dir O               adl5580_clk_o
+create_bd_port -dir I               adl5580_sdo_i
+create_bd_port -dir O               adl5580_sdo_o
+create_bd_port -dir I               adl5580_sdi_i
 
-create_bd_port -dir O ltc2644_csn_o
-create_bd_port -dir I ltc2644_csn_i
-create_bd_port -dir I ltc2644_clk_i
-create_bd_port -dir O ltc2644_clk_o
-create_bd_port -dir O ltc2644_sdo_o
-create_bd_port -dir I ltc2644_sdi_i
+create_bd_port -dir O               ltc2644_csn_o
+create_bd_port -dir I               ltc2644_csn_i
+create_bd_port -dir I               ltc2644_clk_i
+create_bd_port -dir O               ltc2644_clk_o
+create_bd_port -dir O               ltc2644_sdo_o
+create_bd_port -dir I               ltc2644_sdi_i
 
 # ad4080 interface
 
@@ -171,8 +171,8 @@ ad_connect  glbl_clk_0 rx_ad9213_tpl_core/link_clk
 ad_connect  glbl_clk_0 axi_ad9213_fifo/adc_clk
 
 # dma clock domain
-ad_connect  $sys_cpu_clk axi_ad9213_fifo/dma_clk
-ad_connect  $sys_cpu_clk axi_ad9213_dma/s_axis_aclk
+ad_connect  $sys_dma_clk axi_ad9213_fifo/dma_clk
+ad_connect  $sys_dma_clk axi_ad9213_dma/s_axis_aclk
 
 # connect resets
 ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9213_fifo/adc_rst
@@ -278,16 +278,16 @@ ad_connect $sys_cpu_clk sys_cpu_out_clk
 ad_connect $sys_cpu_resetn axi_ad4080_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
-ad_cpu_interconnect 0x44a60000 axi_ad9213_xcvr
-ad_cpu_interconnect 0x44a10000 rx_ad9213_tpl_core
-ad_cpu_interconnect 0x44a90000 axi_ad9213_jesd
-ad_cpu_interconnect 0x44a71000 hmc7044_spi
-ad_cpu_interconnect 0x44a72000 ad4080_spi
-ad_cpu_interconnect 0x44a73000 adl5580_spi
-ad_cpu_interconnect 0x44a74000 ltc2644_spi
-ad_cpu_interconnect 0x7c420000 axi_ad9213_dma
+ad_cpu_interconnect 0x44A60000 axi_ad9213_xcvr
+ad_cpu_interconnect 0x44A10000 rx_ad9213_tpl_core
+ad_cpu_interconnect 0x44A90000 axi_ad9213_jesd
+ad_cpu_interconnect 0x44A71000 hmc7044_spi
+ad_cpu_interconnect 0x44A72000 ad4080_spi
+ad_cpu_interconnect 0x44A73000 adl5580_spi
+ad_cpu_interconnect 0x44A74000 ltc2644_spi
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma
+ad_cpu_interconnect 0x44B00000 axi_ad9213_dma
 
 # interconnect (gt/adc)
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_xcvr/m_axi
@@ -298,8 +298,7 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
 ad_cpu_interrupt ps-17 mb-7 hmc7044_spi/ip2intc_irpt
 ad_cpu_interrupt ps-16 mb-8 ad4080_spi/ip2intc_irpt
 ad_cpu_interrupt ps-15 mb-9 adl5580_spi/ip2intc_irpt
-ad_cpu_interrupt ps-10 mb-14 ltc2644_spi/ip2intc_irpt
-
+ad_cpu_interrupt ps-14 mb-10 axi_ad4080_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9213_dma/irq
 ad_cpu_interrupt ps-11 mb-13 axi_ad9213_jesd/irq
-ad_cpu_interrupt ps-14 mb-10 axi_ad4080_dma/irq
+ad_cpu_interrupt ps-10 mb-14 ltc2644_spi/ip2intc_irpt

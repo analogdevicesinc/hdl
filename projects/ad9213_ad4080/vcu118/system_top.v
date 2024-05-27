@@ -109,19 +109,18 @@ module system_top (
   input                   cnv_in_n,
 
   // GPIOs
+
   inout       [ 4:0]      ad9213_gpio,
   output                  ad9213_rstb,
-  output                  ad9213_hmc_sync_req,
+  output                  hmc7044_sync_req,
 
-  inout                   ad4080_gpio1_fmc,
-  inout                   ad4080_gpio2_fmc,
-  inout                   ad4080_gpio3_fmc,
+  inout       [ 3:0]      ad4080_gpio,
 
-  inout                   adrf5203_ctrl_0,
-  inout                   adrf5203_ctrl_1,
-  inout                   adrf5203_ctrl_2,
+  input                   fpga_seq_shdn,
 
+  inout        [2:0]      adrf5203_ctrl,
   inout                   adg5419_ctrl,
+
   inout                   ada4945_disable,
 
   inout                   adl5580_en,
@@ -130,6 +129,7 @@ module system_top (
   inout                   dig_ext_n,
   inout                   dig_ext_hs_p,
   inout                   dig_ext_hs_n,
+  inout       [1:0]       dig_ext_gpio,
 
   inout                   ltc2644_ldac,
   inout                   ltc2644_clr,
@@ -170,8 +170,8 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
 
-  wire            spi_miso;
-  wire            spi_mosi;
+  wire            ad9213_spi_miso;
+  wire            ad9213_spi_mosi;
 
   wire            hmc7044_adf4371_miso;
   wire            hmc7044_adf4371_mosi;
@@ -183,45 +183,60 @@ module system_top (
   wire            rx_ref_clk_replica;
   wire            rx_sysref;
   wire            rx_sync;
+  wire            glbl_clk_0;
+  wire            glbl_clk_buf;
+  wire            filter_data_ready_n;
+  wire  [1:0]     hmc7044_adf4371_csn;
 
 
-
-
-
-
-  assign gpio_i[63:55] = gpio_o[63:55];
-  assign rstb          = gpio_o[38];
-  assign hmc_sync_req  = gpio_o[37];
+  assign adf4371_csb    = hmc7044_adf4371_csn[1];
+  assign hmc7044_csb    = hmc7044_adf4371_csn[0];
+  assign gpio_i[63:56]  = gpio_o[63:56];
+  assign ad4080_gpio[0] = 1'b0;
 
   ad_iobuf #(
-    .DATA_WIDTH(15)
+    .DATA_WIDTH(12)
   ) i_gpio (
-    .dio_t(gpio_t[53:39]),
-    .dio_i(gpio_o[53:39]),
-    .dio_o(gpio_i[53:39]),
-    .dio_p({adrf5203_ctrl_0,
-            adrf5203_ctrl_1,
-            adrf5203_ctrl_2,
-            adg5419_ctrl,
-            ada4945_disable,
-            adl5580_en,
-            gpio3_fmc,
-            gpio2_fmc,
-            dig_ext_p,
-            dig_ext_n,
-            ltc2644_ldac,
-            ltc2644_clr,
-            ltc2644_tgp,
-            dig_ext_hs_p,
-            dig_ext_hs_n}));
+    .dio_t(gpio_t[55:45]),
+    .dio_i(gpio_o[55:45]),
+    .dio_o(gpio_i[55:45]),
+    .dio_p({ltc2644_tgp,      //55
+            ltc2644_clr,      //54
+            ltc2644_ldac,     //53
+            adl5580_en,       //52
+            ada4945_disable,  //51
+            adg5419_ctrl,     //50
+            adrf5203_ctrl,    //49-47
+            hmc7044_sync_req, //46
+            ad9213_rstb}));   //45
+
+  ad_iobuf #(
+    .DATA_WIDTH(6)
+  ) i_dig_ext_gpio (
+    .dio_t (gpio_t[44:39]),
+    .dio_i (gpio_o[44:39]),
+    .dio_o (gpio_i[44:39]),
+    .dio_p ({dig_ext_gpio,    //44-43
+             dig_ext_p,       //42
+             dig_ext_n,       //41
+             dig_ext_hs_p,    //40
+             dig_ext_hs_n})); //39
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_ad4080_gpio (
+    .dio_t (gpio_t[38:37]),
+    .dio_i (gpio_o[38:37]),
+    .dio_o (gpio_i[38:37]),
+    .dio_p (ad4080_gpio[3:2]));   // 38-37
 
   ad_iobuf #(
     .DATA_WIDTH(5)
-  ) i_iobuf (
+  ) i_ad9213_gpio (
     .dio_t (gpio_t[36:32]),
     .dio_i (gpio_o[36:32]),
     .dio_o (gpio_i[36:32]),
-    .dio_p ({ad9213_gpio[4:0]}));   // 36-32
+    .dio_p (ad9213_gpio[4:0]));   // 36-32
 
   assign gpio_i[31:17] = gpio_o[31:17];
 
@@ -232,12 +247,6 @@ module system_top (
     .dio_i (gpio_o[16:0]),
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
-
-
-
-
-
-
 
   // instantiations
 
@@ -265,6 +274,8 @@ module system_top (
     .O (rx_sync_p),
     .OB (rx_sync_n));
 
+
+
   IBUFDS_GTE4 i_ibufds_glbl_clk_0 (
     .I (glbl_clk_0_p),
     .IB (glbl_clk_0_n),
@@ -274,34 +285,10 @@ module system_top (
     .I (glbl_clk_0),
     .O (glbl_clk_buf));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ad_3w_spi #(
     .NUM_OF_SLAVES(2)
   ) i_hmc7044_spi (
-    .spi_csn ({adf4371_csb,hmc7044_csb}),
+    .spi_csn (hmc7044_adf4371_csn),
     .spi_clk (hmc7044_adf4371_sclk),
     .spi_mosi (hmc7044_adf4371_mosi),
     .spi_miso (hmc7044_adf4371_miso),
@@ -311,11 +298,11 @@ module system_top (
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
   ) i_ad9213_spi (
-    .spi_csn (fpga_csb),
-    .spi_clk (fpga_sclk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_sdio (fpga_sdio),
+    .spi_csn (ad9213_csb),
+    .spi_clk (ad9213_sclk),
+    .spi_mosi (ad9213_spi_mosi),
+    .spi_miso (ad9213_spi_miso),
+    .spi_sdio (ad9213_sdio),
     .spi_dir ());
 
   ad_3w_spi #(
@@ -336,29 +323,7 @@ module system_top (
     .dio_t(1'b1),
     .dio_i(1'b0),
     .dio_o(filter_data_ready_n),
-    .dio_p(gpio1_fmc));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    .dio_p(ad4080_gpio[1]));
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -454,18 +419,18 @@ module system_top (
 
     .ltc2644_clk_i (1'b0),
     .ltc2644_clk_o (ltc2644_sclk),
-    .ltc2644_csn_i (),
+    .ltc2644_csn_i (1'b1),
     .ltc2644_csn_o (ltc2644_cs),
     .ltc2644_sdi_i (ltc2644_sdi),
     .ltc2644_sdo_o (ltc2644_sdo),
 
-    .spi_clk_i (fpga_sclk),
-    .spi_clk_o (fpga_sclk),
-    .spi_csn_i (fpga_csb),
-    .spi_csn_o (fpga_csb),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
+    .spi_clk_i (1'b0),
+    .spi_clk_o (ad9213_sclk),
+    .spi_csn_i (1'b1),
+    .spi_csn_o (ad9213_csb),
+    .spi_sdi_i (ad9213_spi_miso),
+    .spi_sdo_i (1'b0),
+    .spi_sdo_o (ad9213_spi_mosi),
 
     .hmc7044_adf4371_clk_i (1'b0),
     .hmc7044_adf4371_clk_o (hmc7044_adf4371_sclk),

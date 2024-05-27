@@ -76,13 +76,13 @@ module ad408x_phy #(
 
   input                             adc_rst,
   output                            adc_clk,
- 
-  // Output data 
+
+  // Output data
 
    (* MARK_DEBUG = "TRUE" *) output        [31:0]             adc_data,
    (* MARK_DEBUG = "TRUE" *) output                           adc_valid,
 
-  // Synchronization signals used when CNV signal is not present 
+  // Synchronization signals used when CNV signal is not present
 
   (* MARK_DEBUG = "TRUE" *) output                            sync_status
 );
@@ -114,7 +114,7 @@ module ad408x_phy #(
   (* MARK_DEBUG = "TRUE" *) wire           fall_filter_ready;
 
   wire           adc_clk_phy;
-  wire           adc_clk_data; 
+  wire           adc_clk_data;
   wire           dclk_s;
 
   (* MARK_DEBUG = "TRUE" *) reg            filter_cycle        = 'b1;
@@ -140,7 +140,7 @@ module ad408x_phy #(
   assign delay_locked  = &delay_locked_s;
   assign sync_status   = sync_status_int_dd;
   assign adc_data      = {{12{adc_data_dd[19]}},adc_data_dd};
-  assign adc_valid     = adc_valid_p_dd; 
+  assign adc_valid     = adc_valid_p_dd;
   assign pattern_value = 'hac5d6;
   assign adc_clk       = adc_clk_data;
 
@@ -154,33 +154,58 @@ module ad408x_phy #(
     .I(dclk_in_p),
     .IB(dclk_in_n));
 
-  BUFH BUFH_inst (
-   .O(adc_clk_phy),
-   .I(dclk_s));
+    generate
+      if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+        BUFH BUFH_inst (
+          .O(adc_clk_phy),
+          .I(dclk_s));
+         BUFR #(
+           .BUFR_DIVIDE("2")
+         ) i_div_clk_buf (
+           .CLR (1'b0),
+           .CE (1'b1),
+           .I (adc_clk_phy),
+           .O (adc_clk_data));
+      end else begin
 
-  BUFR #(
-    .BUFR_DIVIDE("2")
-  ) i_div_clk_buf (
-    .CLR (1'b0),
-    .CE (1'b1),
-    .I (adc_clk_phy),
-    .O (adc_clk_data));
+        BUFGCE #(
+          .CE_TYPE("SYNC"),
+          .IS_CE_INVERTED(1'b0),
+          .IS_I_INVERTED(1'b0)
+        ) i_clk_buf_fast(
+          .O(adc_clk_phy),
+          .CE(1'b1),
+          .I(dclk_s));
+
+        BUFGCE_DIV #(
+          .BUFGCE_DIVIDE(2),
+          .IS_CE_INVERTED(1'b0),
+          .IS_CLR_INVERTED(1'b0),
+          .IS_I_INVERTED(1'b0)
+        ) i_div_clk_buf(
+          .O(adc_clk_data),
+          .CE(1'b1),
+          .CLR(1'b0),
+          .I(adc_clk_phy));
+
+      end
+      endgenerate
 
   always @(posedge adc_clk_data) begin
     adc_data_dd        <= adc_data_d;
-    adc_valid_p_dd     <= adc_valid_p_d[2] | adc_valid_p_d[1]; 
+    adc_valid_p_dd     <= adc_valid_p_d[2] | adc_valid_p_d[1];
     sync_status_int_dd <= sync_status_int_d;
   end
 
-// compensate the delay added by the sync_event 
+// compensate the delay added by the sync_event
 
 
   always @(posedge adc_clk_phy) begin
     adc_valid_p_d <= {adc_valid_p_d[2:0],adc_valid_p};
     adc_data_p_d <= adc_data_p;
-    if(adc_valid_p == 1'b1) begin 
+    if(adc_valid_p == 1'b1) begin
       adc_data_d <= adc_data_p_d;
-    end else begin 
+    end else begin
       adc_data_d <= adc_data_d;
     end
   end
@@ -204,7 +229,7 @@ always @(posedge adc_clk_phy) begin
   end else begin
     transfer_state <= transfer_state_next;
   end
-end 
+end
 
 // FSM next state logic
 
@@ -334,5 +359,5 @@ end
       .up_drdata(up_adc_drdata[9:5]),
       .delay_clk(delay_clk),
       .delay_rst(delay_rst),
-      .delay_locked(delay_locked_s[0]));                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      .delay_locked(delay_locked_s[0]));
 endmodule

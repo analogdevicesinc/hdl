@@ -141,8 +141,8 @@ module axi_ad408x #(
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
 
-  assign self_sync     = adc_custom_control_s[1]; 
-  assign filter_enable = adc_custom_control_s[0]; 
+  assign self_sync     = adc_custom_control_s[1];
+  assign filter_enable = adc_custom_control_s[0];
 
   always @(*) begin
     up_rdata_r = 'h00;
