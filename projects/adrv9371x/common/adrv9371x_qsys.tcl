@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -208,7 +208,7 @@ set_instance_parameter_value axi_ad9371_rx_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9371_rx_dma {FIFO_SIZE} {16}
 add_connection ad9371_rx_jesd204.link_clk axi_ad9371_rx_dma.if_fifo_wr_clk
 add_connection axi_ad9371_rx_cpack.if_packed_fifo_wr_en axi_ad9371_rx_dma.if_fifo_wr_en
-add_connection axi_ad9371_rx_cpack.if_packed_fifo_wr_sync axi_ad9371_rx_dma.if_fifo_wr_sync
+add_connection axi_ad9371_rx_cpack.if_packed_sync axi_ad9371_rx_dma.if_sync
 add_connection axi_ad9371_rx_cpack.if_packed_fifo_wr_data axi_ad9371_rx_dma.if_fifo_wr_din
 add_connection axi_ad9371_rx_dma.if_fifo_wr_overflow axi_ad9371_rx_cpack.if_packed_fifo_wr_overflow
 add_connection sys_clk.clk axi_ad9371_rx_dma.s_axi_clock
@@ -231,7 +231,7 @@ set_instance_parameter_value axi_ad9371_rx_os_dma {DMA_TYPE_SRC} {2}
 set_instance_parameter_value axi_ad9371_rx_os_dma {FIFO_SIZE} {16}
 add_connection ad9371_rx_os_jesd204.link_clk axi_ad9371_rx_os_dma.if_fifo_wr_clk
 add_connection axi_ad9371_rx_os_cpack.if_packed_fifo_wr_en axi_ad9371_rx_os_dma.if_fifo_wr_en
-add_connection axi_ad9371_rx_os_cpack.if_packed_fifo_wr_sync  axi_ad9371_rx_os_dma.if_fifo_wr_sync
+add_connection axi_ad9371_rx_os_cpack.if_packed_sync axi_ad9371_rx_os_dma.if_sync
 add_connection axi_ad9371_rx_os_cpack.if_packed_fifo_wr_data axi_ad9371_rx_os_dma.if_fifo_wr_din
 add_connection axi_ad9371_rx_os_dma.if_fifo_wr_overflow axi_ad9371_rx_os_cpack.if_packed_fifo_wr_overflow
 add_connection sys_clk.clk axi_ad9371_rx_os_dma.s_axi_clock

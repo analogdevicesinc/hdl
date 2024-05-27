@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -181,7 +181,7 @@ ad_connect logic_analyzer_dmac/fifo_wr_en   la_trigger_fifo/data_out_valid
 
 ad_connect logic_analyzer/fifo_depth la_trigger_fifo/depth
 
-ad_connect logic_analyzer/trigger_out logic_analyzer_dmac/fifo_wr_sync
+ad_connect logic_analyzer/trigger_out logic_analyzer_dmac/sync
 ad_connect logic_analyzer/trigger_in adc_trigger/trigger_out_la
 
 ad_connect pattern_generator_dmac/fifo_rd_en      logic_analyzer/dac_read
@@ -236,7 +236,7 @@ ad_connect adc_trigger_fifo/depth        adc_trigger/fifo_depth
 ad_connect adc_trigger/trigger_in        logic_analyzer/trigger_out_adc
 
 ad_connect adc_trigger_fifo/data_out        ad9963_adc_dmac/fifo_wr_din
-ad_connect adc_trigger/trigger_out          ad9963_adc_dmac/fifo_wr_sync
+ad_connect adc_trigger/trigger_out          ad9963_adc_dmac/sync
 ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk

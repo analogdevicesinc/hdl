@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -101,6 +101,7 @@ ad_connect  rx_ad9656_tpl_core/adc_dovf util_ad9656_rx_cpack/fifo_wr_overflow
 
 ad_connect  util_ad9656_xcvr/rx_out_clk_0 axi_ad9656_rx_dma/fifo_wr_clk
 ad_connect  util_ad9656_rx_cpack/packed_fifo_wr axi_ad9656_rx_dma/fifo_wr
+ad_connect  util_ad9656_rx_cpack/packed_sync axi_ad9656_rx_dma/sync
 ad_connect  $sys_dma_resetn axi_ad9656_rx_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)

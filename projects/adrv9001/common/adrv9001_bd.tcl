@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -80,7 +80,7 @@ ad_ip_instance axi_dmac axi_adrv9001_rx1_dma
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
@@ -97,7 +97,7 @@ ad_ip_instance axi_dmac axi_adrv9001_rx2_dma
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
@@ -231,6 +231,7 @@ ad_connect  axi_adrv9001/adc_1_data_q1   util_adc_1_pack/fifo_wr_data_3
 ad_connect  axi_adrv9001/adc_1_dovf      util_adc_1_pack/fifo_wr_overflow
 
 ad_connect util_adc_1_pack/packed_fifo_wr axi_adrv9001_rx1_dma/fifo_wr
+ad_connect util_adc_1_pack/packed_sync axi_adrv9001_rx1_dma/sync
 
 # RX2 - CPACK - RX_DMA2
 ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
@@ -243,6 +244,7 @@ ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
 ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
 
 ad_connect util_adc_2_pack/packed_fifo_wr axi_adrv9001_rx2_dma/fifo_wr
+ad_connect util_adc_2_pack/packed_sync axi_adrv9001_rx2_dma/sync
 
 # TX_DMA1 - UPACK - TX1
 ad_connect  axi_adrv9001/dac_1_rst        util_dac_1_upack/reset
