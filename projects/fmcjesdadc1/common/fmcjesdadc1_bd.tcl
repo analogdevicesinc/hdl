@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -127,6 +127,7 @@ ad_connect  axi_ad9250_core/adc_dovf axi_ad9250_cpack/fifo_wr_overflow
 
 ad_connect  axi_ad9250_core/link_clk axi_ad9250_dma/fifo_wr_clk
 ad_connect  axi_ad9250_dma/fifo_wr axi_ad9250_cpack/packed_fifo_wr
+ad_connect  axi_ad9250_dma/sync axi_ad9250_cpack/packed_sync
 
 ad_connect  axi_ad9250_core/link_valid axi_ad9250_jesd/rx_data_tvalid
 

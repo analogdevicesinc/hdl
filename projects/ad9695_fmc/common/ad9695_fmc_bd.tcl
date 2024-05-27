@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -53,7 +53,7 @@ ad_ip_instance axi_dmac axi_ad9695_rx_dma [list \
   DMA_TYPE_SRC 2 \
   DMA_TYPE_DEST 0 \
   CYCLIC 0 \
-  SYNC_TRANSFER_START 0 \
+  SYNC_TRANSFER_START 1 \
   DMA_2D_TRANSFER 0 \
   FIFO_SIZE 32 \
   MAX_BYTES_PER_BURST 2048 \
@@ -126,6 +126,7 @@ ad_xcvrpll  axi_ad9695_rx_xcvr/up_pll_rst util_ad9695_xcvr/up_qpll_rst_*
 ad_connect $sys_cpu_resetn axi_ad9695_rx_dma/m_dest_axi_aresetn
 ad_connect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi_aclk
 ad_connect util_ad9695_rx_cpack/packed_fifo_wr axi_ad9695_rx_dma/fifo_wr
+ad_connect util_ad9695_rx_cpack/packed_sync axi_ad9695_rx_dma/sync
 
 ad_connect $sys_cpu_clk dma_clk_wiz/clk_in1
 ad_connect $sys_cpu_resetn dma_clk_wiz/resetn

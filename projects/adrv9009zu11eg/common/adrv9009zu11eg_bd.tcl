@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -683,10 +683,12 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect  obs_adrv9009_som_tpl_core/adc_dovf util_som_obs_cpack/fifo_wr_overflow
 ad_connect  util_som_obs_cpack/packed_fifo_wr axi_adrv9009_som_obs_dma/fifo_wr
+ad_connect  util_som_obs_cpack/packed_sync axi_adrv9009_som_obs_dma/sync
 
 ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
 
 ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI
 ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn

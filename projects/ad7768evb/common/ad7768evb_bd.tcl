@@ -66,13 +66,14 @@ ad_connect  ad7768_dma/m_dest_axi_aresetn     sys_cpu_resetn
 ad_connect  ad7768_dma/fifo_wr_clk            axi_ad7768_adc/adc_clk                
 ad_connect  ad7768_dma/fifo_wr_en             axi_ad7768_adc/adc_valid              
 ad_connect  ad7768_dma/fifo_wr_din            axi_ad7768_adc/adc_data  
-ad_connect  ad7768_dma/fifo_wr_sync           axi_ad7768_adc/adc_sync             
+ad_connect  ad7768_dma/sync                   axi_ad7768_adc/adc_sync             
 
 #parallel DMA
 
 ad_connect  ad7768_dma_2/m_dest_axi_aresetn   sys_cpu_resetn                        
 ad_connect  ad7768_dma_2/fifo_wr_clk          axi_ad7768_adc/adc_clk                
 ad_connect  ad7768_dma_2/fifo_wr              util_ad7768_adc_pack/packed_fifo_wr   
+ad_connect  ad7768_dma_2/sync                 util_ad7768_adc_pack/packed_sync
 
 # interrupts
 

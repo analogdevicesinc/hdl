@@ -200,6 +200,7 @@ ad_connect  rx_adrv9026_tpl_core/adc_dovf util_adrv9026_rx_cpack/fifo_wr_overflo
 
 ad_connect  core_clk axi_adrv9026_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr axi_adrv9026_rx_dma/fifo_wr
+ad_connect  util_adrv9026_rx_cpack/packed_sync axi_adrv9026_rx_dma/sync
 
 # interconnect (cpu)
 

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -51,7 +51,7 @@ add_connection sys_clk.clk     axi_ad777x_adc.s_axi_clock
 
 add_connection axi_ad777x_adc.if_adc_clk                  ad777x_dma.if_fifo_wr_clk
 add_connection ad777x_adc_pack.if_packed_fifo_wr_en       ad777x_dma.if_fifo_wr_en
-add_connection ad777x_adc_pack.if_packed_fifo_wr_sync     ad777x_dma.if_fifo_wr_sync
+add_connection ad777x_adc_pack.if_packed_sync             ad777x_dma.if_sync
 add_connection ad777x_adc_pack.if_packed_fifo_wr_data     ad777x_dma.if_fifo_wr_din
 add_connection ad777x_adc_pack.if_packed_fifo_wr_overflow ad777x_dma.if_fifo_wr_overflow
 

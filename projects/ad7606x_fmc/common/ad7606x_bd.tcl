@@ -28,6 +28,7 @@ ad_ip_instance axi_pwm_gen ad7606_pwm_gen
 ad_ip_instance axi_dmac axi_ad7606x_dma
 ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad7606x_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad7606x_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
@@ -111,6 +112,7 @@ switch $INTF {
     ad_connect axi_ad7606x/adc_reset ad7606x_adc_pack/reset
     ad_connect axi_ad7606x/adc_valid ad7606x_adc_pack/fifo_wr_en
     ad_connect ad7606x_adc_pack/packed_fifo_wr axi_ad7606x_dma/fifo_wr
+    ad_connect ad7606x_adc_pack/packed_sync axi_ad7606x_dma/sync
     ad_connect ad7606x_adc_pack/fifo_wr_overflow axi_ad7606x/adc_dovf
 
     for {set i 0} {$i < 8} {incr i} {
