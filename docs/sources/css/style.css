@@ -1,0 +1,7 @@
+#indexlogo img, #badges img {
+    background: none;
+}
+
+#badges img {
+    display: inline-block;
+}
