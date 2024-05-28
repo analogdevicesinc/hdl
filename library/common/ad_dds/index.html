@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AD Direct Digital Synthesis &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=8e0fb079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=7e1fdd13"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Projects" href="../../../projects/index.html" />
+    <link rel="prev" title="Util VAR FIFO" href="../../util_var_fifo/index.html" />
+   
+  
+    <meta name="robots" content="noindex">
+  
+  <meta name="repo" content="hdl">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <div class="banner"></div>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../../doctools/index.html">Doctools</a>
+  <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header">On this page</div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AD Direct Digital Synthesis</a><ul>
+<li><a class="reference internal" href="#dds-basics">DDS basics</a></li>
+<li><a class="reference internal" href="#adi-dds-module">ADI DDS module</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#control">Control</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#config">Config</a><ul>
+<li><a class="reference internal" href="#dds-scale">DDS_SCALE</a></li>
+<li><a class="reference internal" href="#phase-dds-init">PHASE - DDS_INIT</a></li>
+<li><a class="reference internal" href="#frequency-dds-incr">FREQUENCY - DDS_INCR</a></li>
+<li><a class="reference internal" href="#structure">STRUCTURE</a></li>
+<li><a class="reference internal" href="#id1">ad_dds</a></li>
+<li><a class="reference internal" href="#ad-dds-2">ad_dds_2</a></li>
+<li><a class="reference internal" href="#ad-dds-1">ad_dds_1</a></li>
+<li><a class="reference internal" href="#ad-dds-sine">ad_dds_sine_*</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#clock-ratio">CLOCK RATIO</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
+  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../index.html" class="current">HDL</a>
+  <a href="../../../../no-OS/index.html">no-OS</a>
+  <a href="../../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
+  <a href="../../../../doctools/index.html">Doctools</a>
+  <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="ad-direct-digital-synthesis">
+<span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading">#</a></h1>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds.v">AD Direct Digital Synthesis (DDS)</a> module
+is used to generate sine waves on a clock (referenced to sampling clock).</p>
+<p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every
+channel.</p>
+<img alt="../../../_images/dds_in_dac_core.svg" src="../../../_images/dds_in_dac_core.svg" /><p>The resulting sine wave can be changed at runtime by 4 parameters:</p>
+<ul class="simple">
+<li><p>frequency word (FW)</p></li>
+<li><p>phase shift</p></li>
+<li><p>scale (the peak to peak amplitude of the sine wave)</p></li>
+<li><p>clock frequency (sampling rate - where possible)</p></li>
+</ul>
+<section id="dds-basics">
+<h2>DDS basics<a class="headerlink" href="#dds-basics" title="Permalink to this heading">#</a></h2>
+<p>A generic DDS consists of a phase accumulator and a phase to amplitude
+converter.</p>
+<p>The phase accumulator is basically a counter that increments by a frequency word
+which determines a timely overflow (the actual period of the resulting signal).</p>
+<img alt="../../../_images/dds_basic.svg" src="../../../_images/dds_basic.svg" /><p>The phase to amplitude converter is a bit more complex and is the main consumer
+of FPGA resources out of the DDS modules.</p>
+<p>Currently in the reference designs, there is support for 2 types of phase to
+amplitude converters, polynomial and
+<a class="reference external" href="https://en.wikibooks.org/wiki/Digital_Circuits/CORDIC">CORDIC</a>. The
+polynomial type uses more DSPs and way less LUTs and FFs in comparison to the
+CORDIC. Regarding precision/accuracy, CORDIC is better.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The CORDIC implementation is not optimal. The CORDIC phase to
+amplitude converter outputs a sine and a cosine, which can be used as I and Q.
+But because the DAC channel reference design requires dual tone + independent
+I/Q control, only the sine component is used out of a DDS instance, and
+multiple DDS instances are added for each tone and independent I/Q channels.</p>
+</div>
+</section>
+<section id="adi-dds-module">
+<h2>ADI DDS module<a class="headerlink" href="#adi-dds-module" title="Permalink to this heading">#</a></h2>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DISABLE</span></code></p></td>
+<td><p>Disable DDS</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DDS_DW</span></code></p></td>
+<td><p>DDS out data bus width range 8-24</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PHASE_DW</span></code></p></td>
+<td><p>DDS phase accumulator data width range 8-32.</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DDS_TYPE</span></code></p></td>
+<td><p>1 for CORDIC or 2 for Polynomial.</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CORDIC_DW</span></code></p></td>
+<td><p>CORDIC stages data width, range 8-24</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CORDIC_PHASE_DW</span></code></p></td>
+<td><p>Number of CORDIC stages, range 8-32</p></td>
+<td><p>16</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></p></td>
+<td><dl class="simple">
+<dt>The clock ratio between the device clock (axi core clock ~= sample rate)</dt><dd><p>and the interface clock.</p>
+</dd>
+</dl>
+</td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interface">
+<h3>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Interface</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">clk</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Input clock</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dac_dds_format</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Two’s complement (0) or offset binary (1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dac_data_sync</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Data sync/external phase sync</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dac_valid</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input</span></code></p></td>
+<td><p>Valid signal (ready for new data)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tone_1_scale</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[15:0]</span></code></p></td>
+<td><p>Tone 1 scale</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tone_2_scale</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[15:0]</span></code></p></td>
+<td><p>Tone 2 scale</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tone_1_init_offset</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[31:0]</span></code></p></td>
+<td><p>Tone 1 initial offset (phase shift)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tone_2_init_offset</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[31:0]</span></code></p></td>
+<td><p>Tone 2 initial offset (phase shift)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tone_1_freq_word</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[31:0]</span></code></p></td>
+<td><p>Tone 1 frequency word</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tone_2_freq_word</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">input[31:0]</span></code></p></td>
+<td><p>Tone 2 frequency word</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dac_dds_data</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">output[DDS_DW*CLK_RATIO-1:0]</span></code></p></td>
+<td><p>Out sine wave</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="control">
+<h3>Control<a class="headerlink" href="#control" title="Permalink to this heading">#</a></h3>
+<p>In the reference designs, the DDS is controlled through the register map
+(DAC channel section).</p>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-DAC_CHANNEL">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="988df3881dd6e54e1dc4feb84da7d989941d5164" name="988df3881dd6e54e1dc4feb84da7d989941d5164" type="checkbox"></input><label for="988df3881dd6e54e1dc4feb84da7d989941d5164"><p>DAC Channel (axi_ad*) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_1</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[21:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PHASE_DW</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The DDS phase data width offers the HDL parameter configuration with the same name. This information is used in conjunction with CHAN_CNTRL_9 and CHAN_CNTRL_10. More info at <a class="reference internal" href="#ad-dds"><span class="std std-ref">AD Direct Digital Synthesis</span></a>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS scale for tone 1. Sets the amplitude of the tone. The format is 1.1.14 fixed point (signed, integer, fractional). The DDS in general runs on 16-bits, note that if you do use both channels and set both scale to 0x4000, it is over-range. The final output is (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2). NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_2</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS phase initialization for tone 1. Sets the initial phase offset of the tone. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of the phase accumulator. Its value can be calculated by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the generated output frequency, and f_if is the frequency of the digital interface, and clock_ratio is the ratio between the sampling clock and the interface clock. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase increment for tone 1 is extended in CHAN_CNTRL_9. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_3</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS scale for tone 2. Sets the amplitude of the tone. The format is 1.1.14 fixed point (signed, integer, fractional). The DDS in general runs on 16-bits, note that if you do use both channels and set both scale to 0x4000, it is over-range. The final output is (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2). NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x103</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_4</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS phase initialization for tone 2. Sets the initial phase offset of the tone. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase init for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of the phase accumulator. Its value can be calculated by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the generated output frequency, and f_if is the frequency of the digital interface, and clock_ratio is the ratio between the sampling clock and the interface clock. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase increment for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_5</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS data pattern for this channel.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS data pattern for this channel.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_6</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>if set, enables IQ correction. NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, forces DAC_DDS_SEL to 0x8, loopback If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>IF set, forces DAC_DDS_SEL to 0x09, device specific pnX If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_7</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_SEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select internal data sources (available only if the DAC supports it). \  - 0x00: internal tone (DDS) \  - 0x01: pattern (SED) \  - 0x02: input data (DMA) \  - 0x03: 0x00 \  - 0x04: inverted pn7 \  - 0x05: inverted pn15 \  - 0x06: pn7 (standard O.150) \  - 0x07: pn15 (standard O.150) \  - 0x08: loopback data (ADC) \  - 0x09: pnX (Device specific e.g. ad9361) \  - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \  - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x107</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_8</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used, this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the offset value and the format is 2’s complement. If matrix multiplication is used, this is the channel Q coefficient and the format is 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_3</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[25:25]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>The user data type format- if set, indicates big endian (default is little endian). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[24:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>The user data type format- if set, indicates signed (2’s complement) data (default is unsigned). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SHIFT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- the amount of right shift for actual samples within the total number of bits. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_TOTAL_BITS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- number of total bits used for a sample. The total number of bits must be an integer multiple of 8 (byte aligned). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BITS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- number of bits in a sample. This indicates the actual sample data bits. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_4</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_M</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This holds the user interpolation M value of the channel that is currently being selected on the multiplexer above. The total interpolation factor is of the form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This holds the user interpolation N value of the channel that is currently being selected on the multiplexer above. The total interpolation factor is of the form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_5</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable complex mode. In this mode the driven data to the DAC must be a sequence of I and Q sample pairs.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Allows IQ swapping in complex mode. Only takes effect if complex mode is enabled.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10b</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_9</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The extended DDS phase initialization for tone 1. Sets the initial phase offset of the tone. The extended init(phase) value should be calculated according to DDS_PHASE_DW value from CHAN_CNTRL_1 NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of tone 1’s phase accumulator. Its value can be calculated by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_1 in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface, and clock_ratio is the ratio between the sampling clock and the interface clock. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10c</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x430</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_10</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0) Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The extended DDS phase initialization for tone 2. Sets the initial phase offset of the tone. The extended init(phase)  value should be calculated according to DDS_PHASE_DW value from CHAN_CNTRL_2 NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of tone 2’s phase accumulator. Its value can be calculated by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_2 in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface, and clock_ratio is the ratio between the sampling clock and the interface clock. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+</section>
+<section id="config">
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this heading">#</a></h2>
+<section id="dds-scale">
+<h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Permalink to this heading">#</a></h3>
+<p>The DDS scale for a tone contributes to the amplitude of the channel (I or Q -
+where it applies).</p>
+<p>The format is 1.1.14 fixed point. See below:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="3"><p>16 bit register = scale value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 bit sign</p></td>
+<td><p>1 bit integer</p></td>
+<td><p>14 bits fractional</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The DDS scale is on 16 bits.</p>
+<p>The channel output is equal to
+tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2).</p>
+<p>The phase to amplitude converter always outputs the full-scale (unity sine)
+sine wave, independent on the phase and data widths.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you do use both tones and set both scales to 0x4000, the channel
+output will over-range.</p>
+</div>
+<p>16’h4000 * 1 + 16’h4000 * 1 = 16’h8000 = 16’h1000000000000000</p>
+<ol class="arabic simple">
+<li><p>sign = 1’b1</p></li>
+<li><p>integer = 1’b0</p></li>
+<li><p>fract = 14’b0</p></li>
+</ol>
+</section>
+<section id="phase-dds-init">
+<h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Permalink to this heading">#</a></h3>
+<p>All tones/channels start on a sync event (internal or external).
+The DDS_INIT value will be used by the phase accumulator as a starting point in
+other words as a phase offset.</p>
+<p>The offset can be determined from the phase accumulator capacity 0 to
+<span class="math notranslate nohighlight">\(2^{phaseDW}\)</span> represents (0° - 360°).</p>
+<p>e.g., for 90°. <span class="math notranslate nohighlight">\(init = (90 * 2^{phaseDW})/360\)</span>.</p>
+</section>
+<section id="frequency-dds-incr">
+<h3>FREQUENCY - DDS_INCR<a class="headerlink" href="#frequency-dds-incr" title="Permalink to this heading">#</a></h3>
+<p>The value can be calculated by:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[INCR = \frac{(f_{out} * 2^{phaseDW}) * clkratio}{f_{if}}\]</div>
+</div>
+<p>Where:</p>
+<ol class="arabic simple">
+<li><p>f_out is the generated output frequency</p></li>
+<li><p>phaseDW (<code class="docutils literal notranslate"><span class="pre">DDS_PHASE_DW</span></code>) value can be found in <code class="docutils literal notranslate"><span class="pre">CHAN_CNTRL_1</span></code> in case
+<code class="docutils literal notranslate"><span class="pre">DDS_PHASE_DW</span></code> is not eq. 16</p></li>
+<li><p>f_if is the frequency of the digital interface</p></li>
+<li><p>clock_ratio is the ratio between the sampling clock and the interface clock.</p></li>
+</ol>
+</section>
+<section id="structure">
+<h3>STRUCTURE<a class="headerlink" href="#structure" title="Permalink to this heading">#</a></h3>
+<p>Below is the hierarchical structure of the modules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">ad_dds</span> <span class="o">-&gt;</span>
+  <span class="o">*</span> <span class="n">ad_dds_2</span> <span class="o">-&gt;</span>
+    <span class="o">*</span> <span class="n">ad_dds_1</span> <span class="o">-&gt;</span>
+      <span class="o">*</span> <span class="n">ad_dds_sine_</span><span class="o">*</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds.v">ad_dds</a>
+is the main module, it contains the phase accumulators and the phase to
+amplitude converters.</p>
+<img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" /></section>
+<section id="ad-dds-2">
+<h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading">#</a></h3>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_2.v">ad_dds_2</a>
+contains two phase to amplitude converters. The resulting waveforms will be
+summed. The resulting waveform must have a maximum amplitude level of 0x8000
+-1. When only one tone is desired, both tones must have the same frequency word
+and shift, there is no constraint for the amplitude, but if is equal for both
+channels, it should not be more than 0x400 -1 for each channel.</p>
+</section>
+<section id="ad-dds-1">
+<h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading">#</a></h3>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_1.v">ad_dds_1</a>
+contains the phase to amplitude converter and an “amplifier”. The phase to
+amplitude converter is always generating a full scale sine wave. Because the
+data format is two’s complement, for a 16-bit data angle, min value will be
+-(2^16)/2 and max (2^16)/2-1.</p>
+<img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" /></section>
+<section id="ad-dds-sine">
+<h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading">#</a></h3>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_sine.v">ad_dds_sine</a>
+and
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_sine_cordic.v">ad_dds_sine_cordic</a>
+are the available phase to amplitude converters.</p>
+</section>
+</section>
+<section id="clock-ratio">
+<h2>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Permalink to this heading">#</a></h2>
+<p>The clock ratio (number of data paths processed in parallel) instantiates more
+DDS logic, but it is controlled by the same register map for all
+CLOCK_RATIO/DATA_PATH parameters.</p>
+<p>Where is the CLOCK_RATIO &gt; 1? This scenario can be found in every high speed DAC
+design. It is required because the FPGA fabric can’t work at the same speed as
+that of the high-speed converter (typically &gt; 250M).</p>
+<p>Let’s take the DAQ2 (AD9144) as an example, where the clock ratio is 4. This
+ratio is chosen for the maximum sampling frequency 1GSPS; this results in an
+internal clock of 250MHz (device clock), which is closer to the upper limit of
+what some FPGAs can handle. So, in one clock cycle (250M) it needs to generate 4
+consecutive samples to keep up with the DAC. This is done by 4 DDS modules.
+The phase accumulator part is all in one place and the phase to
+amplitude converters have dedicated sub-modules, as described above. When the
+frequency is changed by software, the 4 phase accumulators are aligned for the new
+frequency word and/or frequency phase shift. The counter increment value will be
+multiplied with the clock ratio (4), to get a continuity of the 4 consecutive
+samples generated at t, t+1, t+2, and so on.</p>
+<img alt="../../../_images/dds_clk_ratio_4.svg" src="../../../_images/dds_clk_ratio_4.svg" /><p>For scenarios where the synchronization signal comes from an external source and
+it is high for a longer period of time, the phase accumulator stages will be
+hold in reset, to avoid a noise-like signal, caused by sending all the
+summed outputs of each DDS stage.</p>
+<p>There is a minimum synchronization pulse width (delay) of <strong>n</strong> clock cycles,
+that is required to synchronize all phase accumulator stages, where <strong>n</strong> is
+equal to the CLOCK_RATIO.</p>
+<img alt="../../../_images/fw_sync_basics.svg" src="../../../_images/fw_sync_basics.svg" />
+<div style="overflow-x:auto">
+<script type="WaveDrom">
+{
+  "signal" : [
+    { "name": "clk",        "wave": "P....................."},
+    { "name": "external sync","wave": "0.1..|..0............."},
+    { "name": "phase init",  "wave": "0.......1...0........."},
+    { "name": "tone 1 gen0",  "wave": "=.......4=..44|4444444","data":["","i0","","i0+","i0+","i0+","..."]},
+    { "name": "tone 1 gen1",  "wave": "=........4=.44|4444444","data":["","i1","","i1+","i1+","i1+","..."]},
+    { "name": "tone 1 gen2",  "wave": "=.........4=44|4444444","data":["","i2","","i2+","i2+","i2+","..."]},
+    { "name": "tone 1 gen3",  "wave": "=..........444|4444444","data":["","i3","i3+","i3+","i3+","..."]},
+    { "name": "tone 1",     "wave": "=.......======|4444444","data":["","0","0","0","0","0","...","s0-3","s4-8","s8-C","..."]},
+    { "name": "tone 2 gen0",  "wave": "=.......5=..55|5555555","data":["","i0","","i0+","i0+","i0+","..."]},
+    { "name": "tone 2 gen1",  "wave": "=........5=.55|5555555","data":["","i1","","i1+","i1+","i1+","..."]},
+    { "name": "tone 2 gen2",  "wave": "=.........5=55|5555555","data":["","i2","","i2+","i2+","i2+","..."]},
+    { "name": "tone 2 gen3",  "wave": "=..........555|5555555","data":["","i3","i3+","i3+","i3+","..."]},
+    { "name": "tone 2",     "wave": "=.......======|5555555","data":["","0","0","0","0","0","...","s0-3","s4-8","s8-C","..."]},
+    ],
+  foot: {
+    text: ['tspan', 'Frequency word sync at CLK_RATIO=4'],
+  }
+}
+</script>
+</div>
+<p>In the above diagram example:</p>
+<ul class="simple">
+<li><p>CLOCK_RATIO = 4</p></li>
+<li><p>i0 = phase offset</p></li>
+<li><p>i1 = i0 + FW</p></li>
+<li><p>i2 = i1 + FW</p></li>
+<li><p>i3 = i2 + FW</p></li>
+</ul>
+<p>Each <strong>i</strong> is on 16 bits and each “s”(0-3) is on 64 bits.
+i(t)+ is the value of the previous i(t) plus the increment (FW*CLOCK_RATIO).</p>
+<p>It should be mentioned that after the phase init fall-edge, until the first
+valid sample, there is a delay caused by the phase to angle converter type and
+in the case of the CORDIC type, the number of rotation stages will also have a
+direct impact on this clock period delay.</p>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../../util_var_fifo/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Util VAR FIFO</a>
+    <a href="../../../projects/index.html" title="Next document (Ctrl+RightArrow)" class="next">Projects</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
