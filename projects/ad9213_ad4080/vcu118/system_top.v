@@ -145,7 +145,6 @@ module system_top (
 
   output                  ad4080_sclk,
   output                  ad4080_cs,
-  input                   ad4080_sdi,
   output                  ad4080_sdo,
 
 
@@ -192,10 +191,9 @@ module system_top (
   assign adf4371_csb    = hmc7044_adf4371_csn[1];
   assign hmc7044_csb    = hmc7044_adf4371_csn[0];
   assign gpio_i[63:56]  = gpio_o[63:56];
-  assign ad4080_gpio[0] = 1'b0;
 
   ad_iobuf #(
-    .DATA_WIDTH(12)
+    .DATA_WIDTH(11)
   ) i_gpio (
     .dio_t(gpio_t[55:45]),
     .dio_i(gpio_o[55:45]),
@@ -316,6 +314,15 @@ module system_top (
     .spi_dir ());
 
   // instantiations
+
+
+  ad_iobuf #(
+    .DATA_WIDTH(1)
+  ) i_miso_ad4080 (
+    .dio_t(1'b1),
+    .dio_i(1'b0),
+    .dio_o(ad4080_sdi),
+    .dio_p(ad4080_gpio[0]));
 
   ad_iobuf #(
     .DATA_WIDTH(1)

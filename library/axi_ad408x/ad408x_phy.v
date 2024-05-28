@@ -37,6 +37,9 @@
 
 module ad408x_phy #(
   parameter FPGA_TECHNOLOGY = 0,
+  parameter FPGA_FAMILY = 0,
+  parameter SPEED_GRADE = 0,
+  parameter DEV_PACKAGE = 0,
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 2,
   parameter IODELAY_CTRL = 1,
@@ -318,9 +321,9 @@ end
   end
 
   ad_data_in # (
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .SINGLE_ENDED(0),
     .IDDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
-    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .DDR_SDR_N(1),
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
@@ -340,9 +343,9 @@ end
     .delay_locked(delay_locked_s[1]));
 
     ad_data_in # (
+      .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
       .SINGLE_ENDED(0),
       .IDDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
-      .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
       .DDR_SDR_N(1),
       .IODELAY_CTRL(IODELAY_CTRL),
       .IODELAY_GROUP(IO_DELAY_GROUP),

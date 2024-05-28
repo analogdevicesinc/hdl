@@ -76,7 +76,7 @@ set_property -dict {PACKAGE_PIN N34  IOSTANDARD LVCMOS18                   } [ge
 
 set_property -dict {PACKAGE_PIN W34  IOSTANDARD LVCMOS18                   } [get_ports ad4080_sclk]       ; ## G28  FMC_LA25_N           IO_L3N_T0L_N5_AD15N_45
 set_property -dict {PACKAGE_PIN U35  IOSTANDARD LVCMOS18                   } [get_ports ad4080_cs]         ; ## G30  FMC_LA29_P           IO_L4P_T0U_N6_DBC_AD7P_45
-set_property -dict {PACKAGE_PIN T36  IOSTANDARD LVCMOS18                   } [get_ports ad4080_sdi]        ; ## G31  FMC_LA29_N           IO_L4N_T0U_N7_DBC_AD7N_45
+set_property -dict {PACKAGE_PIN T36  IOSTANDARD LVCMOS18                   } [get_ports ad4080_gpio[0]]    ; ## G31  FMC_LA29_N           IO_L4N_T0U_N7_DBC_AD7N_45
 set_property -dict {PACKAGE_PIN P37  IOSTANDARD LVCMOS18                   } [get_ports ad4080_sdo]        ; ## G33  FMC_LA31_P           IO_L16P_T2U_N6_QBC_AD3P_45
 
 ## LTC2644 SPI PORT

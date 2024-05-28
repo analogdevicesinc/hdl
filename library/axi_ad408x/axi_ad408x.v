@@ -38,6 +38,9 @@
 module axi_ad408x #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
+  parameter   FPGA_FAMILY = 0,
+  parameter   SPEED_GRADE = 0,
+  parameter   DEV_PACKAGE = 0,
   parameter   DRP_WIDTH = 5,
   parameter   NUM_LANES = 2,   // Max number of lanes is 2
   parameter   NUM_OF_CHANNELS = 1,
@@ -274,7 +277,10 @@ module axi_ad408x #(
  // ad4080 interface module
 
   ad408x_phy #(
-    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .FPGA_TECHNOLOGY(3),
+    .FPGA_FAMILY(FPGA_FAMILY),
+    .SPEED_GRADE(SPEED_GRADE),
+    .DEV_PACKAGE(DEV_PACKAGE),
     .DRP_WIDTH(DRP_WIDTH),
     .NUM_LANES(NUM_LANES),
     .IODELAY_CTRL(IODELAY_CTRL),

@@ -198,13 +198,13 @@ ad_ip_parameter hmc7044_spi CONFIG.C_USE_STARTUP 0
 ad_ip_parameter hmc7044_spi CONFIG.C_NUM_SS_BITS 2
 ad_ip_parameter hmc7044_spi CONFIG.C_SCK_RATIO 8
 
-ad_connect hmc7044_csn_i hmc7044_spi/ss_i
-ad_connect hmc7044_csn_o hmc7044_spi/ss_o
-ad_connect hmc7044_clk_i hmc7044_spi/sck_i
-ad_connect hmc7044_clk_o hmc7044_spi/sck_o
-ad_connect hmc7044_sdo_i hmc7044_spi/io0_i
-ad_connect hmc7044_sdo_o hmc7044_spi/io0_o
-ad_connect hmc7044_sdi_i hmc7044_spi/io1_i
+ad_connect hmc7044_adf4371_csn_i hmc7044_spi/ss_i
+ad_connect hmc7044_adf4371_csn_o hmc7044_spi/ss_o
+ad_connect hmc7044_adf4371_clk_i hmc7044_spi/sck_i
+ad_connect hmc7044_adf4371_clk_o hmc7044_spi/sck_o
+ad_connect hmc7044_adf4371_sdo_i hmc7044_spi/io0_i
+ad_connect hmc7044_adf4371_sdo_o hmc7044_spi/io0_o
+ad_connect hmc7044_adf4371_sdi_i hmc7044_spi/io1_i
 
 ad_connect $sys_cpu_clk hmc7044_spi/ext_spi_clk
 
