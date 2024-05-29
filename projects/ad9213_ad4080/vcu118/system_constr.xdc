@@ -76,15 +76,15 @@ set_property -dict {PACKAGE_PIN N34  IOSTANDARD LVCMOS18                   } [ge
 
 set_property -dict {PACKAGE_PIN W34  IOSTANDARD LVCMOS18                   } [get_ports ad4080_sclk]       ; ## G28  FMC_LA25_N           IO_L3N_T0L_N5_AD15N_45
 set_property -dict {PACKAGE_PIN U35  IOSTANDARD LVCMOS18                   } [get_ports ad4080_cs]         ; ## G30  FMC_LA29_P           IO_L4P_T0U_N6_DBC_AD7P_45
-set_property -dict {PACKAGE_PIN T36  IOSTANDARD LVCMOS18                   } [get_ports ad4080_gpio[0]]    ; ## G31  FMC_LA29_N           IO_L4N_T0U_N7_DBC_AD7N_45
-set_property -dict {PACKAGE_PIN P37  IOSTANDARD LVCMOS18                   } [get_ports ad4080_sdo]        ; ## G33  FMC_LA31_P           IO_L16P_T2U_N6_QBC_AD3P_45
+set_property -dict {PACKAGE_PIN T36  IOSTANDARD LVCMOS18                   } [get_ports ad4080_mosi]       ; ## G31  FMC_LA29_N           IO_L4N_T0U_N7_DBC_AD7N_45
+set_property -dict {PACKAGE_PIN P37  IOSTANDARD LVCMOS18                   } [get_ports ad4080_gpio[0]]    ; ## G33  FMC_LA31_P           IO_L16P_T2U_N6_QBC_AD3P_45
 
-## LTC2644 SPI PORT
+## ltc2664 SPI PORT
 
-set_property -dict {PACKAGE_PIN L35  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_sclk]     ; ## H26  FMC_LA21_N           IO_L24N_T3U_N11_45
-set_property -dict {PACKAGE_PIN T35  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_cs]       ; ## H29  FMC_LA24_N           IO_L6N_T0U_N11_AD6N_45
-set_property -dict {PACKAGE_PIN T34  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_sdi]      ; ## H28  FMC_LA24_P           IO_L6P_T0U_N10_AD6P_45
-set_property -dict {PACKAGE_PIN M36  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_sdo]      ; ## H31  FMC_LA28_P           IO_L17P_T2U_N8_AD10P_45
+set_property -dict {PACKAGE_PIN L35  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_sclk]     ; ## H26  FMC_LA21_N           IO_L24N_T3U_N11_45
+set_property -dict {PACKAGE_PIN T35  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_cs]       ; ## H29  FMC_LA24_N           IO_L6N_T0U_N11_AD6N_45
+set_property -dict {PACKAGE_PIN T34  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_mosi]     ; ## H28  FMC_LA24_P           IO_L6P_T0U_N10_AD6P_45
+set_property -dict {PACKAGE_PIN M36  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_miso]     ; ## H31  FMC_LA28_P           IO_L17P_T2U_N8_AD10P_45
 
 ## AD9213 SPI PORT
 
@@ -123,9 +123,9 @@ set_property -dict {PACKAGE_PIN N37  IOSTANDARD LVCMOS18                   } [ge
 set_property -dict {PACKAGE_PIN L34  IOSTANDARD LVCMOS18                   } [get_ports ad4080_gpio[2]]       ; ## G36  FMC_LA33_P           IO_L19P_T3L_N0_DBC_AD9P_45
 set_property -dict {PACKAGE_PIN K34  IOSTANDARD LVCMOS18                   } [get_ports ad4080_gpio[3]]       ; ## G37  FMC_LA33_N           IO_L19N_T3L_N1_DBC_AD9N_45
 
-set_property -dict {PACKAGE_PIN L36  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_ldac]         ; ## H32  FMC_LA28_N           IO_L17N_T2U_N9_AD10N_45
-set_property -dict {PACKAGE_PIN N38  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_clr]          ; ## H34  FMC_LA30_P           IO_L18P_T2U_N10_AD2P_45
-set_property -dict {PACKAGE_PIN M38  IOSTANDARD LVCMOS18                   } [get_ports ltc2644_tgp]          ; ## H35  FMC_LA30_N           IO_L18N_T2U_N11_AD2N_45
+set_property -dict {PACKAGE_PIN L36  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_ldac]         ; ## H32  FMC_LA28_N           IO_L17N_T2U_N9_AD10N_45
+set_property -dict {PACKAGE_PIN N38  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_clr]          ; ## H34  FMC_LA30_P           IO_L18P_T2U_N10_AD2P_45
+set_property -dict {PACKAGE_PIN M38  IOSTANDARD LVCMOS18                   } [get_ports ltc2664_tgp]          ; ## H35  FMC_LA30_N           IO_L18N_T2U_N11_AD2N_45
 
 ## DIGITAL EXTERNAL PORTS
 
@@ -159,4 +159,4 @@ set_input_delay -clock [get_clocks global_clk_0] \
   [get_ports {rx_sysref_*}]
 
 set_property IOB FALSE [get_cells i_system_wrapper/system_i/ad4080_spi/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/LOGIC_FOR_MD_0_GEN.SPI_MODULE_I/RATIO_NOT_EQUAL_4_GENERATE.SCK_O_NQ_4_NO_STARTUP_USED.SCK_O_NE_4_FDRE_INST]
-set_property IOB FALSE [get_cells i_system_wrapper/system_i/ltc2644_spi/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/LOGIC_FOR_MD_0_GEN.SPI_MODULE_I/RATIO_NOT_EQUAL_4_GENERATE.SCK_O_NQ_4_NO_STARTUP_USED.SCK_O_NE_4_FDRE_INST]
+set_property IOB FALSE [get_cells i_system_wrapper/system_i/ltc2664_spi/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/LOGIC_FOR_MD_0_GEN.SPI_MODULE_I/RATIO_NOT_EQUAL_4_GENERATE.SCK_O_NQ_4_NO_STARTUP_USED.SCK_O_NE_4_FDRE_INST]

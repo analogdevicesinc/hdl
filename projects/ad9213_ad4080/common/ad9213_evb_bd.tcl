@@ -42,12 +42,12 @@ create_bd_port -dir I               adl5580_sdo_i
 create_bd_port -dir O               adl5580_sdo_o
 create_bd_port -dir I               adl5580_sdi_i
 
-create_bd_port -dir O               ltc2644_csn_o
-create_bd_port -dir I               ltc2644_csn_i
-create_bd_port -dir I               ltc2644_clk_i
-create_bd_port -dir O               ltc2644_clk_o
-create_bd_port -dir O               ltc2644_sdo_o
-create_bd_port -dir I               ltc2644_sdi_i
+create_bd_port -dir O               ltc2664_csn_o
+create_bd_port -dir I               ltc2664_csn_i
+create_bd_port -dir I               ltc2664_clk_i
+create_bd_port -dir O               ltc2664_clk_o
+create_bd_port -dir O               ltc2664_sdo_o
+create_bd_port -dir I               ltc2664_sdi_i
 
 # ad4080 interface
 
@@ -237,19 +237,19 @@ ad_connect adl5580_sdi_i adl5580_spi/io1_i
 
 ad_connect $sys_cpu_clk adl5580_spi/ext_spi_clk
 
-ad_ip_instance axi_quad_spi ltc2644_spi
-ad_ip_parameter ltc2644_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter ltc2644_spi CONFIG.C_NUM_SS_BITS 1
-ad_ip_parameter ltc2644_spi CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi ltc2664_spi
+ad_ip_parameter ltc2664_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter ltc2664_spi CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter ltc2664_spi CONFIG.C_SCK_RATIO 8
 
-ad_connect ltc2644_csn_i ltc2644_spi/ss_i
-ad_connect ltc2644_csn_o ltc2644_spi/ss_o
-ad_connect ltc2644_clk_i ltc2644_spi/sck_i
-ad_connect ltc2644_clk_o ltc2644_spi/sck_o
-ad_connect ltc2644_sdo_o ltc2644_spi/io0_o
-ad_connect ltc2644_sdi_i ltc2644_spi/io1_i
+ad_connect ltc2664_csn_i ltc2664_spi/ss_i
+ad_connect ltc2664_csn_o ltc2664_spi/ss_o
+ad_connect ltc2664_clk_i ltc2664_spi/sck_i
+ad_connect ltc2664_clk_o ltc2664_spi/sck_o
+ad_connect ltc2664_sdo_o ltc2664_spi/io0_o
+ad_connect ltc2664_sdi_i ltc2664_spi/io1_i
 
-ad_connect $sys_cpu_clk ltc2644_spi/ext_spi_clk
+ad_connect $sys_cpu_clk ltc2664_spi/ext_spi_clk
 
 # connect interface to axi_ad4080_adc
 
@@ -284,7 +284,7 @@ ad_cpu_interconnect 0x44A90000 axi_ad9213_jesd
 ad_cpu_interconnect 0x44A71000 hmc7044_spi
 ad_cpu_interconnect 0x44A72000 ad4080_spi
 ad_cpu_interconnect 0x44A73000 adl5580_spi
-ad_cpu_interconnect 0x44A74000 ltc2644_spi
+ad_cpu_interconnect 0x44A74000 ltc2664_spi
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma
 ad_cpu_interconnect 0x44B00000 axi_ad9213_dma
@@ -301,4 +301,4 @@ ad_cpu_interrupt ps-15 mb-9 adl5580_spi/ip2intc_irpt
 ad_cpu_interrupt ps-14 mb-10 axi_ad4080_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9213_dma/irq
 ad_cpu_interrupt ps-11 mb-13 axi_ad9213_jesd/irq
-ad_cpu_interrupt ps-10 mb-14 ltc2644_spi/ip2intc_irpt
+ad_cpu_interrupt ps-10 mb-14 ltc2664_spi/ip2intc_irpt

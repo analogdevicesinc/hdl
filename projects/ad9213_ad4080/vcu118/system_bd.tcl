@@ -16,7 +16,7 @@ ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter hmc7044_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter ad4080_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter adl5580_spi CONFIG.C_SCK_RATIO 16
-ad_ip_parameter ltc2644_spi CONFIG.C_SCK_RATIO 16
+ad_ip_parameter ltc2664_spi CONFIG.C_SCK_RATIO 16
 
 #ad_ip_parameter spi1 CONFIG.C_SCK_RATIO 16
 

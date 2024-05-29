@@ -131,9 +131,9 @@ module system_top (
   inout                   dig_ext_hs_n,
   inout       [1:0]       dig_ext_gpio,
 
-  inout                   ltc2644_ldac,
-  inout                   ltc2644_clr,
-  inout                   ltc2644_tgp,
+  inout                   ltc2664_ldac,
+  inout                   ltc2664_clr,
+  inout                   ltc2664_tgp,
 
 
 
@@ -145,7 +145,7 @@ module system_top (
 
   output                  ad4080_sclk,
   output                  ad4080_cs,
-  output                  ad4080_sdo,
+  output                  ad4080_mosi,
 
 
   output                  hmc7044_csb,
@@ -157,10 +157,10 @@ module system_top (
   output                  adl5580_csb,
   inout                   adl5580_sdio,
 
-  output                  ltc2644_sclk,
-  output                  ltc2644_cs,
-  input                   ltc2644_sdi,
-  output                  ltc2644_sdo
+  output                  ltc2664_sclk,
+  output                  ltc2664_cs,
+  input                   ltc2664_miso,
+  output                  ltc2664_mosi
   );
 
   // internal signals
@@ -198,9 +198,9 @@ module system_top (
     .dio_t(gpio_t[55:45]),
     .dio_i(gpio_o[55:45]),
     .dio_o(gpio_i[55:45]),
-    .dio_p({ltc2644_tgp,      //55
-            ltc2644_clr,      //54
-            ltc2644_ldac,     //53
+    .dio_p({ltc2664_tgp,      //55
+            ltc2664_clr,      //54
+            ltc2664_ldac,     //53
             adl5580_en,       //52
             ada4945_disable,  //51
             adg5419_ctrl,     //50
@@ -321,7 +321,7 @@ module system_top (
   ) i_miso_ad4080 (
     .dio_t(1'b1),
     .dio_i(1'b0),
-    .dio_o(ad4080_sdi),
+    .dio_o(ad4080_miso),
     .dio_p(ad4080_gpio[0]));
 
   ad_iobuf #(
@@ -414,8 +414,8 @@ module system_top (
     .ad4080_clk_o (ad4080_sclk),
     .ad4080_csn_i (1'b1),
     .ad4080_csn_o (ad4080_cs),
-    .ad4080_sdi_i (ad4080_sdi),
-    .ad4080_sdo_o (ad4080_sdo),
+    .ad4080_sdi_i (ad4080_miso),
+    .ad4080_sdo_o (ad4080_mosi),
 
     .adl5580_clk_i (1'b0),
     .adl5580_clk_o (adl5580_sclk),
@@ -424,12 +424,12 @@ module system_top (
     .adl5580_sdi_i (adl5580_miso),
     .adl5580_sdo_o (adl5580_mosi),
 
-    .ltc2644_clk_i (1'b0),
-    .ltc2644_clk_o (ltc2644_sclk),
-    .ltc2644_csn_i (1'b1),
-    .ltc2644_csn_o (ltc2644_cs),
-    .ltc2644_sdi_i (ltc2644_sdi),
-    .ltc2644_sdo_o (ltc2644_sdo),
+    .ltc2664_clk_i (1'b0),
+    .ltc2664_clk_o (ltc2664_sclk),
+    .ltc2664_csn_i (1'b1),
+    .ltc2664_csn_o (ltc2664_cs),
+    .ltc2664_sdi_i (ltc2664_miso),
+    .ltc2664_sdo_o (ltc2664_mosi),
 
     .spi_clk_i (1'b0),
     .spi_clk_o (ad9213_sclk),
