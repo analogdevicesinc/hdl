@@ -54,7 +54,7 @@ module axi_dac_interpolate_reg(
   output              dac_correction_enable_b,
   output      [15:0]  dac_correction_coefficient_a,
   output      [15:0]  dac_correction_coefficient_b,
-  output      [19:0]  trigger_config,
+  output      [20:0]  trigger_config,
  // bus interface
 
   input               up_rstn,
@@ -72,7 +72,7 @@ module axi_dac_interpolate_reg(
   // internal registers
 
   reg     [31:0]  up_version = {16'h0002,     /* MAJOR */
-                                 8'h04,       /* MINOR */
+                                 8'h05,       /* MINOR */
                                  8'h00};      /* PATCH */
   reg     [31:0]  up_scratch = 32'h0;
 
@@ -84,7 +84,7 @@ module axi_dac_interpolate_reg(
   reg     [ 1:0]  up_config = 2'h0;
   reg     [15:0]  up_correction_coefficient_a = 16'h0;
   reg     [15:0]  up_correction_coefficient_b = 16'h0;
-  reg     [19:0]  up_trigger_config = 20'h0;
+  reg     [20:0]  up_trigger_config = 21'h0;
   reg     [15:0]  up_dac_raw_ch_a_data;
   reg     [15:0]  up_dac_raw_ch_b_data;
 
@@ -141,7 +141,7 @@ module axi_dac_interpolate_reg(
         up_correction_coefficient_b <= up_wdata[15:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h18)) begin
-        up_trigger_config <= up_wdata[19:0];
+        up_trigger_config <= up_wdata[20:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr[4:0] == 5'h19)) begin
         up_dac_raw_ch_a_data <= up_wdata[15:0];
@@ -170,7 +170,7 @@ module axi_dac_interpolate_reg(
           5'h15: up_rdata <= {30'h0,up_config};
           5'h16: up_rdata <= {16'h0,up_correction_coefficient_a};
           5'h17: up_rdata <= {16'h0,up_correction_coefficient_b};
-          5'h18: up_rdata <= {12'h0,up_trigger_config};
+          5'h18: up_rdata <= {11'h0,up_trigger_config};
           5'h19: up_rdata <= {up_dac_raw_ch_b_data, up_dac_raw_ch_a_data};
           default: up_rdata <= 0;
         endcase
@@ -181,7 +181,7 @@ module axi_dac_interpolate_reg(
   end
 
   up_xfer_cntrl #(
-    .DATA_WIDTH(162)
+    .DATA_WIDTH(163)
   ) i_xfer_cntrl (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -189,7 +189,7 @@ module axi_dac_interpolate_reg(
                       up_config[0],               // 1
                       up_correction_coefficient_b,// 16
                       up_correction_coefficient_a,// 16
-                      up_trigger_config,          // 20
+                      up_trigger_config,          // 21
                       up_flags,                   //  6
                       up_dac_raw_ch_a_data,       // 16
                       up_dac_raw_ch_b_data,       // 16
@@ -205,7 +205,7 @@ module axi_dac_interpolate_reg(
                       dac_correction_enable_a,      // 1
                       dac_correction_coefficient_b, // 16
                       dac_correction_coefficient_a, // 16
-                      trigger_config,               // 20
+                      trigger_config,               // 21
                       flags,                        // 6
                       dac_raw_ch_a_data,            // 16
                       dac_raw_ch_b_data,            // 16
