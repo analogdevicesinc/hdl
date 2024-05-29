@@ -19,7 +19,7 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00000003
+[15:8] 0x00000005
 VERSION_MINOR
 RO
 ENDFIELD
@@ -75,13 +75,13 @@ FIELD
 [2:0]
 FILTERED_INTERPOLATION
 RW
-Enables the filtered interpolation: 
-  0: No filtered interpolation 
-  1: Interpolation by 10. Result should be corrected by a 1.531 factor 
-  2: Interpolation by 100. Result should be corrected by a 1.168 factor 
-  3: Interpolation by 1000. Result should be corrected by a 1.783 factor 
+Enables the filtered interpolation:
+  0: No filtered interpolation
+  1: Interpolation by 10. Result should be corrected by a 1.531 factor
+  2: Interpolation by 100. Result should be corrected by a 1.168 factor
+  3: Interpolation by 1000. Result should be corrected by a 1.783 factor
   6: Interpolation by 10000. Result should be corrected by a 1.360 factor
-  7: Interpolation by 100000. Result should be corrected by a 1.038 factor 
+  7: Interpolation by 100000. Result should be corrected by a 1.038 factor
   default: No filtered interpolation
 ENDFIELD
 
@@ -115,14 +115,14 @@ FIELD
 [2:0]
 FILTERED_INTERPOLATION
 RW
-Enables the filtered interpolation: 
+Enables the filtered interpolation:
 
-0: No filtered interpolation 
-1: Interpolation by 10. Result should be corrected by a 1.531 factor 
-2: Interpolation by 100. Result should be corrected by a 1.168 factor 
-3: Interpolation by 1000. Result should be corrected by a 1.783 factor 
+0: No filtered interpolation
+1: Interpolation by 10. Result should be corrected by a 1.531 factor
+2: Interpolation by 100. Result should be corrected by a 1.168 factor
+3: Interpolation by 1000. Result should be corrected by a 1.783 factor
 6: Interpolation by 10000. Result should be corrected by a 1.360 factor
-7: Interpolation by 100000. Result should be corrected by a 1.038 factor 
+7: Interpolation by 100000. Result should be corrected by a 1.038 factor
 default: No filtered interpolation
 ENDFIELD
 
@@ -211,6 +211,13 @@ REG
 TRIGGER_CONFIG
 Trigger configuration
 ENDREG
+
+FIELD
+[20]
+Auto rearm trigger
+RW
+Rearms the trigger on the last(sample) signal of the DMA(per DAC channel)
+ENDFIELD
 
 FIELD
 [19]
