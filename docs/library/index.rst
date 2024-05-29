@@ -68,9 +68,9 @@ Utilities
 .. toctree::
    :maxdepth: 1
 
-   common/ad_dds/index
    axi_adc_decimate/index
    axi_adc_trigger/index
+   axi_adxcvr/index
    axi_clkgen/index
    axi_dac_interpolate/index
    axi_fan_control/index
@@ -79,14 +79,14 @@ Utilities
    axi_pwm_gen/index
    axi_sysid/index
    axi_tdd/index
+   common/ad_dds/index
    util_axis_fifo/index
    util_axis_fifo_asym/index
-   util_pack/util_cpack2
-   util_pack/util_upack2
    util_extract/index
    util_mii_to_rmii/index
+   util_pack/util_cpack2
+   util_pack/util_upack2
    util_rfifo/index
-   util_wfifo/index
    util_var_fifo/index
-   axi_adxcvr/index
+   util_wfifo/index
    xilinx/index
