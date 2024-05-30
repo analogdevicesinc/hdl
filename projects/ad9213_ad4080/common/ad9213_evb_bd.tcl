@@ -296,6 +296,7 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
 
 # interrupts
 
+ad_cpu_interrupt ps-4  mb-6  axi_ad9213_jesd/irq
 ad_cpu_interrupt ps-13 mb-7  axi_ad4080_dma/irq
 ad_cpu_interrupt ps-12 mb-8  axi_ad9213_dma/irq
 
@@ -303,4 +304,3 @@ ad_cpu_interrupt ps-8  mb-12 hmc7044_spi/ip2intc_irpt
 ad_cpu_interrupt ps-7  mb-13 ad4080_spi/ip2intc_irpt
 ad_cpu_interrupt ps-6  mb-14 adl5580_spi/ip2intc_irpt
 ad_cpu_interrupt ps-5  mb-15 ltc2664_spi/ip2intc_irpt
-ad_cpu_interrupt ps-4  mb-16 axi_ad9213_jesd/irq
