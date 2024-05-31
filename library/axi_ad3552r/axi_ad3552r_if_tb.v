@@ -36,19 +36,26 @@
 `timescale 1ns/100ps
 
 module axi_ad3552r_if_tb;
-  parameter VCD_FILE = {`__FILE__,"cd"};
+  parameter  VCD_FILE = "axi_ad3552r_if_tb.vcd";
 
   `define TIMEOUT 10000
   `include "tb_base.v"
 
 
   wire   [ 23:0]   data_read;
-  wire             dac_sclk;
-  wire             dac_csn;
+
+
   wire             dac_data_ready;
   wire   [ 3:0]    sdio_i;
   wire   [ 3:0]    sdio_o;
   wire             sdio_t;
+
+  wire             dac_sclk_1;
+  wire             dac_csn_1;
+
+  wire   [ 3:0]    sdio_i_1;
+  wire   [ 3:0]    sdio_o_1;
+  wire             sdio_t_1;
   wire   [31:0]    dac_data_final;
   wire   [ 3:0]    readback_data_shift;
   wire   [ 4:0]    data_increment_valid;
@@ -67,6 +74,9 @@ module axi_ad3552r_if_tb;
   reg    [31:0]    transfer_reg   = 32'h89abcdef;
   reg    [ 4:0]    valid_counter  = 5'b0;
   reg    [31:0]    dac_data       = 32'b0;
+  reg              external_sync_s = 1'b0;
+  reg              stream_1 = 1'b0;
+  reg external_sync_arm_s = 1'b0;
 
   always #4 dac_clk <= ~dac_clk;
 
@@ -113,7 +123,7 @@ module axi_ad3552r_if_tb;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
     #100 transfer_data = 1'b0;
-    
+
     #500;
 
     // Write 8 bit DDR
@@ -158,6 +168,7 @@ module axi_ad3552r_if_tb;
 
     #500;
 
+
     // Stream SDR
 
     address_write = 8'h2c;
@@ -170,54 +181,62 @@ module axi_ad3552r_if_tb;
 
     #500;
 
+    external_sync_arm_s = 1'b1;
+    #50;
     // Stream DDR
 
     address_write = 8'h2c;
     reg_8b_16bn = 1'b1;
     sdr_ddr_n = 1'b0;
+    stream_1 = 1'b1;
+    #50;
     stream = 1'b1;
     transfer_data = 1'b1;
     #100 transfer_data = 1'b0;
+    #1000 stream_1 = 1'b0;
     #1000 stream = 1'b0;
 
   end
 
-  // data is incremented at each complete cycle 
+  // data is incremented at each complete cycle
 
   assign dac_data_final       = (stream == 1'b1) ? dac_data : data_write;
   assign data_increment_valid = (sdr_ddr_n ) ? 5'd16: 5'h8;
-  
-  always @(posedge dac_clk) begin 
+
+  always @(posedge dac_clk) begin
     if (valid_counter == data_increment_valid) begin
       dac_data <= dac_data + 32'h00010002;
       valid_counter <= 3'b0;
       dac_data_valid <= 1'b1;
-    end else begin 
+    end else begin
       dac_data <= dac_data;
       valid_counter <= valid_counter + 3'b1;
       dac_data_valid <= 1'b0;
-    end 
+    end
   end
 
-  // data is circullary shifted at every sampling edge 
+  // data is circullary shifted at every sampling edge
 
   assign readback_data_shift = (sdr_ddr_n ) ? 4'h8 : 4'h4;
   assign sdio_i = (sdio_t === 1'b1) ? transfer_reg[31:28] : 4'b0;
 
-  always @(posedge dac_clk) begin 
-    if (shift_count == readback_data_shift) begin 
+  always @(posedge dac_clk) begin
+    if (shift_count == readback_data_shift) begin
       transfer_reg <= {transfer_reg[27:0],transfer_reg[31:28]};
-    end else if (sdio_t === 1'b1) begin 
+    end else if (sdio_t === 1'b1) begin
       transfer_reg <= transfer_reg;
     end
-    if (shift_count == readback_data_shift || dac_csn == 1'b1) begin 
+    if (shift_count == readback_data_shift || dac_csn == 1'b1) begin
       shift_count <= 3'b0;
     end else if (sdio_t === 1'b1) begin
       shift_count <= shift_count + 3'b1;
     end
   end
+wire sync_ext_device_s;
 
-  axi_ad3552r_if axi_ad3552r_interface (
+axi_ad3552r_if #(
+  .MASTER_SLAVE_N(1)
+)axi_ad3552r_interface (
     .clk_in(dac_clk),
     .reset_in(reset_in),
     .dac_data(dac_data_final),
@@ -231,10 +250,39 @@ module axi_ad3552r_if_tb;
     .stream(stream),
     .dac_data_ready(dac_data_ready),
     .if_busy(if_busy),
+    .external_sync(sync_ext_device_s),
+    .sync_ext_device(sync_ext_device_s),
+    .external_sync_arm(external_sync_arm_s),
     .sclk(dac_sclk),
     .csn(dac_csn),
     .sdio_i(sdio_i),
     .sdio_o(sdio_o),
     .sdio_t(sdio_t));
-  
+
+  axi_ad3552r_if #(
+    .MASTER_SLAVE_N(0)
+  ) axi_ad3552r_interface_1 (
+    .clk_in(dac_clk),
+    .reset_in(reset_in),
+    .dac_data(dac_data_final),
+    .dac_data_valid(dac_data_valid),
+    .address(address_write),
+    .data_read(data_read),
+    .data_write(data_write),
+    .sdr_ddr_n(sdr_ddr_n),
+    .symb_8_16b(reg_8b_16bn),
+    .transfer_data(transfer_data),
+    .stream(stream_1),
+    .dac_data_ready(),
+    .if_busy(),
+    .external_sync(sync_ext_device_s),
+    .sync_ext_device(),
+    .external_sync_arm(external_sync_arm_s),
+    .sclk(dac_sclk_1),
+    .csn(dac_csn_1),
+    .sdio_i(sdio_i_1),
+    .sdio_o(sdio_o_1),
+    .sdio_t(sdio_t_1));
+
+
 endmodule

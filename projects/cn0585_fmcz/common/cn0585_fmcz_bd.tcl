@@ -242,7 +242,7 @@ ad_connect max_spi_sdi_i max_spi/io1_i
 # AD3552Rs
 
 ad_ip_instance axi_ad3552r axi_ad3552r_0
-
+ad_ip_parameter axi_ad3552r_0 CONFIG.MASTER_SLAVE_N 1
 #dac0
 
 ad_ip_instance axi_dmac axi_dac_0_dma
@@ -253,7 +253,7 @@ ad_ip_parameter axi_dac_0_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_dac_0_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32 
+ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 ad_ip_parameter axi_dac_0_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 
 ad_connect axi_ad3552r_0/dac_clk axi_clkgen/clk_0
@@ -261,7 +261,7 @@ ad_connect axi_dac_0_dma/m_axis_aclk axi_clkgen/clk_0
 
 ad_connect axi_ad3552r_0/dac_data_ready axi_dac_0_dma/m_axis_ready
 ad_connect axi_ad3552r_0/dma_data       axi_dac_0_dma/m_axis_data
-ad_connect axi_ad3552r_0/valid_in_dma   axi_dac_0_dma/m_axis_valid   
+ad_connect axi_ad3552r_0/valid_in_dma   axi_dac_0_dma/m_axis_valid
 
 ad_connect axi_ltc2387_0/adc_data  axi_ad3552r_0/data_in_a
 ad_connect axi_ltc2387_1/adc_data  axi_ad3552r_0/data_in_b
@@ -277,6 +277,7 @@ ad_connect axi_ad3552r_0/sdio_t    dac0_spi_sdo_t
 #dac1
 
 ad_ip_instance axi_ad3552r axi_ad3552r_1
+ad_ip_parameter axi_ad3552r_1 CONFIG.MASTER_SLAVE_N 0
 
 ad_ip_instance axi_dmac axi_dac_1_dma
 ad_ip_parameter axi_dac_1_dma CONFIG.DMA_TYPE_SRC 0
@@ -293,7 +294,7 @@ ad_connect axi_clkgen/clk_0             axi_ad3552r_1/dac_clk
 ad_connect axi_clkgen/clk_0             axi_dac_1_dma/m_axis_aclk
 ad_connect axi_ad3552r_1/dac_data_ready axi_dac_1_dma/m_axis_ready
 ad_connect axi_ad3552r_1/dma_data       axi_dac_1_dma/m_axis_data
-ad_connect axi_ad3552r_1/valid_in_dma   axi_dac_1_dma/m_axis_valid   
+ad_connect axi_ad3552r_1/valid_in_dma   axi_dac_1_dma/m_axis_valid
 
 ad_connect axi_ltc2387_2/adc_data  axi_ad3552r_1/data_in_a
 ad_connect axi_ltc2387_3/adc_data  axi_ad3552r_1/data_in_b
@@ -306,12 +307,12 @@ ad_connect axi_ad3552r_1/sdio_i    dac1_spi_sdi
 ad_connect axi_ad3552r_1/sdio_o    dac1_spi_sdo
 ad_connect axi_ad3552r_1/sdio_t    dac1_spi_sdo_t
 
-# synchronization between connecting devices  
+# synchronization between connecting devices
 
-ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_0/external_sync 
-ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_1/external_sync 
-ad_connect axi_ad3552r_0/valid_in_dma_sec axi_dac_1_dma/m_axis_valid  
-ad_connect axi_ad3552r_1/valid_in_dma_sec axi_dac_0_dma/m_axis_valid 
+ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_0/external_sync
+ad_connect axi_ad3552r_0/sync_ext_device  axi_ad3552r_1/external_sync
+ad_connect axi_ad3552r_0/valid_in_dma_sec axi_dac_1_dma/m_axis_valid
+ad_connect axi_ad3552r_1/valid_in_dma_sec axi_dac_0_dma/m_axis_valid
 
 # address mapping
 

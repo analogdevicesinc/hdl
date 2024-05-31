@@ -38,6 +38,7 @@
 module axi_ad3552r #(
 
   parameter   ID = 0,
+  parameter   MASTER_SLAVE_N = 1,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
   parameter   SPEED_GRADE = 0,
@@ -129,7 +130,9 @@ module axi_ad3552r #(
   assign up_rstn = s_axi_aresetn;
 
   // device interface
-  axi_ad3552r_if axi_ad3552r_interface (
+  axi_ad3552r_if #(
+    .MASTER_SLAVE_N(MASTER_SLAVE_N)
+  ) axi_ad3552r_interface (
     .clk_in(dac_clk),
     .reset_in(dac_rst_s),
     .dac_data(dac_data),

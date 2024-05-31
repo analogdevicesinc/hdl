@@ -35,7 +35,11 @@
 
 `timescale 1ns/100ps
 
-module axi_ad3552r_if (
+module axi_ad3552r_if #(
+
+parameter   MASTER_SLAVE_N = 1
+
+) (
 
   input                   clk_in,  // 120MHz
   input                   reset_in,
@@ -88,7 +92,9 @@ module axi_ad3552r_if (
   reg             start_transfer      = 1'b0;
   reg             if_busy_reg         = 1'b0;
   reg             dac_data_ready_s    = 1'b0;
+  reg    [ 1:0]   external_sync_d   = 'b0;
   reg             external_sync_arm_reg = 1'b0;
+
 
   localparam  [ 2:0]  IDLE = 3'h0,
                       CS_LOW = 3'h1,
@@ -107,7 +113,7 @@ module axi_ad3552r_if (
   // start the data stream transfer after valid has been captured
 
   assign start_synced = valid_captured_d[1] & start_transfer & stream;
-  assign sync_ext_device = start_synced ;
+  assign sync_ext_device = start_synced;
 
   // use dac_data valid from an external source only if external_sync_arm_reg is 1
 
@@ -115,9 +121,18 @@ module axi_ad3552r_if (
   assign dac_data_ready = dac_data_ready_s & dac_data_valid_synced;
   assign dac_data_int = dac_data;
 
-  // sync the data only if the synchronizations has been armed in software 
+// delay the sync_ext with 2 clocks
+  always @(posedge clk_in) begin
+    external_sync_d <= {external_sync_d[0],external_sync};
+  end
 
-  assign external_sync_s =  ~external_sync_arm_reg | external_sync;
+  wire external_sync_int;
+
+  assign external_sync_int = (MASTER_SLAVE_N) ? external_sync : external_sync_d[1];
+
+  // sync the data only if the synchronizations has been armed in software
+
+  assign external_sync_s =  ~external_sync_arm_reg | external_sync_int;
 
   always @(posedge clk_in) begin
     if(reset_in == 1'b1) begin
@@ -135,17 +150,17 @@ module axi_ad3552r_if (
       valid_captured <= 1'b0;
       valid_captured_d <= 4'b0;
     end
-   
-   // pulse to level conversion 
+
+   // pulse to level conversion
 
     if(external_sync_arm == 1'b1) begin
       external_sync_arm_reg <= 1'b1;
-    end 
+    end
 
     if(transfer_state == CS_HIGH) begin
       external_sync_arm_reg <= 1'b0;
-    end  
- 
+    end
+
     if(dac_data_valid == 1'b1 && start_transfer == 1'b1) begin
       valid_captured <= 1'b1;
     end
