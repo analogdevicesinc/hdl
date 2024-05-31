@@ -15,18 +15,13 @@ chain.
 
    We apologize for any inconvenience that may occur due to this migration.
 
-.. raw:: html
+.. image:: sources/HDL_logo.png
+   :class: only-light
+   :width: 70%
 
-    <center>
-    <div style="width:70%;">
-    <div id="indexlogo" class="only-light">
-    <img src="_static/HDL_logo.png" alt="HDL Logo" />
-    </div>
-    <div id="indexlogo" class="only-dark">
-    <img src="_static/HDL_logo_w.png" alt="HDL Logo" />
-    </div>
-    </div>
-    </center>
+.. image:: sources/HDL_logo_w.png
+   :class: only-dark
+   :width: 70%
 
 .. hdl-build-status::
 
