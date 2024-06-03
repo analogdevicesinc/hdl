@@ -17,7 +17,9 @@ set echo_sclk     0
 
 set hier_spi_engine spi_pulsar_adc
 
-spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
+set use_sdo_idle_state [get_env_param USE_SDO_IDLE_STATE 0]
+
+spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk $use_sdo_idle_state
 
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
