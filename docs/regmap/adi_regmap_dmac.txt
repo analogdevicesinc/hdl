@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ID[0:1]
+[31:0] ID
 PERIPHERAL_ID
 RO
 Value of the ID configuration parameter.
