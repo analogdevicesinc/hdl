@@ -1,6 +1,6 @@
 .. _build_hdl:
 
-Build a HDL project
+Build an HDL project
 ===============================================================================
 
 **Please note that ADI only provides the source files necessary to create
@@ -532,21 +532,22 @@ Building a Lattice project
       unknown compatibility reason. You can use Cygwin on Windows or a normal
       Linux installation.
 
-The Lattice build is in a very early version, does not support any ADI library
-builds yet. We are just starting to develop the library build part.
-Currently we only have a single early version base design that builds almost
-like the same then the others. For Lattice there are separate tools for creating
-a block design **(Propel Builder)** and building a hdl design **(Radiant)**.
-Like in the other cases the build for any supported project works by ``make``.
-First you have to open the **Propel Builder GUI** and **download** the necessary
-Lattice provided IPs manually. You can check the **necessary Lattice IPs** and
+The Lattice build is in a very early version. It does not support any ADI
+library builds, yet. We're just starting to develop the library build part.
+Currently, we only have a single early-version base design that builds almost
+like the other ones. For Lattice, there are separate tools for creating
+a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
+The build for any supported project works with ``make``, same as the others.
+First, you have to open the **Propel Builder GUI** and download the necessary
+Lattice-provided IPs manually. You can check the **necessary Lattice IPs** and
 and their versions in the
 **<project_name>_system_pb.tcl** script or follow the error messages in the
 **<project_name>_propel_builder.log** after running ``make`` and you get
 a FAILED message.
-Then simply go to carrier folder and run make. For now you can try to build the
-only base design we have for **CertusPro-NX Evaluation Board** by entering the
-base design directory and running ``make``.
+Then, simply go to the carrier folder and run ``make``. For now, you can try
+to build the only base design we have available for
+**CertusPro-NX Evaluation Board** by entering the base design directory and
+running ``make``.
 
 Required Lattice Provided IPs to download for projects/common/lfcpnx
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -569,22 +570,22 @@ gp_timer             Timer-Counter                  1.3.0
    cd projects/common/lfcpnx
    make
 
-This assumes that you have the tools and licenses setup correctly. If
+This, assuming that you have the tools and licenses set up correctly. If
 you don't get to the last line, the make failed to build the project.
-There is nothing you can gather from the ``make`` output (other than the
-build failed or not), the actual failure is in a log file. So, let's see
-how to analyze the build log files and results.
+There is nothing you can gather from the ``make`` output (other than if the
+build failed or not); the actual failure message is in a log file.
 
 Checking the build and analyzing results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The make script for Lattice projects is the **projects/scripts/project-lattice.mk**
 that is included in **Makefile** after setting the project dependencies.
-If you check this make script you can note that we have two rules we run by the
-**all:** rule, one that runs the **Propel Builder** targets (for block design)
-and one that runs the  **Radiant** targets (for hdl build). For this reason we
-have two log files also, the first one **$(PROJECT_NAME)_propel_builder.log**,
-the second one is the **$(PROJECT_NAME)_radiant.log**.
+If you check this make script, you can note that we have two rules we run by the
+**all:** rule: one that runs the **Propel Builder** targets (for the block
+design) and one that runs the  **Radiant** targets (for HDL build).
+For this reason, we have two log files as well, the first one
+**$(PROJECT_NAME)_propel_builder.log**, and the second one is
+**$(PROJECT_NAME)_radiant.log**.
 
 If you are seeking support from us, do a quick (or detailed) check on files.
 This contains the most relevant information that you need to provide.
@@ -601,40 +602,49 @@ This contains the most relevant information that you need to provide.
    tail <ADI_carrier_proj_dir>/<project_name>_propel_builder.log
    tail <ADI_carrier_proj_dir>/<project_name>_radiant.log
 
-Note that if the **Propel Builder** project fails to build the
+Note that if the **Propel Builder** project fails to build, the
 **$(PROJECT_NAME)_radiant.log** may not exist.
 
-If the **Propel Builder** project was built successfully, the **sge**
+If the Propel Builder project was built successfully, the **sge**
 folder should appear in the **<ADI_carrier_proj_dir>/** or in the
 **<ADI_carrier_proj_dir>/<project_name>**.
 The **sge** folder contains the **bsp** folder (Base Support
-Package) and the SoC configuration files. The **bsp** folder contains the
-available Lattice provided drivers for the IPs used in the design (Sometimes
+Package) and the SoC configuration files.
+
+The **bsp** folder contains the
+available Lattice-provided drivers for the IPs used in the design (sometimes
 these drivers are more like some basic examples to modify for your specific
 application) and the **sys_platform.h** file.
+
 You should find a **sys_env.xml** file in the same **sge** folder. This file is
 used to create a **no-OS** project with the current **bsp**.
 
-When running the Propel Builder targets we call ``propelbld system_project_pb.tcl``
+When running the Propel Builder targets, we call ``propelbld system_project_pb.tcl``
 on Windows or ``propelbldwrap system_project_pb.tcl`` on Linux.
+
 After running the Propel Builder targets we call ``pnmainc system_project.tcl``
 on Windows or ``radiantc system_project.tcl``
 on Linux.
+
 The **system_project_pb.tcl** runs first. This file is used to create the
 **block design project** (Propel Builder) and source the **system_pb.tcl**
 which is used for linking one or more corelated block design '.tcl' scripts.
+
 The **system_pb.tcl** is sourced in **adi_project_pb** procedure.
+
 The **system_project.tcl** runs second. This file is used to create and build
 the **HDL project** (Radiant). Here we use the output of the Propel Builder
 project as the **configured IPs** that can be found in the
-**<ADI_carrier_proj_dir>/<project_name>/<project_name>/lib** folder and the
-default block design wrapper that is the
-**<ADI_carrier_proj_dir>/<project_name>/<project_name>/<project_name>.v**,
-we add them to the **Radiant project** then add our **system_top.v** wrapper,
-the **constraint files** and build the project. The output is a **.bit** file
-that in default will appear in the
+*<ADI_carrier_proj_dir>/<project_name>/<project_name>/lib* folder and the
+**default block design wrapper** that is the
+*<ADI_carrier_proj_dir>/<project_name>/<project_name>/<project_name>.v*.
+
+We add them to the Radiant project, then add our **system_top.v** wrapper,
+the **constraint files** and build the project.
+
+The output is a **.bit** file that by default will appear in the
 **<ADI_carrier_proj_dir>/<project_name>/impl_1** folder if the project was
-successfully able to build.
+successfully built.
 
 Supported targets of ``make`` command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -701,7 +711,7 @@ This is NOT a comparison (generic or otherwise)- this is what you should
 expect and understand when using ADI HDL repository on these tools.
 **A red text indicates that you must pay extra attention.**
 
-.. list-table:: Tools
+.. list-table:: Tools from Intel and AMD
    :widths: auto
    :header-rows: 1
 
@@ -752,7 +762,7 @@ expect and understand when using ADI HDL repository on these tools.
        (it does on GUI). It will stop at the first version mismatch (a rather
        slow and frustrating process)`
 
-.. list-table:: Tools
+.. list-table:: Tools from Lattice
    :widths: auto
    :header-rows: 1
 
@@ -777,17 +787,17 @@ expect and understand when using ADI HDL repository on these tools.
    * - SDK (Lattice riscv-rx)
      - Use the generated sge folder that contains the bsp and the SoC
        configuration files. You can create a Propel SDK project using the
-       sys_env.xml file. (currently only no-OS and rtos, but not linked yet to
+       sys_env.xml file (currently only no-OS and rtos, but not linked yet to
        ADI no-OS infrastructure)
    * - SDK (ARM/FPGA combo)
      - :red:`Not supported or nonexistent yet.`
    * - Upgrading/Version changes (non-ADI cores)
-     - You have to update the IP versions manually in GUI and copy the config
+     - :red:`You have to update the IP versions manually in GUI and copy the config
        from the tcl console to the '.tcl' block design file, or update directly
        in the '.tcl' block design file. Note that first you have to download the
        new version of IPs using the GUI. An ip_upgrade tcl command exists, but
-       still the IPs has to be downloaded manually, and it only works if the old
-       IP's name is the same as the new (sometimes it changes by version).
+       still the IPs have to be downloaded manually, and it only works if the old
+       IP's name is the same as the new (sometimes it changes by version).`
 
 Tool versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
