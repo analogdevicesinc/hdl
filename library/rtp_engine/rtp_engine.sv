@@ -49,7 +49,7 @@ module rtp_engine #(
   input  logic                          aclk,
   input  logic                          aresetn,
 
-  // input axi stream slave interface
+  /* input axi stream slave interface */
 
   input  logic                          s_axis_tvalid,
   input  logic [(S_TDATA_WIDTH-1):0]    s_axis_tdata,
@@ -58,7 +58,7 @@ module rtp_engine #(
   input  logic [(S_TUSER_WIDTH-1):0]    s_axis_tuser,
   output logic                          s_axis_tready,
 
-  // output axi stream master interface
+  /* output axi stream master interface */
 
   output  logic                         m_axis_tvalid,
   output  logic [(M_TDATA_WIDTH-1):0]   m_axis_tdata,
@@ -66,8 +66,17 @@ module rtp_engine #(
   input   logic                         m_axis_tready,
   output  logic [(M_TKEEP_WIDTH-1):0]   m_axis_tkeep,
 
-  // dropped packet indication
   input   logic                         dropped_pkt,
+  output  logic                         s_tready_ila,
+  output  logic                         s_tvalid_ila,
+  output  logic                         s_tlast_ila,
+  output  logic                         m_cam_tready_ila,
+  output  logic                         m_cam_tvalid_ila,
+  output  logic                         m_cam_tlast_ila,
+  output  logic  [15:0]                       counter_lines_ila,
+  output  logic                         m_cam_tlast_r_ila,
+  output  logic                         dropped_pkt_internal_ila,
+
 
   // axi interface
 
@@ -155,7 +164,7 @@ module rtp_engine #(
   reg                        s_axis_tready_r = 1'b0;
   reg  [(M_TDATA_WIDTH-1):0] m_axis_tdata_r = 'h0;
   reg  [(M_TKEEP_WIDTH-1):0] m_axis_tkeep_r = 'h0;
-  reg                        valid_reg = 1'b0;
+  reg                        m_axis_tready_r = 'h0;
 
   wire [(M_TDATA_WIDTH-1):0] m_axis_cam_tdata;
   wire                       m_axis_cam_tvalid;
@@ -163,25 +172,26 @@ module rtp_engine #(
   wire                       m_axis_cam_tlast;
   wire                       m_axis_cam_tdest;
   wire [(S_TUSER_WIDTH-1):0] m_axis_cam_tuser;
+  wire                       m_axis_tlast_cams;
 
   // line and frame-related regs - wires
   reg  [8:0]                 counter_cycles_ppc = 'h0;
   reg  [15:0]                counter_lines = 'h0;
   reg                        end_of_frame = 1'b0;
   reg                        end_of_frame_r = 1'b0;
+  reg                        wait_eof_r = 1'b0;
   reg                        end_of_line = 1'b0;
+  reg                        m_axis_tlast_cams_r = 1'b0;
+  reg                        m_axis_cam_tvalid_r = 1'b0;
   reg                        dropped_pkt_r = 1'b0;
 
   wire                       negedge_eof;
   wire                       posedge_dropped_pkt;
+  wire                       dropped_pkt_out;
 
   // RTP header/PD header related regs - wires
   reg  [15:0]                ext_seq_num_r = 'h0;
   wire [15:0]                bend_length_l1;
-
-  reg  [(M_TDATA_WIDTH-1):0] s_axis_tdata_r = 'h0;
-  reg  [(M_TDATA_WIDTH-1):0] s_axis_tdata_r1 = 'h0;
-  reg  [(M_TDATA_WIDTH-1):0] s_axis_tdata_r2 = 'h0;
 
   //states related regs - wires 
   wire                       can_start_to_m_axis; // start of transfer indicator
@@ -197,9 +207,6 @@ module rtp_engine #(
   state_rtp_transm           rtp_transm_state_next;
 
 
-  assign int_tready_post_header = (end_of_pd_header_tr || rtp_transm_state == PAYLOAD_TRANSM) ? 1'b1 : 1'b0;
-  assign m_axis_cam_tready = (m_axis_tready & int_tready_post_header) ? 1'b1 : 1'b0;
-
   assign rtp_header.version = 'h2; //rtp version 2 for rfc3550 - used as is in rfc 4175 for uncrompressed video
   assign rtp_header.padding = 'h0; //no padding at the end of packets
   assign rtp_header.extension = 'h0; //no extensions to the header
@@ -214,7 +221,6 @@ module rtp_engine #(
   //
   // will be assigned per rtp engine instance
   assign rtp_header.ssrc_field = SSRC_ID;
-
  
   // assign rtp_pd_header.ext_seq_num = / extended sequence number in nbo
   // assign rtp_pd_header.length = / num B data in scan line - nbo
@@ -260,7 +266,7 @@ module rtp_engine #(
     end
   end
 
-  assign rtp_header.marker = (counter_lines == (NUM_LINES-2)) ? 1'b1 : 1'b0;
+  assign rtp_header.marker = (counter_lines == (NUM_LINES-1)) ? 1'b1 : 1'b0;
 
   always @(posedge aclk) begin
     if (!aresetn) begin
@@ -290,7 +296,7 @@ module rtp_engine #(
     end
   end
 
-  assign rtp_pd_header.ext_seq_num = {ext_seq_num_r[7:0],ext_seq_num_r[15:8]}; //ext seq number in nbo - big endian of 16b
+  assign rtp_pd_header.ext_seq_num = {ext_seq_num_r[7:0],ext_seq_num_r[15:8]};//{{ext_seq_num_r[7:0]},{ext_seq_num_r[15:8]}}; //ext seq number in nbo - big endian of 16b
 
   always @(posedge aclk) begin
     if (!aresetn) begin
@@ -302,76 +308,41 @@ module rtp_engine #(
   
   always @(posedge aclk) begin
     if (!aresetn) begin
-      valid_reg <= 'h0;
-    end else begin
+      m_axis_cam_tvalid_r <= 1'b0;
+    end else begin 
       if (rtp_transm_state == HEADER_TRANSM_P1 || rtp_transm_state == HEADER_TRANSM_P2 || rtp_transm_state == PD_HEADER_TRANSM) begin
-        valid_reg <= 'h1;
-      end else if (rtp_transm_state == PAYLOAD_TRANSM) begin
-        if (!(m_axis_cam_tlast & m_axis_cam_tvalid)) begin
-          valid_reg <= 'h1;
-        end else begin
-          valid_reg <= 'h0;
-        end
+        m_axis_cam_tvalid_r <= 'h1;
+      end else if (rtp_transm_state == PAYLOAD_TRANSM) begin      
+        m_axis_cam_tvalid_r <= /*s_axis_tvalid*/m_axis_cam_tvalid;
       end else begin
-        valid_reg <= 'h0;
+        m_axis_cam_tvalid_r <= 1'b0;  
       end
-    end
+    end  
   end
-  
-  assign m_axis_tvalid = valid_reg;
-
+ 
   always @(posedge aclk) begin
     if (!aresetn) begin
       m_axis_tdata_r <= 'h0;
       m_axis_tkeep_r <= 'hFF;
     end else begin
-      if (rtp_transm_state == HEADER_TRANSM_P1) begin // HEADER_TRANSM_P1 active for 2 cycles
-        if (!end_of_header_p1_tr) begin
-          m_axis_tdata_r <= {rtp_header.version,rtp_header.padding,rtp_header.extension,rtp_header.csrc_count,rtp_header.marker,rtp_header.payload_type,rtp_header.sequence_nr,rtp_header.timestamp};
-          m_axis_tkeep_r <= 'hFF;
-        end else begin 
-          m_axis_tdata_r <= {rtp_header.ssrc_field,32'h00000000};
-          m_axis_tkeep_r <= 'h0F;
-        end
+      if (end_of_pd_header_tr || (rtp_transm_state == PAYLOAD_TRANSM /*&& m_axis_tready*/)) begin
+         m_axis_tdata_r <= /*s_axis_tdata*/m_axis_cam_tdata;
+         m_axis_tkeep_r <= 'hFF;
       end else begin
-        m_axis_tkeep_r <= 'hFF;
-        if (end_of_header_p2_tr) begin
-          m_axis_tdata_r <= rtp_pd_header;
-	end else if (end_of_pd_header_tr || rtp_transm_state == PAYLOAD_TRANSM) begin
-	  m_axis_tdata_r <= m_axis_cam_tdata;
-        end
+         m_axis_tdata_r <= m_axis_tdata_r;
+         m_axis_tkeep_r <= 'hFF;
       end
+    end
+  end
+  
+  always @(posedge aclk) begin
+    if (!aresetn) begin
+      m_axis_tready_r <= 1'b0;
+    end else begin
+      m_axis_tready_r <= m_axis_tready;
     end
   end
 
-  assign m_axis_tkeep = m_axis_tkeep_r;
-  
-  always @(posedge aclk) begin
-    if (!aresetn) begin
-      counter_cycles_ppc <= 'h0;
-    end else begin
-      if (rtp_transm_state == PAYLOAD_TRANSM && valid_reg) begin
-        if (counter_cycles_ppc != (NUM_CYCLES_TR)) begin
-          counter_cycles_ppc <= counter_cycles_ppc + 1;
-        end else begin
-          counter_cycles_ppc <= 0;
-        end
-      end
-    end
-  end
-  
-  always @(posedge aclk) begin
-    if (!aresetn) begin
-      end_of_line <= 'h0;
-    end else begin
-      if (counter_cycles_ppc == (NUM_CYCLES_TR-1)) begin
-        end_of_line <= 1'b1;
-      end else begin
-        end_of_line <= 1'b0;
-      end
-    end
-  end
-  
   always @(posedge aclk) begin
     if (!aresetn) begin
       end_of_frame <= 'h0;
@@ -396,59 +367,90 @@ module rtp_engine #(
 
   always @(posedge aclk) begin
     if (!aresetn) begin
-      dropped_pkt_r <= 'h0;
+      dropped_pkt_r <= 1'b0;
     end else begin
       dropped_pkt_r <= dropped_pkt;
     end
   end
 
-  //streched dropped_pkt indication
   assign posedge_dropped_pkt = dropped_pkt & ~dropped_pkt_r;
 
   always @(posedge aclk) begin
     if (!aresetn) begin
       counter_lines <= 'h0;
+      wait_eof_r <= 1'b0;
     end else begin
-      if (rtp_transm_state == PAYLOAD_TRANSM && valid_reg) begin
+      if (posedge_dropped_pkt) begin
         if (counter_lines != (NUM_LINES)) begin
-          if (m_axis_cam_tlast & m_axis_cam_tvalid) begin
-            if (posedge_dropped_pkt) begin // skip one line number when a dropped_pkt indication is captured
-              counter_lines <= counter_lines + 2;
-            end else begin
+          counter_lines <= counter_lines + 1;
+          wait_eof_r <= 1'b1; // 1 when a dropped is present - cleared at end_of_frame
+        end else begin
+          counter_lines <= 'h0;
+          wait_eof_r <= 1'b0;
+        end
+      end else begin
+        if (rtp_transm_state == PAYLOAD_TRANSM && m_axis_cam_tvalid_r && m_axis_tready) begin
+          if (counter_lines != (NUM_LINES)) begin
+            if (m_axis_tlast_cams_r) begin 
               counter_lines <= counter_lines + 1;
+            end else begin
+              counter_lines <= counter_lines;
             end
+          wait_eof_r <= wait_eof_r;  
+          end
+        end else if (rtp_transm_state == IDLE_TRANSM) begin
+          if (counter_lines == (NUM_LINES)) begin
+            counter_lines <= 'h0;
+            wait_eof_r <= 1'b0; // clear wait - a new transfer can be issued
           end else begin
             counter_lines <= counter_lines;
+            wait_eof_r <= wait_eof_r;
           end
-        end
-      end else if (rtp_transm_state == IDLE_TRANSM) begin
-        if (counter_lines == (NUM_LINES)) begin
-          counter_lines <= 'h0;
-        end else begin
-          counter_lines <= counter_lines;
         end
       end
     end
   end
- 
-  assign end_of_header_p1_tr = (rtp_transm_state == HEADER_TRANSM_P1 && valid_reg) ? 1'b1 : 1'b0;
-  assign end_of_header_p2_tr = (rtp_transm_state == HEADER_TRANSM_P2 && valid_reg) ? 1'b1 : 1'b0;
 
-  assign end_of_pd_header_tr = (rtp_transm_state == PD_HEADER_TRANSM && valid_reg) ? 1'b1 : 1'b0;
+  always @(posedge aclk) begin
+    if (!aresetn) begin
+      m_axis_tlast_cams_r <= 1'b0;
+    end else begin
+      m_axis_tlast_cams_r <= m_axis_tlast_cams;
+    end
+  end
+
+  assign m_axis_tlast_cams = (/*s_axis_tlast & s_axis_tvalid*/ m_axis_cam_tlast & m_axis_cam_tvalid & m_axis_tready) ? 1'b1 : 1'b0;
   
-  assign can_start_to_m_axis = (m_axis_cam_tvalid & m_axis_tready) ? 1'b1 : 1'b0; // m_axis_cam_tvalid indicating only valid data from internal stack that is composed of data capture from csi-2 rx subsystem
-  // tvalid    --------
-  // tready    ___-----
-  // can_start ___-----
-  assign end_of_payload_tr = (m_axis_cam_tlast & m_axis_cam_tvalid) ? 1'b1 : 1'b0; // end of payload-based transmission indicated by tlast from axis-fifo (longer than a cycle - entire last beat + pause period)
-  // tlast     ___----------
-  // tvalid    ----________
-  // end_of_payload + increment - requirement of only one 1'b1 cycle - to do
-  assign m_axis_tlast = (m_axis_cam_tlast & m_axis_cam_tvalid) ? 1'b1 : 1'b0; //end_of_line state when tvalid from fifo at the same time - tlast can be maintained after in pause_state
-  assign m_axis_tdata = m_axis_tdata_r;
-  assign f_32b_tdata = m_axis_tdata[63:32];
-  assign l_32b_tdata = m_axis_tdata[31:0];
+  assign int_tready_post_header = (end_of_pd_header_tr || rtp_transm_state == PAYLOAD_TRANSM) ? 1'b1 : 1'b0;
+  assign m_axis_cam_tready = (m_axis_tready & int_tready_post_header) ? 1'b1 : 1'b0;
   
+  assign m_axis_tlast  = m_axis_tlast_cams_r;
+  assign m_axis_tkeep  = (end_of_header_p1_tr) ? 'hFF : (end_of_header_p2_tr ? 'h0F : (end_of_pd_header_tr ? 'hFF : m_axis_tkeep_r));
+//  assign m_axis_tdata  = (rtp_transm_state == HEADER_TRANSM_P1) ? 
+//  {rtp_header.version,rtp_header.padding,rtp_header.extension,rtp_header.csrc_count,rtp_header.marker,rtp_header.payload_type,rtp_header.sequence_nr,rtp_header.timestamp} :
+//  (rtp_transm_state == HEADER_TRANSM_P2 ? {rtp_header.ssrc_field,32'h00000000} : (rtp_transm_state == PD_HEADER_TRANSM ? rtp_pd_header : m_axis_tdata_r));
+//  assign m_axis_tdata = m_axis_tdata_r;
+  assign m_axis_tdata = (end_of_header_p1_tr) ? {rtp_header.version,rtp_header.padding,rtp_header.extension,rtp_header.csrc_count,rtp_header.marker,rtp_header.payload_type,rtp_header.sequence_nr,rtp_header.timestamp} :
+   (end_of_header_p2_tr ? {rtp_header.ssrc_field,32'h00000000} : ((end_of_pd_header_tr) ? rtp_pd_header : m_axis_tdata_r));
+  assign m_axis_tvalid = m_axis_cam_tvalid_r;
+
+  //changed to m_axis_cam_tvalid
+  assign can_start_to_m_axis = (/*s_axis_tvalid*/m_axis_cam_tvalid && m_axis_tready && ~dropped_pkt && ~wait_eof_r) ? 1'b1 : 1'b0;
+  assign end_of_header_p1_tr = (rtp_transm_state == HEADER_TRANSM_P1 && m_axis_tvalid && m_axis_tready) ? 1'b1 : 1'b0;
+  assign end_of_header_p2_tr = (rtp_transm_state == HEADER_TRANSM_P2 && m_axis_tvalid && m_axis_tready) ? 1'b1 : 1'b0;
+  assign end_of_pd_header_tr = (rtp_transm_state == PD_HEADER_TRANSM && m_axis_tvalid && m_axis_tready) ? 1'b1 : 1'b0;
+  assign end_of_payload_tr   = m_axis_tlast_cams_r;
+
+  assign m_cam_tready_ila = m_axis_cam_tready;
+  assign m_cam_tvalid_ila = m_axis_cam_tvalid;
+  assign m_cam_tlast_r_ila = m_axis_tlast_cams_r;
+  assign s_tready_ila = s_axis_tready;
+  assign s_tvalid_ila = s_axis_tvalid;
+  assign s_tlast_ila = s_axis_tlast;
+  assign m_cam_tlast_ila = m_axis_cam_tlast;
+  assign counter_lines_ila = counter_lines;
+  assign dropped_pkt_internal_ila = dropped_pkt_out;
+
   always @(*) begin
     case (rtp_transm_state)
       IDLE_TRANSM: begin
@@ -520,7 +522,7 @@ module rtp_engine #(
     .up_rack (up_rack_s));
 
   axis_fifo #(
-    .DEPTH (4096),
+    .DEPTH (16384),
     .DATA_WIDTH (S_TDATA_WIDTH),
     .DEST_ENABLE (1),
     .DEST_WIDTH (1),
@@ -543,6 +545,7 @@ module rtp_engine #(
     .m_axis_tready (m_axis_cam_tready),
     .m_axis_tlast (m_axis_cam_tlast),
     .m_axis_tdest (m_axis_cam_tdest),
-    .m_axis_tuser (m_axis_cam_tuser));
+    .m_axis_tuser (m_axis_cam_tuser),
+    .dropped_pkt (dropped_pkt_out));
 
 endmodule
