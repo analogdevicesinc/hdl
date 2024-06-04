@@ -19,7 +19,7 @@ Contents
    Introduction <introduction>
    Git repository <git_repository>
    Releases <releases>
-   Build a HDL project <build_hdl>
+   Build an HDL project <build_hdl>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
    Porting reference designs <porting_project>
