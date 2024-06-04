@@ -36,6 +36,7 @@ Contents
    AD9081/AD9082/AD9986/AD9988 <ad9081_fmca_ebz/index>
    AD9265-FMC <ad9265_fmc/index>
    AD9434-FMC <ad9434_fmc/index>
+   AD9467-FMC <ad9467_fmc/index>
    AD9739A-FMC <ad9739a_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
