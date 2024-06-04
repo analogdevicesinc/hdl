@@ -18,6 +18,7 @@ Contents
    :maxdepth: 1
 
    axi_ad3552r/index
+   axi_ad485x/index
    axi_ad7606x/index
    axi_ad7616/index
    axi_ad7768/index
