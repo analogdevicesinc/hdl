@@ -151,7 +151,7 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 32
      - 86
-     
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -222,7 +222,7 @@ HDL related
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
      - :ref:`here <axi_pwm_gen>`
-   * - AXI_SDDIF_TX
+   * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - ---
    * - AXI_SYSID
