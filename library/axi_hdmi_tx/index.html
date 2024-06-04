@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="AXI HDMI RX" href="../axi_hdmi_rx/index.html" />
-    <link rel="prev" title="AXI DMAC" href="../axi_dmac/index.html" />
+    <link rel="prev" title="AXI Fan Control" href="../axi_fan_control/index.html" />
    
   
     <meta name="robots" content="noindex">
@@ -152,7 +152,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -179,8 +179,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_fan_control/index.html">AXI Fan Control</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
@@ -306,7 +311,7 @@ the <a class="icon adi reference external" href="https://www.analog.com/ADV7511"
 </section>
 <section id="block-diagram">
 <span id="axi-hdmi-tx-block-diagram"></span><h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram11.svg" /></section>
+<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram16.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -1371,7 +1376,7 @@ required resolution.</p>
 <p>Additional IPs needed:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></li>
-<li><p><span class="xref std std-ref">axi_clkgen</span></p></li>
+<li><p><a class="reference internal" href="../axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></li>
 </ul>
 <p><a class="reference internal" href="../axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a> provides a high-bandwidth direct memory access for the video stream.
@@ -1437,7 +1442,7 @@ or YCbCr 4:4:4). In addition it can accept HSYNC, VSYNC and DE (Data Enable)</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../axi_dmac/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">AXI DMAC</a>
+    <a href="../axi_fan_control/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">AXI Fan Control</a>
     <a href="../axi_hdmi_rx/index.html" title="Next document (Ctrl+RightArrow)" class="next">AXI HDMI RX</a>
               </div>
           

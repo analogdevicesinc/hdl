@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Build an HDL project &#8212; HDL  documentation</title>
+    <title>Build a HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -100,7 +100,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Build an HDL project</a><ul>
+<li><a class="reference internal" href="#">Build a HDL project</a><ul>
 <li><a class="reference internal" href="#setup-and-check-your-environment">Setup and check your environment</a></li>
 <li><a class="reference internal" href="#setup-the-hdl-repository">Setup the HDL repository</a></li>
 <li><a class="reference internal" href="#building-the-projects">Building the projects</a><ul>
@@ -112,6 +112,11 @@
 <li><a class="reference internal" href="#enabling-out-of-context-synthesis">Enabling Out-of-Context synthesis</a></li>
 <li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-library-components">Checking the build and analyzing results of library components</a></li>
 <li><a class="reference internal" href="#checking-the-build-and-analyzing-results-of-projects">Checking the build and analyzing results of projects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-a-lattice-project">Building a Lattice project</a><ul>
+<li><a class="reference internal" href="#required-lattice-provided-ips-to-download-for-projects-common-lfcpnx">Required Lattice Provided IPs to download for projects/common/lfcpnx</a></li>
+<li><a class="reference internal" href="#id1">Checking the build and analyzing results</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#supported-targets-of-make-command">Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command</a></li>
@@ -173,7 +178,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Build an HDL project</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Build a HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -200,8 +205,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_fan_control/index.html">AXI Fan Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
@@ -285,8 +295,8 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="build-an-hdl-project">
-<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="build-a-hdl-project">
+<span id="build-hdl"></span><h1>Build a HDL project<a class="headerlink" href="#build-a-hdl-project" title="Permalink to this heading">#</a></h1>
 <p><strong>Please note that ADI only provides the source files necessary to create
 and build the designs. This means that you are responsible for modifying
 and building these projects.</strong></p>
@@ -301,12 +311,13 @@ We use <strong>command line</strong> and mostly <strong>Linux systems</strong>. 
 <p>This section contains a guide about how to setup your environment to build any
 HDL project from the repository:</p>
 <ol class="arabic simple">
-<li><p>Install the required FPGA design suite. We use <a class="reference external" href="https://www.xilinx.com/support/download.html">AMD Xilinx Vivado</a> and
-<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html">Intel Quartus Prime Pro and Standard</a>.
+<li><p>Install the required FPGA design suite. We use <a class="reference external" href="https://www.xilinx.com/support/download.html">AMD Xilinx Vivado</a>,
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html">Intel Quartus Prime Pro and Standard</a>, <a class="reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant">Lattice Radiant</a> and
+<a class="reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/LatticePropel">Lattice Propel</a>.
 You can find information about the proper version in our
 <a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">release notes</a>.
 Make sure that you’re always using the latest release.</p></li>
-<li><p>The proper Vivado/Quartus version can be found in:</p>
+<li><p>The proper Vivado/Quartus/Propel/Radiant version can be found in:</p>
 <ul class="simple">
 <li><p>Starting with <code class="docutils literal notranslate"><span class="pre">hdl_2021_r1</span></code> release branch:
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a></p></li>
@@ -322,6 +333,8 @@ downloading the proper installer. For full installation, it is
 better to choose the one that downloads and installs both Vivado
 and Vitis at the same time)</p></li>
 <li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html">Intel
+tools</a></p></li>
+<li><p><a class="reference external" href="https://www.latticesemi.com/en/Products/DesignSoftwareAndIP">Lattice
 tools</a></p></li>
 </ul>
 </li>
@@ -736,6 +749,143 @@ IP targets, synthesize the netlist and implementation.</p>
 </div>
 </div></section>
 </section>
+<section id="building-a-lattice-project">
+<h3>Building a Lattice project<a class="headerlink" href="#building-a-lattice-project" title="Permalink to this heading">#</a></h3>
+<blockquote>
+<div><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
+unknown compatibility reason. You can use Cygwin on Windows or a normal
+Linux installation.</p>
+</div>
+</div></blockquote>
+<p>The Lattice build is in a very early version, does not support any ADI library
+builds yet. We are just starting to develop the library build part.
+Currently we only have a single early version base design that builds almost
+like the same then the others. For Lattice there are separate tools for creating
+a block design <strong>(Propel Builder)</strong> and building a hdl design <strong>(Radiant)</strong>.
+Like in the other cases the build for any supported project works by <code class="docutils literal notranslate"><span class="pre">make</span></code>.
+First you have to open the <strong>Propel Builder GUI</strong> and <strong>download</strong> the necessary
+Lattice provided IPs manually. You can check the <strong>necessary Lattice IPs</strong> and
+and their versions in the
+<strong>&lt;project_name&gt;_system_pb.tcl</strong> script or follow the error messages in the
+<strong>&lt;project_name&gt;_propel_builder.log</strong> after running <code class="docutils literal notranslate"><span class="pre">make</span></code> and you get
+a FAILED message.
+Then simply go to carrier folder and run make. For now you can try to build the
+only base design we have for <strong>CertusPro-NX Evaluation Board</strong> by entering the
+base design directory and running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
+<section id="required-lattice-provided-ips-to-download-for-projects-common-lfcpnx">
+<h4>Required Lattice Provided IPs to download for projects/common/lfcpnx<a class="headerlink" href="#required-lattice-provided-ips-to-download-for-projects-common-lfcpnx" title="Permalink to this heading">#</a></h4>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Display name</p></th>
+<th class="head"><p>Version</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>riscv_rtos</p></td>
+<td><p>RISC-V RX</p></td>
+<td><p>2.3.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio</p></td>
+<td><p>GPIO</p></td>
+<td><p>1.6.2</p></td>
+</tr>
+<tr class="row-even"><td><p>spi_controller</p></td>
+<td><p>SPI Controller</p></td>
+<td><p>2.1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>i2c_controller</p></td>
+<td><p>I2C Controller</p></td>
+<td><p>2.0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_interconnect</p></td>
+<td><p>AXI4 Interconnect</p></td>
+<td><p>1.2.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi2ahb_bridge</p></td>
+<td><p>AXI4 to AHB-Lite Bridge</p></td>
+<td><p>1.1.1</p></td>
+</tr>
+<tr class="row-even"><td><p>axi2apb_bridge</p></td>
+<td><p>AXI4 to APB Bridge</p></td>
+<td><p>1.1.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>gp_timer</p></td>
+<td><p>Timer-Counter</p></td>
+<td><p>1.3.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/common/lfcpnx
+make
+</pre></div>
+</div>
+<p>This assumes that you have the tools and licenses setup correctly. If
+you don’t get to the last line, the make failed to build the project.
+There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than the
+build failed or not), the actual failure is in a log file. So, let’s see
+how to analyze the build log files and results.</p>
+</section>
+<section id="id1">
+<h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<p>The make script for Lattice projects is the <strong>projects/scripts/project-lattice.mk</strong>
+that is included in <strong>Makefile</strong> after setting the project dependencies.
+If you check this make script you can note that we have two rules we run by the
+<strong>all:</strong> rule, one that runs the <strong>Propel Builder</strong> targets (for block design)
+and one that runs the  <strong>Radiant</strong> targets (for hdl build). For this reason we
+have two log files also, the first one <strong>$(PROJECT_NAME)_propel_builder.log</strong>,
+the second one is the <strong>$(PROJECT_NAME)_radiant.log</strong>.</p>
+<p>If you are seeking support from us, do a quick (or detailed) check on files.
+This contains the most relevant information that you need to provide.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do NOT copy-paste <code class="docutils literal notranslate"><span class="pre">make</span></code> command line text</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;
+ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;
+ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;
+tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_propel_builder.log
+tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_radiant.log
+</pre></div>
+</div>
+<p>Note that if the <strong>Propel Builder</strong> project fails to build the
+<strong>$(PROJECT_NAME)_radiant.log</strong> may not exist.</p>
+<p>If the <strong>Propel Builder</strong> project was built successfully, the <strong>sge</strong>
+folder should appear in the <strong>&lt;ADI_carrier_proj_dir&gt;/</strong> or in the
+<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;</strong>.
+The <strong>sge</strong> folder contains the <strong>bsp</strong> folder (Base Support
+Package) and the SoC configuration files. The <strong>bsp</strong> folder contains the
+available Lattice provided drivers for the IPs used in the design (Sometimes
+these drivers are more like some basic examples to modify for your specific
+application) and the <strong>sys_platform.h</strong> file.
+You should find a <strong>sys_env.xml</strong> file in the same <strong>sge</strong> folder. This file is
+used to create a <strong>no-OS</strong> project with the current <strong>bsp</strong>.</p>
+<p>When running the Propel Builder targets we call <code class="docutils literal notranslate"><span class="pre">propelbld</span> <span class="pre">system_project_pb.tcl</span></code>
+on Windows or <code class="docutils literal notranslate"><span class="pre">propelbldwrap</span> <span class="pre">system_project_pb.tcl</span></code> on Linux.
+After running the Propel Builder targets we call <code class="docutils literal notranslate"><span class="pre">pnmainc</span> <span class="pre">system_project.tcl</span></code>
+on Windows or <code class="docutils literal notranslate"><span class="pre">radiantc</span> <span class="pre">system_project.tcl</span></code>
+on Linux.
+The <strong>system_project_pb.tcl</strong> runs first. This file is used to create the
+<strong>block design project</strong> (Propel Builder) and source the <strong>system_pb.tcl</strong>
+which is used for linking one or more corelated block design ‘.tcl’ scripts.
+The <strong>system_pb.tcl</strong> is sourced in <strong>adi_project_pb</strong> procedure.
+The <strong>system_project.tcl</strong> runs second. This file is used to create and build
+the <strong>HDL project</strong> (Radiant). Here we use the output of the Propel Builder
+project as the <strong>configured IPs</strong> that can be found in the
+<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/lib</strong> folder and the
+default block design wrapper that is the
+<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/&lt;project_name&gt;.v</strong>,
+we add them to the <strong>Radiant project</strong> then add our <strong>system_top.v</strong> wrapper,
+the <strong>constraint files</strong> and build the project. The output is a <strong>.bit</strong> file
+that in default will appear in the
+<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/impl_1</strong> folder if the project was
+successfully able to build.</p>
+</section>
+</section>
 <section id="supported-targets-of-make-command">
 <h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading">#</a></h3>
 <div class="admonition note">
@@ -799,9 +949,9 @@ should be aware of when building the projects.</p>
 <p>This is NOT a comparison (generic or otherwise)- this is what you should
 expect and understand when using ADI HDL repository on these tools.
 <strong>A red text indicates that you must pay extra attention.</strong></p>
-<div class="table-wrapper colwidths-auto docutils container" id="id1">
-<table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id1" title="Permalink to this table">#</a></caption>
+<div class="table-wrapper colwidths-auto docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -864,12 +1014,63 @@ slow and frustrating process)</span></p></td>
 </tbody>
 </table>
 </div>
+<div class="table-wrapper colwidths-auto docutils container" id="id3">
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Notes</p></th>
+<th class="head"><p>Lattice</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Main tools</p></td>
+<td><p>Radiant</p></td>
+</tr>
+<tr class="row-odd"><td><p>EDK tools</p></td>
+<td><p>Propel Builder</p></td>
+</tr>
+<tr class="row-even"><td><p>SDK tools</p></td>
+<td><p>Propel (Eclipse)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Building library</p></td>
+<td><p><span class="red">Not supported yet.</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Building the project</p></td>
+<td><p>Source the system_project_pb.tcl file in Propel Builder tclsh, source the
+system_project.tcl file in Radiant tclsh after.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Timing analysis</p></td>
+<td><p>The projects are usually tested and should be free of timing errors.
+There is no straightforward method to verify a timing pass (it usually
+involves writing a TCL proc by itself) on both the tools. The make
+build will fail and return with an error if the timing is not met.</p></td>
+</tr>
+<tr class="row-even"><td><p>SDK (Lattice riscv-rx)</p></td>
+<td><p>Use the generated sge folder that contains the bsp and the SoC
+configuration files. You can create a Propel SDK project using the
+sys_env.xml file. (currently only no-OS and rtos, but not linked yet to
+ADI no-OS infrastructure)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SDK (ARM/FPGA combo)</p></td>
+<td><p><span class="red">Not supported or nonexistent yet.</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Upgrading/Version changes (non-ADI cores)</p></td>
+<td><p>You have to update the IP versions manually in GUI and copy the config
+from the tcl console to the ‘.tcl’ block design file, or update directly
+in the ‘.tcl’ block design file. Note that first you have to download the
+new version of IPs using the GUI. An ip_upgrade tcl command exists, but
+still the IPs has to be downloaded manually, and it only works if the old
+IP’s name is the same as the new (sometimes it changes by version).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 <section id="tool-versions">
 <h3>Tool versions<a class="headerlink" href="#tool-versions" title="Permalink to this heading">#</a></h3>
 <p>Though the ADI libraries work across different versions of the tools,
-the projects we provide <strong>may not</strong>. The AMD and Intel IPs may or may not
-work across versions. We can only assure you that they are tested and
+the projects we provide <strong>may not</strong>. The AMD, Intel and Lattice IPs may or may
+not work across versions. We can only assure you that they are tested and
 <strong>work only for the versions we specify</strong>.</p>
 <p>The projects are usually upgraded to the latest tools after they are
 publicly released. The used tool versions can be found in the
@@ -911,6 +1112,8 @@ that unless you are an expert at manipulating these things, it is best to leave 
 the tools to set up the environment.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
 <span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
 </pre></div>
 </div>
 </section>
@@ -922,13 +1125,17 @@ the tools to set up the environment.</p>
 in a similar manner to the Linux environment.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/Xilinx/Vivado/202x.x/bin:/cygdrive/d/Xilinx/Vitis/202x.x/bin
 <span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/intelFPGA_pro/2x.x/quartus/bin64
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/lscc/propel/202x.x/builder/rtf/bin/nt64
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/d/lscc/radiant/202x.x/bin/nt64
 </pre></div>
 </div>
 <p>A very good alternative to Cygwin is
 <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a>. The changes
 to your <strong>.bashrc</strong> should look like:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
-<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/quartus/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/quartus/bin
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
 </pre></div>
 </div>
 <p>If you do not want to install Cygwin, there might still be some

@@ -105,11 +105,13 @@
 <li><a class="reference internal" href="#base-design-files">Base design files</a><ul>
 <li><a class="reference internal" href="#example-with-an-amd-xilinx-board">Example with an AMD Xilinx board</a></li>
 <li><a class="reference internal" href="#example-with-an-intel-board">Example with an Intel board</a></li>
+<li><a class="reference internal" href="#example-with-a-lattice-board">Example with a Lattice board</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#project-files">Project files</a><ul>
 <li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
 <li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a></li>
+<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#tips">Tips</a><ul>
@@ -159,7 +161,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build a HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -186,8 +188,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_fan_control/index.html">AXI Fan Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
@@ -413,6 +420,26 @@ the <strong>adi_project</strong> process:</p>
 </pre></div>
 </div>
 </section>
+<section id="example-with-a-lattice-board">
+<h3>Example with a Lattice board<a class="headerlink" href="#example-with-a-lattice-board" title="Permalink to this heading">#</a></h3>
+<p>To create a new base design for a given Lattice FPGA carrier board, the following
+steps should be taken (the <a class="reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard">lfcpnx</a> carrier was used as an example).</p>
+<p>The following files should be created or copied into the directory:</p>
+<ul class="simple">
+<li><p><strong>lfcpnx_system_constr.pdc</strong> - global and I/O assignments of the base design</p></li>
+<li><p><strong>lfcpnx_system_pb.tcl</strong> - this script describes the base block design</p></li>
+</ul>
+<p>You should define the board and its device in the flow script
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_lattice_dev_select.tcl">projects/scripts/adi_lattice_dev_select.tcl</a>,
+by adding the following lines to the file:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_lfcpnx&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>device<span class="w"> </span><span class="s2">&quot;LFCPNX-100-9LFG672C&quot;</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>speed<span class="w"> </span><span class="s2">&quot;9_High-Performance_1.0V&quot;</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span>board<span class="w"> </span><span class="s2">&quot;Certus Pro NX Evaluation Board&quot;</span>
+<span class="k">}</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="project-files">
 <h2>Project files<a class="headerlink" href="#project-files" title="Permalink to this heading">#</a></h2>
@@ -469,6 +496,35 @@ the base design’s I/Os are updated (delete nonexistent I/Os or add new ones).
 The simplest way to update the <em>system_top</em> is to let the synthesis fail and
 the tool will you tell which ports are missing or which ports are redundant.</p></li>
 <li><p><strong>Makefile</strong> - this is an auto-generated file, but after updating the carrier
+name, it should work with the new project without an issue.</p></li>
+</ul>
+</section>
+<section id="project-files-for-lattice-boards">
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading">#</a></h3>
+<p>A project for a Lattice FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><strong>system_project_pb.tcl</strong> - Used to build the Propel Builder project
+(block design). Linked in project-lattice.mk, run by propelbld (Windows),
+propelbldwrap (Linux).</p></li>
+<li><p><strong>system_project.tcl</strong> - Used to build the Radiant project. Linked in
+project-lattice.mk, run by pnmainc (Windows), radiantc (Linux).</p></li>
+<li><p><strong>system_pb.tcl</strong> - linker script for the projects, sourced in adi_project_pb
+procedure that is called in system_project_pb.tcl and it is
+defined in adi_project_lattice_pb.tcl. Sources the <em>base design first</em>,
+then the <em>board design</em>, and afterwards it contains all the IP instances and
+connections that must be added on top of the sourced files, to
+complete the design of the project (these are specific to the
+combination of this carrier and board).</p></li>
+<li><p><strong>system_constr.sdc</strong> - Contains clock definitions and other path
+constraints.</p></li>
+<li><p><strong>system_constr.pdc</strong> - Contains clock definitions and other path
+constraints + phisical constraints.</p></li>
+<li><p><strong>system_top.v</strong> - Contains everything about the HDL part of the
+project. It instantiates the <strong>&lt;project_name&gt;.v</strong> <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module,
+IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA.</p></li>
+<li><p><strong>Makefile</strong> - This is an auto-generated file, but after updating the project
 name, it should work with the new project without an issue.</p></li>
 </ul>
 </section>

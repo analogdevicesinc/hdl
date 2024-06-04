@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="ADI IP cores" href="ip_cores/index.html" />
-    <link rel="prev" title="Build an HDL project" href="build_hdl.html" />
+    <link rel="prev" title="Build a HDL project" href="build_hdl.html" />
    
   
     <meta name="robots" content="noindex">
@@ -134,7 +134,8 @@
 </li>
 <li><a class="reference internal" href="#file-structure-of-a-project">File structure of a project</a><ul>
 <li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
-<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a><ul>
+<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a></li>
+<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a><ul>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
@@ -180,7 +181,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build a HDL project</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -207,8 +208,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_fan_control/index.html">AXI Fan Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
@@ -356,11 +362,12 @@ cores.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Intel</p></th>
@@ -368,12 +375,14 @@ cores.</p>
 <th class="head"><p>AMD Xilinx</p></th>
 <th class="head"></th>
 <th class="head"></th>
+<th class="head"><p>Lattice</p></th>
 </tr>
 <tr class="row-even"><th class="head"><p><strong>SoC</strong></p></th>
 <th class="head"><p><strong>FPGA</strong></p></th>
 <th class="head"><p><strong>SoC</strong></p></th>
 <th class="head"><p><strong>FPGA</strong></p></th>
 <th class="head"><p><a class="reference external" href="https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html">ACAP</a></p></th>
+<th class="head"><p><strong>FPGA</strong></p></th>
 </tr>
 </thead>
 <tbody>
@@ -383,6 +392,7 @@ cores.</p>
 <a class="reference external" href="https://www.xilinx.com/products/intellectual-property/zynq-ultra-ps-e.html">PS8</a></p></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/products/design-tools/microblaze.html">MicroBlaze</a></p></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/products/silicon-devices/acap/versal.html">Versal</a></p></td>
+<td><p><a class="reference external" href="https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu">riscv-rx</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -680,6 +690,65 @@ might be used in the base design of the carrier!</p>
 </tbody>
 </table>
 </div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>HDL</p></th>
+<th class="head"><p>riscv-rx no-OS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>15</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-odd"><td><p>14</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p>13</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-odd"><td><p>12</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td><p>11</p></td>
+<td><p>11</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>9</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 </section>
@@ -818,6 +887,13 @@ might be used in the base design of the carrier!</p>
 <td><p>—</p></td>
 <td><p>3.3V/2.5V/<strong>*1.8V</strong></p></td>
 <td><p>Zynq-7000</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard">LFCPNX-EVN</a></p></td>
+<td><p>JTAG | SPI flash</p></td>
+<td><p>HPC</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
+<td><p>CertusPro-NX</p></td>
 </tr>
 </tbody>
 </table>
@@ -996,6 +1072,35 @@ I/ODDRs, modules that transform signals from LVDS to single-ended,
 etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
+</section>
+<section id="project-files-for-lattice-boards">
+<h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading">#</a></h3>
+<p>A project for a Lattice FPGA board should contain the following files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Makefile</span></code> — auto-generated file; contains all the IP
+dependencies needed for the project to be built</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project_pb.tcl</span></code> — used to build the Propel Builder project
+(block design); linked in project-lattice.mk, run by propelbld (Windows),
+propelbldwrap (Linux);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code> — used to build the Radiant project; Linked in
+project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_pb.tcl</span></code> — linker script for the projects, sourced in
+adi_project_pb procedure that is called in system_project_pb.tcl and it is
+defined in adi_project_lattice_pb.tcl; sources the <em>base design first</em>,
+then the <em>board design</em>, and afterwards it contains all the IP instances and
+connections that must be added on top of the sourced files, to
+complete the design of the project (these are specific to the
+combination of this carrier and board)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path
+constraints</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.pdc</span></code> — contains clock definitions and other path
+constraints  + phisical constraints</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
+project; it instantiates the <strong>&lt;project_name&gt;.v</strong> <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module,
+IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+etc. The I/O ports of this Verilog module will be connected to actual
+I/O pads of the FPGA</p></li>
+</ul>
 <section id="examples">
 <h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h4>
 <p>Some carriers have a different name for these files, for example A10SoC
@@ -1019,7 +1124,7 @@ has constraints file for both PL side and PS side:</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="build_hdl.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Build an HDL project</a>
+    <a href="build_hdl.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Build a HDL project</a>
     <a href="ip_cores/index.html" title="Next document (Ctrl+RightArrow)" class="next">ADI IP cores</a>
               </div>
           
