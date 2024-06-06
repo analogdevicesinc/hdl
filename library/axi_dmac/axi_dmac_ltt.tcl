@@ -307,18 +307,6 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Destination} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
-    -id CACHE_COHERENT_DEST \
-    -type param \
-    -value_type int \
-    -conn_mod axi_dmac \
-    -title {Assume cache coherent} \
-    -options {[(True, 1), (False, 0)]} \
-    -editable {(DMA_TYPE_DEST == 0)} \
-    -default 1 \
-    -output_formatter nostr \
-    -group1 {Destination} \
-    -group2 Config]
 set ip [ipl::igiports -ip $ip \
     -mod_data $mod_data \
     -v_name m_dest_axi \
@@ -414,6 +402,28 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
+set ip [ipl::settpar -ip $ip \
+    -id AXI_AXCACHE \
+    -type param \
+    -value_type string \
+    -conn_mod axi_dmac \
+    -title {ARCACHE/AWCACHE} \
+    -default 4'b0011 \
+    -output_formatter nostr \
+    -editable {(CACHE_COHERENT == 1)} \
+    -group1 {General Configuration} \
+    -group2 Config]
+set ip [ipl::settpar -ip $ip \
+    -id AXI_AXPROT \
+    -type param \
+    -value_type string \
+    -conn_mod axi_dmac \
+    -title {ARPROT/AWPROT} \
+    -default 3'b000 \
+    -output_formatter nostr \
+    -editable {(CACHE_COHERENT == 1)} \
+    -group1 {General Configuration} \
+    -group2 Config]
 
 # features
 set ip [ipl::settpar -ip $ip \
@@ -422,6 +432,17 @@ set ip [ipl::settpar -ip $ip \
     -value_type int \
     -conn_mod axi_dmac \
     -title {Cyclic Transfer Support} \
+    -options {[(True, 1), (False, 0)]} \
+    -default 0 \
+    -output_formatter nostr \
+    -group1 {Features} \
+    -group2 Config]
+set ip [ipl::settpar -ip $ip \
+    -id DMA_SG_TRANSFER \
+    -type param \
+    -value_type int \
+    -conn_mod axi_dmac \
+    -title {SG Transfer Support} \
     -options {[(True, 1), (False, 0)]} \
     -default 0 \
     -output_formatter nostr \
@@ -439,12 +460,13 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Features} \
     -group2 Config]
 set ip [ipl::settpar -ip $ip \
-    -id DMA_SG_TRANSFER \
+    -id CACHE_COHERENT \
     -type param \
     -value_type int \
     -conn_mod axi_dmac \
-    -title {SG Transfer Support} \
+    -title {Cache Coherent} \
     -options {[(True, 1), (False, 0)]} \
+    -editable {(DMA_TYPE_SRC == 0 or DMA_TYPE_DEST == 0)} \
     -default 0 \
     -output_formatter nostr \
     -group1 {Features} \
