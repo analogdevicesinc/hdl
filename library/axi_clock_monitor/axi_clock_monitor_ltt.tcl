@@ -10,7 +10,6 @@ set mod_data [ipl::getmod ./axi_clock_monitor.v]
 set ip $::ipl::ip
 
 set ip [ipl::addports -ip $ip -mod_data $mod_data]
-set ip [ipl::addpars -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general \
     -name [dict get $mod_data mod_name] \
@@ -41,25 +40,32 @@ set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
     -mmap_ref axi_clock_monitor_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
 
-set ip [ipl::igports -ip $ip -portlist {clock_1} -expression {not(NUM_OF_CLOCKS > 1)}]
-set ip [ipl::igports -ip $ip -portlist {clock_2} -expression {not(NUM_OF_CLOCKS > 2)}]
-set ip [ipl::igports -ip $ip -portlist {clock_3} -expression {not(NUM_OF_CLOCKS > 3)}]
-set ip [ipl::igports -ip $ip -portlist {clock_4} -expression {not(NUM_OF_CLOCKS > 4)}]
-set ip [ipl::igports -ip $ip -portlist {clock_5} -expression {not(NUM_OF_CLOCKS > 5)}]
-set ip [ipl::igports -ip $ip -portlist {clock_6} -expression {not(NUM_OF_CLOCKS > 6)}]
-set ip [ipl::igports -ip $ip -portlist {clock_7} -expression {not(NUM_OF_CLOCKS > 7)}]
-set ip [ipl::igports -ip $ip -portlist {clock_8} -expression {not(NUM_OF_CLOCKS > 8)}]
-set ip [ipl::igports -ip $ip -portlist {clock_9} -expression {not(NUM_OF_CLOCKS > 9)}]
-set ip [ipl::igports -ip $ip -portlist {clock_10} -expression {not(NUM_OF_CLOCKS > 10)}]
-set ip [ipl::igports -ip $ip -portlist {clock_11} -expression {not(NUM_OF_CLOCKS > 11)}]
-set ip [ipl::igports -ip $ip -portlist {clock_12} -expression {not(NUM_OF_CLOCKS > 12)}]
-set ip [ipl::igports -ip $ip -portlist {clock_13} -expression {not(NUM_OF_CLOCKS > 13)}]
-set ip [ipl::igports -ip $ip -portlist {clock_14} -expression {not(NUM_OF_CLOCKS > 14)}]
-set ip [ipl::igports -ip $ip -portlist {clock_15} -expression {not(NUM_OF_CLOCKS > 15)}]
+set ip [ipl::settpar -ip $ip \
+    -id ID \
+    -type param \
+    -value_type int \
+    -conn_mod axi_clock_monitor \
+    -title {ID} \
+    -default 0 \
+    -output_formatter nostr \
+    -group1 {General configurations} \
+    -group2 Global]
+set ip [ipl::settpar -ip $ip \
+    -id NUM_OF_CLOCKS \
+    -type param \
+    -value_type int \
+    -conn_mod axi_clock_monitor \
+    -title {Number of clocks} \
+    -default 1 \
+    -output_formatter nostr \
+    -value_range {(1, 16)} \
+    -group1 {General configurations} \
+    -group2 Global]
 
-set ip [ipl::setport -ip $ip -name s_axi_aclk -port_type clock]
-set ip [ipl::setport -ip $ip -name s_axi_aresetn -port_type reset]
-set ip [ipl::setport -ip $ip -name clock_0 -port_type clock]
+for {set i 0} {$i < 16} {incr i} {
+    set ip [ipl::igports -ip $ip -portlist clock_$i \
+        -expression "not(NUM_OF_CLOCKS > $i)"]
+}
 
 set ip [ipl::addfiles -spath ./ -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
 set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
