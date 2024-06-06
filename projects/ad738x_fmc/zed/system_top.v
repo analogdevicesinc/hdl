@@ -86,6 +86,8 @@ module system_top #(
 
   input           spi_sdia,
   input           spi_sdib,
+  input           spi_sdic,
+  input           spi_sdid,
   output          spi_sdo,
   output          spi_sclk,
   output          spi_cs
@@ -105,10 +107,13 @@ module system_top #(
 
   // instantiations
 
+  wire     [3:0]   ad738x_spi_sdi_s;
+
   assign gpio_i[63:33] = gpio_o[63:33];
 
-  assign gpio_i[32] = ALERT_SPI_N ? spi_sdib : 0;
-  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? {spi_sdib, spi_sdia} : spi_sdia;
+  assign gpio_i[32] = ALERT_SPI_N ? spi_sdid : 0;
+  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : spi_sdia;
+
 
   ad_iobuf #(
     .DATA_WIDTH(32)
