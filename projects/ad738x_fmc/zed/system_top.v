@@ -36,7 +36,9 @@
 `timescale 1ns/100ps
 
 module system_top #(
-   parameter ALERT_SPI_N = 0
+   parameter ALERT_SPI_N = 0,
+   parameter NUM_OF_SDI = 4,
+   parameter CHIP_SELECT = 0
 ) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -107,13 +109,13 @@ module system_top #(
 
   // instantiations
 
-  wire     [3:0]   ad738x_spi_sdi_s;
+  wire     [NUM_OF_SDI-1:0]   ad738x_spi_sdi_s;
 
   assign gpio_i[63:33] = gpio_o[63:33];
 
-  assign gpio_i[32] = ALERT_SPI_N ? spi_sdid : 0;
-  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : spi_sdia;
-
+  assign gpio_i[32] = ALERT_SPI_N ? ((CHIP_SELECT == 1) ? spi_sdib : spi_sdid) : 0;
+  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? ((NUM_OF_SDI == 1) ? {spi_sdia} : ((CHIP_SELECT == 1) ?
+                           {spi_sdib, spi_sdia} : ((NUM_OF_SDI == 4) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : {spi_sdib, spi_sdia}))) : spi_sdia;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
