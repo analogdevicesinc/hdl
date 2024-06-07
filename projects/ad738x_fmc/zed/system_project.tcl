@@ -9,12 +9,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # Parameter description
 
-# ALERT_SPI_N - SDOB/ALERT pin can operate as a serial data output pin or alert indication output
-#  - Options : SDOB(0)/ALERT(1)
+# ALERT_SPI_N - SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output
+#  - Options : SDOB-SDOD(0)/ALERT(1)
 # NUM_OF_SDI - Number of SDI lines used
-#  - Options : 1, 2, 4
+#  - Options : 1,2,4
 # CHIP_SELECT - The device which will be used
-#  - Options : AD7380-4(0)/AD7380/1(1)
+#  - Options : AD7380-4,AD7381-4,AD7383-4,AD7384-4,AD7389-4(0)/AD7380,AD7381,AD7386,AD7387,AD7388(1)
 
 set ALERT_SPI_N 0
 if {[info exists ::env(ALERT_SPI_N)]} {

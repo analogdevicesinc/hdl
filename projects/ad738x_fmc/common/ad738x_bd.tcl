@@ -17,7 +17,7 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 a
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-set data_width    16
+set data_width    32
 set async_spi_clk 1
 set num_cs        1
 set num_sdi       [expr {$ALERT_SPI_N ? 1 : $NUM_OF_SDI}]
