@@ -134,7 +134,7 @@ switch $INTF {
   1 {
 
     # instantiation
-    create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad7606_spi
+    create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad7606_spi
 
     # spi engine
     source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
