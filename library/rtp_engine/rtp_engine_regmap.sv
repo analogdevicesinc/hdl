@@ -42,6 +42,7 @@ module rtp_engine_regmap #(
 
   output                  start_transfer,
   output                  stop_transfer,
+  output      [11:0]      num_lines,
 
   // processor interface
 
@@ -61,11 +62,13 @@ module rtp_engine_regmap #(
 
   reg             up_start_transfer  = 'h0;
   reg             up_stop_transfer  = 'h0;
+  reg  [11:0]     up_num_lines = 'h0;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_start_transfer <= 'h0;
       up_stop_transfer <= 'h0;
+      up_num_lines <= 'h0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
@@ -73,6 +76,9 @@ module rtp_engine_regmap #(
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h3)) begin
         up_stop_transfer <= up_wdata;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h4)) begin
+        up_num_lines <= up_wdata;
       end
     end
   end
@@ -89,6 +95,7 @@ module rtp_engine_regmap #(
             14'h0: up_rdata <= VERSION;
             14'h2: up_rdata <= up_start_transfer;
             14'h3: up_rdata <= up_stop_transfer;
+	    14'h4: up_rdata <= up_num_lines;
             default: up_rdata <= 0;
           endcase
         end else begin
@@ -100,5 +107,6 @@ module rtp_engine_regmap #(
 
   assign start_transfer = up_start_transfer;
   assign stop_transfer = up_stop_transfer;
+  assign num_lines = up_num_lines;
 
 endmodule
