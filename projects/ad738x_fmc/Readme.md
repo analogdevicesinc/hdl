@@ -19,23 +19,18 @@ Here are some pointers to help you:
 
   How to use over-writable parameters from the environment:
 ```
-hdl/projects/ad738x_fmc/zed> make ALERT_SPI_N=0 NUM_OF_SDI=4 CHIP_SELECT=0
-CHIP_SELECT - Defines the device which will be used. There are 2 categories depending on the location of the ALERT pin:
-              0 - AD7380-4,AD7381-4,AD7383-4,AD7384-4,AD7389-4 / 1 - AD7380,AD7381,AD7386,AD7387,AD7388
-NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
+hdl/projects/ad738x_fmc/zed> make ALERT_SPI_N=0 NUM_OF_SDI=4
 ALERT_SPI_N-  SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output: 0 - SDOB-SDOD/ 1 - ALERT
-              ALERT PIN can be placed on SDOB or SDOD, depending the chip.
+NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
 
-For the ALERT functionality, the following parameters will be used in make command: ALERT_SPI_N, CHIP_SELECT
-For the serial data output functionality, the following parameters will be used in make command: ALERT_SPI_N, NUM_OF_SDI, CHIP_SELECT
+
+For the ALERT functionality, the following parameters will be used in make command: ALERT_SPI_N
+For the serial data output functionality, the following parameters will be used in make command: ALERT_SPI_N, NUM_OF_SDI
 
 **Example:**
 
-make ALERT_SPI_N=0 NUM_OF_SDI=1 CHIP_SELECT=0
-make ALERT_SPI_N=0 NUM_OF_SDI=2 CHIP_SELECT=0
-make ALERT_SPI_N=0 NUM_OF_SDI=4 CHIP_SELECT=0
-make ALERT_SPI_N=0 NUM_OF_SDI=1 CHIP_SELECT=1
-make ALERT_SPI_N=0 NUM_OF_SDI=2 CHIP_SELECT=1
-make ALERT_SPI_N=1 CHIP_SELECT=0
-make ALERT_SPI_N=1 CHIP_SELECT=1
+make ALERT_SPI_N=0 NUM_OF_SDI=1
+make ALERT_SPI_N=0 NUM_OF_SDI=2
+make ALERT_SPI_N=0 NUM_OF_SDI=4
+make ALERT_SPI_N=1
 ...

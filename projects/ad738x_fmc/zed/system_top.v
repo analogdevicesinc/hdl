@@ -37,8 +37,7 @@
 
 module system_top #(
    parameter ALERT_SPI_N = 0,
-   parameter NUM_OF_SDI = 4,
-   parameter CHIP_SELECT = 0
+   parameter NUM_OF_SDI = 4
 ) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -107,15 +106,16 @@ module system_top #(
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire    [NUM_OF_SDI-1:0]   ad738x_spi_sdi_s;
+
   // instantiations
 
-  wire     [NUM_OF_SDI-1:0]   ad738x_spi_sdi_s;
+  assign gpio_i[63:34] = gpio_o[63:34];
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[32] = ALERT_SPI_N ? spi_sdib : 0;
+  assign gpio_i[33] = ALERT_SPI_N ? spi_sdid : 0;
 
-  assign gpio_i[32] = ALERT_SPI_N ? ((CHIP_SELECT == 1) ? spi_sdib : spi_sdid) : 0;
-  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? ((NUM_OF_SDI == 1) ? {spi_sdia} : ((CHIP_SELECT == 1) ?
-                           {spi_sdib, spi_sdia} : ((NUM_OF_SDI == 4) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : {spi_sdib, spi_sdia}))) : spi_sdia;
+  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? ((NUM_OF_SDI == 1) ? {spi_sdia} : ((NUM_OF_SDI == 4) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : {spi_sdib, spi_sdia})): spi_sdia;
 
   ad_iobuf #(
     .DATA_WIDTH(32)

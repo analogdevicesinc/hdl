@@ -13,8 +13,6 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #  - Options : SDOB-SDOD(0)/ALERT(1)
 # NUM_OF_SDI - Number of SDI lines used
 #  - Options : 1,2,4
-# CHIP_SELECT - The device which will be used
-#  - Options : AD7380-4,AD7381-4,AD7383-4,AD7384-4,AD7389-4(0)/AD7380,AD7381,AD7386,AD7387,AD7388(1)
 
 set ALERT_SPI_N 0
 if {[info exists ::env(ALERT_SPI_N)]} {
@@ -30,18 +28,16 @@ if {[info exists ::env(NUM_OF_SDI)]} {
   set env(NUM_OF_SDI) $NUM_OF_SDI
 }
 
-set CHIP_SELECT [get_env_param CHIP_SELECT 0]
-
 adi_project ad738x_fmc_zed 0 [list \
   ALERT_SPI_N $ALERT_SPI_N \
   NUM_OF_SDI $NUM_OF_SDI \
-  CHIP_SELECT $CHIP_SELECT \
 ]
 
 adi_project_files ad738x_fmc_zed [list \
     "$ad_hdl_dir/library/common/ad_iobuf.v" \
     "system_top.v" \
     "system_constr.tcl" \
+    "system_constr.xdc" \
     "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
 adi_project_run ad738x_fmc_zed

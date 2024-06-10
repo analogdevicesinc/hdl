@@ -7,11 +7,9 @@
 
 set ALERT_SPI_N $ad_project_params(ALERT_SPI_N)
 set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
-set CHIP_SELECT $ad_project_params(CHIP_SELECT)
 
 puts "build parameter: ALERT_SPI_N: $ALERT_SPI_N"
 puts "build parameter: NUM_OF_SDI: $NUM_OF_SDI"
-puts "build parameter: CHIP_SELECT: $CHIP_SELECT"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad738x_spi
 
