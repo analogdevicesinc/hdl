@@ -214,7 +214,6 @@ set_property -dict [list \
 
 ipgui::add_param -name "USE_SDO_IDLE_STATE" -component $cc -parent $mosi_miso_config_group
 set_property -dict [list \
-  "widget" "comboBox" \
   "display_name" "Use MOSI Idle State" \
   "tooltip" "\[USE_SDO_IDLE_STATE\] Enables register based control for the MOSI idle level"
 ] [ipgui::get_guiparamspec -name "USE_SDO_IDLE_STATE" -component $cc]

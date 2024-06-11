@@ -45,7 +45,7 @@ module spi_engine_execution #(
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
   parameter [1:0] SDI_DELAY = 2'b00,
-  parameter USE_SDO_IDLE_STATE = 0
+  parameter USE_SDO_IDLE_STATE = 1
 ) (
   input clk,
   input resetn,
