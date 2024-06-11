@@ -382,7 +382,10 @@ module rtp_engine #(
       counter_lines <= 'h0;
       wait_eof_r <= 1'b0; // in reset
     end else begin
-      if (posedge_dropped_pkt) begin
+      if (m_axis_cam_tuser[0]) begin
+        wait_eof_r <= 1'b0;
+        counter_lines <= 'h0;
+      end else if (posedge_dropped_pkt) begin
         if (counter_lines != (/*NUM_LINES*/num_lines)) begin
           counter_lines <= counter_lines + 1; // increment when not = NUM_LINES
           wait_eof_r <= 1'b1; // 1 when a dropped is present - cleared at end_of_frame
