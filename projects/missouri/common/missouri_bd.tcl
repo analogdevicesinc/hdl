@@ -12,7 +12,7 @@ ad_ip_instance axi_gpio fmc_gpio [list \
   C_IS_DUAL 1 \
   C_ALL_OUTPUTS 1 \
   C_ALL_OUTPUTS_2 1 \
-  C_GPIO2_WIDTH 19 \
+  C_GPIO2_WIDTH 20 \
 ]
 
 ad_connect fmc_gpio/GPIO fmc_gpio_o1

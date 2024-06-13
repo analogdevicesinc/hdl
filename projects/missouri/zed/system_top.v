@@ -83,12 +83,14 @@ module system_top (
 
   input                   otg_vbusoc,
 
-  output      [50:0]      fmc_gpio_o,
+  // output      [50:0]      fmc_gpio_o,
+  output      [51:0]      fmc_gpio_o,
 
   inout                   fmc_i2c_scl,
   inout                   fmc_i2c_sda,
 
-  output      [11:0]      fmc_spi_cs_n,
+  // output      [11:0]      fmc_spi_cs_n,
+  output      [10:0]      fmc_spi_cs_n,
   input                   fmc_spi_miso,
   output                  fmc_spi_mosi,
   output                  fmc_spi_sck
@@ -105,6 +107,9 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
+  wire    [11:0]  fmc_cs_i;
+
+  assign fmc_spi_cs_n = {fmc_cs_i[11:10],fmc_cs_i[8:0]};
 
   genvar i;
 
@@ -157,10 +162,11 @@ module system_top (
     .fixed_io_ps_porb (fixed_io_ps_porb),
     .fixed_io_ps_srstb (fixed_io_ps_srstb),
     .fmc_gpio_o1_tri_o(fmc_gpio_o[31:0]),
-    .fmc_gpio_o2_tri_o(fmc_gpio_o[50:32]),
+    // .fmc_gpio_o2_tri_o(fmc_gpio_o[50:32]),
+    .fmc_gpio_o2_tri_o(fmc_gpio_o[51:32]),
     .fmc_iic_scl_io(fmc_i2c_scl),
     .fmc_iic_sda_io(fmc_i2c_sda),
-    .fmc_spi_cs_n(fmc_spi_cs_n),
+    .fmc_spi_cs_n(fmc_cs_i),
     .fmc_spi_miso(fmc_spi_miso),
     .fmc_spi_mosi(fmc_spi_mosi),
     .fmc_spi_sck(fmc_spi_sck),
