@@ -73,12 +73,13 @@ M_DEPS += $(wildcard system_constr*.tcl) # Not all projects have this file
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
+M_DEPS += $(EXTERNAL_DEPS)
 
 M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 
 .PHONY: all lib clean clean-all
 
-all: $(PROJECT_NAME).sdk/system_top.xsa
+all: external_dependencies $(PROJECT_NAME).sdk/system_top.xsa
 
 lib: $(M_DEPS)
 
@@ -95,6 +96,16 @@ clean-all: clean
 		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
 	done
 
+external_dependencies: external_dependencies_cleanup $(EXTERNAL_DEPS)
+
+external_dependencies_cleanup:
+	rm -f missing_external.log
+
+$(EXTERNAL_DEPS):
+	if [ ! -d $@ ]; then \
+		echo $@ >> missing_external.log ; \
+	fi
+
 MODE ?= "default"
 
 $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
@@ -109,11 +120,15 @@ $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 	else \
 		rm -f reference.dcp; \
 	fi;
-	-rm -rf $(CLEAN_TARGET)
+	$(call skip_if_missing, \
+		Project, \
+		$(PROJECT_NAME), \
+		true, \
+	rm -rf $(CLEAN_TARGET) ; \
 	$(call build, \
 		$(VIVADO) system_project.tcl, \
 		$(PROJECT_NAME)_vivado.log, \
-		$(HL)$(PROJECT_NAME)$(NC) project)
+		$(HL)$(PROJECT_NAME)$(NC) project))
 
 $(HDL_LIBRARY_PATH)%/component.xml: TARGET:=xilinx
 FORCE:
