@@ -65,6 +65,7 @@ clean-all:
 ifneq ($(INTEL_DEPS),)
 
 INTEL_DEPS += $(GENERIC_DEPS)
+INTEL_DEPS += $(EXTERNAL_DEPS)
 INTEL_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_intel.tcl
 _INTEL_LIB_DEPS = $(foreach dep,$(INTEL_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/.timestamp_intel)
 
@@ -81,20 +82,35 @@ endif
 ifneq ($(XILINX_DEPS),)
 
 XILINX_DEPS += $(GENERIC_DEPS)
+XILINX_DEPS += $(EXTERNAL_DEPS)
 XILINX_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_xilinx.tcl
 _XILINX_LIB_DEPS = $(foreach dep,$(XILINX_LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/component.xml)
 _XILINX_INTF_DEPS = $(foreach dep,$(XILINX_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
 
-xilinx: component.xml
+xilinx: external_dependencies component.xml
+
+external_dependencies: external_dependencies_cleanup $(EXTERNAL_DEPS)
+
+external_dependencies_cleanup:
+	rm -f missing_external.log
+
+$(EXTERNAL_DEPS):
+	if [ ! -d $@ ]; then \
+		echo $@ >> missing_external.log ; \
+	fi
 
 .DELETE_ON_ERROR:
 
 component.xml: $(XILINX_DEPS) $(_XILINX_INTF_DEPS) $(_XILINX_LIB_DEPS)
-	-rm -rf $(CLEAN_TARGET)
+	$(call skip_if_missing, \
+		Library, \
+		$(LIBRARY_NAME), \
+		true, \
+	rm -rf $(CLEAN_TARGET) ; \
 	$(call build, \
 		$(VIVADO) $(LIBRARY_NAME)_ip.tcl, \
 		$(LIBRARY_NAME)_ip.log, \
-		$(HL)$(LIBRARY_NAME)$(NC) library)
+		$(HL)$(LIBRARY_NAME)$(NC) library))
 
 $(_XILINX_INTF_DEPS):
 	$(MAKE) -C $(dir $@) $(notdir $@)
