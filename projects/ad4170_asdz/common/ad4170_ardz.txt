@@ -1,0 +1,11 @@
+# ad4170
+
+Pin   Port    Schematic_name  System_top_name IOSTANDARD  Termination
+
+P4.3  CK_IO10 CS_N1           spi_csn         LVCMOS33    IOB TRUE
+P4.4  CK_IO11 STD_SPI_SDI     spi_mosi        LVCMOS33    IOB TRUE PULLTYPE PULLUP
+P4.5  CK_IO12 STD_SPI_SDO     spi_miso        LVCMOS33    IOB TRUE PULLTYPE PULLUP
+P4.6  CK_IO13 STD_SPI_SCK     spi_clk         LVCMOS33    IOB TRUE
+
+P5.3  CK_IO02 DIGAUX1         digaux[0]       LVCMOS33    #N/A
+P5.8  CK_IO07 DIGAUX2         digaux[1]       LVCMOS33    #N/A
