@@ -37,7 +37,7 @@
 
 module system_top #(
    parameter ALERT_SPI_N = 0,
-   parameter NUM_OF_SDI = 4
+   parameter NUM_OF_SDI = 1
 ) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
