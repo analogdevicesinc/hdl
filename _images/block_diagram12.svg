@@ -16,7 +16,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="axi_dac_interpolate.svg">
+   sodipodi:docname="axi_adc_decimate.svg">
   <defs
      id="defs4">
     <marker
@@ -815,17 +815,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.11"
-     inkscape:cx="380.06481"
-     inkscape:cy="159.76849"
+     inkscape:zoom="8.88"
+     inkscape:cx="663.96685"
+     inkscape:cy="82.654114"
      inkscape:document-units="px"
-     inkscape:current-layer="g5367-9-1"
+     inkscape:current-layer="layer1"
      showgrid="true"
      width="800mm"
      units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="1047"
-     inkscape:window-x="-11"
+     inkscape:window-height="1009"
+     inkscape:window-x="1909"
      inkscape:window-y="-11"
      inkscape:window-maximized="1">
     <inkscape:grid
@@ -840,7 +840,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -850,12 +850,12 @@
      id="layer1"
      transform="translate(0,-752.36203)">
     <rect
-       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.73008597;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.72103631;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect4477"
-       width="645.30389"
-       height="235.85777"
-       x="85.120476"
-       y="781.02124" />
+       width="638.54614"
+       height="235.86682"
+       x="100.22995"
+       y="782.36804" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -907,7 +907,7 @@
        id="g5816" />
     <g
        id="g5418"
-       transform="translate(-73.356043,102.26735)">
+       transform="translate(-73.93485,111.79084)">
       <g
          id="g5812-8-3-8"
          style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#c8c8c8;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -943,7 +943,7 @@
            y="-120" /></flowRegion><flowPara
          id="flowPara8024" /></flowRoot>    <g
        id="g5358"
-       transform="translate(217.00788,109.92473)"
+       transform="translate(-78.290086,109.16733)"
        style="stroke:none">
       <rect
          y="698.05969"
@@ -979,7 +979,7 @@
            y="760.51514"
            x="269.48785"
            id="tspan5040"
-           sodipodi:role="line">Interpolation by</tspan><tspan
+           sodipodi:role="line">Decimation by</tspan><tspan
            id="tspan5042"
            y="773.01514"
            x="269.48785"
@@ -987,7 +987,7 @@
     </g>
     <g
        id="g5382"
-       transform="translate(216.01688,112.35717)"
+       transform="translate(-79.281083,111.59977)"
        style="stroke:none">
       <rect
          y="795.62726"
@@ -1023,7 +1023,7 @@
            y="858.0827"
            x="270.47882"
            id="tspan5040-9"
-           sodipodi:role="line">Interpolation by</tspan><tspan
+           sodipodi:role="line">Decimation by</tspan><tspan
            id="tspan5042-6"
            y="870.5827"
            x="270.47882"
@@ -1031,7 +1031,7 @@
     </g>
     <g
        id="g5367"
-       transform="translate(-76.956114,109.42924)"
+       transform="translate(-72.254051,108.67184)"
        style="stroke:none;stroke-width:0.50000006;stroke-miterlimit:0;stroke-dasharray:none">
       <rect
          y="698.55518"
@@ -1067,7 +1067,7 @@
            y="761.01062"
            x="413.45181"
            id="tspan5040-5"
-           sodipodi:role="line">Interpolation by</tspan><tspan
+           sodipodi:role="line">Decimation by</tspan><tspan
            id="tspan5042-1"
            y="773.51062"
            x="413.45181"
@@ -1075,7 +1075,7 @@
     </g>
     <g
        id="g5376"
-       transform="translate(78.944831,108.9788)"
+       transform="translate(-66.353133,108.2214)"
        style="stroke:none;stroke-opacity:1">
       <rect
          y="699.00562"
@@ -1100,7 +1100,7 @@
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            y="755.24408"
            x="561.5481"
-           sodipodi:role="line">Interpolation</tspan></text>
+           sodipodi:role="line">Decimation</tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -1115,7 +1115,7 @@
          id="tspan5042-4" /></text>
     <g
        id="g5391"
-       transform="translate(-76.4606,111.18602)"
+       transform="translate(-71.758537,110.42862)"
        style="stroke:none">
       <rect
          y="796.7984"
@@ -1151,7 +1151,7 @@
            y="859.25385"
            x="412.95633"
            id="tspan5040-5-2"
-           sodipodi:role="line">Interpolation by</tspan><tspan
+           sodipodi:role="line">Decimation by</tspan><tspan
            id="tspan5042-1-6"
            y="871.75385"
            x="412.95633"
@@ -1159,7 +1159,7 @@
     </g>
     <g
        id="g5400"
-       transform="translate(79.848029,110.50487)"
+       transform="translate(-65.449934,109.74746)"
        style="stroke:none">
       <rect
          y="797.47955"
@@ -1184,11 +1184,11 @@
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
            y="853.71802"
            x="560.6449"
-           sodipodi:role="line">Interpolation</tspan></text>
+           sodipodi:role="line">Decimation</tspan></text>
     </g>
     <g
        id="g5424"
-       transform="translate(-74.815533,107.89728)">
+       transform="translate(-75.39434,112.42077)">
       <g
          id="g5812-8-3-8-7"
          style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#c8c8c8;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1214,7 +1214,7 @@
     </g>
     <g
        id="g5406"
-       transform="translate(73.78104,109.75789)">
+       transform="translate(76.327317,111.01986)">
       <g
          id="g5812-8-3-8-70"
          style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#c8c8c8;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1240,7 +1240,7 @@
     </g>
     <g
        id="g5412"
-       transform="translate(73.38573,109.46793)">
+       transform="translate(75.932007,105.7299)">
       <g
          id="g5812-8-3-8-4"
          style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#c8c8c8;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1265,22 +1265,22 @@
            sodipodi:role="line">CHANNEL_B</tspan></text>
     </g>
     <rect
-       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.014081;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.00000012;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect4477-2"
-       width="298.98596"
-       height="91.694946"
-       x="260.50702"
-       y="804.16003" />
+       width="290.69589"
+       height="91.70903"
+       x="121.118"
+       y="803.55511" />
     <rect
-       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.01408076;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:1.00000012;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect4477-2-4"
-       width="298.98596"
-       height="91.650215"
-       x="260.50699"
-       y="904.20483" />
+       width="290.69611"
+       height="91.664299"
+       x="121.08652"
+       y="903.57385" />
     <g
        id="g5367-9"
-       transform="translate(-226.95613,109.42924)"
+       transform="translate(225.61139,109.53854)"
        style="stroke:none;stroke-width:0.50000006;stroke-miterlimit:0;stroke-dasharray:none">
       <rect
          y="698.55518"
@@ -1320,11 +1320,11 @@
     </g>
     <g
        id="g5367-9-1"
-       transform="translate(-226.95613,209.42925)"
+       transform="translate(229.44022,209.53854)"
        style="stroke:none;stroke-width:0.50000006;stroke-miterlimit:0;stroke-dasharray:none">
       <rect
          y="698.55518"
-         x="346.95609"
+         x="343.12726"
          height="84.377632"
          width="133.26411"
          id="rect4870-9-3-3-8-4-8"

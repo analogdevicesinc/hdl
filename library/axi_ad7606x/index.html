@@ -18,7 +18,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AXI AD7768" href="../axi_ad7768/index.html" />
+    <link rel="next" title="AXI AD7616" href="../axi_ad7616/index.html" />
     <link rel="prev" title="AXI AD3552R" href="../axi_ad3552r/index.html" />
    
   
@@ -180,12 +180,15 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
@@ -2189,7 +2192,248 @@ description of each generic register map.</p>
 </div>
 </section>
 </section>
-</div><div></div></section>
+</div><div><section id="hdl-regmap">
+<section id="hdl-regmap-axi_pwm_gen">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="23902361f1f766927dcc0a7bee20e5476aef628e" name="23902361f1f766927dcc0a7bee20e5476aef628e" type="checkbox"></input><label for="23902361f1f766927dcc0a7bee20e5476aef628e"><p>PWM Generator (axi_pwm_gen) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00020101</span></code></td>
+<td class="description"><section>
+<p>Version number. Unique to all cores.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_ID</span></code></td>
+<td class="description bold"><section>
+<p>Core ID</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ID[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Instance identifier number.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_SCRATCH</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CORE_MAGIC</span></code></td>
+<td class="description bold"><section>
+<p>Identification number</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x504c5347</span></code></td>
+<td class="description"><section>
+<p>Identification number.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_RSTN</span></code></td>
+<td class="description bold"><section>
+<p>Reset and load values</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">LOAD_CONFIG</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Loads the new values written in the config registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reset, default is (0x0).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CONFIG</span></code></td>
+<td class="description bold"><section>
+<p>Features enable register</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ALIGN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If active the ext_sync will trigger a phase align at each neg-edge. Otherwise the phase align will be armed by a load config toggle.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FORCE_ALIGN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If active the current active pulses are immediately stopped and realigned. Otherwise, the synchronized pulses will start only after all running pulse periods end.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">START_AT_SYNC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="description"><section>
+<p>If active, the pulses will start after the trigger event. Otherwise each pulse will start after a period equal to the one for which it is set. Default valew can be overwritten at build time through parameters.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_NB_PULSES</span></code></td>
+<td class="description bold"><section>
+<p>Number of pulses</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NB_PULSES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Number of configurable pulses.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_PERIOD</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x period</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_PERIOD[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">period</span> <span class="pre">-</span> <span class="pre">'h4C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pulse x duration, defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_WIDTH</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x width</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_WIDTH[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">width</span> <span class="pre">-</span> <span class="pre">'h8C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pulse x width (high time), defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_OFFSET</span></code></td>
+<td class="description bold"><section>
+<p>Pulse x offset</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_OFFSET[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">offset</span> <span class="pre">-</span> <span class="pre">'hCC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pulse x offset, defined in number of clock cycles.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+</div></section>
 <section id="theory-of-operation">
 <h2>Theory of operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
 <p>The axi_ad7606x IP can be configured in various operation modes, this feature
@@ -2437,7 +2681,7 @@ AD7606x family devices.</p>
               <div class="related">
                 &nbsp;
     <a href="../axi_ad3552r/index.html" title="Previous document (Ctrl+LeftArrow)" class="prev">AXI AD3552R</a>
-    <a href="../axi_ad7768/index.html" title="Next document (Ctrl+RightArrow)" class="next">AXI AD7768</a>
+    <a href="../axi_ad7616/index.html" title="Next document (Ctrl+RightArrow)" class="next">AXI AD7616</a>
               </div>
           
         </div>

@@ -170,12 +170,15 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
@@ -663,29 +666,19 @@ ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:</p>
 address specified is from the perspective of the Master interface. Since
 the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
 is &gt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the</p></li>
-</ul>
-<blockquote>
-<div><p>address specified is from the perspective of the Master interface. Since
+<li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the
+address specified is from the perspective of the Master interface. Since
 the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
-is &gt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p>
-</div></blockquote>
-<ul class="simple">
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the</p></li>
-</ul>
-<blockquote>
-<div><p>address specified is from the perspective of the Slave interface. Since
+is &gt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
+<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the
+address specified is from the perspective of the Slave interface. Since
 the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
-is &lt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p>
-</div></blockquote>
-<ul class="simple">
-<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the</p></li>
-</ul>
-<blockquote>
-<div><p>address specified is from the perspective of the Slave interface. Since
+is &lt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
+<li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the
+address specified is from the perspective of the Slave interface. Since
 the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
-is &lt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p>
-</div></blockquote>
+is &lt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
+</ul>
 </section>
 </section>
 </section>
