@@ -315,12 +315,18 @@ ADC Read Mode with Status and CRC enabled (AD7606C-18)
 Software Support
 -------------------------------------------------------------------------------
 
-Analog Devices recommends to use the provided software drivers.
+* Linux device drivers at:
+
+  * :git-linux:`drivers/iio/adc/ad7606.c`
+  * :git-linux:`drivers/iio/adc/ad7606_par.c`
+  * :git-linux:`drivers/iio/adc/ad7606_spi.c`
 
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_ad7606x`
+* HDL IP core at :git-hdl:`library/axi_ad7606x`
+* HDL project at :git-hdl:`projects/ad7606x_fmc`
+* HDL project documentation at :ref:`ad7606x_fmc`
 * :adi:`AD7606B`
 * :adi:`AD7606C-16`
 * :adi:`AD7606C-18`
@@ -331,4 +337,3 @@ References
 * :adi:`EVAL-AD7606C-16/18 Information <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606c-18.html>`
 * :adi:`EVAL-AD7606B User Guide <media/en/technical-documentation/user-guides/EVAL-AD7606BFMCZ-UG-1225.pdf>`
 * :adi:`EVAL-AD7606C-16/18 User Guide <media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf>`
-* :dokuwiki:`AD7606X FMC HDL Reference Design <resources/eval/user-guides/ad7606x-fmc/hdl>`

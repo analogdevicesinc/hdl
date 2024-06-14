@@ -178,17 +178,21 @@ The example design uses a processor to program all the registers. If no
 processor is available in your system, you can create your IP starting from the
 interface module.
 
-Software Guidelines
+Software Support
 --------------------------------------------------------------------------------
 
-Linux is supported using
-:dokuwiki:`AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`.
+* Linux device driver at :git-linux:`drivers/iio/dac/ad3552r.c`
+* Linux device driver documentation
+  :dokuwiki:`on wiki <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
+* No-OS device driver at :git-no-os:`drivers/dac/ad3552r`
+* No-OS project at :git-no-os:`projects/ad3552r_fmcz`
 
 References
 --------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/axi_ad3552r`
+* HDL project at :git-hdl:`projects/ad3552r_evb`
+* Linux device driver :git-linux:`drivers/iio/dac/ad3552r.c`
 * :adi:`AD3552R`
-* :git-hdl:`projects/ad3552r_evb`
-* :git-hdl:`library/axi_ad3552r`
-* :git-linux:`/`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`

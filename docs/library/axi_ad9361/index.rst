@@ -432,20 +432,23 @@ registers relative address.
    :name: TDD_CNTRL
    :no-type-info:
 
-Software Guidelines
+Software Support
 --------------------------------------------------------------------------------
 
 The software for this IP can be found as part of the FMCOMMS2/3/4/5
-Reference Design at: :git-no-OS:`projects/ad9361`
-Linux is supported also using :git-linux:`/`.
+reference designs.
+
+* Linux device driver at :git-linux:`drivers/iio/adc/ad9361.c`
+* Linux device trees for this can be found at :git-linux:`/`
+* Linux documentation :dokuwiki:`on wiki <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+* No-OS device driver at :git-no-os:`drivers/rf-transceiver/ad9361`
+* No-OS project at :git-no-os:`projects/ad9361`
 
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_ad9361`
+* HDL IP core at :git-hdl:`library/axi_ad9361`
 * :adi:`AD9361`
-* :git-linux:`/`
-* :git-no-OS:`projects/ad9361`
 * :adi:`AD9361 User Guide <media/en/technical-documentation/user-guides/AD9361_Reference_Manual_UG-570.pdf>`
 * :dokuwiki:`FMCOMMS2 Reference Design <resources/eval/user-guides/ad-fmcomms2-ebz>`
 * :dokuwiki:`FMCOMMS4 Reference Design <resources/eval/user-guides/ad-fmcomms4-ebz>`
