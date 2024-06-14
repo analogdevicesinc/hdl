@@ -77,7 +77,8 @@ Register Map
 Software Support
 --------------------------------------------------------------------------------
 
-* No-OS driver :git-no-os:`drivers/adc/ad7616`
+* Linux driver documentation :dokuwiki:`here <resources/tools-software/linux-drivers/iio-adc/ad7606>`
+* No-OS driver at :git-no-os:`drivers/adc/ad7616`
 
 Refereces
 --------------------------------------------------------------------------------

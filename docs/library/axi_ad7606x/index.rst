@@ -315,11 +315,11 @@ ADC Read Mode with Status and CRC enabled (AD7606C-18)
 Software Support
 -------------------------------------------------------------------------------
 
-Analog Devices recommends to use the provided software drivers:
+* Linux device drivers at:
 
-* :git-linux:`drivers/iio/adc/ad7606.c`
-* :git-linux:`drivers/iio/adc/ad7606_par.c`
-* :git-linux:`drivers/iio/adc/ad7606_spi.c`
+  * :git-linux:`drivers/iio/adc/ad7606.c`
+  * :git-linux:`drivers/iio/adc/ad7606_par.c`
+  * :git-linux:`drivers/iio/adc/ad7606_spi.c`
 
 References
 -------------------------------------------------------------------------------
