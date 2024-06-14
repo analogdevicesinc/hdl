@@ -6,7 +6,7 @@ AXI AD777x
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI AD777x <library/axi_ad777x>` IP core
-can be used to interface the :adi:`AD7770`, :adi:`AD7771` and :adi:`AD7779` 
+can be used to interface the :adi:`AD7770`, :adi:`AD7771` and :adi:`AD7779`
 converters using an FPGA in 1, 2, or 4 data lines active.
 More about the generic framework interfacing ADCs, that contains the
 ``up_adc_channel`` and ``up_adc_common modules``, can be read in :ref:`axi_adc`.
@@ -146,18 +146,21 @@ The example design uses a processor to program all the registers. If no
 processor is available in your system, you can create your own IP starting from
 the interface module.
 
-Software Guidelines
+Software Support
 --------------------------------------------------------------------------------
 
-Linux is suported using :git-linux:`/`.
+* No-OS device driver at :git-no-os:`drivers/adc/ad7779`
+* No-OS driver documentation :dokuwiki:`here <resources/tools-software/uc-drivers/ad7779>`
+* IIO support :dokuwiki:`here <resources/tools-software/product-support-software/ad777x_iio_support>`
 
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_ad777x`
+* HDL IP core at :git-hdl:`library/axi_ad777x`
+* HDL project at :git-hdl:`projects/ad777x_ardz`
+* HDL project documentation at :ref:`ad777x_ardz`
 * :adi:`AD7770`
 * :adi:`AD7771`
 * :adi:`AD7779`
-* :git-linux:`/`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`

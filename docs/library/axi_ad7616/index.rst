@@ -73,3 +73,17 @@ Register Map
 
 .. hdl-regmap::
    :name: AXI_AD7616
+
+Software Support
+--------------------------------------------------------------------------------
+
+* Linux documentation :dokuwiki:`on wiki <resources/tools-software/linux-drivers/iio-adc/ad7606>`
+* No-OS driver at :git-no-os:`drivers/adc/ad7616`
+
+Refereces
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/axi_ad7616`
+* HDL project at :git-hdl:`projects/ad7616_sdz`
+* HDL project documentation at :ref:`ad7616_sdz`
+* :adi:`AD7616`
