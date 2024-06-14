@@ -47,14 +47,15 @@ module axi_adxcvr_up #(
   parameter   [15:0]  FPGA_VOLTAGE = 0,
   parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
-  parameter   integer NUM_OF_LANES = 4
+  parameter   integer NUM_OF_LANES = 4,
+  parameter           READY_W = (FPGA_TECHNOLOGY != 105) ?  NUM_OF_LANES : 1
 ) (
-
   // xcvr, lane-pll and ref-pll are shared
 
   output                        up_rst,
   input                         up_pll_locked,
-  input   [(NUM_OF_LANES-1):0]  up_ready,
+  input                         up_rx_lockedtodata,
+  input   [READY_W-1:0]         up_ready,
 
   // bus interface
 
@@ -121,8 +122,9 @@ module axi_adxcvr_up #(
   assign up_rst = up_rst_cnt[3];
   assign up_ready_s = & up_status_32_s[NUM_OF_LANES:1];
   assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
-  assign up_status_32_s[NUM_OF_LANES] = up_pll_locked;
-  assign up_status_32_s[(NUM_OF_LANES-1):0] = up_ready;
+  assign up_status_32_s[NUM_OF_LANES] = FPGA_TECHNOLOGY == 105 ? TX_OR_RX_N ? up_pll_locked : up_rx_lockedtodata :
+                                                                 up_pll_locked;
+  assign up_status_32_s[(NUM_OF_LANES-1):0] =  FPGA_TECHNOLOGY == 105 ? {NUM_OF_LANES{up_ready}} : up_ready;
 
   always @(negedge up_rstn or posedge up_clk) begin
     if (up_rstn == 0) begin
