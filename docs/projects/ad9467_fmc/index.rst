@@ -51,24 +51,34 @@ Block diagram
 Project block diagram
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-|Xilinx HDL Block Diagram|
+The data path and clock domains are depicted in the below diagram:
+
+.. image:: ad9467_fmc_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD9467-FMC HDL block diagram
 
 AD9467 FMC card block diagram
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-|image1|
+The block diagram of the AD9467-FMC evaluation board is depicted below:
 
-#The reference design is built on a ARM/Microblaze based system tailored
-#for Linux. A functional block diagram of the design is given below.
-#
-#Through an SPI interface, the software can access the AD9467/AD9517-4
-#registers, given the possibility to initialize and configure the ADC
-#and/or clock chip.
-#
-#The LVDS interface captures and buffers data from the ADC. The DMA
-#interface then transfers the samples to the external DDR-DRAM. The
-#capture is initiated by the software. The status of capture (overflow,
-#over the range) are reported back to the software.
+.. image:: ad9467_fmc_card.svg
+   :width: 800
+   :align: center
+   :alt: AD9467-FMC card diagram
+
+The reference design is built on a ARM/Microblaze based system tailored
+for Linux.
+
+Through an SPI interface, the software can access the AD9467/AD9517-4
+registers, given the possibility to initialize and configure the ADC
+and/or clock chip.
+
+The LVDS interface captures and buffers data from the ADC. The DMA
+interface then transfers the samples to the external DDR-DRAM. The
+capture is initiated by the software. The status of capture (overflow,
+over the range) are reported back to the software.
 
 Clock selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,7 +144,7 @@ axi_ad9467           0x44A0_0000
 axi_ad9467_dma       0x44A3_0000
 ==================== ===============
 
-SPI connections
+SPI connections --- NEEDS EDITING
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Depending on the carrier, the SPI connections are as follows:
@@ -156,7 +166,7 @@ Depending on the carrier, the SPI connections are as follows:
      - AD9467
      - 0
 
-GPIOs
+GPIOs --- NOT DONE YET
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
@@ -179,7 +189,7 @@ GPIOs
      - 113:112
      - 137:136
 
-Interrupts
+Interrupts --- NEED TO CHECK THE MICROBLAZE NB.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below are the Programmable Logic interrupts used in this project.
@@ -259,7 +269,7 @@ HDL related
      - :ref:`here <axi_hdmi_tx>`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
-     - :ref:`here <axi_i2s_adi>`
+     - ---
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - ---
