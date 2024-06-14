@@ -186,9 +186,10 @@ Linux is supported using
 
 References
 --------------------------------------------------------------------------------
+
 * :adi:`AD3552R`
-* :git-hdl:`projects/ad3552r_evb`
-* :git-hdl:`library/axi_ad3552r`
-* :git-linux:`/`
+* HDL IP core at :git-hdl:`library/axi_ad3552r`
+* HDL project at :git-hdl:`projects/ad3552r_evb`
+* Linux device driver :git-linux:`drivers/iio/dac/ad3552r.c`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
