@@ -23,7 +23,6 @@ hdl/projects/ad738x_fmc/zed> make ALERT_SPI_N=0 NUM_OF_SDI=4
 ALERT_SPI_N-  SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output: 0 - SDOB-SDOD/ 1 - ALERT
 NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
 
-
 For the ALERT functionality, the following parameters will be used in make command: ALERT_SPI_N
 For the serial data output functionality, the following parameters will be used in make command: ALERT_SPI_N, NUM_OF_SDI
 
