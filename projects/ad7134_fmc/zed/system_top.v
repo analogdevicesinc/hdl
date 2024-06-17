@@ -37,98 +37,99 @@
 
 module system_top (
 
-  inout   [14:0]  ddr_addr,
-  inout   [ 2:0]  ddr_ba,
-  inout           ddr_cas_n,
-  inout           ddr_ck_n,
-  inout           ddr_ck_p,
-  inout           ddr_cke,
-  inout           ddr_cs_n,
-  inout   [ 3:0]  ddr_dm,
-  inout   [31:0]  ddr_dq,
-  inout   [ 3:0]  ddr_dqs_n,
-  inout   [ 3:0]  ddr_dqs_p,
-  inout           ddr_odt,
-  inout           ddr_ras_n,
-  inout           ddr_reset_n,
-  inout           ddr_we_n,
+  inout  [14:0] ddr_addr,
+  inout  [ 2:0] ddr_ba,
+  inout         ddr_cas_n,
+  inout         ddr_ck_n,
+  inout         ddr_ck_p,
+  inout         ddr_cke,
+  inout         ddr_cs_n,
+  inout  [ 3:0] ddr_dm,
+  inout  [31:0] ddr_dq,
+  inout  [ 3:0] ddr_dqs_n,
+  inout  [ 3:0] ddr_dqs_p,
+  inout         ddr_odt,
+  inout         ddr_ras_n,
+  inout         ddr_reset_n,
+  inout         ddr_we_n,
 
-  inout           fixed_io_ddr_vrn,
-  inout           fixed_io_ddr_vrp,
-  inout   [53:0]  fixed_io_mio,
-  inout           fixed_io_ps_clk,
-  inout           fixed_io_ps_porb,
-  inout           fixed_io_ps_srstb,
+  inout         fixed_io_ddr_vrn,
+  inout         fixed_io_ddr_vrp,
+  inout  [53:0] fixed_io_mio,
+  inout         fixed_io_ps_clk,
+  inout         fixed_io_ps_porb,
+  inout         fixed_io_ps_srstb,
 
-  inout   [31:0]  gpio_bd,
+  inout  [31:0] gpio_bd,
 
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
+  output        hdmi_out_clk,
+  output        hdmi_vsync,
+  output        hdmi_hsync,
+  output        hdmi_data_e,
+  output [15:0] hdmi_data,
 
-  output          spdif,
+  output        spdif,
 
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
+  output        i2s_mclk,
+  output        i2s_bclk,
+  output        i2s_lrclk,
+  output        i2s_sdata_out,
+  input         i2s_sdata_in,
 
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
+  inout         iic_scl,
+  inout         iic_sda,
+  inout  [ 1:0] iic_mux_scl,
+  inout  [ 1:0] iic_mux_sda,
 
-  input           otg_vbusoc,
+  input         otg_vbusoc,
 
   // ad713x SPI configuration interface
 
-  input           ad713x_spi_sdi,
-  output          ad713x_spi_sdo,
-  output          ad713x_spi_sclk,
-  output  [ 1:0]  ad713x_spi_cs,
+  input         ad713x_spi_sdi,
+  output        ad713x_spi_sdo,
+  output        ad713x_spi_sclk,
+  output [ 1:0] ad713x_spi_cs,
 
   // ad713x data interface
 
-  output          ad713x_dclk,
-  input   [ 7:0]  ad713x_din,
-  output          ad713x_odr,
+  output        ad713x_dclk,
+  input  [ 7:0] ad713x_din,
+  output        ad713x_odr,
 
   // ad713x GPIO lines
 
-  inout   [ 1:0]  ad713x_resetn,
-  inout   [ 1:0]  ad713x_pdn,
-  inout   [ 1:0]  ad713x_mode,
-  inout   [ 7:0]  ad713x_gpio,
-  inout   [ 1:0]  ad713x_dclkio,
-  inout           ad713x_pinbspi,
-  inout           ad713x_dclkmode,
+  inout  [ 1:0] ad713x_resetn,
+  inout  [ 1:0] ad713x_pdn,
+  inout  [ 1:0] ad713x_mode,
+  inout  [ 7:0] ad713x_gpio,
+  inout  [ 1:0] ad713x_dclkio,
+  inout         ad713x_pinbspi,
+  inout         ad713x_dclkmode,
 
   // ad713x reference clock (not used by default)
 
-  output          ad713x_sdpclk
+  output        ad713x_sdpclk
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
+  wire [ 1:0] iic_mux_scl_i_s;
+  wire [ 1:0] iic_mux_scl_o_s;
+  wire        iic_mux_scl_t_s;
+  wire [ 1:0] iic_mux_sda_i_s;
+  wire [ 1:0] iic_mux_sda_o_s;
+  wire        iic_mux_sda_t_s;
 
-  wire    [1:0]   cs;
-  wire            resetn;
+  wire [1:0]  cs;
+  wire        resetn;
 
   // instantiations
   assign ad713x_spi_cs = gpio_o[50] ? {cs[0], cs[0]} : cs;
   assign gpio_i[63:51] = gpio_o[63:51];
+
   ad_iobuf #(
     .DATA_WIDTH(16)
   ) i_iobuf_ad713x_gpio (
@@ -142,7 +143,8 @@ module system_top (
             ad713x_mode,        // [37:36]
             ad713x_pdn }));     // [35:34]
 
-    ad_iobuf #(
+  // gpio_o[33] reserved in devicetree for reset
+  ad_iobuf #(
     .DATA_WIDTH(2)
   ) i_iobuf_ad713x_resetn (
     .dio_t({gpio_t[32], gpio_t[32]}),
