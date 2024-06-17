@@ -310,7 +310,7 @@ module adrv9001_rx_link #(
     .sof (rx_data16_0_packed_osof),
     .odata (rx_data32_0_packed),
     .ovalid (rx_data32_0_packed_valid),
-    .osof (rx_data32_0_packed_osof));
+    .osof ());
 
   generate if (CMOS_LVDS_N) begin
     assign rx_data_i = ~rx_single_lane ? {rx_data8_1_aligned,rx_data8_0_aligned} :
