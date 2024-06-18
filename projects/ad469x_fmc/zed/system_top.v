@@ -109,7 +109,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:34] = 31'b0;
+  assign gpio_i[63:33] = 31'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(1)
