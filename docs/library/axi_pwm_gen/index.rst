@@ -157,31 +157,42 @@ This flags are software overwritable at runtime. Default value is given at build
 Timing Diagrams and examples
 --------------------------------------------------------------------------------
 
+.. note::
+
+   The diagrams below, that refer to ``load_config`` functionality, are
+   highlighting the transition from a set of pwm core config values (period,
+   pulse, offset) to new pwm set of config values.
+
+.. warning::
+
+  The relationship between the offset and channel counters is not 100% accurate.
+  It is meant to highlight the functionality, by helping the reader track the
+  pwm waveforms. If you are interested in the exact timing you will have to
+  simulate the IP.
+
 The timing diagram below, shows the ``load_config`` functionality with
-force sync and force start disabled.
+force align and start at sync disabled.
 
 .. wavedrom::
 
   { "signal" : [
-    { "name": "clk", "wave": "P.............................."},
-    { "name": "pwm_1 period", "wave": "9.............9................","data":["8","10"]},
-    { "name": "pwm_1 pulse",  "wave": "9.............9................","data":["3","5"]},
-    { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","0"]},
-    { "name": "pwm_2 period", "wave": "6.............6................","data":["8","10"]},
-    { "name": "pwm_2 pulse",  "wave": "6.............6................","data":["3","5"]},
-    { "name": "pwm_2 offset", "wave": "6.............6................","data":["5","4"]},
-    { "name": "load_config", "wave": "0............10................",phase: 0,},
-    { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
-    { "name": "counter 0", "wave": "45555555544444=6666666666333333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6"]},
-    { "name": "pwm 0", "wave": "lh..l....h...l.h....l....h....l"},
-    { "name": "counter 1", "wave": "44444555555554=...6666666666333","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
-    { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
-  ],
-  foot: {text: ['tspan', 'load_config force_sync and start at sync e.g.'],
-  }}
+    { "name": "clk", "wave": "P................................"},
+    { "name": "pwm_1 period", "wave": "9...........9....................","data":["8","10"]},
+    { "name": "pwm_1 pulse",  "wave": "9...........9....................","data":["3","5"]},
+    { "name": "pwm_1 offset", "wave": "9...........9....................","data":["1","1"]},
+    { "name": "pwm_2 period", "wave": "6...........6....................","data":["8","10"]},
+    { "name": "pwm_2 pulse",  "wave": "6...........6....................","data":["3","5"]},
+    { "name": "pwm_2 offset", "wave": "6...........6....................","data":["5","4"]},
+    { "name": "load_config", "wave": "0..........10....................",phase: 0,},
+    { "name": "offset counter", "wave": "777777777777=.....777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]},
+    { "name": "counter 0", "wave": "45555555544444444=666666666633333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
+    { "name": "pwm 0", "wave": "lh..l....h...l..............h...."},
+    { "name": "counter 1", "wave": "4444455555555=.......666666666633","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2"]},
+    { "name": "pwm 1", "wave": "l....h..l......................h."},
+  ]}
 
 The timing diagram below, shows the ``load_config`` functionality with
-force sync disabled and force start enabled.
+force align disabled and start at sync enabled.
 
 .. wavedrom::
 
@@ -189,22 +200,20 @@ force sync disabled and force start enabled.
     { "name": "clk", "wave": "P.............................."},
     { "name": "pwm_1 period", "wave": "9...........9..................","data":["8","10"]},
     { "name": "pwm_1 pulse",  "wave": "9...........9..................","data":["3","5"]},
-    { "name": "pwm_1 offset", "wave": "9...........9..................","data":["1","0"]},
+    { "name": "pwm_1 offset", "wave": "9...........9..................","data":["1","1"]},
     { "name": "pwm_2 period", "wave": "6...........6..................","data":["8","10"]},
     { "name": "pwm_2 pulse",  "wave": "6...........6..................","data":["3","5"]},
     { "name": "pwm_2 offset", "wave": "6...........6..................","data":["5","4"]},
     { "name": "load_config", "wave": "0..........10..................",phase: 0,},
-    { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
+    { "name": "offset counter", "wave": "777777777777=.....7777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","0","1","2","3","4","5","6","7","8","9","10","11","12","13"]},
     { "name": "counter 0", "wave": "45555555544444444=6666666666333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2","3"]},
     { "name": "pwm 0", "wave": "lh..l....h...l....h....l....h.."},
     { "name": "counter 1", "wave": "4444455555555=.......6666666666","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10"]},
     { "name": "pwm 1", "wave": "l....h..l............h....l...."},
-  ],
-  foot: {text: ['tspan', 'load_config with start at sync(default)'],
-  }}
+  ]}
 
 The timing diagram below, shows the ``load_config`` functionality with
-force sync and force start enabled.
+force align and start at sync enabled.
 
 .. wavedrom::
 
@@ -212,7 +221,7 @@ force sync and force start enabled.
     { "name": "clk", "wave": "P.............................."},
     { "name": "pwm_1 period", "wave": "9.............9................","data":["8","10"]},
     { "name": "pwm_1 pulse",  "wave": "9.............9................","data":["3","5"]},
-    { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","0"]},
+    { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","1"]},
     { "name": "pwm_2 period", "wave": "6.............6................","data":["8","10"]},
     { "name": "pwm_2 pulse",  "wave": "6.............6................","data":["3","5"]},
     { "name": "pwm_2 offset", "wave": "6.............6................","data":["5","4"]},
@@ -222,9 +231,7 @@ force sync and force start enabled.
     { "name": "pwm 0", "wave": "lh..l....h...l.h....l....h....l"},
     { "name": "counter 1", "wave": "44444555555554=...6666666666333","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
     { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
-  ],
-  foot: {text: ['tspan', 'load_config force_sync and start at sync e.g.'],
-  }}
+  ]}
 
 The below timing diagrams, shows the ``external_sync`` functionality:
 
