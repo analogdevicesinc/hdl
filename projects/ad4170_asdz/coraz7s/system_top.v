@@ -66,11 +66,12 @@ module system_top (
   inout           iic_eeprom_scl,
   inout           iic_eeprom_sda,
 
-  input           ad4170_spi_miso,
-  output          ad4170_spi_mosi,
-  output          ad4170_spi_sclk,
-  output          ad4170_spi_cs,
-  inout           ad4170_rdy_n
+  // ad4170
+  input           spi_miso,
+  output          spi_mosi,
+  output          spi_sclk,
+  output          spi_cs,
+  inout   [1:0]   dig_aux
 );
 
   // internal signals
@@ -102,12 +103,12 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(1)
   ) i_iobuf_ad4170_gpio (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p({ad4170_rdy_n})); // 32
+    .dio_t(gpio_t[33:32]),
+    .dio_i(gpio_o[33:32]),
+    .dio_o(gpio_i[33:32]),
+    .dio_p({dig_aux})); // 33:32
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -134,12 +135,12 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .adc_spi_sdo (ad4170_spi_mosi),
+    .adc_spi_sdo (spi_mosi),
     .adc_spi_sdo_t (),
-    .adc_spi_sdi (ad4170_spi_miso),
-    .adc_spi_cs (ad4170_spi_cs),
-    .adc_spi_sclk (ad4170_spi_sclk),
-    .adc_data_ready (ad4170_rdy_n),
+    .adc_spi_sdi (spi_miso),
+    .adc_spi_cs (spi_cs),
+    .adc_spi_sclk (spi_sclk),
+    .adc_data_ready (dig_aux[0]),
     .iic_ad4170_scl_io (iic_eeprom_scl),
     .iic_ad4170_sda_io (iic_eeprom_sda),
     .spi0_clk_i (1'b0),
