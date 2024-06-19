@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -96,12 +96,9 @@ module spi_engine_offload #(
   reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
   reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
 
-  reg trigger_last_reg;
-
   wire [15:0] cmd_int_s;
   wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
   wire spi_enable;
-  wire trigger_posedge;
 
   assign cmd_valid = spi_active;
   assign sdo_data_valid = spi_active;
@@ -251,22 +248,12 @@ module spi_engine_offload #(
 
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
-      trigger_last_reg <= 1'b0;
-    end else begin
-      trigger_last_reg <= trigger_s;
-    end
-  end
-
-  assign trigger_posedge = trigger_s && !trigger_last_reg;
-
-  always @(posedge spi_clk) begin
-    if (!spi_resetn) begin
       spi_active <= 1'b0;
     end else begin
       if (!spi_active) begin
         // start offload when we have a valid trigger, offload is enabled and
         // the DMA is enabled
-        if (trigger_posedge && spi_enable && offload_sdi_ready)
+        if (trigger_s && spi_enable && offload_sdi_ready)
           spi_active <= 1'b1;
       end else if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
         spi_active <= 1'b0;
