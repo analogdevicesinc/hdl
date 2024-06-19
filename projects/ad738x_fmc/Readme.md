@@ -15,21 +15,26 @@ Here are some pointers to help you:
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad738x
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad738x
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad738x
-## Building, Generating Bit Files
+# Building, Generating Bit Files
 
-  How to use over-writable parameters from the environment:
+How to use over-writable parameters from the environment:
 ```
 hdl/projects/ad738x_fmc/zed> make ALERT_SPI_N=0 NUM_OF_SDI=4
-ALERT_SPI_N-  SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output: 0 - SDOB-SDOD/ 1 - ALERT
+```
+
+SDOB-SDOD/ALERT pin can operate as a serial data output pin or alert indication output depending on its value:
+* 0 - SDOB-SDOD
+* 1 - ALERT
+
 NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4
 
 For the ALERT functionality, the following parameters will be used in make command: ALERT_SPI_N
 For the serial data output functionality, the following parameters will be used in make command: ALERT_SPI_N, NUM_OF_SDI
 
 **Example:**
-
+```
 make ALERT_SPI_N=0 NUM_OF_SDI=1
 make ALERT_SPI_N=0 NUM_OF_SDI=2
 make ALERT_SPI_N=0 NUM_OF_SDI=4
 make ALERT_SPI_N=1
-...
+```
