@@ -279,8 +279,7 @@ create_bd_port -dir I gpio_tx2_enable_in
 create_bd_port -dir I ref_clk
 create_bd_port -dir I mcs_in
 create_bd_port -dir O mcs_out
-create_bd_port -dir I mcs_src
-create_bd_port -dir I mcs_or_transfer_sync_n
+create_bd_port -dir O mcs_src
 create_bd_port -dir I tx_output_enable
 
 create_bd_port -dir I s_1p0_rf_sns_p
@@ -399,7 +398,6 @@ ad_connect ref_clk                 axi_adrv9001/ref_clk
 ad_connect mcs_in                  axi_adrv9001/mcs_in
 ad_connect mcs_out                 axi_adrv9001/mcs_out
 ad_connect mcs_src                 axi_adrv9001/mcs_src
-ad_connect mcs_or_transfer_sync_n  axi_adrv9001/mcs_or_transfer_sync_n
 ad_connect tx_output_enable        axi_adrv9001/tx_output_enable
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC

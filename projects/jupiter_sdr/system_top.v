@@ -46,6 +46,7 @@ module system_top (
   output                  usb_flash_prog_en,
   output                  fan_en,
   output                  fan_ctl,
+  // MCS source 0 = external, 1 = internal
   output                  adrv9002_mcssrc,
 
   inout      [15:0]       ext_gpio,
@@ -185,8 +186,6 @@ module system_top (
   assign fan_en  = 1'b1;
   assign usb_flash_prog_en = gpio_o[66];
   assign fan_ctl = gpio_o[67];
-  assign adrv9002_mcssrc = gpio_o[65]; // 0 = external, 1 = internal
-  assign mcs_or_transfer_sync_n_s = gpio_o[64];
   assign add_on_power = gpio_o[63];
 
   assign rf_rx1a_mux_ctl = gpio_o[ 8];
@@ -258,7 +257,6 @@ module system_top (
     .mcs_in (fpga_mcs_in),
     .mcs_out (mcs_out),
     .mcs_src (adrv9002_mcssrc),
-    .mcs_or_transfer_sync_n(mcs_or_transfer_sync_n_s),
     .tx_output_enable (1'b1),
 
     .rx1_dclk_in_n (rx1_dclk_in_n),

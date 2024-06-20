@@ -99,8 +99,6 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_R
   [ipx::get_ports *rx2_* -of_objects $cc]
 
 set_property driver_value 0 [ipx::get_ports mcs_in -of_objects $cc]
-set_property driver_value 0 [ipx::get_ports mcs_src -of_objects $cc]
-set_property driver_value 0 [ipx::get_ports mcs_or_transfer_sync_n -of_objects $cc]
 
 ## Customize XGUI layout
 

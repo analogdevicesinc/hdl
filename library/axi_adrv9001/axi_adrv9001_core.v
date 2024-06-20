@@ -110,6 +110,7 @@ module axi_adrv9001_core #(
   input        [ 9:0]     rx1_mcs_to_strobe_delay,
   input        [ 9:0]     rx2_mcs_to_strobe_delay,
 
+  output       [31:0]     sync_config,
   output       [31:0]     mcs_sync_pulse_width,
   output       [31:0]     mcs_sync_pulse_1_delay,
   output       [31:0]     mcs_sync_pulse_2_delay,
@@ -828,7 +829,7 @@ module axi_adrv9001_core #(
     .DEFAULT_REF_CLK (DEFAULT_REF_CLK)
   ) i_sync_ctrl (
     .ref_clk (ref_clk),
-    .sync_config (),
+    .sync_config (sync_config),
     .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
     .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
     .mcs_sync_pulse_width (mcs_sync_pulse_width),

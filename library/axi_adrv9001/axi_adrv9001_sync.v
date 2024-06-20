@@ -40,7 +40,7 @@ module axi_adrv9001_sync #(
 ) (
   input                   ref_clk,
   input                   request_mcs,
-  input                   mcs_src,
+  input       [31:0]      sync_config,
   input       [31:0]      mcs_sync_pulse_width,
   input       [31:0]      mcs_sync_pulse_1_delay,
   input       [31:0]      mcs_sync_pulse_2_delay,
@@ -50,7 +50,7 @@ module axi_adrv9001_sync #(
   input       [31:0]      mcs_sync_pulse_6_delay,
   output  reg             mcs_out = 1'b0,
   output                  mcs_6th_pulse,
-  input                   mcs_transfer_n,
+  output                  mcs_src,
   output                  rf_enable,
   output                  mssi_sync,
   output                  transfer_sync
@@ -81,8 +81,19 @@ module axi_adrv9001_sync #(
   wire          req_fall_edge;
   wire          mcs_out_rise_edge;
   wire          mcs_out_fall_edge;
+  wire          mcs_src_s;
+  wire          mcs_req_src_s;
+  wire          manual_sync_req;
+  wire          mcs_or_transfer_trig_n_s;
 
-  // multi-chip or system synchronization
+  // MCS pulses src internal = 1 or external = 0
+  assign mcs_src_s = sync_config[0];
+  // MCS request src internal = 1 or external = 0
+  assign mcs_req_src_s = sync_config[1];
+  // use to synchronize the channels of one system
+  assign manual_sync_req_s = sync_config[2];
+  // use to synchronize the transfer start of all channels
+  assign mcs_or_transfer_trig_n_s = sync_config[3];
 
   // consider ref_clk = 30.72MHz (32.552ns)
   // the MCS sync requires 6 pulses of min 10us with a in between delay of min 100us
@@ -90,17 +101,19 @@ module axi_adrv9001_sync #(
   // mcs_sync_pulse_max_delay = 32'd3073;  // 100.03 us (ref_clk = 30.72MHz)
   // mcs_sync_pulse_min_delay = 32'd31;    //   1.01 us (ref_clk = 30.72MHz)
 
+  // multi-chip or system synchronization
+
   always @(negedge ref_clk) begin
-    request_m1 <= request_mcs;
+    request_m1 <= mcs_req_src_s & mcs_req_src_s ? manual_sync_req_s : request_mcs;
     request_m2 <= request_m1;
     request_mn <= request_m2 & request_m1; // the pulse should be min 2 clk cycles
-    mcs_src_d <= mcs_src;
+    mcs_src_d <= mcs_src_s;
   end
 
   assign req_fall_edge = request_mn & !request_m1;
   assign req_rise_edge = !request_mn & request_m1;
-  assign mcs_start = req_rise_edge & !mcs_sync_busy & mcs_transfer_n;
-  assign transfer_start = req_rise_edge & !transfer_busy & !mcs_transfer_n;
+  assign mcs_start = req_rise_edge & !mcs_sync_busy & mcs_or_transfer_trig_n_s;
+  assign transfer_start = req_rise_edge & !transfer_busy & !mcs_or_transfer_trig_n_s;
 
   always @(negedge ref_clk) begin
     if (mcs_start) begin
@@ -146,7 +159,7 @@ module axi_adrv9001_sync #(
   assign mcs_out_rise_edge = !mcs_out_d & mcs_out;
 
   always @(negedge ref_clk) begin
-    if (mcs_src) begin // internal mcs
+    if (mcs_src_s) begin // internal mcs
       if (mcs_start) begin
         mcs_sync_pulse_num <= 3'd0;
       end else begin
@@ -157,8 +170,8 @@ module axi_adrv9001_sync #(
       mcs_rise_edge <= mcs_out_rise_edge;
       mcs_fall_edge <= mcs_out_fall_edge;
     end else begin  // external mcs
-      // reset the mcs counter by toggeling the mcs_src
-      if (!mcs_sync_pulse_num <=mcs_src_d & mcs_src) begin
+      // reset the mcs counter by toggeling the mcs_src_s
+      if (!mcs_src_d & mcs_src_s) begin
         mcs_sync_pulse_num <= 3'd0;
       end else begin
         if (req_rise_edge) begin

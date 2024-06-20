@@ -58,18 +58,11 @@ module axi_adrv9001 #(
   parameter DEFAULT_REF_CLK = 30720, //KHz
   parameter USE_RX_CLK_FOR_TX = 0
 ) (
-  // debug
-  output                  mssi_out,
-  output                  transfer_out,
-  output                  adc_1_fast_clk,
-  //
 
   input                   ref_clk,
-  //input                   external_mssi,
   input                   mcs_in,
   output                  mcs_out,
-  input                   mcs_src,
-  input                   mcs_or_transfer_sync_n,
+  output                  mcs_src,
   input                   tx_output_enable,
 
   // physical interface
@@ -292,6 +285,7 @@ module axi_adrv9001 #(
   wire                       [ 9:0] rx1_mcs_to_strobe_delay;
   wire                       [ 9:0] rx2_mcs_to_strobe_delay;
 
+  wire                       [31:0] sync_config;
   wire                       [31:0] mcs_sync_pulse_width;
   wire                       [31:0] mcs_sync_pulse_1_delay;
   wire                       [31:0] mcs_sync_pulse_2_delay;
@@ -313,7 +307,6 @@ module axi_adrv9001 #(
   (* MARK_DEBUG = "TRUE" *) wire  ila_ref_clk = ref_clk;
   (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_in = mcs_in;
   (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_src = mcs_src;
-  (* MARK_DEBUG = "TRUE" *) wire  ila_mcs_or_transfer_sync_n = mcs_or_transfer_sync_n;
   (* MARK_DEBUG = "TRUE" *) wire  ila_mssi_sync = mssi_sync;
   (* MARK_DEBUG = "TRUE" *) wire  ila_transfer_sync = transfer_sync;
 
@@ -356,7 +349,7 @@ module axi_adrv9001 #(
     .ref_clk (ref_clk),
     .request_mcs (mcs_in),
     .mcs_src (mcs_src),
-    .mcs_transfer_n (mcs_or_transfer_sync_n),
+    .sync_config (sync_config),
     .mcs_sync_pulse_width (mcs_sync_pulse_width),
     .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
     .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
@@ -393,7 +386,6 @@ module axi_adrv9001 #(
     .mcs_6th_pulse (mcs_6th_pulse),
     .mssi_sync (mssi_sync),
     .tx_output_enable (tx_output_enable),
-    .adc_1_fast_clk (adc_1_fast_clk),
 
     .rx1_dclk_in_n_NC (rx1_dclk_in_n_NC),
     .rx1_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
@@ -638,6 +630,7 @@ module axi_adrv9001 #(
     .delay_rx2_rst (delay_rx2_rst),
     .delay_rx2_locked (delay_rx2_locked),
 
+
     // TDD interface
     .tdd_sync (tdd_sync),
     .tdd_sync_cntr (tdd_sync_cntr),
@@ -655,7 +648,8 @@ module axi_adrv9001 #(
     .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
     .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
 
-    .mcs_sync_pulse_width   (mcs_sync_pulse_width),
+    .sync_config (sync_config),
+    .mcs_sync_pulse_width (mcs_sync_pulse_width),
     .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
     .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
     .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
