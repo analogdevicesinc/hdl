@@ -167,7 +167,7 @@ module axi_ad9434_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .CLKIN_DS_OR_SE_N (1),
     .MMCM_OR_BUFR_N (1),
-    .MMCM_CLKIN_PERIOD (2),
+    .MMCM_CLKIN_PERIOD (2.17),
     .MMCM_VCO_DIV (6),
     .MMCM_VCO_MUL (12),
     .MMCM_CLK0_DIV (2),

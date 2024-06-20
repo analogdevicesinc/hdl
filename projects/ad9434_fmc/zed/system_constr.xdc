@@ -43,3 +43,9 @@ set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVCMOS25} [get_ports spi_csn_clk]
 set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS25} [get_ports spi_csn_adc]                  ; ## G37  FMC_LA33_N     IO_L18N_T2_AD13N_35
 set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVCMOS25} [get_ports spi_dio]                      ; ## H37  FMC_LA32_P     IO_L15P_T2_DQS_AD12P_35
 set_property -dict {PACKAGE_PIN A22 IOSTANDARD LVCMOS25} [get_ports spi_sclk]                     ; ## H38  FMC_LA32_N     IO_L15N_T2_DQS_AD12N_35
+
+create_clock -name adc_clk          -period 2.17    [get_ports adc_clk_p]
+create_clock -name adc_core_clk     -period 8.70    [get_pins i_system_wrapper/system_i/axi_ad9434/adc_clk]
+
+set_clock_groups -asynchronous -group [get_clocks adc_clk]
+set_clock_groups -asynchronous -group [get_clocks adc_core_clk]
