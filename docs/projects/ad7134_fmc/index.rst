@@ -122,7 +122,6 @@ Instance                  Address
 ========================  ===========
 dual_ad7134_axi_regmap    0x44A0_0000
 axi_ad7134_dma            0x44A3_0000
-axi_sdp_clkgen            0x44A4_0000
 odr_generator             0x44B0_0000
 axi_ad7134_clkgen         0x44B1_0000
 ========================  ===========
