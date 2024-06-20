@@ -1139,15 +1139,15 @@
      inkscape:snap-page="true"
      showguides="false"
      inkscape:window-maximized="1"
-     inkscape:window-y="1342"
-     inkscape:window-x="2392"
-     inkscape:window-height="1122"
-     inkscape:window-width="1920"
+     inkscape:window-y="1324"
+     inkscape:window-x="-8"
+     inkscape:window-height="1221"
+     inkscape:window-width="2400"
      units="px"
      showgrid="true"
      inkscape:current-layer="g11134"
      inkscape:document-units="px"
-     inkscape:cy="400"
+     inkscape:cy="400.35714"
      inkscape:cx="408.21429"
      inkscape:zoom="1.4"
      inkscape:pageshadow="2"
@@ -1858,7 +1858,7 @@
            y="248.57417"
            x="583.83264"
            sodipodi:role="line"
-           id="tspan355">  1.496 MHz max</tspan></text>
+           id="tspan355" /></text>
     </g>
     <g
        transform="matrix(1.4208528,0,0,1.4208528,-288.10505,-153.29479)"
