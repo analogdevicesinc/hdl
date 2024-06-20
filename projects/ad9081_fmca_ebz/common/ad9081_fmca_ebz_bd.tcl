@@ -636,3 +636,5 @@ if {$TDD_SUPPORT} {
     ad_connect GND $dac_data_offload_name/sync_ext
   }
 }
+
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
