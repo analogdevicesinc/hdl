@@ -1,8 +1,9 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # Common parameter for TX and RX
@@ -72,15 +73,13 @@ set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_JESD_L $TX
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
-set adc_fifo_name mxfe_adc_fifo
+set adc_offload_name mxfe_rx_data_offload
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
-set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-set dac_fifo_name mxfe_dac_fifo
+set dac_offload_name mxfe_tx_data_offload
 set dac_data_width [expr $TX_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
-set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_SAMPLE_WIDTH))/log(2)))]
 
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
@@ -209,7 +208,23 @@ ad_ip_instance util_cpack2 util_mxfe_cpack [list \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_data_offload_create $adc_offload_name \
+                       0 \
+                       $adc_offload_type \
+                       $adc_offload_size \
+                       $adc_data_width \
+                       $adc_data_width
+
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $adc_offload_name/sync_ext GND
+
+ad_ip_instance util_vector_logic rx_do_rstout_logic
+ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
+ad_ip_parameter rx_do_rstout_logic config.c_size {1}
+
+ad_ip_instance util_vector_logic cpack_reset_logic
+ad_ip_parameter cpack_reset_logic config.c_operation {or}
+ad_ip_parameter cpack_reset_logic config.c_size {1}
 
 ad_ip_instance axi_dmac axi_mxfe_rx_dma [list \
   DMA_TYPE_SRC 1 \
@@ -251,7 +266,15 @@ ad_ip_instance util_upack2 util_mxfe_upack [list \
   SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 ]
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
+ad_data_offload_create $dac_offload_name \
+                       1 \
+                       $dac_offload_type \
+                       $dac_offload_size \
+                       $dac_data_width \
+                       $dac_data_width
+
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $dac_offload_name/sync_ext GND
 
 ad_ip_instance util_pad tx_util_pad [list \
   NUM_OF_SAMPLES [expr $TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL] \
@@ -406,25 +429,26 @@ ad_connect  rx_device_clk axi_mxfe_rx_jesd/device_clk
 # device clock domain
 ad_connect  rx_device_clk rx_mxfe_tpl_core/link_clk
 ad_connect  rx_device_clk util_mxfe_cpack/clk
-ad_connect  rx_device_clk mxfe_adc_fifo/adc_clk
+ad_connect  rx_device_clk $adc_offload_name/s_axis_aclk
 
 ad_connect  tx_device_clk tx_mxfe_tpl_core/link_clk
 ad_connect  tx_device_clk util_mxfe_upack/clk
-ad_connect  tx_device_clk mxfe_dac_fifo/dac_clk
+ad_connect  tx_device_clk $dac_offload_name/m_axis_aclk
 
 # dma clock domain
-ad_connect  $sys_cpu_clk mxfe_adc_fifo/dma_clk
-ad_connect  $sys_dma_clk mxfe_dac_fifo/dma_clk
+ad_connect  $sys_cpu_clk $adc_offload_name/m_axis_aclk
+ad_connect  $sys_dma_clk $dac_offload_name/s_axis_aclk
 ad_connect  $sys_cpu_clk axi_mxfe_rx_dma/s_axis_aclk
 ad_connect  $sys_dma_clk axi_mxfe_tx_dma/m_axis_aclk
 
 # connect resets
-ad_connect  rx_device_clk_rstgen/peripheral_reset mxfe_adc_fifo/adc_rst
-ad_connect  tx_device_clk_rstgen/peripheral_reset mxfe_dac_fifo/dac_rst
+ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_offload_name/s_axis_aresetn
+ad_connect  $sys_cpu_resetn $adc_offload_name/m_axis_aresetn
+ad_connect  $sys_dma_resetn $dac_offload_name/s_axis_aresetn
+ad_connect  tx_device_clk_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
 ad_connect  tx_device_clk_rstgen/peripheral_reset util_mxfe_upack/reset
 ad_connect  $sys_cpu_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 ad_connect  $sys_dma_resetn axi_mxfe_tx_dma/m_src_axi_aresetn
-ad_connect  $sys_dma_reset mxfe_dac_fifo/dma_rst
 
 if {$ADI_PHY_SEL == 0} {
 ad_connect  jesd204_phy_121_122/tx_sys_reset GND
@@ -535,7 +559,9 @@ ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
 ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
 
 ad_connect ext_sync rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
-ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst util_mxfe_cpack/reset
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_logic/op1
+ad_connect rx_do_rstout_logic/res cpack_reset_logic/op2
+ad_connect cpack_reset_logic/res util_mxfe_cpack/reset
 
 #
 # rx tpl to cpack
@@ -548,17 +574,19 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect rx_mxfe_tpl_core/adc_dovf util_mxfe_cpack/fifo_wr_overflow
 
 #
-# cpack to adc_fifo
+# cpack to data offload
 #
-ad_connect  util_mxfe_cpack/packed_fifo_wr_data mxfe_adc_fifo/adc_wdata
-ad_connect  util_mxfe_cpack/packed_fifo_wr_en mxfe_adc_fifo/adc_wr
+ad_connect  util_mxfe_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
+ad_connect  util_mxfe_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
+ad_connect  $adc_offload_name/s_axis_tlast GND
+ad_connect  $adc_offload_name/s_axis_tkeep VCC
+ad_connect  $adc_offload_name/s_axis_tready rx_do_rstout_logic/op1
+
 #
-# adc_fifo to dma
+# data offload to dma
 #
-ad_connect  mxfe_adc_fifo/dma_wr axi_mxfe_rx_dma/s_axis_valid
-ad_connect  mxfe_adc_fifo/dma_wdata axi_mxfe_rx_dma/s_axis_data
-ad_connect  mxfe_adc_fifo/dma_wready axi_mxfe_rx_dma/s_axis_ready
-ad_connect  mxfe_adc_fifo/dma_xfer_req axi_mxfe_rx_dma/s_axis_xfer_req
+ad_connect $adc_offload_name/m_axis axi_mxfe_rx_dma/s_axis
+ad_connect $adc_offload_name/init_req axi_mxfe_rx_dma/s_axis_xfer_req
 
 #
 #connect dac dataflow
@@ -642,27 +670,21 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect ext_sync tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
 
 #
-# dac fifo to upack
+# data offload to upack
 #
-
-# TODO: Add streaming AXI interface for DAC FIFO
-ad_connect  util_mxfe_upack/s_axis_valid VCC
-ad_connect  util_mxfe_upack/s_axis_ready mxfe_dac_fifo/dac_valid
-ad_connect  util_mxfe_upack/s_axis_data mxfe_dac_fifo/dac_data
+ad_connect  util_mxfe_upack/s_axis $dac_offload_name/m_axis
 
 #
-# dma to dac fifo
+# dma to data offload
 #
-ad_connect  mxfe_dac_fifo/dma_valid axi_mxfe_tx_dma/m_axis_valid
-ad_connect  tx_util_pad/data_out mxfe_dac_fifo/dma_data
+ad_connect  $dac_offload_name/s_axis_tvalid axi_mxfe_tx_dma/m_axis_valid
+ad_connect  tx_util_pad/data_out $dac_offload_name/s_axis_tdata
 ad_connect  axi_mxfe_tx_dma/m_axis_data tx_util_pad/data_in
-ad_connect  mxfe_dac_fifo/dma_ready axi_mxfe_tx_dma/m_axis_ready
-ad_connect  mxfe_dac_fifo/dma_xfer_req axi_mxfe_tx_dma/m_axis_xfer_req
-ad_connect  mxfe_dac_fifo/dma_xfer_last axi_mxfe_tx_dma/m_axis_last
-ad_connect  mxfe_dac_fifo/dac_dunf tx_mxfe_tpl_core/dac_dunf
-
-create_bd_port -dir I dac_fifo_bypass
-ad_connect  mxfe_dac_fifo/bypass dac_fifo_bypass
+ad_connect  $dac_offload_name/s_axis_tready axi_mxfe_tx_dma/m_axis_ready
+ad_connect  $dac_offload_name/s_axis_tlast axi_mxfe_tx_dma/m_axis_last
+ad_connect  $dac_offload_name/s_axis_tkeep axi_mxfe_tx_dma/m_axis_keep
+ad_connect  $dac_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
+ad_connect  tx_mxfe_tpl_core/dac_dunf util_mxfe_upack/fifo_rd_underflow
 
 # extra GPIOs
 ad_connect gpio2_i axi_gpio_2/gpio_io_i
@@ -687,6 +709,8 @@ ad_cpu_interconnect 0x44b90000 axi_mxfe_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_mxfe_rx_dma
 ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
 ad_cpu_interconnect 0x7c440000 axi_gpio_2
+ad_cpu_interconnect 0x7c450000 $adc_offload_name
+ad_cpu_interconnect 0x7c460000 $dac_offload_name
 
 # interconnect (gt/adc)
 #
