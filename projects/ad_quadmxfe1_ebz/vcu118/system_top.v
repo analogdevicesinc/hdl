@@ -327,8 +327,6 @@ module system_top (
   assign mxfe_tx_en0   = gpio_o[56:53];
   assign mxfe_tx_en1   = gpio_o[60:57];
 
-  assign dac_fifo_bypass  = gpio_o[61];
-
   ad_iobuf #(
     .DATA_WIDTH(17)
   ) i_iobuf_bd (
@@ -551,7 +549,6 @@ module system_top (
     .tx_sync_0 (link0_tx_syncin),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
-    .dac_fifo_bypass (dac_fifo_bypass),
     .gpio2_i (gpio_i[95:64]),
     .gpio2_o (gpio_o[95:64]),
     .gpio2_t (gpio_t[95:64]),
