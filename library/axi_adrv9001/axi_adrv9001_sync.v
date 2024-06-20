@@ -51,6 +51,7 @@ module axi_adrv9001_sync #(
   output  reg             mcs_out = 1'b0,
   output                  mcs_6th_pulse,
   input                   mcs_transfer_n,
+  output                  rf_enable,
   output                  mssi_sync,
   output                  transfer_sync
 );
@@ -138,6 +139,8 @@ module axi_adrv9001_sync #(
       end
     end
   end
+
+  assign rf_enable = !(mcs_sync_busy & (mcs_sync_pulse_num == 5 ? mcs_out : 1'b1));
 
   assign mcs_out_fall_edge = mcs_out_d & !mcs_out;
   assign mcs_out_rise_edge = !mcs_out_d & mcs_out;

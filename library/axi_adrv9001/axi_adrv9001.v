@@ -271,6 +271,8 @@ module axi_adrv9001 #(
   wire            up_rstn;
   wire            up_clk;
 
+  wire            rf_enable_s;
+
   // clock/reset assignments
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -364,6 +366,7 @@ module axi_adrv9001 #(
     .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
     .mcs_out (mcs_out),
     .mcs_6th_pulse (mcs_6th_pulse),
+    .rf_enable (rf_enable_s),
     .mssi_sync (mssi_sync),
     .transfer_sync (transfer_sync)
   );
@@ -685,10 +688,10 @@ module axi_adrv9001 #(
   assign dac_2_valid_i0 = dac_2_valid;
   assign dac_2_valid_q0 = dac_2_valid;
 
-  assign rx1_enable = tdd_if1_mode ? tdd_rx1_rf_en : gpio_rx1_enable_in;
-  assign rx2_enable = tdd_if2_mode ? tdd_rx2_rf_en : gpio_rx2_enable_in;
-  assign tx1_enable = tdd_if1_mode ? tdd_tx1_rf_en : gpio_tx1_enable_in;
-  assign tx2_enable = tdd_if2_mode ? tdd_tx2_rf_en : gpio_tx2_enable_in;
+  assign rx1_enable = (tdd_if1_mode ? tdd_rx1_rf_en : gpio_rx1_enable_in) & rf_enable_s;
+  assign rx2_enable = (tdd_if2_mode ? tdd_rx2_rf_en : gpio_rx2_enable_in) & rf_enable_s;
+  assign tx1_enable = (tdd_if1_mode ? tdd_tx1_rf_en : gpio_tx1_enable_in) & rf_enable_s;
+  assign tx2_enable = (tdd_if2_mode ? tdd_tx2_rf_en : gpio_tx2_enable_in) & rf_enable_s;
 
   // up bus interface
   up_axi #(
