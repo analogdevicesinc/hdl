@@ -36,6 +36,11 @@ adi_ip_files axi_ad408x [list \
 
 adi_ip_properties axi_ad408x
 
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \
+  analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
+
 adi_init_bd_tcl
 adi_ip_bd axi_ad408x "bd/bd.tcl"
 
