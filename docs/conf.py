@@ -1,3 +1,7 @@
+# -- Import setup -------------------------------------------------------------
+
+from os import path
+
 # -- Project information ------------------------------------------------------
 
 repository = 'hdl'
@@ -39,4 +43,9 @@ todo_emit_warnings = True
 html_theme = 'cosmic'
 html_static_path = ['sources']
 html_css_files = ["custom.css"]
-html_favicon = "sources/icon.svg"
+html_favicon = path.join("sources", "icon.svg")
+
+html_theme_options = {
+    "light_logo": "HDL_logo_cropped.svg",
+    "dark_logo": "HDL_logo_w_cropped.svg",
+}

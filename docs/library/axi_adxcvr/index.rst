@@ -1,14 +1,14 @@
 .. _axi_adxcvr:
 
-AXI_ADXCVR
+AXI ADXCVR
 ================================================================================
 
 .. hdl-component-diagram::
    :path: library/xilinx/axi_adxcvr
 
-The AXI_ADXCVR utility IP core is used to control and configure the highspeed
+The AXI ADXCVR utility IP core is used to control and configure the highspeed
 transceivers.
-There are separate AXI_ADXCVR cores for Intel and AMD Xilinx designs, due to the
+There are separate AXI ADXCVR cores for Intel and AMD Xilinx designs, due to the
 small differences between the AMD Xilinx's and Intel's transceivers architecture.
 For the AMD Xilinx architecture, the transceivers are instantiated in
 :ref:`UTIL_ADXCVR <util_adxcvr>`.
@@ -30,7 +30,7 @@ Features
 Intel Devices
 --------------------------------------------------------------------------------
 
-For Intel devices, the adi_jesd204 IP is using the axi_adxcvr core, which can be
+For Intel devices, the ADI JESD204 IP is using the AXI ADXCVR core, which can be
 accessed by the **link_management** interface. It provides a global reset signal
 for the JESD204B framework. Resets the XCVR reset controller IP, the link PLL
 reset controller, the PHY itself, and also the link layer of the stack. Besides
