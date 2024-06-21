@@ -3,9 +3,9 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_property -dict {PACKAGE_PIN M19  IOSTANDARD LVCMOS25} [get_ports spi_sclk];         ## G6 FMC_LA00_CC_P   IO_L13P_T2_MRCC_34
-set_property -dict {PACKAGE_PIN P17  IOSTANDARD LVCMOS25} [get_ports spi_sdo];          ## H7  FMC_LA02_P     IO_L20P_T3_34
-set_property -dict {PACKAGE_PIN M20  IOSTANDARD LVCMOS25} [get_ports spi_cs];           ## G7  FMC_LA00_CC_N  IO_L13N_T2_MRCC_34
+set_property -dict {PACKAGE_PIN M19  IOSTANDARD LVCMOS25 IOB TRUE} [get_ports spi_sclk];         ## G6 FMC_LA00_CC_P   IO_L13P_T2_MRCC_34
+set_property -dict {PACKAGE_PIN P17  IOSTANDARD LVCMOS25 IOB TRUE} [get_ports spi_sdo];          ## H7  FMC_LA02_P     IO_L20P_T3_34
+set_property -dict {PACKAGE_PIN M20  IOSTANDARD LVCMOS25 IOB TRUE} [get_ports spi_cs];           ## G7  FMC_LA00_CC_N  IO_L13N_T2_MRCC_34
 
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
