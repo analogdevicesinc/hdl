@@ -54,8 +54,8 @@ Block design
 
 The architecture is composed from one :adi:`ADA4945-1` fully differential 
 analog-to-digital driver interface IP that is driving the :adi:`LTC2387-18` 
-18 bits analog-to-digital converter interface IP. All these IPs utilize an 
-120MHz reference clock, which is produced by an axi_clkgen IP.
+which is an 18 bits analog-to-digital converter interface IP. All these IPs 
+utilize an 120MHz reference clock, which is produced by an axi_clkgen IP.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,55 +67,78 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: CN0577/ZedBoard block diagram
 
+Jumper setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Depending on what configuration of pins is chosen on the jumpers P1, P2 and P3, 
+the device can act in different modes, as described below. Of course, the PD 
+jumper overrides the PD signal from the FPGA. It is controlled by a 
+one-bit-adc-dac, in software.
+
+.. list-table::
+   :widths: 35 35 35 35
+   :header-rows: 1
+
+   * - Jumper/Solder link
+     - Description
+     - Pins
+     - Configuration
+   * - P1
+     - configures PD_N
+     - Shorting pins 1 and 2
+     - PD_N = 1, device is not powered down
+   * - P1
+     - ---
+     - Shorting pins 2 and 3
+     - PD_N = 0, device is powered down
+   * - P2
+     - configures TESTPAT
+     - Shorting pins 1 and 2
+     - TESTPAT = 1, pattern testing is active
+   * - P2
+     - ---
+     - Shorting pins 2 and 3
+     - TESTPAT = 0, pattern testing is inactive
+   * - P3
+     - configures TWOLANES parameter
+     - Shorting pins 1 and 2
+     - TWOLANES = 1 (TWO LANES mode)
+   * - P3
+     - ---
+     - Shorting pins 2 and 3
+     - TWOLANES = 0 (ONE LANE mode)
+
+The FMC connector connects to the LPC connector of the carrier board. For more 
+detalis, check :adi:`EVALCN0577-FMCZ <CN0577>` datasheet.
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  External clock source
-   :dokuwiki:`AD-SYNCHRONA14-EBZ <resources/eval/user-guides/ad-synchrona14-ebz>`
--  SYSREF clocks are LVDS
--  ADCCLK and REFCLK are LVPECL
+-  The clock architecture of the :adi:`EVALCN0577-FMCZ <CN0577>` is designed 
+   with careful consideration to ensure low jitter and low phase noise
 
-\*\* ADD IMAGE IF APPLIES! MUST: Use SVG format \*\*
+-  An on-board 120 MHz voltage controlled crystal oscillator (VCXO) is used to 
+   provide the clock for the :adi:`EVALCN0577-FMCZ <CN0577>` board and the FPGA. 
+   It is further named as reference clock. This clock is gated and fed back to 
+   the device as the sampling clock, on which the data was sampled
 
-**\*DESCRIBE OTHER COMPONENTS FROM THE PROJECT, EX: SYNCHRONA**\ \*
+-  The DMA runs on the ZynqPS clock FCLK_CLK0 which has a frequency of 100MHz
 
-Only the channels presented in the clocking selection are relevant. For
-the rest, you can either disable them or just put a divided frequency of
-the source clock.
+For more detalis, check :adi:`EVALCN0577-FMCZ <CN0577>` datasheet.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-\**\* KEEP THIS PARAGRAPH \**\*
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
-**If there are any PL SPI connections, they must be added in this table too**
-
-\**\* THIS IS JUST AN EXAMPLE \**\*
-
-Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
-some IPs are instatiated and some are not.
-
-Check-out the table below to find out the conditions.
-
-\*\* MUST: Hexadecimal addresses are written in caps and separated by an underscore. \*\*
-
-==================== ================================= =============== =========== ============
-Instance             Depends on parameter              Zynq/Microblaze ZynqMP      Versal
-==================== ================================= =============== =========== ============
-axi_mxfe_rx_xcvr     $INTF_CFG!="TX" & $ADI_PHY_SEL==1 0x44A6_0000     0x84A6_0000 0xA4A6_00000
-rx_mxfe_tpl_core     $INTF_CFG!="TX"                   0x44A1_0000     0x84A1_0000 0xA4A1_00000
-axi_mxfe_rx_jesd     $INTF_CFG!="TX"                   0x44A9_0000     0x84A9_0000 0xA4A9_00000
-axi_mxfe_rx_dma      $INTF_CFG!="TX"                   0x7C42_0000     0x9C42_0000 0xBC42_00000
-mxfe_rx_data_offload $INTF_CFG!="TX"                   0x7C45_0000     0x9C45_0000 0xBC45_00000
-axi_mxfe_tx_xcvr     $INTF_CFG!="RX" & $ADI_PHY_SEL==1 0x44B6_0000     0x84B6_0000 0xA4B6_00000
-tx_mxfe_tpl_core     $INTF_CFG!="RX"                   0x44B1_0000     0x84B1_0000 0xA4B1_00000
-axi_mxfe_tx_jesd     $INTF_CFG!="RX"                   0x44B9_0000     0x84B9_0000 0xA4B9_00000
-axi_mxfe_tx_dma      $INTF_CFG!="RX"                   0x7C43_0000     0x9C43_0000 0xBC43_00000
-mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_0000 0xBC44_00000
-axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
-==================== ================================= =============== =========== ============
+==================== ===============
+Instance             Zynq/Microblaze
+==================== ===============
+axi_ltc2387          0x44A0_0000    
+axi_ltc2387_dma      0x44A3_0000    
+axi_pwm_gen          0x44A6_0000 
+==================== ===============
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
