@@ -35,8 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
-
+module system_top #(
+  parameter SPI_4WIRE = 0
+) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
   inout           ddr_cas_n,
@@ -107,9 +108,15 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  // instantiations
+  wire            ad469x_spi_cnv_s;
+  wire            ad469x_spi_cs_s;
+
+  // instantiation
 
   assign gpio_i[63:33] = 31'b0;
+
+  assign ad469x_spi_cnv = (SPI_4WIRE == 0) ? ad469x_spi_cnv_s : ad469x_spi_cs_s;
+  assign ad469x_spi_cs = ad469x_spi_cs_s;
 
   ad_iobuf #(
     .DATA_WIDTH(1)
@@ -207,10 +214,10 @@ module system_top (
     .ad469x_spi_sdo (ad469x_spi_sdo),
     .ad469x_spi_sdo_t (),
     .ad469x_spi_sdi (ad469x_spi_sdi),
-    .ad469x_spi_cs (ad469x_spi_cs),
+    .ad469x_spi_cs (ad469x_spi_cs_s),
     .ad469x_spi_sclk (ad469x_spi_sclk),
     .ad469x_spi_busy(ad469x_busy_alt_gp0),
-    .ad469x_spi_cnv(ad469x_spi_cnv),
+    .ad469x_spi_cnv(ad469x_spi_cnv_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
