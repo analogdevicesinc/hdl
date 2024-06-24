@@ -142,6 +142,21 @@ set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
+set ADC_FIR_FILTER [ expr { [info exists ad_project_params(ADC_FIR_FILTER)] \
+                            ? $ad_project_params(ADC_FIR_FILTER) : 0 } ]
+set DAC_FIR_FILTER [ expr { [info exists ad_project_params(DAC_FIR_FILTER)] \
+                            ? $ad_project_params(DAC_FIR_FILTER) : 0 } ]
+
+if {$ADC_FIR_FILTER || $DAC_FIR_FILTER} {
+  source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
+}
+
+# Common ports
+create_bd_port -dir I ref_clk_q0
+create_bd_port -dir I ref_clk_q1
+create_bd_port -dir I adc_fir_filter_active
+create_bd_port -dir I dac_fir_filter_active
+
 # common xcvr
 if {$ADI_PHY_SEL == 1} {
   ad_ip_instance util_adxcvr util_mxfe_xcvr
@@ -224,6 +239,20 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.SYSREF_IOB false
   ad_ip_parameter axi_mxfe_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 1
 
+  if {$ADC_FIR_FILTER} {
+    set ADC_FIR_RATE           $ad_project_params(ADC_FIR_RATE)
+    set ADC_FIR_PARALLEL_PATHS $ad_project_params(ADC_FIR_PARALLEL_PATHS)
+    set ADC_FIR_CORE_CLK_RATE  $ad_project_params(ADC_FIR_CORE_CLK_RATE)
+    set ADC_FIR_SAMPLING_RATE  $ad_project_params(ADC_FIR_SAMPLING_RATE)
+    ad_add_decimation_filter "rx_fir_decimator" \
+                              $ADC_FIR_RATE \
+                              $RX_NUM_OF_CONVERTERS \
+                              $ADC_FIR_PARALLEL_PATHS \
+                              $ADC_FIR_CORE_CLK_RATE \
+                              $ADC_FIR_SAMPLING_RATE \
+                              "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
+  }
+
   adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
                                             $RX_NUM_OF_CONVERTERS \
                                             $RX_SAMPLES_PER_FRAME \
@@ -288,6 +317,20 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.SYSREF_IOB false
   #ad_ip_parameter axi_mxfe_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 
+  if {$DAC_FIR_FILTER} {
+    set DAC_FIR_RATE           $ad_project_params(DAC_FIR_RATE)
+    set DAC_FIR_PARALLEL_PATHS $ad_project_params(DAC_FIR_PARALLEL_PATHS)
+    set DAC_FIR_CORE_CLK_RATE  $ad_project_params(DAC_FIR_CORE_CLK_RATE)
+    set DAC_FIR_SAMPLING_RATE  $ad_project_params(DAC_FIR_SAMPLING_RATE)
+    ad_add_interpolation_filter "tx_fir_interpolator" \
+                                 $DAC_FIR_RATE \
+                                 $TX_NUM_OF_CONVERTERS \
+                                 $DAC_FIR_PARALLEL_PATHS \
+                                 $DAC_FIR_CORE_CLK_RATE \
+                                 $DAC_FIR_SAMPLING_RATE \
+                                 "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
+  }
+
   adi_tpl_jesd204_tx_create tx_mxfe_tpl_core $TX_NUM_OF_LANES \
                                             $TX_NUM_OF_CONVERTERS \
                                             $TX_SAMPLES_PER_FRAME \
@@ -327,9 +370,6 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 }
-
-create_bd_port -dir I ref_clk_q0
-create_bd_port -dir I ref_clk_q1
 
 if {$ADI_PHY_SEL == 1} {
   for {set i 0} {$i < [expr max($TX_NUM_OF_LANES,$RX_NUM_OF_LANES)]} {incr i} {
@@ -407,13 +447,27 @@ if {$INTF_CFG != "TX"} {
   ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
   ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
 
-  ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
-  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
-    ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
-  }
-  ad_connect rx_mxfe_tpl_core/adc_dovf util_mxfe_cpack/fifo_wr_overflow
+  if {!$ADC_FIR_FILTER} {
+    ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
+    for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
+      ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+    }
+  } else {
+    ad_connect rx_fir_decimator/aclk rx_device_clk
+    ad_connect rx_fir_decimator/active adc_fir_filter_active
+    ad_connect rx_fir_decimator/valid_out_0 util_mxfe_cpack/fifo_wr_en
+    for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_mxfe_tpl_core/adc_enable_$i rx_fir_decimator/enable_in_$i
+      ad_connect  rx_mxfe_tpl_core/adc_data_$i   rx_fir_decimator/data_in_$i
+      ad_connect  rx_mxfe_tpl_core/adc_valid_$i  rx_fir_decimator/valid_in_$i
 
+      ad_connect  rx_fir_decimator/enable_out_$i util_mxfe_cpack/enable_$i
+      ad_connect  rx_fir_decimator/data_out_$i   util_mxfe_cpack/fifo_wr_data_$i
+    }
+  }
+
+  ad_connect  util_mxfe_cpack/fifo_wr_overflow rx_mxfe_tpl_core/adc_dovf
   ad_connect  util_mxfe_cpack/packed_fifo_wr_data $adc_data_offload_name/s_axis_tdata
   ad_connect  util_mxfe_cpack/packed_fifo_wr_en $adc_data_offload_name/s_axis_tvalid
   ad_connect  $adc_data_offload_name/s_axis_tlast GND
@@ -462,12 +516,26 @@ if {$INTF_CFG != "RX"} {
   ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
   # Link Layer to Transport Layer
-  ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
+  if {!$DAC_FIR_FILTER} {
+    ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
 
-  ad_connect  tx_mxfe_tpl_core/dac_valid_0 util_mxfe_upack/fifo_rd_en
-  for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
-    ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
+    ad_connect  tx_mxfe_tpl_core/dac_valid_0 util_mxfe_upack/fifo_rd_en
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
+      ad_connect  tx_mxfe_tpl_core/dac_enable_$i  util_mxfe_upack/enable_$i
+    }
+  } else {
+    ad_connect tx_fir_interpolator/aclk tx_device_clk
+    ad_connect tx_fir_interpolator/active dac_fir_filter_active
+    ad_connect tx_fir_interpolator/valid_out_0 util_mxfe_upack/fifo_rd_en
+    for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  tx_mxfe_tpl_core/dac_enable_$i tx_fir_interpolator/dac_enable_$i
+      ad_connect  tx_mxfe_tpl_core/dac_valid_$i  tx_fir_interpolator/dac_valid_$i
+      ad_connect  tx_mxfe_tpl_core/dac_data_$i   tx_fir_interpolator/data_out_$i
+
+      ad_connect  tx_fir_interpolator/data_in_$i    util_mxfe_upack/fifo_rd_data_$i
+      ad_connect  tx_fir_interpolator/enable_out_$i util_mxfe_upack/enable_$i
+    }
   }
 
   ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
