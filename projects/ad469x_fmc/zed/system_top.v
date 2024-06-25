@@ -113,10 +113,12 @@ module system_top #(
 
   // instantiation
 
-  assign gpio_i[63:33] = 31'b0;
+  assign gpio_i[63:34] = 30'b0;
 
   assign ad469x_spi_cnv = (SPI_4WIRE == 0) ? ad469x_spi_cnv_s : ad469x_spi_cs_s;
   assign ad469x_spi_cs = ad469x_spi_cs_s;
+
+  assign gpio_i[33] = ad469x_busy_alt_gp0;
 
   ad_iobuf #(
     .DATA_WIDTH(1)
