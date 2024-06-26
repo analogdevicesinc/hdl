@@ -4,10 +4,10 @@
 ###############################################################################
 
 # ad4696_fmc SPI interface
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_sdi]       ; ## D08  FMC_LA01_CC_P  IO_L14P_T2_SRCC_34
-set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_sdo]       ; ## H07  FMC_LA02_P     IO_L20P_T3_34
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_sclk]      ; ## D09  FMC_LA01_CC_N  IO_L14N_T2_SRCC_34
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_cs]        ; ## G06  FMC_LA00_CC_P  IO_L13P_T2_MRCC_34
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad469x_spi_sdi]       ; ## D08  FMC_LA01_CC_P  IO_L14P_T2_SRCC_34
+set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad469x_spi_sdo]       ; ## H07  FMC_LA02_P     IO_L20P_T3_34
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad469x_spi_sclk]      ; ## D09  FMC_LA01_CC_N  IO_L14N_T2_SRCC_34
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad469x_spi_cs]        ; ## G06  FMC_LA00_CC_P  IO_L13P_T2_MRCC_34
 set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVCMOS25} [get_ports ad469x_spi_cnv]       ; ## G07  FMC_LA00_CC_N  IO_L13N_T2_MRCC_34
 
 set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25} [get_ports ad469x_resetn]        ; ## H10  FMC_LA04_P     IO_L15P_T2_DQS_34
