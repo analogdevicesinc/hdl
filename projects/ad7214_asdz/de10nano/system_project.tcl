@@ -14,21 +14,19 @@ source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
 # ad4170 interface
 
-set_location_assignment PIN_AH8  -to dig_aux[1]     ; ##   P5.8 Arduino_IO07              
-set_location_assignment PIN_AG10 -to dig_aux[0]     ; ##   P5.3 Arduino_IO02
+set_location_assignment PIN_U14  -to sync_err       ; ##   P4.5 Arduino_IO4
 
 set_location_assignment PIN_AF15 -to spi_csn        ; ##   P4.3 Arduino_IO10
 set_location_assignment PIN_AG16 -to spi_mosi       ; ##   P4.4 Arduino_IO11
 set_location_assignment PIN_AH11 -to spi_miso       ; ##   P4.5 Arduino_IO12
 set_location_assignment PIN_AH12 -to spi_clk        ; ##   P4.5 Arduino_IO13
- 
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dig_aux[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dig_aux[0]
 
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_csn      
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_mosi     
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_miso     
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_clk      
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sync_err
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_csn
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_mosi
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_miso
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_clk
 
 # Arduino shield connections on de10_nano
 

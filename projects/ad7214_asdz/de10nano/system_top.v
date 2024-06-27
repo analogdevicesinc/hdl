@@ -114,12 +114,11 @@ module system_top (
   inout             hdmi_i2c_scl,
   inout             hdmi_i2c_sda,
 
-  // ad4170
-  output                  spi_csn,
-  output                  spi_clk,
-  output                  spi_mosi,
-  input                   spi_miso,
-  inout   [1:0]           dig_aux
+  output            spi_csn,
+  output            spi_clk,
+  output            spi_mosi,
+  input             spi_miso,
+  inout             sync_err
 );
 
   // internal signals
@@ -141,7 +140,7 @@ module system_top (
 
   // adc control gpio assign
 
-  assign gpio_i[63:34] = gpio_o[63:34];
+  assign gpio_i[63:33] = gpio_o[63:33];
   assign gpio_i[31:15] = gpio_o[31:15];
 
   // bd gpio
@@ -149,17 +148,11 @@ module system_top (
   assign gpio_i[13:8] = gpio_bd_i[5:0];
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
-  ALT_IOBUF dig_aux2_iobuf (
-    .i(gpio_o[33]),
-    .oe(gpio_t[33]),
-    .o(gpio_i[33]),
-    .io(dig_aux[1]));
-
-  ALT_IOBUF dig_aux1_iobuf (
+  ALT_IOBUF sync_err_iobuf (
     .i(gpio_o[32]),
     .oe(gpio_t[32]),
     .o(gpio_i[32]),
-    .io(dig_aux[0]));
+    .io(sync_err));
 
   // IO Buffers for I2C
 
