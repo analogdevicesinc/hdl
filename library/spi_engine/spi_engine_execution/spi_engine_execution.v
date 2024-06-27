@@ -268,8 +268,8 @@ module spi_engine_execution #(
     if (idle == 1'b1 || (cs_sleep_counter_compare && !cs_sleep_repeat && inst_d1 == CMD_CHIPSELECT)) begin
       counter <= 'h00;
     end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-      if (bit_counter == word_length) begin
-        counter <= (counter & BIT_COUNTER_CLEAR) + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH)) + BIT_COUNTER_CARRY;
+      if (bit_counter == word_length && transfer_active) begin
+        counter <= (counter & BIT_COUNTER_CLEAR) + 'h1 + BIT_COUNTER_CARRY;
       end else begin
         counter <= counter + (transfer_active ? 'h1 : (2**BIT_COUNTER_WIDTH));
       end
