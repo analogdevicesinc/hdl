@@ -200,7 +200,6 @@ ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SAMP
 
 # common cores
 
-
 ad_ip_instance util_adxcvr util_ad9371_xcvr
 ad_ip_parameter util_ad9371_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
 ad_ip_parameter util_ad9371_xcvr CONFIG.TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES
