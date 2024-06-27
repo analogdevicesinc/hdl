@@ -7,9 +7,9 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_qsys.tcl
 
 if [info exists ad_project_dir] {
-  source ../../common/ad7214_asdz_qsys.tcl
+  source ../../common/ad7124_asdz_qsys.tcl
 } else {
-  source ../common/ad7214_asdz_qsys.tcl
+  source ../common/ad7124_asdz_qsys.tcl
 }
 
 set_instance_parameter_value sys_gpio_in {captureEdge} {true}

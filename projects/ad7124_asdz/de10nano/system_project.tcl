@@ -8,11 +8,11 @@ set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
-adi_project ad4170_asdz_de10nano
+adi_project ad7124_asdz_de10nano
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
-# ad4170 interface
+# ad7124 interface
 
 set_location_assignment PIN_U14  -to sync_err       ; ##   P4.5 Arduino_IO4
 

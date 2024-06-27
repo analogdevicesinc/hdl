@@ -4,7 +4,7 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad7214_asdz_de10nano
+PROJECT_NAME := ad7124_asdz_de10nano
 
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/de10nano/de10nano_system_qsys.tcl
