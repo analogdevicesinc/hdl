@@ -45,6 +45,7 @@ package rtp_engine_package;
     logic [15:0]  sequence_nr;
     logic [31:0]  timestamp;
     logic [31:0]  ssrc_field; //12 bytes - without csrc sources identifiers
+    logic [31:0]  csrc_field1;
   } rtp_pckt_header;
 
   typedef struct packed {

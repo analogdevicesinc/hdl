@@ -38,11 +38,13 @@ module rtp_engine_regmap #(
   parameter         VERSION = 1
   ) (
 
-  // control and status signals
+  // control signals
 
-  output                  start_transfer,
-  output                  stop_transfer,
   output      [11:0]      num_lines,
+  output      [11:0]      num_px_p_line,
+  output                  custom_timestamp,
+  output                  custom_timestamp_96b,
+  output                  timestamp_s_eof,
 
   // processor interface
 
@@ -60,25 +62,35 @@ module rtp_engine_regmap #(
 
   // internal registers
 
-  reg             up_start_transfer  = 'h0;
-  reg             up_stop_transfer  = 'h0;
   reg  [11:0]     up_num_lines = 'h0;
+  reg  [11:0]     up_num_px_p_line = 'h0;
+  reg             up_custom_timestamp = 1'b0;
+  reg             up_custom_timestamp_96b = 1'b0;
+  reg             up_timestamp_s_eof = 1'b0;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_start_transfer <= 'h0;
-      up_stop_transfer <= 'h0;
       up_num_lines <= 'h0;
+      up_num_px_p_line <= 'h0;
+      up_custom_timestamp <= 1'b0;
+      up_custom_timestamp_96b <= 1'b0;
+      up_timestamp_s_eof <= 1'b0;
     end else begin
       up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h1)) begin
+        up_num_lines <= up_wdata[11:0];
+      end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
-        up_start_transfer <= up_wdata;
+        up_num_px_p_line <= up_wdata[11:0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h3)) begin
-        up_stop_transfer <= up_wdata;
+        up_custom_timestamp <= up_wdata[0];
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h4)) begin
-        up_num_lines <= up_wdata;
+        up_custom_timestamp_96b <= up_wdata[0];
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'h5)) begin
+        up_timestamp_s_eof <= up_wdata[0];
       end
     end
   end
@@ -93,9 +105,11 @@ module rtp_engine_regmap #(
         if (up_raddr[13:4] == 10'd0) begin
           case (up_raddr)
             14'h0: up_rdata <= VERSION;
-            14'h2: up_rdata <= up_start_transfer;
-            14'h3: up_rdata <= up_stop_transfer;
-	    14'h4: up_rdata <= up_num_lines;
+            14'h1: up_rdata <= {20'd0, up_num_lines};
+            14'h2: up_rdata <= {20'd0, up_num_px_p_line};
+            14'h3: up_rdata <= {31'd0, up_custom_timestamp};
+            14'h4: up_rdata <= {31'd0, up_custom_timestamp_96b};
+            14'h5: up_rdata <= {31'd0, up_timestamp_s_eof};
             default: up_rdata <= 0;
           endcase
         end else begin
@@ -105,8 +119,10 @@ module rtp_engine_regmap #(
     end
   end
 
-  assign start_transfer = up_start_transfer;
-  assign stop_transfer = up_stop_transfer;
   assign num_lines = up_num_lines;
+  assign num_px_p_line = up_num_px_p_line;
+  assign custom_timestamp = up_custom_timestamp;
+  assign custom_timestamp_96b = up_custom_timestamp_96b;
+  assign timestamp_s_eof = up_timestamp_s_eof;
 
 endmodule
