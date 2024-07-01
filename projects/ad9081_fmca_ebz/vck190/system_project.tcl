@@ -64,4 +64,3 @@ adi_project_files ad9081_fmca_ebz_vck190 [list \
 set_property strategy Performance_Explore [get_runs impl_1]
 
 adi_project_run ad9081_fmca_ebz_vck190
-

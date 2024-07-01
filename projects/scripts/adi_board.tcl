@@ -963,6 +963,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   global sys_zynq
   global sys_cpu_interconnect_index
   global use_smartconnect
+  set original_p_intf_name $p_intf_name
 
   set i_str "M$sys_cpu_interconnect_index"
   if {$sys_cpu_interconnect_index < 10} {
@@ -1149,7 +1150,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
       }
       create_bd_addr_seg -range $p_seg_range \
         -offset $p_address $sys_addr_cntrl_space \
-        $p_seg_name "SEG_data_${p_name}"
+        $p_seg_name "SEG_data_${p_name}_${original_p_intf_name}"
     } else {
       assign_bd_address $p_seg_name
     }

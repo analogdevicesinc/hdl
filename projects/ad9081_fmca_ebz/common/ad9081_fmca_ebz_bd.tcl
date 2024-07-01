@@ -128,7 +128,7 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($T
 
 # TODO: Increase the maximum number of quads if necessary
 set max_num_quads 2
-set num_quads [expr int(round(1.0 * $RX_NUM_OF_LANES / 4))]
+set num_quads [expr int(ceil(1.0 * $RX_NUM_OF_LANES / 4))]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
@@ -182,6 +182,13 @@ if {$ADI_PHY_SEL == 1} {
                             ? $ad_project_params(REF_CLK_RATE) : 375 } ]
 
   create_bd_port -dir I gt_reset
+  create_bd_port -dir I gt_reset_rx_pll_and_datapath
+  create_bd_port -dir I gt_reset_tx_pll_and_datapath
+  create_bd_port -dir I gt_reset_rx_datapath
+  create_bd_port -dir I gt_reset_tx_datapath
+  create_bd_port -dir O gt_powergood
+  create_bd_port -dir O rx_resetdone
+  create_bd_port -dir O tx_resetdone
 
   switch $INTF_CFG {
     "RXTX" {
@@ -195,6 +202,15 @@ if {$ADI_PHY_SEL == 1} {
       create_versal_phy jesd204_phy $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $INTF_CFG
     }
   }
+
+  ad_connect gt_reset                     jesd204_phy/gtreset_in
+  ad_connect gt_reset_rx_datapath         jesd204_phy/gtreset_rx_datapath
+  ad_connect gt_reset_tx_datapath         jesd204_phy/gtreset_tx_datapath
+  ad_connect gt_reset_rx_pll_and_datapath jesd204_phy/gtreset_rx_pll_and_datapath
+  ad_connect gt_reset_tx_pll_and_datapath jesd204_phy/gtreset_tx_pll_and_datapath
+  ad_connect gt_powergood                 jesd204_phy/gtpowergood
+  ad_connect rx_resetdone                 jesd204_phy/rx_resetdone
+  ad_connect tx_resetdone                 jesd204_phy/tx_resetdone
 }
 
 # Instantiate ADC (Rx) path
@@ -352,7 +368,7 @@ if {$ADI_PHY_SEL == 1} {
   }
 } else {
   ad_connect ref_clk_q0 jesd204_phy/GT_REFCLK
-  ad_connect gt_reset jesd204_phy/gtreset_in
+
   if {$INTF_CFG != "TX"} {
     set rx_link_clock  jesd204_phy/rxusrclk_out
     # Connect PHY to Link Layer
@@ -382,7 +398,8 @@ if {$ADI_PHY_SEL == 1} {
     create_bd_port -dir I tx_sync_0
   }
 
-  ad_connect $sys_cpu_clk jesd204_phy/apb3clk
+  ad_connect $sys_cpu_clk    jesd204_phy/s_axi_clk
+  ad_connect $sys_cpu_resetn jesd204_phy/s_axi_resetn
 }
 
 if {$INTF_CFG != "TX"} {
@@ -635,4 +652,12 @@ if {$TDD_SUPPORT} {
   if {$INTF_CFG != "RX"} {
     ad_connect GND $dac_data_offload_name/sync_ext
   }
+}
+
+if {$ADI_PHY_SEL == 0} {
+  # Connect Versal phys to interconnect
+  for {set j 0} {$j < $num_quads} {incr j} {
+      set base_addr [expr 0x44a20000 + 0x00020000 * $j]
+      ad_cpu_interconnect $base_addr jesd204_phy AXI_LITE_${j}
+    }
 }
