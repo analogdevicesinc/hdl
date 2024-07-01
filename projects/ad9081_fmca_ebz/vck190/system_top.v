@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -130,6 +130,17 @@ module system_top  #(
   wire            tx_device_clk;
   wire            rx_device_clk;
 
+  wire            gt_reset;
+  wire            rx_reset_pll_and_datapath;
+  wire            tx_reset_pll_and_datapath;
+  wire            rx_reset_datapath;
+  wire            tx_reset_datapath;
+  wire            rx_resetdone;
+  wire            tx_resetdone;
+  wire            gt_powergood;
+  wire            gt_reset_s;
+  wire            mst_resetdone;
+
   // instantiations
   IBUFDS_GTE5 i_ibufds_ref_clk (
     .CEB (1'd0),
@@ -215,6 +226,15 @@ module system_top  #(
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
+  assign gpio_i[64] = rx_resetdone;
+  assign gpio_i[65] = tx_resetdone;
+  assign gpio_i[66] = mst_resetdone;
+  assign gt_reset   = gpio_o[67];
+  assign rx_reset_pll_and_datapath = gpio_o[68];
+  assign tx_reset_pll_and_datapath = gpio_o[69];
+  assign rx_reset_datapath = gpio_o[70];
+  assign tx_reset_datapath = gpio_o[71];
+
   generate
   if (TX_NUM_LINKS > 1 & JESD_MODE == "8B10B") begin
     assign tx_syncin[1] = fpga_syncin_1_p;
@@ -251,9 +271,13 @@ module system_top  #(
   assign gpio_i[9: 8] = gpio_pb;
 
   // Unused GPIOs
-  assign gpio_i[59:54] = gpio_o[59:54];
-  assign gpio_i[94:64] = gpio_o[94:64];
+  assign gpio_i[59:57] = gpio_o[59:57];
+  assign gpio_i[94:72] = gpio_o[94:72];
   assign gpio_i[31:10] = gpio_o[31:10];
+
+  /* Reset should only be asserted if powergood is high */
+  assign gt_reset_s    = gt_reset & gt_powergood;
+  assign mst_resetdone = rx_resetdone & tx_resetdone;
 
   system_wrapper i_system_wrapper (
     .gpio0_i (gpio_i[31:0]),
@@ -299,7 +323,14 @@ module system_top  #(
     .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
     .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
 
-    .gt_reset (~rstb),
+    .gt_reset (gt_reset_s),
+    .gt_reset_rx_datapath (rx_reset_datapath),
+    .gt_reset_tx_datapath (tx_reset_datapath),
+    .gt_reset_rx_pll_and_datapath (rx_reset_pll_and_datapath),
+    .gt_reset_tx_pll_and_datapath (tx_reset_pll_and_datapath),
+    .gt_powergood (gt_powergood),
+    .rx_resetdone (rx_resetdone),
+    .tx_resetdone (tx_resetdone),
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
 
