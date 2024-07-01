@@ -12,15 +12,18 @@ adi_project ad411x_de10nano
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
-# files
+#
+## down-grade Critical Warning related to asynchronous RAM in DMAC
+#
+## "mixed_port_feed_through_mode" parameter of RAM can not have value "old"
+set_global_assignment -name MESSAGE_DISABLE 15003
 
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_edge_detect.v
-set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/util_cdc/sync_bits.v
+# files
 
 # ad4170 interface
 
 set_location_assignment PIN_U14  -to error          ; ##   J7.5 Arduino_IO04
-set_location_assignment PIN_AG9  -to sync           ; ##   J7.4 Arduino_IO03
+set_location_assignment PIN_AG9  -to sync_error     ; ##   J7.4 Arduino_IO03
 
 set_location_assignment PIN_AF15 -to spi_csn        ; ##   J5.3 Arduino_IO10
 set_location_assignment PIN_AG16 -to spi_mosi       ; ##   J5.4 Arduino_IO11
@@ -28,7 +31,7 @@ set_location_assignment PIN_AH11 -to spi_miso       ; ##   J5.5 Arduino_IO12
 set_location_assignment PIN_AH12 -to spi_clk        ; ##   J5.6 Arduino_IO13
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to error
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sync
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sync_error
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_csn
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_mosi

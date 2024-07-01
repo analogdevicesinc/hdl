@@ -119,7 +119,7 @@ module system_top (
   output            spi_clk,
   output            spi_mosi,
   input             spi_miso,
-  inout             sync,
+  inout             sync_error,
   inout             error
 );
 
@@ -139,10 +139,6 @@ module system_top (
   wire             i2c0_sda;
   wire             i2c0_out_clk;
   wire             i2c0_scl_in_clk;
-  wire             spi_trigger;
-  wire             spi_clk_s;
-  wire             spi_resetn;
-  wire             spi_trigger_ed;
 
   // adc control gpio assign
 
@@ -160,11 +156,11 @@ module system_top (
     .o(gpio_i[33]),
     .io(error));
 
-  ALT_IOBUF sync_iobuf (
+  ALT_IOBUF sync_error_iobuf (
     .i(gpio_o[32]),
     .oe(gpio_t[32]),
     .o(gpio_i[32]),
-    .io(sync));
+    .io(sync_error));
 
   // IO Buffers for I2C
 
@@ -179,22 +175,6 @@ module system_top (
     .oe(i2c0_out_data),
     .o(i2c0_sda),
     .io(hdmi_i2c_sda));
-
-  sync_bits #(
-    .ASYNC_CLK(1)
-  ) i_sync_bits (
-    .in_bits (gpio_i[32]),
-    .out_resetn (~spi_resetn),
-    .out_clk (spi_clk_s),
-    .out_bits (spi_trigger_ed));
-
-  ad_edge_detect#(
-    .EDGE(1)
-  ) i_ad_edge_detect (
-    .clk (spi_clk_s),
-    .rst (1'b0),
-    .signal_in (spi_trigger_ed),
-    .signal_out (spi_trigger));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -271,9 +251,6 @@ module system_top (
     .ad411x_spi_sclk_clk(spi_clk),
     .ad411x_spi_sdi_sdi(spi_miso),
     .ad411x_spi_sdo_sdo(spi_mosi),
-    .ad411x_spi_trigger_if_pwm(spi_trigger),
-    .ad411x_spi_resetn_reset_n(spi_resetn),
-    .ad411x_spi_clk_clk(spi_clk_s),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
