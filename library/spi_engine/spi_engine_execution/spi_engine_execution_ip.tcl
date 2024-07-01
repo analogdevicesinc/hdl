@@ -128,18 +128,6 @@ set_property -dict [list \
  ] \
  [ipx::get_hdl_parameters ECHO_SCLK -of_objects $cc]
 
- ## USE SDO IDLE STATE
-set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
- ] \
- [ipx::get_user_parameters USE_SDO_IDLE_STATE -of_objects $cc]
-set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
- ] \
- [ipx::get_hdl_parameters USE_SDO_IDLE_STATE -of_objects $cc]
-
 ## echo_sclk should be active only when ECHO_SCLK is set
 adi_set_ports_dependency echo_sclk ECHO_SCLK 0
 
@@ -211,12 +199,6 @@ set_property -dict [list \
   "display_name" "MOSI default level" \
   "tooltip" "\[SDO_DEFAULT\] Define the default voltage level on MOSI"
 ] [ipgui::get_guiparamspec -name "SDO_DEFAULT" -component $cc]
-
-ipgui::add_param -name "USE_SDO_IDLE_STATE" -component $cc -parent $mosi_miso_config_group
-set_property -dict [list \
-  "display_name" "Use MOSI Idle State" \
-  "tooltip" "\[USE_SDO_IDLE_STATE\] Enables register based control for the MOSI idle level"
-] [ipgui::get_guiparamspec -name "USE_SDO_IDLE_STATE" -component $cc]
 
 set custom_clocking_group [ipgui::add_group -name "Custom clocking options" -component $cc \
     -parent $page0 -display_name "Custom clocking options" ]
