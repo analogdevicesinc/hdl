@@ -44,8 +44,7 @@ module spi_engine_execution #(
   parameter NUM_OF_SDI = 1,
   parameter [0:0] SDO_DEFAULT = 1'b0,
   parameter ECHO_SCLK = 0,
-  parameter [1:0] SDI_DELAY = 2'b00,
-  parameter USE_SDO_IDLE_STATE = 1
+  parameter [1:0] SDI_DELAY = 2'b00
 ) (
   input clk,
   input resetn,
@@ -135,7 +134,7 @@ module spi_engine_execution #(
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
   reg [7:0] clk_div = DEFAULT_CLK_DIV;
-  reg sdo_idle_state = DEFAULT_SPI_CFG[3];
+  reg sdo_idle_state = SDO_DEFAULT;
 
   reg [NUM_OF_CS-1:0] cs_inv_mask_reg = 'h0;
 
@@ -213,7 +212,7 @@ module spi_engine_execution #(
       cpha <= DEFAULT_SPI_CFG[0];
       cpol <= DEFAULT_SPI_CFG[1];
       three_wire <= DEFAULT_SPI_CFG[2];
-      sdo_idle_state  <= (USE_SDO_IDLE_STATE) ? DEFAULT_SPI_CFG[3] : SDO_DEFAULT;
+      sdo_idle_state  <= SDO_DEFAULT;
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
       left_aligned <= 8'b0;
@@ -222,7 +221,7 @@ module spi_engine_execution #(
         cpha <= cmd[0];
         cpol <= cmd[1];
         three_wire <= cmd[2];
-        sdo_idle_state <= (USE_SDO_IDLE_STATE) ? cmd[3] : SDO_DEFAULT;
+        sdo_idle_state <= cmd[3];
       end else if (cmd[9:8] == REG_CLK_DIV) begin
         clk_div <= cmd[7:0];
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
@@ -417,7 +416,7 @@ module spi_engine_execution #(
     end
   end
 
-  assign sdo_int_s = ((exec_transfer_cmd && !cmd[8]) && USE_SDO_IDLE_STATE) ? sdo_idle_state : data_sdo_shift[DATA_WIDTH-1];
+  assign sdo_int_s = (exec_transfer_cmd && !cmd[8]) ? sdo_idle_state : data_sdo_shift[DATA_WIDTH-1];
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
   // the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
@@ -640,7 +639,7 @@ module spi_engine_execution #(
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-    sdo <= (!cs_active && USE_SDO_IDLE_STATE) ?  sdo_idle_state : sdo_int_s;
+    sdo <= (!cs_active) ?  sdo_idle_state : sdo_int_s;
     sdo_t <= sdo_t_int;
   end
 
