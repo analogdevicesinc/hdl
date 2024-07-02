@@ -140,9 +140,14 @@ module axi_adrv9001_tx #(
 
   end else begin : core_enabled
 
+    // This bit lets the sw know that this feature is available
+    localparam  SELECTABLE_CLK = 1;
+
     // configuration settings
 
-    localparam  CONFIG =  (USE_RX_CLK_FOR_TX * 1024) +
+    localparam  CONFIG =  (SELECTABLE_CLK * 16384) +
+                          (USE_RX_CLK_FOR_TX[1] * 2048) +
+                          (USE_RX_CLK_FOR_TX[0] * 1024) +
                           (CMOS_LVDS_N * 128) +
                           (MODE_R1 * 16) +
                           (DDS_DISABLE * 64) +
