@@ -988,17 +988,17 @@
      inkscape:snap-page="true"
      showguides="false"
      inkscape:window-maximized="1"
-     inkscape:window-y="-9"
-     inkscape:window-x="2391"
-     inkscape:window-height="1121"
+     inkscape:window-y="1342"
+     inkscape:window-x="2392"
+     inkscape:window-height="1122"
      inkscape:window-width="1920"
      units="px"
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="px"
-     inkscape:cy="358.9993"
-     inkscape:cx="315.66495"
-     inkscape:zoom="1.2576626"
+     inkscape:cy="432.74723"
+     inkscape:cx="230.28831"
+     inkscape:zoom="5.0306504"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1255,7 +1255,7 @@
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          y="-51.840603"
-         x="684.04791"
+         x="690.11884"
          height="380"
          width="29.067329"
          id="rect4488"
@@ -1265,12 +1265,12 @@
          inkscape:export-xdpi="96"
          transform="rotate(-90)"
          id="text4491"
-         y="704.67242"
+         y="710.74335"
          x="-211.65445"
          style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:1px"
-           y="704.67242"
+           y="710.74335"
            x="-211.65445"
            id="tspan4493"
            sodipodi:role="line">FMC CONNECTOR</tspan></text>
@@ -1373,8 +1373,8 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1206-1-0"
-         d="m 528.80556,98.139362 h 145"
-         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:1.99314;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3);shape-rendering:crispEdges;enable-background:new" />
+         d="M 528.80556,98.139362 H 682.2451"
+         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:2.05032;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3);shape-rendering:crispEdges;enable-background:new" />
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -1385,8 +1385,8 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1206-1-0-95-1"
-         d="m 528.80556,152.45493 h 145"
-         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:1.98635;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2);shape-rendering:crispEdges;enable-background:new" />
+         d="M 528.80556,152.45493 H 680.94762"
+         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:2.03468;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2);shape-rendering:crispEdges;enable-background:new" />
       <text
          id="text2401-1-7-3-9"
          y="114.29861"
@@ -1396,7 +1396,7 @@
            y="114.29861"
            x="564.71356"
            id="tspan2399-1-6-6-1"
-           sodipodi:role="line">MISO/SDI</tspan></text>
+           sodipodi:role="line">MISO/SDI[3:0]</tspan></text>
       <text
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -1556,8 +1556,8 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1206-1-0-95-1-9"
-         d="m 528.80556,134.16268 h 145"
-         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:1.99314;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-0);shape-rendering:crispEdges;enable-background:new" />
+         d="M 528.80556,134.16268 H 681.5959"
+         style="display:inline;opacity:1;fill:none;stroke:#000000;stroke-width:2.04598;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-0);shape-rendering:crispEdges;enable-background:new" />
       <rect
          y="237.0224"
          x="426.3736"
@@ -2003,15 +2003,16 @@
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges" />
     <text
        id="text2401-61-1-54-8-2-5"
-       y="896.92297"
-       x="-7.0430984"
+       y="-6.7784286"
+       x="845.52734"
        style="font-style:normal;font-weight:normal;font-size:13.3333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       transform="rotate(90)"><tspan
          style="font-size:12px"
-         y="896.92297"
-         x="-7.0430984"
+         y="-6.7784286"
+         x="845.52734"
          id="tspan2399-9-2-70-3-0-6"
-         sodipodi:role="line">32b</tspan></text>
+         sodipodi:role="line">32b *  num_sdi</tspan></text>
     <text
        id="text2401-61-1-54-8-2-5-4"
        y="908.15179"
