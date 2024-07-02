@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>HDL Git repository &#8212; HDL  documentation</title>
+    <title>Contributing to HDL repository &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Releases" href="releases.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" />
+    <link rel="next" title="Third party forks" href="third_party.html" />
+    <link rel="prev" title="Documentation guidelines" href="docs_guidelines.html" />
    
   
     <meta name="robots" content="noindex">
@@ -100,13 +100,11 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">HDL Git repository</a><ul>
-<li><a class="reference internal" href="#folder-structure">Folder structure</a><ul>
-<li><a class="reference internal" href="#the-projects-are-structured-as-follows">The projects are structured as follows</a></li>
-<li><a class="reference internal" href="#the-library-are-structured-as-follows">The library are structured as follows</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#repository-releases-and-branches">Repository releases and branches</a></li>
+<li><a class="reference internal" href="#">Contributing to HDL repository</a><ul>
+<li><a class="reference internal" href="#pull-request-rules">Pull request rules</a></li>
+<li><a class="reference internal" href="#before-opening-the-pull-request">Before opening the pull request</a></li>
+<li><a class="reference internal" href="#when-opening-the-pull-request">When opening the pull request</a></li>
+<li><a class="reference internal" href="#code-related-check-list">Code-related check list</a></li>
 </ul>
 </li>
 </ul>
@@ -146,7 +144,7 @@ Content on this topic
   <body><ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build a HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
@@ -162,7 +160,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing to HDL</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Contributing to HDL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
 </ul>
 </li>
@@ -278,177 +276,172 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="hdl-git-repository">
-<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Permalink to this heading">#</a></h1>
-<p>All the HDL sources can be found in the following git repository:</p>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a></p>
-<p>We assume that the user is familiar with <a class="reference external" href="https://git-scm.com/">git</a>.
-Knows how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
-the repository, how to check its
-<a class="reference external" href="https://git-scm.com/docs/git-status">status</a> or how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">switch</a>
-between branches.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A basic git knowledge is required in order to work with these source files,
-if you do not have any, don’t worry!</p>
-<p>There are a lot of great resources and tutorials about git all over the
-<a class="reference external" href="http://lmgtfy.com/?q=git+tutorial">web</a>.</p>
-</div>
-<p>If you want to pull down the sources as soon as possible, just do the
-following few steps:</p>
+  <section id="contributing-to-hdl-repository">
+<span id="contributing"></span><h1>Contributing to HDL repository<a class="headerlink" href="#contributing-to-hdl-repository" title="Permalink to this heading">#</a></h1>
+<p>When contributing to this repository, please first discuss the change you wish
+to make, via the <a class="reference external" href="https://github.com/analogdevicesinc/hdl/issues">issue tracker</a>
+before making a pull request. We will let you know if we want to have it
+supported on our repo. If not, depending on the case, we might propose you to
+have it added to our <a class="reference internal" href="third_party.html#third-party"><span class="std std-ref">Third party forks</span></a> list.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">HDL repo</a> is the place where <a class="icon adi reference external" href="https://www.analog.com//">ADI</a> provides FPGA reference
+designs for selected hardware, featuring some of our products interfacing to
+publicly-available FPGA evaluation boards. Alongside these, we have custom IP
+cores designed to facilitate the creation of these projects — modular
+structure.</p>
+<p>The individual modules are developed independently, and may be accompanied by
+separate and unique license terms (specified inside the file).
+The user should read each of these license terms and understand the freedoms
+and responsibilities that he or she has by using them.</p>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE">LICENSE</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD">LICENSE_ADIBSD</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIJESD204">LICENSE_ADIJESD204</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_BSD-1-Clause">LICENSE_BSD-1-Clause</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_GPL2">LICENSE_GPL2</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_LGPL">LICENSE_LGPL</a></p></li>
+</ul>
+<section id="pull-request-rules">
+<h2>Pull request rules<a class="headerlink" href="#pull-request-rules" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Install Git from <a class="reference external" href="https://git-scm.com/">here</a></p></li>
-<li><p>Open up Git bash, change your current directory to a place where you
-want to keep the hdl source</p></li>
-<li><p>Clone the repository using
-<a class="reference external" href="https://help.github.com/articles/cloning-a-repository/">these</a>
-instructions</p></li>
+<li><p>Commit message includes a “Signed-off-by: [name] &lt; email &gt;” to the commit
+message. This ensures you have the rights to submit your code, by agreeing
+to the
+<a class="reference external" href="https://developercertificate.org/">Developer Certificate of Origin</a>.
+If you can not agree to the DCO, don’t submit a pull request, as we can
+not accept it.</p></li>
+<li><p>For first-time contributors, you will be asked by <strong>CLAssistant</strong> to
+“sign our <a class="reference external" href="https://cla-assistant.io/analogdevicesinc/hdl?pullRequest=959">Contributor License Agreement</a>
+before we can accept your contribution.”</p></li>
+<li><p>Commit should be “atomic”, meaning it should do one thing only.
+A pull request should only contain multiple commits if that is required
+to fix the bug or implement the feature.</p></li>
+<li><p>Commits should have good commit messages. Check out
+<a class="reference external" href="https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project">The git book</a>
+for some pointers and tools to use.</p></li>
+<li><p>Typically, the title of the commit should have the path to the changed files, and
+then explaining in a few words what has been done, like
+<em>projects/ad9081_fmca_ebz/zcu102: Add missing clock constraint</em></p></li>
+<li><p>Write a concise PR description, containing all the needed details</p></li>
+<li><p>Pull requests will be merged only after they have been reviewed, tested and
+approved by the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/.github/CODEOWNERS">code owners</a>.</p></li>
 </ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you want to contribute to our repository, check out this guide
-<a class="reference internal" href="contributing.html#contributing"><span class="std std-ref">Contributing to HDL repository</span></a>.</p>
-</div>
-<section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading">#</a></h2>
-<p>The root of the HDL repository has the following structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>
-<span class="o">+--</span> <span class="o">.</span><span class="n">github</span>
-<span class="o">+--</span> <span class="n">docs</span>
-<span class="o">+--</span> <span class="n">library</span>
-<span class="o">+--</span> <span class="n">projects</span>
-<span class="o">+--</span> <span class="n">scripts</span>
-<span class="o">+--</span> <span class="n">Makefile</span>
-<span class="o">+--</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
-<span class="o">+--</span> <span class="n">LICENSE</span>
-</pre></div>
-</div>
-<p>The repository is divided into 5 separate sections:</p>
+</section>
+<section id="before-opening-the-pull-request">
+<h2>Before opening the pull request<a class="headerlink" href="#before-opening-the-pull-request" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Create a fork of this repository. If you are not sure on how to do this,
+check out
+<a class="reference external" href="https://help.github.com/en/github/getting-started-with-github/fork-a-repo">GitHub help</a></p></li>
+<li><p>Here you will make your contributions on a branch. From time to time,
+rebase it onto main, to make sure you have the latest code available</p></li>
+<li><p>Check the <a class="reference internal" href="#contributing-code-related-check-list"><span class="std std-ref">Code-related check list</span></a>
+section while still in the development phase</p></li>
+<li><p>The <strong>register map</strong> should be updated, if that’s the case:</p>
 <ul class="simple">
-<li><p><strong>.github</strong> with all our automations regarding coding checks, GitHub actions</p></li>
-<li><p><strong>docs</strong> with our GitHubIO documentation and regmap source files</p></li>
-<li><p><strong>library</strong> with all the Analog Devices Inc. proprietary IP cores and
-hdl modules, which are required to build the projects</p></li>
-<li><p><strong>projects</strong> with all the currently supported projects</p></li>
-<li><p><strong>scripts</strong> with our environment scripts that set tools versions, etc.</p></li>
+<li><p>Update the corresponding <strong>docs/regmap text files</strong></p></li>
+<li><p>The IPs typically should follow
+<a class="reference external" href="https://semver.org/">Semantic Versioning 2.0.0</a></p></li>
 </ul>
-<p>The file <strong>.gitattributes</strong> is used to properly <a class="reference external" href="https://help.github.com/articles/dealing-with-line-endings/">handle
-different</a>
-line endings. And the <strong>.gitignore</strong> specifies intentionally untracked
-files that Git should ignore. The root <strong>Makefile</strong> can be used to build
-all the project of the repository. To learn more about hdl <strong>Makefiles</strong>
-visit the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
-<section id="the-projects-are-structured-as-follows">
-<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
-+-- docs
-+-- library
-+-- projects
-¦   +-- ad40xx_fmc
-¦   +-- ad4110
-¦   .
-¦   +-- common
-¦   +-- dac_fmc_ebz
-¦   ¦   +-- common
-¦   ¦   +-- a10soc
-¦   ¦   +-- vcu118
-¦   ¦   .
-¦   ¦   +-- zcu102
-¦   ¦   +-- Makefile
-¦   ¦   +-- Readme.md
-¦   .
-¦   +-- scripts
-¦   .
-¦   +-- Readme.md
-¦   +-- Makefile
-¦   +-- wiki_summary.sh
-+-- README.md
-</pre></div>
+</li>
+<li><p>Update <strong>Makefile</strong> files of the affected projects</p></li>
+<li><p>Run <strong>check_guideline.py</strong> on your branch</p></li>
+<li><p>Run <strong>Verilator</strong></p></li>
+<li><p>Code must build OK on all affected projects. Warnings are reviewed.
+<strong>Critical Warnings</strong> are not accepted. These must be built on Windows
+and Linux. What fails to build on our continuous integration system,
+cannot be merged.</p></li>
+<li><p>Test code in hardware on as many setups as possible</p></li>
+<li><p>Make sure you have your branch <strong>rebased</strong> onto latest main right before
+opening the PR</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The changes brought to the project/IP core should be reflected in its
+corresponding documentation, if exists. If not, then a documentation
+should be created, following our <a class="reference internal" href="docs_guidelines.html#docs-guidelines"><span class="std std-ref">Documentation guidelines</span></a>.</p>
 </div>
-<p>Besides the project folders, there are two special folders inside the
-<strong>/hdl/projects</strong>:</p>
+</section>
+<section id="when-opening-the-pull-request">
+<h2>When opening the pull request<a class="headerlink" href="#when-opening-the-pull-request" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Create a pull request on this repository. If you are not sure on how to
+do this, check out
+<a class="reference external" href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork">GitHub help</a></p></li>
+<li><p>In the description of the PR:</p>
 <ul class="simple">
-<li><p><strong>common</strong>: This folder contains all the base designs, for all
-currently supported FPGA development boards. Be aware if you see your
-board on this list, it does not necessarily mean that you can use it
-with your FMC board.</p></li>
-<li><p><strong>scripts</strong>: In all cases, we are interacting with the development
-tools (Vivado/Quartus) using Tcl scripts. In this folder are defined
-all the custom Tcl processes, which are used to create a project,
-define the system and generate programming files for the FPGA.</p></li>
+<li><p>Motivate the additions/changes/deletions to the code</p></li>
+<li><p>Add link to related GitHub issues</p></li>
+<li><p>Add link to related PR if it depends on others (maybe link to
+Linux/no-OS PR); everything that is relevant for the reviewers</p></li>
 </ul>
-<p>Inside a project folder, you can find folders with an FPGA carrier name
-(e.g. ZC706) which in general contains all the carrier board specific
-files, and a folder called <strong>common</strong> which contains the project
-specific files. If you can not find your FPGA board name in a project
-folder, that means your FPGA board with that particular FMC board is not
-supported.</p>
+</li>
+<li><p>Tick the boxes with the requirements that you fulfill</p></li>
+<li><p>Add some labels to be easier for others to review your changes</p></li>
+<li><p>Check the results from the GitHub actions that were run</p></li>
+<li><p>If reviewers requested changes or you found mistakes, then:</p>
+<ul class="simple">
+<li><p><strong>No force-pushing</strong>, even if there are tiny changes or typos</p></li>
+<li><p><strong>For every change</strong>, a new commit at least</p></li>
+<li><p>Check the <strong>GitHub actions</strong> that are failing and fix the issues</p></li>
+<li><p><strong>Add a comment</strong> explaining what you modified additionally (it’s easier
+for the reviewer and for tracking)</p></li>
+<li><p>When the PR is approved by all code owners, you have 3 options</p></li>
+<li><p>Option 1: If all these commits must be pushed, then from the dropdown,
+select <strong>Rebase and merge</strong></p></li>
+<li><p>Option 2: If all these commits must be in one commit in the end, then you
+can use the <strong>Squash and merge</strong> option from the dropdown.
+It will prompt you to give the name of the final commit</p></li>
+<li><p>Option 3: <strong>Squash the commits locally</strong>, force-push and if you don’t
+make any changes to the code, then GitHub will recognize this force-push
+as being without changes, so you don’t need approves again to merge it
+using <strong>Rebase and merge</strong></p>
+<ul>
+<li><p>If you do make changes (<strong>don’t!!</strong>), comment on what you did and
+request again the code owners to review the PR – changed files will be
+seen with <strong>Changes since last view</strong> next to the name
+(in the PR &gt; Files changed tab) or there’s a “Compare” button in the
+Conversation tab.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>If you encounter conflicts with other files (that you didn’t change, and
+that are already on main), <strong>do not resolve the conflicts using Git GUI!</strong>
+This way, you will insert a merge commit into the commit history.
+<strong>We do not want merge commits.</strong> Thus, open a terminal and resolve
+it there (see <a class="reference external" href="https://stackoverflow.com/a/162056">this discussion</a>)</p></li>
+</ol>
 </section>
-<section id="the-library-are-structured-as-follows">
-<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
-+-- library
-¦   +-- ad463x_data_capture
-¦   +-- axi_ad3552r
-¦   +-- axi_ad4858
-¦   +-- axi_ad5766
-¦   +-- axi_ad7606x
-¦   +-- axi_ad7616
-¦   +-- axi_ad7768
-¦   +-- axi_ad777x
-¦   +-- axi_ad9122
-¦   .
-¦   +-- common
-¦   .
-¦   +-- interfaces
-¦   +-- jesd204
-¦   +-- scripts
-¦   .
-¦   +-- Makefile
-+-- projects
-+-- README.md
-</pre></div>
-</div>
-<p>The library folder contains all the IP cores and common modules. An IP,
-in general, contains Verilog files, which describe the hardware logic,
-constraint files, to ease timing closure, and Tcl scripts, which
-generate all the other files required for IP integration (*_ip.tcl for
-Vivado and *_hw.tcl for Quartus) .</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Regarding Vivado, all the IPs must be ‘packed’ before being used in a
-design.</p>
-<p>To find more information about how to build the libraries, please visit
-the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
-</div>
-</section>
-</section>
-<section id="repository-releases-and-branches">
-<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Permalink to this heading">#</a></h2>
-<p>The repository may contain multiple branches and tags. The
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/">main</a> branch
-is the development branch (latest sources, but not stable). If you check
-out this branch, some builds may fail. If you are not into any kind of
-experimentation, you should only check out one of the release branch.</p>
-<p>All our release branches have the following naming convention:
-<strong>hdl_</strong>[year_of_release]<strong>_r</strong>[1 or 2]. (e.g.
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/hdl_2014_r2/">hdl_2014_r2</a>)</p>
-<p>ADI does two releases each year when all the projects get an update to
-support the latest tools and get additional new features. ** The
-main branch is always synchronized with the latest release.** If you
-are in doubt, ask us on <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can find the release notes on the GitHub page of the
-repository:</p>
-<p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">https://github.com/analogdevicesinc/hdl/releases</a></p>
-<p>The latest version of tools used on main can be found at:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a> (<em>required_vivado_version</em> and
-<em>required_quartus_version</em> variables). For Intel Quartus Standard, the version
-is specified in each project that uses it, depending on the carrier.</p>
-</div>
+<section id="code-related-check-list">
+<span id="contributing-code-related-check-list"></span><h2>Code-related check list<a class="headerlink" href="#code-related-check-list" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>On top of the existing guidelines for Tcl scripting, Verilog/SystemVerilog,
+Makefiles, etc., we have our own guidelines and you must check them out:
+<a class="reference internal" href="hdl_coding_guidelines.html#hdl-coding-guidelines"><span class="std std-ref">ADI HDL coding guidelines</span></a>.</p></li>
+<li><p>We also created a
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/check_guideline.py">script</a>
+to check some of those rules. To see which ones and how to use the script,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/.github/scripts/readme_check_guideline.md">click here</a>
+(this is part of our GitHub actions check as well, and if this fails,
+the PR will not be approved).</p></li>
+<li><p>Check if in the meantime there were any <strong>changes to the common IPs</strong>
+that you used (e.g., <em>up_adc_common</em>, <em>up_delay_cntrl</em>, etc.).</p></li>
+<li><p>If there are changes in the I/O ports, update your instances accordingly</p></li>
+<li><p>If a new IP core has been used in the affected project, it should be added
+as a dependency in its corresponding Makefile file (of the affected project).</p></li>
+<li><p>If it’s the case, to update all the README files of the affected projects
+and IP cores.</p></li>
+</ol>
+<p>Resources:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://cbea.ms/git-commit/">How to write a good commit message</a>
+and <a class="reference external" href="https://gist.github.com/rsp/057481db4dbd999bb7077f211f53f212">another resource</a></p></li>
+<li><p><a class="reference external" href="https://github.blog/2022-06-30-write-better-commits-build-better-projects/">Write better commits, build better projects</a></p></li>
+<li><p><a class="reference external" href="https://dhwthompson.com/2019/my-favourite-git-commit">Good commit example (but extreme one)</a></p></li>
+<li><p><a class="reference external" href="https://opensource.com/article/18/6/anatomy-perfect-pull-request">How should a PR look like</a>
+and <a class="reference external" href="https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/">anatomy of a PR</a></p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/linux/blob/master/Documentation/process/submitting-patches.rst">Submitting patches</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -462,8 +455,8 @@ is specified in each project that uses it, depending on the carrier.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="introduction.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Introduction</a>
-    <a href="releases.html" title="Next document (Ctrl+RightArrow)" class="next">Releases</a>
+    <a href="docs_guidelines.html" title="Previous document (Ctrl+LeftArrow)" class="prev">Documentation guidelines</a>
+    <a href="third_party.html" title="Next document (Ctrl+RightArrow)" class="next">Third party forks</a>
               </div>
           
         </div>
