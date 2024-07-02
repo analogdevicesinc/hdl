@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -320,6 +320,7 @@ module util_hbm #(
       .req_dest_stride(0),
       .req_src_stride(0),
       .req_sync_transfer_start(1'b0),
+      .req_sync(),
       .req_last(1'b1),
 
       .req_eot(wr_request_eot_loc[i]),
@@ -404,7 +405,6 @@ module util_hbm #(
       .fifo_wr_en(1'b0),
       .fifo_wr_din('b0),
       .fifo_wr_overflow(),
-      .fifo_wr_sync(),
       .fifo_wr_xfer_req(),
 
       .fifo_rd_clk(1'b0),
@@ -490,6 +490,7 @@ module util_hbm #(
       .req_dest_stride(0),
       .req_src_stride(0),
       .req_sync_transfer_start(1'b0),
+      .req_sync(),
       .req_last(1'b1),
 
       .req_eot(rd_request_eot_loc[i]),
@@ -574,7 +575,6 @@ module util_hbm #(
       .fifo_wr_en(1'b0),
       .fifo_wr_din('b0),
       .fifo_wr_overflow(),
-      .fifo_wr_sync(),
       .fifo_wr_xfer_req(),
 
       .fifo_rd_clk(1'b0),

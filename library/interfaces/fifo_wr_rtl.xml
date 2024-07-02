@@ -59,23 +59,6 @@
       </spirit:wire>
     </spirit:port>
     <spirit:port>
-      <spirit:logicalName>SYNC</spirit:logicalName>
-      <spirit:description/>
-      <spirit:wire>
-        <spirit:onMaster>
-          <spirit:presence>optional</spirit:presence>
-          <spirit:width>1</spirit:width>
-          <spirit:direction>out</spirit:direction>
-        </spirit:onMaster>
-        <spirit:onSlave>
-          <spirit:presence>optional</spirit:presence>
-          <spirit:width>1</spirit:width>
-          <spirit:direction>in</spirit:direction>
-        </spirit:onSlave>
-        <spirit:defaultValue>0</spirit:defaultValue>
-      </spirit:wire>
-    </spirit:port>
-    <spirit:port>
       <spirit:logicalName>XFER_REQ</spirit:logicalName>
       <spirit:wire>
         <spirit:onMaster>

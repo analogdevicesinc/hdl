@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -97,6 +97,7 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect  axi_ad6676_core/link_clk axi_ad6676_dma/fifo_wr_clk
 ad_connect  axi_ad6676_dma/fifo_wr axi_ad6676_cpack/packed_fifo_wr
+ad_connect  axi_ad6676_dma/sync axi_ad6676_cpack/packed_sync
 
 # interconnect (cpu)
 

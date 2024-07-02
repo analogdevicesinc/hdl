@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -188,7 +188,7 @@ set_interface_property fifo_wr_en_out EXPORT_OF util_ad9694_cpack.if_packed_fifo
 add_interface fifo_wr_en_in conduit end
 set_interface_property fifo_wr_en_in EXPORT_OF axi_ad9694_dma.if_fifo_wr_en
 add_interface fifo_wr_sync conduit end
-set_interface_property fifo_wr_sync EXPORT_OF axi_ad9694_dma.if_fifo_wr_sync
+set_interface_property fifo_wr_sync EXPORT_OF axi_ad9694_dma.if_sync
 
 # software needs to know the used TIA channel selection for each transfer, so
 # we create an addition dummy ADC channel whit this information

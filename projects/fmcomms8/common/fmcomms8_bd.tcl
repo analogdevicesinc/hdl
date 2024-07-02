@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -122,7 +122,7 @@ ad_ip_instance axi_dmac axi_adrv9009_fmc_rx_dma
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_2D_TRANSFER 0
@@ -329,6 +329,7 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect rx_adrv9009_fmc_tpl_core/adc_dovf util_fmc_rx_cpack/fifo_wr_overflow
 ad_connect axi_adrv9009_fmc_rx_dma/fifo_wr util_fmc_rx_cpack/packed_fifo_wr
+ad_connect axi_adrv9009_fmc_rx_dma/sync util_fmc_rx_cpack/packed_sync
 ad_connect core_clk_d axi_adrv9009_fmc_rx_dma/fifo_wr_clk
 
 # connections (adc-os)
@@ -348,6 +349,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect  obs_adrv9009_fmc_tpl_core/adc_dovf util_fmc_obs_cpack/fifo_wr_overflow
 ad_connect  util_fmc_obs_cpack/packed_fifo_wr axi_adrv9009_fmc_obs_dma/fifo_wr
+ad_connect  util_fmc_obs_cpack/packed_sync axi_adrv9009_fmc_obs_dma/sync
 
 
 ad_cpu_interconnect 0x45A00000 rx_adrv9009_fmc_tpl_core

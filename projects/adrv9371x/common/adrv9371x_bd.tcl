@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -336,6 +336,7 @@ ad_connect rx_fir_decimator/active adc_fir_filter_active
 
 ad_connect  axi_ad9371_rx_clkgen/clk_0 axi_ad9371_rx_dma/fifo_wr_clk
 ad_connect  util_ad9371_rx_cpack/packed_fifo_wr axi_ad9371_rx_dma/fifo_wr
+ad_connect  util_ad9371_rx_cpack/packed_sync axi_ad9371_rx_dma/sync
 ad_connect  $sys_dma_resetn axi_ad9371_rx_dma/m_dest_axi_aresetn
 
 # connections (adc-os)
@@ -355,6 +356,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 }
 ad_connect  rx_os_ad9371_tpl_core/adc_dovf util_ad9371_rx_os_cpack/fifo_wr_overflow
 ad_connect  util_ad9371_rx_os_cpack/packed_fifo_wr axi_ad9371_rx_os_dma/fifo_wr
+ad_connect  util_ad9371_rx_os_cpack/packed_sync axi_ad9371_rx_os_dma/sync
 
 ad_connect  $sys_dma_resetn axi_ad9371_rx_os_dma/m_dest_axi_aresetn
 

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -25,7 +25,6 @@ adi_add_bus "packed_fifo_wr" "master" \
     {"packed_fifo_wr_en" "EN"} \
     {"packed_fifo_wr_data" "DATA"} \
     {"packed_fifo_wr_overflow" "OVERFLOW"} \
-    {"packed_fifo_wr_sync" "SYNC"} \
   }
 adi_add_bus_clock "clk" "packed_fifo_wr" "reset"
 

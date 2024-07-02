@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -48,9 +48,9 @@ proc util_cpack_elab {} {
   set_interface_property reset associatedClock clk
 
   ad_interface signal packed_fifo_wr_en output 1 valid
-  ad_interface signal packed_fifo_wr_sync output 1 sync
   ad_interface signal packed_fifo_wr_data output $total_data_width data
   ad_interface signal packed_fifo_wr_overflow input 1 ovf
+  ad_interface signal packed_sync output 1 sync
 
   ad_interface signal fifo_wr_overflow output 1 ovf
 
