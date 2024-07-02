@@ -26,6 +26,7 @@ Contents
    Customize HDL projects <customize_hdl>
    HDL coding guidelines <hdl_coding_guidelines>
    Documentation guidelines <docs_guidelines>
+   Contributing to HDL <contributing>
    Third party forks <third_party>
 
 #. :ref:`introduction`
@@ -39,6 +40,7 @@ Contents
 #. :ref:`hdl_coding_guidelines`: The Verilog/VHDL coding guidelines that the
    HDL team follows
 #. :ref:`docs_guidelines`: Documentation guidelines
+#. :ref:`contributing`: How to contribute to our HDL repository
 #. :ref:`third_party`: Third party forks with derived work
 #. :dokuwiki:`Reference designs using AMD Xilinx hardware <resources/alliances/xilinx>`
 #. :dokuwiki:`Reference designs using Intel hardware <resources/alliances/altera>`
