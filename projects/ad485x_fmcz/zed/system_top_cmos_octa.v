@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -109,12 +109,13 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire            spiad_sck_s;
+  wire            spiad_csn_s;
+
+  reg     [ 4:0]  cnt_cs_up = 3'd0;
+
   assign gpio_i[63:32] = gpio_o[63:32];
   assign pd = gpio_o[32];
-
-  wire                    spiad_sck_s;
-  wire                    spiad_csn_s;
-  reg           [ 4:0]    cnt_cs_up = 3'd0;
 
   always @(posedge cpu_clk) begin
     csck <= spiad_sck_s;
