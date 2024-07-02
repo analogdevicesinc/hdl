@@ -7,7 +7,12 @@ source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_xilinx.tcl
 source ../../scripts/adi_board.tcl
 
-adi_project ad469x_fmc_zed
+# Parameter description
+
+# SPI_4WIRE - For 0 CNV is linked to PWM. For 1 CNV is linked to SPI_CS
+
+adi_project ad469x_fmc_zed 0 [list \
+  SPI_4WIRE [get_env_param SPI_4WIRE 0]]
 
 adi_project_files ad469x_fmc_zed [list \
     "../../../library/common/ad_iobuf.v" \

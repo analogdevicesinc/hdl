@@ -9,3 +9,12 @@ Here are some pointers to help you:
   * Project Doc: https://wiki.analog.com/resources/eval/user-guides/ad469x
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad469x
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers-all
+# Building, Generating Bit Files
+
+How to use over-writable parameter from the environment:
+```
+hdl/projects/ad469x_fmc/zed> make SPI_4WIRE=0
+```
+SPI_4WIRE - Defines if CNV signal is linked to PWM or to SPI_CS
+* 0 - CNV signal is linked to PWM
+* 1 - CNV signal is linked to SPI_CS

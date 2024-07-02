@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,8 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
-
+module system_top #(
+  parameter SPI_4WIRE = 0
+) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
   inout           ddr_cas_n,
@@ -107,9 +108,17 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  // instantiations
+  wire            ad469x_spi_cnv_s;
+  wire            ad469x_spi_cs_s;
 
-  assign gpio_i[63:33] = 31'b0;
+  // instantiation
+
+  assign gpio_i[63:34] = 30'b0;
+
+  assign ad469x_spi_cnv = (SPI_4WIRE == 0) ? ad469x_spi_cnv_s : ad469x_spi_cs_s;
+  assign ad469x_spi_cs = ad469x_spi_cs_s;
+
+  assign gpio_i[33] = ad469x_busy_alt_gp0;
 
   ad_iobuf #(
     .DATA_WIDTH(1)
@@ -207,10 +216,10 @@ module system_top (
     .ad469x_spi_sdo (ad469x_spi_sdo),
     .ad469x_spi_sdo_t (),
     .ad469x_spi_sdi (ad469x_spi_sdi),
-    .ad469x_spi_cs (ad469x_spi_cs),
+    .ad469x_spi_cs (ad469x_spi_cs_s),
     .ad469x_spi_sclk (ad469x_spi_sclk),
     .ad469x_spi_busy(ad469x_busy_alt_gp0),
-    .ad469x_spi_cnv(ad469x_spi_cnv),
+    .ad469x_spi_cnv(ad469x_spi_cnv_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
