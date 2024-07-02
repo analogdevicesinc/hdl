@@ -26,7 +26,7 @@ spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $
 
 ad_ip_instance axi_clkgen axi_ad4134_clkgen
 ad_ip_parameter axi_ad4134_clkgen CONFIG.VCO_DIV 5
-ad_ip_parameter axi_ad4134_clkgen CONFIG.VCO_MUL 48
+ad_ip_parameter axi_ad4134_clkgen CONFIG.VCO_MUL 50
 ad_ip_parameter axi_ad4134_clkgen CONFIG.CLK0_DIV 10
 
 # dma to receive data stream
