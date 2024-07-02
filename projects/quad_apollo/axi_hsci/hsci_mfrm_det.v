@@ -49,6 +49,7 @@ module hsci_mfrm_det(// globals
                  input miso_test_mode,
                  output miso_test_lfsr_acq,
                  output reg [31:0] miso_ber_cnt,
+                 input miso_clk_inv,
                 // link control sigs
                  input man_linkup,
                  input auto_linkup,
@@ -80,6 +81,7 @@ module hsci_mfrm_det(// globals
    wire [7:0] lfsr_next;
    reg [2:0] idle_cnt;
    reg [1:0] frm_acq_cnt;
+   reg [6:0] mdec_data_d1;
 
    // count idle states
    always @ (posedge hsci_pclk or negedge rstn)
@@ -109,17 +111,27 @@ module hsci_mfrm_det(// globals
        end
      end // always @ (posedge hsci_pclk or negedge rstn)
    
-          
-   
-
-   // buffer input
+   // JPB         
+   //capture and delay mdec_dats
    always @ (posedge hsci_pclk or negedge rstn)
      begin
      if (~rstn)
-       ibuf <= 19'h00000;
+       mdec_data_d1 <= 7'h00;
      else
-       ibuf <= {ibuf[10:0], mdec_data[7:0]};
+       mdec_data_d1 <= mdec_data[6:0];
      end
+
+   // buffer input
+   always @ (posedge hsci_pclk or negedge rstn) begin
+     if (~rstn)
+       ibuf <= 19'h00000;
+     else begin
+       if (miso_clk_inv == 1'b0)
+         ibuf <= {ibuf[10:0], mdec_data[7:0]};
+       else
+         ibuf <= {ibuf[10:0], mdec_data_d1[6:0], mdec_data[7]};
+     end
+    end
 
    assign tmp_frm[7] = ibuf[16:7];
    assign tmp_frm[6] = ibuf[15:6];
@@ -149,48 +161,48 @@ module hsci_mfrm_det(// globals
            frm_align <= 4'h7;
            mdec_sfrm <= tmp_frm[7];
            end
-         else if(ibuf[15] == 1'b1) 
-           begin
-           frm_det <= 1'b1;
-           frm_align <= 4'h6;
-           mdec_sfrm <= tmp_frm[6];
-           end
+        //  else if(ibuf[15] == 1'b1) 
+        //    begin
+        //    frm_det <= 1'b1;
+        //    frm_align <= 4'h6;
+        //    mdec_sfrm <= tmp_frm[6];
+        //    end
          else if(ibuf[14] == 1'b1) 
            begin
            frm_det <= 1'b1;
            frm_align <= 4'h5;
            mdec_sfrm <= tmp_frm[5];
           end
-         else if(ibuf[13] == 1'b1) 
-           begin
-           frm_det <= 1'b1;
-           frm_align <= 4'h4;
-           mdec_sfrm <= tmp_frm[4];
-           end
+        //  else if(ibuf[13] == 1'b1) 
+        //    begin
+        //    frm_det <= 1'b1;
+        //    frm_align <= 4'h4;
+        //    mdec_sfrm <= tmp_frm[4];
+        //    end
          else if(ibuf[12] == 1'b1) 
            begin
            frm_det <= 1'b1;
            frm_align <= 4'h3;
            mdec_sfrm <= tmp_frm[3];
            end
-         else if(ibuf[11] == 1'b1) 
-           begin
-           frm_det <= 1'b1;
-           frm_align <= 4'h2;
-           mdec_sfrm <= tmp_frm[2];
-           end
+        //  else if(ibuf[11] == 1'b1) 
+        //    begin
+        //    frm_det <= 1'b1;
+        //    frm_align <= 4'h2;
+        //    mdec_sfrm <= tmp_frm[2];
+        //    end
          else if(ibuf[10] == 1'b1) 
            begin
            frm_det <= 1'b1;
            frm_align <= 4'h1;
            mdec_sfrm <= tmp_frm[1];
            end
-         else if(ibuf[9] == 1'b1) 
-           begin
-           frm_det <= 1'b1;
-           frm_align <= 4'h0;
-           mdec_sfrm <= tmp_frm[0];
-           end
+        //  else if(ibuf[9] == 1'b1) 
+        //    begin
+        //    frm_det <= 1'b1;
+        //    frm_align <= 4'h0;
+        //    mdec_sfrm <= tmp_frm[0];
+        //    end
          end // if (frm_det == 1'b0)
        else
          begin
@@ -204,58 +216,59 @@ module hsci_mfrm_det(// globals
            begin
            // check for next frame coming in
            case(frm_align)
-             4'h9:
-               begin
-               end
+            //  4'h9:
+            //    begin
+            //    end
 
-             4'h8:
-               begin
-               end
+            //  4'h8:
+            //    begin
+            //    end
 
              4'h7:
                begin
-               if (tmp_frm[6][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h6;
-                 mdec_sfrm <= tmp_frm[6];
-                 end
-               else if (tmp_frm[6][9] == 1'b1)
+              //  if (tmp_frm[6][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h6;
+              //    mdec_sfrm <= tmp_frm[6];
+              //    end
+              //  else 
+               if (tmp_frm[5][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h5;
                  mdec_sfrm <= tmp_frm[5];
                  end
-               else if (tmp_frm[4][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h4;
-                 mdec_sfrm <= tmp_frm[4];
-                 end
+              //  else if (tmp_frm[4][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h4;
+              //    mdec_sfrm <= tmp_frm[4];
+              //    end
                else if (tmp_frm[3][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h3;
                  mdec_sfrm <= tmp_frm[3];
                  end
-               else if (tmp_frm[2][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h2;
-                 mdec_sfrm <= tmp_frm[2];
-                 end
+              //  else if (tmp_frm[2][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h2;
+              //    mdec_sfrm <= tmp_frm[2];
+              //    end
                else if (tmp_frm[1][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h1;
                  mdec_sfrm <= tmp_frm[1];
                  end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
+              //  else if (tmp_frm[0][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h0;
+              //    mdec_sfrm <= tmp_frm[0];
+              //    end
                else
                  begin  // drop frm_det
                  frm_det <= 1'b0;
@@ -264,84 +277,84 @@ module hsci_mfrm_det(// globals
                  end // else: !if(tmp_frm[0][9] == 1'b1)
                end // case: 3'h6             
 
-             4'h6:
-               begin
-               if (tmp_frm[5][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h5;
-                 mdec_sfrm <= tmp_frm[5];
-                 end
-               else if (tmp_frm[4][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h4;
-                 mdec_sfrm <= tmp_frm[4];
-                 end
-               else if (tmp_frm[3][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h3;
-                 mdec_sfrm <= tmp_frm[3];
-                 end
-               else if (tmp_frm[2][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h2;
-                 mdec_sfrm <= tmp_frm[2];
-                 end
-               else if (tmp_frm[1][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h1;
-                 mdec_sfrm <= tmp_frm[1];
-                 end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
-               else
-                 begin  // drop frm_det
-                 frm_det <= 1'b0;
-                 frm_align <= 4'h9;
-                 mdec_sfrm <= 10'h000;
-                 end // else: !if(tmp_frm[0][9] == 1'b1)
-               end // case: 3'h6
+            //  4'h6:
+            //    begin
+            //    if (tmp_frm[5][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h5;
+            //      mdec_sfrm <= tmp_frm[5];
+            //      end
+            //    else if (tmp_frm[4][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h4;
+            //      mdec_sfrm <= tmp_frm[4];
+            //      end
+            //    else if (tmp_frm[3][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h3;
+            //      mdec_sfrm <= tmp_frm[3];
+            //      end
+            //    else if (tmp_frm[2][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h2;
+            //      mdec_sfrm <= tmp_frm[2];
+            //      end
+            //    else if (tmp_frm[1][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h1;
+            //      mdec_sfrm <= tmp_frm[1];
+            //      end
+            //    else if (tmp_frm[0][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h0;
+            //      mdec_sfrm <= tmp_frm[0];
+            //      end
+            //    else
+            //      begin  // drop frm_det
+            //      frm_det <= 1'b0;
+            //      frm_align <= 4'h9;
+            //      mdec_sfrm <= 10'h000;
+            //      end // else: !if(tmp_frm[0][9] == 1'b1)
+            //    end // case: 3'h6
 
              4'h5:
                begin
-               if (tmp_frm[4][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h4;
-                 mdec_sfrm <= tmp_frm[4];
-                 end
-               else if (tmp_frm[3][9] == 1'b1)
+              //  if (tmp_frm[4][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h4;
+              //    mdec_sfrm <= tmp_frm[4];
+              //    end
+               if (tmp_frm[3][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h3;
                  mdec_sfrm <= tmp_frm[3];
                  end
-               else if (tmp_frm[2][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h2;
-                 mdec_sfrm <= tmp_frm[2];
-                 end
+              //  else if (tmp_frm[2][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h2;
+              //    mdec_sfrm <= tmp_frm[2];
+              //    end
                else if (tmp_frm[1][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h1;
                  mdec_sfrm <= tmp_frm[1];
                  end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
+              //  else if (tmp_frm[0][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h0;
+              //    mdec_sfrm <= tmp_frm[0];
+              //    end
                else
                  begin  // drop frm_det
                  frm_det <= 1'b0;
@@ -350,60 +363,60 @@ module hsci_mfrm_det(// globals
                  end // else: !if(tmp_frm[0][9] == 1'b1)
                end // case: 3'h5
 
-             4'h4:
-               begin
-               if (tmp_frm[3][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h3;
-                 mdec_sfrm <= tmp_frm[3];
-                 end
-               else if (tmp_frm[2][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h2;
-                 mdec_sfrm <= tmp_frm[2];
-                 end
-               else if (tmp_frm[1][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h1;
-                 mdec_sfrm <= tmp_frm[1];
-                 end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
-               else
-                 begin  // drop frm_det
-                 frm_det <= 1'b0;
-                 frm_align <= 4'h9;
-                 mdec_sfrm <= 10'h000;
-                 end // else: !if(tmp_frm[0][9] == 1'b1)
-               end // case: 3'h4
+            //  4'h4:
+            //    begin
+            //    if (tmp_frm[3][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h3;
+            //      mdec_sfrm <= tmp_frm[3];
+            //      end
+            //    else if (tmp_frm[2][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h2;
+            //      mdec_sfrm <= tmp_frm[2];
+            //      end
+            //    else if (tmp_frm[1][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h1;
+            //      mdec_sfrm <= tmp_frm[1];
+            //      end
+            //    else if (tmp_frm[0][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h0;
+            //      mdec_sfrm <= tmp_frm[0];
+            //      end
+            //    else
+            //      begin  // drop frm_det
+            //      frm_det <= 1'b0;
+            //      frm_align <= 4'h9;
+            //      mdec_sfrm <= 10'h000;
+            //      end // else: !if(tmp_frm[0][9] == 1'b1)
+            //    end // case: 3'h4
 
              4'h3:
                begin
-               if (tmp_frm[2][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h2;
-                 mdec_sfrm <= tmp_frm[2];
-                 end
-               else if (tmp_frm[1][9] == 1'b1)
+              //  if (tmp_frm[2][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h2;
+              //    mdec_sfrm <= tmp_frm[2];
+              //    end
+               if (tmp_frm[1][9] == 1'b1)
                  begin
                  frm_det <= 1'b1;
                  frm_align <= 4'h1;
                  mdec_sfrm <= tmp_frm[1];
                  end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
+              //  else if (tmp_frm[0][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h0;
+              //    mdec_sfrm <= tmp_frm[0];
+              //    end
                else
                  begin  // drop frm_det
                  frm_det <= 1'b0;
@@ -412,45 +425,51 @@ module hsci_mfrm_det(// globals
                  end // else: !if(tmp_frm[0][9] == 1'b1)
                end // case: 3'h3
              
-             4'h2:
-               begin
-               if (tmp_frm[1][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h1;
-                 mdec_sfrm <= tmp_frm[1];
-                 end
-               else if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
-               else
-                 begin  // drop frm_det
-                 frm_det <= 1'b0;
-                 frm_align <= 4'h9;
-                 mdec_sfrm <= 10'h000;
-                 end // else: !if(tmp_frm[0][9] == 1'b1)
-               end // case: 3'h2
+            //  4'h2:
+            //    begin
+            //    if (tmp_frm[1][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h1;
+            //      mdec_sfrm <= tmp_frm[1];
+            //      end
+            //    else if (tmp_frm[0][9] == 1'b1)
+            //      begin
+            //      frm_det <= 1'b1;
+            //      frm_align <= 4'h0;
+            //      mdec_sfrm <= tmp_frm[0];
+            //      end
+            //    else
+            //      begin  // drop frm_det
+            //      frm_det <= 1'b0;
+            //      frm_align <= 4'h9;
+            //      mdec_sfrm <= 10'h000;
+            //      end // else: !if(tmp_frm[0][9] == 1'b1)
+            //    end // case: 3'h2
              
               4'h1:
                begin
-               if (tmp_frm[0][9] == 1'b1)
-                 begin
-                 frm_det <= 1'b1;
-                 frm_align <= 4'h0;
-                 mdec_sfrm <= tmp_frm[0];
-                 end
-               else
-                 begin  // drop frm_det
+              //  if (tmp_frm[0][9] == 1'b1)
+              //    begin
+              //    frm_det <= 1'b1;
+              //    frm_align <= 4'h0;
+              //    mdec_sfrm <= tmp_frm[0];
+              //    end
+              //  else
+                //  begin  // drop frm_det
                  frm_det <= 1'b0;
                  frm_align <= 4'h9;
                  mdec_sfrm <= 10'h000;
                  end // else: !if(tmp_frm[0][9] == 1'b1)
-               end // case: 3'h1
+              //  end // case: 3'h1
              
-             4'h0:
+            //  4'h0:
+            //    begin  // drop frm_det
+            //    frm_det <= 1'b0;
+            //    frm_align <= 4'h9;
+            //    mdec_sfrm <= 10'h000;
+            //    end
+              default:
                begin  // drop frm_det
                frm_det <= 1'b0;
                frm_align <= 4'h9;
@@ -460,12 +479,13 @@ module hsci_mfrm_det(// globals
            end // if ( (dec_fsm == DEC_RDATA) & (mdec_cont == 1'b0) & (mdec_val == 1'b1) )
          else
            begin
-           frm_align <= (frm_align == 4'h0) ? 4'h8:
-                                 (frm_align == 4'h1) ? 4'h9:
-                                                                    frm_align - 4'h2;
+          //  frm_align <= (frm_align == 4'h0) ? 4'h8:
+          //                        (frm_align == 4'h1) ? 4'h9:
+          //                                                           frm_align - 4'h2;
 
  //          if (mdec_val == 1'b1)
  //            begin
+             frm_align <= (frm_align <= 4'h1) ? 4'h9:frm_align - 4'h2;
              frm_det <= frm_det;
              mdec_sfrm <= (frm_align == 4'h0) ? mdec_sfrm: 
                                       (frm_align == 4'h1) ? mdec_sfrm: tmp_frm[frm_align - 4'h2];//         if (dec_fsm == DEC_IDLE)
@@ -482,7 +502,7 @@ module hsci_mfrm_det(// globals
    
 
    assign mdec_val  = ~( (frm_align == 4'h9) | (frm_align == 4'h8) );
-   assign next_frm_start = tmp_frm[frm_align - 4'h2][9];
+   assign next_frm_start = (frm_align > 4'h1) ? tmp_frm[frm_align - 4'h2][9] : tmp_frm[7][9];
 
    // in capture_mode, always spit out tmp_frm[0]
    // for miso_test_mode, use capture_word

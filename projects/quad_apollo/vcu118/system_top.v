@@ -195,6 +195,7 @@ module system_top (
   wire    [ 0:1]  hsci_rst_seq_done;
 
   wire            selectio_clk_in;
+  wire    [ 7:0]  hsci_menc_clk [0:3];
   wire    [ 7:0]  hsci_data_in  [0:3];
   wire    [ 7:0]  hsci_data_out [0:3];
 
@@ -371,6 +372,11 @@ module system_top (
     .hsci_miso_clk_p  (hsci_cko_p),
     .hsci_miso_clk_n  (hsci_cko_n),
 
+    .hsci_menc_clk_0 (hsci_menc_clk[0]),
+    .hsci_menc_clk_1 (hsci_menc_clk[1]),
+    .hsci_menc_clk_2 (hsci_menc_clk[2]),
+    .hsci_menc_clk_3 (hsci_menc_clk[3]),
+
     .hsci_mosi_data_0 (hsci_data_out[0]),
     .hsci_mosi_data_1 (hsci_data_out[1]),
     .hsci_mosi_data_2 (hsci_data_out[2]),
@@ -535,6 +541,10 @@ module system_top (
 
     .selectio_clk_in (selectio_clk_in),
 
+    .hsci_menc_clk_0       (hsci_menc_clk[0]),
+    .hsci_menc_clk_1       (hsci_menc_clk[1]),
+    .hsci_menc_clk_2       (hsci_menc_clk[2]),
+    .hsci_menc_clk_3       (hsci_menc_clk[3]),
     .hsci_data_out_0       (hsci_data_out[0]),
     .hsci_data_out_1       (hsci_data_out[1]),
     .hsci_data_out_2       (hsci_data_out[2]),

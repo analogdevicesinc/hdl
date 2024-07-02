@@ -92,7 +92,7 @@ state prev_state;
 
    localparam LINKUP_INSTR = 4'b0101;
    localparam RX_LINK_CNT_DEF = 20'hfffff;
-   localparam ACQUIRE_CNT_DEF = 16'h07ff;
+   localparam ACQUIRE_CNT_DEF = 16'h0fff;
 
    reg [2:0] alink_cntr;
    wire [7:0] lfsr_out;
@@ -122,7 +122,7 @@ state prev_state;
    reg dec_made;
    reg [5:0][2:0]  sum7;
    reg [7:0][2:0]  sum5;
-   reg [15:0][1:0] sum3;
+   reg [9:0][1:0] sum3;
    reg idle_det;
    reg [5:0] idle_det_cntr;
    reg [3:0] tx_del_cntr;
@@ -323,7 +323,7 @@ state prev_state;
              begin
              if ( (mlink_state == M_TX_ACQ) & (alink_fsm_stall == 1'b1) )
                begin
-               if ( (tx_acq_cntr == 16'h07D0) & (tx_clk_adj != 4'hF) )
+               if ( (tx_acq_cntr == (ACQUIRE_CNT_DEF - 16'h002F) ) & (tx_clk_adj != 4'hF) )
                  tx_ctrl <= 3'b010;  // decrement
                else if ( (alink_cntr == 3'b000) & (menc_pause == 1'b0) )
                  tx_ctrl <= 3'b000;
@@ -569,44 +569,39 @@ state prev_state;
            case(dec_cntr)
              3'b111:
                begin
-               sum7[0]  <= auto_link_table[14] + auto_link_table[15] + auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4];
+               sum7[0]  <= auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6];
                sum7[1]  <= auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7];
-               sum7[2]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10];
-               sum7[3]  <= auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10] + auto_link_table[11] + auto_link_table[12] + auto_link_table[15];
-               sum7[4]  <= auto_link_table[10] + auto_link_table[11] + auto_link_table[12] + auto_link_table[13] + auto_link_table[14] + auto_link_table[15] + auto_link_table[0];
+               sum7[2]  <= auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8];
+               sum7[3]  <= auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9];
+               sum7[4]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9] + auto_link_table[10];
+               sum7[5]  <= auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10] + auto_link_table[11];
 
-               sum5[0]  <= auto_link_table[14] + auto_link_table[15] + auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2];
-               sum5[1]  <= auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4];
+               sum5[0]  <= auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4];
+               sum5[1]  <= auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5];
                sum5[2]  <= auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6];
-               sum5[3]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8];
-               sum5[4]  <= auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10];
-               sum5[5]  <= auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10] + auto_link_table[11] + auto_link_table[12];
-               sum5[6]  <= auto_link_table[10] + auto_link_table[11] + auto_link_table[12] + auto_link_table[13] + auto_link_table[14];
-               sum5[7]  <= auto_link_table[12] + auto_link_table[13] + auto_link_table[14] + auto_link_table[15] + auto_link_table[0];
-                  
-               sum3[0]  <= auto_link_table[15] + auto_link_table[0]  + auto_link_table[1];
-               sum3[1]  <= auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2];
-               sum3[2]  <= auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3];
-               sum3[3]  <= auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4];
-               sum3[4]  <= auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5];
-               sum3[5]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6];
-               sum3[6]  <= auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7];
-               sum3[7]  <= auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8];
-               sum3[8]  <= auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9];
-               sum3[9]  <= auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10];
-               sum3[10] <= auto_link_table[9]  + auto_link_table[10] + auto_link_table[11];
-               sum3[11] <= auto_link_table[10] + auto_link_table[11] + auto_link_table[12];
-               sum3[12] <= auto_link_table[11] + auto_link_table[12] + auto_link_table[13];
-               sum3[13] <= auto_link_table[12] + auto_link_table[13] + auto_link_table[14];
-               sum3[14] <= auto_link_table[13] + auto_link_table[14] + auto_link_table[15];
-               sum3[15] <= auto_link_table[14] + auto_link_table[15] + auto_link_table[0];
+               sum5[3]  <= auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7];
+               sum5[4]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8];
+               sum5[5]  <= auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9];
+               sum5[6]  <= auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10];
+               sum5[7]  <= auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9] + auto_link_table[10] + auto_link_table[11];
+               
+               sum3[0]  <= auto_link_table[0]  + auto_link_table[1]  + auto_link_table[2];
+               sum3[1]  <= auto_link_table[1]  + auto_link_table[2]  + auto_link_table[3];
+               sum3[2]  <= auto_link_table[2]  + auto_link_table[3]  + auto_link_table[4];
+               sum3[3]  <= auto_link_table[3]  + auto_link_table[4]  + auto_link_table[5];
+               sum3[4]  <= auto_link_table[4]  + auto_link_table[5]  + auto_link_table[6];
+               sum3[5]  <= auto_link_table[5]  + auto_link_table[6]  + auto_link_table[7];
+               sum3[6]  <= auto_link_table[6]  + auto_link_table[7]  + auto_link_table[8];
+               sum3[7]  <= auto_link_table[7]  + auto_link_table[8]  + auto_link_table[9];
+               sum3[8]  <= auto_link_table[8]  + auto_link_table[9]  + auto_link_table[10];
+               sum3[9]  <= auto_link_table[9]  + auto_link_table[10] + auto_link_table[11];
                end // case: 3'b111
 
              3'b110:
                begin
                if (sum7[0] == 3'b111)
                  begin
-                 tx_clk_adj_val <= 4'h1;
+                 tx_clk_adj_val <= 4'h3;
                  dec_made <= 1'b1;
                  end
                else if (sum7[1] == 3'b111)
@@ -616,17 +611,22 @@ state prev_state;
                  end
                else if (sum7[2] == 3'b111)
                  begin
-                 tx_clk_adj_val <= 4'h7;
+                 tx_clk_adj_val <= 4'h5;
                  dec_made <= 1'b1;
                  end
                else if (sum7[3] == 3'b111)
                  begin
-                 tx_clk_adj_val <= 4'ha;
+                 tx_clk_adj_val <= 4'h6;
                  dec_made <= 1'b1;
                  end
                else if (sum7[4] == 3'b111)
                  begin
-                 tx_clk_adj_val <= 4'hd;
+                 tx_clk_adj_val <= 4'h7;
+                 dec_made <= 1'b1;
+                 end
+               else if (sum7[5] == 3'b111)
+                 begin
+                 tx_clk_adj_val <= 4'h8;
                  dec_made <= 1'b1;
                  end
                end // case: 3'b110
@@ -637,12 +637,12 @@ state prev_state;
                  begin
                  if (sum5[0] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'h0;
+                   tx_clk_adj_val <= 4'h2;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[1] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'h2;
+                   tx_clk_adj_val <= 4'h3;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[2] == 3'b101)
@@ -652,27 +652,27 @@ state prev_state;
                    end
                  else if (sum5[3] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'h6;
+                   tx_clk_adj_val <= 4'h5;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[4] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'h8;
+                   tx_clk_adj_val <= 4'h6;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[5] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'ha;
+                   tx_clk_adj_val <= 4'h7;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[6] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'hc;
+                   tx_clk_adj_val <= 4'h8;
                    dec_made <= 1'b1;
                    end
                  else if (sum5[7] == 3'b101)
                    begin
-                   tx_clk_adj_val <= 4'he;
+                   tx_clk_adj_val <= 4'h9;
                    dec_made <= 1'b1;
                    end
                  end // if (dec_made == 1'b0)
@@ -684,82 +684,52 @@ state prev_state;
                  begin
                  if (sum3[0] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h0;
+                   tx_clk_adj_val <= 4'h1;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[1] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h1;
+                   tx_clk_adj_val <= 4'h2;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[2] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h2;
+                   tx_clk_adj_val <= 4'h3;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[3] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h3;
+                   tx_clk_adj_val <= 4'h4;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[4] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h4;
+                   tx_clk_adj_val <= 4'h5;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[5] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h5;
+                   tx_clk_adj_val <= 4'h6;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[6] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h6;
+                   tx_clk_adj_val <= 4'h7;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[7] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h7;
+                   tx_clk_adj_val <= 4'h8;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[8] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h8;
+                   tx_clk_adj_val <= 4'h9;
                    dec_made <= 1'b1;
                    end
                  else if (sum3[9] == 2'b11)
                    begin
-                   tx_clk_adj_val <= 4'h9;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[10] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'ha;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[11] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'hb;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[12] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'hc;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[13] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'hd;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[14] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'he;
-                   dec_made <= 1'b1;
-                   end
-                 else if (sum3[15] == 2'b11)
-                   begin
-                   tx_clk_adj_val <= 4'hf;
+                   tx_clk_adj_val <= 4'hA;
                    dec_made <= 1'b1;
                    end
                  end // if (dec_made == 1'b0)

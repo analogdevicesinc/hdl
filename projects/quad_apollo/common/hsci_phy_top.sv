@@ -19,6 +19,11 @@ module hsci_phy_top (
   input wire   [0:3]  hsci_miso_clk_p,
   input wire   [0:3]  hsci_miso_clk_n,
 
+  input  wire  [7:0]  hsci_menc_clk_0,
+  input  wire  [7:0]  hsci_menc_clk_1,
+  input  wire  [7:0]  hsci_menc_clk_2,
+  input  wire  [7:0]  hsci_menc_clk_3,
+
   input  wire  [7:0]  hsci_mosi_data_0,
   input  wire  [7:0]  hsci_mosi_data_1,
   input  wire  [7:0]  hsci_mosi_data_2,
@@ -137,10 +142,10 @@ module hsci_phy_top (
     .data_from_fabric_data_out_p_1  (hsci_mosi_data_br[1]),
     .clk_out_p_0                    (hsci_mosi_clk_p[0]),
     .clk_out_n_0                    (hsci_mosi_clk_n[0]),
-    .data_from_fabric_clk_out_p_0   (8'b01010101),
+    .data_from_fabric_clk_out_p_0   (hsci_menc_clk_0),
     .clk_out_p_1                    (hsci_mosi_clk_p[1]),
     .clk_out_n_1                    (hsci_mosi_clk_n[1]),
-    .data_from_fabric_clk_out_p_1   (8'b01010101)
+    .data_from_fabric_clk_out_p_1   (hsci_menc_clk_1)
   );
 
   high_speed_selectio_wiz_1 hssio_wiz_1 (
@@ -195,10 +200,10 @@ module hsci_phy_top (
     .data_from_fabric_data_out_p_3  (hsci_mosi_data_br[3]),
     .clk_out_p_2                    (hsci_mosi_clk_p[2]),
     .clk_out_n_2                    (hsci_mosi_clk_n[2]),
-    .data_from_fabric_clk_out_p_2   (8'b01010101),
+    .data_from_fabric_clk_out_p_2   (hsci_menc_clk_2),
     .clk_out_p_3                    (hsci_mosi_clk_p[3]),
     .clk_out_n_3                    (hsci_mosi_clk_n[3]),
-    .data_from_fabric_clk_out_p_3   (8'b01010101)
+    .data_from_fabric_clk_out_p_3   (hsci_menc_clk_3)
   );
 
 endmodule

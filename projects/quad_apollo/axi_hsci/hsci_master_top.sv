@@ -48,10 +48,11 @@ module hsci_master_top #(
   input  wire         hsci_pclk,
   
   axi4_lite.slave     axi, 
-  
+
+  output       [7:0]  hsci_menc_clk,
   output       [7:0]  hsci_mosi_data,
   input  wire  [7:0]  hsci_miso_data,
-  
+
   output              hsci_pll_reset,
   input  wire         hsci_rst_seq_done,
   input  wire         hsci_pll_locked,
@@ -156,6 +157,8 @@ module hsci_master_top #(
    .alink_fsm_step         (1'b0),
    .clear_errors           (hsci_clear_errors),
    .ver_b_na               (O.ver_b__na.data),
+   .mosi_clk_inv           (O.mosi_clk_inv.data),
+   .miso_clk_inv           (O.miso_clk_inv.data),
    // status signals
    .master_done            (I.master_done.data),
    .master_running         (I.master_running.data),
@@ -184,6 +187,7 @@ module hsci_master_top #(
    .mem_we                 (bram_we),
    .mem_dout               (bram_dout),
    // isedes/oserdes i/f
+   .menc_clk               (hsci_menc_clk),
    .menc_data              (hsci_mosi_data),
    .mdec_data              (hsci_miso_data)
 );

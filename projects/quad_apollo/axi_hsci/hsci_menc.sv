@@ -47,6 +47,7 @@ module hsci_menc(// globals
                 input [15:0] hsci_master_bram_addr,
                 input [1:0] tsize,
                 input mosi_test_mode,
+                input mosi_clk_inv,
                 // status sigs for regmap
                 output master_done,
                 output master_running,
@@ -64,6 +65,7 @@ module hsci_menc(// globals
                 input [31:0] enc_data,  // Note: this is data read from the memory and actually write data to the slave
                 output reg enc_en,
                 // oserdes interfac
+                output reg [7:0] menc_clk,
                 output reg [7:0] menc_data,
                 // i/f with  mdec
                 output [3:0] menc_state,
@@ -656,6 +658,7 @@ state prev_state;
        end // else: !if(~rstn)
      end // always @ (posedge hsci_pclk or negedge rstn)
    assign menc_pause = (menc_word_cntr == 3'b011);
+   assign menc_clk = (mosi_clk_inv == 1'b0) ? 8'h55: 8'hAA;
    assign menc_data = (mosi_test_mode == 1'b1) ? lfsr_word: cur_buf;
 
    // set-up status sigs

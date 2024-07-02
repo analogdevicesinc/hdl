@@ -408,7 +408,41 @@ package hsci_master_regs_pkg;
   typedef struct packed {
     hsci_auto_linkup_data_t data;
   } hsci_auto_linkup_reg_t;
-  
+
+  // BitField: mosi_clk_inv (r/w) 
+  //        bitfield defines
+  parameter BF_MOSI_CLK_INV_RESET                 = 1'h0;
+  parameter BF_MOSI_CLK_INV_WIDTH                 = 32'd1;
+  //        register reference defines
+  parameter BF_MOSI_CLK_INV_LSB                   = 32'd0;
+  parameter BF_MOSI_CLK_INV_MSB                   = 32'd0;
+  parameter BF_MOSI_CLK_INV_ROFFSET               = 32'd12;
+  parameter BF_MOSI_CLK_INV_RMSB                  = 32'd12;
+  parameter BF_MOSI_CLK_INV_RMASK                 = 13'h1000;
+  parameter BF_MOSI_CLK_INV_RWIDTH                = 32'd1;
+  typedef logic  mosi_clk_inv_data_t;
+  //        bitfield structures
+  typedef struct packed {
+    mosi_clk_inv_data_t data;
+  } mosi_clk_inv_reg_t;
+
+  // BitField: miso_clk_inv (r/w) 
+  //        bitfield defines
+  parameter BF_MISO_CLK_INV_RESET                 = 1'h0;
+  parameter BF_MISO_CLK_INV_WIDTH                 = 32'd1;
+  //        register reference defines
+  parameter BF_MISO_CLK_INV_LSB                   = 32'd0;
+  parameter BF_MISO_CLK_INV_MSB                   = 32'd0;
+  parameter BF_MISO_CLK_INV_ROFFSET               = 32'd13;
+  parameter BF_MISO_CLK_INV_RMSB                  = 32'd13;
+  parameter BF_MISO_CLK_INV_RMASK                 = 14'h2000;
+  parameter BF_MISO_CLK_INV_RWIDTH                = 32'd1;
+  typedef logic  miso_clk_inv_data_t;
+  //        bitfield structures
+  typedef struct packed {
+    miso_clk_inv_data_t data;
+  } miso_clk_inv_reg_t;
+
   // BitField: hsci_mosi_test_mode (r/w) 
   //        bitfield defines
   parameter BF_HSCI_MOSI_TEST_MODE_RESET          = 1'h0;
@@ -935,6 +969,8 @@ package hsci_master_regs_pkg;
     hsci_man_linkup_word_reg_t hsci_man_linkup_word;
     hsci_man_linkup_reg_t hsci_man_linkup;
     hsci_auto_linkup_reg_t hsci_auto_linkup;
+    mosi_clk_inv_reg_t mosi_clk_inv;
+    miso_clk_inv_reg_t miso_clk_inv;
     hsci_mosi_test_mode_reg_t hsci_mosi_test_mode;
     hsci_miso_test_mode_reg_t hsci_miso_test_mode;
     hsci_capture_mode_reg_t hsci_capture_mode;

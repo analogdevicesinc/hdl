@@ -39,7 +39,9 @@
 | 0000800a | HSCI_MASTER_LINKUP_CTRL    |         |                                                                       | 
 |          |                            |   [9:0] | hsci_man_linkup_word                                   (r/w)          | 
 |          |                            |    [10] | hsci_man_linkup                                        (r/w)          | 
-|          |                            |    [11] | hsci_auto_linkup                                       (r/w)          | 
+|          |                            |    [11] | hsci_auto_linkup                                       (r/w)          |
+|          |                            |    [12] | mosi_clk_inv                                           (r/w)          |
+|          |                            |    [13] | miso_clk_inv                                           (r/w)          |
 | 0000800b | HSCI_MASTER_TEST_CTRL      |         |                                                                       | 
 |          |                            |     [0] | hsci_mosi_test_mode                                    (r/w)          | 
 |          |                            |     [1] | hsci_miso_test_mode                                    (r/w)          | 
@@ -255,7 +257,25 @@ import hsci_master_regs_pkg::*;
       O.hsci_auto_linkup.data <= I_wr_data[11];                            
     end
   end
-  
+
+  // BitField: mosi_clk_inv (r/w)
+  always_ff @( posedge clk) begin
+    if(!srstn) begin
+      O.mosi_clk_inv.data <= 1'h0;
+    end else if(wr_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_CTRL) begin
+      O.mosi_clk_inv.data <= I_wr_data[12];                            
+    end
+  end
+
+  // BitField: miso_clk_inv (r/w)
+  always_ff @( posedge clk) begin
+    if(!srstn) begin
+      O.miso_clk_inv.data <= 1'h0;
+    end else if(wr_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_CTRL) begin
+      O.miso_clk_inv.data <= I_wr_data[13];                            
+    end
+  end
+
   // BitField: hsci_mosi_test_mode (r/w) 
   always_ff @( posedge clk) begin
     if(!srstn) begin
@@ -410,7 +430,7 @@ import hsci_master_regs_pkg::*;
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_BRAM_ADDRESS[31:0]   = {16'h0, O.hsci_bram_start_address.data};
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_RUN[31:0]            = {31'h0, O.hsci_run.data};
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_STATUS[31:0]         = {27'h0, I.miso_test_lfsr_acq.data, I.master_rd_in_prog.data, I.master_wr_in_prog.data, I.master_running.data, I.master_done.data};
-  assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_CTRL[31:0]    = {20'h0, O.hsci_auto_linkup.data, O.hsci_man_linkup.data, O.hsci_man_linkup_word.data};
+  assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_CTRL[31:0]    = {18'h0, O.miso_clk_inv.data, O.mosi_clk_inv.data, O.hsci_auto_linkup.data, O.hsci_man_linkup.data, O.hsci_man_linkup_word.data};
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_TEST_CTRL[31:0]      = {29'h0, O.hsci_capture_mode.data, O.hsci_miso_test_mode.data, O.hsci_mosi_test_mode.data};
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_STATUS[31:0]  = {20'h0, I.txclk_inv_mismatch.data, I.txclk_adj_mismatch.data, 1'h0, I.alink_txclk_inv.data, I.alink_txclk_adj.data, 3'h0, I.link_active.data};
   assign rdata_HSCI_MASTER_REGS_HSCI_MASTER_LINKUP_STATUS2[31:0] = {12'h0, I.alink_fsm.data, I.alink_table.data};

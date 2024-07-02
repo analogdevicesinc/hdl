@@ -112,6 +112,7 @@ if {!$HSCI_BYPASS} {
   for {set i 0} {$i < 4} {incr i} {
     set j [expr $i > 1 ? 1 : 0]
 
+    create_bd_port -dir O -from 7 -to 0 hsci_menc_clk_$i
     create_bd_port -dir O -from 7 -to 0 hsci_data_out_$i
     create_bd_port -dir I -from 7 -to 0 hsci_data_in_$i
 
@@ -122,6 +123,7 @@ if {!$HSCI_BYPASS} {
 
     ad_ip_instance axi_hsci axi_hsci_$i
     ad_connect axi_hsci_${i}/hsci_miso_data hsci_data_in_$i
+    ad_connect axi_hsci_${i}/hsci_menc_clk hsci_menc_clk_$i
     ad_connect axi_hsci_${i}/hsci_pclk hsci_pclk_$j
     ad_connect axi_hsci_${i}/hsci_rst_seq_done hsci_rst_seq_done_$j
     ad_connect axi_hsci_${i}/hsci_pll_locked hsci_pll_locked_$j

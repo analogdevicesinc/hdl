@@ -67,7 +67,7 @@ module axi_hsci #(
   output  wire                               s_axi_bvalid,
 
   input   wire                               hsci_pclk,
-
+  output       [7:0]                         hsci_menc_clk,
   output       [7:0]                         hsci_mosi_data,
   input   wire [7:0]                         hsci_miso_data,
 
@@ -114,6 +114,7 @@ module axi_hsci #(
     .axi_resetn          (s_axi_aresetn),    
     .axi                 (axi),
     .hsci_pclk           (hsci_pclk),
+    .hsci_menc_clk       (hsci_menc_clk),
     .hsci_mosi_data      (hsci_mosi_data),
     .hsci_miso_data      (hsci_miso_data),
     .hsci_pll_reset      (hsci_pll_reset),

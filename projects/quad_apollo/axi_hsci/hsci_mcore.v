@@ -57,6 +57,8 @@ module hsci_mcore(// globals
                   input alink_fsm_step,
                   input clear_errors,
                   input ver_b_na,
+                  input mosi_clk_inv,
+                  input miso_clk_inv,
                   // status sigs
                   output master_done,
                   output master_running,
@@ -85,6 +87,7 @@ module hsci_mcore(// globals
                   output [3:0] mem_we,
                   input [31:0] mem_dout,
                   // iserdes/oserdes i/f
+                  output [7:0] menc_clk,
                   output [7:0] menc_data,
                   input [7:0] mdec_data
                   );
@@ -185,6 +188,7 @@ module hsci_mcore(// globals
                   .hsci_master_bram_addr(hsci_master_bram_addr),
                   .tsize(tsize),
                   .mosi_test_mode(mosi_test_mode),
+                  .mosi_clk_inv(mosi_clk_inv), 
                   // status sigs
                   .master_done(master_done),
                   .master_running(master_running),
@@ -202,6 +206,7 @@ module hsci_mcore(// globals
                   .enc_data(enc_data),
                   .enc_en(enc_en),
                   // oserdes i/f
+                  .menc_clk(menc_clk),
                   .menc_data(menc_data),
                   // i/f to mdec
                   .menc_state(menc_state),
@@ -229,6 +234,7 @@ module hsci_mcore(// globals
                                           .miso_test_mode(miso_test_mode),
                                           .miso_ber_cnt(miso_ber_cnt),
                                           .miso_test_lfsr_acq(miso_test_lfsr_acq),
+                                          .miso_clk_inv(miso_clk_inv), 
                                            // link control sigs
                                           .man_linkup(man_linkup),                  
                                           .auto_linkup(auto_linkup),
