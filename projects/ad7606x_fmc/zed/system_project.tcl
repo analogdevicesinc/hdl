@@ -16,6 +16,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #  - Options : Parallel(0)/Serial(1)
 # NUM_OF_SDI - Number of SDI lines used
 #  - Options: 1, 2, 4, 8
+# NUM_OF_CH - Number of channels used
+#  - Options: 4, 6, 8
 # EXT_CLK - Use external clock as ADC clock
 #  - Options : No(0), Yes(1)
 # TYPE - Combination of resolution & number of channels
@@ -37,6 +39,13 @@ if {[info exists ::env(NUM_OF_SDI)]} {
   set env(NUM_OF_SDI) $NUM_OF_SDI
 }
 
+set NUM_OF_CH 8
+if {[info exists ::env(NUM_OF_CH)]} {
+  set NUM_OF_CH $::env(NUM_OF_CH)
+} else {
+  set env(NUM_OF_CH) $NUM_OF_CH
+}
+
 set EXT_CLK [get_env_param EXT_CLK 0]
 
 set TYPE 0
@@ -50,6 +59,7 @@ adi_project ad7606x_fmc_zed 0 [list \
   DEV_CONFIG $DEV_CONFIG \
   INTF $INTF \
   NUM_OF_SDI $NUM_OF_SDI \
+  NUM_OF_CH $NUM_OF_CH \
   EXT_CLK $EXT_CLK \
   TYPE $TYPE \
 ]

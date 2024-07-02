@@ -120,6 +120,7 @@ set_property -dict [list \
   } \
 ] [ipx::get_user_parameters TYPE -of_objects $cc]
 
+
 adi_add_auto_fpga_spec_params
 
 ## save the modifications

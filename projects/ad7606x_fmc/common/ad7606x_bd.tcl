@@ -8,6 +8,7 @@ set DEV_CONFIG $ad_project_params(DEV_CONFIG)
 set INTF $ad_project_params(INTF)
 set TYPE $ad_project_params(TYPE)
 set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+set NUM_OF_CH $ad_project_params(NUM_OF_CH)
 set ADC_N_BITS [expr {$TYPE == 1 ? 18 : 16}]
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
 set EXT_CLK $ad_project_params(EXT_CLK)
@@ -16,6 +17,7 @@ set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
 puts "build parameters: DEV_CONFIG: $DEV_CONFIG"
 puts "build parameters: INTF: $INTF"
 puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
+puts "build parameters: NUM_OF_CH: $NUM_OF_CH"
 puts "build parameters: EXT_CLK: $EXT_CLK"
 puts "build parameters: TYPE: $TYPE"
 
@@ -75,7 +77,7 @@ switch $INTF {
     ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_DATA_WIDTH_SRC $TOTAL_N_BITS_DMA
 
     ad_ip_instance util_cpack2 ad7606x_adc_pack
-    ad_ip_parameter ad7606x_adc_pack CONFIG.NUM_OF_CHANNELS 8
+    ad_ip_parameter ad7606x_adc_pack CONFIG.NUM_OF_CHANNELS $NUM_OF_CH
     ad_ip_parameter ad7606x_adc_pack CONFIG.SAMPLE_DATA_WIDTH $ADC_TO_DMA_N_BITS
 
     if {$EXT_CLK == 1} {
@@ -121,7 +123,7 @@ switch $INTF {
     ad_connect ad7606x_adc_pack/packed_fifo_wr axi_ad7606x_dma/fifo_wr
     ad_connect ad7606x_adc_pack/fifo_wr_overflow axi_ad7606x/adc_dovf
 
-    for {set i 0} {$i < 8} {incr i} {
+    for {set i 0} {$i < $NUM_OF_CH} {incr i} {
       ad_connect axi_ad7606x/adc_data_$i ad7606x_adc_pack/fifo_wr_data_$i
       ad_connect axi_ad7606x/adc_enable_$i ad7606x_adc_pack/enable_$i
     }

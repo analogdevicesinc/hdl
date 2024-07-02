@@ -42,6 +42,7 @@ module axi_ad7606x #(
   parameter ADC_TO_DMA_N_BITS = 16,
   parameter ADC_N_BITS = 16,
   parameter EXTERNAL_CLK = 0,
+  parameter NUM_OF_CH = 0,
   parameter TYPE = 0
 ) (
 
