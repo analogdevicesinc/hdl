@@ -51,6 +51,9 @@ module axi_dac_interpolate_filter #(
   output                dac_valid_out,
   output                underflow,
 
+  input                 rearm_on_last,
+  input                 last,
+
   input       [ 2:0]    filter_mask,
   input       [31:0]    interpolation_ratio,
   input       [15:0]    dac_correction_coefficient,
@@ -105,7 +108,6 @@ module axi_dac_interpolate_filter #(
   wire              dac_cic_valid;
   wire    [109:0]   dac_cic_data;
 
-  wire              dma_valid_ch_sync;
   wire              dma_valid_ch;
   wire              flush_dma;
 
@@ -114,6 +116,7 @@ module axi_dac_interpolate_filter #(
 
   wire              transfer_start;
   wire              transfer_ready;
+  wire              rearm_channel;
 
   // Once enabled the raw value will be selected until the DMA has valid data.
   // This is a workaround for when DAC channels are start/stopped independent
@@ -197,12 +200,13 @@ module axi_dac_interpolate_filter #(
   assign transfer_start = !(en_start_trigger ^ trigger) &
                           transfer_ready & !dma_transfer_suspend;
 
+  assign rearm_channel = last & rearm_on_last;
   always @(posedge dac_clk) begin
     stop_transfer <= transfer_sm == IDLE ? 1'b0 :
                      (stop_transfer & !clear_stop_flag) |
                      dma_transfer_suspend |
                      (en_stop_trigger & trigger) |
-                     (sync_stop_channels & dma_valid & dma_valid_adjacent);
+                     (sync_stop_channels & (dma_valid ^ dma_valid_adjacent));
   end
 
   // transfer state machine
@@ -224,7 +228,9 @@ module axi_dac_interpolate_filter #(
       TRANSFER: begin
         clear_stop_flag <= 1'b0;
         transfer <= 1'b1;
-        if (stop_transfer) begin
+        if (rearm_channel) begin
+          transfer_sm_next <= WAIT;
+        end else if (stop_transfer) begin
           if (flush_dma_in) begin
             transfer_sm_next <= FLUSHING;
           end else begin

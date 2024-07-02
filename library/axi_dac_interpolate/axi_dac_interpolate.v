@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -51,6 +51,8 @@ module axi_dac_interpolate #(
   input                 dma_valid_b,
   output                dma_ready_a,
   output                dma_ready_b,
+  input                 last_a,
+  input                 last_b,
 
   input                 dac_enable_a,
   input                 dac_enable_b,
@@ -131,7 +133,7 @@ module axi_dac_interpolate #(
   wire              dac_correction_enable_b;
   wire    [15:0]    dac_correction_coefficient_a;
   wire    [15:0]    dac_correction_coefficient_b;
-  wire    [19:0]    trigger_config;
+  wire    [20:0]    trigger_config;
 
   wire              en_start_trigger;
   wire              en_stop_trigger;
@@ -156,6 +158,7 @@ module axi_dac_interpolate #(
   wire    [ 1:0]    raw_transfer_en;
   wire    [15:0]    dac_raw_ch_a_data;
   wire    [15:0]    dac_raw_ch_b_data;
+  wire              rearm_on_last_s;
 
   // signal name changes
 
@@ -175,6 +178,7 @@ module axi_dac_interpolate #(
   assign en_trigger_pins  = trigger_config[17:16];
   assign en_trigger_adc   = trigger_config[18];
   assign en_trigger_la    = trigger_config[19];
+  assign rearm_on_last_s  = trigger_config[20];
 
   assign trigger_active = |trigger_config[19:16];
   assign trigger = (ext_trigger & en_trigger_pins) |
@@ -224,6 +228,8 @@ module axi_dac_interpolate #(
     .dac_int_data (dac_int_data_a),
     .dma_ready (dma_ready_a),
     .underflow (underflow_a),
+    .rearm_on_last (rearm_on_last_s),
+    .last (last_a),
 
     .filter_mask (filter_mask_a),
     .interpolation_ratio (interpolation_ratio_a),
@@ -252,6 +258,8 @@ module axi_dac_interpolate #(
     .dac_valid (dac_valid_b),
     .dac_valid_out (dac_valid_out_b),
     .underflow (underflow_b),
+    .rearm_on_last (rearm_on_last_s),
+    .last (last_b),
 
     .dac_enable (dac_enable_b),
     .dac_int_data (dac_int_data_b),
