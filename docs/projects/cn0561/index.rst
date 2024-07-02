@@ -32,7 +32,7 @@ are necessary to interact with the device using a Xilinx FPGA development
 board; to acquire data from the ADC device, supporting continuous data 
 capture at maximum 1.5 MSPS data rate. However, due to a hardware limitation, 
 the Cora-Z7s variant will only support a maximum data clock of 24MHz,
-in contrast with 48MHz supported on the Zedboard.
+in contrast with 50MHz supported on the Zedboard.
 
 Supported boards
 -------------------------------------------------------------------------------
