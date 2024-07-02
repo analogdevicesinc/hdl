@@ -34,6 +34,11 @@ following few steps:
    `these <https://help.github.com/articles/cloning-a-repository/>`__
    instructions
 
+.. note::
+
+   If you want to contribute to our repository, check out this guide
+   :ref:`contributing`.
+
 Folder structure
 -------------------------------------------------------------------------------
 
