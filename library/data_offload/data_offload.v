@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -250,7 +250,7 @@ module data_offload #(
   // it's supported just with the FIFO interface
   util_axis_fifo_asym #(
     .S_DATA_WIDTH (SRC_DATA_WIDTH),
-    .S_ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
+    .ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
     .M_DATA_WIDTH (DST_DATA_WIDTH),
     .ASYNC_CLK (1)
   ) i_bypass_fifo (
