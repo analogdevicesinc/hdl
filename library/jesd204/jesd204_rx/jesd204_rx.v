@@ -18,6 +18,7 @@ module jesd204_rx #(
   parameter ENABLE_FRAME_ALIGN_CHECK = 1,
   parameter ENABLE_FRAME_ALIGN_ERR_RESET = 0,
   parameter ENABLE_CHAR_REPLACE = 0,
+  parameter ENABLE_FEC = 0,
   parameter ASYNC_CLK = 1,
   parameter TPL_DATA_PATH_WIDTH = LINK_MODE == 2 ? 8 : 4
 ) (
@@ -59,6 +60,7 @@ module jesd204_rx #(
   input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input cfg_disable_scrambler,
+  input [1:0] cfg_header_mode,
   input cfg_disable_char_replacement,
   input [7:0] cfg_frame_align_err_threshold,
 
@@ -72,7 +74,7 @@ module jesd204_rx #(
   input [7:0] device_cfg_buffer_delay,
 
   input ctrl_err_statistics_reset,
-  input [6:0] ctrl_err_statistics_mask,
+  input [8:0] ctrl_err_statistics_mask,
 
   output [32*NUM_LANES-1:0] status_err_statistics_cnt,
 
@@ -501,6 +503,7 @@ module jesd204_rx #(
 
     jesd204_rx_lane_64b #(
       .ELASTIC_BUFFER_SIZE(ELASTIC_BUFFER_SIZE),
+      .ENABLE_FEC(ENABLE_FEC),
       .TPL_DATA_PATH_WIDTH(TPL_DATA_PATH_WIDTH),
       .ASYNC_CLK(ASYNC_CLK)
     ) i_lane (
@@ -515,7 +518,7 @@ module jesd204_rx #(
       .phy_block_sync(phy_block_sync_r[i]),
 
       .cfg_disable_scrambler(cfg_disable_scrambler),
-      .cfg_header_mode(2'b0),
+      .cfg_header_mode(cfg_header_mode),
       .cfg_rx_thresh_emb_err(5'd8),
       .cfg_beats_per_multiframe(cfg_beats_per_multiframe),
 
@@ -529,7 +532,7 @@ module jesd204_rx #(
       .emb_lock(emb_lock[i]),
 
       .ctrl_err_statistics_reset(ctrl_err_statistics_reset),
-      .ctrl_err_statistics_mask(ctrl_err_statistics_mask[6:3]),
+      .ctrl_err_statistics_mask(ctrl_err_statistics_mask[8:3]),
       .status_err_statistics_cnt(status_err_statistics_cnt[32*i+31:32*i]),
 
       .status_lane_emb_state(status_lane_emb_state[3*i+2:3*i]),
