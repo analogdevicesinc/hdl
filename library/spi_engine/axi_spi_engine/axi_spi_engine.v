@@ -133,7 +133,7 @@ module axi_spi_engine #(
   input [7:0] offload_sync_data
 );
 
-  localparam PCORE_VERSION = 'h010201;
+  localparam PCORE_VERSION = 'h010300;
   localparam S_AXI = 0;
   localparam UP_FIFO = 1;
 

@@ -251,9 +251,13 @@ bus behavior.
    * - Bits
      - Name
      - Description
-   * - [7:3]
+   * - [7:4]
      - reserved
      - Must always be 0.
+   * - [3]
+     - sdo_idle_state
+     - Configures the output of the SDO pin when CS is inactive or during
+       read-only transfers.
    * - [2]
      - three_wire
      - Configures the output of the three_wire pin.
