@@ -16,11 +16,12 @@ set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)
 set EXT_CLK $ad_project_params(EXT_CLK)
+set TYPE $ad_project_params(TYPE)
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-set sys_cstring "$DEV_CONFIG,$NUM_OF_SDI,$EXT_CLK"
+set sys_cstring "$DEV_CONFIG,$NUM_OF_SDI,$EXT_CLK,$TYPE"
 
 sysid_gen_sys_init_file $sys_cstring

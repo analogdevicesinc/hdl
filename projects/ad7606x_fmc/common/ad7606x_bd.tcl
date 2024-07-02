@@ -6,8 +6,9 @@
 # system level parameters
 set DEV_CONFIG $ad_project_params(DEV_CONFIG)
 set INTF $ad_project_params(INTF)
+set TYPE $ad_project_params(TYPE)
 set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
-set ADC_N_BITS [expr {$DEV_CONFIG == 2 ? 18 : 16}]
+set ADC_N_BITS [expr {$TYPE == 1 ? 18 : 16}]
 set ADC_TO_DMA_N_BITS [expr {$ADC_N_BITS == 16 ? 16 : 32}]
 set EXT_CLK $ad_project_params(EXT_CLK)
 set TOTAL_N_BITS_DMA [expr {$ADC_TO_DMA_N_BITS*8}]
@@ -16,6 +17,7 @@ puts "build parameters: DEV_CONFIG: $DEV_CONFIG"
 puts "build parameters: INTF: $INTF"
 puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
 puts "build parameters: EXT_CLK: $EXT_CLK"
+puts "build parameters: TYPE: $TYPE"
 
 # control lines
 create_bd_port -dir I rx_busy
@@ -57,11 +59,17 @@ switch $INTF {
     if {$DEV_CONFIG == 0} {
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 124
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 125
-    } else {
+    } elseif {$DEV_CONFIG == 1 || $DEV_CONFIG == 2} {
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 99
       ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 100
+    } elseif {$DEV_CONFIG == 3} {
+      ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 329
+      ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 330
+    } else {
+      ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_WIDTH 499
+      ad_ip_parameter ad7606_pwm_gen CONFIG.PULSE_0_PERIOD 500
     }
-
+    
     # dma
     ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_TYPE_SRC 2
     ad_ip_parameter axi_ad7606x_dma CONFIG.DMA_DATA_WIDTH_SRC $TOTAL_N_BITS_DMA
@@ -134,7 +142,7 @@ switch $INTF {
   1 {
 
     # instantiation
-    create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 ad7606_spi
+    create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad7606_spi
 
     # spi engine
     source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl

@@ -94,8 +94,31 @@ set_property -dict [list \
     "AD7606B" "0" \
     "AD7606C-16" "1" \
     "AD7606C-18" "2" \
+    "AD7605-4" "3" \
+    "AD7606-8" "4" \
+    "AD7606-6" "5" \
+    "AD7606-4" "6" \
+    "AD7607" "7" \
+    "AD7608" "8" \
+    "AD7609" "9" \        
   } \
 ] [ipx::get_user_parameters DEV_CONFIG -of_objects $cc]
+
+ipgui::add_param -name "TYPE" -component $cc -parent $page0
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "Resolution & Number of channels Selection" \
+] [ipgui::get_guiparamspec -name "TYPE" -component $cc]
+
+set_property -dict [list \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" { \
+    "16b_8ch" "0" \
+    "18b_8ch" "1" \
+    "16b_4ch" "2" \
+    "16b_6ch" "3" \  
+  } \
+] [ipx::get_user_parameters TYPE -of_objects $cc]
 
 adi_add_auto_fpga_spec_params
 

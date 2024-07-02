@@ -41,7 +41,8 @@ module axi_ad7606x #(
   parameter DEV_CONFIG = 0,
   parameter ADC_TO_DMA_N_BITS = 16,
   parameter ADC_N_BITS = 16,
-  parameter EXTERNAL_CLK = 0
+  parameter EXTERNAL_CLK = 0,
+  parameter TYPE = 0
 ) (
 
   // physical data interface
@@ -301,7 +302,7 @@ module axi_ad7606x #(
   endgenerate
 
   generate
-    if (DEV_CONFIG == AD7606B || DEV_CONFIG == AD7606C_16) begin
+    if (ADC_N_BITS == 16) begin
       axi_ad7606x_16b_pif i_ad7606_parallel_interface (
         .cs_n (rx_cs_n),
         .db_o (rx_db_o),

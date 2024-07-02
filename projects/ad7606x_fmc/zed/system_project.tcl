@@ -9,13 +9,17 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # Parameter description
 # DEV_CONFIG - The device which will be used
-#  - Options : AD7606B(0)/C-16(1)/C-18(2)
+#  - Options : AD7606B(0)/C-16(1)/C-18(2)/
+#              AD7605-4(3)/AD7606-8/6/4(4/5/6)/
+#              AD7607(7)/AD7608(8)AD7609(9)
 # INTF - Operation interface
 #  - Options : Parallel(0)/Serial(1)
 # NUM_OF_SDI - Number of SDI lines used
 #  - Options: 1, 2, 4, 8
 # EXT_CLK - Use external clock as ADC clock
 #  - Options : No(0), Yes(1)
+# TYPE - Combination of resolution & number of channels
+#  - Options : 16b_8ch(0), 18b_8ch(1), 16b_4ch(2), 16b_4ch(3)
 
 set DEV_CONFIG [get_env_param DEV_CONFIG 0]
 
@@ -35,11 +39,19 @@ if {[info exists ::env(NUM_OF_SDI)]} {
 
 set EXT_CLK [get_env_param EXT_CLK 0]
 
+set TYPE 0
+if {[info exists ::env(TYPE)]} {
+  set TYPE $::env(TYPE)
+} else {
+  set env(TYPE) $TYPE
+}
+
 adi_project ad7606x_fmc_zed 0 [list \
   DEV_CONFIG $DEV_CONFIG \
   INTF $INTF \
   NUM_OF_SDI $NUM_OF_SDI \
   EXT_CLK $EXT_CLK \
+  TYPE $TYPE \
 ]
 
 adi_project_files ad7606x_fmc_zed [list \
