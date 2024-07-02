@@ -119,8 +119,8 @@ module system_top (
   output            spi_clk,
   output            spi_mosi,
   input             spi_miso,
-  inout             sync_error,
-  inout             error
+  input             sync_error,
+  input             error
 );
 
   // internal signals
@@ -150,17 +150,8 @@ module system_top (
   assign gpio_i[13:8] = gpio_bd_i[5:0];
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
-  ALT_IOBUF error_iobuf (
-    .i(gpio_o[33]),
-    .oe(gpio_t[33]),
-    .o(gpio_i[33]),
-    .io(error));
-
-  ALT_IOBUF sync_error_iobuf (
-    .i(gpio_o[32]),
-    .oe(gpio_t[32]),
-    .o(gpio_i[32]),
-    .io(sync_error));
+  assign gpio_i[32] = sync_error;
+  assign gpio_i[33] = error;
 
   // IO Buffers for I2C
 
