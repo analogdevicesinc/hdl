@@ -142,7 +142,7 @@ module system_top  #(
   wire            mst_resetdone;
 
   /* reset should only be asserted if powergood is high */
-  assign gt_reset_s    = gt_reset | ~rstb; // & gt_powergood;
+  assign gt_reset_s    = gt_reset & gt_powergood;
   assign mst_resetdone = rx_resetdone & tx_resetdone;
 
   // instantiations

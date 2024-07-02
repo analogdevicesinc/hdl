@@ -16,17 +16,37 @@ proc create_reset_logic {
   create_bd_pin -dir O ${ip_name}/rx_resetdone
   create_bd_pin -dir O ${ip_name}/tx_resetdone
 
-  # Sync reset to apb3clk
-  # create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_sync
-  # ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_sync/out_clk
-  # ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_sync/out_resetn
-  # ad_connect ${ip_name}/gtreset_in ${ip_name}/gtreset_sync/in_bits
+  # Sync resets to apb3clk
+  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_sync
+  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_sync/out_clk
+  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_sync/out_resetn
+  ad_connect ${ip_name}/gtreset_in ${ip_name}/gtreset_sync/in_bits
 
-  ad_connect ${ip_name}/gtreset_in ${ip_name}/gt_bridge_ip_0/gtreset_in
-  ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
-  ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/gt_bridge_ip_0/reset_tx_pll_and_datapath_in
-  ad_connect ${ip_name}/gtreset_rx_datapath ${ip_name}/gt_bridge_ip_0/reset_rx_datapath_in
-  ad_connect ${ip_name}/gtreset_tx_datapath ${ip_name}/gt_bridge_ip_0/reset_tx_datapath_in
+  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_rx_pll_and_datapath_sync
+  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_rx_pll_and_datapath_sync/out_clk
+  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_rx_pll_and_datapath_sync/out_resetn
+  ad_connect ${ip_name}/gtreset_rx_pll_and_datapath ${ip_name}/gtreset_rx_pll_and_datapath_sync/in_bits
+
+  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_tx_pll_and_datapath_sync
+  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_tx_pll_and_datapath_sync/out_clk
+  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_tx_pll_and_datapath_sync/out_resetn
+  ad_connect ${ip_name}/gtreset_tx_pll_and_datapath ${ip_name}/gtreset_tx_pll_and_datapath_sync/in_bits
+
+  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_rx_datapath_sync
+  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_rx_datapath_sync/out_clk
+  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_rx_datapath_sync/out_resetn
+  ad_connect ${ip_name}/gtreset_rx_datapath ${ip_name}/gtreset_rx_datapath_sync/in_bits
+
+  create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_tx_datapath_sync
+  ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_tx_datapath_sync/out_clk
+  ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_tx_datapath_sync/out_resetn
+  ad_connect ${ip_name}/gtreset_tx_datapath ${ip_name}/gtreset_tx_datapath_sync/in_bits
+
+  ad_connect ${ip_name}/gtreset_sync/out_bits ${ip_name}/gt_bridge_ip_0/gtreset_in
+  ad_connect ${ip_name}/gtreset_rx_pll_and_datapath_sync/out_bits ${ip_name}/gt_bridge_ip_0/reset_rx_pll_and_datapath_in
+  ad_connect ${ip_name}/gtreset_tx_pll_and_datapath_sync/out_bits ${ip_name}/gt_bridge_ip_0/reset_tx_pll_and_datapath_in
+  ad_connect ${ip_name}/gtreset_rx_datapath_sync/out_bits ${ip_name}/gt_bridge_ip_0/reset_rx_datapath_in
+  ad_connect ${ip_name}/gtreset_tx_datapath_sync/out_bits ${ip_name}/gt_bridge_ip_0/reset_tx_datapath_in
 
   set num_quads [expr int(ceil(1.0 * $num_lanes / 4))]
 
@@ -319,12 +339,12 @@ proc create_versal_phy {
       CONFIG.PROT0_GT_DIRECTION ${gt_direction} \
     ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
 
-    if {$intf_cfg != "TX"} {
+    if {$intf_cfg != "TX" && $j == 0} {
       ad_ip_instance bufg_gt ${ip_name}/bufg_gt_rx_${j}
       ad_connect ${ip_name}/gt_quad_base_${j}/ch0_rxoutclk ${ip_name}/bufg_gt_rx_${j}/outclk
       ad_connect ${ip_name}/gt_bridge_ip_0/rx_clr_out ${ip_name}/bufg_gt_rx_${j}/gt_bufgtclr
     }
-    if {$intf_cfg != "RX"} {
+    if {$intf_cfg != "RX" && $j == 0} {
       ad_ip_instance bufg_gt ${ip_name}/bufg_gt_tx_${j}
       ad_connect ${ip_name}/gt_quad_base_${j}/ch0_txoutclk ${ip_name}/bufg_gt_tx_${j}/outclk
       ad_connect ${ip_name}/gt_bridge_ip_0/tx_clr_out ${ip_name}/bufg_gt_tx_${j}/gt_bufgtclr
@@ -349,7 +369,7 @@ proc create_versal_phy {
       create_bd_intf_pin -mode Master -vlnv xilinx.com:display_jesd204:jesd204_rx_bus_rtl:1.0 ${ip_name}/rx${j}
       ad_connect ${ip_name}/rx${j} ${ip_name}/rx_adapt_${j}/RX
 
-      ad_connect ${ip_name}/bufg_gt_rx_${quad_index}/usrclk ${ip_name}/rx_adapt_${j}/usr_clk
+      ad_connect ${ip_name}/bufg_gt_rx_0/usrclk ${ip_name}/rx_adapt_${j}/usr_clk
     }
   }
   if {$intf_cfg != "RX"} {
@@ -367,17 +387,17 @@ proc create_versal_phy {
       create_bd_intf_pin -mode Slave -vlnv xilinx.com:display_jesd204:jesd204_tx_bus_rtl:1.0 ${ip_name}/tx${j}
       ad_connect ${ip_name}/tx${j} ${ip_name}/tx_adapt_${j}/TX
 
-      ad_connect ${ip_name}/bufg_gt_tx_${quad_index}/usrclk ${ip_name}/tx_adapt_${j}/usr_clk
+      ad_connect ${ip_name}/bufg_gt_tx_0/usrclk ${ip_name}/tx_adapt_${j}/usr_clk
     }
   }
 
   for {set i 0} {$i < $num_quads} {incr i} {
     for {set j 0} {$j < 4} {incr j} {
       if {$intf_cfg != "TX"} {
-        ad_connect ${ip_name}/bufg_gt_rx_${i}/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_rxusrclk
+        ad_connect ${ip_name}/bufg_gt_rx_0/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_rxusrclk
       }
       if {$intf_cfg != "RX"} {
-        ad_connect ${ip_name}/bufg_gt_tx_${i}/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_txusrclk
+        ad_connect ${ip_name}/bufg_gt_tx_0/usrclk ${ip_name}/gt_quad_base_${i}/ch${j}_txusrclk
       }
     }
   }
