@@ -14,6 +14,7 @@
 <: set dma_data_width_sg       [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_SG] :>
 <: set dma_length_width        [get_property MODELPARAM_VALUE.DMA_LENGTH_WIDTH] :>
 <: set dma_2d_transfer         [get_property MODELPARAM_VALUE.DMA_2D_TRANSFER] :>
+<: set dma_2d_tlast_mode       [get_property MODELPARAM_VALUE.DMA_2D_TLAST_MODE] :>
 <: set dma_sg_transfer         [get_property MODELPARAM_VALUE.DMA_SG_TRANSFER] :>
 <: set async_clk_req_src       [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SRC] :>
 <: set async_clk_src_dest      [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_DEST] :>
@@ -37,6 +38,11 @@
 <: set axi_id_width_dest       [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_DEST] :>
 <: set axi_id_width_sg         [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SG] :>
 <: set disable_debug_registers [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
+<: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
+<: set framelock               [get_property MODELPARAM_VALUE.FRAMELOCK] :>
+<: set max_num_frames          [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
+<: set use_ext_sync            [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
+<: set has_autorun             [get_property MODELPARAM_VALUE.AUTORUN] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -49,35 +55,54 @@ package <=: ComponentName :>_pkg;
 // These parameters are named after the component for use in your verification
 // environment.
 ///////////////////////////////////////////////////////////////////////////
-  parameter <=: ComponentName :>_ID                      = <=: $id :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SRC      = <=: $dma_data_width_src :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_DEST     = <=: $dma_data_width_dest :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SG       = <=: $dma_data_width_sg :>;
-  parameter <=: ComponentName :>_DMA_LENGTH_WIDTH        = <=: $dma_length_width :>;
-  parameter <=: ComponentName :>_DMA_2D_TRANSFER         = <=: b2i $dma_2d_transfer :>;
-  parameter <=: ComponentName :>_DMA_SG_TRANSFER         = <=: b2i $dma_sg_transfer :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SRC       = <=: b2i $async_clk_req_src :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_SRC_DEST      = <=: b2i $async_clk_src_dest :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_DEST_REQ      = <=: b2i $async_clk_dest_req :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SG        = <=: b2i $async_clk_req_sg :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_SRC_SG        = <=: b2i $async_clk_src_sg :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_DEST_SG       = <=: b2i $async_clk_dest_sg :>;
-  parameter <=: ComponentName :>_AXI_SLICE_DEST          = <=: b2i $axi_slice_dest :>;
-  parameter <=: ComponentName :>_AXI_SLICE_SRC           = <=: b2i $axi_slice_src :>;
-  parameter <=: ComponentName :>_SYNC_TRANSFER_START     = <=: b2i $sync_transfer_start :>;
-  parameter <=: ComponentName :>_CYCLIC                  = <=: b2i $cyclic :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_DEST   = <=: $dma_axi_protocol_dest :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SRC    = <=: $dma_axi_protocol_src :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SG     = <=: $dma_axi_protocol_sg :>;
-  parameter <=: ComponentName :>_DMA_TYPE_DEST           = <=: $dma_type_dest :>;
-  parameter <=: ComponentName :>_DMA_TYPE_SRC            = <=: $dma_type_src :>;
-  parameter <=: ComponentName :>_DMA_AXI_ADDR_WIDTH      = <=: $dma_axi_addr_width :>;
-  parameter <=: ComponentName :>_MAX_BYTES_PER_BURST     = <=: $max_bytes_per_burst :>;
-  parameter <=: ComponentName :>_FIFO_SIZE               = <=: $fifo_size :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_SRC        = <=: $axi_id_width_src :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST       = <=: $axi_id_width_dest :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_SG         = <=: $axi_id_width_sg :>;
-  parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS = <=: b2i $disable_debug_registers :>;
+  parameter <=: ComponentName :>_ID                         = <=: $id :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SRC         = <=: $dma_data_width_src :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_DEST        = <=: $dma_data_width_dest :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SG          = <=: $dma_data_width_sg :>;
+  parameter <=: ComponentName :>_DMA_LENGTH_WIDTH           = <=: $dma_length_width :>;
+  parameter <=: ComponentName :>_DMA_2D_TRANSFER            = <=: b2i $dma_2d_transfer :>;
+  parameter <=: ComponentName :>_DMA_2D_TLAST_MODE          = <=: $dma_2d_tlast_mode :>;
+  parameter <=: ComponentName :>_DMA_SG_TRANSFER            = <=: b2i $dma_sg_transfer :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SRC          = <=: b2i $async_clk_req_src :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_SRC_DEST         = <=: b2i $async_clk_src_dest :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_DEST_REQ         = <=: b2i $async_clk_dest_req :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SG           = <=: b2i $async_clk_req_sg :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_SRC_SG           = <=: b2i $async_clk_src_sg :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_DEST_SG          = <=: b2i $async_clk_dest_sg :>;
+  parameter <=: ComponentName :>_AXI_SLICE_DEST             = <=: b2i $axi_slice_dest :>;
+  parameter <=: ComponentName :>_AXI_SLICE_SRC              = <=: b2i $axi_slice_src :>;
+  parameter <=: ComponentName :>_SYNC_TRANSFER_START        = <=: b2i $sync_transfer_start :>;
+  parameter <=: ComponentName :>_CYCLIC                     = <=: b2i $cyclic :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_DEST      = <=: $dma_axi_protocol_dest :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SRC       = <=: $dma_axi_protocol_src :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SG        = <=: $dma_axi_protocol_sg :>;
+  parameter <=: ComponentName :>_DMA_TYPE_DEST              = <=: $dma_type_dest :>;
+  parameter <=: ComponentName :>_DMA_TYPE_SRC               = <=: $dma_type_src :>;
+  parameter <=: ComponentName :>_DMA_AXI_ADDR_WIDTH         = <=: $dma_axi_addr_width :>;
+  parameter <=: ComponentName :>_MAX_BYTES_PER_BURST        = <=: $max_bytes_per_burst :>;
+  parameter <=: ComponentName :>_FIFO_SIZE                  = <=: $fifo_size :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_SRC           = <=: $axi_id_width_src :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST          = <=: $axi_id_width_dest :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_SG            = <=: $axi_id_width_sg :>;
+  parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS    = <=: b2i $disable_debug_registers :>;
+  parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF      = <=: b2i $enable_diagnostics_if :>;
+  parameter <=: ComponentName :>_FRAMELOCK                  = <=: b2i $framelock :>;
+  parameter <=: ComponentName :>_MAX_NUM_FRAMES             = <=: $max_num_frames :>;
+  parameter <=: ComponentName :>_USE_EXT_SYNC               = <=: b2i $use_ext_sync :>;
+  parameter <=: ComponentName :>_AUTORUN                    = <=: b2i $has_autorun :>;
+
+
+  parameter <=: ComponentName :>_AUTORUN_FLAGS              = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_FLAGS        ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_SRC_ADDR           = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_SRC_ADDR     ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_DEST_ADDR          = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_DEST_ADDR    ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_X_LENGTH           = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_X_LENGTH     ]] :>;
+
+  parameter <=: ComponentName :>_AUTORUN_Y_LENGTH           = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_Y_LENGTH     ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_SRC_STRIDE         = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_SRC_STRIDE   ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_DEST_STRIDE        = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_DEST_STRIDE  ]] :>;
+
+  parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_CONFIG   = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_CONFIG    ]] :>;
+  parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_STRIDE   = <=: [expr [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_STRIDE ]] :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg
