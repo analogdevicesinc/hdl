@@ -419,7 +419,7 @@ module axi_ad7606x #(
     .up_drp_wdata (),
     .up_drp_rdata (),
     .up_drp_ready (),
-    .up_drp_locked (),
+    .up_drp_locked (1'b1),
     .adc_config_wr (wr_data_s),
     .adc_config_ctrl (adc_config_ctrl_s),
     .adc_config_rd ({16'd0, rd_data_s}),
