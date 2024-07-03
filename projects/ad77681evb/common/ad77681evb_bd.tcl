@@ -8,7 +8,7 @@ create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 a
 create_bd_port -dir I adc_data_ready
 
 ad_ip_instance axi_clkgen spi_clkgen
-ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 10
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
 ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 ad_connect sys_cpu_clk spi_clkgen/clk
