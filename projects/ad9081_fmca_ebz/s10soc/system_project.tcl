@@ -195,8 +195,8 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to irqb[1]
 set_instance_assignment -name IO_STANDARD "1.8 V" -to hmc_gpio1
 
 set_location_assignment PIN_BG30 -to "spi0_csb"               ; ## D11  FMCA_LA05_P         IO,LVDS2A_18p
-set_location_assignment PIN_BC30 -to "spi0_sclk"              ; ## H10  FMCA_LA04_P         IO,LVDS2A_16p
-set_location_assignment PIN_BD30 -to "spi0_mosi"              ; ## H11  FMCA_LA04_N         IO,LVDS2A_16n
+set_location_assignment PIN_BD30 -to "spi0_sclk"              ; ## H10  FMCA_LA04_P         IO,LVDS2A_16p
+set_location_assignment PIN_BC30 -to "spi0_mosi"              ; ## H11  FMCA_LA04_N         IO,LVDS2A_16n
 set_location_assignment PIN_BH30 -to "spi0_miso"              ; ## D12  FMCA_LA05_N         IO,LVDS2A_18n
 set_location_assignment PIN_AU29 -to "spi1_csb"               ; ## G15  FMCA_LA12_P         IO,LVDS2A_1p
 set_location_assignment PIN_AT15 -to "spi1_sclk"              ; ## H16  FMCA_LA11_P         IO,LVDS3B_9p
