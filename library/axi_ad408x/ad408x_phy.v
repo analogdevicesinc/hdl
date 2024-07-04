@@ -110,12 +110,12 @@ module ad408x_phy #(
   (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_n;
                             wire           adc_clk_phy;
                             wire           adc_clk_data;
-                            wire   [19:0]  adc_data_p_d;
+
                             wire   [19:0]  pattern_value;
                             wire   [ 1:0]  delay_locked_s;
   (* MARK_DEBUG = "TRUE" *) wire           filter_rdy_n_s;
   (* MARK_DEBUG = "TRUE" *) wire           fall_filter_ready;
-
+                            wire   [19:0]  adc_data_s;
 
 
 
@@ -124,7 +124,7 @@ module ad408x_phy #(
   (* MARK_DEBUG = "TRUE" *) reg    [ 3:0]  adc_cnt_p           = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg            cycle_done          = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p          = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 1:0]  adc_valid_d         = 'b0;
+  (* MARK_DEBUG = "TRUE" *) reg      adc_valid_d         = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg    [ 1:0]  cnv_in_io_d         = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg            filter_cycle        = 'b1;
   (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state      = 'b0;
@@ -132,12 +132,12 @@ module ad408x_phy #(
   (* MARK_DEBUG = "TRUE" *) reg            sync_status_int     = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg            sync_status_int_d   = 'b0;
   (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state_next = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p_dd[0:1];
+                            reg  [19:0]   adc_data_p_d;
 
   assign pattern_value     = 'hac5d6;
   assign single_lane       = num_lanes[0];
   assign adc_clk           = adc_clk_data;
-  assign adc_valid         = adc_valid_d[1];
+  assign adc_valid         = adc_valid_d;
   assign delay_locked      = &delay_locked_s;
   assign sync_status       = sync_status_int_d;
   assign rise_slip         = ~slip_d[1]      & slip_d[0];
@@ -146,7 +146,8 @@ module ad408x_phy #(
   assign filter_rdy_n_s    = ~filter_rdy_n   & filter_enable;
   assign rise_cnv          = ~cnv_in_io_d[1] & cnv_in_io_d[0];
   assign fall_filter_ready =  filter_rdy_n_d & ~filter_rdy_n_s;
-  assign adc_data          = {{12{adc_data_p_dd[1][19]}},adc_data_p_dd[1]};
+  assign adc_data          = {{12{adc_data_p_d[19]}},adc_data_p_d};
+  assign adc_data_s        = sync_pos_neg ? adc_data_pos: adc_data_neg ;
   assign adc_valid_s       =  cycle_done & (transfer_state == COUNT || transfer_state == FILTER_COUNT);
 
   IBUFDS i_cnv_in_ibuf(
@@ -171,15 +172,19 @@ module ad408x_phy #(
     .I (adc_clk_phy),
     .O (adc_clk_data));
 
+    always @(posedge adc_clk_data) begin
+      adc_valid_d <= adc_valid_s;
+      if(adc_valid_s == 1'b1) begin
+        adc_data_p_d <= adc_data_s;
+      end else begin
+        adc_data_p_d <= adc_data_p_d;
+      end
+    end
 
   always @(posedge adc_clk_data) begin
-
-    adc_data_p_dd[0] <= adc_data_p_d;
-    adc_data_p_dd[1] <= adc_data_p_dd[0];
     filter_rdy_n_d   <= filter_rdy_n_s;
     slip_d           <= {slip_d[0],slip};
     cnv_in_io_d      <= {cnv_in_io_d[0],cnv_in_io};
-    adc_valid_d      <= {adc_valid_d[0],adc_valid_s};
   end
 
   always @(posedge adc_clk_data) begin
@@ -189,6 +194,19 @@ module ad408x_phy #(
       transfer_state <= transfer_state_next;
     end
   end
+
+  reg [19:0] adc_data_pos = 'b0;
+  reg [19:0] adc_data_neg = 'b0;
+
+  always @(posedge adc_clk_phy) begin
+  adc_data_pos <= adc_data_p;
+  end
+
+  always @(negedge adc_clk_phy) begin
+    adc_data_neg <= adc_data_p;
+  end
+
+reg cycle_done_d = 1'b0;
 
 // FSM next state logic
 
@@ -216,7 +234,7 @@ module ad408x_phy #(
         transfer_state_next = (cycle_done)  ? ((filter_rdy_n_s & filter_cycle)
                                             ? FILTER_COUNT :(filter_enable)
                                             ? IDLE : COUNT ) : SYNC;
-        cycle_done          = (adc_data_p_d == pattern_value);
+        cycle_done          = (adc_data_pos == pattern_value) || (adc_data_neg == pattern_value) ? 1'b1 : cycle_done_d;
         sync_status_int     = cycle_done;
       end
       default : begin
@@ -225,8 +243,18 @@ module ad408x_phy #(
       end
     endcase
   end
+  reg sync_pos_neg = 1'b0;
 
   always @(posedge adc_clk_data) begin
+    cycle_done_d <= cycle_done;
+    if(cycle_done && (adc_data_pos == pattern_value)) begin
+      sync_pos_neg <= 1'b1;
+    end else if (cycle_done && (adc_data_neg == pattern_value)) begin
+      sync_pos_neg <= 1'b0;
+    end else begin
+      sync_pos_neg <= sync_pos_neg;
+    end
+
     if( sync_status_int ) begin
       sync_status_int_d <= 1'b1;
     end else if (transfer_state == IDLE && !filter_enable ) begin
@@ -246,35 +274,6 @@ module ad408x_phy #(
       end
     end
   end
-
-// CDC between the 400MHz phy clock and 200MHz data clock
-
-  util_axis_fifo # (
-    .DATA_WIDTH(20),
-    .ADDRESS_WIDTH(4),
-    .ASYNC_CLK(1)
-  ) util_axis_fifo_inst (
-    .m_axis_aclk(adc_clk_data),
-    .m_axis_aresetn(~adc_rst),
-    .m_axis_ready(1'b1),
-    .m_axis_valid(),
-    .m_axis_data(adc_data_p_d),
-    .m_axis_tkeep(),
-    .m_axis_tlast(),
-    .m_axis_level(),
-    .m_axis_empty(),
-    .m_axis_almost_empty(),
-
-    .s_axis_aclk(adc_clk_phy),
-    .s_axis_aresetn(~adc_rst),
-    .s_axis_ready(),
-    .s_axis_valid(1'b1),
-    .s_axis_data(adc_data_p),
-    .s_axis_tkeep(),
-    .s_axis_tlast(),
-    .s_axis_room(),
-    .s_axis_full(),
-    .s_axis_almost_full());
 
   always @(posedge adc_clk_phy) begin
     if(single_lane) begin
