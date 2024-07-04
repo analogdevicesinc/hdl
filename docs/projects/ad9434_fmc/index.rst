@@ -11,7 +11,7 @@ The :adi:`AD9434` is a 12-bit monolithic sampling analog-to-digital converter
 operates at up to a 500 MSPS conversion rate and is optimized for outstanding
 dynamic performance in wideband carrier and broadband systems. All necessary
 functions, including a sample-and-hold and voltage reference, are included on
-the chip to provide a complete signal conversion solution. This reference 
+the chip to provide a complete signal conversion solution. This reference
 design includes a data capture interface and the external DDR-DRAM interface
 for sample storage. It allows programming the device and monitoring its internal
 status registers. The board also provides other options to drive the clock and
@@ -76,6 +76,14 @@ For LVPECL and LVDS configurations, appropriate charge pump filter circuit
 values are necessary to have an optimized clock buffer performance from
 :adi:`AD9517-4`.
 
+.. warning::
+
+   On Zedboard, the frequency is set to 463.82MHz, because there is a limitation
+   for BUFG input clock frequency to 464MHz, which is below the maximum
+   sampling rate of the ADC (500MSPS).
+
+   Thus the adc_clk period is set to 2.156ns (463.82MHz) on Zedboard.
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -106,7 +114,7 @@ SPI connections
      - 1
    * - PS
      - SPI 0
-     - AD9434BCPZ
+     - AD9434
      - 0
 
 Interrupts
@@ -167,8 +175,9 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets: :adi:`AD9434`
-- :dokuwiki:`EVAL-AD9434 user guide <resources/eval/ad9434fmc-500ebz>`
+-  Product datasheet: :adi:`AD9434`
+-  Schematic file: `ad9434_fmc_500ebz_sch.pdf <https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_sch.pdf>`__
+-  :dokuwiki:`EVAL-AD9434 user guide <resources/eval/ad9434fmc-500ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -190,19 +199,19 @@ HDL related
      - :ref:`here <axi_dmac>`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_clkgen>`
+     - :ref:`here <axi_clkgen>`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
+     - :ref:`here <axi_hdmi_tx>`
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
      - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
