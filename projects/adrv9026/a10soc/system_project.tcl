@@ -176,7 +176,7 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_miso
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_mosi
 
 # set optimization to get a better timing closure
-set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
-set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 1.2
+set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT WITH MAXIMUM PLACEMENT EFFORT"
+set_global_assignment -name PLACEMENT_EFFORT_MULTIPLIER 1.5
 
 execute_flow -compile
