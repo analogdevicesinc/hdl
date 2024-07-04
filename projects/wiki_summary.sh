@@ -39,7 +39,7 @@ do
 	README="./${PROJECT}/Readme.md"
 	if [ ! -f ${README} ] ; then
 		echo -n "  ${PROJECT} |"
-		echo -n "  [[repo>hdl/tree/master/projects/${PROJECT}|Source]] |"
+		echo -n "  [[repo>hdl/tree/main/projects/${PROJECT}|Source]] |"
 		echo -n " missing ${README} |||"
 	else
 		BOARD=$(grep -i "Board Product Page" ${README} | sed -e 's|^.*(||' -e 's|).*$||' -e 's|http.*\/\/www\.analog\.com\/|adi>|')
@@ -62,7 +62,7 @@ do
 			echo -n "  ${PROJECT} |"
 		fi
 
-		echo -n "  [[repo>hdl/tree/master/projects/${PROJECT}|Source]] |"
+		echo -n "  [[repo>hdl/tree/main/projects/${PROJECT}|Source]] |"
 
 		if [ ! -z "${PROJECT_DOC}" ] ; then
 			i=0
