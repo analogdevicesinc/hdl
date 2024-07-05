@@ -43,9 +43,7 @@ set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
     -mmap_ref axi_spi_engine_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
 
-
-global env
-set ifp "${env(TOOLRTF)}/ip/interfaces"
+set ifp "$ipl::PropelIPLocal_path/interfaces"
 
 set if [ipl::createcif -vendor analog.com \
     -library ADI \

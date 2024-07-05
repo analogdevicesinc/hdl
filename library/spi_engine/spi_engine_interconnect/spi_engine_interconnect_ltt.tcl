@@ -24,8 +24,7 @@ set ip [ipl::general  -vendor "analog.com" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
 
-global env
-set ifp "${env(TOOLRTF)}/ip/interfaces"
+set ifp "$ipl::PropelIPLocal_path/interfaces"
 
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
