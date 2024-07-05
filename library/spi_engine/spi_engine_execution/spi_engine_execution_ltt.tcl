@@ -24,8 +24,6 @@ set ip [ipl::general  -vendor "analog.com" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
 
-set ifp "$ipl::PropelIPLocal_path/interfaces"
-
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
     -name spi_engine_ctrl \
@@ -47,7 +45,8 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
+
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
     -name spi_master \
@@ -63,7 +62,7 @@ set if [ipl::createcif -vendor analog.com \
         {-n THREE_WIRE -p optional -w 1 -d out}
         {-n CS -p required -d out}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
 
 set ip [ipl::addif -ip $ip \
     -iname spi_engine_ctrl \

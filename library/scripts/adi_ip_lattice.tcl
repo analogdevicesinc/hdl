@@ -351,7 +351,11 @@ namespace eval ipl {
         }
         return $if
     }
-    proc genif {if {dpath ./}} {
+    proc genif {if {dpath ""}} {
+        if {$dpath == ""} {
+            set dpath $ipl::PropelIPLocal_path/interfaces
+        }
+
         set abstractionDefinition [ipl::getnode {} abstractionDefinition_desc $if]
         set busDefinition [ipl::getnode {} busDefinition_desc $if]
 

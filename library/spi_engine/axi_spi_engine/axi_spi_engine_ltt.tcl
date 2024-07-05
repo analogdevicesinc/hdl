@@ -43,8 +43,6 @@ set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
     -mmap_ref axi_spi_engine_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
 
-set ifp "$ipl::PropelIPLocal_path/interfaces"
-
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
     -name spi_engine_ctrl \
@@ -66,7 +64,8 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
+
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
     -name spi_engine_offload_ctrl \
@@ -86,7 +85,7 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
 
 set ip [ipl::addif -ip $ip \
     -iname spi_engine_ctrl \

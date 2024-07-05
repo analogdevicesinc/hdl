@@ -76,8 +76,6 @@ set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_sg_axi \
     -aspace_ref m_sg_axi_aspace \
     -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
 
-set ifp "$ipl::PropelIPLocal_path/interfaces"
-
 set if [ipl::createcif -vendor analog.com \
     -library ADI \
     -name fifo_wr \
@@ -92,7 +90,7 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC -p optional -w 1 -d out}
         {-n XFER_REQ -p optional -w 1 -d in}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
 
 set ip [ipl::addif -ip $ip \
     -iname fifo_wr \
@@ -122,7 +120,7 @@ set if [ipl::createcif -vendor analog.com \
         {-n VALID -d in -p optional -w 1}
         {-n XFER_REQ -d in -p optional -w 1}
     }]
-ipl::genif $if $ifp
+ipl::genif $if
 
 set ip [ipl::addif -ip $ip \
     -iname fifo_rd \
