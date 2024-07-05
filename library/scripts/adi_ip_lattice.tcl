@@ -4,6 +4,16 @@
 ###############################################################################
 
 namespace eval ipl {
+    set interfaces_paths_list [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
+    puts $interfaces_paths_list
+
+    foreach file $interfaces_paths_list {
+        if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
+            puts $file
+            puts $PropelIPLocal_path
+        }
+    }
+
     #node: {name attributes content childs}
     set ip_desc {{lsccip:ip} {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip" xmlns:xi="http://www.w3.org/2001/XInclude" version="1.0" platform="radiant" platform_version="2023.2"}} {} {
             {lsccip:general} {{lsccip:general} {} {} {
@@ -1077,9 +1087,12 @@ namespace eval ipl {
         return $ip
     }
 
-    proc genip {ip {dpath {./}} {ip_name ""}} {
+    proc genip {ip {dpath ""} {ip_name ""}} {
         if {$ip_name == ""} {
             set ip_name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
+        }
+        if {$dpath == ""} {
+            set dpath $ipl::PropelIPLocal_path
         }
         if {[file exist $dpath] != 1} {
             file mkdir $dpath
