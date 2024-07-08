@@ -114,12 +114,16 @@ module system_top (
   inout             hdmi_i2c_scl,
   inout             hdmi_i2c_sda,
 
-  // ad4170
-  output                  spi_csn,
-  output                  spi_clk,
-  output                  spi_mosi,
-  input                   spi_miso,
-  inout   [1:0]           dig_aux
+  // ad57xx ardz
+  inout             ad57xx_ardz_scl,
+  inout             ad57xx_ardz_sda,
+  output            ad57xx_ardz_spi_sclk,
+  input             ad57xx_ardz_spi_miso,
+  output            ad57xx_ardz_spi_mosi,
+  output            ad57xx_ardz_syncb,
+  output            ad57xx_ardz_ldacb,
+  output            ad57xx_ardz_clrb,
+  output            ad57xx_ardz_resetb
 );
 
   // internal signals
@@ -129,50 +133,53 @@ module system_top (
   wire    [63:0]   gpio_o;
   wire    [63:0]   gpio_t;
 
-  wire             i2c1_scl;
-  wire             i2c1_scl_oe;
-  wire             i2c1_sda;
-  wire             i2c1_sda_oe;
+  wire             i2c1_out_sda;
+  wire             i2c1_in_sda;
+  wire             i2c1_out_scl;
+  wire             i2c1_in_scl;
 
-  wire             i2c0_out_data;
-  wire             i2c0_sda;
-  wire             i2c0_out_clk;
-  wire             i2c0_scl_in_clk;
+  wire             i2c0_out_sda;
+  wire             i2c0_in_sda;
+  wire             i2c0_out_scl;
+  wire             i2c0_in_scl;
 
   // adc control gpio assign
 
-  assign gpio_i[63:34] = gpio_o[63:34];
-  assign gpio_i[31:15] = gpio_o[31:15];
+  assign ad57xx_ardz_ldacb  = gpio_o[18];
+  assign ad57xx_ardz_clrb   = gpio_o[17];
+  assign ad57xx_ardz_resetb = gpio_o[16];
+  assign gpio_i[63:14] = gpio_o[63:14];
 
   // bd gpio
 
   assign gpio_i[13:8] = gpio_bd_i[5:0];
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
-  ALT_IOBUF dig_aux2_iobuf (
-    .i(gpio_o[33]),
-    .oe(gpio_t[33]),
-    .o(gpio_i[33]),
-    .io(dig_aux[1]));
+  // IO Buffers for EVAL-AD5781ARDZ I2C (EEPROM)
+  ALT_IOBUF scl_eeprom_iobuf (
+    .i(1'b0),
+    .oe(i2c1_out_sdl),
+    .o(i2c1_in_scl),
+    .io(ad57xx_ardz_scl));
 
-  ALT_IOBUF dig_aux1_iobuf (
-    .i(gpio_o[32]),
-    .oe(gpio_t[32]),
-    .o(gpio_i[32]),
-    .io(dig_aux[0]));
+  ALT_IOBUF sda_eeprom_iobuf (
+    .i(1'b0),
+    .oe(i2c1_out_sda),
+    .o(i2c1_in_data),
+    .io(ad57xx_ardz_sda));
 
-  // IO Buffers for I2C
+  // IO Buffers for HDMI I2C
 
   ALT_IOBUF scl_video_iobuf (
     .i(1'b0),
-    .oe(i2c0_out_clk),
-    .o(i2c0_scl_in_clk),
+    .oe(i2c0_out_scl),
+    .o(i2c0_in_scl),
     .io(hdmi_i2c_scl));
 
   ALT_IOBUF sda_video_iobuf (
     .i(1'b0),
-    .oe(i2c0_out_data),
-    .o(i2c0_sda),
+    .oe(i2c0_out_sda),
+    .o(i2c0_in_sda),
     .io(hdmi_i2c_sda));
 
   system_bd i_system_bd (
@@ -195,10 +202,10 @@ module system_top (
     .sys_hps_memory_mem_dm (ddr3_dm),
     .sys_hps_memory_oct_rzqin (ddr3_rzq),
     .sys_rst_reset_n (sys_resetn),
-    .sys_hps_i2c0_out_data (i2c0_out_data),
-    .sys_hps_i2c0_sda (i2c0_sda),
-    .sys_hps_i2c0_clk_clk (i2c0_out_clk),
-    .sys_hps_i2c0_scl_in_clk (i2c0_scl_in_clk),
+    .sys_hps_i2c0_out_data (i2c0_out_sda),
+    .sys_hps_i2c0_sda (i2c0_in_sda),
+    .sys_hps_i2c0_clk_clk (i2c0_out_scl),
+    .sys_hps_i2c0_scl_in_clk (i2c0_in_scl),
     .sys_hps_hps_io_hps_io_emac1_inst_TX_CLK (eth1_tx_clk),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD0 (eth1_tx_d[0]),
     .sys_hps_hps_io_hps_io_emac1_inst_TXD1 (eth1_tx_d[1]),
@@ -238,18 +245,18 @@ module system_top (
     .sys_hps_hps_io_hps_io_spim1_inst_MISO (spim1_miso),
     .sys_hps_hps_io_hps_io_spim1_inst_SS0 (spim1_ss0),
     .sys_hps_hps_io_hps_io_gpio_inst_GPIO09 (hps_conv_usb_n),
-    .sys_hps_i2c1_sda (i2c1_sda),
-    .sys_hps_i2c1_out_data (i2c1_sda_oe),
-    .sys_hps_i2c1_clk_clk (i2c1_scl_oe),
-    .sys_hps_i2c1_scl_in_clk (i2c1_scl),
+    .sys_hps_i2c1_sda (i2c1_in_data),
+    .sys_hps_i2c1_out_data (i2c1_out_sda),
+    .sys_hps_i2c1_clk_clk (i2c1_out_sdl),
+    .sys_hps_i2c1_scl_in_clk (i2c1_in_scl),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
-    .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
+    .sys_spi_MISO (ad57xx_ardz_spi_miso),
+    .sys_spi_MOSI (ad57xx_ardz_spi_mosi),
+    .sys_spi_SCLK (ad57xx_ardz_spi_sclk),
+    .sys_spi_SS_n (ad57xx_ardz_syncb),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
