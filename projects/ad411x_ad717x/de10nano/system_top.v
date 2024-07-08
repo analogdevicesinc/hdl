@@ -114,6 +114,9 @@ module system_top (
   inout             hdmi_i2c_scl,
   inout             hdmi_i2c_sda,
 
+  inout             i2c_sda,
+  inout             i2c_scl,
+
   // ad411x_ad717x
   output            spi_csn,
   output            spi_clk,
@@ -154,6 +157,18 @@ module system_top (
   assign gpio_i[33] = error;
 
   // IO Buffers for I2C
+
+  ALT_IOBUF scl_iobuf (
+    .i(1'b0),
+    .oe(i2c1_scl_oe),
+    .o(i2c1_scl),
+    .io(i2c_scl));
+
+  ALT_IOBUF sda_iobuf (
+    .i(1'b0),
+    .oe(i2c1_sda_oe),
+    .o(i2c1_sda),
+    .io(i2c_sda));
 
   ALT_IOBUF scl_video_iobuf (
     .i(1'b0),
