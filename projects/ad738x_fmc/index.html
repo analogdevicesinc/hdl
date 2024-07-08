@@ -107,10 +107,12 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
@@ -348,12 +350,18 @@ from -40°C to +125°C temperature range.</p>
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7380">AD7380</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7380-4">AD7380-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7381">AD7381</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7381-4">AD7381-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7383">AD7383</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7383-4">AD7383-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7384">AD7384</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7384-4">AD7384-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7386">AD7386</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7387">AD7387</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7388">AD7388</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7388-4">AD7388-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7389-4">AD7389-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4680">AD4680</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4681">AD4681</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4682">AD4682</a></p></li>
@@ -374,6 +382,28 @@ from -40°C to +125°C temperature range.</p>
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ad738x_spi_engine_hdl.svg"><img alt="AD738X_FMC block diagram" class="align-center" src="../../_images/ad738x_spi_engine_hdl.svg" width="800" /></a>
+</section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
+<p>The ALERT_SPI_N configuration parameter defines if a known pin will operate as a
+serial data output pin or alert indication pin. By default it is set to 0.
+Depending on the required pin functionality, some hardware modifications need to
+be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
+<p>In case of the <strong>Serial Data Output Pin</strong> functionality:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">ALERT_SPI_N</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>In case of the <strong>Alert Indication Output Pin</strong> functionality:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">ALERT_SPI_N</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
+-  Options: 1, 2, 4.
+By default is set to 1.</p>
+<p>For the ALERT functionality, the following parameters will be used in make
+command: ALERT_SPI_N.
+For the serial data output functionality, the following parameters will be
+used in make command: ALERT_SPI_N, NUM_OF_SDI.</p>
 </section>
 <section id="jumper-setup">
 <h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading">#</a></h3>
@@ -531,6 +561,57 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </table>
 </div>
 </section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>Zynq-7000: if PS7 is used, then the offset is 54</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+<th class="head"><p>Assigned value</p></th>
+<th class="head"><p>Assigned value</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq-7000</p></th>
+<th class="head"><p>ALERT_SPI_N=1</p></th>
+<th class="head"><p>ALERT_SPI_N=0</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>gpio[33]</p></td>
+<td><p>OUT</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+<td><p>sdid</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio[32]</p></td>
+<td><p>OUT</p></td>
+<td><p>32</p></td>
+<td><p>86</p></td>
+<td><p>sdib</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
@@ -569,9 +650,15 @@ the source you must
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad738x_fmc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad738x_fmc/zed$ make
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad738x_fmc/zed$ make ALERT_SPI_N=0 NUM_OF_SDI=4
 </pre></div>
 </div>
+<p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used:</p>
+<p>if the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ALERT_SPI_N=0</span> <span class="pre">NUM_OF_SDI=4</span></code></p>
+<p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">ALERTSPIN0_NUMOFSDI4</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build a HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
@@ -582,12 +669,18 @@ the HDL repository, and then build the project as follows:</p>
 <li><p>Product datasheets:</p>
 <ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7380">AD7380</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7380-4">AD7380-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7381">AD7381</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7381-4">AD7381-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7383">AD7383</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7383-4">AD7383-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7384">AD7384</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7384-4">AD7384-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7386">AD7386</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7387">AD7387</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7388">AD7388</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7388-4">AD7388-4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7389-4">AD7389-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4680">AD4680</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4681">AD4681</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4682">AD4682</a></p></li>
