@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,76 +35,88 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter ALERT_SPI_N = 0,
+  parameter NUM_OF_SDI = 1
+) (
+  inout  [14:0] ddr_addr,
+  inout  [ 2:0] ddr_ba,
+  inout         ddr_cas_n,
+  inout         ddr_ck_n,
+  inout         ddr_ck_p,
+  inout         ddr_cke,
+  inout         ddr_cs_n,
+  inout  [ 3:0] ddr_dm,
+  inout  [31:0] ddr_dq,
+  inout  [ 3:0] ddr_dqs_n,
+  inout  [ 3:0] ddr_dqs_p,
+  inout         ddr_odt,
+  inout         ddr_ras_n,
+  inout         ddr_reset_n,
+  inout         ddr_we_n,
 
-  inout   [14:0]  ddr_addr,
-  inout   [ 2:0]  ddr_ba,
-  inout           ddr_cas_n,
-  inout           ddr_ck_n,
-  inout           ddr_ck_p,
-  inout           ddr_cke,
-  inout           ddr_cs_n,
-  inout   [ 3:0]  ddr_dm,
-  inout   [31:0]  ddr_dq,
-  inout   [ 3:0]  ddr_dqs_n,
-  inout   [ 3:0]  ddr_dqs_p,
-  inout           ddr_odt,
-  inout           ddr_ras_n,
-  inout           ddr_reset_n,
-  inout           ddr_we_n,
+  inout         fixed_io_ddr_vrn,
+  inout         fixed_io_ddr_vrp,
+  inout  [53:0] fixed_io_mio,
+  inout         fixed_io_ps_clk,
+  inout         fixed_io_ps_porb,
+  inout         fixed_io_ps_srstb,
 
-  inout           fixed_io_ddr_vrn,
-  inout           fixed_io_ddr_vrp,
-  inout   [53:0]  fixed_io_mio,
-  inout           fixed_io_ps_clk,
-  inout           fixed_io_ps_porb,
-  inout           fixed_io_ps_srstb,
+  inout  [31:0] gpio_bd,
 
-  inout   [31:0]  gpio_bd,
+  output        hdmi_out_clk,
+  output        hdmi_vsync,
+  output        hdmi_hsync,
+  output        hdmi_data_e,
+  output [15:0] hdmi_data,
 
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
+  output        spdif,
 
-  output          spdif,
+  output        i2s_mclk,
+  output        i2s_bclk,
+  output        i2s_lrclk,
+  output        i2s_sdata_out,
+  input         i2s_sdata_in,
 
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
+  inout         iic_scl,
+  inout         iic_sda,
+  inout  [ 1:0] iic_mux_scl,
+  inout  [ 1:0] iic_mux_sda,
 
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
+  input         otg_vbusoc,
 
-  input           otg_vbusoc,
-
-  input           spi_sdia,
-  input           spi_sdib,
-  output          spi_sdo,
-  output          spi_sclk,
-  output          spi_cs
+  input         spi_sdia,
+  input         spi_sdib,
+  input         spi_sdic,
+  input         spi_sdid,
+  output        spi_sdo,
+  output        spi_sclk,
+  output        spi_cs
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
+  wire [ 1:0] iic_mux_scl_i_s;
+  wire [ 1:0] iic_mux_scl_o_s;
+  wire        iic_mux_scl_t_s;
+  wire [ 1:0] iic_mux_sda_i_s;
+  wire [ 1:0] iic_mux_sda_o_s;
+  wire        iic_mux_sda_t_s;
+
+  wire [NUM_OF_SDI-1:0] ad738x_spi_sdi_s;
 
   // instantiations
 
-  assign gpio_i[63:32] = gpio_o[63:32];
+  assign gpio_i[63:34] = gpio_o[63:34];
+
+  assign gpio_i[32] = ALERT_SPI_N ? spi_sdib : 0;
+  assign gpio_i[33] = ALERT_SPI_N ? spi_sdid : 0;
+
+  assign ad738x_spi_sdi_s = (ALERT_SPI_N == 0) ? ((NUM_OF_SDI == 1) ? {spi_sdia} : ((NUM_OF_SDI == 4) ? {spi_sdid, spi_sdic, spi_sdib, spi_sdia} : {spi_sdib, spi_sdia})): spi_sdia;
+
   ad_iobuf #(
     .DATA_WIDTH(32)
   ) i_iobuf (
@@ -174,7 +186,7 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .ad738x_spi_sdo (spi_sdo),
     .ad738x_spi_sdo_t (),
-    .ad738x_spi_sdi ({spi_sdib, spi_sdia}),
+    .ad738x_spi_sdi (ad738x_spi_sdi_s),
     .ad738x_spi_cs (spi_cs),
     .ad738x_spi_sclk (spi_sclk),
     .otg_vbusoc (otg_vbusoc),
