@@ -58,11 +58,11 @@ CLEAN_TARGET += $(LIBRARY_NAME)
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
-.PHONY: all intel xilinx lattice clean clean-all
+.PHONY: all intel xilinx lattice clean clean-all interfaces_ltt
 
 all: intel xilinx lattice
 
-clean: clean-all
+clean: clean-all interfaces_ltt_clean
 
 clean-all:
 	$(call clean, \
@@ -136,20 +136,23 @@ ifneq ($(LATTICE_DEPS),)
 
 LATTICE_DEPS += $(GENERIC_DEPS)
 LATTICE_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_lattice.tcl
-# _LATTICE_INTF_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
+_LATTICE_INTF_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
 
-lattice: ${LIBRARY_NAME}/metadata.xml
+lattice: interfaces_ltt ${LIBRARY_NAME}/metadata.xml
 
 .DELETE_ON_ERROR:
 
-$(LIBRARY_NAME)/metadata.xml: $(_LATTICE_INTF_DEPS) $(LATTICE_DEPS)
+$(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
 	-rm -rf $(CLEAN_TARGET)
 	$(call build, \
 		$(PROPEL_BUILDER) $(LIBRARY_NAME)_ltt.tcl, \
 		$(LIBRARY_NAME)_ltt.log, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 
-# $(_LATTICE_INTF_DEPS):
-# 	$(MAKE) -C $(dir $@) $(notdir $@)
+interfaces_ltt:
+	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep);)
+
+interfaces_ltt_clean:
+	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep) clean-all;)
 
 endif
