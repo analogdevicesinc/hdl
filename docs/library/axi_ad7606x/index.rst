@@ -5,9 +5,11 @@ AXI AD7606x
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD7606x <library/axi_ad7606x>` IP core
-can be used to interface the :adi:`AD7606B`, :adi:`AD7606C-16`
-and :adi:`AD7606C-18` devices using an FPGA.
+The :git-hdl:`AXI AD7606x <library/axi_ad7606x>` IP core can be used to
+interface the :adi:`AD7606B`, :adi:`AD7606C-16`, :adi:`AD7606C-18`,
+:adi:`AD7605-4`, :adi:`AD7606`, :adi:`AD7606-6`, :adi:`AD7606-4`,
+:adi:`AD7607`, :adi:`AD7608` and :adi:`AD7609` devices using an FPGA.
+
 The core supports the parallel data interface of the device,
 and has a simple FIFO interface for the DMAC.
 More about the generic framework interfacing ADCs, that contains the
@@ -41,16 +43,12 @@ Configuration Parameters
 
    * - ID
      - Core ID should be unique for each IP in the system
-   * - DEV_CONFIG
-     - Defines the device which will be used.
    * - ADC_TO_DMA_N_BITS
      - Defines the number of bits to be transmitted to DMA: 16 - AD7606B/C-16,
        32 - AD7606C-18
    * - ADC_N_BITS
      - Defines the number of bits of each device: 16 - AD7606B/C-16,
-       18 - AD7606C-18.
-   * - EXTERNAL_CLK
-     - Defines the external clock option for the ADC clock: 0 - No, 1 - Yes.
+       18 - AD7606C-18
 
 Interface
 --------------------------------------------------------------------------------
@@ -107,10 +105,6 @@ description of each generic register map.
 
 .. hdl-regmap::
    :name: ADC_CHANNEL
-   :no-type-info:
-
-.. hdl-regmap::
-   :name: axi_pwm_gen
    :no-type-info:
 
 Theory of operation
@@ -330,10 +324,28 @@ References
 * :adi:`AD7606B`
 * :adi:`AD7606C-16`
 * :adi:`AD7606C-18`
+* :adi:`AD7605-4`
+* :adi:`AD7606`
+* :adi:`AD7606-6`
+* :adi:`AD7606-4`
+* :adi:`AD7607`
+* :adi:`AD7608`
+* :adi:`AD7609`
 * :adi:`AD7606B Documentation <media/en/technical-documentation/data-sheets/ad7606b.pdf>`
 * :adi:`AD7606C-16 Documentation <media/en/technical-documentation/data-sheets/ad7606c-16.pdf>`
 * :adi:`AD7606C-18 Documentation <media/en/technical-documentation/data-sheets/ad7606c-18.pdf>`
+* :adi:`AD7605-4 Documentation <media/en/technical-documentation/data-sheets/ad7605-4.pdf>`
+* :adi:`AD7606-8/-6/-4 Documentation <media/en/technical-documentation/data-sheets/ad7606_7606-6_7606-4.pdf>`
+* :adi:`AD7607 Documentation <media/en/technical-documentation/data-sheets/ad7607.pdf>`
+* :adi:`AD7608 Documentation <media/en/technical-documentation/data-sheets/ad7608.pdf>`
+* :adi:`AD7609 Documentation <media/en/technical-documentation/data-sheets/ad7609.pdf>`
 * :adi:`EVAL-AD7606B Information <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606b-fmcz.html>`
 * :adi:`EVAL-AD7606C-16/18 Information <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606c-18.html>`
 * :adi:`EVAL-AD7606B User Guide <media/en/technical-documentation/user-guides/EVAL-AD7606BFMCZ-UG-1225.pdf>`
 * :adi:`EVAL-AD7606C-16/18 User Guide <media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf>`
+* :adi:`EVAL-AD7605-4 User Guide <media/en/technical-documentation/user-guides/EVAL-AD7605-4SDZ_7606SDZ_7606-6SDZ_7606-4SDZ_7607SDZ_7608SDZ.pdf>`
+* :adi:`EVAL-AD7606-8/-6/-4 User Guide <media/en/technical-documentation/user-guides/EVAL-AD7605-4SDZ_7606SDZ_7606-6SDZ_7606-4SDZ_7607SDZ_7608SDZ.pdf>`
+* :adi:`EVAL-AD7607 User Guide <media/en/technical-documentation/user-guides/EVAL-AD7605-4SDZ_7606SDZ_7606-6SDZ_7606-4SDZ_7607SDZ_7608SDZ.pdf>`
+* :adi:`EVAL-AD7608 User Guide <media/en/technical-documentation/user-guides/EVAL-AD7605-4SDZ_7606SDZ_7606-6SDZ_7606-4SDZ_7607SDZ_7608SDZ.pdf>`
+* :adi:`EVAL-AD7609 User Guide <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7609.html>`
+* :dokuwiki:`AD7606X FMC HDL Reference Design <resources/eval/user-guides/ad7606x-fmc/hdl>`
