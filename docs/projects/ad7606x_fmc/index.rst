@@ -38,6 +38,13 @@ Supported boards
 -  :adi:`EVAL-AD7606B <EVAL-AD7606B>`
 -  :adi:`EVAL-AD7606C-16 <AD7606C-16>`
 -  :adi:`EVAL-AD7606C-18 <EVAL-AD7606C-18>`
+-  :adi:`EVAL-AD7605-4 <EVAL-AD7605-4>`
+-  :adi:`EVAL-AD7606-8 <EVAL-AD7606>`
+-  :adi:`EVAL-AD7606-6 <EVAL-AD7606-6>`
+-  :adi:`EVAL-AD7606-4 <EVAL-AD7606-4>`
+-  :adi:`EVAL-AD7607 <EVAL-AD7607>`
+-  :adi:`EVAL-AD7608 <EVAL-AD7608>`
+-  :adi:`EVAL-AD7609 <EVAL-AD7609>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -45,6 +52,12 @@ Supported devices
 -  :adi:`AD7606B`
 -  :adi:`AD7606C-16`
 -  :adi:`AD7606C-18`
+-  :adi:`AD7606`
+-  :adi:`AD7606-6`
+-  :adi:`AD7606-4`
+-  :adi:`AD7607`
+-  :adi:`AD7608`
+-  :adi:`AD7609`
 -  :adi:`ADP7118`
 -  :adi:`ADR4525`
 
@@ -113,18 +126,13 @@ In case of the **SERIAL** interface:
    -   JP5 - Position A - Serial interface
    -   JP5 - Position B - Parallel interface
 
-The DEV_CONFIG configuration parameter defines the device which will be used:
--  Options: 0 - AD7606B, 1 - AD7606C-16, 2 - AD7606C-18.
-By default it is set to 0.
-
 The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
 -  Options: 1, 2, 4, 8.
 By default is set to 8.
 
-The EXT_CLK configuration parameter defines the external clock option for
-the ADC clock:
--  Options: 0 - No, 1 - Yes.
-By default is set to 0.
+The ADC_N_BITS configuration parameter specifies the ADC resolution:
+-  Options: 16, 18.
+By default it is set to 16.
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,11 +319,11 @@ by the configuration used:
 
 if the following command was run
 
-``make DEV_CONFIG=2 INTF=0``
+``make INTF=0 ADC_N_BITS=16``
 
 then the folder name will be:
 
-``DEVCONFIG2_INTF0``
+``INTF0_ADC_N_BITS16``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -345,6 +353,13 @@ Hardware related
    -  :adi:`AD7606B`
    -  :adi:`AD7606C-16`
    -  :adi:`AD7606C-18`
+   -  :adi:`AD7605-4`
+   -  :adi:`AD7606`
+   -  :adi:`AD7606-6`
+   -  :adi:`AD7606-4`
+   -  :adi:`AD7607`
+   -  :adi:`AD7608`
+   -  :adi:`AD7609`
    -  :adi:`ADP7118`
    -  :adi:`ADR4525`
    -  :adi:`UG-1870, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf>`
