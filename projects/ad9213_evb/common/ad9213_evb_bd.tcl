@@ -116,12 +116,12 @@ ad_connect  glbl_clk_0 rx_ad9213_tpl_core/link_clk
 ad_connect  glbl_clk_0 axi_ad9213_fifo/adc_clk
 
 # dma clock domain
-ad_connect  $sys_cpu_clk axi_ad9213_fifo/dma_clk
-ad_connect  $sys_cpu_clk axi_ad9213_dma/s_axis_aclk
+ad_connect  $sys_dma_clk axi_ad9213_fifo/dma_clk
+ad_connect  $sys_dma_clk axi_ad9213_dma/s_axis_aclk
 
 # connect resets
 ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9213_fifo/adc_rst
-ad_connect  $sys_cpu_resetn axi_ad9213_dma/m_dest_axi_aresetn
+ad_connect  $sys_dma_resetn axi_ad9213_dma/m_dest_axi_aresetn
 
 # connect dataflow
 ad_connect  axi_ad9213_jesd/rx_sof rx_ad9213_tpl_core/link_sof
