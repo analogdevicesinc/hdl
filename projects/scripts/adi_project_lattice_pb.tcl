@@ -43,17 +43,17 @@ proc adi_project_pb {project_name args} {
   set preinst_ip_mod_dir ${env(TOOLRTF)}
 
   array set opt [list -dev_select "auto" \
-    -ppath "." \
+    -ppath "./_bld" \
     -device "" \
     -board "" \
     -speed "" \
     -language "verilog" \
-    -psc "" \
+    -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc" \
     -cmd_list {{source ./system_pb.tcl}} \
     {*}$args]
 
   set dev_select $opt(-dev_select)
-  set ppath $opt(-ppath)
+  set ppath [file normalize $opt(-ppath)]
   set language $opt(-language)
   set cmd_list $opt(-cmd_list)
   set psc $opt(-psc)
@@ -93,7 +93,7 @@ proc adi_project_pb {project_name args} {
 proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
 
-  array set opt [list -ppath "." \
+  array set opt [list -ppath "./_bld" \
     -device "" \
     -board "" \
     -speed "" \
@@ -102,7 +102,7 @@ proc adi_project_create_pb {project_name args} {
     -cmd_list "" \
     {*}$args]
 
-  set ppath $opt(-ppath)
+  set ppath [file normalize $opt(-ppath)]
   set device $opt(-device)
   set board $opt(-board)
   set speed $opt(-speed)
@@ -156,37 +156,19 @@ proc adi_project_create_pb {project_name args} {
   set preinst_ip_mod_dir ${env(TOOLRTF)}
   set propel_builder_project_dir "$ppath/$project_name/$project_name"
 
-  if {$psc == ""} {
-    file mkdir $propel_builder_project_dir
+  if {[file exists $ppath] != 1} {
+    file mkdir $ppath
+  }
 
-  # Creating the necessary .socproject file for being able to open the Radiant
-  # and Propel SDK from Propel Builder if needed.
-    set file [open "$ppath/$project_name/.socproject" w]
-    puts $file [format {<?xml version="1.0" encoding="UTF-8"?>
-<propelProject>
-  <builder-resource>
-    <socProject sbxfile="./%s/%s.sbx"/>
-  </builder-resource>
-</propelProject>} $project_name $project_name]
-    close $file
+  sbp_create_project  -name "$project_name" \
+    -path $ppath \
+    -device $device \
+    -speed $speed \
+    -language $language \
+    -psc $psc
 
-    sbp_design new -name $project_name \
-      -path $propel_builder_project_dir/$project_name.sbx \
-      -device $device  \
-      -speed $speed \
-      -language $language \
-      -board $board
-  } else {
-    sbp_create_project  -name "$project_name" \
-      -path $ppath \
-      -device $device \
-      -speed $speed \
-      -language $language \
-      -psc $psc
-
-      foreach port [sbp_get_ports *] {
-        sbp_delete $port -type port
-      }
+  foreach port [sbp_get_ports *] {
+    sbp_delete $port -type port
   }
 
   sbp_design save
@@ -197,24 +179,8 @@ proc adi_project_create_pb {project_name args} {
     eval $cmd
   }
 
-# Workaround for keeping the configured IP folders in Propel Builder 2023.2
-# command line version.
-# The 'sbp_design save' doesn't saves the temporary .lib folder to lib folder,
-# instead deletes if there is anything in lib folder.
-# I am copying the content of .lib (the configured IP cores) to lib after save
-# to keep the configured IP cores for the Radiant project.
-# Also generating the bsp after copying the configured IP cores to lib folder
-# because that's also based on the content of lib folder.
-#
-# Update: - If the psc default template file exists then the save works fine
-# and we do not need to generate the bsp separately also.
   sbp_design save
   sbp_design generate
-
-  if {$psc == ""} {
-    file copy "$propel_builder_project_dir/.lib/latticesemi.com" \
-      "$propel_builder_project_dir/lib"
-  }
 
   # Generating the bsp.
   sbp_design pge sge \
@@ -335,7 +301,7 @@ proc adi_ip_instance {args} {
 # \opt[ip_iname] -ip_iname cpu0_inst
 # \opt[ip_niname] -ip_niname new_name_inst
 ###############################################################################
-proc adi_ip_update {args} {
+proc adi_ip_update {project_name args} {
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
@@ -353,8 +319,6 @@ proc adi_ip_update {args} {
   puts "adi_ip_update: $ip_iname"
 
   adi_ip_config {*}$args
-
-  global project_name
 
   if {$ip_niname == ""} {
     sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
