@@ -110,3 +110,7 @@ _build
 library/**/.lock
 library/**/interfaces/*.sv
 .backstage_yaml
+.setting.ini
+ipcfg
+_bld
+radiantc.*
