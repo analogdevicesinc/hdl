@@ -115,3 +115,7 @@ lib/
 lib64
 pyvenv.cfg
 share/
+.setting.ini
+ipcfg
+_bld
+radiantc.*

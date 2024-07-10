@@ -260,7 +260,7 @@ sbp_assign_addr_seg -offset 'h00000000 "$project_name/cpu0_inst/LOCAL_BUS_M_INST
   "$project_name/tcm0_inst/LOCAL_BUS_IF_S1"
 
 if {$timer_en == 1} {
-  adi_ip_update -vlnv {latticesemi.com:ip:axi_interc0:1.2.2} \
+  adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:1.2.2} \
     -meta_vlnv {latticesemi.com:ip:axi_interconnect:1.2.2} \
     -cfg_value {
       TOTAL_EXTMAS_CNT: 1,
@@ -270,13 +270,13 @@ if {$timer_en == 1} {
     } \
     -ip_iname "axi_interc0_inst"
 
-  adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb3:1.1.0} \
-    -meta_vlnv {latticesemi.com:ip:axi2apb_bridge:1.1.0} \
+  adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb3:1.1.1} \
+    -meta_vlnv {latticesemi.com:ip:axi2apb_bridge:1.1.1} \
     -cfg_value {} \
     -ip_iname "axi_apb3_inst"
 
-  adi_ip_instance -vlnv {latticesemi.com:ip:timer0:1.3.0} \
-    -meta_vlnv {latticesemi.com:ip:gp_timer:1.3.0} \
+  adi_ip_instance -vlnv {latticesemi.com:ip:timer0:1.3.1} \
+    -meta_vlnv {latticesemi.com:ip:gp_timer:1.3.1} \
     -cfg_value {
       t1_cnt_up: count-up,
       T1_PERIOD_WIDTH: 32,
