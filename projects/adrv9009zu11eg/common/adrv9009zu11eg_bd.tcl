@@ -674,6 +674,7 @@ ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tdata obs_adrv9009_som_tpl_core/li
 ad_connect  axi_adrv9009_som_obs_jesd/rx_data_tvalid obs_adrv9009_som_tpl_core/link_valid
 ad_connect  core_clk_a util_som_obs_cpack/clk
 ad_connect  obs_adrv9009_som_tpl_core/adc_tpl_core/adc_rst util_som_obs_cpack/reset
+ad_connect  obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_in GND
 ad_connect  core_clk_a axi_adrv9009_som_obs_dma/fifo_wr_clk
 
 ad_connect  obs_adrv9009_som_tpl_core/adc_valid_0 util_som_obs_cpack/fifo_wr_en

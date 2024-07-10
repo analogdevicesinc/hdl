@@ -72,6 +72,7 @@ ad_connect enable_0 axi_ad9361_0/enable
 ad_connect txnrx_0 axi_ad9361_0/txnrx
 ad_connect up_enable_0 axi_ad9361_0/up_enable
 ad_connect up_txnrx_0 axi_ad9361_0/up_txnrx
+ad_connect axi_ad9361_0/tdd_sync GND
 
 # ad9361 core (slave)
 
@@ -98,6 +99,7 @@ ad_connect enable_1 axi_ad9361_1/enable
 ad_connect txnrx_1 axi_ad9361_1/txnrx
 ad_connect up_enable_1 axi_ad9361_1/up_enable
 ad_connect up_txnrx_1 axi_ad9361_1/up_txnrx
+ad_connect axi_ad9361_1/tdd_sync GND
 
 # interface clock divider to generate sampling clock
 # interface runs at 4x in 2r2t mode, and 2x in 1r1t mode

@@ -520,6 +520,8 @@ ad_connect  tx2_enable                    axi_adrv9001/tx2_enable
 ad_connect  system_sync                   axi_adrv9001/adc_sync_in
 ad_connect  system_sync                   axi_adrv9001/dac_sync_in
 
+ad_connect  GND                           axi_adrv9001/tdd_sync
+
 # system monitor
 
 ad_ip_instance system_management_wiz pl_sysmon
