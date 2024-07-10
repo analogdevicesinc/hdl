@@ -751,7 +751,7 @@ i2c_controller       I2C Controller                 2.0.1
 axi_interconnect     AXI4 Interconnect              1.2.2
 axi2ahb_bridge       AXI4 to AHB-Lite Bridge        1.1.1
 axi2apb_bridge       AXI4 to APB Bridge             1.1.1
-gp_timer             Timer-Counter                  1.3.0
+gp_timer             Timer-Counter                  1.3.1
 ==================== ============================= =======
 
 .. shell:: bash
