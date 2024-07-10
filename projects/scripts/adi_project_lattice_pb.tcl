@@ -335,7 +335,7 @@ proc adi_ip_instance {args} {
 # \opt[ip_iname] -ip_iname cpu0_inst
 # \opt[ip_niname] -ip_niname new_name_inst
 ###############################################################################
-proc adi_ip_update {args} {
+proc adi_ip_update {project_name args} {
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
@@ -353,8 +353,6 @@ proc adi_ip_update {args} {
   puts "adi_ip_update: $ip_iname"
 
   adi_ip_config {*}$args
-
-  global project_name
 
   if {$ip_niname == ""} {
     sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
