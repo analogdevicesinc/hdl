@@ -212,8 +212,12 @@ proc adi_project_create_pb {project_name args} {
   sbp_design generate
 
   if {$psc == ""} {
-    file copy "$propel_builder_project_dir/.lib/latticesemi.com" \
-      "$propel_builder_project_dir/lib"
+    set files [glob -directory $propel_builder_project_dir/.lib *]
+    foreach file $files {
+        set fname [file tail $file]
+        set dest_p [file join $propel_builder_project_dir/lib $fname]
+        file copy -force $file $dest_p
+    }
   }
 
   # Generating the bsp.
