@@ -33,12 +33,23 @@ Configuration Parameters
    * - ASYNC_SPI_CLK
      - If set to 1 the ``ctrl_clk`` and ``spi_clk`` are assumed to be
        asynchronous.
+   * - ASYNC_TRIG
+     - If set to 1, the trigger input is considered asynchronous to the
+       module.
    * - CMD_MEM_ADDRESS_WIDTH
      - Configures the size of the command stream storage. The size is
        ``2**CMD_MEM_ADDR_WIDTH`` entries.
    * - SDO_MEM_ADDRESS_WIDTH
      - Configures the size of the SDO data stream storage. The size is
        ``2**SDO_MEM_ADDR_WIDTH`` entries.
+   * - DATA_WIDTH
+     - Data width of the parallel data stream. Will define the transaction's
+       granularity. Supported values: 8/16/24/32
+   * - NUM_OF_SDI
+     - Number of multiple SDI lines, (min: 1, max: 8)
+   * - SDO_STREAMING
+     - Enables the s_axis_sdo interface. This allows for sourcing the SDO data
+       stream from a DMA or other similar sources, useful for DACs.
 
 Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -66,3 +77,6 @@ Signal and Interface Pins
    * - offload_sdi
      - Streaming AXI controller
        Output stream of the received SPI data.
+   * - s_axis_sdo
+     - Streaming AXI peripheral
+       Input stream for SPI data to be sent. Only present when ``SDO_STREAMING`` parameter is set to 1.
