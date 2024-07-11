@@ -58,7 +58,7 @@ AD9739A FMC Card block diagram
 .. image:: ../ad9739a_fmc/ad9739a_fmc_card_1.svg
    :width: 800
    :align: center
-   :alt: AD9739A-FMC/ZC706 xlilinx block diagram
+   :alt: AD9739A-FMC/ZC706 fmc card block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,47 +131,12 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - ADXYZT
+     - ADF4350
      - 0
    * - PS
-     - SPI 1
-     - AD0000
+     - SPI 0
+     - ADCLK914
      - 0
-
-GPIOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-**Add explanation depending on your case**
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 127:96
-     - 181:150
-     - 205:174
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 95:64
-     - 149:118
-     - 173:142
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 63:32
-     - 117:86
-     - 141:110
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -208,9 +173,9 @@ Hardware related
 -  Product datasheets:
 
    -  :adi:`ADCLK914`
+   -  :adi:`ADF4350`
    -  :adi:`ADCLK946`
    -  :adi:`ADF4150`
-   -  :adi:`ADF4350`
 -  `AD9737A/AD9739A Data sheet <https://www.analog.com/media/en/technical-documentation/data-sheets/AD9737A_9739A.pdf>`__
 
 HDL related
