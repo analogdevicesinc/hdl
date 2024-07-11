@@ -1,0 +1,21 @@
+###############################################################################
+## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+# spi_engine
+ldc_set_location -site {AD12} [get_ports cs]; #G7
+ldc_set_location -site {AF4} [get_ports sdo]; #H7
+ldc_set_location -site {Y5} [get_ports {sdi_bus[0]}]; #D8
+ldc_set_location -site {AA5} [get_ports {sdi_bus[1]}]; #D9
+ldc_set_location -site {AF3} [get_ports {sdi_bus[2]}]; #H8
+ldc_set_location -site {AD4} [get_ports {sdi_bus[3]}]; #G9
+ldc_set_location -site {AC12} [get_ports sclk]; #G6
+
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports cs]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports sdo]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {sdi_bus[0]}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {sdi_bus[1]}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {sdi_bus[2]}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports {sdi_bus[3]}]
+ldc_set_port -iobuf {IO_TYPE=LVCMOS18H} [get_ports sclk]
