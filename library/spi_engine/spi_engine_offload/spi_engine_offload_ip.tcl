@@ -15,7 +15,7 @@ adi_ip_files spi_engine_offload [list \
 ]
 
 adi_ip_properties_lite spi_engine_offload
-adi_ip_ttcl axi_spi_engine "spi_engine_offload_constr.ttcl"
+adi_ip_ttcl spi_engine_offload "spi_engine_offload_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/offload} [ipx::current_core]
 
