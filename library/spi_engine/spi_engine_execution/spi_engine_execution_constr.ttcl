@@ -30,6 +30,7 @@ set_property ASYNC_REG true [get_cells -hier {*last_sdi_bit_m_reg[1]}]
 set_false_path -to [get_cells -hier -filter {name =~ *last_sdi_bit_m_reg[0]* && IS_SEQUENTIAL}]
 
 # SDI shift registers are reset asynchronously after a negative edge of CSN - define the reset line as a false path
-set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.data_sdi_shift_reg[*]/CLR}]
+set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.data_sdi_shift_reg[*]/C*}]
+set_false_path -to [get_pins -hierarchical -filter {NAME=~*g_echo_sclk_miso_latch.*.sdi_data_latch_reg[*]/CE}]
 
 <: } :>
