@@ -19,6 +19,7 @@ Contents
    :maxdepth: 1
 
    AD4134-FMC <ad4134_fmc/index>
+   AD4170-ASDZ <ad4170_asdz/index>
    AD4630-FMC/AD4030-FMC/ADAQ4224-FMC <ad4630_fmc/index>
    AD469X-FMC <ad469x_fmc/index>
    AD5766-SDZ <ad5766_sdz/index>
