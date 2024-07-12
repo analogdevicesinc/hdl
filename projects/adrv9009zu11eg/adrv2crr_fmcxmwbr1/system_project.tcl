@@ -17,12 +17,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   How to use over-writable parameters from the environment:
 #
 #    e.g.
-#      make ADI_PRODUCTION = 1
+#      make ADI_PRODUCTION = 0
 #
 #    ADI_PRODUCTION  - Defines the interface type (XMICROWAVE or FMCXMWBR1)
 #
-# LEGEND: 0 - XMICROWAVE - uses all the spi lines and gpios
-#         1 - FMCXMWBR1 - used for production testing
+# LEGEND: 0 - FMCXMWBR1 - used for production testing
+#         1 - XMICROWAVE - uses all the spi lines and gpios
 #
 ##-----------------------------------------------------------------------------
 
@@ -56,11 +56,11 @@ adi_project_files adrv9009zu11eg_fmcxmwbr1 [list \
 switch $intf {
   0 {
     adi_project_files adrv9009zu11eg_fmcxmwbr1 [list \
-      "system_top_xmicrowave.v" ]
+      "system_top_fmcxmwbr1.v" ]
   }
   1 {
     adi_project_files adrv9009zu11eg_fmcxmwbr1 [list \
-      "system_top_fmcxmwbr1.v" ]
+      "system_top_xmicrowave.v" ]
   }
 }
 
