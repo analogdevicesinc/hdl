@@ -54,6 +54,14 @@ set_instance_parameter_value spi_engine_offload_0 {ASYNC_SPI_CLK} {0}
 set_instance_parameter_value spi_engine_offload_0 {DATA_WIDTH}    {32}
 set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI}    {1}
 
+# axi pwm gen
+
+add_instance trigger_generator axi_pwm_gen
+set_instance_parameter_value trigger_generator {N_PWMS} {1}
+set_instance_parameter_value trigger_generator {PULSE_0_PERIOD} {85}
+set_instance_parameter_value trigger_generator {PULSE_0_WIDTH} {1}
+
+
 # exported interface
 
 add_interface ad411x_spi_sclk       clock source
@@ -79,7 +87,9 @@ set_interface_property ad411x_spi_clk     EXPORT_OF clock_bridge_0.out_clk
 
 add_connection sys_clk.clk axi_spi_engine_0.s_axi_clock
 add_connection sys_clk.clk axi_dmac_0.s_axi_clock
+add_connection sys_clk.clk trigger_generator.s_axi_clock
 
+add_connection sys_dma_clk.clk trigger_generator.if_ext_clk
 add_connection sys_dma_clk.clk spi_engine_execution_0.if_clk
 add_connection sys_dma_clk.clk spi_engine_interconnect_0.if_clk
 add_connection sys_dma_clk.clk axi_spi_engine_0.if_spi_clk
@@ -99,6 +109,7 @@ add_connection axi_spi_engine_0.if_spi_resetn spi_engine_interconnect_0.if_reset
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_offload_0.if_spi_resetn
 
 add_connection sys_dma_clk.clk_reset axi_dmac_0.m_dest_axi_reset
+add_connection sys_dma_clk.clk_reset trigger_generator.s_axi_reset
 
 # interfaces
 
@@ -124,12 +135,15 @@ add_connection spi_engine_offload_0.if_ctrl_enabled   axi_spi_engine_0.if_offloa
 add_connection spi_engine_offload_0.if_ctrl_mem_reset axi_spi_engine_0.if_offload0_mem_reset
 add_connection spi_engine_offload_0.status_sync       axi_spi_engine_0.offload_sync
 
+
+add_connection spi_engine_offload_0.if_trigger trigger_generator.if_pwm_0
 add_connection spi_engine_offload_0.offload_sdi axi_dmac_0.s_axis
 
 # cpu interconnects
 
 ad_cpu_interconnect 0x00020000 axi_dmac_0.s_axi
 ad_cpu_interconnect 0x00030000 axi_spi_engine_0.s_axi
+ad_cpu_interconnect 0x00040000 trigger_generator.s_axi
 
 # dma interconnect
 ad_dma_interconnect axi_dmac_0.m_dest_axi
