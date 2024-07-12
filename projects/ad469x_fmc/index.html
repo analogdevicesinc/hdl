@@ -107,6 +107,7 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
@@ -338,6 +339,21 @@ signal of the device.</p>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ad469x_hdl.svg"><img alt="AD469X_FMC block diagram" class="align-center" src="../../_images/ad469x_hdl.svg" width="800" /></a>
 </section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
+<p>The SPI_4WIRE configuration parameter defines if CNV signal is linked to PWM or
+to SPI_CS to enable interfacing with a single 4-wire SPI port. By default it is
+set to 0. Depending on the required pin functionality, some hardware
+modifications need to be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
+<p>In case we link CNV signal to PWM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SPI_4WIRE</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>In case we link CNV signal to SPI_CS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SPI_4WIRE</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+</section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
@@ -461,9 +477,17 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
+<tr class="row-even"><td><p>gpio[33]</p></td>
+<td><p>IN</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+</tr>
 </tbody>
 </table>
 </div>
+<p>BSY_ALT_GP0 pin can be configured to function as a general-purpose input/output
+(GPIO), the threshold detection alert indicator, the busy indicator, or the
+second serial data output in dual-sdo MODE</p>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
@@ -502,9 +526,15 @@ built from the sources available <a class="icon git reference external" href="ht
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad469x_fmc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad469x_fmc/zed$ make
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad469x_fmc/zed$ make SPI_4WIRE=0
 </pre></div>
 </div>
+<p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used:</p>
+<p>if the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">SPI_4WIRE=0</span></code></p>
+<p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">SPI4WIRE0</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build a HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
