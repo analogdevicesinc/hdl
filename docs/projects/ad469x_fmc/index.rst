@@ -51,6 +51,26 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: AD469X_FMC block diagram
 
+Configuration modes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The SPI_4WIRE configuration parameter defines if CNV signal is linked to PWM or
+to SPI_CS to enable interfacing with a single 4-wire SPI port. By default it is
+set to 0. Depending on the required pin functionality, some hardware
+modifications need to be done on the board and/or ``make`` command:
+
+In case we link CNV signal to PWM:
+
+.. code-block::
+
+   make SPI_4WIRE=0
+
+In case we link CNV signal to SPI_CS:
+
+.. code-block::
+
+   make SPI_4WIRE=1
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -128,6 +148,14 @@ The Software GPIO number is calculated as follows:
      - INOUT
      - 32
      - 86
+   * - gpio[33]
+     - IN
+     - 33
+     - 87
+
+BSY_ALT_GP0 pin can be configured to function as a general-purpose input/output
+(GPIO), the threshold detection alert indicator, the busy indicator, or the
+second serial data output in dual-sdo MODE
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -156,7 +184,18 @@ the HDL repository, and then build the project as follows:
    :linenos:
 
    user@analog:~$ cd hdl/projects/ad469x_fmc/zed
-   user@analog:~/hdl/projects/ad469x_fmc/zed$ make
+   user@analog:~/hdl/projects/ad469x_fmc/zed$ make SPI_4WIRE=0
+
+The result of the build, if parameters were used, will be in a folder named
+by the configuration used:
+
+if the following command was run
+
+``SPI_4WIRE=0``
+
+then the folder name will be:
+
+``SPI4WIRE0``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
