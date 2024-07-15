@@ -406,7 +406,7 @@ module spi_engine_execution #(
   // Load the SDO parallel data into the SDO shift register. In case of a custom
   // data width, additional bit shifting must done at load.
   always @(posedge clk) begin
-    if (((inst_d1 == CMD_TRANSFER) && (!sdo_enabled)) || (exec_transfer_cmd && !cmd[8]) || (cs_activate_s)) begin
+    if (!sdo_enabled || (inst_d1 != CMD_TRANSFER)) begin
       data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
       if (first_bit == 1'b1)
@@ -416,7 +416,7 @@ module spi_engine_execution #(
     end
   end
 
-  assign sdo_int_s = (exec_transfer_cmd && !cmd[8]) ? sdo_idle_state : data_sdo_shift[DATA_WIDTH-1];
+  assign sdo_int_s = data_sdo_shift[DATA_WIDTH-1];
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
   // the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
@@ -639,7 +639,7 @@ module spi_engine_execution #(
   // Additional register stage to improve timing
   always @(posedge clk) begin
     sclk <= sclk_int;
-    sdo <= (!cs_active) ?  sdo_idle_state : sdo_int_s;
+    sdo <= sdo_int_s;
     sdo_t <= sdo_t_int;
   end
 
