@@ -197,7 +197,7 @@ module dmac_2d_transfer #(
     end
   end
 
-  assign out_req_last = (out_last || (DMA_2D_TLAST_MODE == 1)) & gen_last;
+  assign out_req_last = (out_last | (DMA_2D_TLAST_MODE == 1)) & gen_last;
   assign out_req_islast = out_last;
 
 endmodule
