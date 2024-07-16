@@ -104,7 +104,7 @@ module axi_dmac_ext_sync #(
       end
     end
 
-    assign req_ext_sync = req_src_ext_sync || req_dest_ext_sync;
+    assign req_ext_sync = req_src_ext_sync | req_dest_ext_sync;
     assign ext_sync_ready = ext_sync_ready_s;
 
   end else begin

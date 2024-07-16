@@ -99,7 +99,7 @@ module axi_dmac_framelock #(
   always @(posedge req_aclk) begin
     if (req_aresetn == 1'b0) begin
       prev_buf_done <= 1'b1;
-    end else if (out_req_valid & out_req_ready) begin
+    end else if (out_req_valid && out_req_ready) begin
       prev_buf_done <= 1'b0;
     end else if (resp_eot) begin
       prev_buf_done <= 1'b1;
@@ -120,7 +120,7 @@ module axi_dmac_framelock #(
     if (req_aresetn == 1'b0) begin
       transfer_id <= 'h0;
       req_address <= 'h0;
-    end else if (req_valid & req_ready) begin
+    end else if (req_valid && req_ready) begin
       transfer_id <= 'h0;
       req_address <= FRAMELOCK_MODE ? req_src_address : req_dest_address;
     end else if (calc_enable) begin
@@ -137,7 +137,7 @@ module axi_dmac_framelock #(
   // Latch the transfer IDs so it can be passed to the reader
   // once it is completed
   always @(posedge req_aclk) begin
-    if (out_req_valid & out_req_ready) begin
+    if (out_req_valid && out_req_ready) begin
       cur_frame_id <= transfer_id;
     end
   end
@@ -147,13 +147,13 @@ module axi_dmac_framelock #(
       req_ready <= 1'b1;
     end else if (req_ready == 1'b1) begin
       req_ready <= ~req_valid;
-    end else if (out_req_valid & out_req_ready) begin
+    end else if (out_req_valid && out_req_ready) begin
       req_ready <= ~req_cyclic;
     end
   end
 
   always @(*) begin
-    out_req_valid = calc_enable & (calc_done || ~req_flock_en);
+    out_req_valid = calc_enable & (calc_done | ~req_flock_en);
   end
 
   generate if (FRAMELOCK_MODE == 0) begin
@@ -172,7 +172,7 @@ module axi_dmac_framelock #(
     always @(posedge req_aclk) begin
       if (req_aresetn == 1'b0) begin
         reader_started <= 1'b0;
-      end else if (req_valid & req_ready) begin
+      end else if (req_valid && req_ready) begin
         reader_started <= 1'b0;
       end else if (~req_ready) begin
         if (s_frame_id_vld) begin
@@ -187,9 +187,9 @@ module axi_dmac_framelock #(
     assign s_frame_id = m_frame_in[MAX_NUM_FRAMES_WIDTH-1:0];
     assign s_frame_id_vld = m_frame_in[MAX_NUM_FRAMES_WIDTH];
 
-    assign calc_done = s_frame_id != transfer_id ||
-                       reader_started == 1'b0 ||
-                       req_flock_mode == 1'b1;
+    assign calc_done = (s_frame_id != transfer_id ||
+                        reader_started == 1'b0 ||
+                        req_flock_mode == 1'b1);
   end else begin
 
     // Reader mode logic
@@ -220,7 +220,7 @@ module axi_dmac_framelock #(
     always @(posedge req_aclk) begin
       if (req_aresetn == 1'b0) begin
         wait_distance <= 1'b1;
-      end else if (req_valid & req_ready) begin
+      end else if (req_valid && req_ready) begin
         wait_distance <= req_cyclic && req_flock_en;
       end else if (~req_ready) begin
         if (({1'b0, m_frame_id} == req_flock_distance) && m_frame_id_vld) begin
@@ -288,8 +288,8 @@ module axi_dmac_framelock #(
     // until the writer completes a buffer. In Dynamic Flock just wait until
     // the required number of buffers are filled, then enable the request
     // generation regardless of the writer.
-    assign enable_out_req = req_flock_wait_writer == 1'b0 ||
-                            ((m_frame_ready | ~req_flock_mode) & ~wait_distance);
+    assign enable_out_req = (req_flock_wait_writer == 1'b0 ||
+                             ((m_frame_ready | ~req_flock_mode) & ~wait_distance));
 
   end
   endgenerate
