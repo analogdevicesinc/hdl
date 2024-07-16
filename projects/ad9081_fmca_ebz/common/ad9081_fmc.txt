@@ -46,6 +46,8 @@ C11       LA06_N         FPGA_SYNCOUT_N<1>  fpga_syncout_1_n    LVCMOS15    #N/A
 
 D4        GBTCLK0_M2C_P  FPGA_REFCLK_IN_P   fpga_refclk_in_p    #N/A        #N/A
 D5        GBTCLK0_M2C_N  FPGA_REFCLK_IN_N   fpga_refclk_in_n    #N/A        #N/A
+B20       GBTCLK1_M2C_P  CLKIN8_P           clkin8_p            #N/A        #N/A
+B21       GBTCLK1_M2C_N  CLKIN8_N           clkin8_n            #N/A        #N/A
 H4        CLK0_M2C_P     SYSREF2_P          sysref2_p           LVDS15      DIFF_TERM_ADV TERM_100
 H5        CLK0_M2C_N     SYSREF2_N          sysref2_n           LVDS15      DIFF_TERM_ADV TERM_100
 G2        CLK1_M2C_P     CLKIN6_P           clkin6_p            LVDS15      DIFF_TERM_ADV TERM_100
@@ -75,9 +77,9 @@ G13       LA08_N         IRQB<1>            irqb[1]             LVCMOS15    #N/A
 H17       LA11_N         HMC_GPIO1          hmc_gpio1           LVCMOS15    #N/A
 
 D11       LA05_P         SPI0_CSB           spi0_csb            LVCMOS15    #N/A   
-H10       LA04_N         SPI0_SCLK          spi0_sclk           LVCMOS15    #N/A
-H11       LA04_P         SPI0_MOSI          spi0_mosi           LVCMOS15    #N/A
 D12       LA05_N         SPI0_MISO          spi0_miso           LVCMOS15    #N/A
+H10       LA04_P         SPI0_MOSI          spi0_mosi           LVCMOS15    #N/A
+H11       LA04_N         SPI0_SCLK          spi0_sclk           LVCMOS15    #N/A
 G15       LA12_P         SPI1_CSB           spi1_csb            LVCMOS15    #N/A
 H16       LA11_P         SPI1_SCLK          spi1_sclk           LVCMOS15    #N/A
 G16       LA12_N         SPI1_SDIO          spi1_sdio           LVCMOS15    #N/A
