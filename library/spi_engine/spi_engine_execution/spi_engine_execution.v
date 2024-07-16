@@ -164,8 +164,6 @@ module spi_engine_execution #(
   wire cs_sleep_early_exit;
   reg cs_sleep_repeat;
   reg cs_activate;
-  reg cs_active;
-  wire cs_activate_s;
 
   wire io_ready1;
   wire io_ready2;
@@ -442,16 +440,10 @@ module spi_engine_execution #(
   always @(posedge clk) begin
     if (!resetn) begin // set cs_activate during reset for a cycle to clear shift reg
       cs_activate <= 1;
-      cs_active   <= 0;
     end else begin
       cs_activate <= ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
-      if (cs_gen) begin
-          cs_active <= ~(&cmd_d1[NUM_OF_CS-1:0]);
-      end
     end
   end
-
-  assign cs_activate_s = ~(&cmd_d1[NUM_OF_CS-1:0]) & cs_gen;
 
   genvar i;
 
