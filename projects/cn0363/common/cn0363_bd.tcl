@@ -98,6 +98,7 @@ current_bd_instance /processing
 	create_bd_pin -dir I -from 31 -to 0 phase
 	create_bd_pin -dir O overflow
 	create_bd_pin -dir I -from 13 -to 0 channel_enable
+	create_bd_pin -dir O dma_wr_sync
 	create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S_AXIS_SAMPLE
 	create_bd_intf_pin -mode Master -vlnv analog.com:interface:fifo_wr_rtl:1.0 DMA_WR
 
@@ -211,6 +212,7 @@ current_bd_instance /processing
 
 	ad_connect channel_enable sequencer/channel_enable
 	ad_connect sequencer/dma_wr DMA_WR
+	ad_connect sequencer/dma_wr_sync dma_wr_sync
 
 	ad_connect phase_data_sync/overflow overflow_or/Op1
 	ad_connect sequencer/overflow overflow_or/Op2
@@ -242,6 +244,7 @@ connect_bd_net -net $sys_cpu_resetn \
 	[get_bd_pins /axi_dma/m_dest_axi_aresetn]
 
 ad_connect /processing/dma_wr /axi_dma/fifo_wr
+ad_connect /processing/dma_wr_sync /axi_dma/sync
 
 ad_cpu_interconnect 0x43c00000 /axi_adc
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap

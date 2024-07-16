@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 # SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -23,6 +23,7 @@
 <: set async_clk_dest_sg       [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_SG] :>
 <: set axi_slice_dest          [get_property MODELPARAM_VALUE.AXI_SLICE_DEST] :>
 <: set axi_slice_src           [get_property MODELPARAM_VALUE.AXI_SLICE_SRC] :>
+<: set axis_tuser_sync         [get_property MODELPARAM_VALUE.AXIS_TUSER_SYNC] :>
 <: set sync_transfer_start     [get_property MODELPARAM_VALUE.SYNC_TRANSFER_START] :>
 <: set cyclic                  [get_property MODELPARAM_VALUE.CYCLIC] :>
 <: set dma_axi_protocol_dest   [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_DEST] :>
@@ -37,6 +38,8 @@
 <: set axi_id_width_dest       [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_DEST] :>
 <: set axi_id_width_sg         [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SG] :>
 <: set disable_debug_registers [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
+<: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
+<: set cache_coherent          [get_property MODELPARAM_VALUE.CACHE_COHERENT] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -64,6 +67,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_ASYNC_CLK_DEST_SG       = <=: b2i $async_clk_dest_sg :>;
   parameter <=: ComponentName :>_AXI_SLICE_DEST          = <=: b2i $axi_slice_dest :>;
   parameter <=: ComponentName :>_AXI_SLICE_SRC           = <=: b2i $axi_slice_src :>;
+  parameter <=: ComponentName :>_AXIS_TUSER_SYNC         = <=: b2i $axis_tuser_sync :>;
   parameter <=: ComponentName :>_SYNC_TRANSFER_START     = <=: b2i $sync_transfer_start :>;
   parameter <=: ComponentName :>_CYCLIC                  = <=: b2i $cyclic :>;
   parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_DEST   = <=: $dma_axi_protocol_dest :>;
@@ -78,6 +82,8 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST       = <=: $axi_id_width_dest :>;
   parameter <=: ComponentName :>_AXI_ID_WIDTH_SG         = <=: $axi_id_width_sg :>;
   parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS = <=: b2i $disable_debug_registers :>;
+  parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
+  parameter <=: ComponentName :>_CACHE_COHERENT          = <=: b2i $cache_coherent :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg

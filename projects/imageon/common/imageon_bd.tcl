@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -50,7 +50,7 @@ ad_connect  hdmi_rx_clk axi_hdmi_rx_core/hdmi_rx_clk
 ad_connect  hdmi_rx_data axi_hdmi_rx_core/hdmi_rx_data
 
 ad_connect  axi_hdmi_rx_core/hdmi_clk axi_hdmi_rx_dma/fifo_wr_clk
-ad_connect  axi_hdmi_rx_core/hdmi_dma_sof axi_hdmi_rx_dma/fifo_wr_sync
+ad_connect  axi_hdmi_rx_core/hdmi_dma_sof axi_hdmi_rx_dma/sync
 ad_connect  axi_hdmi_rx_core/hdmi_dma_de axi_hdmi_rx_dma/fifo_wr_en
 ad_connect  axi_hdmi_rx_core/hdmi_dma_data axi_hdmi_rx_dma/fifo_wr_din
 ad_connect  axi_hdmi_rx_core/hdmi_dma_ovf axi_hdmi_rx_dma/fifo_wr_overflow

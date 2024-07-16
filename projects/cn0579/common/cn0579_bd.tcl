@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -58,6 +58,7 @@ ad_connect axi_ad77684_adc/adc_dovf            cn0579_adc_pack/fifo_wr_overflow
 ad_connect  cn0579_dma/m_dest_axi_aresetn       sys_cpu_resetn                   
 ad_connect  cn0579_dma/fifo_wr_clk              axi_ad77684_adc/adc_clk                
 ad_connect  cn0579_dma/fifo_wr                  cn0579_adc_pack/packed_fifo_wr   
+ad_connect  cn0579_dma/sync                     cn0579_adc_pack/packed_sync
 
 # interrupts
 
