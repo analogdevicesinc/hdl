@@ -21,11 +21,13 @@ ad_ip_parameter CMD_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter DATA_WIDTH INTEGER 8
 ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter SDO_STREAMING INTEGER 0
 
 proc p_elaboration {} {
 
   set data_width [get_parameter_value DATA_WIDTH]
   set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set disabled_intfs {}
 
   # control interface
 
@@ -85,6 +87,16 @@ proc p_elaboration {} {
   set_interface_property sdo_data associatedClock if_spi_clk
   set_interface_property sdo_data associatedReset if_spi_resetn
 
+  ## SDO streaming data interface
+
+  add_interface s_axis_sdo axi4stream end
+  add_interface_port s_axis_sdo s_axis_sdo_valid  tvalid   input  1
+  add_interface_port s_axis_sdo s_axis_sdo_ready  tready   output 1
+  add_interface_port s_axis_sdo s_axis_sdo_data   tdata    input  $data_width
+
+  set_interface_property s_axis_sdo associatedClock if_spi_clk
+  set_interface_property s_axis_sdo associatedReset if_spi_resetn
+
   ## SDI data interface
 
   add_interface sdi_data axi4stream end
@@ -115,4 +127,11 @@ proc p_elaboration {} {
   set_interface_property offload_sdi associatedClock if_spi_clk
   set_interface_property offload_sdi associatedReset if_spi_resetn
 
+  if {[get_parameter_value SDO_STREAMING] != 1} {
+    lappend disabled_intfs s_axis_sdo
+  }
+  
+  foreach intf $disabled_intfs {
+    set_interface_property $intf ENABLED false
+  }
 }
