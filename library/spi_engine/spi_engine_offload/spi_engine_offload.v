@@ -290,7 +290,7 @@ module spi_engine_offload #(
       if (SDO_STREAMING) begin
         if (sdo_source_select == SDO_SOURCE_MEM) begin
           // switch to streaming sdo after we're done with reading the sdo memory
-          if (sdo_data_valid && sdo_data_ready && (spi_sdo_rd_addr+1 == ctrl_sdo_wr_addr)) begin
+          if (sdo_data_valid && sdo_data_ready && (spi_sdo_rd_addr+1 == ctrl_sdo_wr_addr)|| (ctrl_sdo_wr_addr==0 && spi_active) ) begin
             sdo_source_select <= SDO_SOURCE_STREAM;
           end
         end else begin
