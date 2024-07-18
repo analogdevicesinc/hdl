@@ -56,11 +56,11 @@ module ad408x_phy #(
   input                             cnv_in_p,
   input                             cnv_in_n,
 
-   (* MARK_DEBUG = "TRUE" *) input        [4:0]                num_lanes,
-   (* MARK_DEBUG = "TRUE" *) input                             self_sync,
-   (* MARK_DEBUG = "TRUE" *) input                             bitslip_enable,
-   (* MARK_DEBUG = "TRUE" *) input                             filter_enable,
-   (* MARK_DEBUG = "TRUE" *) input                             filter_rdy_n,
+   input        [4:0]                num_lanes,
+      input                             self_sync,
+      input                             bitslip_enable,
+      input                             filter_enable,
+      input                             filter_rdy_n,
 
   // delay interface(for IDELAY macros)
 
@@ -79,12 +79,12 @@ module ad408x_phy #(
 
   // Output data
 
-   (* MARK_DEBUG = "TRUE" *) output        [31:0]             adc_data,
-   (* MARK_DEBUG = "TRUE" *) output                           adc_valid,
+     output        [31:0]             adc_data,
+     output                           adc_valid,
 
   // Synchronization signals used when CNV signal is not present
 
-  (* MARK_DEBUG = "TRUE" *) output                            sync_status
+  output                            sync_status
 );
 
   localparam  SEVEN_SERIES     = 1;
@@ -94,61 +94,75 @@ module ad408x_phy #(
   localparam  [ 2:0]  IDLE         = 3'h0,
                       COUNT        = 3'h1,
                       FILTER_COUNT = 3'h2,
-                      SYNC         = 3'h3;
+                      PRE_SYNC     = 3'h3,
+                      SYNC         = 3'h4,
+                      POST_SYNC    = 3'h5;
 
-  (* MARK_DEBUG = "TRUE" *) wire           slip;
-                            wire           dclk_s;
-  (* MARK_DEBUG = "TRUE" *) wire           rise_cnv;
-  (* MARK_DEBUG = "TRUE" *) wire           rise_slip;
-  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io;
-  (* MARK_DEBUG = "TRUE" *) wire           adc_valid_s;
-  (* MARK_DEBUG = "TRUE" *) wire           single_lane;
-  (* MARK_DEBUG = "TRUE" *) wire           cnv_in_io_s;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_p;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_b_n;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_p;
-  (* MARK_DEBUG = "TRUE" *) wire           rx_data_a_n;
-                            wire           adc_clk_phy;
-                            wire           adc_clk_data;
+  wire           slip;
 
-                            wire   [19:0]  pattern_value;
-                            wire   [ 1:0]  delay_locked_s;
-  (* MARK_DEBUG = "TRUE" *) wire           filter_rdy_n_s;
-  (* MARK_DEBUG = "TRUE" *) wire           fall_filter_ready;
-                            wire   [19:0]  adc_data_s;
+  wire           dclk_s;
 
+  wire           rise_cnv;
+  wire           rise_slip;
+  wire           cnv_in_io;
+  wire   [19:0]  adc_data_s;
+  wire           adc_valid_s;
+  wire           single_lane;
 
+  wire           cnv_in_io_s;
+  wire           rx_data_b_p;
+  wire           rx_data_b_n;
+  wire           rx_data_a_p;
+  wire           rx_data_a_n;
 
+  wire           adc_clk_phy;
+  wire           adc_clk_data;
 
-  (* MARK_DEBUG = "TRUE" *) reg     [1:0]  slip_d              = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 3:0]  adc_cnt_p           = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            cycle_done          = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [19:0]  adc_data_p          = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg      adc_valid_d         = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 1:0]  cnv_in_io_d         = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            filter_cycle        = 'b1;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state      = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            filter_rdy_n_d      = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            sync_status_int     = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg            sync_status_int_d   = 'b0;
-  (* MARK_DEBUG = "TRUE" *) reg    [ 2:0]  transfer_state_next = 'b0;
-                            reg  [19:0]   adc_data_p_d;
+  wire   [19:0]  pattern_value;
+  wire   [ 3:0]  adc_cnt_value;
+  wire   [19:0]  adc_data_p_d;
+  wire   [ 1:0]  delay_locked_s;
+  wire           filter_rdy_n_s;
+  wire   [ 4:0]  shift_cnt_value;
+  wire           adc_cnt_enable_s;
+  wire           fall_filter_ready;
+  wire           fall_filter_ready_s;
 
-  assign pattern_value     = 'hac5d6;
-  assign single_lane       = num_lanes[0];
-  assign adc_clk           = adc_clk_data;
-  assign adc_valid         = adc_valid_d;
-  assign delay_locked      = &delay_locked_s;
-  assign sync_status       = sync_status_int_d;
-  assign rise_slip         = ~slip_d[1]      & slip_d[0];
-  assign cnv_in_io         =  cnv_in_io_s    & ~self_sync;
-  assign slip              =  bitslip_enable &  self_sync;
-  assign filter_rdy_n_s    = ~filter_rdy_n   & filter_enable;
-  assign rise_cnv          = ~cnv_in_io_d[1] & cnv_in_io_d[0];
-  assign fall_filter_ready =  filter_rdy_n_d & ~filter_rdy_n_s;
-  assign adc_data          = {{12{adc_data_p_d[19]}},adc_data_p_d};
-  assign adc_data_s        = sync_pos_neg ? adc_data_pos: adc_data_neg ;
-  assign adc_valid_s       =  cycle_done & (transfer_state == COUNT || transfer_state == FILTER_COUNT);
+  reg    [ 1:0]  slip_d              = 'b0;
+  reg    [ 3:0]  adc_cnt_p           = 'b0;
+  reg    [19:0]  adc_data_d [0:2]         ;
+  reg            cycle_done          = 'b0;
+  reg    [19:0]  adc_data_p          = 'b0;
+  reg    [ 4:0]  shift_cnt           = 'd0;
+  reg            adc_valid_d         = 'b0;
+  reg    [ 1:0]  cnv_in_io_d         = 'b0;
+  reg            filter_cycle        = 'b1;
+  reg    [ 2:0]  transfer_state      = 'b0;
+  reg            filter_rdy_n_d      = 'b0;
+  reg            sync_status_int     = 'b0;
+  reg            sync_status_int_d   = 'b0;
+  reg    [19:0]  adc_data_shifted    = 'b0;
+  reg    [ 2:0]  transfer_state_next = 'b0;
+  reg    [ 1:0]  fall_filter_ready_d = 'b0;
+
+  assign adc_cnt_value       = 'h4;
+  assign shift_cnt_value     = 'd19;
+  assign pattern_value       = 'hac5d6;
+  assign single_lane         =  num_lanes[0];
+  assign adc_clk             =  adc_clk_data;
+  assign delay_locked        = &delay_locked_s;
+  assign sync_status         =  sync_status_int_d;
+  assign fall_filter_ready   =  fall_filter_ready_d[1];
+  assign rise_slip           = ~slip_d[1]      & slip_d[0];
+  assign cnv_in_io           =  cnv_in_io_s    & ~self_sync;
+  assign slip                =  bitslip_enable &  self_sync;
+  assign filter_rdy_n_s      = ~filter_rdy_n   & filter_enable;
+  assign rise_cnv            = ~cnv_in_io_d[1] & cnv_in_io_d[0];
+  assign fall_filter_ready_s = ~filter_rdy_n_d & filter_rdy_n_s;
+  assign adc_cnt_enable_s    = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
+  assign adc_data            = {{12{adc_data_shifted[19]}},adc_data_shifted};
+  assign adc_valid           =  cycle_done & (transfer_state == COUNT || transfer_state == FILTER_COUNT);
+
 
   IBUFDS i_cnv_in_ibuf(
     .I(cnv_in_p),
@@ -172,16 +186,30 @@ module ad408x_phy #(
     .I (adc_clk_phy),
     .O (adc_clk_data));
 
-    always @(posedge adc_clk_data) begin
-      adc_valid_d <= adc_valid_s;
-      if(adc_valid_s == 1'b1) begin
-        adc_data_p_d <= adc_data_s;
-      end else begin
-        adc_data_p_d <= adc_data_p_d;
-      end
+  always @(posedge adc_clk_data) begin
+    if(transfer_state == PRE_SYNC || adc_rst) begin
+      sync_status_int_d <= 1'b0;
+    end else if (transfer_state == POST_SYNC) begin
+      sync_status_int_d <= 1'b1;
     end
+  end
 
   always @(posedge adc_clk_data) begin
+    adc_data_shifted <= {adc_data_d[2],adc_data_d[1]} >> shift_cnt;
+  end
+
+  always @(posedge adc_clk_data) begin
+    if(transfer_state == SYNC) begin
+      if(shift_cnt > shift_cnt_value || adc_rst) begin
+        shift_cnt <= 0;
+      end else if((adc_data_shifted != pattern_value) && cycle_done) begin
+        shift_cnt <= shift_cnt + 1;
+      end
+    end
+  end
+
+  always @(posedge adc_clk_data) begin
+    fall_filter_ready_d <= {fall_filter_ready_d[0],fall_filter_ready_s};
     filter_rdy_n_d   <= filter_rdy_n_s;
     slip_d           <= {slip_d[0],slip};
     cnv_in_io_d      <= {cnv_in_io_d[0],cnv_in_io};
@@ -195,92 +223,104 @@ module ad408x_phy #(
     end
   end
 
-  reg [19:0] adc_data_pos = 'b0;
-  reg [19:0] adc_data_neg = 'b0;
-
-  always @(posedge adc_clk_phy) begin
-  adc_data_pos <= adc_data_p;
-  end
-
-  always @(negedge adc_clk_phy) begin
-    adc_data_neg <= adc_data_p;
-  end
-
-reg cycle_done_d = 1'b0;
-
 // FSM next state logic
 
   always @(*) begin
     case (transfer_state)
-      IDLE : begin
-        transfer_state_next = (rise_slip) ? SYNC :((filter_rdy_n_s & filter_cycle)
+      IDLE : begin : idle_state
+        transfer_state_next = (rise_slip) ? PRE_SYNC :((filter_rdy_n_s & filter_cycle)
                                           ? FILTER_COUNT :((!filter_enable && (rise_cnv || self_sync ))
                                           ? COUNT : IDLE ));
         filter_cycle        = (fall_filter_ready)  ? 1'b1 : filter_cycle;
         cycle_done = 0;
       end
-      COUNT : begin
-        transfer_state_next = (rise_slip)   ? SYNC :((cycle_done)  ? ((filter_rdy_n_s & filter_cycle)
+      COUNT : begin : count_state
+        transfer_state_next = (rise_slip)   ? PRE_SYNC :((cycle_done)  ? ((filter_rdy_n_s & filter_cycle)
                                             ? FILTER_COUNT : COUNT ) : COUNT );
         filter_cycle        = (fall_filter_ready)  ? 1'b1 : filter_cycle;
-        cycle_done          = (single_lane) ? (adc_cnt_p == 4'h4) : (adc_cnt_p == 4'h2);
+        cycle_done          = (adc_cnt_p == 4'h4);
       end
-      FILTER_COUNT : begin
-        transfer_state_next = (rise_slip)   ? SYNC :((cycle_done)  ? IDLE : FILTER_COUNT);
-        cycle_done          = (single_lane) ? (adc_cnt_p == 4'h4) : (adc_cnt_p == 4'h2);
+      FILTER_COUNT : begin : filter_count_state
+        transfer_state_next = (rise_slip)   ? PRE_SYNC :((cycle_done)  ? IDLE : FILTER_COUNT);
+        cycle_done          = (adc_cnt_p == 4'h4);
         filter_cycle        = (cycle_done)  ? 1'b0 : filter_cycle;
       end
-      SYNC: begin
-        transfer_state_next = (cycle_done)  ? ((filter_rdy_n_s & filter_cycle)
-                                            ? FILTER_COUNT :(filter_enable)
-                                            ? IDLE : COUNT ) : SYNC;
-        cycle_done          = (adc_data_pos == pattern_value) || (adc_data_neg == pattern_value) ? 1'b1 : cycle_done_d;
-        sync_status_int     = cycle_done;
+      PRE_SYNC: begin : pre_sync_state
+        cycle_done          =  (adc_cnt_p == 4'h4);
+        transfer_state_next = SYNC;
       end
-      default : begin
+      SYNC: begin : sync_state
+        transfer_state_next = sync_status_int ? POST_SYNC : SYNC;
+        cycle_done          = (adc_cnt_p == 4'h4);
+        sync_status_int     = (adc_data_shifted == pattern_value);
+      end
+      POST_SYNC: begin : post_sync_state
+        cycle_done          = (adc_cnt_p == 4'h4);
+        transfer_state_next = (filter_rdy_n_s & filter_cycle) ? FILTER_COUNT :
+                                             ((filter_enable) ? IDLE : COUNT);
+      end
+      default : begin : default_state
         transfer_state_next = IDLE;
         cycle_done = 0;
       end
     endcase
   end
-  reg sync_pos_neg = 1'b0;
 
   always @(posedge adc_clk_data) begin
-    cycle_done_d <= cycle_done;
-    if(cycle_done && (adc_data_pos == pattern_value)) begin
-      sync_pos_neg <= 1'b1;
-    end else if (cycle_done && (adc_data_neg == pattern_value)) begin
-      sync_pos_neg <= 1'b0;
-    end else begin
-      sync_pos_neg <= sync_pos_neg;
-    end
-
-    if( sync_status_int ) begin
-      sync_status_int_d <= 1'b1;
-    end else if (transfer_state == IDLE && !filter_enable ) begin
-      sync_status_int_d <= 1'b0;
-    end
-  end
-
-  always @(posedge adc_clk_data) begin
-
-    if (transfer_state == SYNC || adc_rst || adc_cnt_p >= 4'h4) begin
+    if (adc_rst || cycle_done || (sync_status_int && transfer_state == SYNC) || transfer_state == IDLE) begin
       adc_cnt_p   <= 4'b0;
-    end else if (transfer_state == COUNT || transfer_state == FILTER_COUNT || transfer_state == IDLE ) begin
-      if (cycle_done) begin
-        adc_cnt_p   <= 4'b0;
-      end else  begin
+    end else if (adc_cnt_enable_s) begin
         adc_cnt_p   <= adc_cnt_p + 4'b1;
-      end
     end
   end
+
+  always @(posedge adc_clk_data) begin
+    adc_data_d[0] <= adc_data_p_d;
+    adc_data_d[1] <= adc_data_d[0];
+    adc_data_d[2] <= adc_data_d[1];
+  end
+
+  // util_axis_fifo # (
+    // .DATA_WIDTH(20),
+    // .ADDRESS_WIDTH(4)
+  // ) util_axis_fifo_inst (
+    // .m_axis_aclk(adc_clk_data),
+    // .m_axis_aresetn(~adc_rst),
+    // .m_axis_ready(1'b1),
+    // .m_axis_valid(),
+    // .m_axis_data(adc_data_p_d),
+    // .m_axis_tkeep(),
+    // .m_axis_tlast(),
+    // .m_axis_level(),
+    // .m_axis_empty(),
+    // .m_axis_almost_empty(),
+
+    // .s_axis_aclk(adc_clk_phy),
+    // .s_axis_aresetn(~adc_rst),
+    // .s_axis_ready(),
+    // .s_axis_valid(1'b1),
+    // .s_axis_data(adc_data_p),
+    // .s_axis_tkeep(),
+    // .s_axis_tlast(),
+    // .s_axis_room(),
+    // .s_axis_full(),
+    // .s_axis_almost_full());
+
+  xpm_cdc_gray #(
+    .DEST_SYNC_FF(10), // DECIMAL; range: 2-10
+    .INIT_SYNC_FF(0),  // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
+    .REG_OUTPUT(1),    // DECIMAL		0: Disable registered output 1: Enable registered output
+    .WIDTH(20)         // 	Width of binary input bus that will be synchronized to destination clock domain.
+  ) data_sync (
+    .dest_clk(adc_clk_data),
+    .dest_out_bin(adc_data_p_d),
+    .src_clk(adc_clk_phy),
+    .src_in_bin(adc_data_p));
+
+
 
   always @(posedge adc_clk_phy) begin
-    if(single_lane) begin
-        adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
-    end else begin
-        adc_data_p <= {adc_data_p[15:0], rx_data_a_p, rx_data_b_p, rx_data_a_n, rx_data_b_n};
-    end
+    adc_data_p <= {adc_data_p[17:0], rx_data_a_p, rx_data_a_n};
   end
 
   ad_data_in # (
@@ -304,27 +344,5 @@ reg cycle_done_d = 1'b0;
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked_s[1]));
-
-  ad_data_in # (
-    .SINGLE_ENDED(0),
-    .IDDR_CLK_EDGE("SAME_EDGE_PIPELINED"),
-    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .DDR_SDR_N(1),
-    .IODELAY_CTRL(IODELAY_CTRL),
-    .IODELAY_GROUP(IO_DELAY_GROUP),
-    .REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
-  ) db_iddr (
-    .rx_clk(~adc_clk_phy),
-    .rx_data_in_p(data_b_in_p),
-    .rx_data_in_n(data_b_in_n),
-    .rx_data_p(rx_data_b_p),
-    .rx_data_n(rx_data_b_n),
-    .up_clk(up_clk),
-    .up_dld(up_adc_dld[1]),
-    .up_dwdata(up_adc_dwdata[9:5]),
-    .up_drdata(up_adc_drdata[9:5]),
-    .delay_clk(delay_clk),
-    .delay_rst(delay_rst),
-    .delay_locked(delay_locked_s[0]));
 
 endmodule

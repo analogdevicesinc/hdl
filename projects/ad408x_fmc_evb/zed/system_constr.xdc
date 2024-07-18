@@ -58,16 +58,9 @@ set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS25} [get_ports {pbio[8]}]
 set_property -dict {PACKAGE_PIN L21 IOSTANDARD LVCMOS25} [get_ports ad9508_sync]
 set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock]
 
+set_property IDELAY_VALUE 11 [get_cells -hier -filter {name =~ *da_iddr/i_rx_data_idelay*}]
+
 # clocks
 
 create_clock -period 2.500 -name dco_clk [get_ports dco_p]
 
-# set_property IDELAY_VALUE 1 [get_cells -hier -filter {name =~ *da_iddr/i_rx_data_idelay*}]
-# set_property IDELAY_VALUE 1 [get_cells -hier -filter {name =~ *db_iddr/i_rx_data_idelay*}]
-
-
-
-# set_input_delay -clock dco_clk -max 1.000 [get_ports {da_p db_p}]
-# set_input_delay -clock dco_clk -min -1.000 [get_ports {da_p db_p}]
-# set_input_delay -clock dco_clk -clock_fall -max -add_delay 1.000 [get_ports {da_p db_p}]
-# set_input_delay -clock dco_clk -clock_fall -min -add_delay -1.000 [get_ports {da_p db_p}]
