@@ -400,18 +400,22 @@ can be an alternative to <a class="icon adi reference external" href="https://ww
 <td><p>FMC0</p></td>
 </tr>
 <tr class="row-even"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
+<td><p>FMCP1</p></td>
+</tr>
+<tr class="row-odd"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
 <td><p>FMC+</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCU128">VCU128</a></p></td>
 <td><p>FMC+</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
 <td><p>FMC HPC0</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
 <td><p>FMC HPC</p></td>
 </tr>
@@ -437,14 +441,18 @@ can be an alternative to <a class="icon adi reference external" href="https://ww
 <td><p>FMC0</p></td>
 </tr>
 <tr class="row-odd"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
+<td><p>FMCP1</p></td>
+</tr>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
 <td><p>FMC+</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
 <td><p>FMC HPC0</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
 <td><p>FMC HPC</p></td>
 </tr>
@@ -951,19 +959,19 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <p><code class="docutils literal notranslate"><span class="pre">NP</span></code> notation is equivalent with <code class="docutils literal notranslate"><span class="pre">N'</span></code></p>
 </div>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="81efae4387bfcc9722530908f834ca39b93e1edb" name="81efae4387bfcc9722530908f834ca39b93e1edb" type="checkbox"></input><label for="81efae4387bfcc9722530908f834ca39b93e1edb"><p>Default values of the ``make`` parameters for AD9081-FMCA-EBZ</p>
+<input class="collapsible_input" id="1c2c66087c4384ae7dab018501b4972c9eeeb643" name="1c2c66087c4384ae7dab018501b4972c9eeeb643" type="checkbox"></input><label for="1c2c66087c4384ae7dab018501b4972c9eeeb643"><p>Default values of the ``make`` parameters for AD9081-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head" rowspan="2"><p>Parameter</p></th>
-<th class="head" colspan="6"><p>Default value of the parameters depending on carrier</p></th>
+<th class="head" colspan="8"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"><p>A10SoC</p></th>
 <th class="head"><p>VCK190</p></th>
+<th class="head"><p>VPK180</p></th>
 <th class="head"><p>VCU118</p></th>
-<th class="head"><p>VCU128</p></th>
-<th class="head"><p>ZC706</p></th>
+<th class="head" colspan="3"><p>VCU128 | ZC706</p></th>
 <th class="head"><p>ZCU102</p></th>
 </tr>
 </thead>
@@ -971,32 +979,36 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tr class="row-odd"><td><p>JESD_MODE</p></td>
 <td><p>—</p></td>
 <td><p>64B66B</p></td>
+<td><p>64B66B</p></td>
 <td><p>8B10B</p></td>
-<td><p>8B10B</p></td>
+<td colspan="2"><p>8B10B</p></td>
 <td><p>8B10B</p></td>
 <td><p>8B10B</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_LANE_RATE</p></td>
 <td><p>10</p></td>
 <td><p>24.75</p></td>
+<td><p>24.75</p></td>
 <td><p>10</p></td>
-<td><p>10</p></td>
+<td colspan="2"><p>10</p></td>
 <td><p>10</p></td>
 <td><p>10</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
 <td><p>10</p></td>
 <td><p>24.75</p></td>
+<td><p>24.75</p></td>
 <td><p>10</p></td>
-<td><p>10</p></td>
+<td colspan="2"><p>10</p></td>
 <td><p>10</p></td>
 <td><p>10</p></td>
 </tr>
 <tr class="row-even"><td><p>REF_CLK_RATE</p></td>
 <td><p>—</p></td>
 <td><p>375</p></td>
+<td><p>375</p></td>
 <td><p>—</p></td>
-<td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
@@ -1005,30 +1017,34 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
+<td colspan="2"><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_L</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
+<td><p>8</p></td>
 <td><p>4</p></td>
-<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 </tr>
 <tr class="row-odd"><td><p>RX_JESD_S</p></td>
 <td><p>1</p></td>
 <td><p>2</p></td>
+<td><p>2</p></td>
 <td><p>1</p></td>
-<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_NP</p></td>
 <td><p>16</p></td>
 <td><p>12</p></td>
+<td><p>12</p></td>
 <td><p>16</p></td>
-<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 </tr>
@@ -1037,6 +1053,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
@@ -1045,6 +1062,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>{}</p></td>
 </tr>
@@ -1053,30 +1071,34 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
+<td colspan="2"><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_L</p></td>
 <td><p>4</p></td>
 <td><p>8</p></td>
+<td><p>8</p></td>
 <td><p>4</p></td>
-<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_S</p></td>
 <td><p>1</p></td>
 <td><p>2</p></td>
+<td><p>2</p></td>
 <td><p>1</p></td>
-<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_NP</p></td>
 <td><p>16</p></td>
 <td><p>12</p></td>
+<td><p>12</p></td>
 <td><p>16</p></td>
-<td><p>16</p></td>
+<td colspan="2"><p>16</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
 </tr>
@@ -1085,6 +1107,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
@@ -1093,6 +1116,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>{}</p></td>
 </tr>
@@ -1101,6 +1125,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>0</p></td>
 </tr>
@@ -1109,6 +1134,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>0</p></td>
 </tr>
@@ -1117,6 +1143,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>2</p></td>
 </tr>
@@ -1125,6 +1152,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>32</p></td>
 </tr>
@@ -1133,6 +1161,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>1</p></td>
 </tr>
@@ -1141,6 +1170,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>0</p></td>
 </tr>
@@ -1149,6 +1179,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
+<td colspan="2"><p>—</p></td>
 <td><p>—</p></td>
 <td><p>0</p></td>
 </tr>
@@ -1156,7 +1187,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>32</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
-<td><p>16384</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>16384</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
@@ -1164,7 +1196,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>32</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
-<td><p>16384</p></td>
+<td><p>64</p></td>
+<td colspan="2"><p>16384</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
@@ -1172,7 +1205,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
-<td><p>2</p></td>
+<td><p>—</p></td>
+<td colspan="2"><p>2</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
@@ -1180,8 +1214,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
-<td><p>2</p></td>
 <td><p>—</p></td>
+<td colspan="3"><p>2 |   —</p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
@@ -1190,19 +1224,20 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3" name="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3" type="checkbox"></input><label for="0b5ec0a3cb3ba13a3fc8f5cfecc5194e86999cf3"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
+<input class="collapsible_input" id="8963ce80c6ccd0de24d5f73a407a382bd6f14662" name="8963ce80c6ccd0de24d5f73a407a382bd6f14662" type="checkbox"></input><label for="8963ce80c6ccd0de24d5f73a407a382bd6f14662"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head" rowspan="2"><p>Parameter</p></th>
-<th class="head" colspan="4"><dl class="simple">
+<th class="head" colspan="5"><dl class="simple">
 <dt>Default value of the parameters</dt><dd><p>depending on carrier</p>
 </dd>
 </dl>
 </th>
 </tr>
 <tr class="row-even"><th class="head"><p>VCK190</p></th>
+<th class="head"><p>VPK180</p></th>
 <th class="head"><p>VCU118</p></th>
 <th class="head"><p>ZC706</p></th>
 <th class="head"><p>ZCU102</p></th>
@@ -1211,11 +1246,13 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tbody>
 <tr class="row-odd"><td><p>JESD_MODE</p></td>
 <td><p>64B66B</p></td>
+<td><p>64B66B</p></td>
 <td><p>8B10B</p></td>
 <td><p><span class="red">8B10B*</span></p></td>
 <td><p><span class="red">8B10B*</span></p></td>
 </tr>
 <tr class="row-even"><td><p>RX_LANE_RATE</p></td>
+<td><p>24.75</p></td>
 <td><p>24.75</p></td>
 <td><p>15</p></td>
 <td><p>10</p></td>
@@ -1223,11 +1260,13 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </tr>
 <tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
 <td><p>24.75</p></td>
+<td><p>24.75</p></td>
 <td><p>15</p></td>
 <td><p>10</p></td>
 <td><p>15</p></td>
 </tr>
 <tr class="row-even"><td><p>REF_CLK_RATE</p></td>
+<td><p>375</p></td>
 <td><p>375</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
@@ -1236,10 +1275,12 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tr class="row-odd"><td><p>RX_JESD_M</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
+<td><p>4</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_L</p></td>
+<td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
@@ -1247,11 +1288,13 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </tr>
 <tr class="row-odd"><td><p>RX_JESD_S</p></td>
 <td><p>4</p></td>
+<td><p>4</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_NP</p></td>
+<td><p>12</p></td>
 <td><p>12</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
@@ -1262,8 +1305,10 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
+<td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_TPL_WIDTH</p></td>
+<td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
@@ -1272,10 +1317,12 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tr class="row-odd"><td><p>TX_JESD_M</p></td>
 <td><p>4</p></td>
 <td><p>4</p></td>
+<td><p>4</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_L</p></td>
+<td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>8</p></td>
 <td><p>4</p></td>
@@ -1283,11 +1330,13 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_S</p></td>
 <td><p>8</p></td>
+<td><p>8</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_NP</p></td>
+<td><p>12</p></td>
 <td><p>12</p></td>
 <td><p>16</p></td>
 <td><p>16</p></td>
@@ -1298,8 +1347,10 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <td><p>1</p></td>
 <td><p>1</p></td>
 <td><p>1</p></td>
+<td><p>1</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_TPL_WIDTH</p></td>
+<td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
@@ -1308,10 +1359,12 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tr class="row-odd"><td><p>RX_KS_PER_CHANNEL</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
+<td><p>64</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_KS_PER_CHANNEL</p></td>
+<td><p>64</p></td>
 <td><p>64</p></td>
 <td><p>64</p></td>
 <td><p>—</p></td>
@@ -1460,7 +1513,7 @@ accordingly.</p>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynq">ZC706</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/zynqmp">ZCU102</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/microblaze">VCU118</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal">VCK190/VMK180</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal">VCK190/VMK180/VPK180</a></p></td>
 <td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081/quickstart/a10soc">A10SoC</a></p></td>
 </tr>
 </tbody>

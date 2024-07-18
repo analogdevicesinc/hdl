@@ -392,6 +392,13 @@ or uninstall on the evaluation board.</p>
 <p>For LVPECL and LVDS configurations, appropriate charge pump filter circuit
 values are necessary to have an optimized clock buffer performance from
 <a class="icon adi reference external" href="https://www.analog.com/AD9517-4">AD9517-4</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>On Zedboard, the frequency is set to 463.82MHz, because there is a limitation
+for BUFG input clock frequency to 464MHz, which is below the maximum
+sampling rate of the ADC (500MSPS).</p>
+<p>Thus the adc_clk period is set to 2.156ns (463.82MHz) on Zedboard.</p>
+</div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
@@ -440,7 +447,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 <tr class="row-odd"><td><p>PS</p></td>
 <td><p>SPI 0</p></td>
-<td><p>AD9434BCPZ</p></td>
+<td><p>AD9434</p></td>
 <td><p>0</p></td>
 </tr>
 </tbody>
@@ -518,7 +525,8 @@ guide.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9434">AD9434</a></p></li>
+<li><p>Schematic file: <a class="reference external" href="https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_sch.pdf">ad9434_fmc_500ebz_sch.pdf</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad9434fmc-500ebz">EVAL-AD9434 user guide</a></p></li>
 </ul>
 </section>
@@ -551,11 +559,11 @@ guide.</p>
 </tr>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_clkgen">[Wiki]</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_hdmi_tx">[Wiki]</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
@@ -563,11 +571,11 @@ guide.</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
