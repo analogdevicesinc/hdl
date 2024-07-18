@@ -760,37 +760,37 @@ HDL related
      - :ref:`here <axi_dmac>`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_cpack>`
+     - :ref:`here <util_cpack2>`
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/util_upack>`
+     - :ref:`here <util_cpack2>`
    * - UTIL_ADXCVR for AMD
      - :git-hdl:`library/xilinx/util_adxcvr`
-     - :ref:`util_adxcvr`
+     - :ref:`here <util_adxcvr>`
    * - AXI_ADXCVR for Intel
      - :git-hdl:`library/intel/axi_adxcvr`
-     - :ref:`AXI_ADXCVR for Intel devices <axi_adxcvr intel>`
+     - :ref:`here <axi_adxcvr intel>`
    * - AXI_ADXCVR for AMD
      - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :ref:`AXI_ADXCVR for AMD devices <axi_adxcvr amd>`
+     - :ref:`here <axi_adxcvr amd>`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :ref:`axi_jesd204_rx`
+     - :ref:`here <axi_jesd204_rx>`
    * - AXI_JESD204_TX
      - :git-hdl:`library/jesd204/axi_jesd204_tx`
-     - :ref:`axi_jesd204_tx`
+     - :ref:`here <axi_jesd204_tx>`
    * - JESD204_TPL_ADC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :ref:`ad_ip_jesd204_tpl_adc`
+     - :ref:`here <ad_ip_jesd204_tpl_adc>`
    * - JESD204_TPL_DAC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
-     - :ref:`ad_ip_jesd204_tpl_dac`
+     - :ref:`here <ad_ip_jesd204_tpl_dac>`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 -  :ref:`jesd204`

@@ -228,7 +228,7 @@ HDL related
      - ---   
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_hdmi_tx>`
+     - :ref:`here <axi_hdmi_tx>`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi <library/axi_i2s_adi>`
      - ---
@@ -237,7 +237,7 @@ HDL related
      - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - CN0363_DMA_SEQUENCER
      - :git-hdl:`library/cn0363/cn0363_dma_sequencer <library/cn0363/cn0363_dma_sequencer>`
      - :dokuwiki:`[Wiki] <resources/fpga/peripherals/cn0363/sequencer?s[]=dma&s[]=sequencer>`
@@ -261,7 +261,7 @@ HDL related
      - :ref:`here <spi_engine offload>`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_sysid>`
+     - :ref:`here <axi_sysid>`
    * - UTIL_AXIS_RESIZE
      - :git-hdl:`library/util_axis_resize`
      - ---   
