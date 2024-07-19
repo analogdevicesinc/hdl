@@ -9,8 +9,8 @@
 
 
 set_false_path  \
- -from [get_cells -quiet -hierarchical -filter {NAME =~ *da_iddr/i_rx_data_iddr/C*}] \
- -to [get_cells -quiet -hierarchical -filter {NAME =~ *ad408x_interface/adc_data_p_reg[1]/D*}]
+ -from [get_cells -quiet -hierarchical -filter {NAME =~ *da_iddr/i_rx_data_iddr*}] \
+ -to [get_cells -quiet -hierarchical -filter {NAME =~ *ad408x_interface/adc_data_p_reg[*]*}]
 
 # set_false_path  -from [get_cells -hier -filter {name =~ *i_address_gray/s_axis_waddr_reg_reg[*]*}]
 # set_false_path  -from [get_cells -hier -filter {name =~ *i_address_gray/g_async_clock.i_raddr_sync_gray/out_count_m_reg[*]*}]
