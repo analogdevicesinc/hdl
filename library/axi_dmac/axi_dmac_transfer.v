@@ -68,7 +68,6 @@ module axi_dmac_transfer #(
   parameter ALLOW_ASYM_MEM = 0,
   parameter [3:0] AXI_AXCACHE = 4'b0011,
   parameter [2:0] AXI_AXPROT = 3'b000,
-  parameter CACHE_COHERENT_DEST = 0,
   parameter FRAMELOCK = 0,
   parameter FRAMELOCK_MODE = 0,
   parameter MAX_NUM_FRAMES = 4,
@@ -105,7 +104,7 @@ module axi_dmac_transfer #(
 
   output req_eot,
   output [31:0] req_sg_desc_id,
-  output [BYTES_PER_BURST_WIDTH:0] req_measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH-1:0] req_measured_burst_length,
   output req_response_partial,
   output req_response_valid,
   input req_response_ready,
@@ -238,7 +237,7 @@ module axi_dmac_transfer #(
   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] dma_req_dest_address;
   wire [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] dma_req_src_address;
   wire [DMA_LENGTH_WIDTH-1:0] dma_req_length;
-  wire [BYTES_PER_BURST_WIDTH:0] dma_req_measured_burst_length;
+  wire [BYTES_PER_BURST_WIDTH-1:0] dma_req_measured_burst_length;
   wire dma_req_eot;
   wire dma_response_valid;
   wire dma_response_ready;
@@ -440,9 +439,9 @@ module axi_dmac_transfer #(
   wire flock_req_ready;
   wire dma_2d_req_valid;
   wire dma_2d_req_ready;
-  wire dma_2d_req_ready_w;
+  wire dma_2d_req_ready_s;
 
-  assign dma_2d_req_ready_w = dma_2d_req_ready && ext_sync_ready;
+  assign dma_2d_req_ready_s = dma_2d_req_ready && ext_sync_ready;
   assign ext_sync_valid = dma_2d_req_valid;
 
   assign flock_dest_address = ctrl_hwdesc ? dma_sg_out_dest_address : req_dest_address;
@@ -484,16 +483,15 @@ module axi_dmac_transfer #(
     .req_flock_en (req_flock_en),
     .req_cyclic (req_cyclic),
 
-    .req_response_ready (req_response_ready),
-
     // Interface to 2D
     .out_req_valid (dma_2d_req_valid),
-    .out_req_ready (dma_2d_req_ready_w),
+    .out_req_ready (dma_2d_req_ready_s),
     .out_req_dest_address (dma_2d_dest_address),
     .out_req_src_address (dma_2d_src_address),
 
     .out_eot (dma_2d_eot),
     .out_response_valid (req_response_valid),
+    .out_response_ready (req_response_ready),
 
     .m_frame_in (m_frame_in),
     .m_frame_out (m_frame_out),
@@ -503,7 +501,7 @@ module axi_dmac_transfer #(
 
   end else begin
   assign dma_2d_req_valid = flock_req_valid;
-  assign flock_req_ready = dma_2d_req_ready_w;
+  assign flock_req_ready = dma_2d_req_ready_s;
 
   assign dma_2d_dest_address = flock_dest_address;
   assign dma_2d_src_address = flock_src_address;

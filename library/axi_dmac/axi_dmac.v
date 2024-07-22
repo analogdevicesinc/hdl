@@ -429,7 +429,7 @@ module axi_dmac #(
 
   wire up_req_eot;
   wire [31:0] up_req_sg_desc_id;
-  wire [BYTES_PER_BURST_WIDTH:0] up_req_measured_burst_length;
+  wire [BYTES_PER_BURST_WIDTH-1:0] up_req_measured_burst_length;
   wire up_response_partial;
   wire up_response_valid;
   wire up_response_ready;
