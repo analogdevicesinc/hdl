@@ -258,12 +258,24 @@ CONTROL
 ENDREG
 
 FIELD
-[2] 0x00000000
+[3] ''AUTORUN_FLAGS[4]''
+FRAMELOCK
+RW
+Setting this field to 1 puts the DMA transfer into framelock mode.
+In framelock mode the data is hold to compensate frames rates mismatch between source and
+sink channels.
+Parameter ``FRAMELOCK`` must 1 to writing to this register to have an effect.
+If ``AUTORUN`` is unset, the default value of the field is 0x0.
+ENDFIELD
+
+FIELD
+[2] ''AUTORUN_FLAGS[3]''
 HWDESC
 RW
 When set to 1 the scatter-gather transfers are enabled.
 
 Note, this field is only valid if the DMA channel has been configured with SG transfer support.
+If ``AUTORUN`` is unset, the default value of the field is 0x0.
 ENDFIELD
 
 FIELD
@@ -324,17 +336,6 @@ REG
 0x103
 FLAGS
 ENDREG
-
-FIELD
-[3] ''AUTORUN_FLAGS[3]''
-FRAMELOCK
-RW
-Setting this field to 1 puts the DMA transfer into framelock mode.
-In framelock mode the data is hold to compensate frames rates mismatch between source and
-sink channels.
-Parameter ``FRAMELOCK`` must 1 to writing to this register to have an effect.
-If ``AUTORUN`` is unset, the default value of the field is 0x0.
-ENDFIELD
 
 FIELD
 [2] ''AUTORUN_FLAGS[2]''

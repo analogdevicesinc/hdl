@@ -452,7 +452,7 @@ module axi_dmac #(
   wire                        up_dma_req_flock_wait_writer;
   wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_distance;
   wire [DMA_AXI_ADDR_WIDTH-1:0] up_dma_req_flock_stride;
-  wire up_dma_req_flock_en;
+  wire ctrl_flock;
   wire up_dma_req_sync_transfer_start;
   wire up_dma_req_last;
   wire up_dma_req_cyclic;
@@ -538,6 +538,7 @@ module axi_dmac #(
     .ctrl_enable(ctrl_enable),
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
+    .ctrl_flock(ctrl_flock),
 
      // Request interface
     .request_valid(up_dma_req_valid),
@@ -554,7 +555,6 @@ module axi_dmac #(
     .request_flock_wait_writer(up_dma_req_flock_wait_writer),
     .request_flock_distance(up_dma_req_flock_distance),
     .request_flock_stride(up_dma_req_flock_stride),
-    .request_flock_en(up_dma_req_flock_en),
     .request_sync_transfer_start(up_dma_req_sync_transfer_start),
     .request_last(up_dma_req_last),
     .request_cyclic(up_dma_req_cyclic),
@@ -619,6 +619,7 @@ module axi_dmac #(
     .ctrl_enable(ctrl_enable),
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
+    .ctrl_flock(ctrl_flock),
 
     .req_valid(up_dma_req_valid),
     .req_ready(up_dma_req_ready),
@@ -634,7 +635,6 @@ module axi_dmac #(
     .req_flock_wait_writer(up_dma_req_flock_wait_writer),
     .req_flock_distance(up_dma_req_flock_distance),
     .req_flock_stride(up_dma_req_flock_stride),
-    .req_flock_en(up_dma_req_flock_en),
     .req_sync_transfer_start(up_dma_req_sync_transfer_start),
     .req_sync(sync),
     .req_last(up_dma_req_last),

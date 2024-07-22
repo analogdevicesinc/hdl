@@ -80,6 +80,7 @@ module axi_dmac_transfer #(
   input ctrl_enable,
   input ctrl_pause,
   input ctrl_hwdesc,
+  input ctrl_flock,
 
   input req_valid,
   output req_ready,
@@ -96,7 +97,6 @@ module axi_dmac_transfer #(
   input                          req_flock_wait_writer,
   input [MAX_NUM_FRAMES_WIDTH:0] req_flock_distance,
   input [DMA_AXI_ADDR_WIDTH-1:0] req_flock_stride,
-  input req_flock_en,
   input req_sync_transfer_start,
   input req_sync,
   input req_last,
@@ -480,7 +480,7 @@ module axi_dmac_transfer #(
     .req_flock_wait_writer (req_flock_wait_writer),
     .req_flock_distance (req_flock_distance),
     .req_flock_stride (req_flock_stride),
-    .req_flock_en (req_flock_en),
+    .req_flock_en (ctrl_flock),
     .req_cyclic (req_cyclic),
 
     // Interface to 2D
