@@ -60,7 +60,7 @@ module dmac_2d_transfer #(
   input req_last,
 
   output reg req_eot,
-  output reg [BYTES_PER_BURST_WIDTH:0] req_measured_burst_length,
+  output reg [BYTES_PER_BURST_WIDTH-1:0] req_measured_burst_length,
   output reg req_response_partial,
   output reg req_response_valid,
   input req_response_ready,
@@ -77,7 +77,7 @@ module dmac_2d_transfer #(
   output out_req_islast,
 
   input out_eot,
-  input [BYTES_PER_BURST_WIDTH:0] out_measured_burst_length,
+  input [BYTES_PER_BURST_WIDTH-1:0] out_measured_burst_length,
   input out_response_partial,
   input out_response_valid,
   output reg out_response_ready = 1'b1

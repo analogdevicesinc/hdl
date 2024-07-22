@@ -132,7 +132,7 @@ module axi_dmac_regmap #(
   // DMA response interface
   input response_eot,
   input [31:0] response_sg_desc_id,
-  input [BYTES_PER_BURST_WIDTH:0] response_measured_burst_length,
+  input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
   input response_partial,
   input response_valid,
   output response_ready,

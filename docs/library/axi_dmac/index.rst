@@ -488,10 +488,12 @@ AutoRun mode
 
 When the ``AUTORUN`` parameter is set the DMAC can initiate transfers without
 software intervention. Once the core comes out of reset, the core will operate
-on a transfer defined through the ``DMAC_DEF_*`` synthesis parameters.
-This is useful mostly in ``CYCLIC`` mode. In non cyclic mode, once the initial
+on a transfer defined through the ``AUTORUN_*`` synthesis parameters.
+This is useful mostly in ``CYCLIC`` mode.
+In non cyclic mode, once the initial
 transfer is done the core will go to idle state and will wait for software
-interaction if that exists. In this mode the s_axi AXI configuration interface
+interaction if that exists.
+In this mode the s_axi AXI configuration interface
 is optional.
 
 .. _axi_dmac interrupts:
@@ -701,7 +703,7 @@ the buffers size, start address and stride through the ``FRAMELOCK_CONFIG`` and
 
 Notice that the reader DMA will start to read the frames only after the writer
 finished to store in the DDR at least ``FRAMELOCK_CONFIG_DISTANCE+1`` frames.
-This means that while the FRAMLOCK_CONFIG_DISTANCE+1 frames are written into the
+This means that while the FRAMELOCK_CONFIG_DISTANCE+1 frames are written into the
 memory the reader DMA won’t output anything.
 
 Transfer Start Synchronization

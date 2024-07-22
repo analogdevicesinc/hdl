@@ -115,21 +115,17 @@ module axi_dmac_regmap_request #(
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
   localparam ADDR_HIGH_MSB = HAS_ADDR_HIGH ? DMA_AXI_ADDR_WIDTH-32-1 : 0;
-  localparam DMAC_DEF_SRC_ADDR_LOC = !AUTORUN ? 'h00 :
-      AUTORUN_SRC_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
-  localparam DMAC_DEF_DEST_ADDR_LOC = !AUTORUN ? 'h00 :
-      AUTORUN_DEST_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
-  localparam DMAC_DEF_X_LENGTH_LOC = !AUTORUN ? 'h00 :
-      AUTORUN_X_LENGTH[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
+  localparam DMAC_DEF_SRC_ADDR_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_SRC_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+  localparam DMAC_DEF_DEST_ADDR_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_DEST_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+  localparam DMAC_DEF_X_LENGTH_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_X_LENGTH[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
 
-  localparam AUTORUN_FLAGS_CYCLIC = !AUTORUN ? DMA_CYCLIC :
-      AUTORUN_FLAGS[0];
-  localparam AUTORUN_FLAGS_LAST = !AUTORUN ? 1 :
-      AUTORUN_FLAGS[1];
-  localparam AUTORUN_FLAGS_TLEN = !AUTORUN ? 0 :
-      AUTORUN_FLAGS[2];
-  localparam AUTORUN_FLAGS_FRAMELOCK = !AUTORUN ? 0 :
-      AUTORUN_FLAGS[3];
+  localparam AUTORUN_FLAGS_CYCLIC = AUTORUN ? AUTORUN_FLAGS[0] : DMA_CYCLIC;
+  localparam AUTORUN_FLAGS_LAST   = AUTORUN ? AUTORUN_FLAGS[1] : 1;
+  localparam AUTORUN_FLAGS_TLEN   = AUTORUN ? AUTORUN_FLAGS[2] : 0;
+  localparam AUTORUN_FLAGS_FLOCK  = AUTORUN ? AUTORUN_FLAGS[3] : 0;
 
   // DMA transfer signals
   reg up_dma_req_valid = AUTORUN == 1;
@@ -139,9 +135,9 @@ module axi_dmac_regmap_request #(
   reg [1:0] up_transfer_id_eot = 2'b0;
   reg [3:0] up_transfer_done_bitmap = 4'b0;
 
-  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = DMAC_DEF_DEST_ADDR_LOC;
-  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = DMAC_DEF_SRC_ADDR_LOC;
-  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMAC_DEF_X_LENGTH_LOC,{DMA_LENGTH_ALIGN{1'b1}}};
+  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = DMAC_DEF_DEST_ADDR_DEFAULT;
+  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = DMAC_DEF_SRC_ADDR_DEFAULT;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMAC_DEF_X_LENGTH_DEFAULT,{DMA_LENGTH_ALIGN{1'b1}}};
   reg up_dma_cyclic = AUTORUN_FLAGS_CYCLIC;
   reg up_dma_last = AUTORUN_FLAGS_LAST;
   reg up_dma_enable_tlen_reporting = AUTORUN_FLAGS_TLEN;
@@ -170,9 +166,9 @@ module axi_dmac_regmap_request #(
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
-      up_dma_src_address <= DMAC_DEF_SRC_ADDR_LOC;
-      up_dma_dest_address <= DMAC_DEF_DEST_ADDR_LOC;
-      up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= DMAC_DEF_X_LENGTH_LOC;
+      up_dma_src_address <= DMAC_DEF_SRC_ADDR_DEFAULT;
+      up_dma_dest_address <= DMAC_DEF_DEST_ADDR_DEFAULT;
+      up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= DMAC_DEF_X_LENGTH_DEFAULT;
       up_dma_req_valid <= AUTORUN[0];
       up_dma_cyclic <= AUTORUN_FLAGS_CYCLIC;
       up_dma_last <= AUTORUN_FLAGS_LAST;

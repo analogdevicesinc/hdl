@@ -550,7 +550,7 @@ set_property -dict [list \
 set p [ipgui::get_guiparamspec -name "FRAMELOCK" -component $cc]
 ipgui::move_param -component $cc -order 1 $p -parent $feature_group_2d
 set_property -dict [list \
-  "display_name" "Frame Locking Support" \
+  "display_name" "Framelock Support" \
   "tooltip" "Requires Cyclic mode" \
 ] $p
 
@@ -643,7 +643,7 @@ set p [ipgui::get_guiparamspec -name "AUTORUN" -component $cc]
 ipgui::move_param -component $cc -order 0 $p -parent $page1
 set_property -dict [list \
   "display_name" "Enable AutoRun mode" \
-  "tooltip" "Start transfer after reset deassertion" \
+  "tooltip" "Set default register values through parameters. Allows to start a transfer after reset deassertion, without software intervention" \
 ] $p
 
 set group [ipgui::add_group -name "Register Defaults" -component $cc \

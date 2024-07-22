@@ -77,7 +77,7 @@ module request_arb #(
   input req_sync,
 
   output eot,
-  output [BYTES_PER_BURST_WIDTH:0] measured_burst_length,
+  output [BYTES_PER_BURST_WIDTH-1:0] measured_burst_length,
   output response_partial,
   output response_valid,
   input response_ready,
@@ -324,6 +324,7 @@ module request_arb #(
   wire [ID_WIDTH+3-1:0] rewind_req_data;
 
   reg src_throttler_enabled = 1'b1;
+
   wire src_throttler_enable;
   wire rewind_state;
 
@@ -798,8 +799,6 @@ module request_arb #(
     .m_axis_data(req_rewind_req_data),
     .m_axis_level(),
     .m_axis_empty());
-
-  wire src_throttler_enable;
 
   sync_event #(
     .ASYNC_CLK(ASYNC_CLK_REQ_SRC)

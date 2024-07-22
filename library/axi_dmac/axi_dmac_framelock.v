@@ -58,8 +58,6 @@ module axi_dmac_framelock #(
   input req_flock_en,
   input req_cyclic,
 
-  input req_response_ready,
-
   // Interface to 2D
   output reg out_req_valid,
   input out_req_ready,
@@ -68,6 +66,7 @@ module axi_dmac_framelock #(
 
   input out_eot,
   input out_response_valid,
+  input out_response_ready,
 
   // Frame lock interface
   // Writer mode
@@ -187,9 +186,7 @@ module axi_dmac_framelock #(
     assign s_frame_id = m_frame_in[MAX_NUM_FRAMES_WIDTH-1:0];
     assign s_frame_id_vld = m_frame_in[MAX_NUM_FRAMES_WIDTH];
 
-    assign calc_done = (s_frame_id != transfer_id ||
-                        reader_started == 1'b0 ||
-                        req_flock_mode == 1'b1);
+    assign calc_done = (s_frame_id != transfer_id) | ~reader_started | req_flock_mode;
   end else begin
 
     // Reader mode logic
@@ -288,13 +285,12 @@ module axi_dmac_framelock #(
     // until the writer completes a buffer. In Dynamic Flock just wait until
     // the required number of buffers are filled, then enable the request
     // generation regardless of the writer.
-    assign enable_out_req = (req_flock_wait_writer == 1'b0 ||
-                             ((m_frame_ready | ~req_flock_mode) & ~wait_distance));
+    assign enable_out_req = ~req_flock_wait_writer | ((m_frame_ready | ~req_flock_mode) & ~wait_distance);
 
   end
   endgenerate
 
-  assign resp_eot = out_response_valid & req_response_ready & out_eot;
+  assign resp_eot = out_response_valid & out_response_ready & out_eot;
   assign out_req_src_address = ~FRAMELOCK_MODE ? 'h0 : req_address;
   assign out_req_dest_address = FRAMELOCK_MODE ? 'h0 : req_address;
 
