@@ -107,7 +107,8 @@ module axi_dmac_regmap #(
   // Control interface
   output reg ctrl_enable = AUTORUN == 1,
   output reg ctrl_pause = 1'b0,
-  output reg ctrl_hwdesc = 1'b0,
+  output reg ctrl_hwdesc = AUTORUN_CONTROL_HWDESC,
+  output reg ctrl_flock = AUTORUN_CONTROL_FLOCK,
 
   // DMA request interface
   output request_valid,
@@ -124,7 +125,6 @@ module axi_dmac_regmap #(
   output                        request_flock_wait_writer,
   output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
   output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
-  output request_flock_en,
   output request_sync_transfer_start,
   output request_last,
   output request_cyclic,
@@ -148,6 +148,9 @@ module axi_dmac_regmap #(
   localparam PCORE_VERSION = 'h00040564;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
+
+  localparam AUTORUN_CONTROL_HWDESC = AUTORUN ? AUTORUN_FLAGS[3] : 0;
+  localparam AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0;
 
   // Register interface signals
   reg [31:0] up_rdata = 32'h00;
@@ -203,7 +206,8 @@ module axi_dmac_regmap #(
     if (s_axi_aresetn == 1'b0) begin
       ctrl_enable <= AUTORUN == 1;
       ctrl_pause <= 1'b0;
-      ctrl_hwdesc <= 1'b0;
+      ctrl_flock <= AUTORUN_CONTROL_FLOCK;
+      ctrl_hwdesc <= AUTORUN_CONTROL_HWDESC;
       up_irq_mask <= 2'b11;
       up_scratch <= 32'h00;
       up_wack <= 1'b0;
@@ -219,6 +223,7 @@ module axi_dmac_regmap #(
           up_irq_mask <= up_wdata[1:0];
           end
         9'h100: begin
+          ctrl_flock <= up_wdata[3] & FRAMELOCK;
           ctrl_hwdesc <= up_wdata[2] & DMA_SG_TRANSFER;
           ctrl_pause <= up_wdata[1];
           ctrl_enable <= up_wdata[0];
@@ -254,7 +259,7 @@ module axi_dmac_regmap #(
       9'h020: up_rdata <= up_irq_mask;
       9'h021: up_rdata <= up_irq_pending;
       9'h022: up_rdata <= up_irq_source;
-      9'h100: up_rdata <= {ctrl_hwdesc, ctrl_pause, ctrl_enable};
+      9'h100: up_rdata <= {28'b0, ctrl_flock, ctrl_hwdesc, ctrl_pause, ctrl_enable};
       9'h10d: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_dest_addr[ADDR_LOW_MSB:0];
       9'h10e: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_src_addr[ADDR_LOW_MSB:0];
       9'h10f: up_rdata <= DISABLE_DEBUG_REGISTERS ? 32'h00 : dbg_status;
@@ -325,7 +330,6 @@ module axi_dmac_regmap #(
     .request_flock_wait_writer(request_flock_wait_writer),
     .request_flock_distance(request_flock_distance),
     .request_flock_stride(request_flock_stride),
-    .request_flock_en(request_flock_en),
     .request_sync_transfer_start(request_sync_transfer_start),
     .request_last(request_last),
     .request_cyclic(request_cyclic),
