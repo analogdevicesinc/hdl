@@ -49,11 +49,9 @@ adi_project ad9081_fmca_ebz_s10soc [list \
 
 source $ad_hdl_dir/projects/common/s10soc/s10soc_system_assign.tcl
 
-
 # files
 
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
-
 
 # Note: This projects requires a hardware rework to function correctly.
 # The rework connects FMC header pins directly to the FPGA so that they can be
@@ -72,8 +70,6 @@ set common_lanes [get_env_param RX_JESD_L 4]
 if {$common_lanes > [get_env_param TX_JESD_L 4]} {
   set common_lanes [get_env_param TX_JESD_L 4]
 }
-
-
 
 # set_instance_assignment -name IO_STANDARD IOSTANDARD -to System_top_name
 # set_instance_assignment -name Termination -to System_top_name

@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -64,17 +64,17 @@ module system_top  #(
   input             hps_ddr_ref_clk,
   input             hps_ddr_rzq,
   output  [ 16:0]   hps_ddr_a,
-  output  [  0:0]   hps_ddr_act_n,
-  input   [  0:0]   hps_ddr_alert_n,
+  output            hps_ddr_act_n,
+  input             hps_ddr_alert_n,
   output  [  1:0]   hps_ddr_ba,
-  output  [  0:0]   hps_ddr_bg,
-  output  [  0:0]   hps_ddr_ck,
-  output  [  0:0]   hps_ddr_ck_n,
-  output  [  0:0]   hps_ddr_cke,
-  output  [  0:0]   hps_ddr_odt,
-  output  [  0:0]   hps_ddr_par,
-  output  [  0:0]   hps_ddr_cs_n,
-  output  [  0:0]   hps_ddr_reset_n,
+  output            hps_ddr_bg,
+  output            hps_ddr_ck,
+  output            hps_ddr_ck_n,
+  output            hps_ddr_cke,
+  output            hps_ddr_odt,
+  output            hps_ddr_par,
+  output            hps_ddr_cs_n,
+  output            hps_ddr_reset_n,
   inout   [  8:0]   hps_ddr_dqs_p,
   inout   [  8:0]   hps_ddr_dqs_n,
   inout   [  8:0]   hps_ddr_dbi_n,
@@ -82,32 +82,32 @@ module system_top  #(
 
   // hps-ethernet
 
-  input   [  0:0]   hps_emac_rx_clk,
-  input   [  0:0]   hps_emac_rx_ctl,
+  input             hps_emac_rx_clk,
+  input             hps_emac_rx_ctl,
   input   [  3:0]   hps_emac_rx,
-  output  [  0:0]   hps_emac_tx_clk,
-  output  [  0:0]   hps_emac_tx_ctl,
+  output            hps_emac_tx_clk,
+  output            hps_emac_tx_ctl,
   output  [  3:0]   hps_emac_tx,
-  output  [  0:0]   hps_emac_mdc,
-  inout   [  0:0]   hps_emac_mdio,
+  output            hps_emac_mdc,
+  inout             hps_emac_mdio,
 
   // hps-usb
 
-  input   [  0:0]   hps_usb_clk,
-  input   [  0:0]   hps_usb_dir,
-  input   [  0:0]   hps_usb_nxt,
-  output  [  0:0]   hps_usb_stp,
+  input             hps_usb_clk,
+  input             hps_usb_dir,
+  input             hps_usb_nxt,
+  output            hps_usb_stp,
   inout   [  7:0]   hps_usb_data,
 
   // hps-uart
 
-  input   [  0:0]   hps_uart_rx,
-  output  [  0:0]   hps_uart_tx,
+  input             hps_uart_rx,
+  output            hps_uart_tx,
 
   // hps-i2c (shared w fmc-a, fmc-b)
 
-  inout   [  0:0]   hps_i2c_sda,
-  inout   [  0:0]   hps_i2c_scl,
+  inout             hps_i2c_sda,
+  inout             hps_i2c_scl,
 
   // fpga-gpio motherboard (led/dpsw/button)
 
@@ -191,7 +191,6 @@ module system_top  #(
 
   assign spi0_mosi = spi_mosi;
 
-
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
   ) i_spi_hmc (
@@ -207,8 +206,6 @@ module system_top  #(
                     1'b0;
 
   // gpio
-
-  // TODO output only for now
   assign hmc_gpio1 = gpio_o[43];
 
   assign gpio_i[44] = agc0[0];
@@ -229,14 +226,12 @@ module system_top  #(
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
 
-
   // motherboard-gpio
 
   assign gpio_i[3:0]   = fpga_gpio_dpsw;
   assign gpio_i[7:4]   = fpga_gpio_btn;
   assign gpio_i[31:11]  = gpio_o[31:11];
   assign fpga_gpio_led = gpio_o[10:8];
-
 
   // Unused GPIOs
   assign gpio_i[63:59] = gpio_o[63:59];
