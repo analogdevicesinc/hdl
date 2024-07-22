@@ -60,6 +60,7 @@ module axi_dmac_regmap_request #(
   parameter AUTORUN_Y_LENGTH = 0,
   parameter AUTORUN_SRC_STRIDE = 0,
   parameter AUTORUN_DEST_STRIDE = 0,
+  parameter AUTORUN_SG_ADDRESS = 0,
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
   parameter AUTORUN_FRAMELOCK_STRIDE = 0
 ) (
@@ -331,11 +332,11 @@ module axi_dmac_regmap_request #(
 
   generate
   if (DMA_SG_TRANSFER == 1) begin
-    reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG]  up_dma_sg_address = 'h00;
+    reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG]  up_dma_sg_address = AUTORUN ? AUTORUN_SG_ADDRESS: 'h00;
 
     always @(posedge clk) begin
       if (reset == 1'b1) begin
-        up_dma_sg_address <= 'h00;
+        up_dma_sg_address <= AUTORUN ? AUTORUN_SG_ADDRESS : 'h00;
       end else if (up_wreq == 1'b1) begin
         case (up_waddr)
         9'h11f: up_dma_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG];

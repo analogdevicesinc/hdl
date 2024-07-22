@@ -52,6 +52,7 @@
 <: set autorun_y_length         [get_property MODELPARAM_VALUE.AUTORUN_Y_LENGTH] :>
 <: set autorun_src_stride       [get_property MODELPARAM_VALUE.AUTORUN_SRC_STRIDE] :>
 <: set autorun_dest_stride      [get_property MODELPARAM_VALUE.AUTORUN_DEST_STRIDE] :>
+<: set autorun_sg_address       [get_property MODELPARAM_VALUE.AUTORUN_SG_ADDRESS] :>
 <: set autorun_framelock_config [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_CONFIG] :>
 <: set autorun_framelock_stride [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_STRIDE] :>
 
@@ -111,6 +112,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_AUTORUN_Y_LENGTH           = <=: h2i $autorun_y_length :>;
   parameter <=: ComponentName :>_AUTORUN_SRC_STRIDE         = <=: h2i $autorun_src_stride :>;
   parameter <=: ComponentName :>_AUTORUN_DEST_STRIDE        = <=: h2i $autorun_dest_stride :>;
+  parameter <=: ComponentName :>_AUTORUN_SG_ADDRESS         = <=: h2i $autorun_sg_address :>;
   parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_CONFIG   = <=: h2i $autorun_framelock_config :>;
   parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_STRIDE   = <=: h2i $autorun_framelock_stride :>;
 //////////////////////////////////////////////////////////////////////////

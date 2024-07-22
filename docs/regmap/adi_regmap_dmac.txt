@@ -731,12 +731,13 @@ SG_ADDRESS
 ENDREG
 
 FIELD
-[31:0] 0x00000000
+[31:0] ''AUTORUN_SG_ADDRESS''
 SG_ADDRESS
 RW
 This register contains the starting address of the scatter-gather transfer. The address needs
 to be aligned to the bus width.
 
+If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 This register is only valid if the DMA channel has been configured with SG transfer support.
 ENDFIELD
 

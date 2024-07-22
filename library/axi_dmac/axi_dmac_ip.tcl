@@ -657,6 +657,7 @@ set defaults [list \
   "AUTORUN_Y_LENGTH"         "Y length" \
   "AUTORUN_SRC_STRIDE"       "Source stride" \
   "AUTORUN_DEST_STRIDE"      "Destination stride" \
+  "AUTORUN_SG_ADDRESS"       "Scatter-Gather start address" \
   "AUTORUN_FRAMELOCK_CONFIG" "Framelock config" \
   "AUTORUN_FRAMELOCK_STRIDE" "Framelock stride" \
 ]
