@@ -57,7 +57,7 @@ FPGA. The device sends data on the 4 DIN bits.
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in the below diagrams:
+The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad4134_hdl.svg
    :width: 800
