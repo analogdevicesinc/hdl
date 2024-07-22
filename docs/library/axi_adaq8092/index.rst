@@ -197,19 +197,20 @@ The example design uses a processor to program all the registers. If no
 processor is available in your system, you can create your own IP starting from
 the interface module.
 
-Software Guidelines
+Software Support
 --------------------------------------------------------------------------------
 
-The software for this IP can be found as part of the ADAQ8092 Native FMC Card
-Reference Design at :git-no-OS:`no-OS Software <projects/adaq8092>` and
-Linux is supported at :git-linux:`/`.
+* No-OS project at :git-no-OS:`projects/adaq8092`
+* No-OS device driver at  :git-no-OS:`drivers/adc/adaq8092`
+* Linux device driver at :git-linux:`drivers/iio/adc/adaq8092.c`
+* Linux device tree at :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-adaq8092.dts`
+* Linux device driver documentation
+  :dokuwiki:`on wiki <resources/tools-software/linux-drivers/iio-adc/adaq8092>`
 
 References
 -------------------------------------------------------------------------------
 
 * :git-hdl:`library/axi_adaq8092`
 * :adi:`ADAQ8092`
-* :git-linux:`/`
-* :git-no-OS:`projects/adaq8092`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
