@@ -39,6 +39,7 @@
 ################################################################################
 
 HDL_PROJECT_PATH := $(subst scripts/project-lattice.mk,,$(lastword $(MAKEFILE_LIST)))
+HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
 
@@ -66,6 +67,7 @@ PB_DEPS_FILTER += %.tcl
 PB_DEPS_FILTER += %.mem
 PB_DEPS_FILTER_OUT += %system_project.tcl
 PB_DEPS_FILTER_OUT += %adi_project_lattice.tcl
+PB_DEPS_FILTER += %metadata.xml
 
 R_DEPS_FILTER += %.v
 R_DEPS_FILTER += %.vhdl
@@ -103,6 +105,9 @@ clean-all:
 	-rm -Rf ./ipcfg
 	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
 	-rm -Rf ./sge
+	@for lib in $(LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
+	done
 
 clean-pb:
 	-rm -Rf $(wildcard $(PROJECT_NAME)/$(PROJECT_NAME)/*)
@@ -120,6 +125,19 @@ clean-rd:
 		$(PROJECT_NAME)/. \
 		$(PROJECT_NAME)/.., $(wildcard $(PROJECT_NAME)/.*))
 	-rm -f $(PROJECT_NAME)_radiant.log
+
+# The library name in .tcl script must be the same as the library folder name
+M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/$(lastword $(subst /, ,$(dep)))/metadata.xml)
+
+$(HDL_LIBRARY_PATH)%/metadata.xml: TARGET:=lattice
+FORCE:
+$(HDL_LIBRARY_PATH)%/metadata.xml: FORCE
+	flock $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)).lock sh -c " \
+	if [ -n \"${REQUIRED_LATTICE_VERSION}\" ]; then \
+		$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET) REQUIRED_LATTICE_VERSION=${REQUIRED_LATTICE_VERSION}; \
+	else \
+		$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET); \
+	fi"; exit $$?
 
 $(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
 	-rm -f $(PROJECT_NAME)_propel_builder.log

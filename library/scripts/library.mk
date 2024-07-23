@@ -54,11 +54,11 @@ CLEAN_TARGET += tb/libraries
 CLEAN_TARGET += tb/.Xil
 CLEAN_TARGET += tb/xsim_gui_cmd.tcl
 CLEAN_TARGET += tb/libraries
-CLEAN_TARGET += $(LIBRARY_NAME)
+CLEAN_TARGET += ${LIBRARY_NAME}
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
-.PHONY: all intel xilinx lattice clean clean-all interfaces_ltt
+.PHONY: all intel xilinx lattice clean clean-all interfaces_ltt interfaces_ltt_clean
 
 all: intel xilinx lattice
 
