@@ -39,109 +39,110 @@ module system_top (
 
   // clock and resets
 
-  input            sys_clk,
+  input         sys_clk,
 
   // hps-ddr
 
-  output  [14:0]   ddr3_a,
-  output  [ 2:0]   ddr3_ba,
-  output           ddr3_reset_n,
-  output           ddr3_ck_p,
-  output           ddr3_ck_n,
-  output           ddr3_cke,
-  output           ddr3_cs_n,
-  output           ddr3_ras_n,
-  output           ddr3_cas_n,
-  output           ddr3_we_n,
-  inout   [31:0]   ddr3_dq,
-  inout   [ 3:0]   ddr3_dqs_p,
-  inout   [ 3:0]   ddr3_dqs_n,
-  output  [ 3:0]   ddr3_dm,
-  output           ddr3_odt,
-  input            ddr3_rzq,
+  output [14:0] ddr3_a,
+  output [ 2:0] ddr3_ba,
+  output        ddr3_reset_n,
+  output        ddr3_ck_p,
+  output        ddr3_ck_n,
+  output        ddr3_cke,
+  output        ddr3_cs_n,
+  output        ddr3_ras_n,
+  output        ddr3_cas_n,
+  output        ddr3_we_n,
+  inout  [31:0] ddr3_dq,
+  inout  [ 3:0] ddr3_dqs_p,
+  inout  [ 3:0] ddr3_dqs_n,
+  output [ 3:0] ddr3_dm,
+  output        ddr3_odt,
+  input         ddr3_rzq,
 
   // hps-ethernet
 
-  output            eth1_tx_clk,
-  output            eth1_tx_ctl,
-  output  [  3:0]   eth1_tx_d,
-  input             eth1_rx_clk,
-  input             eth1_rx_ctl,
-  input   [  3:0]   eth1_rx_d,
-  output            eth1_mdc,
-  inout             eth1_mdio,
+  output        eth1_tx_clk,
+  output        eth1_tx_ctl,
+  output [ 3:0] eth1_tx_d,
+  input         eth1_rx_clk,
+  input         eth1_rx_ctl,
+  input  [ 3:0] eth1_rx_d,
+  output        eth1_mdc,
+  inout         eth1_mdio,
 
   // hps-sdio
 
-  output            sdio_clk,
-  inout             sdio_cmd,
-  inout   [  3:0]   sdio_d,
+  output        sdio_clk,
+  inout         sdio_cmd,
+  inout  [ 3:0] sdio_d,
 
   // hps-spim1
 
-  output            spim1_ss0,
-  output            spim1_clk,
-  output            spim1_mosi,
-  input             spim1_miso,
+  output        spim1_ss0,
+  output        spim1_clk,
+  output        spim1_mosi,
+  input         spim1_miso,
 
   // hps-usb
 
-  input             usb1_clk,
-  output            usb1_stp,
-  input             usb1_dir,
-  input             usb1_nxt,
-  inout   [  7:0]   usb1_d,
+  input         usb1_clk,
+  output        usb1_stp,
+  input         usb1_dir,
+  input         usb1_nxt,
+  inout  [ 7:0] usb1_d,
 
   // hps-uart
 
-  input             uart0_rx,
-  output            uart0_tx,
-  inout             hps_conv_usb_n,
+  input         uart0_rx,
+  output        uart0_tx,
+  inout         hps_conv_usb_n,
 
   // board gpio
 
-  output  [  7:0]   gpio_bd_o,
-  input   [  5:0]   gpio_bd_i,
+  output [ 7:0] gpio_bd_o,
+  input  [ 5:0] gpio_bd_i,
 
   // hdmi
 
-  output            hdmi_out_clk,
-  output            hdmi_vsync,
-  output            hdmi_hsync,
-  output            hdmi_data_e,
-  output  [ 23:0]   hdmi_data,
+  output        hdmi_out_clk,
+  output        hdmi_vsync,
+  output        hdmi_hsync,
+  output        hdmi_data_e,
+  output [23:0] hdmi_data,
 
-  inout             hdmi_i2c_scl,
-  inout             hdmi_i2c_sda,
+  inout         hdmi_i2c_scl,
+  inout         hdmi_i2c_sda,
 
-  inout             i2c_sda,
-  inout             i2c_scl,
+  inout         i2c_sda,
+  inout         i2c_scl,
 
   // ad411x_ad717x
-  output            spi_csn,
-  output            spi_clk,
-  output            spi_mosi,
-  input             spi_miso,
-  input             sync_error,
-  input             error
+
+  output        spi_csn,
+  output        spi_clk,
+  output        spi_mosi,
+  input         spi_miso,
+  input         sync_error,
+  input         error
 );
 
   // internal signals
 
-  wire             sys_resetn;
-  wire    [63:0]   gpio_i;
-  wire    [63:0]   gpio_o;
-  wire    [63:0]   gpio_t;
+  wire        sys_resetn;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
 
-  wire             i2c1_scl;
-  wire             i2c1_scl_oe;
-  wire             i2c1_sda;
-  wire             i2c1_sda_oe;
+  wire        i2c1_scl;
+  wire        i2c1_scl_oe;
+  wire        i2c1_sda;
+  wire        i2c1_sda_oe;
 
-  wire             i2c0_out_data;
-  wire             i2c0_sda;
-  wire             i2c0_out_clk;
-  wire             i2c0_scl_in_clk;
+  wire        i2c0_out_data;
+  wire        i2c0_sda;
+  wire        i2c0_out_clk;
+  wire        i2c0_scl_in_clk;
 
   // adc control gpio assign
 

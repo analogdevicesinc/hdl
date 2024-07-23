@@ -20,15 +20,15 @@ set_global_assignment -name MESSAGE_DISABLE 15003
 
 # files
 
-# ad4170 interface
+# ad411x_ad717x interface
 
-set_location_assignment PIN_U14  -to error          ; ##   J7.5 Arduino_IO04
-set_location_assignment PIN_AG9  -to sync_error     ; ##   J7.4 Arduino_IO03
+set_location_assignment PIN_U14  -to error;      ## J7.5 Arduino_IO04
+set_location_assignment PIN_AG9  -to sync_error; ## J7.4 Arduino_IO03
 
-set_location_assignment PIN_AF15 -to spi_csn        ; ##   J5.3 Arduino_IO10
-set_location_assignment PIN_AG16 -to spi_mosi       ; ##   J5.4 Arduino_IO11
-set_location_assignment PIN_AH11 -to spi_miso       ; ##   J5.5 Arduino_IO12
-set_location_assignment PIN_AH12 -to spi_clk        ; ##   J5.6 Arduino_IO13
+set_location_assignment PIN_AF15 -to spi_csn;    ## J5.3 Arduino_IO10
+set_location_assignment PIN_AG16 -to spi_mosi;   ## J5.4 Arduino_IO11
+set_location_assignment PIN_AH11 -to spi_miso;   ## J5.5 Arduino_IO12
+set_location_assignment PIN_AH12 -to spi_clk;    ## J5.6 Arduino_IO13
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to error
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sync_error
@@ -40,8 +40,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_clk
 
 # I2C
 
-set_location_assignment PIN_AG11  -to i2c_scl       ; ##   Arduino_IO15
-set_location_assignment PIN_AH9   -to i2c_sda       ; ##   Arduino_IO14
+set_location_assignment PIN_AG11  -to i2c_scl;   ## Arduino_IO15
+set_location_assignment PIN_AH9   -to i2c_sda;   ## Arduino_IO14
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_scl
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_sda
