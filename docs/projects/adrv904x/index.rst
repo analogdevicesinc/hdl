@@ -35,6 +35,9 @@ Supported carriers
    * - EVAL-ADRV904x
      - :xilinx:`ZCU102`
      - FMC HPC0
+   * - 
+     - :xilinx:`VCK190`
+     - FMCP1
 
 Block design
 -------------------------------------------------------------------------------
@@ -87,9 +90,8 @@ for each project.
    **system_project.tcl** file, located in
    hdl/projects/adrv904x/$CARRIER/system_project.tcl
 
-.. warning::
-
-   ``Lane Rate = I/Q Sample Rate x M x N' x (66 \ 64) \ L``
+.. math::
+   Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{66}{64}
 
 The following are the parameters of this project that can be configured:
 
@@ -120,18 +122,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
-==================== ===========
-Instance             ZynqMP
-==================== ===========
-axi_adrv904x_tx_jesd 0x84A90000
-axi_adrv904x_rx_jesd 0x84AA0000
-axi_adrv904x_tx_dma  0x9c420000
-axi_adrv904x_rx_dma  0x9c400000
-tx_adrv904x_tpl_core 0x84A04000
-rx_adrv904x_tpl_core 0x84A00000
-axi_adrv904x_tx_xcvr 0x84A80000
-axi_adrv904x_rx_xcvr 0x84A60000
-==================== ===========
+==================== =========== ===========
+Instance             ZynqMP      Versal     
+==================== =========== ===========
+axi_adrv904x_tx_jesd 0x84A90000  0xA4A90000
+axi_adrv904x_rx_jesd 0x84AA0000  0xA4AA0000
+axi_adrv904x_tx_dma  0x9C420000  0xBC420000
+axi_adrv904x_rx_dma  0x9C400000  0xBC400000
+tx_adrv904x_tpl_core 0x84A04000  0xA4A04000
+rx_adrv904x_tpl_core 0x84A00000  0xA4A00000
+axi_adrv904x_tx_xcvr 0x84A80000  0xA4A80000
+axi_adrv904x_rx_xcvr 0x84A60000  0xA4A60000
+==================== =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,9 +277,9 @@ for that project (adrv904x/carrier or adrv904x/carrier).
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
    +-------------------+---------------------------+--------------------------+
-   |                   |                         ZCU102                       |
+   |                   |                     ZCU102/VCK190                    |
    +===================+===========================+==========================+
-   | JESD_MODE         |                        64B66B                        |
+   | JESD_MODE         |                         64B66B                       |
    +-------------------+---------------------------+--------------------------+
    | RX_LANE_RATE      |                         16.22                        |
    +-------------------+---------------------------+--------------------------+
@@ -361,7 +363,7 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`ADRV9040 <media/radioverse-adrv9026/adrv9040.pdf>`
+-  Product datasheets: :adi:`ADRV9040 <media/en/technical-documentation/data-sheets/adrv9040.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
