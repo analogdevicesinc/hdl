@@ -139,6 +139,9 @@
 # Code owners for adrv9026 folder
 /projects/adrv9026/         andrei.dragomir@analog.com  iulia.moldovan@analog.com
 
+# Code owners for adrv904x folder
+/projects/adrv904x/         andrei.dragomir@analog.com  iulia.moldovan@analog.com
+
 # Code owners for adrv9361z7035 folder
 /projects/adrv9361z7035/    andrei.grozav@analog.com  jorge.marques@analog.com
 
