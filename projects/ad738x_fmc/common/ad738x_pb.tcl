@@ -7,20 +7,20 @@
 ########### components and the assembly of the design. ########################
 
 ## configure ip components and add to design. #################################
-set dir [pwd]
-cd $ad_hdl_dir/library/axi_dmac
-source ./axi_dmac_ltt.tcl
-cd $ad_hdl_dir/library/axi_pwm_gen
-source ./axi_pwm_gen_ltt.tcl
-cd $ad_hdl_dir/library/spi_engine/axi_spi_engine
-source ./axi_spi_engine_ltt.tcl
-cd $ad_hdl_dir/library/spi_engine/spi_engine_offload
-source ./spi_engine_offload_ltt.tcl
-cd $ad_hdl_dir/library/spi_engine/spi_engine_interconnect
-source ./spi_engine_interconnect_ltt.tcl
-cd $ad_hdl_dir/library/spi_engine/spi_engine_execution
-source ./spi_engine_execution_ltt.tcl
-cd $dir
+# set dir [pwd]
+# cd $ad_hdl_dir/library/axi_dmac
+# source ./axi_dmac_ltt.tcl
+# cd $ad_hdl_dir/library/axi_pwm_gen
+# source ./axi_pwm_gen_ltt.tcl
+# cd $ad_hdl_dir/library/spi_engine/axi_spi_engine
+# source ./axi_spi_engine_ltt.tcl
+# cd $ad_hdl_dir/library/spi_engine/spi_engine_offload
+# source ./spi_engine_offload_ltt.tcl
+# cd $ad_hdl_dir/library/spi_engine/spi_engine_interconnect
+# source ./spi_engine_interconnect_ltt.tcl
+# cd $ad_hdl_dir/library/spi_engine/spi_engine_execution
+# source ./spi_engine_execution_ltt.tcl
+# cd $dir
 
 adi_ip_update $project_name -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
   -meta_vlnv {latticesemi.com:ip:system_memory:2.1.0} \
