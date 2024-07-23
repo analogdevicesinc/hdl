@@ -198,3 +198,4 @@ set ip [ipl::igports -ip $ip \
     -expression {(ECHO_SCLK != 1)}]
 
 ipl::genip $ip
+ipl::genip $ip ./

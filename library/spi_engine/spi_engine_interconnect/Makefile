@@ -17,4 +17,7 @@ XILINX_INTERFACE_DEPS += spi_engine/interfaces
 
 INTEL_DEPS += spi_engine_interconnect_hw.tcl
 
+LATTICE_DEPS += spi_engine_interconnect_ltt.tcl
+LATTICE_INTERFACE_DEPS += spi_engine/interfaces_ltt
+
 include ../../scripts/library.mk

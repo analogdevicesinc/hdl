@@ -2,7 +2,6 @@
 ####################################################################################
 ## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
-## Auto-generated, do not modify!
 ####################################################################################
 ####################################################################################
 
@@ -23,7 +22,7 @@ LTT_INTERFACES += analog.com/ADI/spi_engine_ctrl/1.0/spi_engine_ctrl_rtl.xml
 LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl.xml
 LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl_rtl.xml
 
-CLEAN_TARGETS += analog.com
+CLEAN_TARGETS += $(wildcard */)
 CLEAN_TARGETS += interfaces_ltt.log
 
 .PHONY: all lattice clean clean-all
@@ -31,7 +30,7 @@ all: lattice
 
 lattice: $(LTT_INTERFACES)
 
-clean:clean-all
+clean: clean-all
 
 clean-all:
 	rm -rf $(CLEAN_TARGETS)

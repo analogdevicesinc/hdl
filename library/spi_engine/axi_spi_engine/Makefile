@@ -33,4 +33,7 @@ INTEL_DEPS += ../../util_cdc/sync_gray.v
 INTEL_DEPS += axi_spi_engine_constr.sdc
 INTEL_DEPS += axi_spi_engine_hw.tcl
 
+LATTICE_DEPS += axi_spi_engine_ltt.tcl
+LATTICE_INTERFACE_DEPS += spi_engine/interfaces_ltt
+
 include ../../scripts/library.mk

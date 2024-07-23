@@ -299,3 +299,4 @@ set ip [ipl::igports -ip $ip \
     -expression {(MM_IF_TYPE != 1)}]
 
 ipl::genip $ip
+ipl::genip $ip ./

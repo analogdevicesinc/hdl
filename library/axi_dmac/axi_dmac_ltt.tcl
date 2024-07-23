@@ -632,3 +632,4 @@ set ip [ipl::settpar -ip $ip \
     -group2 Config]
 
 ipl::genip $ip
+ipl::genip $ip ./

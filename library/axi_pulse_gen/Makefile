@@ -18,4 +18,6 @@ XILINX_DEPS += axi_pulse_gen_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc
 
+LATTICE_DEPS += axi_pulse_gen_ltt.tcl
+
 include ../scripts/library.mk

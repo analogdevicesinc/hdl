@@ -182,3 +182,5 @@ set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
 set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
 
 ipl::genip $ip
+ipl::genip $ip ./
+

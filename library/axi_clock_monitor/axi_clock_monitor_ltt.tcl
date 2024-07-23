@@ -72,3 +72,4 @@ set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
     -extl {up_clock_mon.v up_axi.v}]
 
 ipl::genip $ip
+ipl::genip $ip ./

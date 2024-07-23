@@ -57,4 +57,6 @@ INTEL_DEPS += ../util_cdc/sync_gray.v
 INTEL_DEPS += axi_dmac_constr.sdc
 INTEL_DEPS += axi_dmac_hw.tcl
 
+LATTICE_DEPS += axi_dmac_ltt.tcl
+
 include ../scripts/library.mk

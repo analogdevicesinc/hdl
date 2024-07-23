@@ -17,4 +17,6 @@ INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc
 INTEL_DEPS += ../intel/common/up_rst_constr.sdc
 INTEL_DEPS += axi_clock_monitor_hw.tcl
 
+LATTICE_DEPS := axi_clock_monitor_ltt.tcl
+
 include ../scripts/library.mk

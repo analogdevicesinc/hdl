@@ -24,4 +24,6 @@ INTEL_DEPS += ../util_cdc/sync_data.v
 INTEL_DEPS += axi_pwm_gen_constr.sdc
 INTEL_DEPS += axi_pwm_gen_hw.tcl
 
+LATTICE_DEPS += axi_pwm_gen_ltt.tcl
+
 include ../scripts/library.mk
