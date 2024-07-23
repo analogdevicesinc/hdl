@@ -6,16 +6,20 @@
 proc create_reset_logic {
   {ip_name versal_phy}
   {num_lanes 4}
+  {intf_cfg RXTX}
 } {
   create_bd_pin -dir I ${ip_name}/gtreset_in
-  create_bd_pin -dir I ${ip_name}/gtreset_rx_pll_and_datapath
-  create_bd_pin -dir I ${ip_name}/gtreset_tx_pll_and_datapath
-  create_bd_pin -dir I ${ip_name}/gtreset_rx_datapath
-  create_bd_pin -dir I ${ip_name}/gtreset_tx_datapath
   create_bd_pin -dir O ${ip_name}/gtpowergood
-  create_bd_pin -dir O ${ip_name}/rx_resetdone
-  create_bd_pin -dir O ${ip_name}/tx_resetdone
-
+  if {$intf_cfg != "TX"} {
+    create_bd_pin -dir I ${ip_name}/gtreset_rx_pll_and_datapath
+    create_bd_pin -dir I ${ip_name}/gtreset_rx_datapath
+    create_bd_pin -dir O ${ip_name}/rx_resetdone
+  }
+  if {$intf_cfg != "RX"} {
+    create_bd_pin -dir I ${ip_name}/gtreset_tx_pll_and_datapath
+    create_bd_pin -dir I ${ip_name}/gtreset_tx_datapath
+    create_bd_pin -dir O ${ip_name}/tx_resetdone
+  }
   # Sync resets to apb3clk
 
   create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_sync
@@ -26,6 +30,9 @@ proc create_reset_logic {
 
   foreach port {pll_and_datapath datapath} {
     foreach rx_tx {rx tx} {
+      if {($rx_tx == "rx" && $intf_cfg == "TX") || ($rx_tx == "tx" && $intf_cfg == "RX")} {
+        continue
+      }
       create_bd_cell -type module -reference sync_bits ${ip_name}/gtreset_${rx_tx}_${port}_sync
       ad_connect ${ip_name}/s_axi_clk ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_clk
       ad_connect ${ip_name}/s_axi_resetn ${ip_name}/gtreset_${rx_tx}_${port}_sync/out_resetn
@@ -112,8 +119,12 @@ proc create_reset_logic {
 
   # Outputs
   ad_connect ${ip_name}/and_powergood/Res ${ip_name}/gtpowergood
-  ad_connect ${ip_name}/gt_bridge_ip_0/rx_resetdone_out ${ip_name}/rx_resetdone
-  ad_connect ${ip_name}/gt_bridge_ip_0/tx_resetdone_out ${ip_name}/tx_resetdone
+  if {$intf_cfg != "TX"} {
+    ad_connect ${ip_name}/gt_bridge_ip_0/rx_resetdone_out ${ip_name}/rx_resetdone
+  }
+  if {$intf_cfg != "RX"} {
+    ad_connect ${ip_name}/gt_bridge_ip_0/tx_resetdone_out ${ip_name}/tx_resetdone
+  }
 }
 
 proc create_versal_phy {
@@ -399,5 +410,5 @@ proc create_versal_phy {
   }
 
   # Instantiate reset helper logic
-  create_reset_logic $ip_name $num_lanes
+  create_reset_logic $ip_name $num_lanes $intf_cfg
 }
