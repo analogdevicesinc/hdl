@@ -560,10 +560,16 @@ RO
 ENDFIELD
 
 FIELD
-[9:0] 0x00000000
-BUFFER_DEALY
+[9:2] 0x00000000
+BUFFER_DELAY
 RW
 Buffer release opportunity offset from LMFC.
+ENDFIELD
+
+FIELD
+[1:0] 0x00000000
+RESERVED
+RO
 ENDFIELD
 
 ############################################################################################
