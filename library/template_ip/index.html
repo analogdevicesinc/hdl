@@ -108,7 +108,8 @@
 <li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
-<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-guidelines-if-necessary">Software Guidelines (if necessary)</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -151,7 +152,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -2066,21 +2067,35 @@ The <a class="reference internal" href="#template-ip-interface"><span class="std
 the design, as IO primitives are part of the  IP.</p>
 <p>The example design uses a DMA to move the data from the output of the IP to memory.
 If the data needs to be processed in HDL before moving to the memory, it can be
-done at the output of the IP (at the  system level) or inside the ADC interface
-module (at the IP level).
-The example design uses a processor to program all the registers.
-If no processor is available in your system, you  can create your IP starting
+done at the output of the IP (at the system level) or inside the ADC interface
+module (at the IP level).</p>
+<p>The example design uses a processor to program all the registers.</p>
+<p>If no processor is available in your system, you can create your IP starting
 from the interface module.</p>
 </section>
-<section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>Linux is supported also using <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+<section id="software-guidelines-if-necessary">
+<h2>Software Guidelines (if necessary)<a class="headerlink" href="#software-guidelines-if-necessary" title="Permalink to this heading">#</a></h2>
+<p>To note all the details needed by the software to be in a certain way.</p>
+</section>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
+<li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
+<li><p>Linux documentation at …</p></li>
+<li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS">ADI no-OS repository</a></p></li>
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS">ADI no-OS repository</a></p></li>
+<li><p>No-OS documentation at …</p></li>
+<li><p>IIO support at …</p></li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl">ADI HDL repository</a>, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a> library.</p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9783">library/axi_ad9783</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9783_ebz">projects/ad9783_ebz</a></p></li>
+<li><p>HDL project documentation at <a class="reference internal" href="../../projects/ad9783_ebz/index.html#ad9783-ebz"><span class="std std-ref">AD9783-EBZ HDL project</span></a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9783">AD9783</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a>.</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a>.</p></li>
 </ul>

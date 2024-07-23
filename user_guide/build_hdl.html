@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Build a HDL project &#8212; HDL  documentation</title>
+    <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -100,7 +100,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Build a HDL project</a><ul>
+<li><a class="reference internal" href="#">Build an HDL project</a><ul>
 <li><a class="reference internal" href="#setup-and-check-your-environment">Setup and check your environment</a></li>
 <li><a class="reference internal" href="#setup-the-hdl-repository">Setup the HDL repository</a></li>
 <li><a class="reference internal" href="#building-the-projects">Building the projects</a><ul>
@@ -179,7 +179,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Build a HDL project</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -312,8 +312,8 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="build-a-hdl-project">
-<span id="build-hdl"></span><h1>Build a HDL project<a class="headerlink" href="#build-a-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="build-an-hdl-project">
+<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading">#</a></h1>
 <p><strong>Please note that ADI only provides the source files necessary to create
 and build the designs. This means that you are responsible for modifying
 and building these projects.</strong></p>
@@ -776,21 +776,22 @@ unknown compatibility reason. You can use Cygwin on Windows or a normal
 Linux installation.</p>
 </div>
 </div></blockquote>
-<p>The Lattice build is in a very early version, does not support any ADI library
-builds yet. We are just starting to develop the library build part.
-Currently we only have a single early version base design that builds almost
-like the same then the others. For Lattice there are separate tools for creating
-a block design <strong>(Propel Builder)</strong> and building a hdl design <strong>(Radiant)</strong>.
-Like in the other cases the build for any supported project works by <code class="docutils literal notranslate"><span class="pre">make</span></code>.
-First you have to open the <strong>Propel Builder GUI</strong> and <strong>download</strong> the necessary
-Lattice provided IPs manually. You can check the <strong>necessary Lattice IPs</strong> and
+<p>The Lattice build is in a very early version. It does not support any ADI
+library builds, yet. We’re just starting to develop the library build part.
+Currently, we only have a single early-version base design that builds almost
+like the other ones. For Lattice, there are separate tools for creating
+a block design <strong>(Propel Builder)</strong> and building an HDL design <strong>(Radiant)</strong>.
+The build for any supported project works with <code class="docutils literal notranslate"><span class="pre">make</span></code>, same as the others.
+First, you have to open the <strong>Propel Builder GUI</strong> and download the necessary
+Lattice-provided IPs manually. You can check the <strong>necessary Lattice IPs</strong> and
 and their versions in the
 <strong>&lt;project_name&gt;_system_pb.tcl</strong> script or follow the error messages in the
 <strong>&lt;project_name&gt;_propel_builder.log</strong> after running <code class="docutils literal notranslate"><span class="pre">make</span></code> and you get
 a FAILED message.
-Then simply go to carrier folder and run make. For now you can try to build the
-only base design we have for <strong>CertusPro-NX Evaluation Board</strong> by entering the
-base design directory and running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
+Then, simply go to the carrier folder and run <code class="docutils literal notranslate"><span class="pre">make</span></code>. For now, you can try
+to build the only base design we have available for
+<strong>CertusPro-NX Evaluation Board</strong> by entering the base design directory and
+running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
 <section id="required-lattice-provided-ips-to-download-for-projects-common-lfcpnx">
 <h4>Required Lattice Provided IPs to download for projects/common/lfcpnx<a class="headerlink" href="#required-lattice-provided-ips-to-download-for-projects-common-lfcpnx" title="Permalink to this heading">#</a></h4>
 <div class="table-wrapper docutils container">
@@ -841,21 +842,21 @@ base design directory and running <code class="docutils literal notranslate"><sp
 make
 </pre></div>
 </div>
-<p>This assumes that you have the tools and licenses setup correctly. If
+<p>This, assuming that you have the tools and licenses set up correctly. If
 you don’t get to the last line, the make failed to build the project.
-There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than the
-build failed or not), the actual failure is in a log file. So, let’s see
-how to analyze the build log files and results.</p>
+There is nothing you can gather from the <code class="docutils literal notranslate"><span class="pre">make</span></code> output (other than if the
+build failed or not); the actual failure message is in a log file.</p>
 </section>
 <section id="id1">
 <h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
 <p>The make script for Lattice projects is the <strong>projects/scripts/project-lattice.mk</strong>
 that is included in <strong>Makefile</strong> after setting the project dependencies.
-If you check this make script you can note that we have two rules we run by the
-<strong>all:</strong> rule, one that runs the <strong>Propel Builder</strong> targets (for block design)
-and one that runs the  <strong>Radiant</strong> targets (for hdl build). For this reason we
-have two log files also, the first one <strong>$(PROJECT_NAME)_propel_builder.log</strong>,
-the second one is the <strong>$(PROJECT_NAME)_radiant.log</strong>.</p>
+If you check this make script, you can note that we have two rules we run by the
+<strong>all:</strong> rule: one that runs the <strong>Propel Builder</strong> targets (for the block
+design) and one that runs the  <strong>Radiant</strong> targets (for HDL build).
+For this reason, we have two log files as well, the first one
+<strong>$(PROJECT_NAME)_propel_builder.log</strong>, and the second one is
+<strong>$(PROJECT_NAME)_radiant.log</strong>.</p>
 <p>If you are seeking support from us, do a quick (or detailed) check on files.
 This contains the most relevant information that you need to provide.</p>
 <div class="admonition warning">
@@ -869,38 +870,39 @@ tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_pr
 tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_radiant.log
 </pre></div>
 </div>
-<p>Note that if the <strong>Propel Builder</strong> project fails to build the
+<p>Note that if the <strong>Propel Builder</strong> project fails to build, the
 <strong>$(PROJECT_NAME)_radiant.log</strong> may not exist.</p>
-<p>If the <strong>Propel Builder</strong> project was built successfully, the <strong>sge</strong>
+<p>If the Propel Builder project was built successfully, the <strong>sge</strong>
 folder should appear in the <strong>&lt;ADI_carrier_proj_dir&gt;/</strong> or in the
 <strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;</strong>.
 The <strong>sge</strong> folder contains the <strong>bsp</strong> folder (Base Support
-Package) and the SoC configuration files. The <strong>bsp</strong> folder contains the
-available Lattice provided drivers for the IPs used in the design (Sometimes
+Package) and the SoC configuration files.</p>
+<p>The <strong>bsp</strong> folder contains the
+available Lattice-provided drivers for the IPs used in the design (sometimes
 these drivers are more like some basic examples to modify for your specific
-application) and the <strong>sys_platform.h</strong> file.
-You should find a <strong>sys_env.xml</strong> file in the same <strong>sge</strong> folder. This file is
+application) and the <strong>sys_platform.h</strong> file.</p>
+<p>You should find a <strong>sys_env.xml</strong> file in the same <strong>sge</strong> folder. This file is
 used to create a <strong>no-OS</strong> project with the current <strong>bsp</strong>.</p>
-<p>When running the Propel Builder targets we call <code class="docutils literal notranslate"><span class="pre">propelbld</span> <span class="pre">system_project_pb.tcl</span></code>
-on Windows or <code class="docutils literal notranslate"><span class="pre">propelbldwrap</span> <span class="pre">system_project_pb.tcl</span></code> on Linux.
-After running the Propel Builder targets we call <code class="docutils literal notranslate"><span class="pre">pnmainc</span> <span class="pre">system_project.tcl</span></code>
+<p>When running the Propel Builder targets, we call <code class="docutils literal notranslate"><span class="pre">propelbld</span> <span class="pre">system_project_pb.tcl</span></code>
+on Windows or <code class="docutils literal notranslate"><span class="pre">propelbldwrap</span> <span class="pre">system_project_pb.tcl</span></code> on Linux.</p>
+<p>After running the Propel Builder targets we call <code class="docutils literal notranslate"><span class="pre">pnmainc</span> <span class="pre">system_project.tcl</span></code>
 on Windows or <code class="docutils literal notranslate"><span class="pre">radiantc</span> <span class="pre">system_project.tcl</span></code>
-on Linux.
-The <strong>system_project_pb.tcl</strong> runs first. This file is used to create the
+on Linux.</p>
+<p>The <strong>system_project_pb.tcl</strong> runs first. This file is used to create the
 <strong>block design project</strong> (Propel Builder) and source the <strong>system_pb.tcl</strong>
-which is used for linking one or more corelated block design ‘.tcl’ scripts.
-The <strong>system_pb.tcl</strong> is sourced in <strong>adi_project_pb</strong> procedure.
-The <strong>system_project.tcl</strong> runs second. This file is used to create and build
+which is used for linking one or more corelated block design ‘.tcl’ scripts.</p>
+<p>The <strong>system_pb.tcl</strong> is sourced in <strong>adi_project_pb</strong> procedure.</p>
+<p>The <strong>system_project.tcl</strong> runs second. This file is used to create and build
 the <strong>HDL project</strong> (Radiant). Here we use the output of the Propel Builder
 project as the <strong>configured IPs</strong> that can be found in the
-<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/lib</strong> folder and the
-default block design wrapper that is the
-<strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/&lt;project_name&gt;.v</strong>,
-we add them to the <strong>Radiant project</strong> then add our <strong>system_top.v</strong> wrapper,
-the <strong>constraint files</strong> and build the project. The output is a <strong>.bit</strong> file
-that in default will appear in the
+<em>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/lib</em> folder and the
+<strong>default block design wrapper</strong> that is the
+<em>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;/&lt;project_name&gt;.v</em>.</p>
+<p>We add them to the Radiant project, then add our <strong>system_top.v</strong> wrapper,
+the <strong>constraint files</strong> and build the project.</p>
+<p>The output is a <strong>.bit</strong> file that by default will appear in the
 <strong>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/impl_1</strong> folder if the project was
-successfully able to build.</p>
+successfully built.</p>
 </section>
 </section>
 <section id="supported-targets-of-make-command">
@@ -968,7 +970,7 @@ expect and understand when using ADI HDL repository on these tools.
 <strong>A red text indicates that you must pay extra attention.</strong></p>
 <div class="table-wrapper colwidths-auto docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -1033,7 +1035,7 @@ slow and frustrating process)</span></p></td>
 </div>
 <div class="table-wrapper colwidths-auto docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Tools</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Lattice</p></th>
@@ -1065,19 +1067,19 @@ build will fail and return with an error if the timing is not met.</p></td>
 <tr class="row-even"><td><p>SDK (Lattice riscv-rx)</p></td>
 <td><p>Use the generated sge folder that contains the bsp and the SoC
 configuration files. You can create a Propel SDK project using the
-sys_env.xml file. (currently only no-OS and rtos, but not linked yet to
+sys_env.xml file (currently only no-OS and rtos, but not linked yet to
 ADI no-OS infrastructure)</p></td>
 </tr>
 <tr class="row-odd"><td><p>SDK (ARM/FPGA combo)</p></td>
 <td><p><span class="red">Not supported or nonexistent yet.</span></p></td>
 </tr>
 <tr class="row-even"><td><p>Upgrading/Version changes (non-ADI cores)</p></td>
-<td><p>You have to update the IP versions manually in GUI and copy the config
+<td><p><span class="red">You have to update the IP versions manually in GUI and copy the config
 from the tcl console to the ‘.tcl’ block design file, or update directly
 in the ‘.tcl’ block design file. Note that first you have to download the
 new version of IPs using the GUI. An ip_upgrade tcl command exists, but
-still the IPs has to be downloaded manually, and it only works if the old
-IP’s name is the same as the new (sometimes it changes by version).</p></td>
+still the IPs have to be downloaded manually, and it only works if the old
+IP’s name is the same as the new (sometimes it changes by version).</span></p></td>
 </tr>
 </tbody>
 </table>

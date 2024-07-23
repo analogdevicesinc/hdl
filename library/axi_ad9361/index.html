@@ -126,7 +126,7 @@
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interface">Interface</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
-<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -169,7 +169,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -4580,19 +4580,23 @@ registers relative address.</p>
 </section>
 </section>
 </div></section>
-<section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
 <p>The software for this IP can be found as part of the FMCOMMS2/3/4/5
-Reference Design at: <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9361">projects/ad9361</a>
-Linux is supported also using <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+reference designs.</p>
+<ul class="simple">
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad9361.c">drivers/iio/adc/ad9361.c</a></p></li>
+<li><p>Linux device trees for this can be found at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
+<li><p>Linux documentation <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361">on wiki</a></p></li>
+<li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/drivers/rf-transceiver/ad9361">drivers/rf-transceiver/ad9361</a></p></li>
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9361">projects/ad9361</a></p></li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9361">library/axi_ad9361</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9361">library/axi_ad9361</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9361">AD9361</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9361">projects/ad9361</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/AD9361_Reference_Manual_UG-570.pdf">AD9361 User Guide</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms2-ebz">FMCOMMS2 Reference Design</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms4-ebz">FMCOMMS4 Reference Design</a></p></li>

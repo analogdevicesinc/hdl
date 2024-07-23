@@ -110,7 +110,7 @@
 <li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
-<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -153,7 +153,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -2255,19 +2255,28 @@ module (at IP level).</p>
 processor is available in your system, you can create your own IP starting from
 the interface module.</p>
 </section>
-<section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>The software for this IP can be found as part of the AD9467 Native FMC Card
-Reference Design at: <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9467">projects/ad9467</a>
-Linux is supported also using <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad9467.c`">drivers/iio/adc/ad9467.c`</a></p></li>
+<li><p>Linux device trees at:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/kc705_ad9467_fmc.dts">arch/microblaze/boot/dts/kc705_ad9467_fmc.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts">arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts</a></p></li>
+</ul>
+</li>
+<li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/drivers/adc/ad9467">drivers/adc/ad9467</a></p></li>
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9467">projects/ad9467</a></p></li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9467">library/axi_ad9467</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad9467">library/axi_ad9467</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad9467_fmc">projects/ad9467_fmc</a></p></li>
+<li><p>HDL project documentation at <span class="xref std std-ref">ad9467_fmc</span></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9467">AD9467</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/projects/ad9467">projects/ad9467</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad9467">AD9467-FMC-250EBZ FMC card Quick start guide</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf">7 Series libraries</a></p></li>

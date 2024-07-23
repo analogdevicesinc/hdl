@@ -161,7 +161,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -2659,12 +2659,22 @@ AD7606x family devices.</p>
 </section>
 <section id="software-support">
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
-<p>Analog Devices recommends to use the provided software drivers.</p>
+<ul class="simple">
+<li><p>Linux device drivers at:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad7606.c">drivers/iio/adc/ad7606.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad7606_par.c">drivers/iio/adc/ad7606_par.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/blob/main/drivers/iio/adc/ad7606_spi.c">drivers/iio/adc/ad7606_spi.c</a></p></li>
+</ul>
+</li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad7606x">library/axi_ad7606x</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad7606x">library/axi_ad7606x</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad7606x_fmc">projects/ad7606x_fmc</a></p></li>
+<li><p>HDL project documentation at <a class="reference internal" href="../../projects/ad7606x_fmc/index.html#ad7606x-fmc"><span class="std std-ref">AD7606X-FMCZ HDL project</span></a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7606B">AD7606B</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7606C-16">AD7606C-16</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7606C-18">AD7606C-18</a></p></li>
@@ -2675,7 +2685,6 @@ AD7606x family devices.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7606c-18.html">EVAL-AD7606C-16/18 Information</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7606BFMCZ-UG-1225.pdf">EVAL-AD7606B User Guide</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf">EVAL-AD7606C-16/18 User Guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad7606x-fmc/hdl">AD7606X FMC HDL Reference Design</a></p></li>
 </ul>
 </section>
 </section>

@@ -110,7 +110,7 @@
 <li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
-<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -153,7 +153,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -2194,18 +2194,23 @@ module (at IP level).</p>
 processor is available in your system, you can create your own IP starting from
 the interface module.</p>
 </section>
-<section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>Linux is suported using <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>No-OS device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/blob/main/drivers/adc/ad7779">drivers/adc/ad7779</a></p></li>
+<li><p>No-OS driver documentation <a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad7779">here</a></p></li>
+<li><p>IIO support <a class="reference external" href="https://wiki.analog.com/resources/tools-software/product-support-software/ad777x_iio_support">here</a></p></li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/axi_ad777x">library/axi_ad777x</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad777x_ardz">projects/ad777x_ardz</a></p></li>
+<li><p>HDL project documentation at <span class="xref std std-ref">ad777x_ardz</span></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7770">AD7770</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7771">AD7771</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7779">AD7779</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a></p></li>
 </ul>
