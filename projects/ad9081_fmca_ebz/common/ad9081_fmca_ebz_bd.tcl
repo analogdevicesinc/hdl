@@ -207,14 +207,18 @@ if {$ADI_PHY_SEL == 1} {
     }
   }
 
-  ad_connect gt_reset                     jesd204_phy/gtreset_in
-  ad_connect gt_reset_rx_datapath         jesd204_phy/gtreset_rx_datapath
-  ad_connect gt_reset_tx_datapath         jesd204_phy/gtreset_tx_datapath
-  ad_connect gt_reset_rx_pll_and_datapath jesd204_phy/gtreset_rx_pll_and_datapath
-  ad_connect gt_reset_tx_pll_and_datapath jesd204_phy/gtreset_tx_pll_and_datapath
-  ad_connect gt_powergood                 jesd204_phy/gtpowergood
-  ad_connect rx_resetdone                 jesd204_phy/rx_resetdone
-  ad_connect tx_resetdone                 jesd204_phy/tx_resetdone
+  ad_connect gt_reset                       jesd204_phy/gtreset_in
+  ad_connect gt_powergood                   jesd204_phy/gtpowergood
+  if {$INTF_CFG != "TX"} {
+    ad_connect gt_reset_rx_datapath         jesd204_phy/gtreset_rx_datapath
+    ad_connect gt_reset_rx_pll_and_datapath jesd204_phy/gtreset_rx_pll_and_datapath
+    ad_connect rx_resetdone                 jesd204_phy/rx_resetdone
+  }
+  if {$INTF_CFG != "RX"} {
+    ad_connect gt_reset_tx_datapath         jesd204_phy/gtreset_tx_datapath
+    ad_connect gt_reset_tx_pll_and_datapath jesd204_phy/gtreset_tx_pll_and_datapath
+    ad_connect tx_resetdone                 jesd204_phy/tx_resetdone
+  }
 }
 
 # Instantiate ADC (Rx) path
