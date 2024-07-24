@@ -86,3 +86,8 @@ create_clock -name global_clk_0   -period  3.2 [get_ports glbl_clk_0_p]
 set_input_delay -clock [get_clocks global_clk_0] \
   [expr [get_property PERIOD [get_clocks global_clk_0]] / 2] \
   [get_ports {rx_sysref_*}]
+
+# Create SPI clock
+create_generated_clock -name hmc7044_spi_clk  \
+  -source [get_pins i_system_wrapper/system_i/hmc7044_spi/ext_spi_clk] \
+  -divide_by 2 [get_pins i_system_wrapper/system_i/hmc7044_spi/sck_o]
