@@ -128,7 +128,8 @@ The core can be controlled by no-Os or Linux
 References
 -------------------------------------------------------------------------------
 
+* :dokuwiki:`AXI HDMI RX on wiki <resources/fpga/docs/axi_hdmi_rx>`
+* :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
 * :git-hdl:`library/axi_hdmi_rx`
 * :git-hdl:`projects/imageon`
-* :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
 * :dokuwiki:`Zynq & Altera SoC Quick Start Guide <resources/tools-software/linux-software/kuiper-linux>`

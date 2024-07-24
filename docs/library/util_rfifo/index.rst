@@ -97,3 +97,8 @@ Interface
      - Data.
    * - dout_unf
      - Output data underflow.
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`UTIL RFIFO on wiki <resources/fpga/docs/util_rfifo>`

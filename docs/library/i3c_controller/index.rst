@@ -39,7 +39,7 @@ Interfaces
 * :ref:`i3c_controller offload-interface`: Command descriptors for cyclic operation,
   with SDI data generally consumed by a DMA.
 
-Software
+Software support
 --------------------------------------------------------------------------------
 
 * :git-linux:`Linux Driver <i3c:drivers/i3c/master/adi-i3c-master.c>`:

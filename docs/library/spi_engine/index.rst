@@ -96,3 +96,17 @@ Additional Resources
 * :download:`Presentation: SPI Engine Design Philosophy <https://wiki.analog.com/_media/resources/fpga/peripherals/spi-engine3.pdf>`.
 * :ref:`spi_engine pipeline-delays`
 * :ref:`spi_engine tutorial`.
+
+Software Support
+--------------------------------------------------------------------------------
+
+* No-OS project at :git-no-OS:`drivers/axi_core/spi_engine`
+* No-OS driver at :git-no-OS:`drivers/axi_core/spi_engine/spi_engine.c`
+* Linux project at :git-linux:`drivers/spi`
+* Linux driver at :git-linux:`drivers/spi/spi-axi-spi-engine.c`
+
+References
+--------------------------------------------------------------------------------
+
+* :git-hdl:`library/spi_engine`
+* :dokuwiki:`SPI Engine on wiki <resources/fpga/peripherals/spi_engine>`

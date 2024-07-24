@@ -111,6 +111,6 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* :dokuwiki:`AXI ADC DECIMATE on wiki <resources/fpga/docs/axi_adc_decimate>`
 * :git-hdl:`library/axi_adc_decimate`
-* :git-linux:`/`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

@@ -120,8 +120,8 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* :dokuwiki:`AXI LOGIC ANALYZER on wiki <resources/fpga/docs/axi_logic_analyzer>`
 * :git-hdl:`library/axi_logic_analyzer`
-* :git-linux:`/`
 * :xilinx:`7 Series IO <support/documentation/user_guides/ug471_7Series_SelectIO.pdf>`
 * :xilinx:`7 Series Clocking <support/documentation/user_guides/ug472_7Series_Clocking.pdf>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

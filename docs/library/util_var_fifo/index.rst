@@ -84,3 +84,8 @@ Design Guidelines
 The IP should be used with an external BRAM, which can be optimized for power
 or for speed, depending on the design requirements. It uses only one clock
 domain, so everything should be synchronous to that clock domain.
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`UTIL VAR FIFO on wiki <resources/fpga/docs/util_var_fifo>`

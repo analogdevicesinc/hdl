@@ -816,3 +816,8 @@ Glossary
        is based on the ``X_LENGTH`` and ``Y_LENGTH`` registers. This can occur
        on AXIS source interfaces when TLAST asserts earlier than the programmed
        length.
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`High-Speed DMA Controller Peripheral on wiki <resources/fpga/docs/axi_dmac>`

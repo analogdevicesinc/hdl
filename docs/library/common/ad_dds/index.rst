@@ -324,3 +324,8 @@ It should be mentioned that after the phase init fall-edge, until the first
 valid sample, there is a delay caused by the phase to angle converter type and
 in the case of the CORDIC type, the number of rotation stages will also have a
 direct impact on this clock period delay.
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`Direct digital synthesis on wiki <resources/fpga/docs/dds>`

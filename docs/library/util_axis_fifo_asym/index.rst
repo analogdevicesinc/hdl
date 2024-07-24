@@ -167,3 +167,14 @@ ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:
   address specified is from the perspective of the Slave interface. Since
   the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
   is < M_DATA_WIDTH, leading to a bigger FIFO implementation.
+
+Software Support
+--------------------------------------------------------------------------------
+
+* Linux project at :git-linux:`drivers/staging/axis-fifo`
+* Linux driver at :git-linux:`drivers/staging/axis-fifo/axis-fifo.c`
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`Asymmetric AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo_asym>`

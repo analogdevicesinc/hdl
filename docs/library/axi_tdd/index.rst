@@ -190,3 +190,8 @@ Register Map
 
 .. hdl-regmap::
    :name: TDDN_CNTRL
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`Generic Time-Division Duplexing Controller on wiki <resources/fpga/docs/axi_tdd>`
