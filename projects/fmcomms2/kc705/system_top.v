@@ -209,7 +209,7 @@ module system_top (
     .sys_clk_n (sys_clk_n),
     .sys_clk_p (sys_clk_p),
     .sys_rst (sys_rst),
-    .spi_clk_i (spi_clk),
+    .spi_clk_i (),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
     .spi_csn_o (spi_csn),
