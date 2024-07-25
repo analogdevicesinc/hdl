@@ -11,7 +11,6 @@ adi_project template_kc705
 adi_project_files template_kc705 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/kc705/kc705_system_constr.xdc" \
-  "system_constr.xdc"\
   "system_top.v" ]
 
 adi_project_run template_kc705
