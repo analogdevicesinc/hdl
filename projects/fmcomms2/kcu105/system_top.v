@@ -169,7 +169,7 @@ module system_top (
     .sgmii_txn (phy_tx_n),
     .sgmii_txp (phy_tx_p),
 
-    .spi_clk_i (spi_clk),
+    .spi_clk_i (),
     .spi_clk_o (spi_clk),
     .spi_csn_i (spi_csn),
     .spi_csn_o (spi_csn),
