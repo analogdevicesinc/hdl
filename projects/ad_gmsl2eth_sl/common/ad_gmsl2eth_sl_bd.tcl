@@ -21,6 +21,10 @@ create_bd_port -dir O mfp_0_p1
 create_bd_port -dir O mfp_1_p1
 create_bd_port -dir O mfp_2_p1
 create_bd_port -dir O mfp_3_p1
+create_bd_port -dir O mfp_0_p2
+create_bd_port -dir O mfp_1_p2
+create_bd_port -dir O mfp_2_p2
+create_bd_port -dir O mfp_3_p2
 
 set mipi_phy_if_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:mipi_phy_rtl:1.0 mipi_phy_if_0 ]
 set mipi_phy_if_1 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:mipi_phy_rtl:1.0 mipi_phy_if_1 ]
@@ -230,7 +234,7 @@ ad_ip_parameter v_frmbuf_7 CONFIG.MAX_ROWS {1080}
 ad_ip_parameter v_frmbuf_7 CONFIG.SAMPLES_PER_CLOCK {2}
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen_0
-ad_ip_parameter axi_pwm_gen_0 CONFIG.N_PWMS {4}
+ad_ip_parameter axi_pwm_gen_0 CONFIG.N_PWMS {8}
 
 ad_ip_instance axis_subset_converter axis_subset_cnv_0
 ad_ip_parameter axis_subset_cnv_0 CONFIG.M_TDATA_NUM_BYTES {6}
@@ -324,7 +328,6 @@ ad_connect axis_subset_cnv_6/aresetn ap_rstn_frmbuf_6
 ad_connect axis_subset_cnv_7/aclk sys_cpu_clk
 ad_connect axis_subset_cnv_7/aresetn ap_rstn_frmbuf_7
 
-
 ad_connect v_frmbuf_0/ap_rst_n ap_rstn_frmbuf_0
 ad_connect v_frmbuf_1/ap_rst_n ap_rstn_frmbuf_1
 ad_connect v_frmbuf_2/ap_rst_n ap_rstn_frmbuf_2
@@ -343,7 +346,6 @@ ad_connect v_frmbuf_4/m_axi_mm_video axi_hp1_interconnect/S00_AXI
 ad_connect v_frmbuf_5/m_axi_mm_video axi_hp1_interconnect/S01_AXI
 ad_connect v_frmbuf_6/m_axi_mm_video axi_hp1_interconnect/S02_AXI
 ad_connect v_frmbuf_7/m_axi_mm_video axi_hp1_interconnect/S03_AXI
-
 
 ad_connect axis_subset_cnv_0/M_AXIS v_frmbuf_0/s_axis_video
 ad_connect axis_subset_cnv_1/M_AXIS v_frmbuf_1/s_axis_video
@@ -391,6 +393,10 @@ ad_connect axi_pwm_gen_0/pwm_0 mfp_0_p1
 ad_connect axi_pwm_gen_0/pwm_1 mfp_1_p1
 ad_connect axi_pwm_gen_0/pwm_2 mfp_2_p1
 ad_connect axi_pwm_gen_0/pwm_3 mfp_3_p1
+ad_connect axi_pwm_gen_0/pwm_4 mfp_0_p2
+ad_connect axi_pwm_gen_0/pwm_5 mfp_1_p2
+ad_connect axi_pwm_gen_0/pwm_6 mfp_2_p2
+ad_connect axi_pwm_gen_0/pwm_7 mfp_3_p2
 ad_connect axi_pwm_gen_0/ext_clk sys_cpu_clk
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 tca_iic

@@ -119,11 +119,6 @@ module system_top (
   assign sfp_i2c_rstn = gpio_o[10];
   assign sfp_i2c_en = 1'b0;
 
-  assign mfp_3_p2 = 1'b0;
-  assign mfp_2_p2 = 1'b0;
-  assign mfp_1_p2 = 1'b0;
-  assign mfp_0_p2 = 1'b0;
-
   ad_iobuf #(
     .DATA_WIDTH(2)
   ) iobuf_0 (
@@ -166,6 +161,10 @@ module system_top (
     .mfp_2_p1 (mfp_2_p1),
     .mfp_1_p1 (mfp_1_p1),
     .mfp_0_p1 (mfp_0_p1),
+    .mfp_3_p2 (mfp_3_p2),
+    .mfp_2_p2 (mfp_2_p2),
+    .mfp_1_p2 (mfp_1_p2),
+    .mfp_0_p2 (mfp_0_p2),
     .mipi_phy_if_0_clk_n (mipi_ch0_clk_n),
     .mipi_phy_if_0_clk_p (mipi_ch0_clk_p),
     .mipi_phy_if_0_data_n (mipi_ch0_data_n),
