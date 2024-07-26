@@ -80,6 +80,9 @@ create_clock -name rx_ref_clk_replica   -period  1.6 [get_ports rx_ref_clk_repli
 # since GLBLCLK0 and GLBLCLK1 are not connected to global clock capable pins.
 create_clock -name global_clk_0   -period  3.2 [get_ports glbl_clk_0_p]
 
+# Create clock driving ad_3w_spi (worst case: sys_cpu/2)
+create_clock -name hmc7044_spi -period  20 [get_pins -hierarchical i_hmc7044_spi/hmc7044_clk_o]
+
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
