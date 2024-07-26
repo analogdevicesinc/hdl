@@ -8,6 +8,7 @@ PROJECT_NAME := ad_xband16_ebz_vcu118
 hdl_dir := ../../../../hdl
 
 M_DEPS += timing_constr.xdc
+M_DEPS += ../common/clk_spi.v
 M_DEPS += ../common/hsci_phy_top.sv
 M_DEPS += ../common/trigger_generator.v
 M_DEPS += $(hdl_dir)/projects/scripts/adi_pd.tcl

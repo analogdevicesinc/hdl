@@ -91,18 +91,25 @@ module system_top (
   input         sysref_m2c_p,
   input         sysref_m2c_n,
 
-  output  [3:0] apollo_sclk,
-  inout   [3:0] apollo_sdio,
+  output        apollo_sclk,
+  input         apollo_sdo,
+  output        apollo_sdi,
   output  [3:0] apollo_csb,
 
-  output        art_sclk,
-  inout         art_sdio,
-  output  [3:0] art_csb,
+  output        clk_sclk,
+  input         clk_sdo,
+  inout         clk_sdi,
+  input         clk_stat,
 
-  output        ltc6953_sclk,  
-  output        ltc6953_sdi, 
-  input         ltc6953_sdo,  
-  output  [1:0] ltc6953_csn,
+  input         art_5v_en,
+  output        art_5v_pg,
+  output  [3:0] art_csb,
+  input         art_stat,
+
+  output        ltc6953_csn,
+  output        ltc6952_csn,
+  output        ad4030_csn,
+  output        vco_csn,
 
   output  [3:0] hsci_ckin_p,
   output  [3:0] hsci_ckin_n,
@@ -133,7 +140,12 @@ module system_top (
   output  [3:0] lpf_b,
   output        admv8913_cs_n,
 
-  output  [5:0] rx_dsa,
+  output        pdn_12v_pg,
+  output        vddd_0p8_pg,
+  output        vdda_1p0_pg,
+  output        vddd_1p8_pg,
+  output        vdda_1p8_pg,
+  output        vneg_m1p0_pg,
 
   inout   [3:0] gp4,
   inout   [3:0] gp5,
@@ -156,17 +168,10 @@ module system_top (
   wire    [127:0] gpio_o;
   wire    [127:0] gpio_t;
 
-  wire            spi_clk;
-  wire    [ 7:0]  spi_csn;
-  wire            spi_mosi;
-  wire            spi_miso;
-  wire    [ 3:0]  apollo_miso;
-
   wire            spi_2_clk;
   wire    [ 7:0]  spi_2_csn;
   wire            spi_2_mosi;
   wire            spi_2_miso;
-  wire            art_miso;
 
   wire            spi_3_clk;
   wire    [ 7:0]  spi_3_csn;
@@ -231,76 +236,48 @@ module system_top (
     .CEB(1'b0),
     .ODIV2 (clkin0));
 
-  IBUFDS i_ibufds_rx_device_clk (
+  IBUFDS_GTE4 i_ibufds_rx_device_clk (
     .I (ref_clk_p[2]),
     .IB (ref_clk_n[2]),
-    .O (clkin1));
+    .CEB(1'b0),
+    .ODIV2 (clkin1));
 
   BUFG_GT i_tx_device_clk (
     .I (clkin0),
     .O (tx_device_clk));
 
-  BUFG i_rx_device_clk (
+  BUFG_GT i_rx_device_clk (
     .I (clkin1),
     .O (rx_device_clk));
 
-  BUFG i_selectio_clk_in(
-    .I (selectio_clk_in),
-    .O (pll_inclk));
+  // BUFG i_selectio_clk_in(
+  //   .I (selectio_clk_in),
+  //   .O (pll_inclk));
 
   // spi
-
-  assign apollo_csb = spi_csn[3:0];
-  assign apollo_sclk = {4{spi_clk}};
-
   assign art_csb = spi_2_csn[3:0];
-  assign art_sclk = spi_2_clk;
-
-  assign ltc6953_csn = spi_2_csn[5:4];
-  assign ltc6953_sclk = spi_2_clk;
-  assign ltc6953_sdi = spi_2_mosi;
+  assign ad4030_csn = spi_2_csn[4];
+  assign vco_csn = spi_2_csn[5];
+  assign ltc6952_csn = spi_2_csn[6];
+  assign ltc6953_csn = spi_2_csn[7];
 
   assign pmod1_adc_sync_n = spi_3_csn[0];
   assign pmod1_adc_sdi = spi_3_mosi;
   assign pmod1_adc_sclk = spi_3_clk;
 
-  assign spi_miso = ~spi_csn[0] ? apollo_miso[0] :
-                    ~spi_csn[1] ? apollo_miso[1] :
-                    ~spi_csn[2] ? apollo_miso[2] :
-                    ~spi_csn[3] ? apollo_miso[3] : 1'b0;
-
-  assign spi_2_miso =  |(~spi_2_csn[3:0]) ? art_miso :
-                       |(~spi_2_csn[5:4]) ? ltc6953_sdo : 1'b0;
-
   assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
-  genvar i;
-  generate
-  for (i=0;i<4;i=i+1) begin : apollo_spi_3w
-    ad_3w_spi #(
-      .NUM_OF_SLAVES(1)
-    ) i_spi_apollo (
-      .spi_csn  (spi_csn[i]),
-      .spi_clk  (spi_clk),
-      .spi_mosi (spi_mosi),
-      .spi_miso (apollo_miso[i]),
-      .spi_sdio (apollo_sdio[i]),
-      .spi_dir  ());
-  end
-  endgenerate
-
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(1)
-  ) i_spi_art (
-    .spi_csn (&spi_2_csn[3:0]),
+  clk_spi #(
+    .NUM_OF_SLAVES(8)
+  ) i_clk_spi (
+    .spi_csn (spi_2_csn),
     .spi_clk (spi_2_clk),
     .spi_mosi (spi_2_mosi),
-    .spi_miso (art_miso),
-    .spi_sdio (art_sdio),
-    .spi_dir ());
+    .spi_miso (spi_2_miso),
+    .spi_miso_in (clk_sdo),
+    .spi_sdio (clk_sdi));
 
   // gpios
-
   ad_iobuf #(
     .DATA_WIDTH(1)
   ) i_iobuf (
@@ -328,11 +305,21 @@ module system_top (
   assign hpf_b         = gpio_o[89:86];
   assign lpf_b         = gpio_o[93:90];
   assign admv8913_cs_n = gpio_o[94];
-  assign rx_dsa        = gpio_o[100:95];
+  assign pdn_12v_pg    = gpio_o[95];
+  assign vddd_0p8_pg   = gpio_o[96];
+  assign vdda_1p0_pg   = gpio_o[97];
+  assign vddd_1p8_pg   = gpio_o[98];
+  assign vdda_1p8_pg   = gpio_o[99];
+  assign vneg_m1p0_pg  = gpio_o[100];
   assign pmod1_5045_v2 = gpio_o[101];
   assign pmod1_5045_v1 = gpio_o[102];
   assign pmod1_ctrl_ind = gpio_o[103];
   assign pmod1_ctrl_rx_combined = gpio_o[104];
+  assign art_5v_pg = gpio_o[105];
+
+  assign gpio_i[106] = art_5v_en;
+  assign gpio_i[107] = art_stat;
+  assign gpio_i[108] = clk_stat;
 
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -342,7 +329,7 @@ module system_top (
     .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
-  assign gpio_i[127:105] = gpio_o[127:105];
+  assign gpio_i[127:109] = gpio_o[127:109];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
 
   trigger_generator trig_i (
@@ -354,7 +341,7 @@ module system_top (
   );
 
   hsci_phy_top hsci_phy_top(
-    .pll_inclk        (pll_inclk),
+    .pll_inclk        (selectio_clk_in),
     .hsci_pll_reset   (hsci_pll_reset),
 
     .hsci_pclk        (hsci_pclk),
@@ -426,13 +413,13 @@ module system_top (
     .iic_main_sda_io (iic_sda),
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
-    .spi_clk_i (spi_clk),
-    .spi_clk_o (spi_clk),
-    .spi_csn_i (spi_csn),
-    .spi_csn_o (spi_csn),
-    .spi_sdi_i (spi_miso),
-    .spi_sdo_i (spi_mosi),
-    .spi_sdo_o (spi_mosi),
+    .spi_clk_i (apollo_sclk),
+    .spi_clk_o (apollo_sclk),
+    .spi_csn_i (apollo_csb),
+    .spi_csn_o (apollo_csb),
+    .spi_sdi_i (apollo_sdo),
+    .spi_sdo_i (apollo_sdi),
+    .spi_sdo_o (apollo_sdi),
 
     .spi_2_clk_i (spi_2_clk),
     .spi_2_clk_o (spi_2_clk),
@@ -464,34 +451,34 @@ module system_top (
     .gpio3_o (gpio_o[127:96]),
     .gpio3_t (gpio_t[127:96]),
     // FMCp
-    // quad 121
-    .rx_data_0_n (m2c_n[0]),
-    .rx_data_0_p (m2c_p[0]),
-    .rx_data_1_n (m2c_n[1]),
-    .rx_data_1_p (m2c_p[1]),
-    .rx_data_2_n (m2c_n[2]),
-    .rx_data_2_p (m2c_p[2]),
-    .rx_data_3_n (m2c_n[3]),
-    .rx_data_3_p (m2c_p[3]),
-    // quad 126
-    .rx_data_4_n (m2c_n[4]),
-    .rx_data_4_p (m2c_p[4]),
-    .rx_data_5_n (m2c_n[5]),
-    .rx_data_5_p (m2c_p[5]),
-    .rx_data_6_n (m2c_n[6]),
-    .rx_data_6_p (m2c_p[6]),
-    .rx_data_7_n (m2c_n[7]),
-    .rx_data_7_p (m2c_p[7]),
-    // quad 122
-    .rx_data_8_n (m2c_n[8]),
-    .rx_data_8_p (m2c_p[8]),
-    .rx_data_9_n (m2c_n[9]),
-    .rx_data_9_p (m2c_p[9]),
-    .rx_data_10_n (m2c_n[10]),
-    .rx_data_10_p (m2c_p[10]),
-    .rx_data_11_n (m2c_n[11]),
-    .rx_data_11_p (m2c_p[11]),
+    // quad 127
+    .rx_data_0_n (m2c_n[3]),
+    .rx_data_0_p (m2c_p[3]),
+    .rx_data_1_n (m2c_n[2]),
+    .rx_data_1_p (m2c_p[2]),
+    .rx_data_2_n (m2c_n[1]),
+    .rx_data_2_p (m2c_p[1]),
+    .rx_data_3_n (m2c_n[0]),
+    .rx_data_3_p (m2c_p[0]),
     // quad 125
+    .rx_data_4_n (m2c_n[7]),
+    .rx_data_4_p (m2c_p[7]),
+    .rx_data_5_n (m2c_n[6]),
+    .rx_data_5_p (m2c_p[6]),
+    .rx_data_6_n (m2c_n[5]),
+    .rx_data_6_p (m2c_p[5]),
+    .rx_data_7_n (m2c_n[4]),
+    .rx_data_7_p (m2c_p[4]),
+    // quad 122
+    .rx_data_8_n (m2c_n[10]),
+    .rx_data_8_p (m2c_p[10]),
+    .rx_data_9_n (m2c_n[11]),
+    .rx_data_9_p (m2c_p[11]),
+    .rx_data_10_n (m2c_n[9]),
+    .rx_data_10_p (m2c_p[9]),
+    .rx_data_11_n (m2c_n[8]),
+    .rx_data_11_p (m2c_p[8]),
+    // quad 120
     .rx_data_12_n (m2c_n[12]),
     .rx_data_12_p (m2c_p[12]),
     .rx_data_13_n (m2c_n[13]),
@@ -500,34 +487,34 @@ module system_top (
     .rx_data_14_p (m2c_p[14]),
     .rx_data_15_n (m2c_n[15]),
     .rx_data_15_p (m2c_p[15]),
-    // quad 121
-    .tx_data_0_n (c2m_n[0]),
-    .tx_data_0_p (c2m_p[0]),
-    .tx_data_1_n (c2m_n[1]),
-    .tx_data_1_p (c2m_p[1]),
-    .tx_data_2_n (c2m_n[2]),
-    .tx_data_2_p (c2m_p[2]),
-    .tx_data_3_n (c2m_n[3]),
-    .tx_data_3_p (c2m_p[3]),
-    // quad 126
-    .tx_data_4_n (c2m_n[4]),
-    .tx_data_4_p (c2m_p[4]),
-    .tx_data_5_n (c2m_n[5]),
-    .tx_data_5_p (c2m_p[5]),
-    .tx_data_6_n (c2m_n[6]),
-    .tx_data_6_p (c2m_p[6]),
-    .tx_data_7_n (c2m_n[7]),
-    .tx_data_7_p (c2m_p[7]),
+    // quad 127
+    .tx_data_0_n (c2m_n[3]),
+    .tx_data_0_p (c2m_p[3]),
+    .tx_data_1_n (c2m_n[2]),
+    .tx_data_1_p (c2m_p[2]),
+    .tx_data_2_n (c2m_n[1]),
+    .tx_data_2_p (c2m_p[1]),
+    .tx_data_3_n (c2m_n[0]),
+    .tx_data_3_p (c2m_p[0]),
+    // quad 125
+    .tx_data_4_n (c2m_n[5]),
+    .tx_data_4_p (c2m_p[5]),
+    .tx_data_5_n (c2m_n[4]),
+    .tx_data_5_p (c2m_p[4]),
+    .tx_data_6_n (c2m_n[7]),
+    .tx_data_6_p (c2m_p[7]),
+    .tx_data_7_n (c2m_n[6]),
+    .tx_data_7_p (c2m_p[6]),
     // quad 122
     .tx_data_8_n (c2m_n[8]),
     .tx_data_8_p (c2m_p[8]),
-    .tx_data_9_n (c2m_n[9]),
-    .tx_data_9_p (c2m_p[9]),
+    .tx_data_9_n (c2m_n[11]),
+    .tx_data_9_p (c2m_p[11]),
     .tx_data_10_n (c2m_n[10]),
     .tx_data_10_p (c2m_p[10]),
-    .tx_data_11_n (c2m_n[11]),
-    .tx_data_11_p (c2m_p[11]),
-    // quad 125
+    .tx_data_11_n (c2m_n[9]),
+    .tx_data_11_p (c2m_p[9]),
+    // quad 120
     .tx_data_12_n (c2m_n[12]),
     .tx_data_12_p (c2m_p[12]),
     .tx_data_13_n (c2m_n[13]),
@@ -578,10 +565,10 @@ module system_top (
     .hsci_dly_rdy_bsc_rx_2 (hsci_dly_rdy_bsc_rx[2]),
     .hsci_dly_rdy_bsc_rx_3 (hsci_dly_rdy_bsc_rx[3]),
 
-    .ref_clk_q0 (ref_clk),
+    .ref_clk_q0 (ref_clk_replica),
     .ref_clk_q1 (ref_clk_replica),
     .ref_clk_q2 (ref_clk),
-    .ref_clk_q3 (ref_clk_replica),
+    .ref_clk_q3 (ref_clk),
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
     // .rx_sync_0 (),

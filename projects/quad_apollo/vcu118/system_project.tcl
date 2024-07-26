@@ -43,6 +43,7 @@ adi_project_files ad_xband16_ebz_vcu118 [list \
   "system_top.v" \
   "system_constr.xdc"\
   "timing_constr.xdc"\
+  "../common/clk_spi.v"\
   "../common/hsci_phy_top.sv"\
   "../common/trigger_generator.v"\
   "../../../../hdl/library/common/ad_3w_spi.v" \
