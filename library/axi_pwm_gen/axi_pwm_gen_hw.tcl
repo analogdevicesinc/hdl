@@ -10,7 +10,7 @@ package require quartus::device
 source ../../scripts/adi_env.tcl
 source ../scripts/adi_ip_intel.tcl
 
-ad_ip_create axi_pwm_gen {AXI PWM GEN}
+ad_ip_create axi_pwm_gen {AXI PWM GEN} p_elaboration
 ad_ip_files axi_pwm_gen [list \
   $ad_hdl_dir/library/util_cdc/sync_data.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
@@ -83,16 +83,31 @@ ad_ip_parameter PULSE_13_OFFSET INTEGER 0
 ad_ip_parameter PULSE_14_OFFSET INTEGER 0
 ad_ip_parameter PULSE_15_OFFSET INTEGER 0
 
-# interfaces
+proc p_elaboration {} {
 
-# axi
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
+  set disabled_intfs {}
 
-# external clock and external sync
-ad_interface clock ext_clk input 1
-ad_interface signal ext_sync input 1
+  # interfaces
 
-# output signals
-for {set i 0} {$i < 16} {incr i} {
-  ad_interface signal pwm_$i output 1 if_pwm
+  # axi
+  ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
+
+  # external clock and external sync
+  ad_interface clock ext_clk input 1
+  ad_interface signal ext_sync input 1
+  if {![get_parameter_value PWM_EXT_SYNC]} {
+    lappend disabled_intfs if_ext_sync
+  }
+
+  # output signals
+  for {set i 0} {$i < 16} {incr i} {
+    ad_interface signal pwm_$i output 1 if_pwm
+    if {$i >= [get_parameter_value N_PWMS]} {
+      lappend disabled_intfs if_pwm_$i
+    }
+  }
+
+  foreach intf $disabled_intfs {
+    set_interface_property $intf ENABLED false
+  }
 }
