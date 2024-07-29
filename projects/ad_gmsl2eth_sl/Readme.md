@@ -1,20 +1,28 @@
-# AD-GMSL2ETH-SL HDL Project:
+# AD-GMSL2ETH-SL HDL Project
 
-Here are some pointers to help you:
-  * [Board Product Page](https://www.analog.com/ad-gmsl2eth-sl)
-  * Parts : [MAX96724, Quad Tunneling GMSL2/1 to CSI-2 Deserializer](https://www.analog.com/max96724)
-  * Parts : [MAX20087, Dual/Quad Camera Power Protectors](https://www.analog.com/max20087)
-  * Parts : [AD9545, Quad Input, 10-Output, Dual DPLL/IEEE 1588, 1 pps Synchronizer and Jitter Cleaner](https://www.analog.com/ad9545)
-  * Parts : [ADM7154, 600 mA, Ultralow Noise, High PSRR, RF Linear Regulator](https://www.analog.com/adm7154)
-  * Parts : [MAX31827, Low-Power Temperature Switch with I2C Interface](https://www.analog.com/max31827)
-  * Parts : [LTC3303, 5V, 4A Synchronous Step-Down Regulator in 2mm × 2mm FCQFN](https://www.analog.com/ltc3303)
-  * Parts : [MAX25206, Versatile Automotive 60V/70V 2.2MHz Buck Controller with 7µA IQ and Optional Bypass Mode ](https://www.analog.com/max25206)
-  * Parts : [MAX17573, 4.5V to 60V, 3.5A, High-Efficiency, Synchronous Step-Down DC-DC Converter with Internal Compensation](https://www.analog.com/max17573)
-  * Parts : [LTC4355, Positive High Voltage Ideal Diode-OR with Input Supply and Fuse Monitors](https://www.analog.com/ltc4355)
+  * Evaluation board product page: [AD-GMSL2ETH-SL](https://www.analog.com/ad-gmsl2eth-sl)
+  * System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-gmsl2eth-sl-guide
+  * HDL project documentation: [source code](../../docs/projects/ad_gmsl2eth_sl/index.rst)
+    or [online](http://analogdevicesinc.github.io/hdl/projects/ad_gmsl2eth_sl/index.html)
 
-## Building, Generating Bit Files
+## Involved parts
+
+| Part name                                   | Description                                  |
+|---------------------------------------------|----------------------------------------------|
+| [MAX96724](https://www.analog.com/max96724) | Quad Tunneling GMSL2/1 to CSI-2 Deserializer |
+| [MAX20087](https://www.analog.com/max20087) | Dual/Quad Camera Power Protectors |
+| [AD9545](https://www.analog.com/ad9545)     | Quad Input, 10-Output, Dual DPLL/IEEE 1588, 1 pps Synchronizer and Jitter Cleaner |
+| [ADM7154](https://www.analog.com/adm7154)   | 600 mA, Ultralow Noise, High PSRR, RF Linear Regulator |
+| [MAX31827](https://www.analog.com/max31827) | Low-Power Temperature Switch with I2C Interface |
+| [LTC3303](https://www.analog.com/ltc3303)   | 5V, 4A Synchronous Step-Down Regulator in 2mm × 2mm FCQFN |
+| [MAX25206](https://www.analog.com/max25206) | Versatile Automotive 60V/70V 2.2MHz Buck Controller with 7µA IQ and Optional Bypass Mode |
+| [MAX17573](https://www.analog.com/max17573) | 4.5V to 60V, 3.5A, High-Efficiency, Synchronous Step-Down DC-DC Converter with Internal Compensation |
+| [LTC4355](https://www.analog.com/ltc4355)   | Positive High Voltage Ideal Diode-OR with Input Supply and Fuse Monitors |
+
+## Building and generating the bit files
 
 This project uses [Corundum NIC](https://github.com/corundum/corundum) and it needs to be cloned alongside this repository.
+This project is supported only on FPGA AMD Xilinx K26.
 
 ```
 hdl/../> git clone https://github.com/corundum/corundum.git

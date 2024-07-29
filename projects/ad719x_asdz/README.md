@@ -1,14 +1,25 @@
-# EVAL-AD719X-ASDZ HDL Project
+# AD719x-ASDZ HDL Project
 
-This project supports EVAL-AD7190, EVAL-AD7193 and EVAL-AD7195.
+  * Evaluation board product pages:
+    * [EVAL-AD7190](https://www.analog.com/eval-ad7190)
+    * [EVAL-AD7193](https://www.analog.com/eval-ad7193)
+    * [EVAL-AD7195](https://www.analog.com/eval-ad7195)
+  * System documentation: https://wiki.analog.com/resources/eval/adc/ad719x_asdz 
+  * HDL project documentation: [source code](../../docs/projects/ad719x_asdz/index.rst)
+    or [online](http://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html)
 
-Here are some pointers to help you:
-  * [EVAL-AD7190 Board Product Page](https://www.analog.com/eval-ad7190)
-  * [EVAL-AD7193 Board Product Page](https://www.analog.com/eval-ad7193)
-  * [EVAL-AD7195 Board Product Page](https://www.analog.com/eval-ad7195)
-  * Parts: AD7190 [Sigma-Delta ADC, SPI interface, 24-bit resolution, Data rate between 4.7Hz - 4.8kHz](https://www.analog.com/ad7190)
-  * Parts: AD7193 [4-channel Sigma-Delta ADC, SPI interface, 24-bit resolution, Data rate between 4.7Hz - 4.8kHz](https://www.analog.com/ad7193)
-  * Parts: AD7195 [Sigma-Delta ADC, SPI interface, 24-bit resolution, Data rate between 4.7Hz - 4.8kHz](https://www.analog.com/ad7195)
-  * Project Doc: https://wiki.analog.com/resources/eval/adc/ad719x_asdz
-  * HDL Doc: https://wiki.analog.com/resources/eval/adc/ad719x_asdz 
-  * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers-all
+## Supported parts
+
+| Part name                               | Resolution | Description                                      |
+|-----------------------------------------|:----------:|--------------------------------------------------|
+| [AD7190](https://www.analog.com/ad7190) | 24-bit     | 4.8 kHz Ultralow Noise, Sigma-Delta ADC with PGA |
+| [AD7193](https://www.analog.com/ad7193) | 24-bit     | 4-Channel, 4.8 kHz, Ultralow Noise, Sigma-Delta ADC with PGA |
+| [AD7195](https://www.analog.com/ad7195) | 24-bit     | 4.8 kHz, Ultralow Noise, Sigma-Delta ADC with PGA and AC Excitation |
+
+## Building the project
+
+This project is supported only on FPGA Xilinx Cora Z7S.
+
+```
+hdl/projects/ad719x_asdz/cora> make
+```
