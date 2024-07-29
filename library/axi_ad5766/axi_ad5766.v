@@ -106,6 +106,10 @@ module axi_ad5766 #(
   input                                 ctrl_cmd_wr_en,
   input       [15:0]                    ctrl_cmd_wr_data,
 
+  input                                 status_sync_ready,
+  output                                status_sync_valid,
+  output      [ 7:0]                    status_sync_data,
+
   input                                 ctrl_enable,
   output                                ctrl_enabled,
   input                                 ctrl_mem_reset
@@ -164,6 +168,8 @@ module axi_ad5766 #(
   assign sync_ready = 1'b1;
 
   assign sdi_data_ready = 1'b0;
+  assign status_sync_valid = 1'b0;
+  assign status_sync_data = 8'b0;
 
   generate if (ASYNC_SPI_CLK) begin
 
