@@ -33,6 +33,9 @@ Supported carriers
    * -
      - :xilinx:`ZCU102`
      - FMC HPC1
+   * -
+     - :xilinx:`VCK190`
+     - FMCP1
 
 Block design
 -------------------------------------------------------------------------------
@@ -85,9 +88,8 @@ for each project.
    **system_project.tcl** file, located in
    hdl/projects/adrv9026/$CARRIER/system_project.tcl
 
-.. warning::
-
-   ``Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L``
+.. math::
+   Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}
 
 The following are the parameters of this project that can be configured:
 
@@ -117,18 +119,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
-==================== ===========
-Instance             ZynqMP     
-==================== ===========
-axi_adrv9026_tx_jesd 0x84A90000 
-axi_adrv9026_rx_jesd 0x84AA0000
-axi_adrv9026_tx_dma  0x9c420000
-axi_adrv9026_rx_dma  0x9c400000
-tx_adrv9026_tpl_core 0x84A04000
-rx_adrv9026_tpl_core 0x84A00000
-axi_adrv9026_tx_xcvr 0x84A80000
-axi_adrv9026_rx_xcvr 0x84A60000
-==================== ===========
+==================== =========== ===========
+Instance             ZynqMP      Versal     
+==================== =========== ===========
+axi_adrv9026_tx_jesd 0x84A90000  0xA4A90000  
+axi_adrv9026_rx_jesd 0x84AA0000  0xA4AA0000
+axi_adrv9026_tx_dma  0x9c420000  0xBC420000
+axi_adrv9026_rx_dma  0x9c400000  0xBC400000
+tx_adrv9026_tpl_core 0x84A04000  0xA4A04000
+rx_adrv9026_tpl_core 0x84A00000  0xA4A00000
+axi_adrv9026_tx_xcvr 0x84A80000  0xA4A80000
+axi_adrv9026_rx_xcvr 0x84A60000  0xA4A60000
+==================== =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -283,34 +285,32 @@ location and run the make command by typing in your command prompt:
 
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
-Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (adrv9026/carrier or adrv9026/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for ADRV9026
+.. collapsible:: Default values of the make parameters for ADRV9026
 
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
-   +-------------------+---------------------------+--------------------------+
-   |                   |           A10SoC          |          ZCU102          |
-   +===================+===========================+==========================+
-   | JESD_MODE         |           8B10B           |          8B10B           |
-   +-------------------+---------------------------+--------------------------+
-   | RX_LANE_RATE      |             10            |            10            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_LANE_RATE      |             10            |            10            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_M         |              8            |             8            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_L         |              4            |             4            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_S         |              1            |             1            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_M         |              8            |             8            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_L         |              4            |             4            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_S         |              1            |             1            |
-   +-------------------+---------------------------+--------------------------+
+   +-------------------+------------------+----------------+------------------+
+   |                   |     A10SoC       |     ZCU102     |      VCK190      |
+   +===================+==================+================+==================+
+   | JESD_MODE         |      8B10B       |     8B10B      |      8B10B       |
+   +-------------------+------------------+----------------+------------------+
+   | RX_LANE_RATE      |        10        |       10       |        10        |
+   +-------------------+------------------+----------------+------------------+
+   | TX_LANE_RATE      |        10        |       10       |        10        |
+   +-------------------+------------------+----------------+------------------+
+   | RX_JESD_M         |         8        |        8       |         8        |
+   +-------------------+------------------+----------------+------------------+
+   | RX_JESD_L         |         4        |        4       |         4        |
+   +-------------------+------------------+----------------+------------------+
+   | RX_JESD_S         |         1        |        1       |         1        |
+   +-------------------+------------------+----------------+------------------+
+   | TX_JESD_M         |         8        |        8       |         8        |
+   +-------------------+------------------+----------------+------------------+
+   | TX_JESD_L         |         4        |        4       |         4        |
+   +-------------------+------------------+----------------+------------------+
+   | TX_JESD_S         |         1        |        1       |         1        |
+   +-------------------+------------------+----------------+------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
