@@ -78,7 +78,7 @@ module system_top (
   input         vadj_1v8_pgood,
 
   // FMCp IOs
-  input  [15:0] m2c_p, 
+  input  [15:0] m2c_p,
   input  [15:0] m2c_n,
   output [15:0] c2m_p,
   output [15:0] c2m_n,
@@ -87,7 +87,7 @@ module system_top (
   input   [2:0] ref_clk_n,
   input         ref_clk_replica_p,
   input         ref_clk_replica_n,
-  
+
   input         sysref_m2c_p,
   input         sysref_m2c_n,
 
@@ -101,8 +101,8 @@ module system_top (
   inout         clk_sdi,
   input         clk_stat,
 
-  input         art_5v_en,
-  output        art_5v_pg,
+  output        art_5v_en,
+  input         art_5v_pg,
   output  [3:0] art_csb,
   input         art_stat,
 
@@ -135,17 +135,17 @@ module system_top (
   output        txrxwe,
   output  [2:0] fcnsel,
   output  [4:0] profile,
-  
+
   output  [3:0] hpf_b,
   output  [3:0] lpf_b,
   output        admv8913_cs_n,
 
-  output        pdn_12v_pg,
-  output        vddd_0p8_pg,
-  output        vdda_1p0_pg,
-  output        vddd_1p8_pg,
-  output        vdda_1p8_pg,
-  output        vneg_m1p0_pg,
+  input        pdn_12v_pg,
+  input        vddd_0p8_pg,
+  input        vdda_1p0_pg,
+  input        vddd_1p8_pg,
+  input        vdda_1p8_pg,
+  input        vneg_m1p0_pg,
 
   inout   [3:0] gp4,
   inout   [3:0] gp5,
@@ -284,7 +284,7 @@ module system_top (
     .dio_t (gpio_t[39:32]),
     .dio_i (gpio_o[39:32]),
     .dio_o (gpio_i[39:32]),
-    .dio_p ({gp5[3:0],       // 39-36 
+    .dio_p ({gp5[3:0],       // 39-36
              gp4[3:0]}));    // 35-32
 
   assign gpio_i[43:40] = irqa;
@@ -305,19 +305,19 @@ module system_top (
   assign hpf_b         = gpio_o[89:86];
   assign lpf_b         = gpio_o[93:90];
   assign admv8913_cs_n = gpio_o[94];
-  assign pdn_12v_pg    = gpio_o[95];
-  assign vddd_0p8_pg   = gpio_o[96];
-  assign vdda_1p0_pg   = gpio_o[97];
-  assign vddd_1p8_pg   = gpio_o[98];
-  assign vdda_1p8_pg   = gpio_o[99];
-  assign vneg_m1p0_pg  = gpio_o[100];
-  assign pmod1_5045_v2 = gpio_o[101];
-  assign pmod1_5045_v1 = gpio_o[102];
-  assign pmod1_ctrl_ind = gpio_o[103];
-  assign pmod1_ctrl_rx_combined = gpio_o[104];
-  assign art_5v_pg = gpio_o[105];
+  assign art_5v_en     = gpio_o[95];
+  assign pmod1_5045_v2 = gpio_o[96];
+  assign pmod1_5045_v1 = gpio_o[97];
+  assign pmod1_ctrl_ind = gpio_o[98];
+  assign pmod1_ctrl_rx_combined = gpio_o[99];
 
-  assign gpio_i[106] = art_5v_en;
+  assign gpio_i[100] = pdn_12v_pg;
+  assign gpio_i[101] = vddd_0p8_pg;
+  assign gpio_i[102] = vdda_1p0_pg;
+  assign gpio_i[103] = vddd_1p8_pg;
+  assign gpio_i[104] = vdda_1p8_pg;
+  assign gpio_i[105] = vneg_m1p0_pg;
+  assign gpio_i[106] = art_5v_pg;
   assign gpio_i[107] = art_stat;
   assign gpio_i[108] = clk_stat;
 
@@ -443,7 +443,7 @@ module system_top (
     .gpio1_i (gpio_i[63:32]),
     .gpio1_o (gpio_o[63:32]),
     .gpio1_t (gpio_t[63:32]),
-    
+
     .gpio2_i (gpio_i[95:64]),
     .gpio2_o (gpio_o[95:64]),
     .gpio2_t (gpio_t[95:64]),
@@ -577,4 +577,3 @@ module system_top (
     .tx_sysref_0 (sysref));
 
 endmodule
-
