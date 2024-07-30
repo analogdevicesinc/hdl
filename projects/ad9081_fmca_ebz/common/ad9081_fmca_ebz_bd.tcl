@@ -279,7 +279,7 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST $adc_dma_data_width
 }
 
 # Instantiate DAC (Tx) path
@@ -344,7 +344,7 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 }
 
