@@ -12,9 +12,10 @@ DC up to 3 GHz.
 
 This reference design includes a single tone sine generator (DDS) and allows
 programming the device and monitoring its internal status registers. It also
-programs the ADF4350 clock chip which can generate a 1.6G Hz to 2.5 GHz clock
-for the :adi:`AD9739A <AD9739A>` from the on-board 25MHz crystal. An alternate
-clock path using an ADCLK914 is available for driving the clock externally.
+programs the :adi:`ADF4350 <ADF4350>` clock chip which can generate a 1.6G Hz
+to 2.5 GHz clock for the :adi:`AD9739A <AD9739A>` from the on-board 25MHz
+crystal. An alternate clock path using an :adi:`ADCLK914 <ADCLK914>` is
+available for driving the clock externally.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADS7-V2EBZ <EVAL-ADS7-V2>`
+-  :adi:`AD9739A <AD9739A>`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -60,6 +61,15 @@ AD9739A FMC Card block diagram
    :align: center
    :alt: AD9739A-FMC/ZC706 fmc card block diagram
 
+The DDS consists of a Xilinx DDS IP core and a DDR based data generator. The
+core generates 6 samples at every fDAC/3 clock cycles for each port of 
+:adi:`AD9739A <AD9739A>`.
+
+The SPI interface allows programming the :adi:`ADF4350 <ADF4350>` and/or
+:adi:`AD9739A <AD9739A>`. The provided SDK software shows the initial setup
+required for both the devices for a 2.5GHz DAC clock with a 300MHz single tone
+DDS.
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -71,12 +81,12 @@ Two clock paths are available to drive the clock input on the
    synthesize a clock over the entire specified range of 
    the :adi:`AD9739A <AD9739A>` (1.6GHz to 2.5GHz)
 
-    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>` 
+    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>`
        position
 
 -  Alternatively, an external clock can be provided via the SMA CLKIN (J3) jack
 
-    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914 <ADCLK914>` 
+    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914 <ADCLK914>`
        position. C102 and C99 on the back of the board also need to be removed
        from their default position, and then soldered into the vertical position
        from the large square pad they were previously soldered to and the narrow
@@ -94,29 +104,6 @@ Instance             Zynq/Microblaze
 axi_ad9739a          0x7420_0000    
 axi_ad9739a_dma      0x7c42_0000    
 ==================== ===============
-
-I2C connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 20 20 20 20 20
-   :header-rows: 1
-
-   * - I2C type
-     - I2C manager instance
-     - Alias
-     - Address
-     - I2C subordinate
-   * - PL
-     - iic_fmc
-     - axi_iic_fmc
-     - 0x4162_0000
-     - ---
-   * - PL
-     - iic_main
-     - axi_iic_main
-     - 0x4160_0000
-     - ---
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,9 +129,10 @@ Building the HDL project
 -------------------------------------------------------------------------------
 
 The design is built upon ADI's generic HDL reference design framework.
-ADI does not distribute the bit/elf files of these projects so they
-must be built from the sources available :git-hdl:`here <>`. To get
-the source you must
+ADI distributes the bit/elf files of these projects as part of the
+:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
+If you want to build the sources, ADI makes them available on the :git-hdl:`HDL repository </>`.
+To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
@@ -154,7 +142,7 @@ the HDL repository.
    user@analog:~$ cd hdl/projects/ad9739a_fmc/zc706
    user@analog:~/hdl/projects/ad9739a_fmc/zc706$ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` user 
+A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
 
 Resources
@@ -164,19 +152,13 @@ Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :dokuwiki:`[Wiki] AD9737A-EBZ/AD9739A-EBZ Quick Start Guide <resources/eval/dpg/ad9739a-ebz>`
+   (with ACE)
 -  :dokuwiki:`[Wiki] AD9739A Native FMC Card/Xilinx Reference Designs <resources/fpga/xilinx/fmc/ad9739a>`
--  :dokuwiki:`[Wiki] EVALUATING THE AD9739A/AD9737A RF DIGITAL-TO-ANALOG CONVERTER <resources/eval/dpg/eval-ad9739a>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`ADCLK914`
-   -  :adi:`ADF4350`
-   -  :adi:`ADCLK946`
-   -  :adi:`ADF4150`
--  `AD9737A/AD9739A Data sheet <https://www.analog.com/media/en/technical-documentation/data-sheets/AD9737A_9739A.pdf>`__
+-  Product datasheets: :adi:`AD9739A`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,15 +194,14 @@ HDL related
      - :git-hdl:`library/sysid_rom`
      - :ref:`here <axi_sysid>`
 
-
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :git-linux:`AD9739A-FMC Linux driver <drivers/iio/frequency/ad9739a.c>`
 -  :git-linux:`AD9739A-FMC Linux device tree <arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
+-  :git-no-os:`AD9739A-FMC No-Os project <drivers/dac/ad9739a>`
+-  :git-no-os:`AD9739A-FMC No-Os driver <drivers/dac/ad9739a/ad9739a.c>`
 
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
