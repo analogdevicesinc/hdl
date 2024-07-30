@@ -161,6 +161,8 @@ set_property -dict [list \
   CONFIG.TUSER_WIDTH {2} \
 ] $axis_switch_1
 
+set camera_correction [ create_bd_cell -type ip -vlnv xilinx.com:hls:camera_correction:1.0 camera_correction ]
+
 ad_ip_instance v_frmbuf_wr v_frmbuf_0
 ad_ip_parameter v_frmbuf_0 CONFIG.HAS_UYVY8 {1}
 ad_ip_parameter v_frmbuf_0 CONFIG.HAS_RGB8 {0}
@@ -311,6 +313,9 @@ ad_connect axi_hp1_interconnect/aresetn sys_cpu_resetn
 ad_connect sys_ps8/saxihp0_fpd_aclk sys_cpu_clk
 ad_connect sys_ps8/saxihp1_fpd_aclk sys_cpu_clk
 
+ad_connect camera_correction/ap_clk sys_cpu_clk
+ad_connect camera_correction/ap_rst_n ap_rstn_frmbuf_0
+
 ad_connect axis_subset_cnv_0/aclk sys_cpu_clk
 ad_connect axis_subset_cnv_0/aresetn ap_rstn_frmbuf_0
 ad_connect axis_subset_cnv_1/aclk sys_cpu_clk
@@ -347,6 +352,7 @@ ad_connect v_frmbuf_5/m_axi_mm_video axi_hp1_interconnect/S01_AXI
 ad_connect v_frmbuf_6/m_axi_mm_video axi_hp1_interconnect/S02_AXI
 ad_connect v_frmbuf_7/m_axi_mm_video axi_hp1_interconnect/S03_AXI
 
+ad_connect camera_correction/stream_out axis_subset_cnv_0/S_AXIS
 ad_connect axis_subset_cnv_0/M_AXIS v_frmbuf_0/s_axis_video
 ad_connect axis_subset_cnv_1/M_AXIS v_frmbuf_1/s_axis_video
 ad_connect axis_subset_cnv_2/M_AXIS v_frmbuf_2/s_axis_video
@@ -373,7 +379,7 @@ ad_connect mipi_csi2_rx_subsyst_1/lite_aclk sys_cpu_clk
 ad_connect mipi_csi2_rx_subsyst_1/dphy_clk_200M dphy_clk_generator/clk_out1
 
 ad_connect mipi_csi2_rx_subsyst_0/video_out axis_switch_0/S00_AXIS
-ad_connect axis_switch_0/M00_AXIS axis_subset_cnv_0/S_AXIS
+ad_connect axis_switch_0/M00_AXIS camera_correction/stream_in
 ad_connect axis_switch_0/M01_AXIS axis_subset_cnv_1/S_AXIS
 ad_connect axis_switch_0/M02_AXIS axis_subset_cnv_2/S_AXIS
 ad_connect axis_switch_0/M03_AXIS axis_subset_cnv_3/S_AXIS

@@ -14,12 +14,14 @@ Here are some pointers to help you:
 
 ## Building, Generating Bit Files
 
-This project uses [Corundum NIC](https://github.com/corundum/corundum) and it needs to be cloned alongside this repository.
+IMPORTANT: This project uses [Corundum NIC](https://github.com/corundum/corundum) and [Vitis Library with ADI modification](https://bitbucket.analog.com/users/coliveir/repos/vitis_libraries_adi/). Both of the repositories need to be cloned alongside this repository.
 
 ```
 hdl/../> git clone https://github.com/corundum/corundum.git
 hdl/../corundum/> git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-hdl/projects/ad_gmsl2eth_sl/> make &
+hdl/../> git clone https://bitbucket.analog.com/scm/~coliveir/vitis_libraries_adi.git
+hdl/../vitis_libraries_adi/> git checkout vision_higher_frequency
+hdl/projects/gmsl/k26/> make &
 ```
 
 ## Publications

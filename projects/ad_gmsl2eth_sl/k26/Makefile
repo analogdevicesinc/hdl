@@ -25,6 +25,7 @@ EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_pwm_gen
+LIB_DEPS += camera_correction
 LIB_DEPS += corundum
 LIB_DEPS += sysid_rom
 
