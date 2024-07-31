@@ -23,7 +23,9 @@ ADC/DAC
 .. toctree::
    :maxdepth: 1
 
+   ad_463x_data_capture/index
    axi_ad3552r/index
+   axi_ad4858/index
    axi_ad7606x/index
    axi_ad7616/index
    axi_ad7768/index
