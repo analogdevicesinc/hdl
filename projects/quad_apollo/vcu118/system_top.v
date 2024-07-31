@@ -98,7 +98,7 @@ module system_top (
 
   output        clk_sclk,
   input         clk_sdo,
-  inout         clk_sdi,
+  output        clk_sdi,
   input         clk_stat,
 
   output        art_5v_en,
@@ -260,6 +260,7 @@ module system_top (
   assign vco_csn = spi_2_csn[5];
   assign ltc6952_csn = spi_2_csn[6];
   assign ltc6953_csn = spi_2_csn[7];
+  assign clk_sclk = spi_2_clk;
 
   assign pmod1_adc_sync_n = spi_3_csn[0];
   assign pmod1_adc_sdi = spi_3_mosi;
@@ -267,15 +268,15 @@ module system_top (
 
   assign spi_3_miso =  ~pmod1_adc_sync_n ? pmod1_adc_sdo : 1'b0;
 
-  clk_spi #(
-    .NUM_OF_SLAVES(8)
-  ) i_clk_spi (
-    .spi_csn (spi_2_csn),
-    .spi_clk (spi_2_clk),
-    .spi_mosi (spi_2_mosi),
-    .spi_miso (spi_2_miso),
-    .spi_miso_in (clk_sdo),
-    .spi_sdio (clk_sdi));
+  // clk_spi #(
+  //   .NUM_OF_SLAVES(8)
+  // ) i_clk_spi (
+  //   .spi_csn (spi_2_csn),
+  //   .spi_clk (spi_2_clk),
+  //   .spi_mosi (spi_2_mosi),
+  //   .spi_miso (spi_2_miso),
+  //   .spi_miso_in (clk_sdo),
+  //   .spi_sdio (clk_sdi));
 
   // gpios
   ad_iobuf #(
@@ -425,9 +426,9 @@ module system_top (
     .spi_2_clk_o (spi_2_clk),
     .spi_2_csn_i (spi_2_csn),
     .spi_2_csn_o (spi_2_csn),
-    .spi_2_sdi_i (spi_2_miso),
-    .spi_2_sdo_i (spi_2_mosi),
-    .spi_2_sdo_o (spi_2_mosi),
+    .spi_2_sdi_i (clk_sdo),
+    .spi_2_sdo_i (clk_sdi),
+    .spi_2_sdo_o (clk_sdi),
 
     .spi_3_clk_i (spi_3_clk),
     .spi_3_clk_o (spi_3_clk),

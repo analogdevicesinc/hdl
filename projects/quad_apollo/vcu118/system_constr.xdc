@@ -75,14 +75,14 @@ set_property  -dict {PACKAGE_PIN BD43                                           
 #
 ## Refernce clocks
 #
-set_property  -dict {PACKAGE_PIN AK38                                                         } [get_ports ref_clk_p[0]      ]; ## GBTCLK0_M2C_P   D4   MGTREFCLK0P_121  
-set_property  -dict {PACKAGE_PIN AK39                                                         } [get_ports ref_clk_n[0]      ]; ## GBTCLK0_M2C_N   D5   MGTREFCLK0N_121 
-set_property  -dict {PACKAGE_PIN V38                                                          } [get_ports ref_clk_replica_p ]; ## -               -    MGTREFCLK0P_126  
-set_property  -dict {PACKAGE_PIN V39                                                          } [get_ports ref_clk_replica_n ]; ## -               -    MGTREFCLK0N_126 
-set_property  -dict {PACKAGE_PIN AM38                                                         } [get_ports ref_clk_p[1]      ]; ## GBTCLK1_M2C_P   B20  MGTREFCLK1P_120,120,121,122,125,126,127   
-set_property  -dict {PACKAGE_PIN AM39                                                         } [get_ports ref_clk_n[1]      ]; ## GBTCLK1_M2C_N   B21  MGTREFCLK1N_120,120,121,122,125,126,127   
-set_property  -dict {PACKAGE_PIN AN40                                                         } [get_ports ref_clk_p[2]      ]; ## GBTCLK5_M2C_P   Z20  MGTREFCLK0P_120   
-set_property  -dict {PACKAGE_PIN AN41                                                         } [get_ports ref_clk_n[2]      ]; ## GBTCLK5_M2C_N   Z21  MGTREFCLK0N_120   
+set_property  -dict {PACKAGE_PIN AK38                                                         } [get_ports ref_clk_p[0]      ]; ## GBTCLK0_M2C_P   D4   MGTREFCLK0P_121
+set_property  -dict {PACKAGE_PIN AK39                                                         } [get_ports ref_clk_n[0]      ]; ## GBTCLK0_M2C_N   D5   MGTREFCLK0N_121
+set_property  -dict {PACKAGE_PIN V38                                                          } [get_ports ref_clk_replica_p ]; ## -               -    MGTREFCLK0P_126
+set_property  -dict {PACKAGE_PIN V39                                                          } [get_ports ref_clk_replica_n ]; ## -               -    MGTREFCLK0N_126
+set_property  -dict {PACKAGE_PIN AM38                                                         } [get_ports ref_clk_p[1]      ]; ## GBTCLK1_M2C_P   B20  MGTREFCLK1P_120,120,121,122,125,126,127
+set_property  -dict {PACKAGE_PIN AM39                                                         } [get_ports ref_clk_n[1]      ]; ## GBTCLK1_M2C_N   B21  MGTREFCLK1N_120,120,121,122,125,126,127
+set_property  -dict {PACKAGE_PIN AN40                                                         } [get_ports ref_clk_p[2]      ]; ## GBTCLK5_M2C_P   Z20  MGTREFCLK0P_120
+set_property  -dict {PACKAGE_PIN AN41                                                         } [get_ports ref_clk_n[2]      ]; ## GBTCLK5_M2C_N   Z21  MGTREFCLK0N_120
 # set_property  -dict {PACKAGE_PIN AL32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports ref_clk_p[2]      ]; ## CLK0_M2C_P      H4   IO_L13P_T2L_N0_GC_QBC_43
 # set_property  -dict {PACKAGE_PIN AM32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports ref_clk_n[2]      ]; ## CLK0_M2C_N      H5   IO_L13N_T2L_N1_GC_QBC_43
 ## Sysref
@@ -90,9 +90,10 @@ set_property  -dict {PACKAGE_PIN P35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100
 set_property  -dict {PACKAGE_PIN P36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports sysref_m2c_n     ]; ## CLK1_M2C_N      G3   IO_L14N_T2L_N3_GC_45
 ## Apollo SPIs
 set_property  -dict {PACKAGE_PIN AL35 IOSTANDARD LVCMOS18                                     } [get_ports apollo_sclk      ]; ## LA00_P_CC       G6   IO_L7P_T1L_N0_QBC_AD13P_43
-set_property  -dict {PACKAGE_PIN AL36 IOSTANDARD LVCMOS18                                     } [get_ports pdn_12v_pg           ]; ## LA00_N_CC       G7   IO_L7N_T1L_N1_QBC_AD13N_43
+set_property  -dict {PACKAGE_PIN AL36 IOSTANDARD LVCMOS18                                     } [get_ports pdn_12v_pg       ]; ## LA00_N_CC       G7   IO_L7N_T1L_N1_QBC_AD13N_43
 set_property  -dict {PACKAGE_PIN R34  IOSTANDARD LVCMOS18                                     } [get_ports clk_sdi          ]; ## LA17_P_CC       D20  IO_L13P_T2L_N0_GC_QBC_45
-set_property  -dict {PACKAGE_PIN P34  IOSTANDARD LVCMOS18                                     } [get_ports clk_sdo          ]; ## LA17_N_CC       D21  IO_L13N_T2L_N1_GC_QBC_45
+# FIXME: Swapped with sdo because of the rework
+set_property  -dict {PACKAGE_PIN P34  IOSTANDARD LVCMOS18                                     } [get_ports clk_sclk         ]; ## LA17_N_CC       D21  IO_L13N_T2L_N1_GC_QBC_45
 set_property  -dict {PACKAGE_PIN AJ32 IOSTANDARD LVCMOS18                                     } [get_ports apollo_sdi       ]; ## LA02_P          H7   IO_L14P_T2L_N2_GC_43
 set_property  -dict {PACKAGE_PIN AK32 IOSTANDARD LVCMOS18                                     } [get_ports apollo_sdo       ]; ## LA02_N          H8   IO_L14N_T2L_N3_GC_43
 set_property  -dict {PACKAGE_PIN N34  IOSTANDARD LVCMOS18                                     } [get_ports vddd_1p8_pg      ]; ## LA22_P          G24  IO_L20P_T3L_N2_AD1P_45
@@ -102,7 +103,8 @@ set_property  -dict {PACKAGE_PIN AG33 IOSTANDARD LVCMOS18                       
 set_property  -dict {PACKAGE_PIN N38  IOSTANDARD LVCMOS18                                     } [get_ports apollo_csb[2]    ]; ## LA30_P          H34  IO_L18P_T2U_N10_AD2P_45
 set_property  -dict {PACKAGE_PIN M38  IOSTANDARD LVCMOS18                                     } [get_ports apollo_csb[3]    ]; ## LA30_N          H35  IO_L18N_T2U_N11_AD2N_45
 ## ADF4382
-set_property  -dict {PACKAGE_PIN R31  IOSTANDARD LVCMOS18                                     } [get_ports clk_sclk         ]; ## LA18_P_CC       C22  IO_L10P_T1U_N6_QBC_AD4P_45
+# FIXME: Swapped with sclk because of the rework
+set_property  -dict {PACKAGE_PIN R31  IOSTANDARD LVCMOS18                                     } [get_ports clk_sdo          ]; ## LA18_P_CC       C22  IO_L10P_T1U_N6_QBC_AD4P_45
 set_property  -dict {PACKAGE_PIN P31  IOSTANDARD LVCMOS18                                     } [get_ports ext_trig         ]; ## LA18_N_CC       C23  IO_L10N_T1U_N7_QBC_AD4N_45
 set_property  -dict {PACKAGE_PIN T34  IOSTANDARD LVCMOS18                                     } [get_ports art_csb[0]       ]; ## LA24_P          H28  IO_L6P_T0U_N10_AD6P_45
 set_property  -dict {PACKAGE_PIN T35  IOSTANDARD LVCMOS18                                     } [get_ports art_csb[1]       ]; ## LA24_N          H29  IO_L6N_T0U_N11_AD6N_45
@@ -171,7 +173,7 @@ set_property  -dict {PACKAGE_PIN L13  IOSTANDARD LVCMOS18                       
 ## Reset
 set_property  -dict {PACKAGE_PIN Y32  IOSTANDARD LVCMOS18                                     } [get_ports resetb[0]        ]; ## LA23_P          D23  IO_L1P_T0L_N0_DBC_45
 set_property  -dict {PACKAGE_PIN W32  IOSTANDARD LVCMOS18                                     } [get_ports resetb[1]        ]; ## LA23_N          D24  IO_L1N_T0L_N1_DBC_45
-set_property  -dict {PACKAGE_PIN AH33 IOSTANDARD LVCMOS18                                     } [get_ports resetb[2]        ]; ## LA12_P          G15  IO_L21P_T3L_N4_AD8P_43 
+set_property  -dict {PACKAGE_PIN AH33 IOSTANDARD LVCMOS18                                     } [get_ports resetb[2]        ]; ## LA12_P          G15  IO_L21P_T3L_N4_AD8P_43
 set_property  -dict {PACKAGE_PIN AH34 IOSTANDARD LVCMOS18                                     } [get_ports resetb[3]        ]; ## LA12_N          G16  IO_L21N_T3L_N5_AD8N_43
 ## GPIO
 set_property  -dict {PACKAGE_PIN M35  IOSTANDARD LVCMOS18                                     } [get_ports txen[0]          ]; ## LA21_P          H25  IO_L24P_T3U_N10_45
