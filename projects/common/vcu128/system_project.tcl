@@ -11,7 +11,6 @@ adi_project template_vcu128
 adi_project_files template_vcu118 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu128/vcu128_system_constr.xdc" \
-  "system_constr.xdc"\
   "system_top.v" ]
 
 adi_project_run template_vcu118
