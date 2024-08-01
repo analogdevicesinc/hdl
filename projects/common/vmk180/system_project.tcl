@@ -11,7 +11,6 @@ adi_project template_vmk180
 adi_project_files template_vmk180 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vmk180/vmk180_system_constr.xdc" \
-  "system_constr.xdc"\
   "system_top.v" ]
 
 adi_project_run template_vmk180

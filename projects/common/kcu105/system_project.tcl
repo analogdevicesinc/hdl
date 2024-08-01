@@ -11,7 +11,6 @@ adi_project template_kcu105
 adi_project_files template_kcu105 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_constr.xdc" \
-  "system_constr.xdc"\
   "$ad_hdl_dir/projects/common/kcu105/kcu105_system_lutram_constr.xdc" \
   "system_top.v" ]
   

@@ -11,7 +11,6 @@ adi_project template_vc709
 adi_project_files template_vc709 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vc709/vc709_system_constr.xdc" \
-  "system_constr.xdc"\
   "system_top.v" ]
 
 adi_project_run template_vc709
