@@ -8,53 +8,59 @@ source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
 # Parameter description
-# DEV_CONFIG - The device which will be used
-#  - Options : AD7606B(0)/C-16(1)/C-18(2)
 # INTF - Operation interface
 #  - Options : Parallel(0)/Serial(1)
 # NUM_OF_SDI - Number of SDI lines used
 #  - Options: 1, 2, 4, 8
-# EXT_CLK - Use external clock as ADC clock
-#  - Options : No(0), Yes(1)
+# ADC_N_BITS - ADC resolution
+#  - Options: 16, 18
 
-set DEV_CONFIG [get_env_param DEV_CONFIG 0]
-
-set INTF 1
-if {[info exists ::env(INTF)]} {
-  set INTF $::env(INTF)
-} else {
-  set env(INTF) $INTF
-}
-
-set NUM_OF_SDI 4
-if {[info exists ::env(NUM_OF_SDI)]} {
-  set NUM_OF_SDI $::env(NUM_OF_SDI)
-} else {
-  set env(NUM_OF_SDI) $NUM_OF_SDI
-}
-
-set EXT_CLK [get_env_param EXT_CLK 0]
+set NUM_OF_SDI [get_env_param NUM_OF_SDI 2]
+set ADC_N_BITS [get_env_param ADC_N_BITS 16]
+set INTF [get_env_param INTF 0]
 
 adi_project ad7606x_fmc_zed 0 [list \
-  DEV_CONFIG $DEV_CONFIG \
   INTF $INTF \
   NUM_OF_SDI $NUM_OF_SDI \
-  EXT_CLK $EXT_CLK \
+  ADC_N_BITS $ADC_N_BITS \
 ]
 
 adi_project_files ad7606x_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-  "system_constr.tcl"]
+  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
 
 switch $INTF {
   0 {
     adi_project_files ad7606x_fmc_zed [list \
-      "system_top_pi.v" ]
+      "system_top_pi.v" \
+      "system_constr_pif.xdc"]
   }
   1 {
-    adi_project_files ad7606x_fmc_zed [list \
-      "system_top_si.v" ]
+    switch $NUM_OF_SDI {
+      1 {
+        adi_project_files ad7606x_fmc_zed [list \
+          "system_top_si.v" \
+          "system_constr_spi_1.xdc"]
+      }
+
+      2 {
+        adi_project_files ad7606x_fmc_zed [list \
+          "system_top_si.v" \
+          "system_constr_spi_2.xdc"]
+      }
+
+      4 {
+        adi_project_files ad7606x_fmc_zed [list \
+          "system_top_si.v" \
+          "system_constr_spi_4.xdc"]
+      }
+
+      8 {
+        adi_project_files ad7606x_fmc_zed [list \
+          "system_top_si.v" \
+          "system_constr_spi_8.xdc"]
+      }
+    }
   }
 }
 
