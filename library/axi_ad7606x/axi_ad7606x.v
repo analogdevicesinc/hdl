@@ -38,10 +38,8 @@
 module axi_ad7606x #(
 
   parameter ID = 0,
-  parameter DEV_CONFIG = 0,
   parameter ADC_TO_DMA_N_BITS = 16,
-  parameter ADC_N_BITS = 16,
-  parameter EXTERNAL_CLK = 0
+  parameter ADC_N_BITS = 16
 ) (
 
   // physical data interface
@@ -52,7 +50,6 @@ module axi_ad7606x #(
   output        rx_db_t,
   output        rx_rd_n,
   output        rx_wr_n,
-  input         external_clk,
 
   // physical control interface
 
@@ -142,7 +139,6 @@ module axi_ad7606x #(
   wire                  adc_dfmt_type_s[0:7];
   wire                  adc_dfmt_se_s[0:7];
 
-  wire                  adc_clk_s;
   wire [ 7:0]           adc_enable;
   wire                  adc_reset_s;
 
@@ -175,7 +171,7 @@ module axi_ad7606x #(
   wire                  m_axis_xfer_req_s;
 
   // defaults
-
+  assign adc_clk = s_axi_aclk;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign adc_reset = adc_reset_s;
@@ -217,22 +213,12 @@ module axi_ad7606x #(
   end
 
   generate
-    if (EXTERNAL_CLK == 1'b1) begin
-      assign adc_clk_s = external_clk;
-    end else begin
-      assign adc_clk_s = up_clk;
-    end
-  endgenerate
-
-  assign adc_clk = adc_clk_s;
-
-  generate
     genvar i;
     for (i = 0; i < 8; i = i + 1) begin
       up_adc_channel #(
         .CHANNEL_ID(i)
       ) i_up_adc_channel (
-        .adc_clk (adc_clk_s),
+        .adc_clk (up_clk),
         .adc_rst (adc_reset_s),
         .adc_enable (adc_enable[i]),
         .adc_iqcor_enb (),
@@ -289,7 +275,7 @@ module axi_ad7606x #(
         .DATA_WIDTH (ADC_N_BITS),
         .BITS_PER_SAMPLE (ADC_TO_DMA_N_BITS)
       ) i_datafmt (
-        .clk (adc_clk),
+        .clk (up_clk),
         .valid (1'b1),
         .data (adc_data_s[k*ADC_N_BITS+(ADC_N_BITS-1):k*ADC_N_BITS]),
         .valid_out (dma_dvalid),
@@ -301,7 +287,7 @@ module axi_ad7606x #(
   endgenerate
 
   generate
-    if (DEV_CONFIG == AD7606B || DEV_CONFIG == AD7606C_16) begin
+    if (ADC_N_BITS == 16) begin
       axi_ad7606x_16b_pif i_ad7606_parallel_interface (
         .cs_n (rx_cs_n),
         .db_o (rx_db_o),
@@ -332,7 +318,7 @@ module axi_ad7606x #(
         .adc_crc_res (adc_crc_res),
         .adc_crc_err (adc_crc_err),
         .adc_valid (adc_valid),
-        .clk (adc_clk_s),
+        .clk (up_clk),
         .rstn (up_rstn),
         .adc_config_ctrl (adc_config_ctrl_s),
         .adc_ctrl_status (adc_ctrl_status_s),
@@ -372,7 +358,7 @@ module axi_ad7606x #(
         .adc_crc_res (adc_crc_res),
         .adc_crc_err (adc_crc_err),
         .adc_valid (adc_valid),
-        .clk (adc_clk_s),
+        .clk (up_clk),
         .rstn (up_rstn),
         .adc_config_ctrl (adc_config_ctrl_s),
         .adc_ctrl_status (adc_ctrl_status_s),
@@ -399,7 +385,7 @@ module axi_ad7606x #(
     .CONFIG (RD_RAW_CAP)
   ) i_up_adc_common (
     .mmcm_rst (),
-    .adc_clk (adc_clk_s),
+    .adc_clk (up_clk),
     .adc_rst (adc_reset_s),
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
