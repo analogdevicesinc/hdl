@@ -58,12 +58,12 @@ adi_project ad9081_fmca_ebz_vck190 0 [list \
   TX_KS_PER_CHANNEL      [get_env_param TX_KS_PER_CHANNEL          64 ] \
   ADC_FIR_FILTER_INSERT  [get_env_param ADC_FIR_FILTER_INSERT       0 ] \
   ADC_FIR_RATE           [get_env_param ADC_FIR_RATE                8 ] \
-  ADC_FIR_PARALLEL_PATHS [get_env_param ADC_FIR_PARALLEL_PATHS      1 ] \
+  ADC_FIR_PARALLEL_PATHS [get_env_param ADC_FIR_PARALLEL_PATHS      8 ] \
   ADC_FIR_CORE_CLK_RATE  [get_env_param ADC_FIR_CORE_CLK_RATE  122.88 ] \
-  ADC_FIR_SAMPLING_RATE  [get_env_param ADC_FIR_SAMPLING_RATE  122.88 ] \
+  ADC_FIR_SAMPLING_RATE  [get_env_param ADC_FIR_SAMPLING_RATE   15.36 ] \
   DAC_FIR_FILTER_INSERT  [get_env_param DAC_FIR_FILTER_INSERT       0 ] \
   DAC_FIR_RATE           [get_env_param DAC_FIR_RATE                8 ] \
-  DAC_FIR_PARALLEL_PATHS [get_env_param DAC_FIR_PARALLEL_PATHS      2 ] \
+  DAC_FIR_PARALLEL_PATHS [get_env_param DAC_FIR_PARALLEL_PATHS      8 ] \
   DAC_FIR_CORE_CLK_RATE  [get_env_param DAC_FIR_CORE_CLK_RATE  122.88 ] \
   DAC_FIR_SAMPLING_RATE  [get_env_param DAC_FIR_SAMPLING_RATE   15.36 ] \
 ]
