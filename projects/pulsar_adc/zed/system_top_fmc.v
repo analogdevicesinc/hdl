@@ -35,8 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
-
+module system_top #(
+  parameter SPI_OP_MODE = 0
+) (
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
   inout           ddr_cas_n,
@@ -83,12 +84,12 @@ module system_top (
 
   input           otg_vbusoc,
 
-  // adaq400x SPI configuration interface
+  input           pulsar_spi_sdi,
+  output          pulsar_spi_sdo,
+  output          pulsar_spi_sclk,
+  output          pulsar_spi_cs,
 
-  input           adaq400x_spi_sdi,
-  output          adaq400x_spi_sdo,
-  output          adaq400x_spi_sclk,
-  output          adaq400x_spi_cs
+  inout   [ 1:0]  pulsar_gpio
 );
 
   // internal signals
@@ -103,9 +104,30 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
+  wire            spi_engine_sdo;
+  wire            spi_engine_cs;
+  wire            spi_engine_gpio_sdo;
+
   // instantiations
 
-  assign gpio_i[63:32] = gpio_o[63:32];
+  assign spi_engine_gpio_sdo = gpio_o[34];
+
+  assign gpio_i[63:35] = gpio_o[63:35];
+
+  assign pulsar_spi_sdo =  SPI_OP_MODE == 1 ? spi_engine_cs :
+                           SPI_OP_MODE == 2 ? spi_engine_gpio_sdo :
+                                              spi_engine_sdo;
+
+  assign pulsar_spi_cs =  SPI_OP_MODE == 1 ? gpio_o[34] : spi_engine_cs;
+
+  ad_iobuf #(
+    .DATA_WIDTH(2)
+  ) i_admp_pd_iobuf (
+    .dio_t(gpio_t[33:32]),
+    .dio_i(gpio_o[33:32]),
+    .dio_o(gpio_i[33:32]),
+    .dio_p({pulsar_gpio[1],    //ad7944_turbo
+            pulsar_gpio[0]})); //pd
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -192,12 +214,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .pulsar_adc_spi_cs (adaq400x_spi_cs),
-    .pulsar_adc_spi_sclk (adaq400x_spi_sclk),
-    .pulsar_adc_spi_sdi (adaq400x_spi_sdi),
-    .pulsar_adc_spi_sdo (adaq400x_spi_sdo),
-    .pulsar_adc_spi_sdo_t (),
-    .pulsar_adc_spi_three_wire (),
+    .pulsar_adc_spi_cs(spi_engine_cs),
+    .pulsar_adc_spi_sclk(pulsar_spi_sclk),
+    .pulsar_adc_spi_sdi(pulsar_spi_sdi),
+    .pulsar_adc_spi_sdo(spi_engine_sdo),
+    .pulsar_adc_spi_sdo_t(),
+    .pulsar_adc_spi_three_wire(),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 

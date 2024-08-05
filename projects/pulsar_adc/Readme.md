@@ -66,3 +66,10 @@ Here are some pointers to help you:
   * AD4011
   * ADAQ4003
   * AD4020
+
+build example:
+make FMC_N_PMOD=0
+make FMC_N_PMOD=1 SPI_OP_MODE=0
+make FMC_N_PMOD=1 SPI_OP_MODE=1
+make FMC_N_PMOD=1 SPI_OP_MODE=2
+
