@@ -81,7 +81,7 @@ proc create_reset_logic {
     ad_connect ${ip_name}/${rx_bridge}/gt_ilo_reset ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_iloreset
   }
   if {$asymmetric_mode} {
-    for {set j 0} {$j < ${rx_num_lanes}} {incr j} {
+    for {set j ${rx_num_lanes}} {$j < ${tx_num_lanes}} {incr j} {
       set quad_index [expr int($j / 4)]
       set ch_index [expr $j % 4]
       ad_connect ${ip_name}/${tx_bridge}/gt_ilo_reset ${ip_name}/gt_quad_base_${quad_index}/ch${ch_index}_iloreset
@@ -168,10 +168,10 @@ proc create_reset_logic {
   # Outputs
   ad_connect ${ip_name}/and_powergood/Res ${ip_name}/gtpowergood
   if {$intf_cfg != "TX"} {
-    ad_connect ${ip_name}/gt_bridge_ip_0/rx_resetdone_out ${ip_name}/rx_resetdone
+    ad_connect ${ip_name}/${rx_bridge}/rx_resetdone_out ${ip_name}/rx_resetdone
   }
   if {$intf_cfg != "RX"} {
-    ad_connect ${ip_name}/gt_bridge_ip_0/tx_resetdone_out ${ip_name}/tx_resetdone
+    ad_connect ${ip_name}/${tx_bridge}/tx_resetdone_out ${ip_name}/tx_resetdone
   }
 }
 
@@ -255,6 +255,7 @@ proc create_versal_phy {
     set num_lanes [expr max($rx_num_lanes, $tx_num_lanes)]
     set_property -dict [list \
       CONFIG.BYPASS_MODE {true} \
+      CONFIG.REG_CONF_INTF {AXI_LITE} \
       CONFIG.IP_PRESET ${preset} \
       CONFIG.IP_GT_DIRECTION ${gt_direction} \
       ${no_lanes_property} ${num_lanes} \
@@ -415,6 +416,7 @@ proc create_versal_phy {
   } else {
     set_property -dict [list \
         CONFIG.BYPASS_MODE {true} \
+        CONFIG.REG_CONF_INTF {AXI_LITE} \
         CONFIG.IP_PRESET ${preset} \
         CONFIG.IP_GT_DIRECTION {SIMPLEX_RX} \
         CONFIG.IP_NO_OF_RX_LANES ${rx_num_lanes} \
@@ -575,6 +577,7 @@ proc create_versal_phy {
 
     set_property -dict [list \
       CONFIG.BYPASS_MODE {true} \
+      CONFIG.REG_CONF_INTF {AXI_LITE} \
       CONFIG.IP_PRESET ${preset} \
       CONFIG.IP_GT_DIRECTION {SIMPLEX_TX} \
       CONFIG.IP_NO_OF_TX_LANES ${tx_num_lanes} \
@@ -733,355 +736,57 @@ proc create_versal_phy {
         ] \
     ] [get_bd_cells ${ip_name}/${tx_bridge}]
   }
-
+  set quad_num_rx_lane $rx_num_lanes
+  set quad_num_tx_lane $tx_num_lanes
   for {set j 0} {$j < $num_quads} {incr j} {
+    set rx_num [expr min($quad_num_rx_lane, 4)]
+    set tx_num [expr min($quad_num_tx_lane, 4)]
     ad_ip_instance gt_quad_base ${ip_name}/gt_quad_base_${j}
     set_property -dict [list \
       CONFIG.REG_CONF_INTF.VALUE_MODE {MANUAL} \
       CONFIG.REG_CONF_INTF {AXI_LITE} \
+      CONFIG.PROT0_GT_DIRECTION ${gt_direction} \
     ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
     if {$asymmetric_mode} {
       # When we have multiple protocols (different number of lanes on Rx and Tx) we have to manually set the protocols to pass design validation
       set_property -dict [list \
-        CONFIG.PROT1_LR0_SETTINGS.VALUE_MODE MANUAL \
         CONFIG.GT_TYPE.VALUE_MODE AUTO \
-        CONFIG.PROT0_RX_MASTERCLK_SRC.VALUE_MODE MANUAL \
-        CONFIG.PROT1_TX_MASTERCLK_SRC.VALUE_MODE MANUAL \
-        CONFIG.PROT0_TX_MASTERCLK_SRC.VALUE_MODE MANUAL \
-        CONFIG.PROT1_PRESET.VALUE_MODE MANUAL \
+        CONFIG.PROT0_RX_MASTERCLK_SRC.VALUE_MODE RX0 \
+        CONFIG.PROT1_TX_MASTERCLK_SRC.VALUE_MODE TX0 \
         CONFIG.PROT1_ENABLE.VALUE_MODE MANUAL \
-        CONFIG.PROT0_PRESET.VALUE_MODE MANUAL \
         CONFIG.PROT0_GT_DIRECTION.VALUE_MODE MANUAL \
         CONFIG.TX0_LANE_SEL.VALUE_MODE AUTO \
-        CONFIG.PROT0_NO_OF_LANES.VALUE_MODE MANUAL \
         CONFIG.PROT0_NO_OF_RX_LANES.VALUE_MODE MANUAL \
         CONFIG.PROT1_NO_OF_TX_LANES.VALUE_MODE MANUAL \
         CONFIG.PROT1_GT_DIRECTION.VALUE_MODE MANUAL \
-        CONFIG.PROT0_LR0_SETTINGS.VALUE_MODE MANUAL \
       ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
 
-      set_property -dict [list \
-        CONFIG.PROT0_GT_DIRECTION {SIMPLEX_RX} \
-        CONFIG.PROT0_LR0_SETTINGS [list \
-          PRESET $preset \
-          INTERNAL_PRESET JESD204_${jesd_mode} \
-          GT_TYPE $transceiver \
-          GT_DIRECTION {SIMPLEX_RX} \
-          TX_LINE_RATE $tx_lane_rate \
-          TX_PLL_TYPE LCPLL \
-          TX_REFCLK_FREQUENCY $ref_clock \
-          TX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
-          TX_FRACN_ENABLED true \
-          TX_FRACN_NUMERATOR 0 \
-          TX_REFCLK_SOURCE R0 \
-          TX_DATA_ENCODING $data_encoding \
-          TX_USER_DATA_WIDTH $datapath_width \
-          TX_INT_DATA_WIDTH $internal_datapath_width \
-          TX_BUFFER_MODE 1 \
-          TX_BUFFER_BYPASS_MODE Fast_Sync \
-          TX_PIPM_ENABLE false \
-          TX_OUTCLK_SOURCE TXPROGDIVCLK \
-          TXPROGDIV_FREQ_ENABLE true \
-          TXPROGDIV_FREQ_SOURCE LCPLL \
-          TXPROGDIV_FREQ_VAL $tx_progdiv_clock \
-          TX_DIFF_SWING_EMPH_MODE CUSTOM \
-          TX_64B66B_SCRAMBLER false \
-          TX_64B66B_ENCODER false \
-          TX_64B66B_CRC false \
-          TX_RATE_GROUP A \
-          RX_LINE_RATE $rx_lane_rate \
-          RX_PLL_TYPE LCPLL \
-          RX_REFCLK_FREQUENCY $ref_clock \
-          RX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
-          RX_FRACN_ENABLED true \
-          RX_FRACN_NUMERATOR 0 \
-          RX_REFCLK_SOURCE R0 \
-          RX_DATA_DECODING $data_encoding \
-          RX_USER_DATA_WIDTH $datapath_width \
-          RX_INT_DATA_WIDTH $internal_datapath_width \
-          RX_BUFFER_MODE 1 \
-          RX_OUTCLK_SOURCE RXPROGDIVCLK \
-          RXPROGDIV_FREQ_ENABLE true \
-          RXPROGDIV_FREQ_SOURCE LCPLL \
-          RXPROGDIV_FREQ_VAL $rx_progdiv_clock \
-          INS_LOSS_NYQ 12 \
-          RX_EQ_MODE LPM \
-          RX_COUPLING AC \
-          RX_TERMINATION PROGRAMMABLE \
-          RX_RATE_GROUP A \
-          RX_TERMINATION_PROG_VALUE 800 \
-          RX_PPM_OFFSET 0 \
-          RX_64B66B_DESCRAMBLER false \
-          RX_64B66B_DECODER false \
-          RX_64B66B_CRC false \
-          OOB_ENABLE false \
-          RX_COMMA_ALIGN_WORD 1 \
-          RX_COMMA_SHOW_REALIGN_ENABLE false \
-          PCIE_ENABLE false \
-          RX_COMMA_P_ENABLE $comma_p_enable \
-          RX_COMMA_M_ENABLE $comma_m_enable \
-          RX_COMMA_DOUBLE_ENABLE false \
-          RX_COMMA_P_VAL 0101111100 \
-          RX_COMMA_M_VAL 1010000011 \
-          RX_COMMA_MASK $comma_mask \
-          RX_SLIDE_MODE PCS \
-          RX_SSC_PPM 0 \
-          RX_CB_NUM_SEQ 0 \
-          RX_CB_LEN_SEQ 1 \
-          RX_CB_MAX_SKEW 1 \
-          RX_CB_MAX_LEVEL 1 \
-          RX_CB_MASK_0_0 false \
-          RX_CB_VAL_0_0 00000000 \
-          RX_CB_K_0_0 false \
-          RX_CB_DISP_0_0 false \
-          RX_CB_MASK_0_1 false \
-          RX_CB_VAL_0_1 00000000 \
-          RX_CB_K_0_1 false \
-          RX_CB_DISP_0_1 false \
-          RX_CB_MASK_0_2 false \
-          RX_CB_VAL_0_2 00000000 \
-          RX_CB_K_0_2 false \
-          RX_CB_DISP_0_2 false \
-          RX_CB_MASK_0_3 false \
-          RX_CB_VAL_0_3 00000000 \
-          RX_CB_K_0_3 false \
-          RX_CB_DISP_0_3 false \
-          RX_CB_MASK_1_0 false \
-          RX_CB_VAL_1_0 00000000 \
-          RX_CB_K_1_0 false \
-          RX_CB_DISP_1_0 false \
-          RX_CB_MASK_1_1 false \
-          RX_CB_VAL_1_1 00000000 \
-          RX_CB_K_1_1 false \
-          RX_CB_DISP_1_1 false \
-          RX_CB_MASK_1_2 false \
-          RX_CB_VAL_1_2 00000000 \
-          RX_CB_K_1_2 false \
-          RX_CB_DISP_1_2 false \
-          RX_CB_MASK_1_3 false \
-          RX_CB_VAL_1_3 00000000 \
-          RX_CB_K_1_3 false \
-          RX_CB_DISP_1_3 false \
-          RX_CC_NUM_SEQ 0 \
-          RX_CC_LEN_SEQ 1 \
-          RX_CC_PERIODICITY 5000 \
-          RX_CC_KEEP_IDLE DISABLE \
-          RX_CC_PRECEDENCE ENABLE \
-          RX_CC_REPEAT_WAIT 0 \
-          RX_CC_VAL 00000000000000000000000000000000000000000000000000000000000000000000000000000000 \
-          RX_CC_MASK_0_0 false \
-          RX_CC_VAL_0_0 00000000 \
-          RX_CC_K_0_0 false \
-          RX_CC_DISP_0_0 false \
-          RX_CC_MASK_0_1 false \
-          RX_CC_VAL_0_1 00000000 \
-          RX_CC_K_0_1 false \
-          RX_CC_DISP_0_1 false \
-          RX_CC_MASK_0_2 false \
-          RX_CC_VAL_0_2 00000000 \
-          RX_CC_K_0_2 false \
-          RX_CC_DISP_0_2 false \
-          RX_CC_MASK_0_3 false \
-          RX_CC_VAL_0_3 00000000 \
-          RX_CC_K_0_3 false \
-          RX_CC_DISP_0_3 false \
-          RX_CC_MASK_1_0 false \
-          RX_CC_VAL_1_0 00000000 \
-          RX_CC_K_1_0 false \
-          RX_CC_DISP_1_0 false \
-          RX_CC_MASK_1_1 false \
-          RX_CC_VAL_1_1 00000000 \
-          RX_CC_K_1_1 false \
-          RX_CC_DISP_1_1 false \
-          RX_CC_MASK_1_2 false \
-          RX_CC_VAL_1_2 00000000 \
-          RX_CC_K_1_2 false \
-          RX_CC_DISP_1_2 false \
-          RX_CC_MASK_1_3 false \
-          RX_CC_VAL_1_3 00000000 \
-          RX_CC_K_1_3 false \
-          RX_CC_DISP_1_3 false \
-          PCIE_USERCLK2_FREQ 250 \
-          PCIE_USERCLK_FREQ 250 \
-          RX_JTOL_FC 10 \
-          RX_JTOL_LF_SLOPE -20 \
-          RX_BUFFER_BYPASS_MODE Fast_Sync \
-          RX_BUFFER_BYPASS_MODE_LANE MULTI \
-          RX_BUFFER_RESET_ON_CB_CHANGE ENABLE \
-          RX_BUFFER_RESET_ON_COMMAALIGN DISABLE \
-          RX_BUFFER_RESET_ON_RATE_CHANGE ENABLE \
-          TX_BUFFER_RESET_ON_RATE_CHANGE ENABLE \
-          RESET_SEQUENCE_INTERVAL 0 \
-          RX_COMMA_PRESET NONE \
-          RX_COMMA_VALID_ONLY 0 \
-        ] \
-        CONFIG.PROT0_NO_OF_RX_LANES $rx_num_lanes \
-        CONFIG.PROT0_PRESET ${preset} \
-        CONFIG.PROT1_ENABLE {true} \
-        CONFIG.PROT1_GT_DIRECTION {SIMPLEX_TX} \
-        CONFIG.PROT1_LR0_SETTINGS [list \
-          PRESET $preset \
-          INTERNAL_PRESET JESD204_${jesd_mode} \
-          GT_TYPE $transceiver \
-          GT_DIRECTION {SIMPLEX_TX} \
-          TX_LINE_RATE $tx_lane_rate \
-          TX_PLL_TYPE LCPLL \
-          TX_REFCLK_FREQUENCY $ref_clock \
-          TX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
-          TX_FRACN_ENABLED true \
-          TX_FRACN_NUMERATOR 0 \
-          TX_REFCLK_SOURCE R0 \
-          TX_DATA_ENCODING $data_encoding \
-          TX_USER_DATA_WIDTH $datapath_width \
-          TX_INT_DATA_WIDTH $internal_datapath_width \
-          TX_BUFFER_MODE 1 \
-          TX_BUFFER_BYPASS_MODE Fast_Sync \
-          TX_PIPM_ENABLE false \
-          TX_OUTCLK_SOURCE TXPROGDIVCLK \
-          TXPROGDIV_FREQ_ENABLE true \
-          TXPROGDIV_FREQ_SOURCE LCPLL \
-          TXPROGDIV_FREQ_VAL $tx_progdiv_clock \
-          TX_DIFF_SWING_EMPH_MODE CUSTOM \
-          TX_64B66B_SCRAMBLER false \
-          TX_64B66B_ENCODER false \
-          TX_64B66B_CRC false \
-          TX_RATE_GROUP A \
-          RX_LINE_RATE $rx_lane_rate \
-          RX_PLL_TYPE LCPLL \
-          RX_REFCLK_FREQUENCY $ref_clock \
-          RX_ACTUAL_REFCLK_FREQUENCY $ref_clock \
-          RX_FRACN_ENABLED true \
-          RX_FRACN_NUMERATOR 0 \
-          RX_REFCLK_SOURCE R0 \
-          RX_DATA_DECODING $data_encoding \
-          RX_USER_DATA_WIDTH $datapath_width \
-          RX_INT_DATA_WIDTH $internal_datapath_width \
-          RX_BUFFER_MODE 1 \
-          RX_OUTCLK_SOURCE RXPROGDIVCLK \
-          RXPROGDIV_FREQ_ENABLE true \
-          RXPROGDIV_FREQ_SOURCE LCPLL \
-          RXPROGDIV_FREQ_VAL $rx_progdiv_clock \
-          INS_LOSS_NYQ 12 \
-          RX_EQ_MODE LPM \
-          RX_COUPLING AC \
-          RX_TERMINATION PROGRAMMABLE \
-          RX_RATE_GROUP A \
-          RX_TERMINATION_PROG_VALUE 800 \
-          RX_PPM_OFFSET 0 \
-          RX_64B66B_DESCRAMBLER false \
-          RX_64B66B_DECODER false \
-          RX_64B66B_CRC false \
-          OOB_ENABLE false \
-          RX_COMMA_ALIGN_WORD 1 \
-          RX_COMMA_SHOW_REALIGN_ENABLE false \
-          PCIE_ENABLE false \
-          RX_COMMA_P_ENABLE $comma_p_enable \
-          RX_COMMA_M_ENABLE $comma_m_enable \
-          RX_COMMA_DOUBLE_ENABLE false \
-          RX_COMMA_P_VAL 0101111100 \
-          RX_COMMA_M_VAL 1010000011 \
-          RX_COMMA_MASK $comma_mask \
-          RX_SLIDE_MODE PCS \
-          RX_SSC_PPM 0 \
-          RX_CB_NUM_SEQ 0 \
-          RX_CB_LEN_SEQ 1 \
-          RX_CB_MAX_SKEW 1 \
-          RX_CB_MAX_LEVEL 1 \
-          RX_CB_MASK_0_0 false \
-          RX_CB_VAL_0_0 00000000 \
-          RX_CB_K_0_0 false \
-          RX_CB_DISP_0_0 false \
-          RX_CB_MASK_0_1 false \
-          RX_CB_VAL_0_1 00000000 \
-          RX_CB_K_0_1 false \
-          RX_CB_DISP_0_1 false \
-          RX_CB_MASK_0_2 false \
-          RX_CB_VAL_0_2 00000000 \
-          RX_CB_K_0_2 false \
-          RX_CB_DISP_0_2 false \
-          RX_CB_MASK_0_3 false \
-          RX_CB_VAL_0_3 00000000 \
-          RX_CB_K_0_3 false \
-          RX_CB_DISP_0_3 false \
-          RX_CB_MASK_1_0 false \
-          RX_CB_VAL_1_0 00000000 \
-          RX_CB_K_1_0 false \
-          RX_CB_DISP_1_0 false \
-          RX_CB_MASK_1_1 false \
-          RX_CB_VAL_1_1 00000000 \
-          RX_CB_K_1_1 false \
-          RX_CB_DISP_1_1 false \
-          RX_CB_MASK_1_2 false \
-          RX_CB_VAL_1_2 00000000 \
-          RX_CB_K_1_2 false \
-          RX_CB_DISP_1_2 false \
-          RX_CB_MASK_1_3 false \
-          RX_CB_VAL_1_3 00000000 \
-          RX_CB_K_1_3 false \
-          RX_CB_DISP_1_3 false \
-          RX_CC_NUM_SEQ 0 \
-          RX_CC_LEN_SEQ 1 \
-          RX_CC_PERIODICITY 5000 \
-          RX_CC_KEEP_IDLE DISABLE \
-          RX_CC_PRECEDENCE ENABLE \
-          RX_CC_REPEAT_WAIT 0 \
-          RX_CC_VAL 00000000000000000000000000000000000000000000000000000000000000000000000000000000 \
-          RX_CC_MASK_0_0 false \
-          RX_CC_VAL_0_0 00000000 \
-          RX_CC_K_0_0 false \
-          RX_CC_DISP_0_0 false \
-          RX_CC_MASK_0_1 false \
-          RX_CC_VAL_0_1 00000000 \
-          RX_CC_K_0_1 false \
-          RX_CC_DISP_0_1 false \
-          RX_CC_MASK_0_2 false \
-          RX_CC_VAL_0_2 00000000 \
-          RX_CC_K_0_2 false \
-          RX_CC_DISP_0_2 false \
-          RX_CC_MASK_0_3 false \
-          RX_CC_VAL_0_3 00000000 \
-          RX_CC_K_0_3 false \
-          RX_CC_DISP_0_3 false \
-          RX_CC_MASK_1_0 false \
-          RX_CC_VAL_1_0 00000000 \
-          RX_CC_K_1_0 false \
-          RX_CC_DISP_1_0 false \
-          RX_CC_MASK_1_1 false \
-          RX_CC_VAL_1_1 00000000 \
-          RX_CC_K_1_1 false \
-          RX_CC_DISP_1_1 false \
-          RX_CC_MASK_1_2 false \
-          RX_CC_VAL_1_2 00000000 \
-          RX_CC_K_1_2 false \
-          RX_CC_DISP_1_2 false \
-          RX_CC_MASK_1_3 false \
-          RX_CC_VAL_1_3 00000000 \
-          RX_CC_K_1_3 false \
-          RX_CC_DISP_1_3 false \
-          PCIE_USERCLK2_FREQ 250 \
-          PCIE_USERCLK_FREQ 250 \
-          RX_JTOL_FC 10 \
-          RX_JTOL_LF_SLOPE -20 \
-          RX_BUFFER_BYPASS_MODE Fast_Sync \
-          RX_BUFFER_BYPASS_MODE_LANE MULTI \
-          RX_BUFFER_RESET_ON_CB_CHANGE ENABLE \
-          RX_BUFFER_RESET_ON_COMMAALIGN DISABLE \
-          RX_BUFFER_RESET_ON_RATE_CHANGE ENABLE \
-          TX_BUFFER_RESET_ON_RATE_CHANGE ENABLE \
-          RESET_SEQUENCE_INTERVAL 0 \
-          RX_COMMA_PRESET NONE \
-          RX_COMMA_VALID_ONLY 0 \
-        ] \
-        CONFIG.PROT1_NO_OF_TX_LANES $tx_num_lanes \
-        CONFIG.PROT1_PRESET ${preset} \
-      ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
-
-      for {set i 0} {$i < 4} {incr i} {
+      if {$rx_num > 0} {
         set_property -dict [list \
-          CONFIG.TX${i}_LANE_SEL.VALUE_MODE MANUAL \
-          CONFIG.RX${i}_LANE_SEL.VALUE_MODE MANUAL \
+          CONFIG.PROT0_GT_DIRECTION {SIMPLEX_RX} \
+          CONFIG.PROT0_NO_OF_RX_LANES $rx_num \
         ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
+        for {set i 0} {$i < $rx_num} {incr i} {
+          set_property -dict [list \
+            CONFIG.RX${i}_LANE_SEL.VALUE_MODE MANUAL \
+          ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
+        }
       }
+      if {$tx_num > 0} {
+        set_property -dict [list \
+          CONFIG.PROT1_ENABLE {true} \
+          CONFIG.PROT1_GT_DIRECTION {SIMPLEX_TX} \
+          CONFIG.PROT1_NO_OF_TX_LANES $tx_num \
+        ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
+        for {set i 0} {$i < $tx_num} {incr i} {
+          set_property -dict [list \
+            CONFIG.TX${i}_LANE_SEL.VALUE_MODE MANUAL \
+          ] [get_bd_cells ${ip_name}/gt_quad_base_${j}]
+        }
+      }
+
+      set quad_num_rx_lane [expr $quad_num_rx_lane - $rx_num]
+      set quad_num_tx_lane [expr $quad_num_tx_lane - $tx_num]
     }
 
     if {$intf_cfg != "TX"} {
@@ -1120,7 +825,6 @@ proc create_versal_phy {
       set rx_index [expr $j % 4]
 
       ad_connect ${ip_name}/bufg_gt_rx/usrclk ${ip_name}/gt_quad_base_${quad_index}/ch${rx_index}_rxusrclk
-      ad_connect ${ip_name}/bufg_gt_rx/usrclk ${ip_name}/gt_quad_base_${quad_index}/ch${rx_index}_txusrclk
 
       ad_ip_instance jesd204_versal_gt_adapter_rx ${ip_name}/rx_adapt_${j} [list \
         LINK_MODE $link_mode \
