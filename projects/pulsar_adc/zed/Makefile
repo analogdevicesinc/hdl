@@ -6,8 +6,11 @@
 
 PROJECT_NAME := pulsar_adc_pmdz_zed
 
-M_DEPS += system_constr_adaq400x.xdc
-M_DEPS += system_constr_ad40xx.xdc
+M_DEPS += system_constr_pmod.xdc
+M_DEPS += system_constr_fmc.xdc
+M_DEPS += system_constr_fmc_sm0.xdc
+M_DEPS += system_constr_fmc_sm1.xdc
+M_DEPS += system_constr_fmc_sm2.xdc
 M_DEPS += ../common/pulsar_adc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc

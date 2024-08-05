@@ -83,14 +83,10 @@ module system_top (
 
   input           otg_vbusoc,
 
-  // ad400x SPI configuration interface
-
-  input           ad40xx_spi_sdi,
-  output          ad40xx_spi_sdo,
-  output          ad40xx_spi_sclk,
-  output          ad40xx_spi_cs,
-
-  inout           ad40xx_amp_pd
+  input           pulsar_spi_sdi,
+  output          pulsar_spi_sdo,
+  output          pulsar_spi_sclk,
+  output          pulsar_spi_cs
 );
 
   // internal signals
@@ -107,15 +103,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:33] = gpio_o[63:33];
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_admp_pd_iobuf (
-    .dio_t(gpio_t[32]),
-    .dio_i(gpio_o[32]),
-    .dio_o(gpio_i[32]),
-    .dio_p(ad40xx_amp_pd));
+  assign gpio_i[63:32] = gpio_o[63:32];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -202,12 +190,12 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .pulsar_adc_spi_cs(ad40xx_spi_cs),
-    .pulsar_adc_spi_sclk(ad40xx_spi_sclk),
-    .pulsar_adc_spi_sdi(ad40xx_spi_sdi),
-    .pulsar_adc_spi_sdo(ad40xx_spi_sdo),
-    .pulsar_adc_spi_sdo_t(),
-    .pulsar_adc_spi_three_wire(),
+    .pulsar_adc_spi_cs (pulsar_spi_cs),
+    .pulsar_adc_spi_sclk (pulsar_spi_sclk),
+    .pulsar_adc_spi_sdi (pulsar_spi_sdi),
+    .pulsar_adc_spi_sdo (pulsar_spi_sdo),
+    .pulsar_adc_spi_sdo_t (),
+    .pulsar_adc_spi_three_wire (),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
