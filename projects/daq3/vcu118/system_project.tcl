@@ -13,7 +13,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   Use over-writable parameters from the environment.
 #
 #    e.g.
-#      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2 
+#      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2
 
 # Parameter description:
 #   [RX/TX]_JESD_M : Number of converters per link
@@ -37,7 +37,6 @@ adi_project_files daq3_vcu118 [list \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
 ## To improve timing in DDR4 MIG
-set_property strategy Performance_Retiming [get_runs impl_1]
+set_property strategy Performance_Explore [get_runs impl_1]
 
 adi_project_run daq3_vcu118
-
