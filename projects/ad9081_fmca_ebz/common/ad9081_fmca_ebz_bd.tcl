@@ -128,7 +128,7 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($T
 
 # TODO: Increase the maximum number of quads if necessary
 set max_num_quads 2
-set num_quads [expr int(round(1.0 * $RX_NUM_OF_LANES / 4))]
+set num_quads [expr int(ceil(1.0 * $RX_NUM_OF_LANES / 4))]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
@@ -527,7 +527,8 @@ if {$INTF_CFG != "RX"} {
   } else {
     ad_connect tx_fir_interpolator/aclk tx_device_clk
     ad_connect tx_fir_interpolator/active dac_fir_filter_active
-    ad_connect tx_fir_interpolator/valid_out_0 util_mxfe_upack/fifo_rd_en
+    # ad_connect tx_fir_interpolator/valid_out_0 util_mxfe_upack/fifo_rd_en
+    ad_connect tx_fir_interpolator/data_out_ready_0 util_mxfe_upack/fifo_rd_en
     for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
       ad_connect  tx_mxfe_tpl_core/dac_enable_$i tx_fir_interpolator/dac_enable_$i
       ad_connect  tx_mxfe_tpl_core/dac_valid_$i  tx_fir_interpolator/dac_valid_$i
