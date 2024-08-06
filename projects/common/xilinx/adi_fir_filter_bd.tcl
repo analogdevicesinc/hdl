@@ -179,6 +179,7 @@ proc ad_add_interpolation_filter {name filter_rate n_chan parallel_paths \
     create_bd_pin -dir O $name/enable_out_$i
     create_bd_pin -dir I -from [expr 16*$parallel_paths-1] -to 0 $name/data_in_$i
     create_bd_pin -dir O -from [expr 16*$parallel_paths-1] -to 0 $name/data_out_$i
+    create_bd_pin -dir O $name/data_out_ready_$i
 
     ad_ip_instance util_vector_logic $name/logic_and_$i [list \
       C_SIZE 1]
@@ -191,6 +192,7 @@ proc ad_add_interpolation_filter {name filter_rate n_chan parallel_paths \
     ad_connect  $name/dac_valid_$i  $name/logic_and_$i/Op2
     ad_connect  $name/logic_and_$i/Res  $name/${filter_name}_${i}/s_axis_data_tvalid
     ad_connect  $name/${filter_name}_${i}/s_axis_data_tdata  $name/data_in_$i
+    ad_connect  $name/${filter_name}_${i}/s_axis_data_tready $name/data_out_ready_$i
 
     ad_connect  $name/rate_gen/pulse  $name/out_mux_${i}/valid_in_1
     ad_connect  $name/dac_enable_$i  $name/out_mux_${i}/enable_in_1
@@ -207,4 +209,3 @@ proc ad_add_interpolation_filter {name filter_rate n_chan parallel_paths \
     ad_connect  $name/cdc_sync_active/out_bits  $name/out_mux_${i}/select_path
   }
 }
-
