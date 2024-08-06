@@ -154,7 +154,7 @@ module util_axis_fifo #(
         // TKEEP support
         if (TKEEP_EN) begin
 
-          reg axis_tkeep_d;
+          reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
 
           always @(posedge s_axis_aclk) begin
             if (s_axis_ready == 1'b1 && s_axis_valid == 1'b1)
@@ -210,7 +210,7 @@ module util_axis_fifo #(
 
       // TKEEP support
       if (TKEEP_EN) begin
-        reg  axis_tkeep_d;
+        reg [DATA_WIDTH/8-1:0] axis_tkeep_d;
 
         always @(posedge s_axis_aclk) begin
           if (!s_axis_aresetn) begin
