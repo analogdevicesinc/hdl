@@ -12,7 +12,7 @@ proc create_versal_phy {
   {intf_cfg RXTX}
 } {
 
-set num_quads [expr int(round(1.0 * $num_lanes / 4))]
+set num_quads [expr int(ceil(1.0 * $num_lanes / 4))]
 set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000 / 66]]
 set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000 / 66]]
 
