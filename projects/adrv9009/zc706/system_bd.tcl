@@ -1,12 +1,15 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set dac_fifo_address_width 10
+## Offload attributes
+set dac_offload_type 1                      ; ## PL_DDR
+set dac_offload_size [expr 1024*1024*1024]  ; ## 1 GB
+set plddr_offload_axi_data_width 512
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_dacfifo_bd.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_data_offload_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
@@ -23,7 +26,8 @@ S=$ad_project_params(TX_JESD_S)\
 RX_OS:M=$ad_project_params(RX_OS_JESD_M)\
 L=$ad_project_params(RX_OS_JESD_L)\
 S=$ad_project_params(RX_OS_JESD_S)\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
 
@@ -43,6 +47,8 @@ set sys_dma_reset         [get_bd_nets sys_250m_reset]
 set sys_dma_resetn        [get_bd_nets sys_250m_resetn]
 
 source ../common/adrv9009_bd.tcl
+
+ad_plddr_data_offload_create $dac_offload_name
 
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE 32
