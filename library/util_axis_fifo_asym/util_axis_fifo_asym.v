@@ -180,13 +180,15 @@ module util_axis_fifo_asym #(
           2'b00 : s_axis_valid_int_d = {RATIO{1'b0}};
           2'b01 : s_axis_valid_int_d = {RATIO{1'b0}};
           2'b10 : s_axis_valid_int_d = {{RATIO-1{1'b0}}, 1'b1} << s_axis_counter;
-          2'b11 : s_axis_valid_int_d = {RATIO{1'b1}} << s_axis_counter;
+          2'b11 : s_axis_valid_int_d = {RATIO{&(s_axis_ready_int_s)}} << s_axis_counter;
         endcase
       end
       assign s_axis_valid_int_s = s_axis_valid_int_d;
 
-      // READY/FULL/ALMOST_FULL is driven by the current atomic instance
-      assign s_axis_ready = s_axis_ready_int_s >> s_axis_counter;
+      // disable read enable if the TLAST arrives before address handshake occurs
+      assign s_axis_ready = (s_axis_tlast) ? &(s_axis_ready_int_s) : s_axis_ready_int_s >> s_axis_counter;
+
+      // FULL/ALMOST_FULL is driven by the current atomic instance
       assign s_axis_almost_full = s_axis_almost_full_int_s >> s_axis_counter;
 
       // the FIFO has the same room as the last atomic instance
@@ -224,12 +226,12 @@ module util_axis_fifo_asym #(
     end else begin : big_master
 
       for (i=0; i<RATIO; i=i+1) begin
-        assign m_axis_ready_int_s[i] = m_axis_ready && &m_axis_valid_int_s;
+        assign m_axis_ready_int_s[i] = m_axis_ready & (&m_axis_valid_int_s);
       end
 
       for (i=0; i<RATIO; i=i+1) begin
-        assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
-                                                      (m_axis_tlast_int_s[i]) ?
+        assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = ((m_axis_tlast_int_s[i:0] == 0) ||
+                                                      (m_axis_tlast_int_s[i])) ?
                                                     m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
                                                     {(A_WIDTH/8){1'b0}};
       end
@@ -237,7 +239,7 @@ module util_axis_fifo_asym #(
       assign m_axis_data = m_axis_data_int_s;
       // if every instance has a valid data, the interface has valid data,
       // otherwise valid is asserted only if TLAST is asserted
-      assign m_axis_valid = &m_axis_valid_int_s;
+      assign m_axis_valid = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
