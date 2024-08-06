@@ -16,6 +16,7 @@ set MAX_RX_OS_NUM_OF_LANES 2
 set DATAPATH_WIDTH 4
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # TX parameters
 set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
@@ -53,14 +54,13 @@ set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
 set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
-set dac_fifo_name axi_adrv9009_dacfifo
+set dac_data_offload_name adrv9009_data_offload
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # adrv9009
 
 create_bd_port -dir I ref_clk
 
-create_bd_port -dir I dac_fifo_bypass
 create_bd_port -dir I adc_fir_filter_active
 create_bd_port -dir I dac_fir_filter_active
 
@@ -110,7 +110,15 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
+set data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+ad_data_offload_create $dac_data_offload_name \
+                       1 \
+                       0 \
+                       $data_offload_size \
+                       $dac_data_width \
+                       $dac_data_width
+
+ad_connect $dac_data_offload_name/sync_ext GND
 
 # adc peripherals
 
@@ -348,25 +356,21 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 
 ad_connect  tx_fir_interpolator/active dac_fir_filter_active
 
-ad_connect  axi_adrv9009_tx_clkgen/clk_0 axi_adrv9009_dacfifo/dac_clk
-ad_connect  adrv9009_tx_device_clk_rstgen/peripheral_reset axi_adrv9009_dacfifo/dac_rst
+ad_connect  axi_adrv9009_tx_clkgen/clk_0 $dac_data_offload_name/m_axis_aclk
+ad_connect  adrv9009_tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
+ad_connect  util_adrv9009_tx_upack/s_axis $dac_data_offload_name/m_axis
 
-# TODO: Add streaming AXI interface for DAC FIFO
-ad_connect  util_adrv9009_tx_upack/s_axis_valid VCC
-ad_connect  util_adrv9009_tx_upack/s_axis_ready axi_adrv9009_dacfifo/dac_valid
-ad_connect  util_adrv9009_tx_upack/s_axis_data axi_adrv9009_dacfifo/dac_data
-
-ad_connect  $sys_dma_clk axi_adrv9009_dacfifo/dma_clk
-ad_connect  $sys_dma_reset axi_adrv9009_dacfifo/dma_rst
+ad_connect  $sys_dma_clk $dac_data_offload_name/s_axis_aclk
+ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
-ad_connect  axi_adrv9009_dacfifo/dma_valid axi_adrv9009_tx_dma/m_axis_valid
-ad_connect  axi_adrv9009_dacfifo/dma_data axi_adrv9009_tx_dma/m_axis_data
-ad_connect  axi_adrv9009_dacfifo/dma_ready axi_adrv9009_tx_dma/m_axis_ready
-ad_connect  axi_adrv9009_dacfifo/dma_xfer_req axi_adrv9009_tx_dma/m_axis_xfer_req
-ad_connect  axi_adrv9009_dacfifo/dma_xfer_last axi_adrv9009_tx_dma/m_axis_last
-ad_connect  axi_adrv9009_dacfifo/dac_dunf tx_adrv9009_tpl_core/dac_dunf
-ad_connect  axi_adrv9009_dacfifo/bypass dac_fifo_bypass
 ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
+
+ad_connect  $dac_data_offload_name/s_axis axi_adrv9009_tx_dma/m_axis
+ad_connect  $dac_data_offload_name/init_req axi_adrv9009_tx_dma/m_axis_xfer_req
+ad_connect  tx_adrv9009_tpl_core/dac_dunf GND
+
+ad_connect  $sys_cpu_clk $dac_data_offload_name/s_axi_aclk
+ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
 # connections (adc)
 
@@ -437,6 +441,7 @@ ad_cpu_interconnect 0x44A80000 axi_adrv9009_tx_xcvr
 ad_cpu_interconnect 0x43C00000 axi_adrv9009_tx_clkgen
 ad_cpu_interconnect 0x44A90000 axi_adrv9009_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_tx_dma
+ad_cpu_interconnect 0x7c430000 $dac_data_offload_name
 ad_cpu_interconnect 0x44A60000 axi_adrv9009_rx_xcvr
 ad_cpu_interconnect 0x43C10000 axi_adrv9009_rx_clkgen
 ad_cpu_interconnect 0x44AA0000 axi_adrv9009_rx_jesd
