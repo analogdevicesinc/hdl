@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -53,6 +53,14 @@ module ad_mem #(
 
   (* ram_style = "block" *)
   reg         [(DATA_WIDTH-1):0]      m_ram[0:((2**ADDRESS_WIDTH)-1)];
+
+  integer i;
+  initial
+    for (i = 0; i < 2 ** ADDRESS_WIDTH; i = i+1)
+      m_ram[i] = {DATA_WIDTH{1'b0}};
+
+  initial
+    doutb <= {DATA_WIDTH{1'b0}};
 
   always @(posedge clka) begin
     if (wea == 1'b1) begin
