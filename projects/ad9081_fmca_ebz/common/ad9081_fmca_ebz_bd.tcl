@@ -250,7 +250,7 @@ if {$INTF_CFG != "TX"} {
                               $ADC_FIR_PARALLEL_PATHS \
                               $ADC_FIR_CORE_CLK_RATE \
                               $ADC_FIR_SAMPLING_RATE \
-                              "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
+                              "$ad_hdl_dir/library/util_fir_dec/coefile_dec.coe"
   }
 
   adi_tpl_jesd204_rx_create rx_mxfe_tpl_core $RX_NUM_OF_LANES \
@@ -516,9 +516,8 @@ if {$INTF_CFG != "RX"} {
   ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
 
   # Link Layer to Transport Layer
+  ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
   if {!$DAC_FIR_FILTER_INSERT} {
-    ad_connect  tx_mxfe_tpl_core/link axi_mxfe_tx_jesd/tx_data
-
     ad_connect  tx_mxfe_tpl_core/dac_valid_0 util_mxfe_upack/fifo_rd_en
     for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
       ad_connect  util_mxfe_upack/fifo_rd_data_$i tx_mxfe_tpl_core/dac_data_$i
@@ -527,8 +526,8 @@ if {$INTF_CFG != "RX"} {
   } else {
     ad_connect tx_fir_interpolator/aclk tx_device_clk
     ad_connect tx_fir_interpolator/active dac_fir_filter_active
-    # ad_connect tx_fir_interpolator/valid_out_0 util_mxfe_upack/fifo_rd_en
-    ad_connect tx_fir_interpolator/data_out_ready_0 util_mxfe_upack/fifo_rd_en
+    ad_connect tx_fir_interpolator/valid_out_0 util_mxfe_upack/fifo_rd_en
+    # ad_connect tx_fir_interpolator/data_out_ready_0 util_mxfe_upack/fifo_rd_en
     for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
       ad_connect  tx_mxfe_tpl_core/dac_enable_$i tx_fir_interpolator/dac_enable_$i
       ad_connect  tx_mxfe_tpl_core/dac_valid_$i  tx_fir_interpolator/dac_valid_$i
