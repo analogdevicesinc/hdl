@@ -8,6 +8,8 @@ package require math
 ## Global variables for interconnect interface indexing
 #
 set sys_cpu_interconnect_index 0
+set sys_cpu_interconnect_instance 0
+set sys_cpu_interconnect_cascade 0
 set sys_hpc0_interconnect_index -1
 set sys_hpc1_interconnect_index -1
 set sys_hp0_interconnect_index -1
@@ -962,7 +964,24 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
 
   global sys_zynq
   global sys_cpu_interconnect_index
+  global sys_cpu_interconnect_instance
+  global sys_cpu_interconnect_cascade
   global use_smartconnect
+  
+
+  if {$sys_cpu_interconnect_cascade == 1} {
+    set axi_cpu_interconnect axi_cpu_interconnect_${sys_cpu_interconnect_instance}
+
+    if {$sys_cpu_interconnect_index == 15} {
+      set_property CONFIG.NUM_MI [expr $sys_cpu_interconnect_index + 1] [get_bd_cells $axi_cpu_interconnect]
+      set sys_cpu_interconnect_index 0
+
+      set sys_cpu_interconnect_instance [expr $sys_cpu_interconnect_instance + 1]
+      set axi_cpu_interconnect axi_cpu_interconnect_${sys_cpu_interconnect_instance}
+    }
+  } else {
+    set axi_cpu_interconnect axi_cpu_interconnect
+  }
 
   set i_str "M$sys_cpu_interconnect_index"
   if {$sys_cpu_interconnect_index < 10} {
@@ -972,37 +991,43 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   if {$sys_cpu_interconnect_index == 0} {
 
     if {$use_smartconnect == 1} {
-      ad_ip_instance smartconnect axi_cpu_interconnect [ list \
+      ad_ip_instance smartconnect $axi_cpu_interconnect [ list \
         NUM_MI 1 \
         NUM_SI 1 \
       ]
-      ad_connect sys_cpu_clk axi_cpu_interconnect/aclk
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/aresetn
+      ad_connect sys_cpu_clk $axi_cpu_interconnect/aclk
+      ad_connect sys_cpu_resetn $axi_cpu_interconnect/aresetn
     } else {
-      ad_ip_instance axi_interconnect axi_cpu_interconnect
-      ad_connect sys_cpu_clk axi_cpu_interconnect/ACLK
-      ad_connect sys_cpu_clk axi_cpu_interconnect/S00_ACLK
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/ARESETN
-      ad_connect sys_cpu_resetn axi_cpu_interconnect/S00_ARESETN
+      ad_ip_instance axi_interconnect $axi_cpu_interconnect
+      ad_connect sys_cpu_clk $axi_cpu_interconnect/ACLK
+      ad_connect sys_cpu_clk $axi_cpu_interconnect/S00_ACLK
+      ad_connect sys_cpu_resetn $axi_cpu_interconnect/ARESETN
+      ad_connect sys_cpu_resetn $axi_cpu_interconnect/S00_ARESETN
     }
 
-    if {$sys_zynq == 3} {
-      ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
-      ad_connect axi_cpu_interconnect/S00_AXI sys_cips/M_AXI_FPD
-    }
-    if {$sys_zynq == 2} {
-      ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
-      ad_connect axi_cpu_interconnect/S00_AXI sys_ps8/M_AXI_HPM0_LPD
-    }
-    if {$sys_zynq == 1} {
-      ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
-      ad_connect axi_cpu_interconnect/S00_AXI sys_ps7/M_AXI_GP0
-    }
-    if {$sys_zynq == 0} {
-      ad_connect axi_cpu_interconnect/S00_AXI sys_mb/M_AXI_DP
-    }
-    if {$sys_zynq == -1} {
-      ad_connect axi_cpu_interconnect/S00_AXI mng_axi_vip/M_AXI
+    if {$sys_cpu_interconnect_instance == 0} {
+      if {$sys_zynq == 3} {
+        ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
+        ad_connect $axi_cpu_interconnect/S00_AXI sys_cips/M_AXI_FPD
+      }
+      if {$sys_zynq == 2} {
+        ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
+        ad_connect $axi_cpu_interconnect/S00_AXI sys_ps8/M_AXI_HPM0_LPD
+      }
+      if {$sys_zynq == 1} {
+        ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
+        ad_connect $axi_cpu_interconnect/S00_AXI sys_ps7/M_AXI_GP0
+      }
+      if {$sys_zynq == 0} {
+        ad_connect $axi_cpu_interconnect/S00_AXI sys_mb/M_AXI_DP
+      }
+      if {$sys_zynq == -1} {
+        ad_connect $axi_cpu_interconnect/S00_AXI mng_axi_vip/M_AXI
+      }
+    } else {
+      set temp_sys_cpu_interconnect_instance [expr $sys_cpu_interconnect_instance - 1]
+      set temp_name axi_cpu_interconnect_${temp_sys_cpu_interconnect_instance}
+      ad_connect $axi_cpu_interconnect/S00_AXI $temp_name/M15_AXI
     }
   }
 
@@ -1105,11 +1130,11 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
     }
   }
 
-  set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells axi_cpu_interconnect]
+  set_property CONFIG.NUM_MI $sys_cpu_interconnect_index [get_bd_cells $axi_cpu_interconnect]
 
   if {$use_smartconnect == 0} {
-    ad_connect sys_cpu_clk axi_cpu_interconnect/${i_str}_ACLK
-    ad_connect sys_cpu_resetn axi_cpu_interconnect/${i_str}_ARESETN
+    ad_connect sys_cpu_clk $axi_cpu_interconnect/${i_str}_ACLK
+    ad_connect sys_cpu_resetn $axi_cpu_interconnect/${i_str}_ARESETN
   }
   if {$p_intf_clock ne ""} {
     ad_connect sys_cpu_clk ${p_intf_clock}
@@ -1117,7 +1142,7 @@ proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
   if {$p_intf_reset ne ""} {
     ad_connect sys_cpu_resetn ${p_intf_reset}
   }
-  ad_connect axi_cpu_interconnect/${i_str}_AXI ${p_intf}
+  ad_connect $axi_cpu_interconnect/${i_str}_AXI ${p_intf}
 
   set p_seg [get_bd_addr_segs -of [get_bd_addr_spaces -of [get_bd_intf_pins -filter "NAME=~ *${p_intf_name}*" -of $p_hier_cell]]]
   set p_index 0
