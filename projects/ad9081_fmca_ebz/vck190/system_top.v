@@ -40,7 +40,8 @@ module system_top  #(
   parameter TX_NUM_LINKS = 1,
   parameter RX_JESD_L = 4,
   parameter RX_NUM_LINKS = 1,
-  parameter JESD_MODE = "8B10B"
+  parameter JESD_MODE = "8B10B",
+  parameter INTF_CFG = "RXTX"
 ) (
   input         sys_clk_n,
   input         sys_clk_p,
@@ -129,6 +130,8 @@ module system_top  #(
   wire            clkin10;
   wire            tx_device_clk;
   wire            rx_device_clk;
+  wire            rx_sysref;
+  wire            tx_sysref;
 
   wire            gt_reset;
   wire            rx_reset_pll_and_datapath;
@@ -136,18 +139,19 @@ module system_top  #(
   wire            rx_reset_datapath;
   wire            tx_reset_datapath;
   wire            rx_resetdone;
+  wire            rx_resetdone_s;
   wire            tx_resetdone;
+  wire            tx_resetdone_s;
   wire            gt_powergood;
   wire            gt_reset_s;
   wire            mst_resetdone;
 
   // instantiations
   IBUFDS_GTE5 i_ibufds_ref_clk (
-    .CEB (1'd0),
+    .CEB (1'b0),
     .I (fpga_refclk_in_p),
     .IB (fpga_refclk_in_n),
-    .O (ref_clk),
-    .ODIV2 ());
+    .O (ref_clk));
 
   IBUFDS i_ibufds_sysref (
     .I (sysref2_p),
@@ -265,8 +269,8 @@ module system_top  #(
   endgenerate
 
   /* Board GPIOS. Buttons, LEDs, etc... */
-  assign gpio_led = gpio_o[3:0];
-  assign gpio_i[3:0] = gpio_o[3:0];
+  assign gpio_led     = gpio_o[3:0];
+  assign gpio_i[3:0]  = gpio_o[3:0];
   assign gpio_i[7: 4] = gpio_dip_sw;
   assign gpio_i[9: 8] = gpio_pb;
 
@@ -278,6 +282,10 @@ module system_top  #(
   /* Reset should only be asserted if powergood is high */
   assign gt_reset_s    = gt_reset & gt_powergood;
   assign mst_resetdone = rx_resetdone & tx_resetdone;
+
+  /* Hardwired to 1 if the RX/TX reset doesn't exit */
+  assign rx_resetdone = INTF_CFG != "TX" ? rx_resetdone_s : 1'b1;
+  assign tx_resetdone = INTF_CFG != "RX" ? tx_resetdone_s : 1'b1;
 
   system_wrapper i_system_wrapper (
     .gpio0_i (gpio_i[31:0]),
@@ -314,14 +322,14 @@ module system_top  #(
     .spi1_mosi (spi1_mosi),
     .spi1_sclk (spi1_sclk),
     // FMC HPC
-    .GT_Serial_0_0_gtx_p (tx_data_p_loc[3:0]),
-    .GT_Serial_0_0_gtx_n (tx_data_n_loc[3:0]),
-    .GT_Serial_0_0_grx_p (rx_data_p_loc[3:0]),
-    .GT_Serial_0_0_grx_n (rx_data_n_loc[3:0]),
-    .GT_Serial_1_0_gtx_p (tx_data_p_loc[7:4]),
-    .GT_Serial_1_0_gtx_n (tx_data_n_loc[7:4]),
-    .GT_Serial_1_0_grx_p (rx_data_p_loc[7:4]),
-    .GT_Serial_1_0_grx_n (rx_data_n_loc[7:4]),
+    .rx_0_p (rx_data_p_loc[3:0]),
+    .rx_0_n (rx_data_n_loc[3:0]),
+    .tx_0_p (tx_data_p_loc[3:0]),
+    .tx_0_n (tx_data_n_loc[3:0]),
+    .rx_1_p (rx_data_p_loc[7:4]),
+    .rx_1_n (rx_data_n_loc[7:4]),
+    .tx_1_p (tx_data_p_loc[7:4]),
+    .tx_1_n (tx_data_n_loc[7:4]),
 
     .gt_reset (gt_reset_s),
     .gt_reset_rx_datapath (rx_reset_datapath),
@@ -329,11 +337,11 @@ module system_top  #(
     .gt_reset_rx_pll_and_datapath (rx_reset_pll_and_datapath),
     .gt_reset_tx_pll_and_datapath (tx_reset_pll_and_datapath),
     .gt_powergood (gt_powergood),
-    .rx_resetdone (rx_resetdone),
-    .tx_resetdone (tx_resetdone),
+    .rx_resetdone (rx_resetdone_s),
+    .tx_resetdone (tx_resetdone_s),
+
     .ref_clk_q0 (ref_clk),
     .ref_clk_q1 (ref_clk),
-
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
     .rx_sync_0 (rx_syncout),
