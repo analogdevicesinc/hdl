@@ -18,6 +18,7 @@ module jesd204_tx_static_config #(
   parameter HIGH_DENSITY = 1,
   parameter SCR = 1,
   parameter LINK_MODE = 1,  // 2 - 64B/66B;  1 - 8B/10B
+  parameter HEADER_MODE = 0, // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
   parameter SYSREF_DISABLE = 0,
   parameter SYSREF_ONE_SHOT = 0,
   /* Only 4, 8 are supported at the moment for 8b/10b and 8 for 64b */
@@ -35,6 +36,7 @@ module jesd204_tx_static_config #(
   output cfg_skip_ilas,
   output [7:0] cfg_mframes_per_ilas,
   output cfg_disable_char_replacement,
+  output [1:0] cfg_header_mode,
   output cfg_disable_scrambler,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -58,6 +60,7 @@ module jesd204_tx_static_config #(
   assign cfg_skip_ilas = 1'b0;
   assign cfg_mframes_per_ilas = 3;
   assign cfg_disable_char_replacement = 1'b0;
+  assign cfg_header_mode = HEADER_MODE;
   assign cfg_disable_scrambler = SCR ? 1'b0 : 1'b1;
 
   assign device_cfg_octets_per_multiframe = (FRAMES_PER_MULTIFRAME * OCTETS_PER_FRAME) - 1;
