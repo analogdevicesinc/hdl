@@ -34,7 +34,7 @@ NUM_OF_SDI - Defines the number of SDI lines used: 1, 2, 4, 8
 ADC_N_BITS - Specifies the ADC resolution: 16 or 18 bits; only for the Parallel Interface
 
 For the serial interface, the following parameters will be used in make command: INTF, NUM_OF_SDI.
-For the parallel interface, the following parameters will be used in make command: INTF, NUM_OF_CH.
+For the parallel interface, the following parameters will be used in make command: INTF, ADC_N_BITS.
 
 **Example:**
 
