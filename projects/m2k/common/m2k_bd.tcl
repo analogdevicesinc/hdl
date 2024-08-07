@@ -266,6 +266,9 @@ ad_connect axi_dac_interpolate/trigger_la  logic_analyzer/trigger_out_adc
 ad_connect axi_dac_interpolate/dac_valid_out_a  axi_ad9963/dma_valid_i
 ad_connect axi_dac_interpolate/dac_valid_out_b  axi_ad9963/dma_valid_q
 
+ad_connect axi_dac_interpolate/last_a           ad9963_dac_dmac_a/m_axis_last
+ad_connect axi_dac_interpolate/last_b           ad9963_dac_dmac_b/m_axis_last
+
 ad_connect /axi_ad9963/tx_data    txd
 ad_connect /axi_ad9963/tx_iq      txiq
 ad_connect /axi_ad9963/tx_clk     tx_clk
