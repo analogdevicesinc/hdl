@@ -57,7 +57,7 @@ module regmap_tb;
   localparam VAL_DBG_IDS0 = 32'h01234567;
   localparam VAL_DBG_IDS1 = 32'h89abcdef;
 
-  localparam AW = 11;
+  localparam AW = 12;
   localparam NUM_REGS = 'h200;
 
   wire s_axi_aclk = clk;
@@ -169,9 +169,9 @@ module regmap_tb;
     for (i = 0; i < NUM_REGS; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00040563); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00040564); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h444d4143); /* PCORE magic register */
-    set_reset_reg_value('h10, 32'h00002101); /* Interface Description*/
+    set_reset_reg_value('h10, 32'h40072101); /* Interface Description*/
     set_reset_reg_value('h80, 'h3); /* IRQ mask */
 
     set_reset_reg_value('h40c, 'h3); /* Flags */

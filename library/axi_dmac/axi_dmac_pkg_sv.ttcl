@@ -8,40 +8,56 @@
 <: setOutputDirectory "./sim/" :>
 <: setFileName ${ComponentName}_pkg :>
 <: setFileExtension ".sv" :>
-<: set id                      [get_property MODELPARAM_VALUE.ID] :>
-<: set dma_data_width_src      [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_SRC] :>
-<: set dma_data_width_dest     [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_DEST] :>
-<: set dma_data_width_sg       [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_SG] :>
-<: set dma_length_width        [get_property MODELPARAM_VALUE.DMA_LENGTH_WIDTH] :>
-<: set dma_2d_transfer         [get_property MODELPARAM_VALUE.DMA_2D_TRANSFER] :>
-<: set dma_sg_transfer         [get_property MODELPARAM_VALUE.DMA_SG_TRANSFER] :>
-<: set async_clk_req_src       [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SRC] :>
-<: set async_clk_src_dest      [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_DEST] :>
-<: set async_clk_dest_req      [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_REQ] :>
-<: set async_clk_req_sg        [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SG] :>
-<: set async_clk_src_sg        [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_SG] :>
-<: set async_clk_dest_sg       [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_SG] :>
-<: set axi_slice_dest          [get_property MODELPARAM_VALUE.AXI_SLICE_DEST] :>
-<: set axi_slice_src           [get_property MODELPARAM_VALUE.AXI_SLICE_SRC] :>
-<: set axis_tuser_sync         [get_property MODELPARAM_VALUE.AXIS_TUSER_SYNC] :>
-<: set sync_transfer_start     [get_property MODELPARAM_VALUE.SYNC_TRANSFER_START] :>
-<: set cyclic                  [get_property MODELPARAM_VALUE.CYCLIC] :>
-<: set dma_axi_protocol_dest   [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_DEST] :>
-<: set dma_axi_protocol_src    [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_SRC] :>
-<: set dma_axi_protocol_sg     [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_SG] :>
-<: set dma_type_dest           [get_property MODELPARAM_VALUE.DMA_TYPE_DEST] :>
-<: set dma_type_src            [get_property MODELPARAM_VALUE.DMA_TYPE_SRC] :>
-<: set dma_axi_addr_width      [get_property MODELPARAM_VALUE.DMA_AXI_ADDR_WIDTH] :>
-<: set max_bytes_per_burst     [get_property MODELPARAM_VALUE.MAX_BYTES_PER_BURST] :>
-<: set fifo_size               [get_property MODELPARAM_VALUE.FIFO_SIZE] :>
-<: set axi_id_width_src        [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SRC] :>
-<: set axi_id_width_dest       [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_DEST] :>
-<: set axi_id_width_sg         [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SG] :>
-<: set disable_debug_registers [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
-<: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
-<: set cache_coherent          [get_property MODELPARAM_VALUE.CACHE_COHERENT] :>
+<: set id                       [get_property MODELPARAM_VALUE.ID] :>
+<: set dma_data_width_src       [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_SRC] :>
+<: set dma_data_width_dest      [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_DEST] :>
+<: set dma_data_width_sg        [get_property MODELPARAM_VALUE.DMA_DATA_WIDTH_SG] :>
+<: set dma_length_width         [get_property MODELPARAM_VALUE.DMA_LENGTH_WIDTH] :>
+<: set dma_2d_transfer          [get_property MODELPARAM_VALUE.DMA_2D_TRANSFER] :>
+<: set dma_2d_tlast_mode        [get_property MODELPARAM_VALUE.DMA_2D_TLAST_MODE] :>
+<: set dma_sg_transfer          [get_property MODELPARAM_VALUE.DMA_SG_TRANSFER] :>
+<: set async_clk_req_src        [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SRC] :>
+<: set async_clk_src_dest       [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_DEST] :>
+<: set async_clk_dest_req       [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_REQ] :>
+<: set async_clk_req_sg         [get_property MODELPARAM_VALUE.ASYNC_CLK_REQ_SG] :>
+<: set async_clk_src_sg         [get_property MODELPARAM_VALUE.ASYNC_CLK_SRC_SG] :>
+<: set async_clk_dest_sg        [get_property MODELPARAM_VALUE.ASYNC_CLK_DEST_SG] :>
+<: set axi_slice_dest           [get_property MODELPARAM_VALUE.AXI_SLICE_DEST] :>
+<: set axi_slice_src            [get_property MODELPARAM_VALUE.AXI_SLICE_SRC] :>
+<: set axis_tuser_sync          [get_property MODELPARAM_VALUE.AXIS_TUSER_SYNC] :>
+<: set sync_transfer_start      [get_property MODELPARAM_VALUE.SYNC_TRANSFER_START] :>
+<: set cyclic                   [get_property MODELPARAM_VALUE.CYCLIC] :>
+<: set dma_axi_protocol_dest    [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_DEST] :>
+<: set dma_axi_protocol_src     [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_SRC] :>
+<: set dma_axi_protocol_sg      [get_property MODELPARAM_VALUE.DMA_AXI_PROTOCOL_SG] :>
+<: set dma_type_dest            [get_property MODELPARAM_VALUE.DMA_TYPE_DEST] :>
+<: set dma_type_src             [get_property MODELPARAM_VALUE.DMA_TYPE_SRC] :>
+<: set dma_axi_addr_width       [get_property MODELPARAM_VALUE.DMA_AXI_ADDR_WIDTH] :>
+<: set max_bytes_per_burst      [get_property MODELPARAM_VALUE.MAX_BYTES_PER_BURST] :>
+<: set fifo_size                [get_property MODELPARAM_VALUE.FIFO_SIZE] :>
+<: set axi_id_width_src         [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SRC] :>
+<: set axi_id_width_dest        [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_DEST] :>
+<: set axi_id_width_sg          [get_property MODELPARAM_VALUE.AXI_ID_WIDTH_SG] :>
+<: set disable_debug_registers  [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
+<: set enable_diagnostics_if    [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
+<: set cache_coherent           [get_property MODELPARAM_VALUE.CACHE_COHERENT] :>
+<: set framelock                [get_property MODELPARAM_VALUE.FRAMELOCK] :>
+<: set max_num_frames           [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
+<: set use_ext_sync             [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
+<: set has_autorun              [get_property MODELPARAM_VALUE.AUTORUN] :>
+<: set autorun_flags            [get_property MODELPARAM_VALUE.AUTORUN_FLAGS] :>
+<: set autorun_src_addr         [get_property MODELPARAM_VALUE.AUTORUN_SRC_ADDR] :>
+<: set autorun_dest_addr        [get_property MODELPARAM_VALUE.AUTORUN_DEST_ADDR] :>
+<: set autorun_x_length         [get_property MODELPARAM_VALUE.AUTORUN_X_LENGTH] :>
+<: set autorun_y_length         [get_property MODELPARAM_VALUE.AUTORUN_Y_LENGTH] :>
+<: set autorun_src_stride       [get_property MODELPARAM_VALUE.AUTORUN_SRC_STRIDE] :>
+<: set autorun_dest_stride      [get_property MODELPARAM_VALUE.AUTORUN_DEST_STRIDE] :>
+<: set autorun_sg_address       [get_property MODELPARAM_VALUE.AUTORUN_SG_ADDRESS] :>
+<: set autorun_framelock_config [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_CONFIG] :>
+<: set autorun_framelock_stride [get_property MODELPARAM_VALUE.AUTORUN_FRAMELOCK_STRIDE] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
+<: proc h2i {b} { format "%d" $b } :>
 ///////////////////////////////////////////////////////////////////////////
 //NOTE: This file has been automatically generated by Vivado.
 ///////////////////////////////////////////////////////////////////////////
@@ -52,38 +68,53 @@ package <=: ComponentName :>_pkg;
 // These parameters are named after the component for use in your verification
 // environment.
 ///////////////////////////////////////////////////////////////////////////
-  parameter <=: ComponentName :>_ID                      = <=: $id :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SRC      = <=: $dma_data_width_src :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_DEST     = <=: $dma_data_width_dest :>;
-  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SG       = <=: $dma_data_width_sg :>;
-  parameter <=: ComponentName :>_DMA_LENGTH_WIDTH        = <=: $dma_length_width :>;
-  parameter <=: ComponentName :>_DMA_2D_TRANSFER         = <=: b2i $dma_2d_transfer :>;
-  parameter <=: ComponentName :>_DMA_SG_TRANSFER         = <=: b2i $dma_sg_transfer :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SRC       = <=: b2i $async_clk_req_src :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_SRC_DEST      = <=: b2i $async_clk_src_dest :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_DEST_REQ      = <=: b2i $async_clk_dest_req :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SG        = <=: b2i $async_clk_req_sg :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_SRC_SG        = <=: b2i $async_clk_src_sg :>;
-  parameter <=: ComponentName :>_ASYNC_CLK_DEST_SG       = <=: b2i $async_clk_dest_sg :>;
-  parameter <=: ComponentName :>_AXI_SLICE_DEST          = <=: b2i $axi_slice_dest :>;
-  parameter <=: ComponentName :>_AXI_SLICE_SRC           = <=: b2i $axi_slice_src :>;
-  parameter <=: ComponentName :>_AXIS_TUSER_SYNC         = <=: b2i $axis_tuser_sync :>;
-  parameter <=: ComponentName :>_SYNC_TRANSFER_START     = <=: b2i $sync_transfer_start :>;
-  parameter <=: ComponentName :>_CYCLIC                  = <=: b2i $cyclic :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_DEST   = <=: $dma_axi_protocol_dest :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SRC    = <=: $dma_axi_protocol_src :>;
-  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SG     = <=: $dma_axi_protocol_sg :>;
-  parameter <=: ComponentName :>_DMA_TYPE_DEST           = <=: $dma_type_dest :>;
-  parameter <=: ComponentName :>_DMA_TYPE_SRC            = <=: $dma_type_src :>;
-  parameter <=: ComponentName :>_DMA_AXI_ADDR_WIDTH      = <=: $dma_axi_addr_width :>;
-  parameter <=: ComponentName :>_MAX_BYTES_PER_BURST     = <=: $max_bytes_per_burst :>;
-  parameter <=: ComponentName :>_FIFO_SIZE               = <=: $fifo_size :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_SRC        = <=: $axi_id_width_src :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST       = <=: $axi_id_width_dest :>;
-  parameter <=: ComponentName :>_AXI_ID_WIDTH_SG         = <=: $axi_id_width_sg :>;
-  parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS = <=: b2i $disable_debug_registers :>;
-  parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
-  parameter <=: ComponentName :>_CACHE_COHERENT          = <=: b2i $cache_coherent :>;
+  parameter <=: ComponentName :>_ID                         = <=: $id :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SRC         = <=: $dma_data_width_src :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_DEST        = <=: $dma_data_width_dest :>;
+  parameter <=: ComponentName :>_DMA_DATA_WIDTH_SG          = <=: $dma_data_width_sg :>;
+  parameter <=: ComponentName :>_DMA_LENGTH_WIDTH           = <=: $dma_length_width :>;
+  parameter <=: ComponentName :>_DMA_2D_TRANSFER            = <=: b2i $dma_2d_transfer :>;
+  parameter <=: ComponentName :>_DMA_2D_TLAST_MODE          = <=: $dma_2d_tlast_mode :>;
+  parameter <=: ComponentName :>_DMA_SG_TRANSFER            = <=: b2i $dma_sg_transfer :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SRC          = <=: b2i $async_clk_req_src :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_SRC_DEST         = <=: b2i $async_clk_src_dest :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_DEST_REQ         = <=: b2i $async_clk_dest_req :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_REQ_SG           = <=: b2i $async_clk_req_sg :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_SRC_SG           = <=: b2i $async_clk_src_sg :>;
+  parameter <=: ComponentName :>_ASYNC_CLK_DEST_SG          = <=: b2i $async_clk_dest_sg :>;
+  parameter <=: ComponentName :>_AXI_SLICE_DEST             = <=: b2i $axi_slice_dest :>;
+  parameter <=: ComponentName :>_AXI_SLICE_SRC              = <=: b2i $axi_slice_src :>;
+  parameter <=: ComponentName :>_AXIS_TUSER_SYNC            = <=: b2i $axis_tuser_sync :>;
+  parameter <=: ComponentName :>_SYNC_TRANSFER_START        = <=: b2i $sync_transfer_start :>;
+  parameter <=: ComponentName :>_CYCLIC                     = <=: b2i $cyclic :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_DEST      = <=: $dma_axi_protocol_dest :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SRC       = <=: $dma_axi_protocol_src :>;
+  parameter <=: ComponentName :>_DMA_AXI_PROTOCOL_SG        = <=: $dma_axi_protocol_sg :>;
+  parameter <=: ComponentName :>_DMA_TYPE_DEST              = <=: $dma_type_dest :>;
+  parameter <=: ComponentName :>_DMA_TYPE_SRC               = <=: $dma_type_src :>;
+  parameter <=: ComponentName :>_DMA_AXI_ADDR_WIDTH         = <=: $dma_axi_addr_width :>;
+  parameter <=: ComponentName :>_MAX_BYTES_PER_BURST        = <=: $max_bytes_per_burst :>;
+  parameter <=: ComponentName :>_FIFO_SIZE                  = <=: $fifo_size :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_SRC           = <=: $axi_id_width_src :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_DEST          = <=: $axi_id_width_dest :>;
+  parameter <=: ComponentName :>_AXI_ID_WIDTH_SG            = <=: $axi_id_width_sg :>;
+  parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS    = <=: b2i $disable_debug_registers :>;
+  parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF      = <=: b2i $enable_diagnostics_if :>;
+  parameter <=: ComponentName :>_CACHE_COHERENT             = <=: b2i $cache_coherent :>;
+  parameter <=: ComponentName :>_FRAMELOCK                  = <=: b2i $framelock :>;
+  parameter <=: ComponentName :>_MAX_NUM_FRAMES             = <=: $max_num_frames :>;
+  parameter <=: ComponentName :>_USE_EXT_SYNC               = <=: b2i $use_ext_sync :>;
+  parameter <=: ComponentName :>_AUTORUN                    = <=: b2i $has_autorun :>;
+  parameter <=: ComponentName :>_AUTORUN_FLAGS              = <=: h2i $autorun_flags :>;
+  parameter <=: ComponentName :>_AUTORUN_SRC_ADDR           = <=: h2i $autorun_src_addr :>;
+  parameter <=: ComponentName :>_AUTORUN_DEST_ADDR          = <=: h2i $autorun_dest_addr :>;
+  parameter <=: ComponentName :>_AUTORUN_X_LENGTH           = <=: h2i $autorun_x_length :>;
+  parameter <=: ComponentName :>_AUTORUN_Y_LENGTH           = <=: h2i $autorun_y_length :>;
+  parameter <=: ComponentName :>_AUTORUN_SRC_STRIDE         = <=: h2i $autorun_src_stride :>;
+  parameter <=: ComponentName :>_AUTORUN_DEST_STRIDE        = <=: h2i $autorun_dest_stride :>;
+  parameter <=: ComponentName :>_AUTORUN_SG_ADDRESS         = <=: h2i $autorun_sg_address :>;
+  parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_CONFIG   = <=: h2i $autorun_framelock_config :>;
+  parameter <=: ComponentName :>_AUTORUN_FRAMELOCK_STRIDE   = <=: h2i $autorun_framelock_stride :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg
