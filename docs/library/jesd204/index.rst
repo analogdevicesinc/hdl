@@ -480,3 +480,15 @@ JESD204B Clocking Solutions
    JESD204B/JESD204C
 -  :adi:`ADF 4371 <en/products/ADF4371>`: Microwave Wideband Synthesizer
    with Integrated VCO
+
+Software Support
+--------------------------------------------------------------------------------
+
+* No-OS JESD204 project at :git-no-OS:`jesd204`
+* Linux JESD204 project at :git-linux:`drivers/jesd204`
+* Linux JESD204 IIO project at :git-linux:`drivers/iio/jesd204`
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`JESD204 Interface Framework on wiki <resources/fpga/peripherals/jesd204>`

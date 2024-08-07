@@ -318,15 +318,24 @@ RX link procedure
    the internal error counter to get the number of errors received. See the
    transceiver guide for details.
 
-More Information
+Software Support
 --------------------------------------------------------------------------------
 
--  :ref:`jesd204`
--  :dokuwiki:`JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux Driver <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
+* No-OS project at :git-no-OS:`drivers/axi_core/jesd204`
+* No-OS device driver at  :git-no-OS:`drivers/axi_core/jesd204/axi_adxcvr.c`
+* Linux project at :git-linux:`linux/drivers/iio/jesd204`
+* Linux device driver at :git-linux:`drivers/iio/jesd204/axi_adxcvr.c`
+* Linux device driver documentation
+  :dokuwiki:`on wiki <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
+* No-OS device driver documentation
+  :dokuwiki:`on wiki <resources/tools-software/uc-drivers/jesd204/axi_adxcvr>`
 
 Reference
 --------------------------------------------------------------------------------
 
--  :intel:`Intel® Arria® 10 Transceiver PHY User Guide <content/dam/www/programmable/us/en/pdfs/literature/hb/arria-10/ug_arria10_xcvr_phy.pdf>`
--  `7 Series FPGAs GTX/GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug476_7Series_Transceivers>`_
--  `Ultrascale Architecture GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug576-ultrascale-gth-transceivers>`_
+*  :dokuwiki:`AXI ADXCVR on wiki <resources/fpga/docs/axi_adxcvr>`
+*  :git-hdl:`library/axi_adxcvr`
+*  :ref:`jesd204`
+*  :intel:`Intel® Arria® 10 Transceiver PHY User Guide <content/dam/www/programmable/us/en/pdfs/literature/hb/arria-10/ug_arria10_xcvr_phy.pdf>`
+*  `7 Series FPGAs GTX/GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug476_7Series_Transceivers>`_
+*  `Ultrascale Architecture GTH Transceivers User Guide - AMD Xilinx <https://docs.amd.com/v/u/en-US/ug576-ultrascale-gth-transceivers>`_

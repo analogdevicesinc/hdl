@@ -280,3 +280,8 @@ Register Map
 
 .. hdl-regmap::
    :name: axi_pwm_gen
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`AXI PWM GEN on wiki <resources/fpga/docs/axi_pwm_gen>`

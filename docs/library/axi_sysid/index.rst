@@ -240,3 +240,14 @@ the information that will be written to the "Custom String" areas.
 
    set sys_cstring "sys rom custom string placeholder"
    sysid_gen_sys_init_file $sys_cstring
+
+Software Support
+--------------------------------------------------------------------------------
+
+* No-OS project at :git-no-OS:`drivers/axi_core/axi_sysid`
+* No-OS device driver at  :git-no-OS:`drivers/axi_core/axi_sysid/axi_sysid.c`
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`System ID on wiki <resources/fpga/docs/axi_sysid>`

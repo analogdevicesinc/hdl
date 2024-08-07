@@ -201,5 +201,5 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* :dokuwiki:`AXI ADC TRIGGER on wiki <resources/fpga/docs/axi_adc_trigger>`
 * :git-hdl:`library/axi_adc_trigger`
-* :git-linux:`/`

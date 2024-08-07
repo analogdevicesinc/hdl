@@ -130,18 +130,19 @@ Software Support
 
 Analog Devices recommends to use the provided software drivers.
 
--  :dokuwiki:`Analog Devices ADIN1300/ADIN1200 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`
+* Linux driver at :git-linux:`drivers/net/mii.c`
+* :dokuwiki:`Analog Devices ADIN1300/ADIN1200 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`
 
 References
 --------------------------------------------------------------------------------
 
-- :git-hdl:`library/util_mii_to_rmii`
-- :adi:`ADIN1300 PHY Information <adin1300>`
-- :adi:`ADIN1300 PHY Documentation <media/en/technical-documentation/data-sheets/ADIN1300.pdf>`
-- :dokuwiki:`ADIN1300 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`
-- :adi:`CN0506 Information <en/design-center/reference-designs/circuits-from-the-lab/cn0506.html>`
-- :adi:`CN0506 Reference Note <media/en/reference-design-documentation/reference-designs/cn0506.pdf>`
-- :dokuwiki:`CN0506 HDL Reference Design <resources/eval/user-guides/circuits-from-the-lab/cn0506/hdl>`
-- :dokuwiki:`CN0506 User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0506>`
+* :git-hdl:`library/util_mii_to_rmii`
+* :adi:`ADIN1300 PHY Information <adin1300>`
+* :adi:`ADIN1300 PHY Documentation <media/en/technical-documentation/data-sheets/ADIN1300.pdf>`
+* :dokuwiki:`ADIN1300 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`
+* :adi:`CN0506 Information <en/design-center/reference-designs/circuits-from-the-lab/cn0506.html>`
+* :adi:`CN0506 Reference Note <media/en/reference-design-documentation/reference-designs/cn0506.pdf>`
+* :dokuwiki:`CN0506 HDL Reference Design <resources/eval/user-guides/circuits-from-the-lab/cn0506/hdl>`
+* :dokuwiki:`CN0506 User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0506>`
 
 

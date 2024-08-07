@@ -259,6 +259,6 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* :dokuwiki:`AXI FAN CONTROL on wiki <resources/fpga/docs/axi_fan_control>`
 * :git-hdl:`library/axi_fan_control`
-* :git-linux:`/`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

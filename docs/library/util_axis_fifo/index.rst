@@ -124,3 +124,15 @@ logic:
    should take this into account when controlling the data stream into and from the
    FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide a
    safe operating margin.
+
+Software Support
+--------------------------------------------------------------------------------
+
+* Linux project at :git-linux:`drivers/staging/axis-fifo`
+* Linux driver at :git-linux:`drivers/staging/axis-fifo/axis-fifo.c`
+
+References
+--------------------------------------------------------------------------------
+
+* :dokuwiki:`AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo>`
+* :dokuwiki:`Asymmetric AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo_asym>`
