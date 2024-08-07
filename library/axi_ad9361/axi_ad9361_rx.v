@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -154,6 +154,7 @@ module axi_ad9361_rx #(
   wire    [15:0]  adc_dcfilter_data_out_1_s;
   wire    [15:0]  adc_dcfilter_data_out_2_s;
   wire    [15:0]  adc_dcfilter_data_out_3_s;
+  wire            up_adc_r1_mode;
   wire    [ 3:0]  up_adc_pn_err_s;
   wire    [ 3:0]  up_adc_pn_oos_s;
   wire    [ 3:0]  up_adc_or_s;
@@ -176,8 +177,8 @@ module axi_ad9361_rx #(
       up_rack_int <= 'd0;
       up_wack_int <= 'd0;
     end else begin
-      up_status_pn_err <= | up_adc_pn_err_s;
-      up_status_pn_oos <= | up_adc_pn_oos_s;
+      up_status_pn_err <= up_adc_r1_mode ? | up_adc_pn_err_s[1:0] : | up_adc_pn_err_s[3:0];
+      up_status_pn_oos <= up_adc_r1_mode ? | up_adc_pn_oos_s[1:0] : | up_adc_pn_oos_s[3:0];
       up_status_or <= | up_adc_or_s;
       up_rdata_int <= up_rdata_s[0] | up_rdata_s[1] | up_rdata_s[2] |
         up_rdata_s[3] | up_rdata_s[4] | up_rdata_s[5];
@@ -374,7 +375,7 @@ module axi_ad9361_rx #(
     .up_pps_rcounter (up_pps_rcounter),
     .up_pps_status (up_pps_status),
     .up_pps_irq_mask (up_pps_irq_mask),
-    .up_adc_r1_mode (),
+    .up_adc_r1_mode (up_adc_r1_mode),
     .up_status_pn_err (up_status_pn_err),
     .up_status_pn_oos (up_status_pn_oos),
     .up_status_or (up_status_or),
