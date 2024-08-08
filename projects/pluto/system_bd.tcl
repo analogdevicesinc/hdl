@@ -204,6 +204,7 @@ ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
@@ -283,6 +284,7 @@ ad_connect axi_ad9361/dac_valid_q0 tx_fir_interpolator/dac_valid_1
 ad_connect axi_ad9361/dac_data_q0 tx_fir_interpolator/data_out_1
 
 ad_connect  axi_ad9361/l_clk tx_upack/clk
+ad_connect  axi_ad9361/rst tx_upack/reset
 
 ad_connect  tx_upack/fifo_rd_data_0  tx_fir_interpolator/data_in_0
 ad_connect  tx_upack/enable_0  tx_fir_interpolator/enable_out_0
@@ -314,7 +316,7 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 
 # External TDD
 set TDD_CHANNEL_CNT 3
-set TDD_DEFAULT_POL 0b010
+set TDD_DEFAULT_POL 0b110
 set TDD_REG_WIDTH 32
 set TDD_BURST_WIDTH 32
 set TDD_SYNC_WIDTH 0
@@ -334,20 +336,13 @@ ad_ip_instance util_vector_logic logic_inv [list \
   C_OPERATION {not} \
   C_SIZE 1]
 
-ad_ip_instance util_vector_logic logic_or_1 [list \
-  C_OPERATION {or} \
-  C_SIZE 1]
-
 ad_connect logic_inv/Op1  axi_ad9361/rst
 ad_connect logic_inv/Res  axi_tdd_0/resetn
 ad_connect axi_ad9361/l_clk axi_tdd_0/clk
 ad_connect axi_tdd_0/sync_in tdd_ext_sync
 ad_connect axi_tdd_0/tdd_channel_0 txdata_o
 ad_connect axi_tdd_0/tdd_channel_1 axi_ad9361_adc_dma/sync
-
-ad_connect  logic_or_1/Op1  axi_ad9361/rst
-ad_connect  logic_or_1/Op2  axi_tdd_0/tdd_channel_2
-ad_connect  logic_or_1/Res  tx_upack/reset
+ad_connect axi_tdd_0/tdd_channel_2 axi_ad9361_dac_dma/sync
 
 # interconnects
 
