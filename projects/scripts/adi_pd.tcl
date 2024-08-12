@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -7,7 +7,7 @@
 
 set mem_init_sys_file_path [pwd]
 if {[info exists ::env(ADI_PROJECT_DIR)]} {
-  set mem_init_sys_file_path $::env(ADI_PROJECT_DIR)
+  set mem_init_sys_file_path [string trimright [pwd]/$::env(ADI_PROJECT_DIR) "/"]
 }
 
 ## Converts a string input to hex and adds whitespace as padding to obtain the size defined by
@@ -212,7 +212,7 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   set sys_mem_hex [format %0-${memory_size}s [concat $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex]];
 
   if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    set mem_init_sys_file_path $::env(ADI_PROJECT_DIR)mem_init_sys.txt
+    set mem_init_sys_file_path [pwd]/$::env(ADI_PROJECT_DIR)mem_init_sys.txt
   } else {
     set mem_init_sys_file_path "mem_init_sys.txt"
   }
