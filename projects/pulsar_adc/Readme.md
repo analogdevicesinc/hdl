@@ -68,8 +68,7 @@ Here are some pointers to help you:
   * AD4020
 
 build example:
-make FMC_N_PMOD=0
-make FMC_N_PMOD=1 SPI_OP_MODE=0
-make FMC_N_PMOD=1 SPI_OP_MODE=1
-make FMC_N_PMOD=1 SPI_OP_MODE=2
-
+make FMC_N_PMOD=0 - builds PMOD version
+make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
+make FMC_N_PMOD=1 SPI_OP_MODE=1 - builds FMC version with ADC SDO pin driven by SPI Engine CS and ADC CS pin driven by GPIO
+make FMC_N_PMOD=1 SPI_OP_MODE=2 - builds FMC version with ADC SDO pin driven by GPIO and ADC CS pin driven by SPI Engine CS
