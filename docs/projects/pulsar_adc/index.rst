@@ -5,7 +5,7 @@ PULSAR-ADC HDL project
 
 Overview
 ---------------------------------------------------------------------------------
-Depending on the type of connector it uses, the Pulsar family is divided into
+Depending on the type of connector it uses, the PulSAR family is divided into
 the products which have **PMOD** connectors and **FMC** connectors.
 
 PulSAR converters which have PMOD boards associated with them are low power ADCs
@@ -17,10 +17,16 @@ the differences being found in their performance.  A full description of these
 products are available in their respective data sheets and should be consulted
 when utilizing the boards.
 
-ADAQ40xx families is also part of the family of pulsar converters with PMOD
-connector. This type of boards come with the :adi:`EVAL-PMD-IB1Z` PMOD to
+With PMOD
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADAQ40xx families is also part of the family of PulSAR converters with PMOD
+connector.
+
+This type of boards come with the :adi:`EVAL-PMD-IB1Z` PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
 interfaces with the system demonstration controller board.
+
 The :adi:`ADAQ4003` is an 18-bit precision data acquisition sub-system SiP
 design on a laminate that includes the :adi:`AD4003` ADC with a fully
 differential driver the :adi:`ADA4945-1`, a reference buffer
@@ -30,7 +36,11 @@ challenges for a wide range of applications similar to AD400x, yet it still
 provides the flexibility. It offers over 75% area savings compared to discrete
 design and reduces TTM.
 
+With FMC
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 PulSAR converters which have FMC boards associated with them are AD40xx family.
+
 The :adi:`AD4003` / :adi:`AD4007` / :adi:`AD4011` / :adi:`AD4020` are low noise,
 low power, high speed, 18-bit, precision successive approximation register (SAR)
 analog-to-digital converters (ADCs). The :adi:`AD4003`, :adi:`AD4007`, and
@@ -61,47 +71,47 @@ Supported boards
 
 PulSAR with PMOD connector:
 
--  :adi:`EVAL-AD7942-PMDZ <EVAL-AD7942-PMDZ>`
--  :adi:`EVAL-AD7946-PMDZ <EVAL-AD7946-PMDZ>`
--  :adi:`EVAL-AD7988-1-PMDZ <EVAL-AD7988-1-PMDZ>`
--  :adi:`EVAL-AD7685-PMDZ <EVAL-AD7685-PMDZ>`
--  :adi:`EVAL-AD7687-PMDZ <EVAL-AD7687-PMDZ>`
--  :adi:`EVAL-AD7691-PMDZ <EVAL-AD7691-PMDZ>`
--  :adi:`EVAL-AD7686-PMDZ <EVAL-AD7686-PMDZ>`
--  :adi:`EVAL-AD7688-PMDZ <EVAL-AD7688-PMDZ>`
--  :adi:`EVAL-AD7693-PMDZ <EVAL-AD7693-PMDZ>`
--  :adi:`EVAL-AD7988-5-PMDZ <EVAL-AD7988-5-PMDZ>`
--  :adi:`EVAL-AD7980-PMDZ <EVAL-AD7980-PMDZ>`
--  :adi:`EVAL-AD7983-PMDZ <EVAL-AD7983-PMDZ>`
--  :adi:`EVAL-AD7690-PMDZ <EVAL-AD7690-PMDZ>`
--  :adi:`EVAL-AD7982-PMDZ <EVAL-AD7982-PMDZ>`
--  :adi:`EVAL-AD7984-PMDZ <EVAL-AD7984-PMDZ>`
--  :adi:`EVAL-ADAQ40xx <EVAL-ADAQ40xx>`
+-  :adi:`EVAL-AD7685-PMDZ`
+-  :adi:`EVAL-AD7686-PMDZ`
+-  :adi:`EVAL-AD7687-PMDZ`
+-  :adi:`EVAL-AD7688-PMDZ`
+-  :adi:`EVAL-AD7690-PMDZ`
+-  :adi:`EVAL-AD7691-PMDZ`
+-  :adi:`EVAL-AD7693-PMDZ`
+-  :adi:`EVAL-AD7942-PMDZ`
+-  :adi:`EVAL-AD7946-PMDZ`
+-  :adi:`EVAL-AD7980-PMDZ`
+-  :adi:`EVAL-AD7982-PMDZ`
+-  :adi:`EVAL-AD7983-PMDZ`
+-  :adi:`EVAL-AD7984-PMDZ`
+-  :adi:`EVAL-AD7988-1-PMDZ`
+-  :adi:`EVAL-AD7988-5-PMDZ`
+-  :adi:`EVAL-ADAQ40xx`
 
 PulSAR with FMC connector:
 
--  :adi:`EVAL-AD400x-FMCZ <EVAL-AD400x-FMCZ>`
+-  :adi:`EVAL-AD400x-FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 PulSAR with PMOD connector:
 
+-  :adi:`AD7685`
+-  :adi:`AD7686`
+-  :adi:`AD7687`
+-  :adi:`AD7688`
+-  :adi:`AD7690`
+-  :adi:`AD7691`
+-  :adi:`AD7693`
 -  :adi:`AD7942`
 -  :adi:`AD7946`
--  :adi:`AD7988-1`
--  :adi:`AD7685`
--  :adi:`AD7687`
--  :adi:`AD7691`
--  :adi:`AD7686`
--  :adi:`AD7688`
--  :adi:`AD7693`
--  :adi:`AD7988-5`
 -  :adi:`AD7980`
--  :adi:`AD7983`
--  :adi:`AD7690`
 -  :adi:`AD7982`
+-  :adi:`AD7983`
 -  :adi:`AD7984`
+-  :adi:`AD7988-1`
+-  :adi:`AD7988-5`
 -  :adi:`ADAQ4003`
 
 PulSAR with FMC connector:
@@ -120,7 +130,7 @@ Supported carriers
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :adi:`EVAL-PMD-IB1Z <EVAL-PMD-IB1Z>`
+-  :adi:`EVAL-PMD-IB1Z`
 
 .. note::
 
@@ -134,7 +144,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-PulSAR_ADC_PMDZ 
+PulSAR_ADC_PMDZ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: pulsar_adc_pmod_hdl.svg
@@ -142,7 +152,7 @@ PulSAR_ADC_PMDZ
    :align: center
    :alt: PulSAR_ADC_PMOD block diagram
 
-PulSAR_ADC_FMC 
+PulSAR_ADC_FMC
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: pulsar_adc_fmc_hdl.svg
@@ -153,21 +163,27 @@ PulSAR_ADC_FMC
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For AD40xx/ADAQ40xx projects the AD40XX_ADAQ400X_N parameter defines the type
-of ADC (AD40xx or ADAQ40xx). By default is set to 1. Depending on the project,
-some hardware modifications need to be done on the board and/or make command:
+The Zedboard-based PulSAR ADC project can be built to use either the FMC
+connector or the Pmod JA connector.
 
-In case of the **ADAQ40xx** project:
+The ``FMC_N_PMOD`` parameter is used to select between the them:
 
-.. code-block::
+*  0 - for PMOD
+*  1 - for FMC (default)
 
-   make AD40XX_ADAQ400X_N=0
+The PulSAR project supports different configurations required for certain
+ADCs, like the AD7944.
 
-In case of the **AD40xx** project:
+These modes are selected using the ``SPI_OP_MODE`` parameter:
 
-.. code-block::
+*  0 - for normal SPI Engine connections (default)
+*  1 - for 3-wire "single" mode where CS drives the SDO line while the CS line
+   is driven by GPIO
+*  2 - SDO is driven by GPIO and the CS line is driven by CS.
 
-   make AD40XX_ADAQ400X_N=1
+.. caution::
+
+   The SPI_OP_MODE parameter must only be used for the FMC variant.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -235,8 +251,8 @@ The Software GPIO number is calculated as follows:
 -  Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+   :widths: 40 25 25 25
+   :header-rows: 3
 
    * - GPIO signal
      - Direction
@@ -246,20 +262,24 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - Zynq-7000
-   * - pulsar_adc_spi_pd *
-     - OUT
-     - 32
-     - 86
-   * - ad40xx_amp_pd **
+   * - pulsar_gpio[0] (PD)*
      - INOUT
      - 32
      - 86
+   * - pulsar_gpio[1] (TURBO)**
+     - INOUT
+     - 33
+     - 87
+   * - pulsar_gpio[2] (SDO - SPI_OP_MODE=2)**
+     - INOUT
+     - 34
+     - 88
 
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for PulSAR_ADC_PMDZ projects
-   -   ``**`` instantiated only for AD40XX_ADAQ400X_N=1 (AD40xx)
+   -  ``*`` instantiated only for PulSAR_ADC_PMDZ projects
+   -  ``**`` instantiated only for FMC_N_PMOD=1 (AD40xx)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,20 +310,48 @@ the HDL repository, and then build the project as follows:.
    :linenos:
 
    user@analog:~$ cd hdl/projects/pulsar_adc/zed
-   user@analog:~/hdl/projects/pulsar_adc/zed$ make AD40XX_ADAQ400X_N=1
+   user@analog:~/hdl/projects/pulsar_adc/zed$ make FMC_N_PMOD=1 SPI_OP_MODE=0
+
+Build examples:
+
+Zedboard Pmod support
+
+.. code-block::
+
+   make FMC_N_PMOD=0
+
+Zedboard standard configuration FMC support (default)
+
+.. code-block::
+
+   make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
+
+Zedboard FMC support for AD7944 4-wire mode ("multi")
+
+.. code-block::
+
+   make FMC_N_PMOD=1 SPI_OP_MODE=1
+
+Zedboard FMC support for AD7944 chain mode or 3-wire "single"
+
+.. code-block::
+
+   make FMC_N_PMOD=1 SPI_OP_MODE=2
 
 The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
+by the used configuration. If the following command was run
 
-if the following command was run
+.. code-block::
 
-``make AD40XX_ADAQ400X_N=0``
+   make FMC_N_PMOD=1 SPI_OP_MODE=0
 
 then the folder name will be:
 
-``AD40XX_ADAQ400X_N0``
+``FMC_N_PMOD1_SPI_OP_MODE0``
 
-For projects that have coraz7s as a carrier, the build is done without parameters.
+.. note::
+
+   For the CoraZ7S-based projects, the build is donw without parameters!
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -313,9 +361,7 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PulSAR with PMOD connector:
-
--  Product datasheets:
+Datasheets for PulSAR with PMOD connector:
 
 -  :adi:`AD7942`
 -  :adi:`AD7946`
@@ -335,7 +381,7 @@ PulSAR with PMOD connector:
 -  :adi:`UG-682, Evaluation Board User Guide <media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf>`
 -  :adi:`UG-340, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-340.pdf>`
 
-PulSAR with FMC connector:
+Datasheets PulSAR with FMC connector:
 
 -  :adi:`AD4003`
 -  :adi:`AD4007`
@@ -354,7 +400,7 @@ HDL related
 -  :dokuwiki:`[Wiki] AD40xx/ADAQ40xx quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
 
 .. list-table::
-   :widths: 30 35 35
+   :widths: 30 40 30
    :header-rows: 1
 
    * - IP name
@@ -374,7 +420,7 @@ HDL related
      - ---
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :ref:`here <axi_pwm_gen>` 
+     - :ref:`here <axi_pwm_gen>`
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>` *
      - ---
@@ -403,7 +449,7 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for AD40xx/ADAQ40xx
+   ``*`` instantiated only for AD40xx/ADAQ40xx
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 
