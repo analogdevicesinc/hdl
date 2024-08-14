@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -88,7 +88,6 @@ module axi_ad9963_tx_channel #(
   // internal registers
 
   reg             dac_valid_sel = 'd0;
-  reg             data_source_valid = 'd0;
   reg     [23:0]  dac_test_data = 'd0;
   reg     [15:0]  dac_test_counter = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
@@ -111,27 +110,29 @@ module axi_ad9963_tx_channel #(
   wire            dac_iqcor_enb_s;
   wire    [15:0]  dac_iqcor_coeff_1_s;
   wire    [15:0]  dac_iqcor_coeff_2_s;
+  wire            data_source_valid_s;
 
   // dac iq correction
 
   always @(posedge dac_clk) begin
-    data_source_valid <= dac_data_sel_s == 4'h2 ? dma_valid_m : dac_valid;
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
     if (dac_iqcor_valid_s == 1'b1) begin
       dac_data <= dac_iqcor_data_s[15:4];
     end
   end
 
+  assign data_source_valid_s = dac_data_sel_s == 4'h2 ? dma_valid_m : dac_valid;
+
   generate
   if (DATAPATH_DISABLE == 1) begin
-  assign dac_iqcor_valid_s = data_source_valid;
+  assign dac_iqcor_valid_s = data_source_valid_s;
   assign dac_iqcor_data_s = {dac_data_out, 4'd0};
   end else begin
   ad_iqcor #(
     .Q_OR_I_N (Q_OR_I_N)
   ) i_ad_iqcor (
     .clk (dac_clk),
-    .valid (data_source_valid),
+    .valid (data_source_valid_s),
     .data_in ({dac_data_out, 4'd0}),
     .data_iq ({dac_data_in, 4'd0}),
     .valid_out (dac_iqcor_valid_s),
