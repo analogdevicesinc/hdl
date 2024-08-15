@@ -10,7 +10,8 @@ source ../../scripts/adi_ip_intel.tcl
 ad_ip_create spi_engine_execution {SPI Engine Execution}
 set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files spi_engine_execution [list\
-  spi_engine_execution.v]
+  spi_engine_execution.v \
+  spi_engine_execution_shiftreg.v]
 
 # parameters
 
