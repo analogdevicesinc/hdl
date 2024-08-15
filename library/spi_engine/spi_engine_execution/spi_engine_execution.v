@@ -163,6 +163,8 @@ module spi_engine_execution #(
 
   wire end_of_sdi_latch;
 
+  wire sample_sdo;
+
   (* direct_enable = "yes" *) wire cs_gen;
 
   spi_engine_execution_shiftreg #(
@@ -186,10 +188,11 @@ module spi_engine_execution #(
     .sdi_data_ready(sdi_data_ready),
     .sdo_enabled(sdo_enabled),
     .sdi_enabled(sdi_enabled),
-    .current_instr(inst_d1),
+    .current_cmd(cmd_d1),
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .word_length(word_length),
+    .sample_sdo(sample_sdo),
     .transfer_active(transfer_active),
     .trigger_tx(trigger_tx),
     .trigger_rx(trigger_rx),
@@ -197,6 +200,8 @@ module spi_engine_execution #(
     .cs_activate(cs_activate),
     .end_of_sdi_latch(end_of_sdi_latch)
   );
+
+  assign sample_sdo = (trigger_tx && last_bit) || exec_transfer_cmd;
 
   assign cs_gen = inst_d1 == CMD_CHIPSELECT
                   && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
