@@ -48,7 +48,7 @@ module spi_engine_execution_shiftreg #(
   input resetn,
 
   // spi io
-  input sdi,
+  input [NUM_OF_SDI-1:0] sdi,
   output sdo_int,
   input echo_sclk,
 
@@ -63,12 +63,13 @@ module spi_engine_execution_shiftreg #(
   // cfg and status 
   input sdo_enabled,
   input sdi_enabled,
-  input [2:0] current_instr,
+  input [15:0] current_cmd,
   input sdo_idle_state,
   input [7:0] left_aligned,
   input [7:0] word_length,
 
   // timing from main fsm
+  input sample_sdo,
   input transfer_active,
   input trigger_tx,
   input trigger_rx,
@@ -79,17 +80,32 @@ module spi_engine_execution_shiftreg #(
 
   reg [7:0] sdi_counter = 8'b0;
   reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+  reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_d;
   wire last_sdi_bit;
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
   wire trigger_rx_s;
+  wire [2:0] current_instr = current_cmd[14:12];
 
   always @(posedge clk) begin
-    if (resetn == 1'b0)
+    if (resetn == 1'b0) begin
       sdo_data_ready <= 1'b0;
-    else if (sdo_enabled == 1'b1 && first_bit == 1'b1 && trigger_tx == 1'b1 && transfer_active == 1'b1)
+    end else if (sdo_enabled == 1'b1 && first_bit == 1'b1 && trigger_tx == 1'b1 && transfer_active == 1'b1) begin
       sdo_data_ready <= 1'b1;
-    else if (sdo_data_valid == 1'b1)
+    end else if (sdo_data_valid == 1'b1) begin
       sdo_data_ready <= 1'b0;
+    end
+  end
+
+  // pipelined shifter for sdo_data
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      aligned_sdo_data <= 0;
+    end else begin
+      if (sample_sdo) begin
+        sdo_data_d <= sdo_data;
+      end
+      aligned_sdo_data <= sdo_data_d << left_aligned;
+    end
   end
 
   // Load the SDO parallel data into the SDO shift register. In case of a custom
@@ -98,10 +114,11 @@ module spi_engine_execution_shiftreg #(
     if (!sdo_enabled || (current_instr != CMD_TRANSFER)) begin
       data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
     end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-      if (first_bit == 1'b1)
-      data_sdo_shift <= sdo_data << left_aligned; //TODO: check if this could/should be pipelined
-      else
-      data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+      if (first_bit == 1'b1) begin
+        data_sdo_shift <= aligned_sdo_data;
+      end else begin
+        data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
+      end
     end
   end
   assign sdo_int = data_sdo_shift[DATA_WIDTH-1];
@@ -203,7 +220,7 @@ module spi_engine_execution_shiftreg #(
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
 
-    reg [3:0] last_sdi_bit_m = 4'b0; //FIXME: bad synchronizer (cs_activate shouldn't be connected here), also why not just use sync_bits?
+    reg [3:0] last_sdi_bit_m = 4'b0; //FIXME: why not just use sync_bits?
     always @(posedge clk) begin
       if (cs_activate) begin
         last_sdi_bit_m <= 4'b0;
@@ -228,8 +245,8 @@ module spi_engine_execution_shiftreg #(
       if (cs_activate) begin
         num_of_transfers <= 8'b0;
       end else begin
-        if (cmd_d1[15:12] == 4'b0) begin
-          num_of_transfers <= cmd_d1[7:0] + 1'b1; // cmd_d1 contains the NUM_OF_TRANSFERS - 1
+        if (current_instr == CMD_TRANSFER) begin
+          num_of_transfers <= current_cmd[7:0] + 1'b1; // current_cmd contains the NUM_OF_TRANSFERS - 1
         end
       end
     end
