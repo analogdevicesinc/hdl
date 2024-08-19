@@ -159,7 +159,7 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Product datasheets: :adi:`AD9265`
--  :dokuwiki:`Evaluating AD9265, user guide <resources/eval/ad9265-fmc-125ebz>`
+-  :dokuwiki:`[Wiki] Evaluating AD9265, user guide <resources/eval/ad9265-fmc-125ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
