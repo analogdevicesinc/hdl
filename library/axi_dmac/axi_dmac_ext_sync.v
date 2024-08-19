@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2024 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -82,8 +82,7 @@ module axi_dmac_ext_sync #(
       .in_clk(src_clk),
       .in_event(src_ext_sync & ~src_ext_sync_d),
       .out_clk(req_clk),
-      .out_event(req_src_ext_sync)
-    );
+      .out_event(req_src_ext_sync));
 
     sync_event #(
       .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
@@ -91,8 +90,7 @@ module axi_dmac_ext_sync #(
       .in_clk(dest_clk),
       .in_event(dest_ext_sync & ~dest_ext_sync_d),
       .out_clk(req_clk),
-      .out_event(req_dest_ext_sync)
-    );
+      .out_event(req_dest_ext_sync));
 
     always @(posedge req_clk) begin
       if (req_resetn == 1'b0) begin

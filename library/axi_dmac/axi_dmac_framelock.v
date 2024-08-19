@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2024 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -75,7 +75,6 @@ module axi_dmac_framelock #(
   // Reader mode
   input  [MAX_NUM_FRAMES_WIDTH:0] s_frame_in,  // {valid, id}
   output [MAX_NUM_FRAMES_WIDTH:0] s_frame_out  // {valid, id}
-
 );
 
   localparam BYTES_PER_BEAT_WIDTH = FRAMELOCK_MODE ?

@@ -496,8 +496,7 @@ module axi_dmac_transfer #(
     .m_frame_in (m_frame_in),
     .m_frame_out (m_frame_out),
     .s_frame_in (s_frame_in),
-    .s_frame_out (s_frame_out)
-    );
+    .s_frame_out (s_frame_out));
 
   end else begin
   assign dma_2d_req_valid = flock_req_valid;

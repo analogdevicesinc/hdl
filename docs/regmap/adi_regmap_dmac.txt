@@ -360,9 +360,9 @@ FIELD
 [0] ''AUTORUN_FLAGS[0]''
 CYCLIC
 RW
-Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
-the controller will re-start a transfer again once it has finished. In cyclic
-mode no end-of-transfer interrupts will be generated.
+Setting this field to 1 puts the DMA transfer into cyclic mode.
+In cyclic mode, the controller will re-start a transfer again once it has finished, and
+no end-of-transfer interrupts will be generated.
 If ``AUTORUN`` is unset, the default value of the field is ''CYCLIC''.
 ENDFIELD
 
