@@ -678,22 +678,23 @@ descriptors queued by the software. A transfer will start only after the
 assertion of the external sync signal for at least one clock cycle.
 
 The sync signal can be either in source or destination clock domain or both.
-This feature does not ensures fixed latency from the assertion of external sync
+This feature does not ensure fixed latency from the assertion of external sync
 signal and the availability of the data at the destination interface.
 
 Framelock Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This feature adds support for multiple 2D frame buffers which are used in a
-cyclic way. On the same set of buffers a second DMAC core can operate.
-The "Framelock" mechanism ensures no buffer is accessed by two DMACs in the same time.
+This feature adds support for multiple 2D frame buffers, which are used in a
+cyclic way. On the same set of buffers, a second DMAC core can operate.
+The "Framelock" mechanism ensures no buffer is accessed by two DMACs at the same
+time.
 
 The core can operate in two modes:
 
 * Writer mode - available in s2mm configuration, the writer DMAC will always
-  skip the current in use readers buffer.
+  skip the current in-use reader's buffer.
 * Reader mode - available in mm2s configuration, the reader DMAC will stay
-  behind the writers buffer by either repeating or skipping buffers according to
+  behind the writer's buffer by either repeating or skipping buffers according to
   the speed relationship of the two cores.
 
 The writer and reader DMAC cores must be connected through the dedicated
@@ -704,7 +705,7 @@ the buffers size, start address and stride through the ``FRAMELOCK_CONFIG`` and
 Notice that the reader DMA will start to read the frames only after the writer
 finished to store in the DDR at least ``FRAMELOCK_CONFIG_DISTANCE+1`` frames.
 This means that while the FRAMELOCK_CONFIG_DISTANCE+1 frames are written into the
-memory the reader DMA won’t output anything.
+memory, the reader DMA won’t output anything.
 
 Transfer Start Synchronization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
