@@ -1175,11 +1175,19 @@ proc ad_hpmx_interconnect {p_sel p_address p_name {p_intf_name {}}} {
 #
 proc ad_cpu_interconnect {p_address p_name {p_intf_name {}}} {
 
-  if     {$sys_zynq == -1} {ad_hpmx_interconnect "AXI"      $p_address $p_name $p_intf_name}
-  elseif {$sys_zynq ==  0} {ad_hpmx_interconnect "DP"       $p_address $p_name $p_intf_name}
-  elseif {$sys_zynq ==  1} {ad_hpmx_interconnect "GP0"      $p_address $p_name $p_intf_name}
-  elseif {$sys_zynq ==  2} {ad_hpmx_interconnect "HPM0_LPD" $p_address $p_name $p_intf_name}
-  elseif {$sys_zynq ==  3} {ad_hpmx_interconnect "FPD"      $p_address $p_name $p_intf_name}
+  global sys_zynq
+
+  if {$sys_zynq == -1} {
+    ad_hpmx_interconnect "AXI"      $p_address $p_name $p_intf_name
+  } elseif {$sys_zynq ==  0} {
+    ad_hpmx_interconnect "DP"       $p_address $p_name $p_intf_name
+  } elseif {$sys_zynq ==  1} {
+    ad_hpmx_interconnect "GP0"      $p_address $p_name $p_intf_name
+  } elseif {$sys_zynq ==  2} {
+    ad_hpmx_interconnect "HPM0_LPD" $p_address $p_name $p_intf_name
+  } elseif {$sys_zynq ==  3} {
+    ad_hpmx_interconnect "FPD"      $p_address $p_name $p_intf_name
+  }
 }
 
 ## Connects an IP interrupt port to the system's interrupt controller interface.
