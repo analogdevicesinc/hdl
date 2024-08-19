@@ -407,7 +407,7 @@ different “downgraded” configurations.</p>
 <h2>SPI Engine hierarchy instantiation<a class="headerlink" href="#spi-engine-hierarchy-instantiation" title="Permalink to this heading">#</a></h2>
 <p>The SPI Engine can be implemented in two ways, either by placing and connecting
 each IP individually or by using the function provided by the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/scripts/spi_engine.tcl">library/spi_engine/scripts/spi_engine.tcl</a> script.</p>
 <p>Using the script ensures that the correct connections are being made and that
 the IP cores will receive the correct parameter configuration since certain
 parameters need to be set to the same value. The function takes the following
@@ -567,7 +567,7 @@ the SPI Engine.</p>
 <p>To check the overall performance of the design and also to expose any major
 bugs, the system can be tested using a testbench from <a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches">ADI Testbenches repository</a>.</p>
 <p>The testbench framework is designed to use the same bd.tcl as the actual project
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/blob/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/testbenches/tree/main/pulsar_adc_pmdz/system_bd.tcl#L50">pulsar_adc_pmdz/system_bd.tcl#L50</a></p>
 <p>The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run <code class="code docutils literal notranslate"><span class="pre">make</span> <span class="pre">cfg1</span></code> from the
 <em>hdl/testbenches/pulsar_adc_pmdz/</em> folder. Besides exposing possible bugs,

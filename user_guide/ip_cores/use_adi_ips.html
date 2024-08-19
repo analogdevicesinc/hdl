@@ -224,7 +224,7 @@ under Library/Analog Devices.</p>
 <h3>Vivado<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <p>For the JESD204 IP, it is not as straightforward as for other modules.
 Here you have an example of an instantiation for this interface:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/daq2/common/daq2_bd.tcl">projects/daq2/common/daq2_bd.tcl</a>.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/common/daq2_bd.tcl">projects/daq2/common/daq2_bd.tcl</a>.
 First, you will have to source the jesd204.tcl script, inside your
 <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_bd.tcl</span></code>.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>jesd204<span class="o">/</span>scripts<span class="o">/</span>jesd204.tcl
@@ -305,7 +305,7 @@ together.</p>
 <p>The SPI Engine is a special module too, since it consists of more than one IP.
 In order to use it into your own project, you will have to add all of its components.
 For this example, the code shown here is from the ad4630_fmc project:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/ad4630_fmc/common/ad463x_bd.tcl">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/common/ad463x_bd.tcl">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
 <p>Let’s start with sourcing the spi_engine.tcl script inside your <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_db.tcl</span></code>.</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
 </pre></div>

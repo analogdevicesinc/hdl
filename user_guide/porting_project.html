@@ -196,7 +196,7 @@ Content on this topic
   <section id="porting-adi-s-hdl-reference-designs">
 <span id="porting-project"></span><h1>Porting ADI’s HDL reference designs<a class="headerlink" href="#porting-adi-s-hdl-reference-designs" title="Permalink to this heading">#</a></h1>
 <p>In general, a given reference design for an FMC board is deployed to just a few
-carriers, although several <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">FPGA boards</a>
+carriers, although several <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">FPGA boards</a>
 are supported in ADI’s HDL repository. The simple reason behind this practice is
 that it would create a tremendous maintenance workload, that would require a lot
 of human resources, and would increase the required time for testing.</p>
@@ -230,7 +230,7 @@ a carrier with an FMC LPC can host a board just with an FMC LPC connector.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>First, always check out the already available
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">base designs</a>.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">base designs</a>.
 If your board is present among our supported base designs, you do not need
 to verify the following things and you can jump to the Project creation
 section.</p>
@@ -266,7 +266,7 @@ FMC board. If you’re not sure, ask!</p>
 components of it. The user should look at it as a suggestion only.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>In <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier_name&gt;
+<p>In <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>/&lt;carrier_name&gt;
 you can find templates for the <em>system_top.v</em>, <em>Makefile</em>, etc. to help you
 when creating a new project.</p>
 </div>
@@ -287,7 +287,7 @@ golden reference design of the board</p></li>
 <li><p>Other constraints files if needed</p></li>
 </ul>
 <p>You should define the board and its device in the project flow script
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_xilinx.tcl">projects/scripts/adi_project_xilinx.tcl</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_xilinx.tcl">projects/scripts/adi_project_xilinx.tcl</a>
 by adding the following lines after the last device specified in
 the <strong>adi_project_create</strong> process:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_zcu102$&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
@@ -324,7 +324,7 @@ name of the carrier.</p>
 <li><p><strong>a10soc_system_qsys.tcl</strong> - the QSYS base design</p></li>
 </ul>
 <p>You should define the board and its device in the flow script
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_project_intel.tcl">projects/scripts/adi_project_intel.tcl</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_project_intel.tcl">projects/scripts/adi_project_intel.tcl</a>,
 by adding the following lines after the last device specified in
 the <strong>adi_project</strong> process:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_a10soc$&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
@@ -345,7 +345,7 @@ steps should be taken (the <a class="reference external" href="https://www.latti
 <li><p><strong>lfcpnx_system_pb.tcl</strong> - this script describes the base block design</p></li>
 </ul>
 <p>You should define the board and its device in the flow script
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_lattice_dev_select.tcl">projects/scripts/adi_lattice_dev_select.tcl</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_lattice_dev_select.tcl">projects/scripts/adi_lattice_dev_select.tcl</a>,
 by adding the following lines to the file:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="k">[</span><span class="nb">regexp</span><span class="w"> </span><span class="s2">&quot;_lfcpnx&quot;</span><span class="w"> </span><span class="nv">$project_name</span><span class="k">]</span><span class="w"> </span><span class="k">{</span>
 <span class="w">    </span><span class="k">set</span><span class="w"> </span>device<span class="w"> </span><span class="s2">&quot;LFCPNX-100-9LFG672C&quot;</span>
@@ -449,13 +449,13 @@ name, it should work with the new project without an issue.</p></li>
 <section id="generating-the-fmc-i-o-constraints">
 <h3>Generating the FMC I/O constraints<a class="headerlink" href="#generating-the-fmc-i-o-constraints" title="Permalink to this heading">#</a></h3>
 <p>The easiest way of writing the constraints for FMC I/O pins is making use
-of the script <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/scripts/adi_fmc_constr_generator.tcl">projects/scripts/adi_fmc_constr_generator.tcl</a>.</p>
+of the script <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_fmc_constr_generator.tcl">projects/scripts/adi_fmc_constr_generator.tcl</a>.</p>
 <p>Required setup:</p>
 <ul class="simple">
 <li><p>Carrier common FMC connections file
-(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt)</p></li>
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt)</p></li>
 <li><p>Project common FMC connections file
-(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project&gt;/common/&lt;project&gt;_fmc.txt)</p></li>
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects">projects</a>/&lt;project&gt;/common/&lt;project&gt;_fmc.txt)</p></li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -467,7 +467,7 @@ For project common files, you can easily make them following <a class="reference
 <p>To use this script you can source it in any Tcl shell or simply call the
 adi_fmc_constr_generator.tcl <strong>with argument(s) &lt;fmc_port&gt;</strong>.
 But before sourcing or calling it, your current directory needs to be
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project&gt;/&lt;carrier&gt;.</p>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects">projects</a>/&lt;project&gt;/&lt;carrier&gt;.</p>
 <p>For example:</p>
 <ul class="simple">
 <li><p><code class="code docutils literal notranslate"><span class="pre">tclsh</span> <span class="pre">../../scripts/adi_fmc_constr_generator.tcl</span> <span class="pre">fmc0</span></code>
@@ -485,7 +485,7 @@ But before sourcing or calling it, your current directory needs to be
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The fmc port name can be deduced from the common carrier file name
-(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt).</p>
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>/&lt;carrier&gt;/&lt;carrier&gt;_&lt;fmc_port&gt;.txt).</p>
 </div>
 <p>The generated file will appear in the current directory as <strong>fmc_constr.xdc</strong>
 (AMD board) or <strong>fmc_constr.tcl</strong> (Intel board). If ran from an open Vivado
@@ -497,11 +497,11 @@ project, the generated file will be automatically added to the project.</p>
 <li><p>Open the space divided .txt file corresponding to the desired connector type,
 either with a text editor or importing in a spreadsheet editor
 (with Excel, export as .prn).
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc.txt">docs/user_guide/sources/fmc.txt</a>,
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc_hpc.txt">docs/user_guide/sources/fmc_hpc.txt</a>,
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/docs/user_guide/sources/fmc+.txt">docs/user_guide/sources/fmc+.txt</a>.</p></li>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc.txt">docs/user_guide/sources/fmc.txt</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc_hpc.txt">docs/user_guide/sources/fmc_hpc.txt</a>,
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/user_guide/sources/fmc+.txt">docs/user_guide/sources/fmc+.txt</a>.</p></li>
 <li><p>Fill the table by replacing the <strong>#</strong>’s where it’s needed.</p></li>
-<li><p>Save as .txt inside <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/projects">projects</a>/&lt;project_name&gt;/common/.</p></li>
+<li><p>Save as .txt inside <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects">projects</a>/&lt;project_name&gt;/common/.</p></li>
 <li><p>Clean up the file by removing the lines containing <strong>#</strong> for system_top_name.</p></li>
 <li><p>Rearrange the lines following one of the existing examples.</p></li>
 <li><p>To generate empty lines, leave an empty line in the .txt file.

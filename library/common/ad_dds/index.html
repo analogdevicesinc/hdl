@@ -244,7 +244,7 @@ Content on this topic
             
   <section id="ad-direct-digital-synthesis">
 <span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading">#</a></h1>
-<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds.v">AD Direct Digital Synthesis (DDS)</a> module
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">AD Direct Digital Synthesis (DDS)</a> module
 is used to generate sine waves on a clock (referenced to sampling clock).</p>
 <p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every
 channel.</p>
@@ -901,13 +901,13 @@ other words as a phase offset.</p>
 </section>
 <section id="id1">
 <h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds.v">ad_dds</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">ad_dds</a>
 is the main module, it contains the phase accumulators and the phase to
 amplitude converters.</p>
 <img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" /></section>
 <section id="ad-dds-2">
 <h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading">#</a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_2.v">ad_dds_2</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v">ad_dds_2</a>
 contains two phase to amplitude converters. The resulting waveforms will be
 summed. The resulting waveform must have a maximum amplitude level of 0x8000
 -1. When only one tone is desired, both tones must have the same frequency word
@@ -916,7 +916,7 @@ channels, it should not be more than 0x400 -1 for each channel.</p>
 </section>
 <section id="ad-dds-1">
 <h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading">#</a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_1.v">ad_dds_1</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v">ad_dds_1</a>
 contains the phase to amplitude converter and an “amplifier”. The phase to
 amplitude converter is always generating a full scale sine wave. Because the
 data format is two’s complement, for a 16-bit data angle, min value will be
@@ -924,9 +924,9 @@ data format is two’s complement, for a 16-bit data angle, min value will be
 <img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" /></section>
 <section id="ad-dds-sine">
 <h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading">#</a></h3>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_sine.v">ad_dds_sine</a>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine.v">ad_dds_sine</a>
 and
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/blob/main/library/common/ad_dds_sine_cordic.v">ad_dds_sine_cordic</a>
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine_cordic.v">ad_dds_sine_cordic</a>
 are the available phase to amplitude converters.</p>
 </section>
 </section>
