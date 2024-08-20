@@ -61,6 +61,9 @@ clean-all:
 	$(call clean, \
 		$(CLEAN_TARGET) .lock, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
+	@for lib in $(XILINX_LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
+	done
 
 ifneq ($(INTEL_DEPS),)
 
