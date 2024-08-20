@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AD719X-ASDZ HDL project &#8212; HDL  documentation</title>
+    <title>MAX96724 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD738x_FMC HDL project" href="../ad738x_fmc/index.html" />
-    <link rel="prev" title="AD7134-FMC HDL project" href="../ad7134_fmc/index.html" />
+    <link rel="next" title="PULSAR-ADC HDL project" href="../pulsar_adc/index.html" />
+    <link rel="prev" title="CN0585 HDL project" href="../cn0585/index.html" />
    
   
     <meta name="robots" content="noindex">
@@ -100,18 +100,20 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD719X-ASDZ HDL project</a><ul>
+<li><a class="reference internal" href="#">MAX96724 HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
-<li><a class="reference internal" href="#software-considerations">Software considerations</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
@@ -167,7 +169,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/index.html">AD738X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
@@ -184,7 +186,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds/index.html">PULSAR-LVDS</a></li>
 </ul>
@@ -202,73 +204,130 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="ad719x-asdz-hdl-project">
-<span id="ad719x-asdz"></span><h1>AD719X-ASDZ HDL project<a class="headerlink" href="#ad719x-asdz-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="max96724-hdl-project">
+<span id="max96724"></span><h1>MAX96724 HDL project<a class="headerlink" href="#max96724-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The AD719x family uses a low noise, higher speed, high precision ADC. They
-can be used in a wide range of applications where the input signals can vary
-from the milli-volt to volt level. The parts also operate with a wide range of
-output data rates while still maintaining excellent noise performance over the
-complete rate of output data ranges.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX96724">MAX96724</a> deserializer converts four GMSL™2/1 inputs to 1, 2, or 4 MIPI D-PHY
+or C-PHY outputs. The device allows simultaneous transmit bidirectional transmissions
+over 50Ω coax or 100Ω STP cables that meet the GMSL channel specification.</p>
+<p>Up to four remotely located sensors can be supported using industry-standard coax or
+STP interconnects. Each GMSL2 serial link operates at a fixed rate of 3 Gbps or 6 Gbps
+in the forward direction and 187.5Mbps in the reverse direction. The MAX96724/F/R
+supports both aggregation and replication of video data, enabling streams from multiple
+remotely located sensors to be combined and routed to one or more of the available CSI-2 outputs.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/MAX96724F-BAK-EVK">MAX96724 DPHY Evaluation Kit (EV Kit)</a> provides a
+proven design and reliable platform to evaluate the <a class="icon adi reference external" href="https://www.analog.com/MAX96724">MAX96724</a> device using
+standard FAKRA coaxial cables.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/MAX96724F-BAK-EVK">MAX96724 DPHY Evaluation Kit (EV Kit)</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7190">AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7193">AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7195">AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/MAX9724">MAX9724</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper colwidths-given docutils container">
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/products/system-on-modules/kria/k26/kv260-vision-starter-kit.html">KV260 Vision Evaluation Kit</a> using Raspberry Pi camera interface</p></li>
+</ul>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<p>The data path designed in this reference design is as follows:</p>
+<ul class="simple">
+<li><p>the virtual channel inputs of one CSI-2 output port of the deserializer are
+captured using Xilinx’s <a class="reference external" href="https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx">MIPI CSI-2 Rx Subsystem IP</a></p></li>
+<li><p>data is written into memory by using a Xilinx video-related DMA implementation
+<a class="reference external" href="https://docs.amd.com/r/en-US/pg278-v-frmbuf">Video Framebuffer Write</a></p></li>
+<li><p>the control of the camera modules is realized through I2C using Xilinx’s
+<a class="reference external" href="https://docs.amd.com/v/u/en-US/pg090-axi-iic">AXI IIC logic</a></p></li>
+</ul>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
+<p>The data path (through the deserializer) and the writing in memory are illustrated
+in the block diagram.</p>
+<a class="reference internal image-reference" href="../../_images/max96724_hdl.svg"><img alt="MAX96724 EVKIT HDL-related block diagram" class="align-center" src="../../_images/max96724_hdl.svg" width="800" /></a>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Carrier</p></th>
-<th class="head"><p>Slot</p></th>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Address</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p>mipi_csi2_rx_subsyst_0</p></td>
+<td><p>0x84A0_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-odd"><td><p>axi_iic_mipi</p></td>
+<td><p>0x84A2_0000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p>v_frmbuf_wr_0</p></td>
+<td><p>0x84A4_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>v_frmbuf_wr_1</p></td>
+<td><p>0x84A6_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>v_frmbuf_wr_2</p></td>
+<td><p>0x84A8_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>v_frmbuf_wr_3</p></td>
+<td><p>0x84AA_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_sysid_0</p></td>
+<td><p>0x8500_0000</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
-<p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad719x_block_diagram.png"><img alt="AD719x/CORAZ7S block diagram" class="align-center" src="../../_images/ad719x_block_diagram.png" style="width: 800px;" /></a>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_fmc</p></td>
+<td><p>axi_iic_mipi</p></td>
+<td><p>0x84A2_0000</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-<section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>ZynqMP: if PS8 EMIOs are used, then offset is 78</p></li>
+</ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -278,17 +337,99 @@ complete rate of output data ranges.</p>
 <col style="width: 25.0%" />
 </colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>SPI type</p></th>
-<th class="head"><p>SPI manager instance</p></th>
-<th class="head"><p>SPI subordinate</p></th>
-<th class="head"><p>CS</p></th>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>PS</p></td>
-<td><p>SPI 0</p></td>
-<td><p>AD719x</p></td>
+<tr class="row-odd"><td><p>fan_en_b</p></td>
+<td><p>OUT</p></td>
 <td><p>0</p></td>
+<td><p>78</p></td>
+</tr>
+<tr class="row-even"><td><p>csirxss_rstn</p></td>
+<td><p>OUT</p></td>
+<td><p>1</p></td>
+<td><p>79</p></td>
+</tr>
+<tr class="row-odd"><td><p>ap_rstn_frmbuf_0</p></td>
+<td><p>OUT</p></td>
+<td><p>2</p></td>
+<td><p>80</p></td>
+</tr>
+<tr class="row-even"><td><p>ap_rstn_frmbuf_1</p></td>
+<td><p>OUT</p></td>
+<td><p>3</p></td>
+<td><p>81</p></td>
+</tr>
+<tr class="row-odd"><td><p>ap_rstn_frmbuf_2</p></td>
+<td><p>OUT</p></td>
+<td><p>4</p></td>
+<td><p>82</p></td>
+</tr>
+<tr class="row-even"><td><p>ap_rstn_frmbuf_3</p></td>
+<td><p>OUT</p></td>
+<td><p>5</p></td>
+<td><p>83</p></td>
+</tr>
+<tr class="row-odd"><td><p>rpi_en</p></td>
+<td><p>OUT</p></td>
+<td><p>6</p></td>
+<td><p>84</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>csirxss_irq</p></td>
+<td><p>13</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
+</tr>
+<tr class="row-odd"><td><p>iic2intc_irpt</p></td>
+<td><p>12</p></td>
+<td><p>108</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-even"><td><p>v_frmbuf_wr0/interrupt</p></td>
+<td><p>11</p></td>
+<td><p>107</p></td>
+<td><p>139</p></td>
+</tr>
+<tr class="row-odd"><td><p>v_frmbuf_wr1/interrupt</p></td>
+<td><p>10</p></td>
+<td><p>106</p></td>
+<td><p>138</p></td>
+</tr>
+<tr class="row-even"><td><p>v_frmbuf_wr2/interrupt</p></td>
+<td><p>9</p></td>
+<td><p>105</p></td>
+<td><p>137</p></td>
+</tr>
+<tr class="row-odd"><td><p>v_frmbuf_wr3/interrupt</p></td>
+<td><p>8</p></td>
+<td><p>104</p></td>
+<td><p>136</p></td>
 </tr>
 </tbody>
 </table>
@@ -301,26 +442,15 @@ complete rate of output data ranges.</p>
 ADI distributes the bit/elf files of these projects as part of the
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source, you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
-the HDL repository.</p>
-<p>Then go to the project location(<strong>projects/ad719x/coraz7s</strong>) and run the make
-command by typing in your command prompt:</p>
+the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@analog:~$ cd hdl/projects/ad719x_asdz/coraz7s
-user@analog:~/hdl/projects/ad719x_asdz/coraz7s$ make
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/max96724/kv260
+<span class="linenos">2</span>user@analog:~/hdl/projects/max96724/kv260$ make
 </pre></div>
 </div>
-<p>Check <a class="reference external" href="resources/tools-software/linux-software/kuiper-linux">this guide</a> on
-how to prepare your SD card with the proper boot files.
-A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
-guide.</p>
-</section>
-<section id="software-considerations">
-<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading">#</a></h2>
-<p>The SPI communication is changed because of hardware modifications, so the
-connection looks like this:</p>
-<a class="reference internal image-reference" href="../../_images/ad7190_asdz_pmod_diagram.svg"><img alt="AD719x/CORAZ7S pmod diagram" class="align-center" src="../../_images/ad7190_asdz_pmod_diagram.svg" width="800" /></a>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
@@ -329,12 +459,8 @@ connection looks like this:</p>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7190">AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7193">AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7195">AD7195</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/max96724.pdf">MAX96724</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/max96724-bak-evk-max96724r-bak-evk.pdf">MAX96724 DPHY Evaluation Kit (EV Kit)</a></p></li>
 </ul>
 </li>
 </ul>
@@ -342,7 +468,7 @@ connection looks like this:</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad719x_asdz">AD719x-FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/max96724">MAX96724 HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -358,27 +484,20 @@ connection looks like this:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_sysid</p></td>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>sysid_rom</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/pmod/ad7193">AD7193 Pmod Xilinx FPGA Reference Design</a></p></li>
-</ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7192.c">Driver</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/renesas/ad7190">AD7190 - Microcontroller No-OS Driver</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad7193">Supported devices</a></p></li>
+<li><p><a class="reference external" href="https://github.com/analogdevicesinc/gmsl">GMSL-related repository</a></p></li>
+<li><p>The user guide that exemplify the system interfaced using <a class="icon adi reference external" href="https://www.analog.com/AD-GMSLCAMRPI-ADP">AD-GMSLCAMRPI-ADP adaptor</a> is available in wiki <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-gmslcamrpi-adp/ug_amd_kria">page</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/gmsl/xilinx_v6.1_LTS/">GMSL drivers/dts</a></p></li>
 </ul>
 </section>
 </section>
@@ -414,8 +533,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad7134_fmc/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD7134-FMC HDL project</a>
-    <a href="../ad738x_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD738x_FMC HDL project</a>
+    <a href="../cn0585/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">CN0585 HDL project</a>
+    <a href="../pulsar_adc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">PULSAR-ADC HDL project</a>
               </div>
           
         </div>
