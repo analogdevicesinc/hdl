@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AMD Xilinx Specific IPs &#8212; HDL  documentation</title>
+    <title>Corundum &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="UTIL_ADXCVR core for AMD Xilinx devices" href="util_adxcvr/index.html" />
-    <link rel="prev" title="Util WFIFO" href="../util_wfifo/index.html" />
+    <link rel="next" title="AXI Stream FIFO" href="../util_axis_fifo/index.html" />
+    <link rel="prev" title="AD Direct Digital Synthesis" href="../common/ad_dds/index.html" />
    
   
     <meta name="robots" content="noindex">
@@ -100,8 +100,13 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AMD Xilinx Specific IPs</a><ul>
-<li><a class="reference internal" href="#contents">Contents</a></li>
+<li><a class="reference internal" href="#">Corundum</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#building">Building</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 </ul>
@@ -195,7 +200,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_sysid/index.html">AXI System ID</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../corundum/index.html">Corundum</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Corundum</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
@@ -205,8 +210,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../util_rfifo/index.html">Util RFIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
-<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-4" id="toctree-collapse-1-4" checked=""/><div class="collapse"><a class="current reference internal" href="#">AMD Xilinx Specific IPs</a><label for="toctree-collapse-1-4"><div class="icon"></div></label></div><ul>
-<li class="toctree-l3"><a class="reference internal" href="util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-4" id="toctree-collapse-1-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-1-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
 </ul>
@@ -224,26 +229,96 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="amd-xilinx-specific-ips">
-<span id="xilinx"></span><h1>AMD Xilinx Specific IPs<a class="headerlink" href="#amd-xilinx-specific-ips" title="Permalink to this heading">#</a></h1>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="util_adxcvr/index.html">UTIL_ADXCVR</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#features">Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#block-diagram">Block Diagram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#configuration-parameters">Configuration Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#interface">Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#design-guidelines">Design Guidelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#physical-constraints-considerations">Physical constraints considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#software-guidelines">Software Guidelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#references">References</a></li>
-<li class="toctree-l2"><a class="reference internal" href="util_adxcvr/index.html#more-information">More Information</a></li>
+  <section id="corundum">
+<span id="id1"></span><h1>Corundum<a class="headerlink" href="#corundum" title="Permalink to this heading">#</a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 276" width="516" height="276"><rect x="18" y="18" width="480" height="240" rx="18" stroke="#666" fill="none" stroke-width="3" stroke-dasharray="8 16" stroke-linecap="round"/><text style="font: 64px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="94.4">?</text><text style="font: 16px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="150.4">corundum IP-XACT not found.</text><text style="font: 12.0px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="178.4">Generate it and the documentation:</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="198.4">(cd library/corundum; make)</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="218.4">(cd docs; make html)</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum">Corundum</a> IP core
+repackages <a class="reference external" href="https://github.com/corundum/corundum">Corundum NIC</a> as an IP Core.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>AXI-based configuration</p></li>
+<li><p>Vivado compatible</p></li>
 </ul>
-</li>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/corundum.v">library/corundum/corundum.v</a></p></td>
+<td><p>Verilog source for the Corundum top module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/corundum_ip.tcl">library/corundum/corundum_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<div><div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+</div></section>
+<section id="building">
+<h2>Building<a class="headerlink" href="#building" title="Permalink to this heading">#</a></h2>
+<p>This project uses <a class="reference external" href="https://github.com/corundum/corundum">Corundum NIC</a>
+and it needs to be cloned alongside this repository.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hdl</span><span class="o">/../&gt;</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">corundum</span><span class="o">/</span><span class="n">corundum</span><span class="o">.</span><span class="n">git</span>
+<span class="n">hdl</span><span class="o">/../</span><span class="n">corundum</span><span class="o">/&gt;</span> <span class="n">git</span> <span class="n">checkout</span> <span class="n">ed4a26e2cbc0a429c45d5cd5ddf1177f86838914</span>
+<span class="n">hdl</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">corundum</span><span class="o">&gt;</span> <span class="n">make</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<div class="admonition-publications admonition">
+<p class="admonition-title">Publications</p>
+<p>The following papers pertain to the Corundum source code:</p>
+<ul class="simple">
+<li><p>J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM’20.
+(<a class="reference external" href="https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf">FCCM Paper</a>, <a class="reference external" href="https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/">FCCM Presentation</a>)</p></li>
+<li><p>J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (<a class="reference external" href="https://escholarship.org/uc/item/3mc9070t">Thesis</a>)</p></li>
 </ul>
 </div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-GMSL2ETH-SL">AD-GMSL2ETH-SL</a></p></li>
+<li><p><a class="reference internal" href="../../projects/ad_gmsl2eth_sl/index.html#ad-gmsl2eth-sl"><span class="std std-ref">AD-GMSL2ETH-SL HDL project</span></a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_gmsl2eth_sl">projects/ad_gmsl2eth_sl</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum">library/corundum</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -257,8 +332,8 @@ Content on this topic
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../util_wfifo/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Util WFIFO</a>
-    <a href="util_adxcvr/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">UTIL_ADXCVR core for AMD Xilinx devices</a>
+    <a href="../common/ad_dds/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD Direct Digital Synthesis</a>
+    <a href="../util_axis_fifo/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI Stream FIFO</a>
               </div>
           
         </div>
