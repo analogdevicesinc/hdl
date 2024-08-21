@@ -1,6 +1,6 @@
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_master_rtl:1.0 qadc_spi
+create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 qadc_spi
 
 create_bd_port -dir I -from 3 -to 0 qadc_drdy
 create_bd_port -dir I               qadc_mclk_refclk
