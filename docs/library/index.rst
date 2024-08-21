@@ -81,6 +81,7 @@ Utilities
    axi_sysid/index
    axi_tdd/index
    common/ad_dds/index
+   corundum/index
    util_axis_fifo/index
    util_axis_fifo_asym/index
    util_extract/index
