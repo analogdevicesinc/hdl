@@ -284,4 +284,5 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/axi_pwm_gen`
 * :dokuwiki:`AXI PWM GEN on wiki <resources/fpga/docs/axi_pwm_gen>`

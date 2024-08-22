@@ -493,4 +493,5 @@ was disabled.
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/data_offload`
 * :dokuwiki:`Data Offload Engine on wiki <resources/fpga/docs/data_offload>`

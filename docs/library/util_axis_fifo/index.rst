@@ -134,5 +134,6 @@ Software Support
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/util_axis_fifo`
 * :dokuwiki:`AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo>`
 * :dokuwiki:`Asymmetric AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo_asym>`

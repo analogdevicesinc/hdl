@@ -136,7 +136,7 @@ Analog Devices recommends to use the provided software drivers.
 References
 --------------------------------------------------------------------------------
 
-* :git-hdl:`library/util_mii_to_rmii`
+* HDL IP core at :git-hdl:`library/util_mii_to_rmii`
 * :adi:`ADIN1300 PHY Information <adin1300>`
 * :adi:`ADIN1300 PHY Documentation <media/en/technical-documentation/data-sheets/ADIN1300.pdf>`
 * :dokuwiki:`ADIN1300 PHY Linux Driver <resources/tools-software/linux-drivers/net-phy/adin>`

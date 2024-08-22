@@ -108,5 +108,5 @@ Software Support
 References
 --------------------------------------------------------------------------------
 
-* :git-hdl:`library/spi_engine`
+* HDL IP core at :git-hdl:`library/spi_engine`
 * :dokuwiki:`SPI Engine on wiki <resources/fpga/peripherals/spi_engine>`

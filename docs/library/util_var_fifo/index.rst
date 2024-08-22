@@ -88,4 +88,5 @@ domain, so everything should be synchronous to that clock domain.
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/util_var_fifo`
 * :dokuwiki:`UTIL VAR FIFO on wiki <resources/fpga/docs/util_var_fifo>`

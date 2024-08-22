@@ -248,15 +248,15 @@ Software Support
 --------------------------------------------------------------------------------
 
 The software for this part can be found as part of the :adi:`ADALM2000`
-(or shortly, M2K) reference design. It is supported by both :git-linux:`/` and
-:git-no-os:`/`.
+(or shortly, M2K) reference design. 
+
+* Linux device driver at :git-linux:`drivers/iio/adc/ad9963.c`
 
 References
 -------------------------------------------------------------------------------
 
 * :adi:`AD9963`
 * HDL source code at :git-hdl:`library/axi_ad9963`
-* Linux device driver :git-linux:`ad9963.c <drivers/iio/adc/ad9963.c>`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

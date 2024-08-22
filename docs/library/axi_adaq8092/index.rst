@@ -210,7 +210,9 @@ Software Support
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_adaq8092`
+* HDL IP core at :git-hdl:`library/axi_adaq8092`
+* HDL project at :git-hdl:`projects/adaq8092_fmc`
+* HDL project documentation at :ref:`adaq8092_fmc`
 * :adi:`ADAQ8092`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`

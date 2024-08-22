@@ -817,7 +817,16 @@ Glossary
        on AXIS source interfaces when TLAST asserts earlier than the programmed
        length.
 
+Software Support
+--------------------------------------------------------------------------------
+
+* No-OS project at :git-no-OS:`drivers/axi_core/axi_dmac`
+* No-OS device driver at  :git-no-OS:`drivers/axi_core/axi_dmac/axi_dmac.c`
+* No-OS device driver documentation
+  :dokuwiki:`on wiki <resources/tools-software/uc-drivers/jesd204/axi_adxcvr>`
+
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/axi_dmac`
 * :dokuwiki:`High-Speed DMA Controller Peripheral on wiki <resources/fpga/docs/axi_dmac>`

@@ -101,4 +101,5 @@ Interface
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/util_rfifo`
 * :dokuwiki:`UTIL RFIFO on wiki <resources/fpga/docs/util_rfifo>`

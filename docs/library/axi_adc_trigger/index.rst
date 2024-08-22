@@ -201,5 +201,5 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/axi_adc_trigger`
 * :dokuwiki:`AXI ADC TRIGGER on wiki <resources/fpga/docs/axi_adc_trigger>`
-* :git-hdl:`library/axi_adc_trigger`

@@ -491,4 +491,5 @@ Software Support
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/jesd204`
 * :dokuwiki:`JESD204 Interface Framework on wiki <resources/fpga/peripherals/jesd204>`

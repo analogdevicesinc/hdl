@@ -81,3 +81,8 @@ Interface
      - Data.
    * - dout_ovf
      - Output data overflow.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/util_wfifo`
