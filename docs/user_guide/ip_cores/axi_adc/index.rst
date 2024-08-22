@@ -123,20 +123,20 @@ A generic AXI ADC core have at least three different interfaces:
      - Type
      - Description
    * - ``rx_clk``
-     - clock inputg
+     - clock input
      - core clock
    * - ``rx_sof``
-     - input[3:0]g
+     - input[3:0]
      - start of frame signal
    * - ``rx_data``
      - input[DW-1:0]
      - data input; ``DW=32*MAX_LANE_NO``
    * - ``rx_ready``
-     - outputg
+     - output
      - ready, core always ready (tied to HIGH)
    * - ``rx_valid``
-     - inputg
-     - data validg
+     - input
+     - data valid
 
 .. list-table:: Write FIFO interface
 
