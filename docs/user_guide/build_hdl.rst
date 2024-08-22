@@ -3,23 +3,24 @@
 Build an HDL project
 ===============================================================================
 
-**Please note that ADI only provides the source files necessary to create
-and build the designs. This means that you are responsible for modifying
-and building these projects.**
+.. warning::
+
+   Please note that ADI only provides the source files necessary to create
+   and build the designs. This means that you are responsible for modifying
+   and building these projects.
 
 Here, we are giving you a quick rundown on how we build things. That said,
 the steps below are **not a recommendation**, but a suggestion.
 How you want to build these projects is entirely up to you.
-The only catch is that if you run into problems, you have to resolve them independently.
+The only catch is that if you run into problems, you have to resolve them
+independently.
 
-The build process depends on certain software and tools, which you could use in many ways.
-We use **command line** and mostly **Linux systems**. On Windows, we use **Cygwin**.
+The build process depends on certain software and tools, which you could use
+in many ways. We use **command line** and mostly **Linux systems**.
+On Windows, we use **Cygwin**.
 
-Setup and check your environment
+Needed tools
 -------------------------------------------------------------------------------
-
-This section contains a guide about how to setup your environment to build any
-HDL project from the repository:
 
 #. Install the required FPGA design suite. We use `AMD Xilinx Vivado`_,
    `Intel Quartus Prime Pro and Standard`_, `Lattice Radiant`_ and
@@ -27,24 +28,19 @@ HDL project from the repository:
    You can find information about the proper version in our
    `release notes <https://github.com/analogdevicesinc/hdl/releases>`__.
    Make sure that you're always using the latest release.
-#. The proper Vivado/Quartus/Propel/Radiant version can be found in:
+#. The **required** Vivado/Quartus/Propel/Radiant version can be found in:
 
-   -  Starting with ``hdl_2021_r1`` release branch:
-      :git-hdl:`scripts/adi_env.tcl`
-   -  For ``hdl_2019_r2`` and older:
-      :git-hdl:`hdl/projects/scripts/adi_project_xilinx.tcl <hdl_2019_r2:projects/scripts/adi_project_xilinx.tcl>` for Vivado, and
-      :git-hdl:`hdl/projects/scripts/adi_project_intel.tcl <hdl_2019_r2:projects/scripts/adi_project_intel.tcl>` for Quartus.
+   -  :git-hdl:`scripts/adi_env.tcl`
+   -  or in the `release notes <https://github.com/analogdevicesinc/hdl/releases>`__
 
 #. Download the tools from the following links:
 
-   -  `AMD tools <https://www.xilinx.com/support/download.html>`__ (make sure you're
-      downloading the proper installer. For full installation, it is
-      better to choose the one that downloads and installs both Vivado
-      and Vitis at the same time)
-   -  `Intel
-      tools <https://www.intel.com/content/www/us/en/programmable/downloads/download-center.html>`__
-   -  `Lattice
-      tools <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP>`__
+   -  :xilinx:`AMD tools <support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html>`
+      (make sure you're downloading the proper installer.
+      For full installation, it is better to choose the one that downloads
+      and installs both Vivado and Vitis at the same time)
+   -  :intel:`Intel tools <content/www/us/en/programmable/downloads/download-center.html>`
+   -  `Lattice tools <https://www.latticesemi.com/en/Products/DesignSoftwareAndIP>`__
 
 #. After you have installed the above-mentioned tools, you will need the
    paths to those directories in the following steps, so have them in a
@@ -52,47 +48,6 @@ HDL project from the repository:
 #. We are using `git <https://git-scm.com/>`__ for version control and
    `GNU Make <https://www.gnu.org/software/make/>`__ to build the
    projects. Depending on what OS you're using, you have these options:
-
-.. collapsible::  For Windows environment with Cygwin
-
-   Because GNU Make is not supported on Windows, you need to install
-   `Cygwin <https://www.cygwin.com/>`__, which is a UNIX-like environment
-   and command-line interface for Microsoft Windows. You do not need to
-   install any special package, other than ``git`` and ``make``.
-
-   After you have installed Cygwin, you need to add your FPGA Design Tools
-   installation directory to your PATH environment variable. You can do
-   that by modifying your **.bashrc** file, by adding the following lines
-   (**changed accordingly to your installation directories**). For example:
-
-   .. code-block:: bash
-      :linenos:
-
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vivado/202x.x/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vivado_HLS/202x.x/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-      export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
-      export PATH=$PATH:/cygdrive/path_to/intelFPGA_pro/2x.x/quartus/bin
-
-   Replace the **path_to** string with your path to the installation folder
-   and the **tools version** with the proper one.
-
-
-.. collapsible::  How to verify your environment setup
-
-   Run any of the following commands. These commands will return a valid path
-   if your setup is good.
-
-   .. code-block:: bash
-
-      [~] which git
-      [~] which make
-      [~] which vivado
-      [~] which quartus
 
 Setup the HDL repository
 -------------------------------------------------------------------------------
@@ -102,9 +57,10 @@ ADI distributes the bit/elf files of these projects as part of the
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the repository. This is the best method to get the sources. Here, we are
-cloning the repository inside a directory called **adi**. Please refer
-to the :ref:`git_repository` section for more details.
+the repository. This is the best method to get the sources.
+
+Here, we are cloning the repository inside a directory called **adi**.
+Please refer to the :ref:`git_repository` section for more details.
 
 .. code-block:: bash
 
@@ -112,17 +68,19 @@ to the :ref:`git_repository` section for more details.
    [~] cd adi
    [~] git clone git@github.com:analogdevicesinc/hdl.git
 
-.. warning::
+.. collapsible:: Cloning is done now using SSH
 
-   Cloning the HDL repository is done now using SSH, because of
-   GitHub security reasons. Check out this documentation on `how to deal
-   with SSH keys in
-   GitHub <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`__.
-   Both for `Cygwin <https://www.cygwin.com/>`__ and
-   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__ it is
-   necessary to create a unique SSH key. If you use WSL,to get the best
-   performance, you must clone your hdl repository in the WSL file system.
-   For example: (:code:`\\\\wsl.localhost\\Ubuntu\\home\\username\\hdl`)
+   .. warning::
+
+      Cloning the HDL repository is done now using SSH, because of
+      GitHub security reasons. Check out this documentation on `how to deal
+      with SSH keys in
+      GitHub <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`__.
+      Both for `Cygwin <https://www.cygwin.com/>`__ and
+      `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__ it is
+      necessary to create a unique SSH key. If you use WSL, to get the best
+      performance, you must clone your HDL repository in the WSL file system.
+      For example: (:code:`\\\\wsl.localhost\\Ubuntu\\home\\username\\hdl`)
 
 The above command clones the **default** branch, which is the **main** for
 HDL. The **main** branch always points to the latest stable release
@@ -133,32 +91,44 @@ want to switch to any other branch you need to checkout that branch:
 
    [~] cd hdl/
    [~] git status
-   [~] git checkout hdl_2021_r2
+   [~] git checkout hdl_2022_r2
 
-If this is your first time cloning, you have all the latest source
-files. If not, you can simply pull the latest sources
-using ``git pull`` or ``git rebase`` if you have local changes.
+If this is your first time cloning, you have all the latest source files.
+If not, you can simply pull the latest sources using ``git pull`` or
+``git rebase`` if you have local changes.
 
 .. code-block:: bash
 
    [~] git fetch origin               # this shows you what changes will be pulled on your local copy
-   [~] git rebase origin/hdl_2021_r2  # this updates your local copy
+   [~] git rebase origin/hdl_2022_r2  # this updates your local copy
 
 Building the projects
 -------------------------------------------------------------------------------
 
 .. caution::
 
-   Before building any project, you must have the environment prepared and the
-   proper tools. See `Tools`_ section on what you need to download and
-   `Environment`_ section on how to set-up your environment.
+   Before building any project, you **must**:
+
+   #. check the Vivado version needed by entering the
+      :git-hdl:`hdl/scripts/adi_env.tcl <scripts/adi_env.tcl>` file. If you do
+      not want to use that (although **we strongly advise you to use it**)
+      then you have the alternative of setting ``export ADI_IGNORE_VERSION_CHECK=1``
+      before building the project. Otherwise your project will fail.
+
+   #. have the environment prepared and the proper tools. See `Tools`_ section
+      on what you need to download and `Environment`_ section on how to
+      set-up your environment.
+
+If you're not using the Vivado version we recommend, just know that we do not
+guarantee that the project will build ok. The projects are built and tested
+in hardware using the Vivado version specific for that branch.
 
 Simply put, to build a project you just run ``make`` in your Linux terminal
 or in Cygwin. For more details, please read the rest of the documentation.
 
-To clean only the project or a specific library before building it again,
+To clean only a project or an IP core before building it again,
 run ``make clean``.
-To clean both the built libraries which the project depends on and the project,
+To clean both the already built IP cores which the project depends on and the project,
 run ``make clean-all``.
 
 Building an Intel project
@@ -172,10 +142,10 @@ the project. In this example, I am only interested in the
 
 .. code-block:: bash
 
-   cd projects/adrv9371x/a10soc
-   make
+   [~] cd projects/adrv9371x/a10soc
+   [~] make
 
-This assumes that you have the tools and licenses setup correctly. If
+This assumes that you have the tools and licenses set up correctly. If
 you don't get to the last line, the make failed to build the project.
 There is nothing you can gather from the ``make`` output (other than the
 build failed or not), the actual failure is in a log file. So, let's see
@@ -205,19 +175,20 @@ this contains the most relevant information that you need to provide.
 
 .. code-block:: bash
 
-   ls -ltr projects/adrv9371x/a10soc
-   tail projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
+   [~] ls -ltr projects/adrv9371x/a10soc
+   [~] tail projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
 
 And finally, if the project was built is successfully, the **.sopcinfo** and
 **.sof** files should be in the same folder.
 
 .. code-block:: bash
 
-   ls -ltr projects/adrv9371x/a10soc/*.sopcinfo
-   ls -ltr projects/adrv9371x/a10soc/*.sof
+   [~] ls -ltr projects/adrv9371x/a10soc/*.sopcinfo
+   [~] ls -ltr projects/adrv9371x/a10soc/*.sof
 
-You may now use this **sopcinfo** file as the input to your no-OS and/or
-Linux build. The **sof** file is used to program the device.
+You may now use this **sopcinfo** file as the input to your :git-no-os:`no-OS <>`
+and/or :git-linux:`Linux <>` build.
+The **sof** file is used to program the device.
 
 .. collapsible:: Building an Intel project in WSL - known issues
 
@@ -248,10 +219,10 @@ Linux build. The **sof** file is used to program the device.
 
    .. code-block:: bash
 
-      :~$ sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
-      :~$ sudo chmod 600 /swapfile
-      :~$ sudo mkswap /swapfile
-      :~$ sudo swapon /swapfile
+      [~] sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
+      [~] sudo chmod 600 /swapfile
+      [~] sudo mkswap /swapfile
+      [~] sudo swapon /swapfile
 
    If you want to make the change permanent:
 
@@ -264,7 +235,7 @@ Linux build. The **sof** file is used to program the device.
 
    .. code-block:: bash
 
-      :~$ sudo swapoff -v /swapfile
+      [~] sudo swapoff -v /swapfile
 
 .. collapsible:: Building manually in Quartus GUI
 
@@ -287,8 +258,8 @@ Linux build. The **sof** file is used to program the device.
 
    .. code-block:: bash
 
-      cd c:/github/hdl/projects/daq2/a10soc
-      source ./system_project.tcl
+      [~] cd c:/github/hdl/projects/daq2/a10soc
+      [~] source ./system_project.tcl
 
    You will see commands being executed, the script uses a board design in
    QSYS, generate all the IP targets, synthesize the netlist and
@@ -305,8 +276,8 @@ project on the **ZC706** carrier.
 
 .. code-block:: bash
 
-   cd projects/daq2/zc706
-   make
+   [~] cd projects/daq2/zc706
+   [~] make
 
 The ``make`` builds all the libraries first and then builds the project.
 This assumes that you have the tools and licenses setup correctly. If
@@ -355,19 +326,20 @@ parallel job number is set to 4.
 
 .. code-block:: bash
 
-   export ADI_USE_OOC_SYNTHESIS=y
-   export ADI_MAX_OOC_JOBS=8
-   cd projects/daq2/zc706
-   make
+   [~] export ADI_USE_OOC_SYNTHESIS=y
+   [~] export ADI_MAX_OOC_JOBS=8
+   [~] cd projects/daq2/zc706
+   [~] make
 
 This will synthesize each IP from the block design individually and will
 store it in a common cache for future re-use. The cache is located in
-the **ipcache** folder and is common for all the projects, this way
+the **ipcache** folder and is common for all the projects; this way
 speeding up re-compile of the same project or compile time of common
-blocks used in base designs. Example: a MicroBlaze base design for
-VCU118 once compiled, it will be reused on other projects. Using the IP
-cache will speed up the re-compiles of every project in OOC mode since
-the cache is not cleared as with normal compile flow.
+blocks used in base designs.
+
+Example: a MicroBlaze base design for VCU118 once compiled, it will be reused
+on other projects. Using the IP cache will speed up the re-compiles of every
+project in OOC mode since the cache is not cleared as with normal compile flow.
 
 .. caution::
 
@@ -394,16 +366,16 @@ file. In the below example that is **axi_ad7768_ip.log** inside the
 .. code-block:: bash
 
    make[1]: Entering directory '/home/RKutty/gitadi/hdl/library/axi_ad7768'
-   rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
-   vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
+   [~] rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
+   [~] vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
 
 If the ``make`` command returns an error (and stops), **you must first check
 the contents of the log file**. You may also check the generated files for more information.
 
 .. code-block:: bash
 
-   ls -ltr library/axi_ad7768
-   tail library/axi_ad7768/axi_ad7768_ip.log
+   [~] ls -ltr library/axi_ad7768
+   [~] tail library/axi_ad7768/axi_ad7768_ip.log
 
 Checking the build and analyzing results of projects
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -415,8 +387,8 @@ this example, is called **daq2_zc706_vivado.log** and is inside the
 
 .. code-block:: bash
 
-   rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
-   vivado -mode batch -source system_project.tcl >> daq2_zc706_vivado.log 2>&1
+   [~] rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
+   [~] vivado -mode batch -source system_project.tcl >> daq2_zc706_vivado.log 2>&1
    make: Leaving directory '/home/RKutty/gitadi/hdl/projects/daq2/zc706'
 
 Do a quick (or detailed) check on files.
@@ -427,17 +399,17 @@ Do a quick (or detailed) check on files.
 
 .. code-block:: bash
 
-   ls -ltr projects/daq2/zc706
-   tail projects/daq2/zc706/daq2_zc706_vivado.log
+   [~] ls -ltr projects/daq2/zc706
+   [~] tail projects/daq2/zc706/daq2_zc706_vivado.log
 
-And finally, if the project build is successful, the **.xsa** file should be
-in the **.sdk** folder.
+And finally, if the project build is successful, the **system_top.xsa** file
+should be in the **.sdk** folder.
 
 .. code-block:: bash
 
-   ls -ltr projects/daq2/zc706/daq2_zc706.sdk
+   [~] ls -ltr projects/daq2/zc706/daq2_zc706.sdk
 
-You may now use this **.xsa** file as the input to your no-OS and/or Linux
+You may now use this **system_top.xsa** file as the input to your no-OS and/or Linux
 build.
 
 Starting with Vivado 2019.3, the output file extension was changed from
@@ -445,7 +417,7 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
 .. collapsible:: Building an AMD project in WSL - known issues
 
-   For some projects it is very possible to face the following error when you make a
+   For some projects it is possible to face the following error when you make a
    build:
 
    .. warning::
@@ -458,8 +430,8 @@ Starting with Vivado 2019.3, the output file extension was changed from
    For example, the project AD-FMCDAQ3-EBZ with Virtex UltraScale+ VCU118
    (XCVU9P device) requires 20GB (typical memory) and a peak of 32GB RAM
    memory. The following link shows the typical and peak Vivado memory usage
-   per target device: `MemoryUsage
-   <https://www.xilinx.com/products/design-tools/vivado/vivado-ml.html#memory>`__.
+   per target device:
+   :xilinx:`MemoryUsage <products/design-tools/vivado/vivado-ml.html#memory>`.
 
    This problem can be solved if a linux Swap file is created. You can
    find more information about what a swap file is at this link:
@@ -469,10 +441,10 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    .. code-block:: bash
 
-      :~$ sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
-      :~$ sudo chmod 600 /swapfile
-      :~$ sudo mkswap /swapfile
-      :~$ sudo swapon /swapfile
+      [~] sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
+      [~] sudo chmod 600 /swapfile
+      [~] sudo mkswap /swapfile
+      [~] sudo swapon /swapfile
 
    If you want to make the change permanent:
 
@@ -485,7 +457,7 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    .. code-block:: bash
 
-      :~$ sudo swapoff -v /swapfile
+      [~] sudo swapoff -v /swapfile
 
 .. collapsible:: Building manually in Vivado GUI
 
@@ -501,8 +473,8 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    .. code-block::
 
-      cd c:/github/hdl/library/axi_ltc2387
-      source ./axi_ltc2387_ip.tcl
+      [~] cd c:/github/hdl/library/axi_ltc2387
+      [~] source ./axi_ltc2387_ip.tcl
 
    You will see commands being executed, and the GUI will change into a
    project window. There is nothing to do here, you could browse the source
@@ -517,8 +489,8 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    .. code-block:: bash
 
-      cd c:/github/hdl/projects/cn0577/zed
-      source ./system_project.tcl
+      [~] cd c:/github/hdl/projects/cn0577/zed
+      [~] source ./system_project.tcl
 
    Same behavior as above, the GUI will change into a project window. The
    script will create a board design in IPI (IP Integrator), generate all the
@@ -527,17 +499,18 @@ Starting with Vivado 2019.3, the output file extension was changed from
 Building a Lattice project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   .. warning::
+.. warning::
 
-      Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
-      unknown compatibility reason. You can use Cygwin on Windows or a normal
-      Linux installation.
+   Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
+   unknown compatibility reason. You can use Cygwin on Windows or a normal
+   Linux installation.
 
 The Lattice build is in a very early version. It does not support any ADI
 library builds, yet. We're just starting to develop the library build part.
 Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
+
 The build for any supported project works with ``make``, same as the others.
 First, you have to open the **Propel Builder GUI** and download the necessary
 Lattice-provided IPs manually. You can check the **necessary Lattice IPs** and
@@ -545,6 +518,7 @@ and their versions in the
 **<project_name>_system_pb.tcl** script or follow the error messages in the
 **<project_name>_propel_builder.log** after running ``make`` and you get
 a FAILED message.
+
 Then, simply go to the carrier folder and run ``make``. For now, you can try
 to build the only base design we have available for
 **CertusPro-NX Evaluation Board** by entering the base design directory and
@@ -568,8 +542,8 @@ gp_timer             Timer-Counter                  1.3.0
 
 .. code-block:: bash
 
-   cd projects/common/lfcpnx
-   make
+   [~] cd projects/common/lfcpnx
+   [~] make
 
 This, assuming that you have the tools and licenses set up correctly. If
 you don't get to the last line, the make failed to build the project.
@@ -593,15 +567,15 @@ This contains the most relevant information that you need to provide.
 
 .. warning::
 
-   Do NOT copy-paste ``make`` command line text
+   Do NOT copy-paste ``make`` command line text!
 
 .. code-block:: bash
 
-   ls -ltr <ADI_carrier_proj_dir>
-   ls -ltr <ADI_carrier_proj_dir>/<project_name>
-   ls -ltr <ADI_carrier_proj_dir>/<project_name>/<project_name>
-   tail <ADI_carrier_proj_dir>/<project_name>_propel_builder.log
-   tail <ADI_carrier_proj_dir>/<project_name>_radiant.log
+   [~] ls -ltr <ADI_carrier_proj_dir>
+   [~] ls -ltr <ADI_carrier_proj_dir>/<project_name>
+   [~] ls -ltr <ADI_carrier_proj_dir>/<project_name>/<project_name>
+   [~] tail <ADI_carrier_proj_dir>/<project_name>_propel_builder.log
+   [~] tail <ADI_carrier_proj_dir>/<project_name>_radiant.log
 
 Note that if the **Propel Builder** project fails to build, the
 **$(PROJECT_NAME)_radiant.log** may not exist.
@@ -661,7 +635,7 @@ In general, always run ``make`` within a project folder such as
 **hdl/projects/daq2/a10soc** or **hdl/projects/daq2/zc706**. There should
 not be a need for you to run ``make`` inside the library or root folders.
 The ``make`` framework passes the top level 'targets' to any sub-makes
-inside its sub-folders. What this means is that if you run ``make`` inside
+inside its sub-folders. What this means, is that if you run ``make`` inside
 **hdl/projects/daq2**, it builds all the carriers (**kc705**, **a10soc**,
 **kcu105**, **zc706** to **zcu102**) instead of just the target carrier.
 
@@ -676,6 +650,7 @@ The following targets/arguments are supported:
   * ``make -C projects/daq2/a10soc all; # build DAQ2_A10SOC (Intel) project.``
   * ``make -C projects/daq2 all; # build DAQ2 ALL carrier (Intel & AMD) projects.``
   * ``make -C projects all; # build ALL projects (not recommended).``
+
 * ``clean``:
   Removes all tool and temporary files in the current folder and its
   sub-folders, same context as above.
@@ -703,13 +678,12 @@ Tools and their versions
 Tools
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADI provides reference designs for both Intel and AMD. Please note
-that we have no preference over Intel or AMD; if possible, we try to
-port the designs on both platforms. However, there are a few things you
-should be aware of when building the projects.
+ADI provides reference designs for Intel, AMD and soon Lattice.
 
-This is NOT a comparison (generic or otherwise)- this is what you should
-expect and understand when using ADI HDL repository on these tools.
+Please note that this is NOT a comparison (generic or otherwise).
+This is what you should expect and understand when using ADI HDL repository
+on these tools.
+
 **A red text indicates that you must pay extra attention.**
 
 .. list-table:: Tools from Intel and AMD
@@ -821,11 +795,10 @@ to use an unsupported version of tools.
    The easiest way is to check the `release
    notes <https://github.com/analogdevicesinc/hdl/releases>`__. You may
    also check out or browse the desired branch, and verify the tool version
-   in the base Tcl script ./hdl/scripts/adi_env.tcl
-   (:git-hdl:`for Vivado version <scripts/adi_env.tcl#L18>`)
-   or
-   (:git-hdl:`or for Quartus version <scripts/adi_env.tcl#L34>`),
-   which build the projects.
+   in the base Tcl script or in hdl/scripts/adi_env.tcl
+   (:git-hdl:`for Vivado version <scripts/adi_env.tcl#L18>`
+   :git-hdl:`or for Quartus version <scripts/adi_env.tcl#L34>`),
+   which builds the projects.
 
 Environment
 -------------------------------------------------------------------------------
@@ -860,46 +833,77 @@ the tools to set up the environment.
 Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The best option on Windows is to use
-`Cygwin <https://www.cygwin.com>`__. When installing it, select the
-``make`` and ``git`` packages. You should do changes to your **.bashrc**
-in a similar manner to the Linux environment.
+Because GNU Make is not supported on Windows, you need to install
+`Cygwin <https://www.cygwin.com/>`__, which is a UNIX-like environment
+and command-line interface for Microsoft Windows. You do not need to
+install any special package, other than ``git`` and ``make``. You should
+do changes to your **.bashrc** in a similar manner to the Linux environment.
+
+After you have installed Cygwin, you need to add your FPGA Design Tools
+installation directory to your PATH environment variable. You can do
+that by modifying your **.bashrc** file, by adding the following lines
+(**changed accordingly to your installation directories**).
+
+For example:
 
 .. code-block:: bash
+   :linenos:
 
-   export PATH=$PATH:/cygdrive/d/Xilinx/Vivado/202x.x/bin:/cygdrive/d/Xilinx/Vitis/202x.x/bin
-   export PATH=$PATH:/cygdrive/d/intelFPGA_pro/2x.x/quartus/bin64
-   export PATH=$PATH:/cygdrive/d/lscc/propel/202x.x/builder/rtf/bin/nt64
-   export PATH=$PATH:/cygdrive/d/lscc/radiant/202x.x/bin/nt64
+   // AMD Xilinx
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vivado/202x.x/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vivado_HLS/202x.x/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+   export PATH=$PATH:/cygdrive/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
-A very good alternative to Cygwin is
-`WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. The changes
-to your **.bashrc** should look like:
+   // Intel
+   export PATH=$PATH:/cygdrive/path_to/intelFPGA_pro/2x.x/quartus/bin64
 
-.. code-block:: bash
+   // Lattice
+   export PATH=$PATH:/cygdrive/path_to/lscc/propel/202x.x/builder/rtf/bin/nt64
+   export PATH=$PATH:/cygdrive/path_to/lscc/radiant/202x.x/bin/nt64
 
-   export PATH=$PATH:/opt/Vivado/202x.x/bin:/opt/Vitis/202x.x/bin
-   export PATH=$PATH:/opt/quartus/bin
-   export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
-   export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
+   Replace the **path_to** string with your path to the installation folder
+   and the **tools version** with the proper one.
 
-If you do not want to install Cygwin, there might still be some
+A very good alternative to Cygwin -- but not supported by us -- is
+`WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__.
+
+If you do not want to use neither Cygwin nor WSL, there might still be some
 alternative. There are ``make`` alternatives for **Windows Command
 Prompt**, minimalist GNU for Windows (**MinGW**), or the **Cygwin
-variations** installed by the tools itself.
+variations** installed by the tools itself. But note that we do not support it.
 
 Some of these may not be fully functional with our scripts and/or projects.
 If you are an Intel user, the **Nios II Command Shell** does support make.
 If you are an AMD user, use the **gnuwin** installed as part of the SDK,
 usually at ``C:\Xilinx\Vitis\202x.x\gnuwin\bin``.
 
+.. collapsible::  How to verify your environment setup
+
+   Run any of the following commands. These commands will return a valid path
+   if your setup is good.
+
+   .. code-block:: bash
+
+      [~] which git
+      [~] which make
+      [~] which vivado
+      [~] which quartus
+
 Preparing the SD card
 -------------------------------------------------------------------------------
 
 Firstly, you have to check this
-`tutorial <https://wiki.analog.com/resources/tools-software/linux-software/zynq_images/windows_hosts>`__
+:dokuwiki:`tutorial <resources/tools-software/linux-software/zynq_images/windows_hosts>`
 on how to put the Linux image on your SD card. Once you are done with
 that, you can go on with the following steps.
+
+For AMD FPGAs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On the BOOT partition recently created, you will find folders for each
 carrier that we support, and each of these folders contain an archive
@@ -939,19 +943,24 @@ More info on how to generate this file you will find in the
         usage: build_boot_bin.sh system_top.xsa u-boot.elf [output-archive]
 
    You can download the script by accessing the following link:
-   `build_boot_bin.sh <https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynq-boot-image>`__.
+   :dokuwiki:`build_boot_bin.sh <resources/tools-software/linux-software/build-the-zynq-boot-image>`.
+
+For Intel FPGAs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 
 References
 -------------------------------------------------------------------------------
 
--  `How to build the Zynq boot image
-   BOOT.BIN <https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynq-boot-image>`__
--  `How to build the ZynqMP boot image
-   BOOT.BIN <https://wiki.analog.com/resources/tools-software/linux-software/build-the-zynqmp-boot-image>`__
--  `Building the ADI Linux
-   kernel <https://wiki.analog.com/resources/tools-software/linux-drivers-all>`__
+-  :dokuwiki:`How to build the Zynq boot image
+   BOOT.BIN <resources/tools-software/linux-software/build-the-zynq-boot-image>`
+-  :dokuwiki:`How to build the ZynqMP boot image
+   BOOT.BIN <resources/tools-software/linux-software/build-the-zynqmp-boot-image>`
+-  :dokuwiki:`Building the ADI Linux
+   kernel <resources/tools-software/linux-drivers-all>`
 
-Errors, Warnings and Notes
+Errors, warnings and notes
 -------------------------------------------------------------------------------
 
 Assuming the right to make an honest comment, the tools (both Quartus
@@ -962,7 +971,7 @@ going to see a lot of **warnings** and some **critical-warnings** (critical
 to what could be hard to answer). Here are some of the commonly asked
 EngineerZone questions and their explanations.
 
-AMD: Vivado
+AMD Xilinx Vivado
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
