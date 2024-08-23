@@ -223,12 +223,6 @@ the HDL repository, and then build the project as follows:.
 This project uses `Corundum NIC <https://github.com/corundum/corundum>`_
 and it needs to be cloned alongside this repository.
 
-.. code::
-
-   hdl/../> git clone https://github.com/corundum/corundum.git
-   hdl/../corundum/> git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-   hdl/library/corundum> make &
-
 .. admonition:: Publications
 
    The following papers pertain to the Corundum source code:
