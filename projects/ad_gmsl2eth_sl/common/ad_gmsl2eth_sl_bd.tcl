@@ -421,14 +421,17 @@ ad_cpu_interconnect 0x44B20000 v_frmbuf_6
 ad_cpu_interconnect 0x44B40000 v_frmbuf_7
 ad_cpu_interconnect 0x44B60000 axi_pwm_gen_0
 
-assign_bd_address -target_address_space /v_frmbuf_7/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_6/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_5/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_4/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_3/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP0_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_2/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP2/HP0_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_1/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP2/HP0_DDR_LOW]
-assign_bd_address -target_address_space /v_frmbuf_0/Data_m_axi_mm_video [get_bd_addr_segs sys_ps8/SAXIGP3/HP0_DDR_LOW]
+assign_bd_address [get_bd_addr_segs { \
+  sys_ps8/SAXIGP3/HP1_DDR_LOW \
+  sys_ps8/SAXIGP3/HP1_DDR_LOW \
+  sys_ps8/SAXIGP3/HP1_DDR_LOW \
+  sys_ps8/SAXIGP3/HP1_DDR_LOW \
+  sys_ps8/SAXIGP3/HP1_DDR_LOW \
+  sys_ps8/SAXIGP3/HP0_DDR_LOW \
+  sys_ps8/SAXIGP2/HP0_DDR_LOW \
+  sys_ps8/SAXIGP2/HP0_DDR_LOW \
+  sys_ps8/SAXIGP3/HP0_DDR_LOW \
+}]
 
 # Interrrupts
 ad_cpu_interrupt ps-15 mb-15 mipi_csi2_rx_subsyst_0/csirxss_csi_irq
@@ -666,8 +669,10 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__MAXIGP0__DATA_WIDTH 32
 ad_connect smartconnect_corundum/S00_AXI sys_ps8/M_AXI_HPM0_FPD
 ad_connect sys_ps8/maxihpm0_fpd_aclk $sys_dma_clk
 
-assign_bd_address -offset 0xA000_0000 -range 16M -target_address_space sys_ps8/Data [get_bd_addr_segs corundum/s_axil_ctrl/Reg] -force
-assign_bd_address -offset 0xA800_0000 -range 16M -target_address_space sys_ps8/Data [get_bd_addr_segs corundum/s_axil_app_ctrl/Reg] -force
+assign_bd_address [get_bd_addr_segs { \
+  corundum/s_axil_ctrl/Reg \
+  corundum/s_axil_app_ctrl/Reg \
+}]
 
 ad_ip_instance util_reduced_logic util_reduced_logic_0
 ad_ip_parameter util_reduced_logic_0 CONFIG.C_OPERATION {or}
@@ -677,11 +682,12 @@ ad_connect util_reduced_logic_0/Op1 corundum/core_irq
 
 ad_cpu_interrupt ps-4 mb-4 util_reduced_logic_0/Res
 
-ad_mem_hpc0_interconnect $sys_dma_clk ""
-ad_ip_parameter sys_ps8 CONFIG.PSU__SAXIGP0__DATA_WIDTH 128
-ad_connect corundum/m_axi_dma axi_hpc0_interconnect/S00_AXI
+ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0_FPD
+ad_mem_hpc0_interconnect $sys_dma_clk corundum/m_axi_dma
 
-assign_bd_address -target_address_space /corundum/m_axi_dma [get_bd_addr_segs sys_ps8/SAXIGP0/HPC0_LPS_OCM] -force
-assign_bd_address -target_address_space /corundum/m_axi_dma [get_bd_addr_segs sys_ps8/SAXIGP0/HPC0_QSPI] -force
-assign_bd_address -target_address_space /corundum/m_axi_dma [get_bd_addr_segs sys_ps8/SAXIGP0/HPC0_DDR_LOW] -force
-assign_bd_address -target_address_space /corundum/m_axi_dma [get_bd_addr_segs sys_ps8/SAXIGP0/HPC0_DDR_HIGH] -force
+assign_bd_address [get_bd_addr_segs { \
+  sys_ps8/SAXIGP0/HPC0_LPS_OCM \
+  sys_ps8/SAXIGP0/HPC0_QSPI \
+  sys_ps8/SAXIGP0/HPC0_DDR_LOW \
+  sys_ps8/SAXIGP0/HPC0_DDR_HIGH \
+}]
