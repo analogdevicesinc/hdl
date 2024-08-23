@@ -25,6 +25,7 @@ Contents
    AD4630-FMC/AD4030-FMC/ADAQ4224-FMC <ad4630_fmc/index>
    AD469X-FMC <ad469x_fmc/index>
    AD485X-FMCZ <ad485x_fmcz/index>
+   AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
    AD7124-4-ASDZ/AD7124-8-ASDZ <ad7124_asdz/index>
    AD7134-FMC <ad7134_fmc/index>
