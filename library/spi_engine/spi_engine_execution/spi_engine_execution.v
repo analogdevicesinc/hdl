@@ -251,7 +251,7 @@ module spi_engine_execution #(
   assign trigger_tx = trigger == 1'b1 && ntx_rx == 1'b0;
   assign trigger_rx = trigger == 1'b1 && ntx_rx == 1'b1;
 
-  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0];
+  assign sleep_counter_compare = sleep_counter == cmd_d1[7:0]+1;
   assign cs_sleep_counter_compare = cs_sleep_counter == cmd_d1[9:8];
   assign cs_sleep_early_exit = (cmd_d1[9:8] == 2'b00);
 
