@@ -136,7 +136,7 @@ FIELD
 [31:0] 0x00000000
 UP_WRITE_DATA
 WO
-This register can be used to read the device registers on PARALLEL software mode.
+This register can be used to write the device registers on PARALLEL software mode.
 ENDFIELD
 
 ############################################################################################
