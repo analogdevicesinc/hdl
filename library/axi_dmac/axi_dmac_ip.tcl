@@ -281,6 +281,7 @@ foreach {k v} { \
   "DISABLE_DEBUG_REGISTERS" "false" \
   "ENABLE_DIAGNOSTICS_IF" "false" \
   "CACHE_COHERENT" "false" \
+  "SG_DELAYED_INPUT" "false" \
   } { \
   set_property -dict [list \
     "value_format" "bool" \
@@ -455,23 +456,37 @@ set_property -dict [list \
 set p [ipgui::get_guiparamspec -name "DMA_SG_TRANSFER" -component $cc]
 ipgui::move_param -component $cc -order 1 $p -parent $feature_group
 set_property -dict [list \
-  "display_name" "SG Transfer Support" \
+  "tooltip" "Scatter-Gather Transfer Support" \
 ] $p
+set_property -dict [list \
+  "display_name" "SG Transfer Support" \
+  "enablement_tcl_expr" "\$DMA_TYPE_SRC == 0 || \$DMA_TYPE_DEST == 0" \
+] [ipx::get_user_parameters DMA_SG_TRANSFER -of_objects $cc]
+
+set p [ipgui::get_guiparamspec -name "SG_DELAYED_INPUT" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $feature_group
+set_property -dict [list \
+  "tooltip" "Read one set of data at a time to prevent IRQ overlap for partial transfers" \
+] $p
+set_property -dict [list \
+  "display_name" "SG Slow Transfer Support" \
+  "enablement_tcl_expr" "\$DMA_SG_TRANSFER == true" \
+] [ipx::get_user_parameters SG_DELAYED_INPUT -of_objects $cc]
 
 set p [ipgui::get_guiparamspec -name "DMA_2D_TRANSFER" -component $cc]
-ipgui::move_param -component $cc -order 2 $p -parent $feature_group
+ipgui::move_param -component $cc -order 3 $p -parent $feature_group
 set_property -dict [list \
   "display_name" "2D Transfer Support" \
 ] $p
 
 set p [ipgui::get_guiparamspec -name "SYNC_TRANSFER_START" -component $cc]
-ipgui::move_param -component $cc -order 3 $p -parent $feature_group
+ipgui::move_param -component $cc -order 4 $p -parent $feature_group
 set_property -dict [list \
   "display_name" "Transfer Start Synchronization Support" \
 ] $p
 
 set p [ipgui::get_guiparamspec -name "CACHE_COHERENT" -component $cc]
-ipgui::move_param -component $cc -order 4 $p -parent $feature_group
+ipgui::move_param -component $cc -order 5 $p -parent $feature_group
 set_property -dict [list \
   "tooltip" "Assume DMA ports ensure cache coherence (e.g. Ultrascale HPC port)" \
 ] $p
@@ -510,14 +525,22 @@ set_property -dict [list \
 set p [ipgui::get_guiparamspec -name "ASYNC_CLK_SRC_SG" -component $cc]
 ipgui::move_param -component $cc -order 4 $p -parent $clk_group
 set_property -dict [list \
-  "display_name" "Source and Scatter-Gather Clock Asynchronous" \
+  "tooltip" "Source and Scatter-Gather Clock Asynchronous" \
 ] $p
+set_property -dict [list \
+  "display_name" "Source and Scatter-Gather Clock Asynchronous" \
+  "enablement_tcl_expr" "\$DMA_SG_TRANSFER == true" \
+] [ipx::get_user_parameters ASYNC_CLK_SRC_SG -of_objects $cc]
 
 set p [ipgui::get_guiparamspec -name "ASYNC_CLK_DEST_SG" -component $cc]
 ipgui::move_param -component $cc -order 5 $p -parent $clk_group
 set_property -dict [list \
-  "display_name" "Destination and Scatter-Gather Clock Asynchronous" \
+  "tooltip" "Destination and Scatter-Gather Clock Asynchronous" \
 ] $p
+set_property -dict [list \
+  "display_name" "Destination and Scatter-Gather Clock Asynchronous" \
+  "enablement_tcl_expr" "\$DMA_SG_TRANSFER == true" \
+] [ipx::get_user_parameters ASYNC_CLK_DEST_SG -of_objects $cc]
 
 set dbg_group [ipgui::add_group -name {Debug} -component $cc \
   -parent $page0 -display_name {Debug}]

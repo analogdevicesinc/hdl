@@ -40,6 +40,7 @@
 <: set disable_debug_registers [get_property MODELPARAM_VALUE.DISABLE_DEBUG_REGISTERS] :>
 <: set enable_diagnostics_if   [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
 <: set cache_coherent          [get_property MODELPARAM_VALUE.CACHE_COHERENT] :>
+<: set sg_delayed_input        [get_property MODELPARAM_VALUE.SG_DELAYED_INPUT] :>
 
 <: proc b2i {b} { if {$b==true} {return 1} else {return 0}} :>
 ///////////////////////////////////////////////////////////////////////////
@@ -84,6 +85,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_DISABLE_DEBUG_REGISTERS = <=: b2i $disable_debug_registers :>;
   parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF   = <=: b2i $enable_diagnostics_if :>;
   parameter <=: ComponentName :>_CACHE_COHERENT          = <=: b2i $cache_coherent :>;
+  parameter <=: ComponentName :>_SG_DELAYED_INPUT        = <=: b2i $sg_delayed_input :>;
 //////////////////////////////////////////////////////////////////////////
 
 endpackage : <=: ComponentName :>_pkg
