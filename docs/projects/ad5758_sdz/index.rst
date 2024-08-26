@@ -7,7 +7,7 @@ Overview
 -----------------------------------------------------------------------------------
 
 The :adi:`AD5758` is a single-channel, voltage and current output digital-to-analog
-converter (DAC) that operates with a power supply range from −33 V (minimum) on 
+converter (DAC) that operates with a power supply range from −33 V (minimum) on
 AVSS to +33 V (maximum) on AVDD1 with a maximum operating voltage between the two
 rails of 60 V. On-chip DPC (dynamic power control) minimizes package power
 dissipation, which is achieved by regulating the supply voltage (VDPC+) to the
@@ -49,7 +49,7 @@ Supported carriers
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
+-   :adi:`SDP-S`
 
 Block design
 -------------------------------------------------------------------------------
@@ -59,8 +59,10 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-
-
+.. image:: ad5758_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD5758_SDZ block diagram
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,14 +71,14 @@ Jumper setup
 Jumper/Solder link Default Position Description
 ================== ================ =============================================
 JP1                B                Position B selects the VOUT3 pin of the
-                                    :adi:`ADP1031-1`
+                                    :adi:`ADP1031`
 JP2                Inserted         Connects the VLOGIC pin of the :adi:`AD5758`
-                                    to the SVDD1 pin of the :adi:`ADP1031-1`
-JP3                B ??             Position B selects the 3.3 V input via the
+                                    to the SVDD1 pin of the :adi:`ADP1031`
+JP3                B                Position B selects the 3.3 V input via the
                                     EXT+3.3V header to the MVDD pin of the
-                                    :adi:`ADP1031-1`                                  
+                                    :adi:`ADP1031`
 JP4                A                Position A connects the LDAC pin to GND
-JP5                B ??             Position B selects the VLDO pin as the input
+JP5                B                Position B selects the VLDO pin as the input
                                     voltage to the :adi:`ADR4525`
 JP6                Not inserted     Shorts the VDPC+ pin to the AVDD1 pin,
                                     bypassing the positive dc-to-dc circuitry
@@ -88,11 +90,16 @@ JP10               B                Position B selects the :adi:`ADR4525` output
 JP11               Inserted         Selects 3.3 V output of the VLDO pin to the
                                     VLOGIC pin
 JP12               A                Position A selects VOUT2 of the 
-                                    :adi:`ADP1031-1` as the input voltage to the
+                                    :adi:`ADP1031` as the input voltage to the
                                     AVDD2 pin
-JP13               Inserted         Connects VOUT1 of the :adi:`ADP1031-1` to
-                                    the AVDD1 pin                                                                                                                                                                                              
+JP13               Inserted         Connects VOUT1 of the :adi:`ADP1031` to
+                                    the AVDD1 pin
 ================== ================ =============================================
+
+.. note::
+
+    Jumpers on the P2_Header must be inserted to make the connection between the
+    :adi:`ADP1031` and the :adi:`SDP-S`.
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,11 +123,11 @@ The Software GPIO number is calculated as follows:
    * - dac_ldac_n
      - OUT
      - 34
-     - 88  
+     - 88
    * - dac_reset_n
      - OUT
      - 33
-     - 87 
+     - 87
    * - dac_fault_n
      - IN
      - 32
@@ -197,6 +204,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- :dokuwiki:`Using the Serial Peripheral Interface on the AD5758 <resources/eval/user-guides/spi>`
+
 Linux support:
 
 - :dokuwiki:`AD5758 IIO DAC Linux Driver <resources/tools-software/linux-drivers/iio-dac/ad5758>`
@@ -207,7 +216,6 @@ No-OS support:
 -  :git-no-os:`AD5758-SDZ No-OS project source code <projects/ad5758-sdz>`
 -  :git-no-os:`AD5758 No-OS Driver source code <drivers/dac/ad5758>`
 -  :dokuwiki:`AD5758 No-OS Driver documentation <resources/tools-software/uc-drivers/ad5758>`
--  :dokuwiki:`AD4110 IIO Application <resources/tools-software/product-support-software/ad4110_mbed_iio_application>`
 
 .. include:: ../common/more_information.rst
 
