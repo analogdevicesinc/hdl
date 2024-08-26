@@ -74,7 +74,7 @@ module axi_dmac #(
   parameter CACHE_COHERENT = 0,
   parameter [3:0] AXI_AXCACHE = 4'b0011,
   parameter [2:0] AXI_AXPROT = 3'b000,
-  parameter SG_SLOW_TRANSFER = 0
+  parameter SG_DELAYED_INPUT = 0
 ) (
 
   // Slave AXI interface
@@ -735,12 +735,7 @@ module axi_dmac #(
   assign m_axis_dest = 'h0;
   assign m_axis_user = 'h0;
 
-  if (SG_SLOW_TRANSFER == 0) begin
-
-    assign s_axis_ready = s_axis_ready_t;
-    assign s_axis_valid_t = s_axis_valid;
-
-  end else begin
+  if (DMA_SG_TRANSFER == 1 && SG_DELAYED_INPUT == 1) begin
 
     sync_bits #(
       .NUM_OF_BITS (1),
@@ -765,6 +760,11 @@ module axi_dmac #(
 
     assign s_axis_ready = (packet_received) ? 1'b0 : s_axis_ready_t;
     assign s_axis_valid_t = (packet_received) ? 1'b0 : s_axis_valid;
+
+  end else begin
+
+    assign s_axis_ready = s_axis_ready_t;
+    assign s_axis_valid_t = s_axis_valid;
 
   end
   
