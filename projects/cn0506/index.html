@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AD4134-FMC HDL project &#8212; HDL  documentation</title>
+    <title>CN0506 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=a3ba2641" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD4170_ASDZ HDL project" href="../ad4170_asdz/index.html" />
-    <link rel="prev" title="AD411x_AD717x HDL project" href="../ad411x_ad717x/index.html" />
+    <link rel="next" title="CN0561 HDL project" href="../cn0561/index.html" />
+    <link rel="prev" title="CN0540 HDL project" href="../cn0540/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -99,17 +99,22 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD4134-FMC HDL project</a><ul>
+<li><a class="reference internal" href="#">CN0506 HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#cn0506-mii-interface">CN0506_MII interface</a></li>
+<li><a class="reference internal" href="#cn0506-rgmii-interface">CN0506_RGMII interface</a></li>
+<li><a class="reference internal" href="#cn0506-rmii-interface">CN0506_RMII interface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resistor-based-setup">Resistor-based setup</a></li>
+<li><a class="reference internal" href="#mdi-related-resistor-based-setup">MDI-related resistor-based setup</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
-<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#gpio">GPIO</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
@@ -260,7 +265,7 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x_AD717x</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
@@ -283,7 +288,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cn0506/index.html">CN0506</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CN0506</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
@@ -305,75 +310,147 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="ad4134-fmc-hdl-project">
-<span id="ad4134-fmc"></span><h1>AD4134-FMC HDL project<a class="headerlink" href="#ad4134-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="cn0506-hdl-project">
+<span id="cn0506"></span><h1>CN0506 HDL project<a class="headerlink" href="#cn0506-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4134">AD4134</a> is a quad channel, low noise, simultaneous sampling,
-precision  analog-to-digital converter (ADC), based on the continuous time
-sigma-delta (CTSD) modulation scheme. This architecture inherently rejects
-signals around the ADC aliasing frequency band, giving the device its inherent
-antialiasing capability, and removesthe need for a complex external
-antialiasing filter.</p>
-<p>This device has four independent converter channels in parallel, each with a
-CTSD modulator and a digital decimation and filtering path. It enables
-simultaneous sampling of four signal sources, with a maximum input bandwidth
-of 391.5 kHz. It supports a wide range of ODR frequencies, from 0.01 kSPS to
-1496 kSPS wih less than 0.01 SPS adjustment resolution, allowing the user to
-granularly vary sampling speed to achieve coherent sampling.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4134">AD4134</a> supports two device configuration schemes: serial peripheral
-interface (SPI) and hardware pin configuration (pin control mode). The SPI
-control mode offers access to all the features and configuration options
-available on the chip.Pin control mode offers the benefit of simplifying the
-device configuration, enabling the device to operate autonomously after
-power-up operating in a standalone mode.</p>
-<p>The HDL reference design for the EVAL-AD4134 provides all the interfaces that
-are necessary to interact with the device using a Xilinx FPGA development
-board; to acquire continuous data from the 24-bit 4-channel precision alias
-free ADC device.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/CN0506">CN0506</a> is a dual channel, low latency, low power Ethernet PHY card supporting
+speeds of 10/100/1000 Mbps for Industrial Ethernet applications. The circuit consists of two
+indivudual, independent 10/100/1000Mb <a class="icon adi reference external" href="https://www.analog.com/ADIN1300">ADIN1300</a> PHYs, each with an energy efficient
+Ethernet (EEE) physical layer device (PHY) core with all associated common analog circuitry,
+input and output clock buffering, management interface, subsystem registers, MAC interface
+and control logic.</p>
+<p>The design is powered from the host field programmable gate array (FPGA) mezzanine card (FMC)
+development board, eliminating the need for an external power supply. A software programmable
+clock enables media independent interface (MII), reduced MII (RMII), and reduced Gigabit MII (RGMII)
+MAC interface modes. RJ45 ports with integrated magnetics keep the solution as compact as possible.
+The solution supports cable lengths up to 150 meters at gigabit speeds and up to 180 meters
+at 100 Mbps or 10 Mbps.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4134">EVAL-AD4134</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/design-center/reference-designs/circuits-from-the-lab/cn0506">EVAL-CN0506</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4134">AD4134</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADIN1300">ADIN1300</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/4316fa.pdf">LTC4316</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/3502fd.pdf">LTC3502</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
+<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/arria/10/sx.html">A10SOC</a> on FMC_A HPC *</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> on FMC HPC1</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a> on FMC LPC</p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
 </ul>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  only the MII interface is supported to be connected to A10SoC</p></li>
+</ul>
+</div>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<p>The reference design uses the SPI Engine Framework to interface with the AD4134
-ADC and only supports the slave mode with both DCLK and ODR generated by the
-FPGA. The device sends data on the 4 DIN bits.</p>
+<p>The reference design uses <a class="reference internal" href="../../library/util_mii_to_rmii/index.html#util-mii-to-rmii"><span class="std std-ref">Util MII to RMII</span></a> converter to interface the MII
+option of the CN0506’s ethernet PHYs and Xilinx’s GMII to RGMII converter for the
+RGMII option of the kit with Xilinx’s Zynq7000 or ZynqMP SoC implementations.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
-<p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad4134_hdl.svg"><img alt="AD4134-FMC/ZED block diagram" class="align-center" src="../../_images/ad4134_hdl.svg" width="800" /></a>
+<p>The data path and clock domains for all the three MII interface types are depicted
+in the below diagrams:</p>
+<section id="cn0506-mii-interface">
+<h4>CN0506_MII interface<a class="headerlink" href="#cn0506-mii-interface" title="Permalink to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_mii.svg"><img alt="CN0506 MII-based block diagram" class="align-center" src="../../_images/cn0506_mii.svg" width="800" /></a>
 </section>
-<section id="jumper-setup">
-<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper docutils container">
+<section id="cn0506-rgmii-interface">
+<h4>CN0506_RGMII interface<a class="headerlink" href="#cn0506-rgmii-interface" title="Permalink to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_rgmii.svg"><img alt="CN0506 RGMII-based block diagram" class="align-center" src="../../_images/cn0506_rgmii.svg" width="800" /></a>
+</section>
+<section id="cn0506-rmii-interface">
+<h4>CN0506_RMII interface<a class="headerlink" href="#cn0506-rmii-interface" title="Permalink to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/cn0506_rmii.svg"><img alt="CN0506 RMII-based block diagram" class="align-center" src="../../_images/cn0506_rmii.svg" width="800" /></a>
+</section>
+</section>
+<section id="resistor-based-setup">
+<h3>Resistor-based setup<a class="headerlink" href="#resistor-based-setup" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Jumper/Solder link</p></th>
-<th class="head"><p>Position</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head"><p>MAC interface selection</p></th>
+<th class="head"><p>MACIF_SEL1(PHY A/PHY B)</p></th>
+<th class="head"><p>MACIF_SEL0(PHY A/PHY B)</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>JP16</p></td>
-<td><p>Mounted</p></td>
-<td><p>MODE (Slave) and DCLKIO (Input)</p></td>
+<tr class="row-even"><td><p>RGMII RXC/TXC 2ns delay</p></td>
+<td><p>R12/R78</p></td>
+<td><p>R9/R75</p></td>
+</tr>
+<tr class="row-odd"><td><p>RGMII RXC/TXC 2ns delay</p></td>
+<td><p>R11/R77</p></td>
+<td><p>R9/R75</p></td>
+</tr>
+<tr class="row-even"><td><p>MII</p></td>
+<td><p>R17/R78</p></td>
+<td><p>R8/R74</p></td>
+</tr>
+<tr class="row-odd"><td><p>RMII</p></td>
+<td><p>R11/R77</p></td>
+<td><p>R8/R74</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="mdi-related-resistor-based-setup">
+<h3>MDI-related resistor-based setup<a class="headerlink" href="#mdi-related-resistor-based-setup" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52.9%" />
+<col style="width: 11.8%" />
+<col style="width: 23.5%" />
+<col style="width: 11.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Configuration</p></th>
+<th class="head"><p>MODE</p></th>
+<th class="head"><p>R_LO</p></th>
+<th class="head"><p>R_HI</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Manual MDI</p></td>
+<td><p>MODE_1</p></td>
+<td><p>10k</p></td>
+<td><p>Open</p></td>
+</tr>
+<tr class="row-odd"><td><p>Manual MDIX</p></td>
+<td><p>MODE_2</p></td>
+<td><p>10k</p></td>
+<td><p>56k</p></td>
+</tr>
+<tr class="row-even"><td><p>Auto MDIX - Prefer MDIX</p></td>
+<td><p>MODE_3</p></td>
+<td><p>56k</p></td>
+<td><p>10k</p></td>
+</tr>
+<tr class="row-odd"><td><p>Auto MDIX - Prefer MDI</p></td>
+<td><p>MODE_4</p></td>
+<td><p>Open</p></td>
+<td><p>10k</p></td>
 </tr>
 </tbody>
 </table>
@@ -391,54 +468,47 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>spi_ad4134_axi_regmap</p></td>
-<td><p>0x44A0_0000</p></td>
+<tr class="row-even"><td><p>axi_iic_main *</p></td>
+<td><p>0x4160_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ad4134_dma</p></td>
-<td><p>0x44A3_0000</p></td>
+<tr class="row-odd"><td><p>axi_sysid_0</p></td>
+<td><p>0x4500_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>odr_generator</p></td>
-<td><p>0x44B0_0000</p></td>
+<tr class="row-even"><td><p>axi_hdmi_clkgen *</p></td>
+<td><p>0x7900_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ad4134_clkgen</p></td>
-<td><p>0x44B1_0000</p></td>
+<tr class="row-odd"><td><p>axi_hdmi_dma *</p></td>
+<td><p>0x4300_0000</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>SPI type</p></th>
-<th class="head"><p>SPI manager instance</p></th>
-<th class="head"><p>SPI subordinate</p></th>
-<th class="head"><p>CS</p></th>
+<tr class="row-even"><td><p>axi_hdmi_core *</p></td>
+<td><p>0x70e0_0000</p></td>
 </tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>PS</p></td>
-<td><p>SPI 0</p></td>
-<td><p>AD4134</p></td>
-<td><p>0</p></td>
+<tr class="row-odd"><td><p>axi_spdif_tx_core *</p></td>
+<td><p>0x75c0_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_i2s_adi **</p></td>
+<td><p>0x7760_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_iic_fmc **</p></td>
+<td><p>0x4162_0000</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed and ZC706 carriers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for Zed carrier</p></li>
+</ul>
+</div>
 </section>
-<section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<section id="gpio">
+<h3>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading">#</a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
-<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
+<li><p>Zynq-7000: if PS7 EMIOs are used, then offset is 54</p></li>
+<li><p>ZynqMP: if PS8 EMIOs are used, then offset is 78</p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -457,47 +527,108 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <tr class="row-even"><th class="head"></th>
 <th class="head"><p>(from FPGA view)</p></th>
 <th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
+<th class="head"><p>Zynq-7000/ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ad4134_dclkio</p></td>
-<td><p>INOUT</p></td>
-<td><p>45</p></td>
-<td><p>99</p></td>
-</tr>
-<tr class="row-even"><td><p>ad4134_dclk_mode</p></td>
-<td><p>INOUT</p></td>
-<td><p>44</p></td>
-<td><p>98</p></td>
-</tr>
-<tr class="row-odd"><td><p>ad4134_gpio[7:0]</p></td>
-<td><p>INOUT</p></td>
-<td><p>43:36</p></td>
-<td><p>97:90</p></td>
-</tr>
-<tr class="row-even"><td><p>ad4134_pinbspi</p></td>
-<td><p>INOUT</p></td>
+<tr class="row-odd"><td><p>link_st_a</p></td>
+<td><p>IN</p></td>
 <td><p>35</p></td>
 <td><p>89</p></td>
 </tr>
-<tr class="row-odd"><td><p>ad4134_mode</p></td>
-<td><p>INOUT</p></td>
+<tr class="row-even"><td><p>link_st_b</p></td>
+<td><p>IN</p></td>
 <td><p>34</p></td>
 <td><p>88</p></td>
 </tr>
-<tr class="row-even"><td><p>ad4134_pdn</p></td>
-<td><p>INOUT</p></td>
+<tr class="row-odd"><td><p>int_n_a</p></td>
+<td><p>IN</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 </tr>
-<tr class="row-odd"><td><p>ad4134_resetn</p></td>
-<td><p>INOUT</p></td>
+<tr class="row-even"><td><p>int_n_b</p></td>
+<td><p>IN</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
 </tr>
+<tr class="row-odd"><td><p>gpio_bd[31:0] *</p></td>
+<td><p>INOUT</p></td>
+<td><p>31:0</p></td>
+<td><p>85:54</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_bd[14:0] **</p></td>
+<td><p>INOUT</p></td>
+<td><p>14:0</p></td>
+<td><p>68:54</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio_bd_i[20:8] ***</p></td>
+<td><p>IN</p></td>
+<td><p>20:8</p></td>
+<td><p>98:86</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_bd_o[7:0] ***</p></td>
+<td><p>OUT</p></td>
+<td><p>7:0</p></td>
+<td><p>85:78</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<ul class="simple">
+<li><p>Intel FPGAs - Altera Arria 10 SoC</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"><p>Arria10SoC</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>link_st_a</p></td>
+<td><p>IN</p></td>
+<td><p>35</p></td>
+</tr>
+<tr class="row-even"><td><p>link_st_b</p></td>
+<td><p>IN</p></td>
+<td><p>34</p></td>
+</tr>
+<tr class="row-odd"><td><p>mii_crs_a</p></td>
+<td><p>IN</p></td>
+<td><p>33</p></td>
+</tr>
+<tr class="row-even"><td><p>mii_crs_b</p></td>
+<td><p>IN</p></td>
+<td><p>32</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio_bd_i[11:4]</p></td>
+<td><p>IN</p></td>
+<td><p>11:4</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_bd_o</p></td>
+<td><p>OUT</p></td>
+<td><p>3:0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed carrier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for ZC706 carrier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">***</span></code> instantiated only for ZCU102 carrier</p></li>
+</ul>
 </div>
 </section>
 <section id="interrupts">
@@ -513,18 +644,30 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad4134_dma</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
+<tr class="row-even"><td><p>axi_hdmi_dma/irq*</p></td>
+<td><p>15</p></td>
+<td><p>59</p></td>
+<td><p>91</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_ad4134</p></td>
-<td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
+<tr class="row-odd"><td><p>axi_iic_main/iic2intc_irpt*</p></td>
+<td><p>14</p></td>
+<td><p>58</p></td>
+<td><p>90</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_iic_fmc/iic2intc_irpt*</p></td>
+<td><p>11</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed and ZC706 carriers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for Zed carrier</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -538,10 +681,16 @@ If you want to build the sources, ADI makes them available on the
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad4134_fmc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad4134_fmc/zed$ make
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/cn0506/zed
+<span class="linenos">2</span>user@analog:~/hdl/projects/cn0506/zed$ make INTF_CFG=MII
 </pre></div>
 </div>
+<p>The result of the build, if parameters were used, will be in a folder named
+by the configuration used:</p>
+<p>if the following command was run</p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF_CFG=MII</span></code></p>
+<p>then the folder name will be:</p>
+<p><code class="docutils literal notranslate"><span class="pre">INTF_CFGMII</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>
 user guide.</p>
 </section>
@@ -550,14 +699,14 @@ user guide.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD4134">AD4134</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4134-ug-2016.pdf">UG-2016, EVAL-AD4134FMCZ Board User Guide</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/CN0506">CN0506</a></p></li>
+<li><p>ADIN1300 datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADIN1300">ADIN1300</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4134_fmc">AD4134-FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0506">CN0506 HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -573,78 +722,70 @@ user guide.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<tr class="row-even"><td><p>AXI_CLKGEN *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
+<tr class="row-odd"><td><p>AXI_HDMI_TX *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
+<tr class="row-even"><td><p>AXI_I2S_ADI **</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_SYSID</p></td>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SYSID_ROM</p></td>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
+<tr class="row-odd"><td><p>AXI_SDDIF_TX *</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER **</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_MII_TO_RMII ***</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_mii_to_rmii">library/util_mii_to_rmii</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_mii_to_rmii/index.html#util-mii-to-rmii"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code>  instantiated only for Zed and ZC706 carriers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for Zed carrier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">***</span></code> instantiated only for Zed, ZC706 and ZCU102 carriers</p></li>
 </ul>
+</div>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
-<p>Linux support:</p>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-ad4134.dts">Linux device tree zynq-zed-adv7511-ad4134.dts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad4134.c">Linux driver ad4134.c</a></p></li>
-</ul>
-<p>No-OS support:</p>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad413x">AD4134_FMC No-OS project source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad713x">AD4134/AD7134 No-OS Driver source code</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad713x">AD4134/AD7134 No-OS Software documentation[Wiki]</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/adi-cn0506-mii.dtsi">CN0506 MII dtsi source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/adi-cn0506-rgmii.dtsi">CN0506 RGMII dtsi source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/adi-cn0506-rmii.dtsi">CN0506 RMII dtsi source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/adi-cn0506-mii.dtsi">CN0506 MII dtsi source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/adi-cn0506-rgmii.dtsi">CN0506 RGMII dtsi source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/adi-cn0506-rmii.dtsi">CN0506 RMII dtsi source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_arria10_socdk_cn0506_mii.dts">CN0506 MII - A10SOC dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-mii.dts">CN0506 MII - ZCU102 dts source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rgmii.dts">CN0506 RGMII - ZCU102 dts source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rmii.dts">CN0506 RMII - ZCU102 dts source code (arm64)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-mii.dts">CN0506 MII - ZC706 dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rgmii.dts">CN0506 RGMII - ZC706 dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rmii.dts">CN0506 RMII - ZC706 dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-cn0506-mii.dts">CN0506 MII - ZED dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rgmii.dts">CN0506 RGMII - ZED dts source code (arm32)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rmii.dts">CN0506 RMII - ZED dts source code (arm32)</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/net-phy/adin">ADIN1300 driver docs</a></p></li>
 </ul>
 </section>
 </section>
@@ -680,8 +821,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad411x_ad717x/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD411x_AD717x HDL project</a>
-    <a href="../ad4170_asdz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD4170_ASDZ HDL project</a>
+    <a href="../cn0540/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">CN0540 HDL project</a>
+    <a href="../cn0561/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">CN0561 HDL project</a>
               </div>
           
         </div>
