@@ -55,12 +55,13 @@ Zedboard, which is a low cost FPGA carrier board from Digilent, using a
 Zynq-7000 re-programmable SoC from Xilinx.
 
 Applications:
-  * Automatic test equipment
-  * Digital control loops
-  * Medical instrumentation
-  * Seismology
-  * Semiconductor manufacturing
-  * Scientific instrumentation
+
+* Automatic test equipment
+* Digital control loops
+* Medical instrumentation
+* Seismology
+* Semiconductor manufacturing
+* Scientific instrumentation
   
 Supported boards
 -------------------------------------------------------------------------------

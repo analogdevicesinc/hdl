@@ -35,9 +35,10 @@ The :adi:`AD5766`/ :adi:`AD5767` are available in a 4mm x 4mm WLCSP package
 and operates at the range of -40C to +105C.
 
 Applications:
-  * Mach Zehnder Modulator Bias Control
-  * Analog Output Modules
-  * Process Control
+
+* Mach Zehnder Modulator Bias Control
+* Analog Output Modules
+* Process Control
 
 Supported boards
 -------------------------------------------------------------------------------

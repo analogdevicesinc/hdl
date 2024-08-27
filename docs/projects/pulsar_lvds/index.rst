@@ -37,11 +37,12 @@ on a single LVDS self clocked or echoed clock serial interface. The AD7960 is
 available in a 32-lead LFCSP (QFN) with operation specified from −40°C to +85°C.
 
 Applications:
-  * Digital imaging systems
-  * High speed data acquisition
-  * High dynamic range telecommunications receivers
-  * Spectrum analysis
-  * Test equipment
+
+* Digital imaging systems
+* High speed data acquisition
+* High dynamic range telecommunications receivers
+* Spectrum analysis
+* Test equipment
 
 Supported boards
 -------------------------------------------------------------------------------
