@@ -48,12 +48,13 @@ input/output power consumption, broadens processor options, and simplifies the
 task of sending data across digital isolation.
 
 Applications:
-  * Battery-powered equipment
-  * Data acquisition
-  * Instrumentation
-  * Medical instruments
-  * Process controls
-  * Machine automation
+
+* Battery-powered equipment
+* Data acquisition
+* Instrumentation
+* Medical instruments
+* Process controls
+* Machine automation
 
 Supported boards
 -------------------------------------------------------------------------------

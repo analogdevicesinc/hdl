@@ -31,12 +31,13 @@ busy indicator. The user interface is compatible with 1.8 V, 2.5 V, 3 V, or 5 V
 logic. Specified operation of these devices is from −55°C to +125°C.
 
 Applications:
-  * Automated test equipment (ATE)
-  * Battery powered instrumentation
-  * Communications
-  * Data acquisition
-  * Process control
-  * Medical instruments
+
+* Automated test equipment (ATE)
+* Battery powered instrumentation
+* Communications
+* Data acquisition
+* Process control
+* Medical instruments
 
 Supported boards
 -------------------------------------------------------------------------------

@@ -34,13 +34,14 @@ available in a 16-lead 3mm x 3mm LFCSP package while the quad generics
 from -40°C to +125°C temperature range.
 
 Applications:
-  * Motor control position feedback
-  * Motor control current sense
-  * Data acquisition system
-  * EDFA applications
-  * I and Q demodulation
-  * SONAR
-  * Power Quality
+
+* Motor control position feedback
+* Motor control current sense
+* Data acquisition system
+* EDFA applications
+* I and Q demodulation
+* SONAR
+* Power Quality
 
 Supported boards
 -------------------------------------------------------------------------------
