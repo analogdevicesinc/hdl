@@ -4,25 +4,25 @@ AD5758-SDZ HDL project
 ================================================================================
 
 Overview
------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
-The :adi:`AD5758` is a single-channel, voltage and current output digital-to-analog
-converter (DAC) that operates with a power supply range from −33 V (minimum) on
-AVSS to +33 V (maximum) on AVDD1 with a maximum operating voltage between the two
-rails of 60 V. On-chip DPC (dynamic power control) minimizes package power
-dissipation, which is achieved by regulating the supply voltage (VDPC+) to the
-VIOUT output driver circuitry from 5 V to 27 V using a buck dc-to-dc converter,
-optimized for minimum on-chip power dissipation. The CHART pin enables a HART
-signal to be coupled onto the current output.
+The :adi:`AD5758` is a single-channel, voltage and current output
+digital-to-analog converter (DAC) that operates with a power supply range from
+−33 V (minimum) on AVSS to +33 V (maximum) on AVDD1 with a maximum operating
+voltage between the two rails of 60 V. On-chip DPC (dynamic power control)
+minimizes package power dissipation, which is achieved by regulating the supply
+voltage (VDPC+) to the VIOUT output driver circuitry from 5 V to 27 V using a
+buck dc-to-dc converter, optimized for minimum on-chip power dissipation. The
+CHART pin enables a HART signal to be coupled onto the current output.
 
-The device uses a versatile 4-wire serial peripheral interface (SPI) that operates
-at clock rates of up to 50 MHz and is compatible with standard SPI, QSPI™,
-MICROWIRE™, DSP, and microcontroller interface standards. The interface also
-features an optional SPI cyclic redundancy check (CRC) and a watchdog timer. The
-:adi:`AD5758` offers improved diagnostic features from its predecessors, such as
-output current monitoring and an integrated 12-bit diagnostic ADC. Additional
-robustness is provided by the inclusion of a fault protection switch on VIOUT,
-+VSENSE, and −VSENSE pins.
+The device uses a versatile 4-wire serial peripheral interface (SPI) that
+operates at clock rates of up to 50 MHz and is compatible with standard SPI,
+QSPI™, MICROWIRE™, DSP, and microcontroller interface standards. The interface
+also features an optional SPI cyclic redundancy check (CRC) and a watchdog
+timer. The :adi:`AD5758` offers improved diagnostic features from its
+predecessors, such as output current monitoring and an integrated 12-bit
+diagnostic ADC. Additional robustness is provided by the inclusion of a fault
+protection switch on VIOUT, +VSENSE, and −VSENSE pins.
 
 Applications:
 
@@ -54,9 +54,6 @@ Other required hardware
 Block design
 -------------------------------------------------------------------------------
 
-Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad5758_block_diagram.svg
@@ -65,7 +62,7 @@ The data path and clock domains are depicted in the below diagram:
    :alt: AD5758_SDZ block diagram
 
 Jumper setup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ================== ================ =============================================
 Jumper/Solder link Default Position Description
@@ -162,7 +159,7 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Product datasheet: :adi:`AD5758`
--  `UG-1268: EVAL-AD5758 Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad5758-ug-1268.pdf>`__
+-  :adi:`UG-1268: EVAL-AD5758 Board User Guide <media/en/technical-documentation/user-guides/eval-ad5758-ug-1268.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -209,7 +206,7 @@ Software related
 Linux support:
 
 - :dokuwiki:`AD5758 IIO DAC Linux Driver <resources/tools-software/linux-drivers/iio-dac/ad5758>`
-- :git-linux:`AD5758_SDZ Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/dac/ad5758.c>`
+- :git-linux:`AD5758_SDZ Linux driver source code <drivers/iio/dac/ad5758.c>`
 
 No-OS support:
 
