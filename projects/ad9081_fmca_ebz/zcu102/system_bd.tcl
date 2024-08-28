@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -44,14 +44,12 @@ L=$ad_project_params(RX_JESD_L)\
 S=$ad_project_params(RX_JESD_S)\
 NP=$ad_project_params(RX_JESD_NP)\
 LINKS=$ad_project_params(RX_NUM_LINKS)\
-TPL_W=$ad_project_params(RX_TPL_WIDTH)\
 TX:RATE=$ad_project_params(TX_LANE_RATE)\
 M=$ad_project_params(TX_JESD_M)\
 L=$ad_project_params(TX_JESD_L)\
 S=$ad_project_params(TX_JESD_S)\
 NP=$ad_project_params(TX_JESD_NP)\
 LINKS=$ad_project_params(TX_NUM_LINKS)\
-TPL_W=$ad_project_params(TX_TPL_WIDTH)\
 SHARED_DEVCLK=$SHARED_DEVCLK\
 TDD:SUPPORT=$TDD_SUPPORT\
 CHANNEL_CNT=$TDD_CHANNEL_CNT\
