@@ -74,6 +74,9 @@ module axi_ad3552r_if (
 
   reg    [55:0]   transfer_reg        = 56'h0;
   reg    [15:0]   counter             = 16'h0;
+  reg             wa_cp               = 1'b0;
+  reg    [ 3:0]   tf_cp               = 4'h0;
+  reg    [ 3:0]   st_cp               = 4'h0;
   reg    [ 2:0]   transfer_state      = 0;
   reg    [ 2:0]   transfer_state_next = 0;
   reg             cycle_done          = 1'b0;
@@ -191,7 +194,8 @@ module axi_ad3552r_if (
       end
       WRITE_ADDRESS : begin
         // writes the address
-        cycle_done = (counter == 16'h3); //It is considering 8 bit address only
+        cycle_done = wa_cp; //It is considering 8 bit address only
+        // cycle_done = (counter == 16'h3); //It is considering 8 bit address only
         transfer_state_next = cycle_done ? (stream ? STREAM : TRANSFER_REGISTER) : WRITE_ADDRESS ;
         csn = 1'b0;
         // in streaming, change data on falledge. On regular transfer, change data on negedge.
@@ -201,8 +205,10 @@ module axi_ad3552r_if (
         // can be DDR or SDR
         // counter is based on the "Clock Cycles Required to Transfer One Byte" table in the doc
         // counter is twice the number because clk_in is twice the frequency
-        cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? (counter == 16'h4) : (counter == 16'h8)):
-                                               (symb_8_16b ? (counter == 16'h2) : (counter == 16'h4));
+        cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? tf_cp[0] : tf_cp[1]):
+                                               (symb_8_16b ? tf_cp[2] : tf_cp[3]);
+        // cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? (counter == 16'h4) : (counter == 16'h8)):
+        //                                        (symb_8_16b ? (counter == 16'h2) : (counter == 16'h4));
                                                //DDR requires one more cycle to fulfill t3
                                                //DDR is only allowed in writte operations
                                                //It is necessary to keep sclk low for the last bit
@@ -215,8 +221,10 @@ module axi_ad3552r_if (
         // can be DDR or SDR
         // in DDR mode needs to be make sure the clock and data is shifted by 2 ns (t7 and t8)
         // the last word in the stream needs one more clock cycle to guarantee t3
-        cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? (counter == 16'h0f) : (counter == 16'h7)):
-                              ((sdr_ddr_n | data_r_wn) ? (counter == 16'h10) : (counter == 16'h8));
+        cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? st_cp[0] : st_cp[1]):
+                              ((sdr_ddr_n | data_r_wn) ? st_cp[2] : st_cp[3]);
+        // cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? (counter == 16'h0f) : (counter == 16'h7)):
+        //                       ((sdr_ddr_n | data_r_wn) ? (counter == 16'h10) : (counter == 16'h8));
         transfer_state_next = (stream && external_sync_s) ? STREAM: ((cycle_done || external_sync_s == 1'b0) ?  CS_HIGH :STREAM);
         csn = 1'b0;
         transfer_step = (sdr_ddr_n | data_r_wn) ? counter[0] :  1'b1;
@@ -242,12 +250,39 @@ module axi_ad3552r_if (
 
   always @(posedge clk_in) begin
     if (transfer_state == IDLE || reset_in == 1'b1) begin
-      counter <= 'b0;
+      counter  <= 'b0;
+      wa_cp    <= 1'b0;
+      tf_cp[0] <= 1'b0;
+      tf_cp[1] <= 1'b0;
+      tf_cp[2] <= 1'b0;
+      tf_cp[3] <= 1'b0;
+      st_cp[0] <= 1'b0;
+      st_cp[1] <= 1'b0;
+      st_cp[2] <= 1'b0;
+      st_cp[3] <= 1'b0;
     end else if (transfer_state == WRITE_ADDRESS | transfer_state == TRANSFER_REGISTER | transfer_state == STREAM) begin
       if (cycle_done) begin
-        counter <= 0;
+        counter  <= 0;
+        wa_cp    <= 1'b0;
+        tf_cp[0] <= 1'b0;
+        tf_cp[1] <= 1'b0;
+        tf_cp[2] <= 1'b0;
+        tf_cp[3] <= 1'b0;
+        st_cp[0] <= 1'b0;
+        st_cp[1] <= 1'b0;
+        st_cp[2] <= 1'b0;
+        st_cp[3] <= 1'b0;
       end else  begin
-        counter <= counter + 1;
+        counter  <= counter + 1;
+        wa_cp    <= (counter == 16'h2);
+        tf_cp[0] <= (counter == 16'h3);
+        tf_cp[1] <= (counter == 16'h7);
+        tf_cp[2] <= (counter == 16'h1);
+        tf_cp[3] <= (counter == 16'h3);
+        st_cp[0] <= (counter == 16'he);
+        st_cp[1] <= (counter == 16'h6);
+        st_cp[2] <= (counter == 16'hf);
+        st_cp[3] <= (counter == 16'h7);
       end
     end
   end
@@ -316,7 +351,7 @@ module axi_ad3552r_if (
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
 
-  assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER & ~cycle_done);
+  assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER);
   assign sdio_o = transfer_reg[55:52];
 
 endmodule
