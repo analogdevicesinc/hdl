@@ -67,7 +67,7 @@ module axi_ad3552r_if_tb;
   reg    [ 4:0]    valid_counter  = 5'b0;
   reg    [31:0]    dac_data       = 32'b0;
 
-  always #4 dac_clk <= ~dac_clk;
+  always #3.8 dac_clk <= ~dac_clk;
 
   initial begin
 
@@ -75,108 +75,122 @@ module axi_ad3552r_if_tb;
 
     // Write 8 bit SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     data_write = 24'hab0000;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 8 bit SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Write 16 bit SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     data_write = 24'h123400;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 16 bit SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
     
     #500;
 
     // Write 8 bit DDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     data_write = 24'h120000;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 8 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Write 16 bit DDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     data_write = 24'h123400;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 16 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     #500;
 
     // Stream SDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b0;
     stream = 1'b1;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
     #1000 stream = 1'b0;
 
     #500;
 
     // Stream DDR
 
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     reg_8b_16bn = 1'b1;
     sdr_ddr_n = 1'b0;
     stream = 1'b1;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
     #1000 stream = 1'b0;
 
   end
@@ -200,7 +214,7 @@ module axi_ad3552r_if_tb;
 
   // data is circullary shifted at every sampling edge 
 
-  assign readback_data_shift = (sdr_ddr_n ) ? 4'h8 : 4'h4;
+  assign readback_data_shift = (sdr_ddr_n | address_write[7]) ? 4'h1 : 4'h0;
   assign sdio_i = (sdio_t === 1'b1) ? transfer_reg[31:28] : 4'b0;
 
   always @(posedge dac_clk) begin 

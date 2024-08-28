@@ -37,7 +37,7 @@
 
 module axi_ad3552r_if (
 
-  input                   clk_in,  // 120MHz
+  input                   clk_in,  // 132MHz
   input                   reset_in,
   input       [31:0]      dac_data,
   input                   dac_data_valid,
@@ -183,7 +183,7 @@ module axi_ad3552r_if (
         // brings CS down
         // loads all configuration
         // puts data on the SDIO pins
-        // needs 5 ns before risedge of the clock
+        // needs 5 ns before risedge of the clock (t2)
         transfer_state_next = WRITE_ADDRESS;
         csn = 1'b0;
         transfer_step = 0;
@@ -191,35 +191,35 @@ module axi_ad3552r_if (
       end
       WRITE_ADDRESS : begin
         // writes the address
-        // it works either at full speed (60 MHz) when streaming or normal
-        // speed (15 MHz)
-        // full speed - 2 clock cycles
-        // half speed 8 clock cycles
-        cycle_done = full_speed ? (counter == 16'h3) : (counter == 16'hf);
+        cycle_done = (counter == 16'h3); //It is considering 8 bit address only
         transfer_state_next = cycle_done ? (stream ? STREAM : TRANSFER_REGISTER) : WRITE_ADDRESS ;
         csn = 1'b0;
         // in streaming, change data on falledge. On regular transfer, change data on negedge.
-        //A single step should be done for 8 bit addressing
-        transfer_step = full_speed ? (counter[0]== 1'h1) : ((counter[4:0] == 5'h5));
+        transfer_step = (counter[0] == 1'h1);
       end
       TRANSFER_REGISTER : begin
-        // always works at 15 MHz
         // can be DDR or SDR
-        cycle_done = sdr_ddr_n ? (symb_8_16b ? (counter == 16'h10) : (counter == 16'h20))  :
-                                 (symb_8_16b ? (counter == 16'h09) : (counter == 16'h11));
+        // counter is based on the "Clock Cycles Required to Transfer One Byte" table in the doc
+        // counter is twice the number because clk_in is twice the frequency
+        cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? (counter == 16'h4) : (counter == 16'h8)):
+                                               (symb_8_16b ? (counter == 16'h2) : (counter == 16'h4));
+                                               //DDR requires one more cycle to fulfill t3
+                                               //DDR is only allowed in writte operations
+                                               //It is necessary to keep sclk low for the last bit
         transfer_state_next = cycle_done ? CS_HIGH : TRANSFER_REGISTER;
         csn = 1'b0;
         // in DDR mode, change data on falledge
-        transfer_step = sdr_ddr_n ? (counter[2:0] == 3'h0) :   (counter[1:0] == 2'h0);
+        transfer_step = (sdr_ddr_n | data_r_wn) ? counter[0] : 1'b1;
       end
       STREAM : begin
         // can be DDR or SDR
-        // in DDR mode needs to be make sure the clock and data is shifted by 2 ns
-        cycle_done = stream ? (sdr_ddr_n ? (counter == 16'h0f) : (counter == 16'h7)):
-                              (sdr_ddr_n ? (counter == 16'h10) : (counter == 16'h7));
+        // in DDR mode needs to be make sure the clock and data is shifted by 2 ns (t7 and t8)
+        // the last word in the stream needs one more clock cycle to guarantee t3
+        cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? (counter == 16'h0f) : (counter == 16'h7)):
+                              ((sdr_ddr_n | data_r_wn) ? (counter == 16'h10) : (counter == 16'h8));
         transfer_state_next = (stream && external_sync_s) ? STREAM: ((cycle_done || external_sync_s == 1'b0) ?  CS_HIGH :STREAM);
         csn = 1'b0;
-        transfer_step = sdr_ddr_n ? counter[0] :  1'b1;
+        transfer_step = (sdr_ddr_n | data_r_wn) ? counter[0] :  1'b1;
       end
       CS_HIGH : begin
         cycle_done = 1'b1;
@@ -236,6 +236,7 @@ module axi_ad3552r_if (
     endcase
   end
 
+  // counter relies on a 132 Mhz clock or slower
   // counter is used to time all states
   // depends on number of clock cycles per phase
 
@@ -252,16 +253,21 @@ module axi_ad3552r_if (
   end
 
   always @(negedge clk_in) begin
-    if (transfer_state == STREAM | transfer_state == WRITE_ADDRESS) begin
-      sclk_ddr <= !sclk_ddr;
+    if (transfer_state == STREAM | transfer_state == TRANSFER_REGISTER | transfer_state == WRITE_ADDRESS) begin
+      if (cycle_done) begin
+        sclk_ddr <= 0;
+      end else begin
+        sclk_ddr <= !sclk_ddr;
+      end
     end else begin
       sclk_ddr <= 0;
     end
   end
 
-  // selection between 60 MHz and 15 MHz
+  // selection between 66 MHz clocks for the SCLK
+  // DDR mode requires a phase shift for the t7 and t8
 
-  assign sclk = full_speed ? (sdr_ddr_n ? counter[0] : sclk_ddr) : counter[2];
+  assign sclk = (sdr_ddr_n | data_r_wn) ? counter[0] : sclk_ddr;
 
   always @(posedge clk_in) begin
     if (transfer_state == CS_LOW) begin
@@ -310,7 +316,7 @@ module axi_ad3552r_if (
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
 
-  assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER);
+  assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER & ~cycle_done);
   assign sdio_o = transfer_reg[55:52];
 
 endmodule
