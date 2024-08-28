@@ -19,6 +19,7 @@ Contents
    :maxdepth: 1
 
    AD-GMSL2ETH-SL <ad_gmsl2eth_sl/index>
+   AD408X-FMC-EVB <ad408x_fmc_evb/index>
    AD411x_AD717x <ad411x_ad717x/index>
    AD4134-FMC <ad4134_fmc/index>
    AD4170-ASDZ <ad4170_asdz/index>
