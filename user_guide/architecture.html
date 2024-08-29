@@ -107,7 +107,7 @@
 <li><a class="reference internal" href="#typical-project-diagram">Typical project diagram</a></li>
 <li><a class="reference internal" href="#base-design">Base Design</a><ul>
 <li><a class="reference internal" href="#microprocessor">Microprocessor</a></li>
-<li><a class="reference internal" href="#memory-interface-controller">Memory Interface Controller</a></li>
+<li><a class="reference internal" href="#memory-interface-controller">Memory interface controller</a></li>
 <li><a class="reference internal" href="#peripheral-interfaces">Peripheral interfaces</a><ul>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi">SPI</a></li>
@@ -133,11 +133,11 @@
 </li>
 <li><a class="reference internal" href="#file-structure-of-a-project">File structure of a project</a><ul>
 <li><a class="reference internal" href="#project-files-for-amd-boards">Project files for AMD boards</a></li>
-<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a></li>
-<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a><ul>
+<li><a class="reference internal" href="#project-files-for-intel-boards">Project files for Intel boards</a><ul>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#project-files-for-lattice-boards">Project files for Lattice boards</a></li>
 </ul>
 </li>
 </ul>
@@ -277,7 +277,7 @@ Content on this topic
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../projects/ad411x_ad717x/index.html">AD411x_AD717x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4170_asdz/index.html">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
@@ -299,6 +299,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adrv9026/index.html">ADRV9026</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/adrv904x/index.html">ADRV904x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/cn0363/index.html">CN0363</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/cn0506/index.html">CN0506</a></li>
@@ -358,7 +359,8 @@ independent</strong></p></li>
 the <em>base design first</em>, then the <em>board design</em>.</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
-<p>Take <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADFMCOMMS2">AD-FMCOMMS2</a> with ZedBoard;
+<p>Take <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADFMCOMMS2">AD-FMCOMMS2</a> with
+<a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>;
 the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> will look like the following:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span>/projects/common/zed/zed_system_bd.tcl
 <span class="nb">source</span><span class="w"> </span>../common/fmcomms2_bd.tcl
@@ -383,7 +385,7 @@ cores.</p>
 </ul>
 <section id="microprocessor">
 <h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Permalink to this heading">#</a></h3>
-<p>In our designs, we use only two types:</p>
+<p>In our designs, we use only three types:</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -440,15 +442,15 @@ CIPS</a>
 </ul>
 </section>
 <section id="memory-interface-controller">
-<h3>Memory Interface Controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading">#</a></h3>
+<h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading">#</a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
-Analog Devices, so the external memory solution of the system is given.
-Meaning we can not support, modify or alter this important part of the
-system, in several cases we even have system limitations because of it
+<a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a>, so the external memory solution of the system is given.
+Meaning, we can not support, modify or alter this important part of the
+system. In several cases we even have system limitations because of it
 (e.g. the memory interface is not fast enough to handle the required
 data throughput).</p>
-<p>Under the two links below the user can find the landing page of the
-available memory solutions for both Intel and AMD:</p>
+<p>In the following two links, the user can find the landing page of the
+available memory solutions for Intel and AMD:</p>
 <ul class="simple">
 <li><p>Intel’s memory interfaces:
 <a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
@@ -459,7 +461,7 @@ available memory solutions for both Intel and AMD:</p>
 <section id="peripheral-interfaces">
 <h3>Peripheral interfaces<a class="headerlink" href="#peripheral-interfaces" title="Permalink to this heading">#</a></h3>
 <p>These interfaces are used to control external peripherals located on
-the prototyping board or the FMC IO board.</p>
+the prototyping board or the FMC I/O board.</p>
 <p>In HDL, these ports are named slightly different than how they’re in
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.</p>
@@ -501,14 +503,14 @@ Intel or AMD SPI controller core.</p>
 <section id="i2c-i2s-spdif">
 <h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Permalink to this heading">#</a></h4>
 <p>A couple of carrier boards require these standard interfaces for
-different purposes, for example, a configuration interface for an audio
-peripheral device. These peripherals do not necessarily have vital roles
-in the reference design, it’s more like a generic goal to support all
+different purposes (e.g. a configuration interface for an audio
+peripheral device). These peripherals do not necessarily have vital roles
+in the reference design – it’s more like a generic goal to support all
 the provided peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
 <h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading">#</a></h4>
-<p>There is HDMI support for all the carriers which are using the ADV7511
+<p>There is HDMI support for all carriers which are using the <a class="icon adi reference external" href="https://www.analog.com/ADV7511">ADV7511</a>
 as HDMI transmitter. The HDMI transmitter core can be found
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">here (axi_hdmi_tx)</a>.</p>
 </section>
@@ -518,12 +520,13 @@ as HDMI transmitter. The HDMI transmitter core can be found
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
 <li><p>bits [63:32] will be assigned to switches, buttons and/or LEDs, which
-can be found on the FMC board.</p></li>
+can be found on the FMC board;</p></li>
 <li><p>bits [95:64] will be used when the FPGA type is Zynq UltraScale+
-MPSoC</p></li>
+MPSoC.</p></li>
 </ul>
 <p>When some of these GPIOs are not used, the input pins should have the
-output pins driven to them, so that Vivado will not complain about
+output pins driven to them, so that
+<a class="reference external" href="https://www.xilinx.com/products/design-tools/vivado.html">Vivado</a> will not complain about
 inputs not being assigned to.</p>
 <p>Depending on the processor type, add these values to the GPIO number
 from the HDL project to obtain the final number used in software:</p>
@@ -538,7 +541,7 @@ from the HDL project to obtain the final number used in software:</p>
 <li><p>Ethernet</p></li>
 <li><p>USB OTG</p></li>
 </ul>
-<p>These interfaces designs are borrowed from the golden reference design
+<p>These interface designs are borrowed from the golden reference design
 of the board.</p>
 </section>
 </section>
@@ -906,7 +909,7 @@ might be used in the base design of the carrier!</p>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Zynq UltraScale+ MP SoC</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/zedboard/">ZedBoard</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>—</p></td>
@@ -975,7 +978,7 @@ both the carrier and the device(s)</p>
 <td><p>HSMC</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10Nano</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 <td><p>—</p></td>
 </tr>
@@ -1046,21 +1049,21 @@ project and runs the synthesis/implementation of the design</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> — sources the <em>base design first</em>, then the
 <em>board design</em>, and afterwards it contains all the IP instances and
 connections that must be added on top of the sourced files, to
-complete the design of the project (these are specific to the
+complete the design of the project (these are <strong>specific</strong> to the
 combination of this carrier and board)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_constr.xdc</span></code> — constraints file of the design; it’s the
-connection between the physical pins of the FPGA that you want to use
-and the HDL code that describes the behavior; here you define the FMC
-I/O pins, board-specific clock signals, timing constraints, etc. The
+connection between the physical pins of the FPGA and the HDL code
+that describes the behavior; here you define the FMC I/O pins,
+board-specific clock signals, timing constraints, etc. The
 constraints specific to the carrier are imported in the
 <em>system_project.tcl</em> file</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
-project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module, IO buffers,
+project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module, I/O buffers,
 I/ODDRs, modules that transform signals from LVDS to single-ended,
 etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA.</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> — is a tool generated file and can be found at
+<li><p><code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> — is a tool-generated file and can be found at
 <code class="docutils literal notranslate"><span class="pre">&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</span></code></p>
 <ul>
 <li><p>the I/O ports of this module are declared in either
@@ -1092,11 +1095,20 @@ top of the sourced files, to complete the design of the project
 <li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path
 constraints</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
-project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module, IO buffers,
-I/ODDRs, modules that transform signals from LVDS to single-ended,
+project; it instantiates the <code class="docutils literal notranslate"><span class="pre">system_bd</span></code> module, I/O buffers, specific
+SPI modules, modules that transform signals from LVDS to single-ended,
 etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h4>
+<p>Some carriers have a different name for these files, for example A10SoC
+has constraints file for both PL side and PS side:</p>
+<ul class="simple">
+<li><p>a10soc_plddr4_assign.tcl — constraints file for the PL</p></li>
+<li><p>a10soc_system_assign.tcl — constraints file for the PS</p></li>
+</ul>
+</section>
 </section>
 <section id="project-files-for-lattice-boards">
 <h3>Project files for Lattice boards<a class="headerlink" href="#project-files-for-lattice-boards" title="Permalink to this heading">#</a></h3>
@@ -1126,15 +1138,6 @@ IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
 etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>
-<section id="examples">
-<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h4>
-<p>Some carriers have a different name for these files, for example A10SoC
-has constraints file for both PL side and PS side:</p>
-<ul class="simple">
-<li><p>a10soc_plddr4_assign.tcl — constraints file for the PL</p></li>
-<li><p>a10soc_system_assign.tcl — constraints file for the PS</p></li>
-</ul>
-</section>
 </section>
 </section>
 </section>
