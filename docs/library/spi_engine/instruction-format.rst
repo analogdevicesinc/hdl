@@ -171,7 +171,7 @@ is the minimum, needed by the internal logic.
 
 .. math::
 
-   sleep\_time = \frac{2+(t) * ((div + 1) * 2)}{f_{clk}}
+   sleep\_time = \frac{2+(t+1) * ((div + 1) * 2)}{f_{clk}}
 
 .. list-table::
    :widths: 10 15 75
@@ -182,7 +182,7 @@ is the minimum, needed by the internal logic.
      - Description
    * - t
      - Time
-     - The amount of time to wait.
+     - The amount of prescaler cycles to wait, minus one.
 
 .. _spi_engine cs-invert-mask-instruction:
 
