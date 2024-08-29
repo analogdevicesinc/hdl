@@ -213,3 +213,9 @@ set_switching_activity -static_probability 0 -toggle_rate 0 [get_nets i_system_w
 # Define SPI clock
 create_clock -name spi0_clk      -period 40   [get_pins -hier */EMIOSPI0SCLKO]
 
+# CDC between ADC and DAC trigger signal
+set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage1_reg*}]
+set_property ASYNC_REG TRUE [get_cells -hier -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage2_reg*}]
+
+set_false_path  -to [get_cells -hierarchical -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage1_reg** && IS_SEQUENTIAL}]
+set_false_path  -to [get_cells -hierarchical -filter {name =~ */cdc_*_trig_sync/inst/i_sync_*/cdc_sync_stage2_reg** && IS_SEQUENTIAL}]
