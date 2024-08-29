@@ -49,6 +49,7 @@ Contents
    CN0506 <cn0506/index>
    CN0561 <cn0561/index>
    CN0577 <cn0577/index>
+   CN0579 <cn0579/index>
    CN0585 <cn0585/index>
    MAX96724 <max96724/index>
    PULSAR-ADC <pulsar_adc/index>
