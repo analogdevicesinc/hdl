@@ -94,12 +94,6 @@ module axi_dac_interpolate #(
   reg    [ 1:0]    trigger_i_m1;
   reg    [ 1:0]    trigger_i_m2;
   reg    [ 1:0]    trigger_i_m3;
-  reg              trigger_adc_m1;
-  reg              trigger_adc_m2;
-  reg              trigger_adc_m3;
-  reg              trigger_la_m1;
-  reg              trigger_la_m2;
-  reg              trigger_la_m3;
 
   reg    [ 1:0]    any_edge_trigger;
   reg    [ 1:0]    rise_edge_trigger;
@@ -182,8 +176,8 @@ module axi_dac_interpolate #(
 
   assign trigger_active = |trigger_config[19:16];
   assign trigger = (ext_trigger & en_trigger_pins) |
-                   (trigger_adc_m2 & en_trigger_adc) |
-                   (trigger_la_m2 & en_trigger_la);
+                   (trigger_adc & en_trigger_adc) |
+                   (trigger_la & en_trigger_la);
 
   assign ext_trigger = |(any_edge_trigger |
                         rise_edge_trigger |
@@ -196,12 +190,6 @@ module axi_dac_interpolate #(
     trigger_i_m1 <= trigger_i;
     trigger_i_m2 <= trigger_i_m1;
     trigger_i_m3 <= trigger_i_m2;
-
-    trigger_adc_m1 <= trigger_adc;
-    trigger_adc_m2 <= trigger_adc_m1;
-
-    trigger_la_m1 <= trigger_la;
-    trigger_la_m2 <= trigger_la_m1;
   end
 
   always @(posedge dac_clk) begin
