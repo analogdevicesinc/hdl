@@ -1,12 +1,11 @@
 ####################################################################################
-## Copyright (c) 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 PROJECT_NAME := max96724_kv260
 
-M_DEPS += system_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/kv260/kv260_system_constr.xdc
 M_DEPS += ../../common/kv260/kv260_system_bd.tcl

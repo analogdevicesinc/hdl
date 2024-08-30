@@ -17,6 +17,7 @@ M_DEPS += ../../common/vck190/vck190_system_bd.tcl
 M_DEPS += ../../ad9081_fmca_ebz/common/versal_transceiver.tcl
 M_DEPS += ../../ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
+M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v

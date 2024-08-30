@@ -6,11 +6,14 @@
 
 PROJECT_NAME := adrv904x_zcu102
 
+M_DEPS += ../common/versal_transceiver.tcl
 M_DEPS += ../common/adrv904x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
+M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
+M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
@@ -27,6 +30,8 @@ LIB_DEPS += jesd204/axi_jesd204_rx
 LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
+LIB_DEPS += jesd204/jesd204_versal_gt_adapter_rx
+LIB_DEPS += jesd204/jesd204_versal_gt_adapter_tx
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
