@@ -3,7 +3,7 @@
 .. _template_project:
 
 Project template
-================================================================================
+===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ another carrier. Take these tables as an example:**\ \*
      - Carrier
      - FMC slot
    * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-     - `A10SoC`_
+     - :intel:`A10SoC <content/www/us/en/products/details/fpga/arria/10/sx/products.html>`
      - FMCA
    * -
      - :xilinx:`VCK190`
@@ -734,9 +734,10 @@ and of the device tree.
 
    -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
    -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+   -  `Example link`_
 
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
 
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
+.. _Example link: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
