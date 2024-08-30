@@ -37,6 +37,7 @@ ADC/DAC
    axi_ad9783/index
    axi_ad9963/index
    axi_adaq8092/index
+   axi_ltc2387/index
 
 Data Offload
 -------------------------------------------------------------------------------
