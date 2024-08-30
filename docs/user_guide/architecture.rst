@@ -445,19 +445,19 @@ Intel platforms
    * - Board name
      - Connector 1
      - Connector 2
-   * - `A10GX <https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-a10-gx-fpga.html>`__ **
+   * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>` ** (Arria 10 GX)
      - FMC LPC ()
      - FMC HPC (8 x 17.4 Gbps)
-   * - `A10SoC <https://www.altera.com/products/boards_and_kits/dev-kits/altera/arria-10-soc-development-kit.html>`__
+   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>` (Arria 10 SoC)
      - FMC HPC (8)
      - FMC LPC (8)
-   * - `S10SoC <https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`__
+   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>` (Stratix 10 SoC)
      - FMC+ (24 @ 28.3 Gbps)
      - FMC+ (24 @ 28.3 Gbps)
-   * - `C5SoC <https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=167&No=819>`__
+   * - :intel:`C5SoC <content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html>` (Cyclone V SoC)
      - HSMC
      - ---
-   * - `DE10-Nano <https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`__
+   * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
      - ---
 
@@ -476,13 +476,13 @@ VADJ values
    * - Board name
      - FMC connector 1
      - FMC connector 2
-   * - `A10GX <https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-a10-gx-fpga.html>`__
+   * - :intel:`A10GX <content/www/us/en/products/details/fpga/development-kits/arria/10-gx.html>`
      - **\*1.8V**/1.5V/1.35V/1.2V
      - **\*1.8V**/1.5V/1.35V/1.2V
-   * - `A10SoC <https://www.altera.com/products/boards_and_kits/dev-kits/altera/arria-10-soc-development-kit.html>`__
+   * - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - **\*1.8V**/1.5V/1.35V/1.25V/1.2V/1.1V
      - **\*1.8V**/1.5V/1.35V/1.2V/1.1V
-   * - `S10SoC <https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`__
+   * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
      - **\*3.3V**/1.8V/1.2V
      - **\*3.3V**/1.8V/1.2V
 
