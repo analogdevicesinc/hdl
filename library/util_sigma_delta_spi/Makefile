@@ -13,4 +13,6 @@ XILINX_DEPS += util_sigma_delta_spi_ip.tcl
 XILINX_DEPS += ../spi_engine/interfaces/spi_engine.xml
 XILINX_DEPS += ../spi_engine/interfaces/spi_engine_rtl.xml
 
+XILINX_INTERFACE_DEPS += spi_engine/interfaces
+
 include ../scripts/library.mk

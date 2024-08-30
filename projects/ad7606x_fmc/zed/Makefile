@@ -6,6 +6,11 @@
 
 PROJECT_NAME := ad7606x_fmc_zed
 
+M_DEPS += system_constr_spi_8.xdc
+M_DEPS += system_constr_spi_4.xdc
+M_DEPS += system_constr_spi_2.xdc
+M_DEPS += system_constr_spi_1.xdc
+M_DEPS += system_constr_pif.xdc
 M_DEPS += ../common/ad7606x_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
