@@ -253,6 +253,7 @@ Content on this topic
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad4170_asdz/index.html">AD4170-ASDZ</a></li>
@@ -681,7 +682,7 @@ instruction. A fixed delay of two clock cycles (fast, not affected by the presca
 is the minimum, needed by the internal logic.</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[sleep\_time = \frac{2+(t) * ((div + 1) * 2)}{f_{clk}}\]</div>
+\[sleep\_time = \frac{2+(t+1) * ((div + 1) * 2)}{f_{clk}}\]</div>
 </div>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -699,7 +700,7 @@ is the minimum, needed by the internal logic.</p>
 <tbody>
 <tr class="row-even"><td><p>t</p></td>
 <td><p>Time</p></td>
-<td><p>The amount of time to wait.</p></td>
+<td><p>The amount of prescaler cycles to wait, minus one.</p></td>
 </tr>
 </tbody>
 </table>
