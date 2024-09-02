@@ -66,5 +66,5 @@ References
 
 * HDL IP core at :git-hdl:`library/corundum`
 * HDL project at :git-hdl:`projects/ad_gmsl2eth_sl`
-* :adi:`AD-GMSL2ETH-SL`
 * :ref:`ad_gmsl2eth_sl`
+* :adi:`AD-GMSL2ETH-SL`

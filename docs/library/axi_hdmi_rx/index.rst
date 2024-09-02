@@ -130,6 +130,7 @@ References
 
 * HDL IP core at :git-hdl:`library/axi_hdmi_rx`
 * HDL project at :git-hdl:`projects/imageon`
+* HDL project documentation at :ref:`imageon`
 * :dokuwiki:`AXI HDMI RX on wiki <resources/fpga/docs/axi_hdmi_rx>`
 * :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
 * :dokuwiki:`Zynq & Altera SoC Quick Start Guide <resources/tools-software/linux-software/kuiper-linux>`

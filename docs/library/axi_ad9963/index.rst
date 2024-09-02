@@ -256,7 +256,9 @@ References
 -------------------------------------------------------------------------------
 
 * :adi:`AD9963`
-* HDL source code at :git-hdl:`library/axi_ad9963`
+* HDL IP core at :git-hdl:`library/axi_ad9963`
+* HDL project at :git-hdl:`projects/m2k`
+* HDL project documentation at :ref:`m2k`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

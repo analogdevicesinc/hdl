@@ -250,5 +250,5 @@ Software Support
 References
 --------------------------------------------------------------------------------
 
-* HDL IP core at :git-hdl:`library/axi_sysid`
+* HDL IP core at :git-hdl:`library/axi_sysid` and :git-hdl:`library/sysid_rom`
 * :dokuwiki:`System ID on wiki <resources/fpga/docs/axi_sysid>`

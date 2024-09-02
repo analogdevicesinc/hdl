@@ -314,7 +314,7 @@ References
 * HDL project documentation at :ref:`ad9783_ebz`
 * :adi:`AD9783`
 * :adi:`EVAL-AD9783 <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html>`
-* :dokuwiki:`AXI AD9783 on wiki <resources/fpga/docs/axi_adc_trigger>`
+* :dokuwiki:`AXI AD9783 on wiki <resources/fpga/docs/axi_ad9783>`
 * :dokuwiki:`EVAL-AD9783 with ZCU102 reference design description <resources/fpga/xilinx/interposer/ad9783>`
 * :xilinx:`Ultrascale SelectIO <support/documentation/user_guides/ug571-ultrascale-selectio.pdf>`
 * :xilinx:`UltraScale Architecture Clocking Resources User Guide <support/documentation/user_guides/ug572-ultrascale-clocking.pdf>`

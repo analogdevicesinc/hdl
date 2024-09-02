@@ -58,5 +58,5 @@ Interface
 References
 --------------------------------------------------------------------------------
 
+* HDL IP core at :git-hdl:`library/util_extract/util_extract.v`
 * :dokuwiki:`UTIL EXTRACT on wiki <resources/fpga/docs/util_extract>`
-* :git-hdl:`library/util_extract/util_extract.v`

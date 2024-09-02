@@ -330,7 +330,7 @@ Software Support
 * Linux device driver documentation
   :dokuwiki:`on wiki <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
 
-Reference
+References
 --------------------------------------------------------------------------------
 
 * HDL Intel IP core at :git-hdl:`library/intel/axi_adxcvr`

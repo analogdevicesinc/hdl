@@ -125,12 +125,6 @@ logic:
    FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide a
    safe operating margin.
 
-Software Support
---------------------------------------------------------------------------------
-
-* Linux project at :git-linux:`drivers/staging/axis-fifo`
-* Linux driver at :git-linux:`drivers/staging/axis-fifo/axis-fifo.c`
-
 References
 --------------------------------------------------------------------------------
 
