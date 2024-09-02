@@ -489,3 +489,9 @@ The latter is addressed by the integration into
 which allow the drivers to control the oneshot functionality of the data offload
 based on what was requested with the current IIO buffer, assuming that bypass
 was disabled.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/data_offload`
+* :dokuwiki:`Data Offload Engine on wiki <resources/fpga/docs/data_offload>`

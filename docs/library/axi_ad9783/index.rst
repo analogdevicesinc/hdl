@@ -295,19 +295,26 @@ registers relative address.
 Software Guidelines
 --------------------------------------------------------------------------------
 
-The software for this IP can be found as part of the ZCU102 Reference Design
-at :git-linux:`/`.
+The software for this IP can be found as part of the ZCU102 Reference Design.
 The IP expects the software run a calibration at least once. It has to find
 out what value for the SMP_DLY (see in datasheet) is good for the PRBS to
 work.
 
+Software Support
+--------------------------------------------------------------------------------
+
+* Linux device driver at :git-linux:`drivers/iio/adc/ad9783.c`
+* Linux device tree at :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts`
+
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_ad9783`
+* HDL IP core at :git-hdl:`library/axi_ad9783`
+* HDL project at :git-hdl:`projects/ad9783_ebz`
+* HDL project documentation at :ref:`ad9783_ebz`
 * :adi:`AD9783`
-* :git-linux:`/`
 * :adi:`EVAL-AD9783 <en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html>`
+* :dokuwiki:`AXI AD9783 on wiki <resources/fpga/docs/axi_ad9783>`
 * :dokuwiki:`EVAL-AD9783 with ZCU102 reference design description <resources/fpga/xilinx/interposer/ad9783>`
 * :xilinx:`Ultrascale SelectIO <support/documentation/user_guides/ug571-ultrascale-selectio.pdf>`
 * :xilinx:`UltraScale Architecture Clocking Resources User Guide <support/documentation/user_guides/ug572-ultrascale-clocking.pdf>`

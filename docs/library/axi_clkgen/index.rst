@@ -97,7 +97,7 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_clkgen`
-* :git-linux:`/`
+* HDL IP core at :git-hdl:`library/axi_clkgen`
+* :dokuwiki:`AXI CLKGEN on wiki <resources/fpga/docs/axi_clkgen>`
 * :xilinx:`7 Series Clocking <support/documentation/user_guides/ug472_7Series_Clocking.pdf>`
 * :xilinx:`MMCM and PLL Dynamic Reconfiguration <support/documentation/application_notes/xapp888_7Series_DynamicRecon.pdf>`

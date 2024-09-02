@@ -124,3 +124,10 @@ logic:
    should take this into account when controlling the data stream into and from the
    FIFO. Carefully adjusting the ALMOST_EMPTY/ALMOST_FULL indicators can provide a
    safe operating margin.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/util_axis_fifo`
+* :dokuwiki:`AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo>`
+* :dokuwiki:`Asymmetric AXI Stream FIFO Core on wiki <resources/fpga/docs/util_axis_fifo_asym>`

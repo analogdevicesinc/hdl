@@ -54,3 +54,9 @@ Interface
    * - trigger_out
      - Trigger output. Is an logic OR of the triggers from all the channels
        that are captured simulaneously
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/util_extract/util_extract.v`
+* :dokuwiki:`UTIL EXTRACT on wiki <resources/fpga/docs/util_extract>`

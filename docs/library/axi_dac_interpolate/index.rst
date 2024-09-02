@@ -145,6 +145,6 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_dac_interpolate`
-* :git-linux:`/`
+* HDL IP core at :git-hdl:`library/axi_dac_interpolate`
+* :dokuwiki:`AXI DAC INTEPOLATE on wiki <resources/fpga/docs/axi_dac_interpolate>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

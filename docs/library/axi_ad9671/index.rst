@@ -154,9 +154,8 @@ module (at IP level).
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_ad9671`
+* HDL IP core at :git-hdl:`library/axi_ad9671`
 * :adi:`AD9671`
-* :git-linux:`/`
 * :ref:`jesd204`
 * :adi:`Analog Device's JESD204B Survival Guide <media/en/technical-documentation/technical-articles/JESD204B-Survival-Guide.pdf>`
 * :intel:`JESD204B Intel FPGA IP User Guide <content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/ug/archives/ug-jesd204b-18-1.pdf>`

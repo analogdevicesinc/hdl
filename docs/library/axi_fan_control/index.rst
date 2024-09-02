@@ -259,6 +259,6 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_fan_control`
-* :git-linux:`/`
+* HDL IP core at :git-hdl:`library/axi_fan_control`
+* :dokuwiki:`AXI FAN CONTROL on wiki <resources/fpga/docs/axi_fan_control>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

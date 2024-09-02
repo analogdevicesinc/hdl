@@ -205,7 +205,8 @@ The core can be controlled by no-Os or Linux
 References
 -------------------------------------------------------------------------------
 
-* :git-hdl:`library/axi_hdmi_tx`
+* HDL IP core at :git-hdl:`library/axi_hdmi_tx`
+* :dokuwiki:`AXI HDMI TX on wiki <resources/fpga/docs/axi_hdmi_tx>`
 * :dokuwiki:`Zynq & Altera SoC Quick Start Guide <resources/tools-software/linux-software/kuiper-linux>`
 * :dokuwiki:`FMC-IMAGEON Xilinx Reference Design <resources/fpga/xilinx/fmc/fmc-imageon>`
 * :dokuwiki:`ADV7511 Xilinx Evaluation Boards Reference Design <resources/fpga/xilinx/kc705/adv7511>`

@@ -97,3 +97,9 @@ Interface
      - Data.
    * - dout_unf
      - Output data underflow.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/util_rfifo`
+* :dokuwiki:`UTIL RFIFO on wiki <resources/fpga/docs/util_rfifo>`

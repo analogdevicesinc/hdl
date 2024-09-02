@@ -64,7 +64,7 @@ and it needs to be cloned alongside this repository.
 References
 --------------------------------------------------------------------------------
 
-* :adi:`AD-GMSL2ETH-SL`
+* HDL IP core at :git-hdl:`library/corundum`
+* HDL project at :git-hdl:`projects/ad_gmsl2eth_sl`
 * :ref:`ad_gmsl2eth_sl`
-* :git-hdl:`projects/ad_gmsl2eth_sl`
-* :git-hdl:`library/corundum`
+* :adi:`AD-GMSL2ETH-SL`

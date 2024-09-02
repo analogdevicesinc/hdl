@@ -39,10 +39,15 @@ Interfaces
 * :ref:`i3c_controller offload-interface`: Command descriptors for cyclic operation,
   with SDI data generally consumed by a DMA.
 
-Software
+Software support
 --------------------------------------------------------------------------------
 
 * :git-linux:`Linux Driver <i3c:drivers/i3c/master/adi-i3c-master.c>`:
   Linux driver for the I3C Controller.
 * :ref:`i3c_controller instruction-format`: Overview of the I3C Controller
   instruction format.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/i3c_controller`

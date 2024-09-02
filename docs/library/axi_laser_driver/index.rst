@@ -79,3 +79,9 @@ Register Map
 
 .. hdl-regmap::
    :name: AXI_LASER_DRIVER 
+
+References
+-------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/axi_laser_driver`
+* :dokuwiki:`AXI Laser Driver on wiki <resources/fpga/docs/axi_laser_driver>`

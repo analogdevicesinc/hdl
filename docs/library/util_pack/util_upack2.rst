@@ -85,3 +85,8 @@ initiates a read from the DMA three out of four clock cycles.
 .. figure:: upack_2channel.svg
 
    Two channel enabled (4'b1100)
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/util_pack/util_upack2`

@@ -324,3 +324,10 @@ It should be mentioned that after the phase init fall-edge, until the first
 valid sample, there is a delay caused by the phase to angle converter type and
 in the case of the CORDIC type, the number of rotation stages will also have a
 direct impact on this clock period delay.
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP core at :git-hdl:`library/common/ad_dds.v` and :git-hdl:`library/common/ad_dds_1.v`
+  and :git-hdl:`library/common/ad_dds_2.v` 
+* :dokuwiki:`Direct digital synthesis on wiki <resources/fpga/docs/dds>`
