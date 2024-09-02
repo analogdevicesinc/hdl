@@ -113,10 +113,10 @@ the **adi_project_create** process:
 
 .. code:: tcl
 
-   if [regexp "_zcu102$" $project_name] {
-       set p_device "xczu9eg-ffvb1156-1-i-es1"
-       set p_board "xilinx.com:zcu102:part0:1.2"
-       set sys_zynq 2
+   if [regexp "_zcu102" $project_name] {
+     set device "xczu9eg-ffvb1156-2-e"
+     set board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
+     set sys_zynq 2
    }
 
 .. tip::
@@ -128,10 +128,10 @@ the **adi_project_create** process:
 
 The **sys_zynq** constant variable should be set in the following way:
 
-- 0 - 7 Series FPGA (e.g. Kintex7, Virtex7)
-- 1 - Zynq7000 SoC
-- 2 - Zynq UltraScale+ SoC
-- 3 - Versal
+*  0 - 7 Series FPGA (e.g. Kintex7, Virtex7)
+*  1 - Zynq7000 SoC
+*  2 - Zynq UltraScale+ SoC
+*  3 - Versal
 
 Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
