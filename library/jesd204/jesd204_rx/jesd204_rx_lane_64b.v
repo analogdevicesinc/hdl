@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2022, 2024 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -43,6 +43,12 @@ module jesd204_rx_lane_64b #(
   output [2:0] status_lane_emb_state,
   output reg [7:0] status_lane_skew
 );
+  // Enabled to ease the timing
+  localparam ENABLE_INPUT_PIPELINE = 1;
+
+  wire [63:0] phy_data_r;
+  wire [ 1:0] phy_header_r;
+  wire        phy_block_sync_r;
 
   reg [11:0] crc12_calculated_prev;
 
@@ -65,12 +71,28 @@ module jesd204_rx_lane_64b #(
 
   wire [7:0] sh_count;
 
+  pipeline_stage #(
+    .WIDTH(64+2+1),
+    .REGISTERED(ENABLE_INPUT_PIPELINE)
+  ) i_input_pipeline (
+    .clk(clk),
+    .in({
+        phy_header,
+        phy_data,
+        phy_block_sync
+      }),
+    .out({
+        phy_header_r,
+        phy_data_r,
+        phy_block_sync_r
+      }));
+
   jesd204_rx_header i_rx_header (
     .clk(clk),
     .reset(reset),
 
-    .sh_lock(phy_block_sync),
-    .header(phy_header),
+    .sh_lock(phy_block_sync_r),
+    .header(phy_header_r),
 
     .cfg_header_mode(cfg_header_mode),
     .cfg_rx_thresh_emb_err(cfg_rx_thresh_emb_err),
@@ -95,7 +117,7 @@ module jesd204_rx_lane_64b #(
     .clk(clk),
     .reset(1'b0),
     .init(eomb),
-    .data_in(phy_data),
+    .data_in(phy_data_r),
     .crc12(crc12_calculated));
 
   reg crc12_on = 'b0;
@@ -149,7 +171,7 @@ module jesd204_rx_lane_64b #(
     .clk(clk),
     .reset(1'b0),
     .enable(~cfg_disable_scrambler),
-    .data_in(phy_data),
+    .data_in(phy_data_r),
     .data_out(data_descrambled_s));
 
   pipeline_stage #(
