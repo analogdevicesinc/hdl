@@ -120,6 +120,7 @@
 <li><a class="reference internal" href="#interface">Interface</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -2204,19 +2205,27 @@ registers relative address.</p>
 </div></section>
 <section id="software-guidelines">
 <h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>The software for this IP can be found as part of the ZCU102 Reference Design
-at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.
+<p>The software for this IP can be found as part of the ZCU102 Reference Design.
 The IP expects the software run a calibration at least once. It has to find
 out what value for the SMP_DLY (see in datasheet) is good for the PRBS to
 work.</p>
 </section>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9783.c">drivers/iio/adc/ad9783.c</a></p></li>
+<li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts</a></p></li>
+</ul>
+</section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783">library/axi_ad9783</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783">library/axi_ad9783</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9783_ebz">projects/ad9783_ebz</a></p></li>
+<li><p>HDL project documentation at <a class="reference internal" href="../../projects/ad9783_ebz/index.html#ad9783-ebz"><span class="std std-ref">AD9783-EBZ HDL project</span></a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9783">AD9783</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html">EVAL-AD9783</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9783">AXI AD9783 on wiki</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/interposer/ad9783">EVAL-AD9783 with ZCU102 reference design description</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug571-ultrascale-selectio.pdf">Ultrascale SelectIO</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug572-ultrascale-clocking.pdf">UltraScale Architecture Clocking Resources User Guide</a></p></li>

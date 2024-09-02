@@ -109,7 +109,7 @@
 <li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
-<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#software-support">Software Support</a></li>
 <li><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -2366,19 +2366,24 @@ module (at IP level).</p>
 processor is available in your system, you can create your own IP starting from
 the interface module.</p>
 </section>
-<section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
-<p>The software for this IP can be found as part of the ADAQ8092 Native FMC Card
-Reference Design at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adaq8092">no-OS Software</a> and
-Linux is supported at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a>.</p>
+<section id="software-support">
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/adaq8092">drivers/adc/adaq8092</a></p></li>
+<li><p>No-OS device driver at  <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/drivers/adc/adaq8092/adaq8092.c">drivers/adc/drivers/adc/adaq8092/adaq8092.c</a></p></li>
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/adaq8092.c">drivers/iio/adc/adaq8092.c</a></p></li>
+<li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-adaq8092.dts">arch/arm/boot/dts/zynq-zed-adv7511-adaq8092.dts</a></p></li>
+<li><p>Linux device driver documentation
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/adaq8092">on wiki</a></p></li>
+</ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adaq8092">library/axi_adaq8092</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adaq8092">library/axi_adaq8092</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adaq8092_fmc">projects/adaq8092_fmc</a></p></li>
+<li><p>HDL project documentation at <span class="xref std std-ref">adaq8092_fmc</span></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux">ADI Linux repository</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/adaq8092">projects/adaq8092</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a></p></li>
 <li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a></p></li>
 </ul>
