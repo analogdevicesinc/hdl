@@ -1,4 +1,4 @@
-.. _ad5758:
+.. _ad5758_sdz:
 
 AD5758-SDZ HDL project
 ================================================================================
@@ -49,7 +49,7 @@ Supported carriers
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :adi:`SDP-S`
+-  :adi:`SDP-S`
 
 Block design
 -------------------------------------------------------------------------------
@@ -64,9 +64,9 @@ The data path and clock domains are depicted in the below diagram:
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================== ================ =============================================
+================== ================ ============================================
 Jumper/Solder link Default Position Description
-================== ================ =============================================
+================== ================ ============================================
 JP1                B                Position B selects the VOUT3 pin of the
                                     :adi:`ADP1031`
 JP2                Inserted         Connects the VLOGIC pin of the :adi:`AD5758`
@@ -86,12 +86,12 @@ JP10               B                Position B selects the :adi:`ADR4525` output
                                     as the input to the REFIN pin
 JP11               Inserted         Selects 3.3 V output of the VLDO pin to the
                                     VLOGIC pin
-JP12               A                Position A selects VOUT2 of the 
+JP12               A                Position A selects VOUT2 of the
                                     :adi:`ADP1031` as the input voltage to the
                                     AVDD2 pin
 JP13               Inserted         Connects VOUT1 of the :adi:`ADP1031` to
                                     the AVDD1 pin
-================== ================ =============================================
+================== ================ ============================================
 
 .. note::
 

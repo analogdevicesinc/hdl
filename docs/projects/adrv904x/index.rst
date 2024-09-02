@@ -3,19 +3,24 @@
 ADRV904x HDL reference design
 ===============================================================================
 
-The ADRV904x is a highly integrated, system on chip (SoC) radio frequency (RF) 
-agile transceiver with integrated digital front end (DFE). The SoC contains 
-eight transmitters, two observation receivers for monitoring transmitter 
-channels, eight receivers, integrated LO and clock synthesizers, and digital 
+The ADRV904x is a highly integrated, system on chip (SoC) radio frequency (RF)
+agile transceiver with integrated digital front end (DFE). The SoC contains
+eight transmitters, two observation receivers for monitoring transmitter
+channels, eight receivers, integrated LO and clock synthesizers, and digital
 signal processing functions. The SoC meets the high radio performance and low
 power consumption demanded by cellular infrastructure applications including
 small cell basestation radios, macro 3G/4G/5G systems, and massive MIMO base
 stations.
 
+Supported devices
+-------------------------------------------------------------------------------
+
+-  :adi:`ADRV9040`
+
 Supported boards
 -------------------------------------------------------------------------------
 
--  EVAL-ADRV904x 
+-  :adi:`EVAL-ADRV904x`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -27,7 +32,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - EVAL-ADRV904x 
+   * - EVAL-ADRV904x
      - :xilinx:`ZCU102`
      - FMC HPC0
 
@@ -49,7 +54,7 @@ Example block design for Single link; M=16; L=8
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16 
+-  Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
 -  Sample Rate: 491.52 MSPS
 -  Dual link: No
 -  RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
@@ -59,7 +64,7 @@ The Rx links (ADC Path) operate with the following parameters:
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16 
+-  Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
 -  Sample Rate: 491.52 MSPS
 -  Dual link: No
 -  TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
@@ -93,8 +98,8 @@ The following are the parameters of this project that can be configured:
    -  64B66B - 64b66b link layer defined in JESD204C
    -  8B10B  - 8b10b link layer defined in JESD204B
 
--  RX_LANE_RATE: lane rate of the Rx link 
--  TX_LANE_RATE: lane rate of the Tx link 
+-  RX_LANE_RATE: lane rate of the Rx link
+-  TX_LANE_RATE: lane rate of the Tx link
 -  [RX/TX]_JESD_M: number of converters per link
 -  [RX/TX]_JESD_L: number of lanes per link
 -  [RX/TX]_JESD_S: number of samples per frame
@@ -116,9 +121,9 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
 ==================== ===========
-Instance             ZynqMP     
+Instance             ZynqMP
 ==================== ===========
-axi_adrv904x_tx_jesd 0x84A90000 
+axi_adrv904x_tx_jesd 0x84A90000
 axi_adrv904x_rx_jesd 0x84AA0000
 axi_adrv904x_tx_dma  0x9c420000
 axi_adrv904x_rx_dma  0x9c400000
@@ -143,8 +148,8 @@ SPI connections
      - spi0
      - ADRV904x
      - 0
-   * - 
-     - 
+   * -
+     -
      - AD9528
      - 1
 
@@ -356,9 +361,7 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   - `<https://www.analog.com/media/radioverse-adrv9026/adrv9040.pdf>`__
+-  Product datasheet: :adi:`ADRV9040 <media/radioverse-adrv9026/adrv9040.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -392,7 +395,7 @@ HDL related
      - :ref:`here <data_offload>`
    * - UTIL_DO_RAM
      - :git-hdl:`library/util_do_ram`
-     - :dokuwiki:`[Wiki] </resources/fpga/docs/data_offload>`
+     - :ref:`here <data_offload>`
    * - UTIL_ADXCVR for AMD
      - :git-hdl:`library/xilinx/util_adxcvr`
      - :ref:`here <util_adxcvr>`
