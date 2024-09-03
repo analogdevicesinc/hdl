@@ -94,8 +94,8 @@ module system_top (
   wire    [17:0]  gpio_o;
   wire    [17:0]  gpio_t;
 
-  wire            iic_scl;
-  wire            iic_sda;
+  //wire            iic_scl;
+  //wire            iic_sda;
   wire            phaser_enable;
   wire            pl_burst;
   wire            pl_muxout;
@@ -121,8 +121,8 @@ module system_top (
   assign gpio_i[17] = pl_muxout;
   assign phaser_enable = gpio_o[14];
 
-  assign pl_gpio4 = iic_scl;      //PL_GPIO4
-  assign pl_gpio3 = iic_sda;      //PL_GPIO3
+  //assign pl_gpio4 = iic_scl;      //PL_GPIO4
+  //assign pl_gpio3 = iic_sda;      //PL_GPIO3
 
   //PL_GPIO2
   ad_iobuf #(
@@ -166,8 +166,8 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sda),
+    //.iic_main_scl_io (iic_scl),
+    //.iic_main_sda_io (iic_sda),
     .rx_clk_in (rx_clk_in),
     .rx_data_in (rx_data_in),
     .rx_frame_in (rx_frame_in),
