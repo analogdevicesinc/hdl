@@ -270,7 +270,9 @@ ad_connect cpack/fifo_wr_data_0 rx_fir_decimator/data_out_0
 ad_connect cpack/fifo_wr_data_1 rx_fir_decimator/data_out_1
 ad_connect rx_fir_decimator/valid_out_0 cpack/fifo_wr_en
 
-ad_connect axi_ad9361_adc_dma/fifo_wr cpack/packed_fifo_wr
+ad_connect axi_ad9361_adc_dma/fifo_wr_en       cpack/packed_fifo_wr_en
+ad_connect axi_ad9361_adc_dma/fifo_wr_din      cpack/packed_fifo_wr_data
+ad_connect axi_ad9361_adc_dma/fifo_wr_overflow cpack/packed_fifo_wr_overflow
 ad_connect axi_ad9361/up_adc_gpio_out decim_slice/Din
 ad_connect rx_fir_decimator/active decim_slice/Dout
 
@@ -296,7 +298,9 @@ ad_connect axi_ad9361/dac_data_i1 tx_upack/fifo_rd_data_2
 ad_connect axi_ad9361/dac_enable_q1 tx_upack/enable_3
 ad_connect axi_ad9361/dac_data_q1 tx_upack/fifo_rd_data_3
 
-ad_connect tx_upack/s_axis  axi_ad9361_dac_dma/m_axis
+ad_connect tx_upack/s_axis_ready  axi_ad9361_dac_dma/m_axis_ready
+ad_connect tx_upack/s_axis_valid  axi_ad9361_dac_dma/m_axis_valid
+ad_connect tx_upack/s_axis_data   axi_ad9361_dac_dma/m_axis_data
 
 ad_ip_instance util_vector_logic logic_or [list \
   C_OPERATION {or} \
@@ -381,3 +385,47 @@ ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
+# debug
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0
+set_property -dict [list \
+  CONFIG.DIN_FROM {15} \
+  CONFIG.DIN_WIDTH {64} \
+] [get_bd_cells xlslice_0]
+
+ad_connect xlslice_0/Din  axi_ad9361_dac_dma/m_axis_data
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_1
+set_property -dict [list \
+  CONFIG.DIN_FROM {15} \
+  CONFIG.DIN_WIDTH {64} \
+] [get_bd_cells xlslice_1]
+
+ad_connect xlslice_1/Din  axi_ad9361_adc_dma/fifo_wr_din
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {1024} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {9} \
+  CONFIG.C_PROBE1_TYPE {1} \
+  CONFIG.C_PROBE2_TYPE {1} \
+  CONFIG.C_PROBE4_TYPE {1} \
+  CONFIG.C_PROBE5_TYPE {1} \
+  CONFIG.C_PROBE6_TYPE {1} \
+  CONFIG.C_PROBE8_TYPE {1} \
+  CONFIG.C_PROBE4_WIDTH {16} \
+  CONFIG.C_PROBE8_WIDTH {16} \
+] [get_bd_cells ila_0]
+
+ad_connect ila_0/clk     axi_ad9361/l_clk
+ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_1
+ad_connect ila_0/probe1  axi_ad9361_dac_dma/m_axis_ready
+ad_connect ila_0/probe2  axi_ad9361_dac_dma/m_axis_valid
+ad_connect ila_0/probe3  axi_ad9361_dac_dma/m_axis_xfer_req
+ad_connect ila_0/probe4  xlslice_0/Dout
+ad_connect ila_0/probe5  axi_ad9361_adc_dma/fifo_wr_en
+ad_connect ila_0/probe6  axi_ad9361_adc_dma/fifo_wr_overflow
+ad_connect ila_0/probe7  axi_ad9361_adc_dma/fifo_wr_xfer_req
+ad_connect ila_0/probe8  xlslice_1/Dout
