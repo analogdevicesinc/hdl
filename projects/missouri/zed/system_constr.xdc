@@ -109,15 +109,13 @@ set_property -dict {PACKAGE_PIN P21      IOSTANDARD LVCMOS18} [get_ports fmc_spi
 set_property -dict {PACKAGE_PIN J17      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[5]]           ; ## FMC_LA15_N
 set_property -dict {PACKAGE_PIN K21      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[6]]           ; ## FMC_LA16_N
 set_property -dict {PACKAGE_PIN G16      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[7]]           ; ## FMC_LA19_N
-set_property -dict {PACKAGE_PIN A19      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[8]]           ; ## FMC_LA24_N
-# set_property -dict {PACKAGE_PIN C22      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[9]]           ; ## FMC_LA25_N
-# set_property -dict {PACKAGE_PIN B22      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[10]]           ; ## FMC_LA33_N
-# set_property -dict {PACKAGE_PIN B21      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[11]]           ; ## FMC_LA33_P
+set_property -dict {PACKAGE_PIN F19      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[8]]           ; ## FMC_LA22_N
 set_property -dict {PACKAGE_PIN B22      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[9]]           ; ## FMC_LA33_N
-set_property -dict {PACKAGE_PIN B21      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[10]]           ; ## FMC_LA33_P
-set_property -dict {PACKAGE_PIN T16      IOSTANDARD LVCMOS18} [get_ports fmc_spi_miso]           ; ## FMC_LA07_P
-set_property -dict {PACKAGE_PIN N17      IOSTANDARD LVCMOS18} [get_ports fmc_spi_mosi]           ; ## FMC_LA11_P
-set_property -dict {PACKAGE_PIN D20      IOSTANDARD LVCMOS18} [get_ports fmc_spi_sck]           ; ## FMC_LA18_CC_P
+set_property -dict {PACKAGE_PIN B21      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[10]]          ; ## FMC_LA33_P
+set_property -dict {PACKAGE_PIN E20      IOSTANDARD LVCMOS18} [get_ports fmc_spi_cs_n[11]]          ; ## FMC_LA21_N
+set_property -dict {PACKAGE_PIN T16      IOSTANDARD LVCMOS18} [get_ports fmc_spi_miso]              ; ## FMC_LA07_P
+set_property -dict {PACKAGE_PIN N17      IOSTANDARD LVCMOS18} [get_ports fmc_spi_mosi]              ; ## FMC_LA11_P
+set_property -dict {PACKAGE_PIN D20      IOSTANDARD LVCMOS18} [get_ports fmc_spi_sck]               ; ## FMC_LA18_CC_P
 
 # FMC I2C
 
@@ -126,16 +124,16 @@ set_property -dict {PACKAGE_PIN J22      IOSTANDARD LVCMOS18} [get_ports fmc_i2c
 
 # FMC GPIO
 
-set_property -dict {PACKAGE_PIN M20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[0]]           ; ## FMC_LA00_CC_N
-set_property -dict {PACKAGE_PIN N20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[1]]           ; ## FMC_LA01_CC_N
-set_property -dict {PACKAGE_PIN N19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[2]]           ; ## FMC_LA01_CC_P
-set_property -dict {PACKAGE_PIN P17      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[3]]           ; ## FMC_LA02_P
-set_property -dict {PACKAGE_PIN P22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[4]]           ; ## FMC_LA03_N
-set_property -dict {PACKAGE_PIN N22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[5]]           ; ## FMC_LA03_P
-set_property -dict {PACKAGE_PIN M21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[6]]           ; ## FMC_LA04_P
-set_property -dict {PACKAGE_PIN K18      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[7]]           ; ## FMC_LA05_N
-set_property -dict {PACKAGE_PIN J18      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[8]]           ; ## FMC_LA05_P
-set_property -dict {PACKAGE_PIN L22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[9]]           ; ## FMC_LA06_N
+set_property -dict {PACKAGE_PIN M20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[0]]            ; ## FMC_LA00_CC_N
+set_property -dict {PACKAGE_PIN N20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[1]]            ; ## FMC_LA01_CC_N
+set_property -dict {PACKAGE_PIN N19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[2]]            ; ## FMC_LA01_CC_P
+set_property -dict {PACKAGE_PIN P17      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[3]]            ; ## FMC_LA02_P
+set_property -dict {PACKAGE_PIN P22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[4]]            ; ## FMC_LA03_N
+set_property -dict {PACKAGE_PIN N22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[5]]            ; ## FMC_LA03_P
+set_property -dict {PACKAGE_PIN M21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[6]]            ; ## FMC_LA04_P
+set_property -dict {PACKAGE_PIN K18      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[7]]            ; ## FMC_LA05_N
+set_property -dict {PACKAGE_PIN J18      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[8]]            ; ## FMC_LA05_P
+set_property -dict {PACKAGE_PIN L22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[9]]            ; ## FMC_LA06_N
 set_property -dict {PACKAGE_PIN L21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[10]]           ; ## FMC_LA06_P
 set_property -dict {PACKAGE_PIN J21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[11]]           ; ## FMC_LA08_P
 set_property -dict {PACKAGE_PIN R21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[12]]           ; ## FMC_LA09_N
@@ -155,9 +153,9 @@ set_property -dict {PACKAGE_PIN C20      IOSTANDARD LVCMOS18} [get_ports fmc_gpi
 set_property -dict {PACKAGE_PIN G15      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[26]]           ; ## FMC_LA19_P
 set_property -dict {PACKAGE_PIN G21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[27]]           ; ## FMC_LA20_N
 set_property -dict {PACKAGE_PIN G20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[28]]           ; ## FMC_LA20_P
-set_property -dict {PACKAGE_PIN E20      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[29]]           ; ## FMC_LA21_N
+set_property -dict {PACKAGE_PIN C22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[29]]           ; ## FMC_LA25_N
 set_property -dict {PACKAGE_PIN E19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[30]]           ; ## FMC_LA21_P
-set_property -dict {PACKAGE_PIN F19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[31]]           ; ## FMC_LA22_N
+set_property -dict {PACKAGE_PIN A19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[31]]           ; ## FMC_LA24_N
 set_property -dict {PACKAGE_PIN G19      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[32]]           ; ## FMC_LA22_P
 set_property -dict {PACKAGE_PIN D15      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[33]]           ; ## FMC_LA23_N
 set_property -dict {PACKAGE_PIN E15      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[34]]           ; ## FMC_LA23_P
@@ -177,6 +175,3 @@ set_property -dict {PACKAGE_PIN B16      IOSTANDARD LVCMOS18} [get_ports fmc_gpi
 set_property -dict {PACKAGE_PIN B17      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[48]]           ; ## FMC_LA31_N
 set_property -dict {PACKAGE_PIN A22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[49]]           ; ## FMC_LA32_N
 set_property -dict {PACKAGE_PIN A21      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[50]]           ; ## FMC_LA32_P
-
-# CS_1355_8909 (FMC_LA25_N, G28) mapped to a GPIO
-set_property -dict {PACKAGE_PIN C22      IOSTANDARD LVCMOS18} [get_ports fmc_gpio_o[51]]           ; ## FMC_LA25_N
