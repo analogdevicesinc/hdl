@@ -190,6 +190,13 @@ and for fields:
    Controls the EYESCANRESET pin of the GTH/GTY transceivers for lane n.
    ENDFIELD
 
+To ease the process of creating a new regmap with imported registers you can
+use the generic adc/dac templates that include all available registers:
+
+* :git-hdl:`docs/regmap/adi_regmap_common_template.txt`
+* :git-hdl:`docs/regmap/adi_regmap_axi_adc_template.txt`
+* :git-hdl:`docs/regmap/adi_regmap_axi_dac_template.txt`
+
 Xilinx
 --------------------------------------------------------------------------------
 
