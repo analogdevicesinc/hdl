@@ -99,7 +99,9 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_tx_204c.svg
+   :width: 800
    :align: center
+   :alt: JESD204B/C Tx Link Layer
 
 AXI JESD204 TX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -282,7 +284,7 @@ tx_data.
       ],
       foot:
       {text:
-         ['tspan',{dx:'-45'}, 'Link Inicialization', ['tspan', {dx:'60'},
+         ['tspan',{dx:'-45'}, 'Link Initialization', ['tspan', {dx:'60'},
          'User Data Phase'],],
       }
    }
@@ -293,8 +295,10 @@ entered the ``tx_ready`` will be asserted to indicate that the peripheral is now
 accepting and processing the data from the ``tx_data`` signal. The ``tx_ready``
 signal stays asserted until the link is either deactivated or re-initialized.
 
-.. image:: octets_mapping.svg
+.. image:: tx_octets_mapping.svg
+   :width: 300
    :align: right
+   :alt: JESD204B/C Tx link layer octets mapping
 
 Typically the ``TX_DATA`` interface is connected to a JESD204B transport layer
 peripheral that provides framed and lane mapped data. The internal data path

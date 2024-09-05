@@ -33,7 +33,8 @@ Block Diagram
 -------------
 
 .. image:: ad_ip_jesd204_transport_adc.svg
-  :align: center
+   :width: 700
+   :align: center
 
 Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
