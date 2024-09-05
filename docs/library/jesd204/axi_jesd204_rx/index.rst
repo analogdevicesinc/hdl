@@ -100,7 +100,9 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: axi_jesd204_rx_204c.svg
+   :width: 800
    :align: center
+   :alt: JESD204B/C Rx Link Layer
 
 AXI JESD204 RX Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
@@ -289,7 +291,7 @@ is asserted, a continuous stream of user data must be accepted from ``rx_data``.
       ],
       foot: {
          text:
-            ['tspan',{dx:'-45'}, 'Link Inicialization', ['tspan', {dx:'60'},
+            ['tspan',{dx:'-45'}, 'Link Initialization', ['tspan', {dx:'60'},
             'User Data Phase'],],
          }
    }
@@ -300,8 +302,10 @@ asserted to indicate that the peripheral is now providing the processed data
 at the ``rx_data`` signal. The ``rx_valid`` signal stays asserted until the link
 is either deactivated or reinitialized.
 
-.. image:: octets_mapping.svg
+.. image:: rx_octets_mapping.svg
+   :width: 300
    :align: right
+   :alt: JESD204B/C Rx link layer octets mapping
 
 Typically, the ``RX_DATA`` interface is connected to a JESD204 transport layer
 peripheral that deframes the data and passes it to the application layer. The
