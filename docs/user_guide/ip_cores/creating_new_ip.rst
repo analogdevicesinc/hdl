@@ -32,7 +32,7 @@ One file can have more than one register map, and they are bounded by the header
 .. code::
 
    TITLE
-   [USING <regmap_to_inherit>]
+   [USING <regmap_to_inherit> ...]
    <title> (<ip_name>)
    <unique_id>
    ENDTITLE
@@ -46,8 +46,8 @@ Example:
    AXI_SPI_ENGINE
    ENDTITLE
 
-The ``USING`` line is only present if the register map imports other register
-map :ref:`for look-up <hdl-regmap-using>`.
+The ``USING`` method is only present if the register map imports other register
+maps :ref:`for look-up <hdl-regmap-using>`.
 
 The register and fields are defined with the following syntax:
 
@@ -126,6 +126,20 @@ Examples:
 Importing with Using Method
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The ``USING`` method allows to look-up a register map to import register and
+fields.
+A register map can look-up multiple register maps by repeating the method for
+each register map, for example:
+
+.. code::
+
+   TITLE
+   USING COMMON_REGS
+   USING COMMON_REGS_EXTRA
+   My IP (my_ip)
+   MY_IP
+   ENDTITLE
+
 If using the ``USING`` method for look-up, registers and fields are imported
 with the following syntax:
 
@@ -136,9 +150,10 @@ with the following syntax:
    ENDREG
 
    FIELD
-   <field_to_import>
+   [<field_to_import> ...]
    ENDFIELD
 
+That means, only include the register/field name, and nothing else.
 For example:
 
 .. code::
@@ -152,6 +167,19 @@ For example:
    SYMB_8_16B
    ENDFIELD
 
+If inheriting registers from multiple register maps, consider explicitly
+setting the source register map:
+
+.. code::
+
+   REG
+   COMMON_EXTRA.CTRL
+   ENDREG
+
+   FIELD
+   SOME_FIELD
+   ENDFIELD
+
 Some considerations:
 
 * Imported registers shall have non-imported fields, for example, when importing
@@ -159,6 +187,8 @@ Some considerations:
 * Imported fields must be inside a imported register, since the field name is not
   unique.
 * Multiple fields can be imported from a single ``FIELD`` group.
+* Multiple register maps can be used for lookup. Add each in a different ``USING``
+  method.
 
 .. _hdl-regmap-ranged:
 
@@ -178,7 +208,7 @@ The syntax is ``WHERE n IS FROM <lower> TO <UPPER>``, for example, for registers
     DAC Channel Control & Status (channel - 0)
     ENDREG
 
-and for fields:
+And for fields:
 
 .. code::
 
