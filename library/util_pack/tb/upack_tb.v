@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module upack_tb;
-  parameter VCD_FILE = {`__FILE__,"cd"};
+  parameter VCD_FILE = {"upack_tb.vcd"};
   parameter NUM_OF_CHANNELS = 8;
   parameter SAMPLES_PER_CHANNEL = 1;
   parameter ENABLE_RANDOM = 0;

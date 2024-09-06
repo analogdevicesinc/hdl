@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module reset_manager_tb;
-  parameter VCD_FILE = {`__FILE__,"cd"};
+  parameter VCD_FILE = {"reset_manager_tb.vcd"};
 
   `define TIMEOUT 1000000
   `include "tb_base.v"
