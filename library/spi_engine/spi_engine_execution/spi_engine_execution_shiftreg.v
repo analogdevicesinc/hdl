@@ -55,7 +55,7 @@ module spi_engine_execution_shiftreg #(
   // spi data
   input [(DATA_WIDTH-1):0] sdo_data,
   input sdo_data_valid,
-  output reg sdo_data_ready,
+  output sdo_data_ready,
   output [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
   output reg sdi_data_valid,
   input sdi_data_ready,
@@ -69,8 +69,7 @@ module spi_engine_execution_shiftreg #(
   input [7:0] word_length,
 
   // timing from main fsm
-  input sample_sdo,
-  output reg sdo_io_ready,
+  output sdo_io_ready,
   input transfer_active,
   input trigger_tx,
   input trigger_rx,
@@ -81,19 +80,27 @@ module spi_engine_execution_shiftreg #(
 
   reg [7:0] sdi_counter = 8'b0;
   reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
-  reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_d;
+  reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_reg;
+  reg data_sdo_v;
+  wire sdo_toshiftreg;
   wire last_sdi_bit;
   reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
   wire trigger_rx_s;
   wire [2:0] current_instr = current_cmd[14:12];
 
-  always @(posedge clk) begin
+  // sdo data handshake
+  assign sdo_data_ready = (!data_sdo_v) || sdo_toshiftreg;
+  assign sdo_io_ready = data_sdo_v;
+  always @(posedge clk ) begin
     if (resetn == 1'b0) begin
-      sdo_data_ready <= 1'b0;
-    end else if (sdo_toshiftreg) begin
-      sdo_data_ready <= 1'b1;
-    end else if (sdo_data_valid == 1'b1) begin
-      sdo_data_ready <= 1'b0;
+      data_sdo_v <= 1'b0;
+    end else begin
+      if (sdo_data_ready && sdo_data_valid) begin
+        data_sdo_v <= 1'b1;
+        sdo_data_reg <= sdo_data;
+      end else if (sdo_toshiftreg) begin
+        data_sdo_v <= 1'b0;
+      end
     end
   end
 
@@ -101,16 +108,8 @@ module spi_engine_execution_shiftreg #(
   always @(posedge clk ) begin
     if (resetn == 1'b0) begin
       aligned_sdo_data <= 0;
-      sdo_io_ready <= 1'b0;
     end else begin
-      if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
-        sdo_io_ready <= 1'b0;
-      end
-      if (sample_sdo) begin
-        sdo_data_d <= sdo_data;
-        sdo_io_ready <= 1'b1;
-      end
-      aligned_sdo_data <= sdo_data_d << left_aligned;
+      aligned_sdo_data <= sdo_data_reg << left_aligned;
     end
   end
 
@@ -129,7 +128,6 @@ module spi_engine_execution_shiftreg #(
   end
   assign sdo_int = data_sdo_shift[DATA_WIDTH-1];
   assign sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
-
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
   // the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
