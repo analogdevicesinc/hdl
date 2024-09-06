@@ -163,7 +163,7 @@ module spi_engine_execution #(
 
   wire end_of_sdi_latch;
 
-  wire sample_sdo;
+  wire sdo_io_ready;
 
   (* direct_enable = "yes" *) wire cs_gen;
 
@@ -192,7 +192,7 @@ module spi_engine_execution #(
     .sdo_idle_state(sdo_idle_state),
     .left_aligned(left_aligned),
     .word_length(word_length),
-    .sample_sdo(sample_sdo),
+    .sdo_io_ready(sdo_io_ready),
     .transfer_active(transfer_active),
     .trigger_tx(trigger_tx),
     .trigger_rx(trigger_rx),
@@ -200,8 +200,6 @@ module spi_engine_execution #(
     .cs_activate(cs_activate),
     .end_of_sdi_latch(end_of_sdi_latch)
   );
-
-  assign sample_sdo = (trigger_tx && last_bit) || exec_transfer_cmd;
 
   assign cs_gen = inst_d1 == CMD_CHIPSELECT
                   && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
@@ -386,9 +384,9 @@ module spi_engine_execution #(
   assign sync = cmd_d1[7:0];
 
   assign io_ready1 = (sdi_data_valid == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+          (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
   assign io_ready2 = (sdi_enabled == 1'b0 || sdi_data_ready == 1'b1) &&
-          (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_data_valid == 1'b1);
+          (sdo_enabled == 1'b0 || last_transfer == 1'b1 || sdo_io_ready == 1'b1);
 
   always @(posedge clk) begin
     if (idle == 1'b1) begin
@@ -407,14 +405,11 @@ module spi_engine_execution #(
       wait_for_io <= 1'b0;
     end else begin
       if (exec_transfer_cmd == 1'b1) begin
-        wait_for_io <= 1'b1;
-        transfer_active <= 1'b0;
+        wait_for_io <= !io_ready1;
+        transfer_active <= io_ready1;
       end else if (wait_for_io == 1'b1 && io_ready1 == 1'b1) begin
         wait_for_io <= 1'b0;
-        if (last_transfer == 1'b0)
-          transfer_active <= 1'b1;
-        else
-          transfer_active <= 1'b0;
+        transfer_active <= !last_transfer;
       end else if (transfer_active == 1'b1 && end_of_word == 1'b1) begin
         if (last_transfer == 1'b1 || io_ready2 == 1'b0)
           transfer_active <= 1'b0;
