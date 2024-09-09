@@ -1,0 +1,220 @@
+FMC_pin  FMC_port              Schematic_name    System_top_name  IOSTANDARD   Termination
+
+H4       FMC0_CLK0_M2C_P                                           
+H5       FMC0_CLK0_M2C_N                                           
+G2       FMC0_CLK1_M2C_P                                           
+G3       FMC0_CLK1_M2C_N                                           
+B1       CLK_DIR                                                   
+K4       CLK2_IO_P                                                 
+K5       CLK2_IO_N                                                 
+J2       CLK3_IO_P                                                 
+J3       CLK3_IO_N                                                 
+G6       FMC0_LA00_CC_P                                            
+G7       FMC0_LA00_CC_N                                            
+D8       FMC0_LA01_CC_P        sync_p            tx_sync_p[0]     LVDS         DIFF_TERM TRUE 
+D9       FMC0_LA01_CC_N        sync_n            tx_sync_n[0]     LVDS         DIFF_TERM TRUE 
+H7       FMC0_LA02_P           sysref2_p         sysref2_p        LVDS         DIFF_TERM TRUE
+H8       FMC0_LA02_N           sysref2_n         sysref2_n        LVDS         DIFF_TERM TRUE
+G9       FMC0_LA03_P           fmc_sck           spi_clk          LVCMOS18 
+G10      FMC0_LA03_N           fmc_mosi          spi_mosi         LVCMOS18 
+H10      FMC0_LA04_P           fmc_miso          spi_miso         LVCMOS18 
+H11      FMC0_LA04_N           fmc_cs1           spi_csn_dac      LVCMOS18 
+D11      FMC0_LA05_P           fmc_cs2           spi_csn_clk      LVCMOS18 
+D12      FMC0_LA05_N           fmc_spi_en        spi_en           LVCMOS18 
+C10      FMC0_LA06_P                                               
+C11      FMC0_LA06_N                                               
+H13      FMC0_LA07_P           fmc_txen_0        dac_ctrl[0]      LVCMOS18
+H14      FMC0_LA07_N                                               
+G12      FMC0_LA08_P                                               
+G13      FMC0_LA08_N                                               
+D14      FMC0_LA09_P           fmc_cs3           spi_csn_clk2     LVCMOS18
+D15      FMC0_LA09_N           fmc_hmc849vctl    dc_ctrl[4]       LVCMOS18
+C14      FMC0_LA10_P                                               
+C15      FMC0_LA10_N                                               
+H16      FMC0_LA11_P                                               
+H17      FMC0_LA11_N                                               
+G15      FMC0_LA12_P                                               
+G16      FMC0_LA12_N                                               
+D17      FMC0_LA13_P                                               
+D18      FMC0_LA13_N                                               
+C18      FMC0_LA14_P                                               
+C19      FMC0_LA14_N                                               
+H19      FMC0_LA15_P                                               
+H20      FMC0_LA15_N                                               
+G18      FMC0_LA16_P                                               
+G19      FMC0_LA16_N                                               
+D20      FMC0_LA17_CC_P                                            
+D21      FMC0_LA17_CC_N                                            
+C22      FMC0_LA18_CC_P                                            
+C23      FMC0_LA18_CC_N                                            
+H22      FMC0_LA19_P                                               
+H23      FMC0_LA19_N                                               
+G21      FMC0_LA20_P                                               
+G22      FMC0_LA20_N                                               
+H25      FMC0_LA21_P                                               
+H26      FMC0_LA21_N                                               
+G24      FMC0_LA22_P                                               
+G25      FMC0_LA22_N                                               
+D23      FMC0_LA23_P                                               
+D24      FMC0_LA23_N                                               
+H28      FMC0_LA24_P                                               
+H29      FMC0_LA24_N                                               
+G27      FMC0_LA25_P                                               
+G28      FMC0_LA25_N                                               
+D26      FMC0_LA26_P                                               
+D27      FMC0_LA26_N                                               
+C26      FMC0_LA27_P                                               
+C27      FMC0_LA27_N                                               
+H31      FMC0_LA28_P                                               
+H32      FMC0_LA28_N                                               
+G30      FMC0_LA29_P                                               
+G31      FMC0_LA29_N                                               
+H34      FMC0_LA30_P                                               
+H35      FMC0_LA30_N                                               
+G33      FMC0_LA31_P                                               
+G34      FMC0_LA31_N                                               
+H37      FMC0_LA32_P                                               
+H38      FMC0_LA32_N                                               
+G36      FMC0_LA33_P                                               
+G37      FMC0_LA33_N                                               
+F4       FMC0_HA00_CC_P                                            
+F5       FMC0_HA00_CC_N                                            
+E2       FMC0_HA01_CC_P                                            
+E3       FMC0_HA01_CC_N                                            
+K7       FMC0_HA02_P                                               
+K8       FMC0_HA02_N                                               
+J6       FMC0_HA03_P                                               
+J7       FMC0_HA03_N                                               
+F7       FMC0_HA04_P                                               
+F8       FMC0_HA04_N                                               
+E6       FMC0_HA05_P                                               
+E7       FMC0_HA05_N                                               
+K10      FMC0_HA06_P                                               
+K11      FMC0_HA06_N                                               
+J9       FMC0_HA07_P                                               
+J10      FMC0_HA07_N                                               
+F10      FMC0_HA08_P                                               
+F11      FMC0_HA08_N                                               
+E9       FMC0_HA09_P                                               
+E10      FMC0_HA09_N                                               
+K13      FMC0_HA10_P                                               
+K14      FMC0_HA10_N                                               
+J12      FMC0_HA11_P                                               
+J13      FMC0_HA11_N                                               
+F13      FMC0_HA12_P                                               
+F14      FMC0_HA12_N                                               
+E12      FMC0_HA13_P                                               
+E13      FMC0_HA13_N                                               
+J15      FMC0_HA14_P                                               
+J16      FMC0_HA14_N                                               
+F16      FMC0_HA15_P                                               
+F17      FMC0_HA15_N                                               
+E15      FMC0_HA16_P                                               
+E16      FMC0_HA16_N                                               
+K16      FMC0_HA17_CC_P                                            
+K17      FMC0_HA17_CC_N                                            
+J18      FMC0_HA18_P                                               
+J19      FMC0_HA18_N                                               
+F19      FMC0_HA19_P                                               
+F20      FMC0_HA19_N                                               
+E18      FMC0_HA20_P                                               
+E19      FMC0_HA20_N                                               
+K19      FMC0_HA21_P                                               
+K20      FMC0_HA21_N                                               
+J21      FMC0_HA22_P                                               
+J22      FMC0_HA22_N                                               
+K22      FMC0_HA23_P                                               
+K23      FMC0_HA23_N                                               
+K25      FMC0_HB00_CC_P                                            
+K26      FMC0_HB00_CC_N                                            
+J24      FMC0_HB01_P                                               
+J25      FMC0_HB01_N                                               
+F22      FMC0_HB02_P                                               
+F23      FMC0_HB02_N                                               
+E21      FMC0_HB03_P                                               
+E22      FMC0_HB03_N                                               
+F25      FMC0_HB04_P                                               
+F26      FMC0_HB04_N                                               
+E24      FMC0_HB05_P                                               
+E25      FMC0_HB05_N                                               
+K28      FMC0_HB06_CC_P                                            
+K29      FMC0_HB06_CC_N                                            
+J27      FMC0_HB07_P                                               
+J28      FMC0_HB07_N                                               
+F28      FMC0_HB08_P                                               
+F29      FMC0_HB08_N                                               
+E27      FMC0_HB09_P                                               
+E28      FMC0_HB09_N                                               
+K31      FMC0_HB10_P                                               
+K32      FMC0_HB10_N                                               
+J30      FMC0_HB11_P                                               
+J31      FMC0_HB11_N                                               
+F31      FMC0_HB12_P                                               
+F32      FMC0_HB12_N                                               
+E30      FMC0_HB13_P                                               
+E31      FMC0_HB13_N                                               
+K34      FMC0_HB14_P                                               
+K35      FMC0_HB14_N                                               
+J33      FMC0_HB15_P                                               
+J34      FMC0_HB15_N                                               
+F34      FMC0_HB16_P                                               
+F35      FMC0_HB16_N                                               
+K37      FMC0_HB17_CC_P                                            
+K38      FMC0_HB17_CC_N                                            
+J36      FMC0_HB18_P                                               
+J37      FMC0_HB18_N                                               
+E33      FMC0_HB19_P                                               
+E34      FMC0_HB19_N                                               
+F37      FMC0_HB20_P                                               
+F38      FMC0_HB20_N                                               
+E36      FMC0_HB21_P                                               
+E37      FMC0_HB21_N                                               
+D4       FMC0_GBTCLK0_M2C_C_P  gbtclk0_m2c_p         tx_ref_clk_p
+D5       FMC0_GBTCLK0_M2C_C_N  gbtclk0_m2c_n         tx_ref_clk_n  
+B20      FMC0_GBTCLK1_M2C_C_P                                      
+B21      FMC0_GBTCLK1_M2C_C_N                                      
+C2       FMC0_DP0_C2M_P        serdin0_p             tx_data_p[0]
+C3       FMC0_DP0_C2M_N        serdin0_n             tx_data_n[0]
+C6       FMC0_DP0_M2C_P                              
+C7       FMC0_DP0_M2C_N                              
+A22      FMC0_DP1_C2M_P        serdin1_p             tx_data_p[1]
+A23      FMC0_DP1_C2M_N        serdin1_n             tx_data_n[1]
+A2       FMC0_DP1_M2C_P                              
+A3       FMC0_DP1_M2C_N                              
+A26      FMC0_DP2_C2M_P        serdin2_p             tx_data_p[2]
+A27      FMC0_DP2_C2M_N        serdin2_n             tx_data_n[2]
+A6       FMC0_DP2_M2C_P                              
+A7       FMC0_DP2_M2C_N                             
+A30      FMC0_DP3_C2M_P        serdin3_p             tx_data_p[3]
+A31      FMC0_DP3_C2M_N        serdin3_n             tx_data_n[3]
+A10      FMC0_DP3_M2C_P                              
+A11      FMC0_DP3_M2C_N                              
+A34      FMC0_DP4_C2M_P        serdin5_n             tx_data_n[5]
+A35      FMC0_DP4_C2M_N        serdin5_p             tx_data_p[5]
+A14      FMC0_DP4_M2C_P                              
+A15      FMC0_DP4_M2C_N                              
+A38      FMC0_DP5_C2M_P        serdin7_n             tx_data_n[7]
+A39      FMC0_DP5_C2M_N        serdin7_p             tx_data_p[7]
+A18      FMC0_DP5_M2C_P                              
+A19      FMC0_DP5_M2C_N                              
+B36      FMC0_DP6_C2M_P        serdin6_n             tx_data_n[6]
+B37      FMC0_DP6_C2M_N        serdin6_p             tx_data_p[6]
+B16      FMC0_DP6_M2C_P                              
+B17      FMC0_DP6_M2C_N                              
+B32      FMC0_DP7_C2M_P        serdin4_n             tx_data_n[4]
+B33      FMC0_DP7_C2M_N        serdin4_p             tx_data_p[4]
+B12      FMC0_DP7_M2C_P                                            
+B13      FMC0_DP7_M2C_N                                            
+B28      FMC0_DP8_C2M_P                                            
+B29      FMC0_DP8_C2M_N                                            
+B8       FMC0_DP8_M2C_P                                            
+B9       FMC0_DP8_M2C_N                                            
+B24      FMC0_DP9_C2M_P                                            
+B25      FMC0_DP9_C2M_N                                            
+B4       FMC0_DP9_M2C_P                                            
+B5       FMC0_DP9_M2C_N                                            
+C30      FMC0_SCL                                                  
+C31      FMC0_SDA                                                  
+D1       FMC0_PG_C2M                                               
+F1       FMC0_PG_M2C                                               
+H2       FMC0_PRSNT_M2C_L                                          
