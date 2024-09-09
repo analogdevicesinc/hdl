@@ -2324,8 +2324,30 @@ Valid for 8B/10B encoder.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>8B/10B : State of the [[#b10b_link_state_machine|8B/10B link state machine]]. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED) \
-64B/66B : State of the [[#b66b_link_state_machine|64B/66B link state machine]]. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>State of the <a class="reference internal" href="#axi-jesd204-rx-8b10b-link-state-machine"><span class="std std-ref">8B/10B link state machine</span></a>.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>0 = RESET</p></li>
+<li><p>1 = WAIT_FOR_PHY</p></li>
+<li><p>2 = CGS</p></li>
+<li><p>3 = SYNCHRONIZED</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>State of the <a class="reference internal" href="#axi-jesd204-rx-64b66b-link-state-machine"><span class="std std-ref">64B/66B link state machine</span></a>.</p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p>0 = RESET</p></li>
+<li><p>1 = WAIT_BS</p></li>
+<li><p>2 = BLOCK_SYNC</p></li>
+<li><p>3 = DATA</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
 </section>
 </td>
 </tr>
@@ -2350,10 +2372,14 @@ Valid for 8B/10B encoder.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>State of Extended multiblock alignment: \</p>
-<p>001 - EMB_INIT \
-010 - EMB_HUNT \
-100 - EMB_LOCK \</p>
+<p>State of Extended multiblock alignment:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>001 - EMB_INIT</p></li>
+<li><p>010 - EMB_HUNT</p></li>
+<li><p>100 - EMB_LOCK</p></li>
+</ul>
+</div></blockquote>
 <p>Valid for 64b66b encoder.</p>
 </section>
 </td>

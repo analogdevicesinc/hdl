@@ -327,7 +327,7 @@ in the tcl file, under the <code class="docutils literal notranslate"><span clas
 follows a special syntax.</p>
 <p>One file can have more than one register map, and they are bounded by the header:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TITLE</span>
-<span class="p">[</span><span class="n">USING</span> <span class="o">&lt;</span><span class="n">regmap_to_inherit</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="n">USING</span> <span class="o">&lt;</span><span class="n">regmap_to_inherit</span><span class="o">&gt;</span> <span class="o">...</span><span class="p">]</span>
 <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">ip_name</span><span class="o">&gt;</span><span class="p">)</span>
 <span class="o">&lt;</span><span class="n">unique_id</span><span class="o">&gt;</span>
 <span class="n">ENDTITLE</span>
@@ -340,8 +340,8 @@ follows a special syntax.</p>
 <span class="n">ENDTITLE</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> line is only present if the register map imports other register
-map <a class="reference internal" href="#hdl-regmap-using"><span class="std std-ref">for look-up</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> method is only present if the register map imports other register
+maps <a class="reference internal" href="#hdl-regmap-using"><span class="std std-ref">for look-up</span></a>.</p>
 <p>The register and fields are defined with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
 <span class="mh">0x00000000</span>
@@ -408,6 +408,18 @@ quotes <code class="docutils literal notranslate"><span class="pre">''</span></c
 </ul>
 <section id="importing-with-using-method">
 <span id="hdl-regmap-using"></span><h3>Importing with Using Method<a class="headerlink" href="#importing-with-using-method" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> method allows to look-up a register map to import register and
+fields.
+A register map can look-up multiple register maps by repeating the method for
+each register map, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TITLE</span>
+<span class="n">USING</span> <span class="n">COMMON_REGS</span>
+<span class="n">USING</span> <span class="n">COMMON_REGS_EXTRA</span>
+<span class="n">My</span> <span class="n">IP</span> <span class="p">(</span><span class="n">my_ip</span><span class="p">)</span>
+<span class="n">MY_IP</span>
+<span class="n">ENDTITLE</span>
+</pre></div>
+</div>
 <p>If using the <code class="docutils literal notranslate"><span class="pre">USING</span></code> method for look-up, registers and fields are imported
 with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
@@ -415,11 +427,12 @@ with the following syntax:</p>
 <span class="n">ENDREG</span>
 
 <span class="n">FIELD</span>
-<span class="o">&lt;</span><span class="n">field_to_import</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">field_to_import</span><span class="o">&gt;</span> <span class="o">...</span><span class="p">]</span>
 <span class="n">ENDFIELD</span>
 </pre></div>
 </div>
-<p>For example:</p>
+<p>That means, only include the register/field name, and nothing else.
+For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
 <span class="n">CNTRL_1</span>
 <span class="n">ENDREG</span>
@@ -430,6 +443,17 @@ with the following syntax:</p>
 <span class="n">ENDFIELD</span>
 </pre></div>
 </div>
+<p>If inheriting registers from multiple register maps, consider explicitly
+setting the source register map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
+<span class="n">COMMON_EXTRA</span><span class="o">.</span><span class="n">CTRL</span>
+<span class="n">ENDREG</span>
+
+<span class="n">FIELD</span>
+<span class="n">SOME_FIELD</span>
+<span class="n">ENDFIELD</span>
+</pre></div>
+</div>
 <p>Some considerations:</p>
 <ul class="simple">
 <li><p>Imported registers shall have non-imported fields, for example, when importing
@@ -437,6 +461,8 @@ a register that is reserved for custom implementation.</p></li>
 <li><p>Imported fields must be inside a imported register, since the field name is not
 unique.</p></li>
 <li><p>Multiple fields can be imported from a single <code class="docutils literal notranslate"><span class="pre">FIELD</span></code> group.</p></li>
+<li><p>Multiple register maps can be used for lookup. Add each in a different <code class="docutils literal notranslate"><span class="pre">USING</span></code>
+method.</p></li>
 </ul>
 </section>
 <section id="ranged-registers-and-fields">
@@ -452,7 +478,7 @@ The syntax is <code class="docutils literal notranslate"><span class="pre">WHERE
 <span class="n">ENDREG</span>
 </pre></div>
 </div>
-<p>and for fields:</p>
+<p>And for fields:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FIELD</span>
 <span class="p">[</span><span class="n">n</span><span class="p">]</span>
 <span class="n">WHERE</span> <span class="n">n</span> <span class="n">IS</span> <span class="n">FROM</span> <span class="mi">0</span> <span class="n">TO</span> <span class="mi">31</span>
@@ -462,6 +488,13 @@ The syntax is <code class="docutils literal notranslate"><span class="pre">WHERE
 <span class="n">ENDFIELD</span>
 </pre></div>
 </div>
+<p>To ease the process of creating a new regmap with imported registers you can
+use the generic adc/dac templates that include all available registers:</p>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/regmap/adi_regmap_common_template.txt">docs/regmap/adi_regmap_common_template.txt</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/regmap/adi_regmap_axi_adc_template.txt">docs/regmap/adi_regmap_axi_adc_template.txt</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/regmap/adi_regmap_axi_dac_template.txt">docs/regmap/adi_regmap_axi_dac_template.txt</a></p></li>
+</ul>
 </section>
 </section>
 <section id="xilinx">
