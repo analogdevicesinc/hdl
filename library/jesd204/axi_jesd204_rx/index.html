@@ -1699,7 +1699,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit reflects the presence of character replacement monitoring logic for cases when scrambling is disabled. Available starting from version 1.07.a;</p>
+<p>This bit reflects the presence of character replacement monitoring logic for cases when scrambling is disabled.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -1709,7 +1710,10 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If this bit is set in case of frame misalignment is detected the core resets itself. No software intervention is required. If the bit is not set and misalignment is detected the software must restart the link. Available starting from version 1.07.a;</p>
+<p>If this bit is set in case of frame misalignment is detected the core resets itself.
+No software intervention is required.
+If the bit is not set and misalignment is detected the software must restart the link.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -1719,7 +1723,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
-<p>This bit reflects the presence of frame alignment monitor. Available starting from version 1.07.a;</p>
+<p>This bit reflects the presence of frame alignment monitor.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -1727,12 +1732,11 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ASYNC_​CLK’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ASYNC_​CLK</span></code></td>
 <td class="description"><section>
-<p>This bit is set if link clock and device clock are connected to different sources. This is useful for supporting modes where datapath width is not integer multiple of F. Available starting from version 1.07.a;</p>
+<p>This bit is set if link clock and device clock are connected to different sources.
+This is useful for supporting modes where datapath width is not integer multiple of F.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -1902,7 +1906,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16. Available starting from version 1.07.a;</p>
+<p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -1987,7 +1992,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates that an external SYSREF event has been observed that was unaligned to a previously observed event.</p>
+<p>Indicates that an external SYSREF event has been observed that was unaligned to a previously
+observed event.</p>
 </section>
 </td>
 </tr>
@@ -2015,7 +2021,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable n-th lane (0 = enabled, 1 = disabled). Where n is from 0 to 31.</p>
+<p>Enable/Disable n-th lane (0 = enabled, 1 = disabled).
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2057,7 +2064,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x003</span></code></td>
 <td class="description"><section>
-<p>Number of octets per multi-frame - 1 (K x F). In 64B/66B mode represents the number of octets per extended multiblock.</p>
+<p>Number of octets per multi-frame - 1 (K x F).
+In 64B/66B mode represents the number of octets per extended multiblock.</p>
 </section>
 </td>
 </tr>
@@ -2082,7 +2090,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled). Valid for 8B/10B encoder.</p>
+<p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled).
+Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2100,7 +2109,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x218</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">MULTI_LINK_DISABLE</span></code></td>
 <td class="description bold"><section>
-<p>Enable/Disable links in case of a multi-link architecture. Valid for 8B/10B encoder.</p>
+<p>Enable/Disable links in case of a multi-link architecture.
+Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2110,7 +2120,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable n-th link (0 = enabled, 1 = disabled). Where n is from 0 to 31.</p>
+<p>Enable/Disable n-th link (0 = enabled, 1 = disabled).
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2135,7 +2146,9 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer. In 64B/66B mode represents the number of octets per extended multiblock. Available starting from version 1.07.a;</p>
+<p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer.
+In 64B/66B mode represents the number of octets per extended multiblock.
+Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
@@ -2202,7 +2215,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, invalid header errors are not counted; Valid for 64B/66B encoder.</p>
+<p>If set, invalid header errors are not counted;
+Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2212,7 +2226,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, unexpected end of multiblock errors are not counted; Valid for 64B/66B encoder.</p>
+<p>If set, unexpected end of multiblock errors are not counted;
+Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2222,7 +2237,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, unexpected end of extended multiblock errors are not counted; Valid for 64B/66B encoder.</p>
+<p>If set, unexpected end of extended multiblock errors are not counted;
+Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2232,7 +2248,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, CRC mismatch errors are not counted. Valid for 64B/66B encoder.</p>
+<p>If set, CRC mismatch errors are not counted.
+Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2242,7 +2259,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, unexpected k errors are not counted. Valid for 8B/10B encoder.</p>
+<p>If set, unexpected k errors are not counted.
+Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2252,7 +2270,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, not in table errors are not counted. Valid for 8B/10B encoder.</p>
+<p>If set, not in table errors are not counted.
+Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2262,7 +2281,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, disparity errors are not counted. Valid for 8B/10B encoder.</p>
+<p>If set, disparity errors are not counted.
+Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
@@ -2304,7 +2324,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>8B/10B : State of the [[#b10b_link_state_machine|8B/10B link state machine]]. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED) \ 64B/66B : State of the [[#b66b_link_state_machine|64B/66B link state machine]]. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p>
+<p>8B/10B : State of the [[#b10b_link_state_machine|8B/10B link state machine]]. (0 = RESET, 1 = WAIT_FOR_PHY, 2 = CGS, 3 = SYNCHRONIZED) \
+64B/66B : State of the [[#b66b_link_state_machine|64B/66B link state machine]]. (0 = RESET, 1 = WAIT_BS, 2 = BLOCK_SYNC, 3 = DATA)</p>
 </section>
 </td>
 </tr>
@@ -2312,9 +2333,7 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_STATUS</span></code></td>
 <td class="description bold"><section>
-<blockquote>
-<div><p>Where n is from 0 to 31.</p>
-</div></blockquote>
+<p>Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2331,7 +2350,11 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>State of Extended multiblock alignment: \  001 - EMB_INIT \ 010 - EMB_HUNT \ 100 - EMB_LOCK \  Valid for 64b66b encoder.</p>
+<p>State of Extended multiblock alignment: \</p>
+<p>001 - EMB_INIT \
+010 - EMB_HUNT \
+100 - EMB_LOCK \</p>
+<p>Valid for 64b66b encoder.</p>
 </section>
 </td>
 </tr>
@@ -2383,9 +2406,7 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x304</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_LATENCY</span></code></td>
 <td class="description bold"><section>
-<blockquote>
-<div><p>Where n is from 0 to 31.</p>
-</div></blockquote>
+<p>Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2402,7 +2423,10 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>For 8b10b mode: represents the lane latency in octets; For 64b66b mode: represents the delay from the received EOEMB indicator to the next (SYSREF aligned) LEMC edge in octets. In other words, this amount of data is stored in the elastic buffer before it gets released on the LEMC edge. Must be greater than 64. Its max value is KxF octets.  Where LEMC period = KxF/8 link clock periods.</p>
+<p>For 8b10b mode: represents the lane latency in octets;
+For 64b66b mode: represents the delay from the received EOEMB indicator to the next (SYSREF aligned) LEMC edge in octets.
+In other words, this amount of data is stored in the elastic buffer before it gets released on the LEMC edge. Must be greater than 64.
+Its max value is KxF octets.  Where LEMC period = KxF/8 link clock periods.</p>
 </section>
 </td>
 </tr>
@@ -2410,9 +2434,7 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x308</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ERROR_STATISTICS</span></code></td>
 <td class="description bold"><section>
-<blockquote>
-<div><p>Where n is from 0 to 31.</p>
-</div></blockquote>
+<p>Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2422,7 +2444,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>This register shows the number of total errors for this lane. Errors counted depend on the configuration in LINK_CONF3. It must always be manually reset.</p>
+<p>This register shows the number of total errors for this lane. Errors counted depend on the configuration
+in LINK_CONF3. It must always be manually reset.</p>
 </section>
 </td>
 </tr>
@@ -2430,9 +2453,7 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_LANE_FRAME_ALIGN_ERR_CNT</span></code></td>
 <td class="description bold"><section>
-<blockquote>
-<div><p>Where n is from 0 to 31.</p>
-</div></blockquote>
+<p>Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2450,7 +2471,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x310</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS0</span></code></td>
 <td class="description bold"><section>
-<p>Received ILAS config data for the n-th lane. Where n is from 0 to 31.</p>
+<p>Received ILAS config data for the n-th lane.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2492,7 +2514,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x314</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS1</span></code></td>
 <td class="description bold"><section>
-<p>Received ILAS config data for the n-th lane. Where n is from 0 to 31.</p>
+<p>Received ILAS config data for the n-th lane.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2571,7 +2594,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x318</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS2</span></code></td>
 <td class="description bold"><section>
-<p>Received ILAS config data for the n-th lane. Where n is from 0 to 31.</p>
+<p>Received ILAS config data for the n-th lane.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2656,7 +2680,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS3</span></code></td>
 <td class="description bold"><section>
-<p>Received ILAS config data for the n-th lane. Where n is from 0 to 31.</p>
+<p>Received ILAS config data for the n-th lane.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>

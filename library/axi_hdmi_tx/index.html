@@ -958,7 +958,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Reset, a common reset is used for all the interface modules, The default is reset (0x0), software must write 0x1 to bring up the core.</p>
+<p>Reset, a common reset is used for all the interface modules,
+The default is reset (0x0), software must write 0x1 to bring up the core.</p>
 </section>
 </td>
 </tr>
@@ -976,7 +977,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set (0x1) bypasses the chroma sub-sampler. This is primarily intended to be used to send the test-pattern directly to the HDMI transmitter without modifying it.</p>
+<p>If set (0x1) bypasses the chroma sub-sampler. This is primarily intended to be used to send
+the test-pattern directly to the HDMI transmitter without modifying it.</p>
 </section>
 </td>
 </tr>
@@ -996,7 +998,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN registers.</p>
+<p>If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the
+default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN registers.</p>
 </section>
 </td>
 </tr>
@@ -1014,7 +1017,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Select the HDMI data source- register constant (0x3), incr-pattern (0x2), input (0x1) or disabled (0x0).</p>
+<p>Select the HDMI data source- register constant (0x3), incr-pattern (0x2),
+input (0x1) or disabled (0x0).</p>
 </section>
 </td>
 </tr>
@@ -1050,7 +1054,12 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p>
+<p>Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.</p>
 </section>
 </td>
 </tr>
@@ -1068,7 +1077,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
+<p>Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
 </section>
 </td>
 </tr>
@@ -1086,7 +1096,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Interface status, if set indicates no errors. If not set, there  are errors, software may try resetting the cores.</p>
+<p>Interface status, if set indicates no errors. If not set, there 
+are errors, software may try resetting the cores.</p>
 </section>
 </td>
 </tr>
@@ -1160,7 +1171,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
 <td class="description"><section>
-<p>Defines the maximum value for clipping the red or red-difference chroma component. Default value are 0xf0 for red-difference chroma and 0xfe for red.</p>
+<p>Defines the maximum value for clipping the red or red-difference chroma component.
+Default value are 0xf0 for red-difference chroma and 0xfe for red.</p>
 </section>
 </td>
 </tr>
@@ -1170,7 +1182,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0eb</span></code></td>
 <td class="description"><section>
-<p>Defines the maximum value for clipping the green or luma component. Default values are 0xeb for luma and and 0xfe for green.</p>
+<p>Defines the maximum value for clipping the green or luma component.
+Default values are 0xeb for luma and and 0xfe for green.</p>
 </section>
 </td>
 </tr>
@@ -1180,7 +1193,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
 <td class="description"><section>
-<p>Defines the maximum value for clipping the blue or blue-difference chroma component. Default value are 0xf0 for blue-difference chroma and 0xfe for blue.</p>
+<p>Defines the maximum value for clipping the blue or blue-difference chroma component.
+Default value are 0xf0 for blue-difference chroma and 0xfe for blue.</p>
 </section>
 </td>
 </tr>
@@ -1198,7 +1212,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
 <td class="description"><section>
-<p>Defines the minimum value for clipping the red or red-difference chroma component. Default value are 0x10 for red-difference chroma and 0x01 for red.</p>
+<p>Defines the minimum value for clipping the red or red-difference chroma component.
+Default value are 0x10 for red-difference chroma and 0x01 for red.</p>
 </section>
 </td>
 </tr>
@@ -1208,7 +1223,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x010</span></code></td>
 <td class="description"><section>
-<p>Defines the minimum value for clipping the green or luma component. Default values are 0x10 for luma and and 0x01 for green.</p>
+<p>Defines the minimum value for clipping the green or luma component.
+Default values are 0x10 for luma and and 0x01 for green.</p>
 </section>
 </td>
 </tr>
@@ -1218,7 +1234,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
 <td class="description"><section>
-<p>Defines the minimum value for clipping the blue or blue-difference chroma component. Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
+<p>Defines the minimum value for clipping the blue or blue-difference chroma component.
+Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
 </section>
 </td>
 </tr>
@@ -1282,7 +1299,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the horizontal data enable maximum. It is the sum of H_ENABLE_MIN and the active pixel width. e.g. 2112 (192 + 1920) (1080p)</p>
+<p>This is the horizontal data enable maximum. It is the sum of H_ENABLE_MIN and the active
+pixel width. e.g. 2112 (192 + 1920) (1080p)</p>
 </section>
 </td>
 </tr>
@@ -1292,7 +1310,9 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the horizontal data enable minimum. It is the sum of horizontal back porch (number of clock cycles between the falling edge of HSYNC to the rising edge of DE) and the sync width. e.g. 192 (44 + 148) (1080p)</p>
+<p>This is the horizontal data enable minimum. It is the sum of horizontal back porch (number
+of clock cycles between the falling edge of HSYNC to the rising edge of DE) and the sync
+width. e.g. 192 (44 + 148) (1080p)</p>
 </section>
 </td>
 </tr>
@@ -1356,7 +1376,8 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the vertical data enable maximum. It is the sum of V_ENABLE_MIN and the active pixel height. e.g. 1121 (41 + 1080) (1080p)</p>
+<p>This is the vertical data enable maximum. It is the sum of V_ENABLE_MIN and the active
+pixel height. e.g. 1121 (41 + 1080) (1080p)</p>
 </section>
 </td>
 </tr>
@@ -1366,7 +1387,9 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the vertical data enable minimum. It is the sum of vertical back porch (number of lines between the falling edge of VSYNC to the rising edge of DE) and the sync width. e.g. 41 (36 + 5) (1080p)</p>
+<p>This is the vertical data enable minimum. It is the sum of vertical back porch (number of lines
+between the falling edge of VSYNC to the rising edge of DE) and the sync width.
+e.g. 41 (36 + 5) (1080p)</p>
 </section>
 </td>
 </tr>

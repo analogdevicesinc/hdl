@@ -717,12 +717,10 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ID’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
-<p>Value of the ID configuration parameter. In case of multiple instances, each instance will have a unique ID.</p>
+<p>Value of the ID configuration parameter.
+In case of multiple instances, each instance will have a unique ID.</p>
 </section>
 </td>
 </tr>
@@ -771,12 +769,10 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>‘’PULSE_​PERIOD’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PULSE_​PERIOD</span></code></td>
 <td class="description"><section>
-<p>The period of the generated signal. The resolution is the core clock’s time period. LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
+<p>The period of the generated signal. The resolution is the core clock’s time period.
+LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
 </section>
 </td>
 </tr>
@@ -792,12 +788,10 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>‘’PULSE_​WIDTH’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PULSE_​WIDTH</span></code></td>
 <td class="description"><section>
-<p>The pulse width of the generated signal. The resolution is the core clock’s time period. LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
+<p>The pulse width of the generated signal. The resolution is the core clock’s time period.
+LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
 </section>
 </td>
 </tr>
@@ -833,7 +827,9 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>The core clock’s frequency. This clock is used for example by PWM counter too. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz.</p>
+<p>The core clock’s frequency. This clock is used for example by PWM counter too.
+The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the
+minimum is 1.523kHz and maximum is 6.554THz.</p>
 </section>
 </td>
 </tr>
@@ -851,7 +847,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if a pulse was generated, and the IRQ_PULSE_MASK bit is not set. Set this bit after the interrupt was handled as required.</p>
+<p>This bit is set if a pulse was generated, and the IRQ_PULSE_MASK bit is not set. Set this
+bit after the interrupt was handled as required.</p>
 </section>
 </td>
 </tr>
@@ -861,7 +858,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_ENTER_MASK bit is not set. Set this bit after the interrupt was handled as required.</p>
+<p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_ENTER_MASK bit is
+not set. Set this bit after the interrupt was handled as required.</p>
 </section>
 </td>
 </tr>
@@ -871,7 +869,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_EXIT_MASK bit is not set. Set this bit after the interrupt was handled as required.</p>
+<p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_EXIT_MASK bit is
+not set. Set this bit after the interrupt was handled as required.</p>
 </section>
 </td>
 </tr>
@@ -889,7 +888,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if a pulse was generated. Cleared together with the corresponding IRQ_PENDING bit.</p>
+<p>This bit is set if a pulse was generated. Cleared together with the corresponding
+IRQ_PENDING bit.</p>
 </section>
 </td>
 </tr>
@@ -899,7 +899,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if the MOSFET driver enters in OTW state. Cleared together with the corresponding IRQ_PENDING bit.</p>
+<p>This bit is set if the MOSFET driver enters in OTW state. Cleared together with the
+corresponding IRQ_PENDING bit.</p>
 </section>
 </td>
 </tr>
@@ -909,7 +910,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set if the MOSFET driver exits in OTW state. Cleared together with the corresponding IRQ_PENDING bit.</p>
+<p>This bit is set if the MOSFET driver exits in OTW state. Cleared together with the
+corresponding IRQ_PENDING bit.</p>
 </section>
 </td>
 </tr>
@@ -937,7 +939,8 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
-<p>If set, the sequencer runs in auto mode, using the predefined sequence. Otherwise the software must set the TIA_MANUAL_CONFIG register to change the TIA channel selection.</p>
+<p>If set, the sequencer runs in auto mode, using the predefined sequence. Otherwise the
+software must set the TIA_MANUAL_CONFIG register to change the TIA channel selection.</p>
 </section>
 </td>
 </tr>

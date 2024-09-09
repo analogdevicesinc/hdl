@@ -1634,7 +1634,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit reflects the presence of character replacement insertion logic for cases when scrambling is disabled. Available starting from version 1.06.a;</p>
+<p>This bit reflects the presence of character replacement insertion logic for cases when scrambling is disabled.
+Available starting from version 1.06.a;</p>
 </section>
 </td>
 </tr>
@@ -1642,12 +1643,11 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ASYNC_​CLK’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ASYNC_​CLK</span></code></td>
 <td class="description"><section>
-<p>This bit is set if link clock and device clock are connected to different sources. This is useful for supporting modes where datapath width is not integer multiple of F. Available starting from version 1.06.a;</p>
+<p>This bit is set if link clock and device clock are connected to different sources.
+This is useful for supporting modes where datapath width is not integer multiple of F.
+Available starting from version 1.06.a;</p>
 </section>
 </td>
 </tr>
@@ -1802,7 +1802,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16. Available starting from version 1.06.a;</p>
+<p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16.
+Available starting from version 1.06.a;</p>
 </section>
 </td>
 </tr>
@@ -1887,7 +1888,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates that an external SYSREF event has been observed that was unaligned to a previously observed event.</p>
+<p>Indicates that an external SYSREF event has been observed that was unaligned to a previously
+observed event.</p>
 </section>
 </td>
 </tr>
@@ -1915,7 +1917,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable n-th lane (0 = enabled, 1 = disabled). Where n is from 0 to 31.</p>
+<p>Enable/Disable n-th lane (0 = enabled, 1 = disabled).
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -1957,7 +1960,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x003</span></code></td>
 <td class="description"><section>
-<p>Number of octets per multi-frame - 1 (K x F). In 64B/66B mode represents the number of octets per extended multiblock.</p>
+<p>Number of octets per multi-frame - 1 (K x F).
+In 64B/66B mode represents the number of octets per extended multiblock.</p>
 </section>
 </td>
 </tr>
@@ -1982,7 +1986,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled). Valid for 8B/10B link.</p>
+<p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled).
+Valid for 8B/10B link.</p>
 </section>
 </td>
 </tr>
@@ -2000,7 +2005,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x218</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">MULTI_LINK_DISABLE</span></code></td>
 <td class="description bold"><section>
-<p>Enable/Disable links in case of a multi-link architecture. Valid for 8B/10B link.</p>
+<p>Enable/Disable links in case of a multi-link architecture.
+Valid for 8B/10B link.</p>
 </section>
 </td>
 </tr>
@@ -2010,7 +2016,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable/Disable n-th link (0 = enabled, 1 = disabled). Where n is from 0 to 31.</p>
+<p>Enable/Disable n-th link (0 = enabled, 1 = disabled).
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2035,7 +2042,9 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer. In 64B/66B mode represents the number of octets per extended multiblock. Available starting from version 1.06.a;</p>
+<p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer.
+In 64B/66B mode represents the number of octets per extended multiblock.
+Available starting from version 1.06.a;</p>
 </section>
 </td>
 </tr>
@@ -2172,7 +2181,8 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>State of the 8B/10B link state machine. (0 = WAIT, 1 = CGS, 2 = ILAS, 3 = DATA);  State of the 64B/66B link state machine. (0 = RESET, 3 = DATA)</p>
+<p>State of the 8B/10B link state machine. (0 = WAIT, 1 = CGS, 2 = ILAS, 3 = DATA); 
+State of the 64B/66B link state machine. (0 = RESET, 3 = DATA)</p>
 </section>
 </td>
 </tr>
@@ -2180,7 +2190,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x310</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS0</span></code></td>
 <td class="description bold"><section>
-<p>ILAS config data for the n-th lane. Valid for 8B/10B link. Where n is from 0 to 31.</p>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2222,7 +2233,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x314</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS1</span></code></td>
 <td class="description bold"><section>
-<p>ILAS config data for the n-th lane. Valid for 8B/10B link. Where n is from 0 to 31.</p>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2301,7 +2313,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x318</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS2</span></code></td>
 <td class="description bold"><section>
-<p>ILAS config data for the n-th lane. Valid for 8B/10B link. Where n is from 0 to 31.</p>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
@@ -2386,7 +2399,8 @@ peripheral.</p></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS3</span></code></td>
 <td class="description bold"><section>
-<p>ILAS config data for the n-th lane. Valid for 8B/10B link. Where n is from 0 to 31.</p>
+<p>ILAS config data for the n-th lane. Valid for 8B/10B link.
+Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>

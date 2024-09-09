@@ -731,7 +731,8 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Reset, a common reset is used for all the interface modules, The default is reset (0x0), software must write 0x1 to bring up the core.</p>
+<p>Reset, a common reset is used for all the interface modules,
+The default is reset (0x0), software must write 0x1 to bring up the core.</p>
 </section>
 </td>
 </tr>
@@ -749,7 +750,8 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set (0x1), incoming data is registered on the falling edge of the clock first. The default uses rising edge.</p>
+<p>If set (0x1), incoming data is registered on the falling edge of the clock first. The
+default uses rising edge.</p>
 </section>
 </td>
 </tr>
@@ -797,7 +799,12 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p>
+<p>Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.</p>
 </section>
 </td>
 </tr>
@@ -815,7 +822,8 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
+<p>Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
 </section>
 </td>
 </tr>
@@ -955,7 +963,8 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the detected horizontal active pixel lines (active resolution length). This field is valid only if VS_OOS is zero.</p>
+<p>This is the detected horizontal active pixel lines (active resolution length).
+This field is valid only if VS_OOS is zero.</p>
 </section>
 </td>
 </tr>
@@ -965,7 +974,8 @@ in the <code class="docutils literal notranslate"><span class="pre">TPM_STATUS2<
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This is the detected horizontal pixel count (no. of pixel clocks per line). This field is valid only if HS_OOS is zero.</p>
+<p>This is the detected horizontal pixel count (no. of pixel clocks per line).
+This field is valid only if HS_OOS is zero.</p>
 </section>
 </td>
 </tr>

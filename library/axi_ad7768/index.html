@@ -955,7 +955,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, indicates that the IQ Correction module implements only scale correction. IQ correction must be enabled. (as a result of a configuration of the IP instance)</p>
+<p>If set, indicates that the IQ Correction module implements only scale correction.
+IQ correction must be enabled. (as a result of a configuration of the IP instance)</p>
 </section>
 </td>
 </tr>
@@ -1001,7 +1002,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1c</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
 <td class="description bold"><section>
-<p>FPGA device information <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+<p>FPGA device information
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
 </section>
 </td>
 </tr>
@@ -1090,7 +1093,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of the module to control clock enables</p>
+<p>Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of
+the module to control clock enables</p>
 </section>
 </td>
 </tr>
@@ -1100,7 +1104,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>MMCM reset only (required for DRP access). Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
+<p>MMCM reset only (required for DRP access).
+Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
 </section>
 </td>
 </tr>
@@ -1158,7 +1163,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane).  For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.</p>
+<p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane). 
+For AD7768, AD7768-4 and AD777x number of active lanes : 1/2/4/8 where supported.</p>
 </section>
 </td>
 </tr>
@@ -1188,7 +1194,10 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Select rising edge (0x0) or falling edge (0x1) for the first part of a sample (if applicable) followed by the successive edges for the remaining parts. This only controls how the sample is delineated from the incoming data post DDR registers.</p>
+<p>Select rising edge (0x0) or falling edge (0x1) for the first part
+of a sample (if applicable) followed by the successive edges for
+the remaining parts. This only controls how the sample is delineated
+from the incoming data post DDR registers.</p>
 </section>
 </td>
 </tr>
@@ -1198,7 +1207,10 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Select interface pin mode to be clock multiplexed (0x1) or pin multiplexed (0x0). In clock multiplexed mode, samples are received on alternative clock edges. In pin multiplexed mode, samples are interleaved or grouped on the pins at the same clock edge.</p>
+<p>Select interface pin mode to be clock multiplexed (0x1) or pin
+multiplexed (0x0). In clock multiplexed mode, samples are received
+on alternative clock edges. In pin multiplexed mode, samples are
+interleaved or grouped on the pins at the same clock edge.</p>
 </section>
 </td>
 </tr>
@@ -1216,7 +1228,10 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal. Once the external sync signal goes high it synchronizes channels within a ADC, and across multiple instances. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.</p>
+<p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
+Once the external sync signal goes high it synchronizes channels within a ADC, and across multiple instances.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
 </section>
 </td>
 </tr>
@@ -1226,7 +1241,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Setting this bit will disarm the trigger mechanism sensitive to an external sync signal. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.</p>
+<p>Setting this bit will disarm the trigger mechanism sensitive to an external sync signal.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
 </section>
 </td>
 </tr>
@@ -1236,7 +1253,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Setting this bit will issue an external sync event if it is hooked up inside the fabric. This bit has an effect only the EXT_SYNC synthesis parameter is set. This bit self clears.</p>
+<p>Setting this bit will issue an external sync event if it is hooked up inside the fabric.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
 </section>
 </td>
 </tr>
@@ -1264,7 +1283,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>Select output format decode mode.(for ADAQ8092: bit 0 - enables digital output randomizer decode , bit 1 - enables alternate bit polarity decode).</p>
+<p>Select output format decode mode.(for ADAQ8092: bit 0 - enables digital output randomizer decode
+, bit 1 - enables alternate bit polarity decode).</p>
 </section>
 </td>
 </tr>
@@ -1282,7 +1302,12 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock frequency. This is relative to the processor clock and in many cases is 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be the same as the interface clock- software must consider device specific implementation parameters to calculate the final sampling clock.</p>
+<p>Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.</p>
 </section>
 </td>
 </tr>
@@ -1300,7 +1325,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Interface clock ratio - as a factor actual received clock. This is implementation specific and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
+<p>Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
 </section>
 </td>
 </tr>
@@ -1358,15 +1384,16 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Interface status, if set indicates no errors. If not set, there are errors, software may try resetting the cores.</p>
+<p>Interface status, if set indicates no errors. If not set, there
+are errors, software may try resetting the cores.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DELAY_CNTRL</span> </code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DELAY_CNTRL</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status(‘’Deprecated from version 9’’)</p>
+<p>ADC Interface Control &amp; Status(<code class="docutils literal notranslate"><span class="pre">Deprecated</span> <span class="pre">from</span> <span class="pre">version</span> <span class="pre">9</span></code>)</p>
 </section>
 </td>
 </tr>
@@ -1376,7 +1403,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Delay select, a 0x0 to 0x1 transition in this register initiates a delay access controlled by the registers below.</p>
+<p>Delay select, a 0x0 to 0x1 transition in this register initiates
+a delay access controlled by the registers below.</p>
 </section>
 </td>
 </tr>
@@ -1386,7 +1414,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Delay read (0x1) or write (0x0), the delay is accessed directly (no increment or decrement) with an address corresponding to each pin, and data corresponding to the total delay.</p>
+<p>Delay read (0x1) or write (0x0), the delay is accessed directly
+(no increment or decrement) with an address corresponding to each pin,
+and data corresponding to the total delay.</p>
 </section>
 </td>
 </tr>
@@ -1396,7 +1426,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>Delay address, the range depends on the interface pins, data pins are usually at the lower range.</p>
+<p>Delay address, the range depends on the interface pins, data pins
+are usually at the lower range.</p>
 </section>
 </td>
 </tr>
@@ -1412,9 +1443,9 @@ basic monitoring and control of the ADC’s channel.</p>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x19</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x64</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DELAY_STATUS</span> </code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DELAY_STATUS</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status(‘’Deprecated from version 9’’)</p>
+<p>ADC Interface Control &amp; Status(<code class="docutils literal notranslate"><span class="pre">Deprecated</span> <span class="pre">from</span> <span class="pre">version</span> <span class="pre">9</span></code>)</p>
 </section>
 </td>
 </tr>
@@ -1424,7 +1455,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates delay locked (0x1) state. If this bit is read 0x0, delay control has failed to calibrate the elements.</p>
+<p>Indicates delay locked (0x1) state. If this bit is read 0x0, delay control
+has failed to calibrate the elements.</p>
 </section>
 </td>
 </tr>
@@ -1434,7 +1466,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, indicates busy status (access pending). The read data may not be valid if this bit is set.</p>
+<p>If set, indicates busy status (access pending). The read data may not be
+valid if this bit is set.</p>
 </section>
 </td>
 </tr>
@@ -1462,7 +1495,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>ADC synchronization status. Will be set to 1 after the synchronization has been completed  or while waiting for the synchronization signal in JESD204 systems.</p>
+<p>ADC synchronization status. Will be set to 1 after the synchronization has been completed 
+or while waiting for the synchronization signal in JESD204 systems.</p>
 </section>
 </td>
 </tr>
@@ -1480,7 +1514,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>DRP read (0x1) or write (0x0) select (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+<p>DRP read (0x1) or write (0x0) select (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1490,7 +1525,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
 <td class="description"><section>
-<p>DRP address, designs that contain more than one DRP accessible primitives have selects based on the most significant bits (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+<p>DRP address, designs that contain more than one DRP accessible primitives
+have selects based on the most significant bits (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1528,7 +1565,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set indicates busy (access pending). The read data may not be valid if this bit is set (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+<p>If set indicates busy (access pending). The read data may not be valid if
+this bit is set (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1556,7 +1595,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>DRP write data (does not include GTX lanes). NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+<p>DRP write data (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1628,7 +1668,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>User Interface overflow. If set, indicates an overflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit.</p>
+<p>User Interface overflow. If set, indicates an overflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.</p>
 </section>
 </td>
 </tr>
@@ -1638,7 +1680,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>User Interface underflow. If set, indicates an underflow occurred during data transfer at the user interface (FIFO interface). Software must write a 0x1 to clear this register bit.</p>
+<p>User Interface underflow. If set, indicates an underflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.</p>
 </section>
 </td>
 </tr>
@@ -1684,7 +1728,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>This indicates the maximum number of inputs for the channel data multiplexers. User may add different processing modules post data capture as another input to this common multiplexer. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>This indicates the maximum number of inputs for the channel data multiplexers. User may add
+different processing modules post data capture as another input to this common multiplexer.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1702,7 +1748,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>This sets the startcode that is used by the ADCs for synchronization NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).</p>
+<p>This sets the startcode that is used by the ADCs for synchronization
+NOT-APPLICABLE if START_CODE_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1738,7 +1785,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>This controls auxiliary GPO pins of the ADC core NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
+<p>This controls auxiliary GPO pins of the ADC core
+NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1813,7 +1861,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -1833,7 +1882,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, forces ADC_PN_SEL to 0x9, device specific pn (e.g. ad9361) If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored</p>
+<p>If set, forces ADC_PN_SEL to 0x9, device specific pn (e.g. ad9361)
+If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored</p>
 </section>
 </td>
 </tr>
@@ -1843,7 +1893,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>if set, enables IQ correction or scale correction. NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+<p>if set, enables IQ correction or scale correction.
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1853,7 +1904,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>if set, enables DC filter (to disable DC offset, set offset value to 0x0). NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
+<p>if set, enables DC filter (to disable DC offset, set offset value to 0x0).
+NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1863,7 +1915,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>if set, enables sign extension (applicable only in 2’s complement mode). The data is always sign extended to the nearest byte boundary. NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
+<p>if set, enables sign extension (applicable only in 2’s complement mode). The data is
+always sign extended to the nearest byte boundary.
+NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1873,7 +1927,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Select offset binary (0x1) or 2’s complement (0x0) data type. This sets the incoming data type and is required by the post processing modules for any data conversion. NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
+<p>Select offset binary (0x1) or 2’s complement (0x0) data type. This sets the incoming
+data type and is required by the post processing modules for any data conversion.
+NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1883,7 +1939,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enable data format conversion (see register bits above). NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
+<p>Enable data format conversion (see register bits above).
+NOT-APPLICABLE if DATAFORMAT_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -1913,7 +1970,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, forces ADC_PN_SEL to 0x1, modified pn23 If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored</p>
+<p>If set, forces ADC_PN_SEL to 0x1, modified pn23
+If both ADC_PN_TYPE_OWR and ADC_PN_SEL_OWR are set, they are ignored</p>
 </section>
 </td>
 </tr>
@@ -1923,7 +1981,10 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, enables channel. A 0x0 to 0x1 transition transfers all the control signals to the respective channel processing module. If a channel is part of a complex signal (I/Q), even channel is the master and the odd channel is the slave. Though a single control is used, both must be individually selected.</p>
+<p>If set, enables channel. A 0x0 to 0x1 transition transfers all the control signals
+to the respective channel processing module. If a channel is part of a complex
+signal (I/Q), even channel is the master and the odd channel is the slave.
+Though a single control is used, both must be individually selected.</p>
 </section>
 </td>
 </tr>
@@ -1931,7 +1992,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_STATUSn</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -1961,7 +2023,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>PN errors. If set, indicates spurious mismatches in sync state. This bit is cleared if OOS is set and is only indicates errors when OOS is cleared.</p>
+<p>PN errors. If set, indicates spurious mismatches in sync state. This bit is cleared
+if OOS is set and is only indicates errors when OOS is cleared.</p>
 </section>
 </td>
 </tr>
@@ -1971,7 +2034,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>PN Out Of Sync. If set, indicates an OOS status. OOS is set, if 64 consecutive patterns mismatch from the expected pattern. It is cleared, when 16 consecutive patterns match the expected pattern.</p>
+<p>PN Out Of Sync. If set, indicates an OOS status. OOS is set, if 64 consecutive patterns
+mismatch from the expected pattern. It is cleared, when 16 consecutive patterns match
+the expected pattern.</p>
 </section>
 </td>
 </tr>
@@ -1981,7 +2046,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If set, indicates over range. Note that over range is independent of the data path, it indicates an over range over a data transfer period. Software must first clear this bit before initiating a transfer and monitor afterwards.</p>
+<p>If set, indicates over range. Note that over range is independent of the data path,
+it indicates an over range over a data transfer period. Software must first clear
+this bit before initiating a transfer and monitor afterwards.</p>
 </section>
 </td>
 </tr>
@@ -1989,7 +2056,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_RAW_DATAn</span></code></td>
 <td class="description bold"><section>
-<p>ADC Raw Data Reading Where n is from 0 to 15.</p>
+<p>ADC Raw Data Reading
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2007,7 +2075,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_1</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2017,7 +2086,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>DC removal (if equipped) offset. This is a 2’s complement number added to the incoming data to remove a known DC offset. NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
+<p>DC removal (if equipped) offset. This is a 2’s complement number added to the incoming
+data to remove a known DC offset.
+NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2027,7 +2098,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>DC removal filter (if equipped) coefficient. The format is 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
+<p>DC removal filter (if equipped) coefficient. The format is 1.1.14 (sign, integer and
+fractional bits).
+NOT-APPLICABLE if DCFILTER_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2035,7 +2108,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_2</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2045,7 +2119,14 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used, this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits). If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel  with the format 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value
+and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
+this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits).
+If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel</p>
+<blockquote>
+<div><p>with the format 1.1.14 (sign, integer and fractional bits).</p>
+</div></blockquote>
+<p>NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2055,7 +2136,10 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the offset value and the format is 2’s complement. If matrix multiplication is used, this is the channel Q coefficient and the format is 1.1.14 (sign, integer and fractional bits). NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the offset value
+and the format is 2’s complement. If matrix multiplication is used, this is the channel Q coefficient
+and the format is 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2063,7 +2147,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_3</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2073,7 +2158,20 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Selects the PN monitor sequence type (available only if ADC supports it). \  - 0x0: pn9a (device specific, modified pn9) \  - 0x1: pn23a (device specific, modified pn23) \  - 0x4: pn7 (standard O.150) \  - 0x5: pn15 (standard O.150) \  - 0x6: pn23 (standard O.150) \  - 0x7: pn31 (standard O.150) \  - 0x9: pnX (device specific, e.g. ad9361) \  - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \  - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p>
+<dl class="simple">
+<dt>Selects the PN monitor sequence type (available only if ADC supports it). \</dt><dd><ul class="simple">
+<li><p>0x0: pn9a (device specific, modified pn9) \</p></li>
+<li><p>0x1: pn23a (device specific, modified pn23) \</p></li>
+<li><p>0x4: pn7 (standard O.150) \</p></li>
+<li><p>0x5: pn15 (standard O.150) \</p></li>
+<li><p>0x6: pn23 (standard O.150) \</p></li>
+<li><p>0x7: pn31 (standard O.150) \</p></li>
+<li><p>0x9: pnX (device specific, e.g. ad9361) \</p></li>
+<li><p>0x0A: Nibble ramp (Device specific e.g. adrv9001) \</p></li>
+<li><p>0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p></li>
+</ul>
+</dd>
+</dl>
 </section>
 </td>
 </tr>
@@ -2083,7 +2181,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Selects the data source to DMA. 0x0: input data (ADC) 0x1: loopback data (DAC)</p>
+<p>Selects the data source to DMA.
+0x0: input data (ADC)
+0x1: loopback data (DAC)</p>
 </section>
 </td>
 </tr>
@@ -2091,7 +2191,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_USR_CNTRLn_1</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2101,7 +2202,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>The user data type format- if set, indicates big endian (default is little endian). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>The user data type format- if set, indicates big endian (default is little endian).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2111,7 +2213,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>The user data type format- if set, indicates signed (2’s complement) data (default is unsigned). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>The user data type format- if set, indicates signed (2’s complement) data (default is unsigned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2121,7 +2224,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>The user data type format- the amount of right shift for actual samples within the total number of bits. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>The user data type format- the amount of right shift for actual samples within the total number
+of bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2131,7 +2236,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>The user data type format- number of total bits used for a sample. The total number of bits must be an integer multiple of 8 (byte aligned). NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>The user data type format- number of total bits used for a sample. The total number of bits must
+be an integer multiple of 8 (byte aligned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2141,7 +2248,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
-<p>The user data type format- number of bits in a sample. This indicates the actual sample data bits. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>The user data type format- number of bits in a sample. This indicates the actual sample data bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2149,7 +2257,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_USR_CNTRLn_2</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -2159,7 +2268,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This holds the user decimation M value of the channel that is currently being selected on the multiplexer above. The total decimation factor is of the form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>This holds the user decimation M value of the channel that is currently being selected on
+the multiplexer above. The total decimation factor is of the form M/N.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2169,7 +2280,9 @@ basic monitoring and control of the ADC’s channel.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
-<p>This holds the user decimation N value of the channel that is currently being selected on the multiplexer above. The total decimation factor is of the form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+<p>This holds the user decimation N value of the channel that is currently being selected on
+the multiplexer above. The total decimation factor is of the form M/N.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2177,7 +2290,8 @@ basic monitoring and control of the ADC’s channel.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_4</span></code></td>
 <td class="description bold"><section>
-<p>ADC Interface Control &amp; Status Where n is from 0 to 15.</p>
+<p>ADC Interface Control &amp; Status
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>

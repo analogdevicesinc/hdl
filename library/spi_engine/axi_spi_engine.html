@@ -943,12 +943,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ID’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
-<p>Value of the ID configuration parameter. In case of multiple instances, each instance will have a unique ID.</p>
+<p>Value of the ID configuration parameter.
+In case of multiple instances, each instance will have a unique ID.</p>
 </section>
 </td>
 </tr>
@@ -976,12 +974,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’NUM_​OF_​SDI’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">NUM_​OF_​SDI</span></code></td>
 <td class="description"><section>
-<p>Number of SDI. It is equal with the maximum supported SDI lines in bits.</p>
+<p>Number of SDI.
+It is equal with the maximum supported SDI lines in bits.</p>
 </section>
 </td>
 </tr>
@@ -989,12 +985,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’DATA_​WITH’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DATA_​WITH</span></code></td>
 <td class="description"><section>
-<p>Data width of the SDI/SDO parallel interface. It is equal with the maximum supported transfer length in bits.</p>
+<p>Data width of the SDI/SDO parallel interface.
+It is equal with the maximum supported transfer length in bits.</p>
 </section>
 </td>
 </tr>
@@ -1009,7 +1003,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
-<p>Address width for the data (SDO) memory on the Offload Module. The size of the memory is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_MEM_ADDRESS_WIDTH</span></code> data words.</p>
+<p>Address width for the data (SDO) memory on the Offload Module.
+The size of the memory is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_MEM_ADDRESS_WIDTH</span></code> data words.</p>
 </section>
 </td>
 </tr>
@@ -1019,7 +1014,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
-<p>Address width for the command memory on the Offload Module. The size of the command memory is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_MEM_ADDRESS_WIDTH</span></code> instructions.</p>
+<p>Address width for the command memory on the Offload Module.
+The size of the command memory is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_MEM_ADDRESS_WIDTH</span></code> instructions.</p>
 </section>
 </td>
 </tr>
@@ -1034,7 +1030,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><section>
-<p>Address width for the SDI FIFO. The size of the SDI FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDI_FIFO_ADDRESS_WIDTH</span></code>.</p>
+<p>Address width for the SDI FIFO.
+The size of the SDI FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDI_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
 </td>
 </tr>
@@ -1044,7 +1041,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><section>
-<p>Address width for the SDO FIFO. The size of the SDO FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_FIFO_ADDRESS_WIDTH</span></code>.</p>
+<p>Address width for the SDO FIFO.
+The size of the SDO FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
 </td>
 </tr>
@@ -1054,7 +1052,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
-<p>Address width for the synchronization FIFO. The size of the synchronization FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SYNC_FIFO_ADDRESS_WIDTH</span></code>.</p>
+<p>Address width for the synchronization FIFO.
+The size of the synchronization FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SYNC_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
 </td>
 </tr>
@@ -1064,7 +1063,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
 <td class="description"><section>
-<p>Address width for the command FIFO. The size of the command FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_FIFO_ADDRESS_WIDTH</span></code>.</p>
+<p>Address width for the command FIFO.
+The size of the command FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_FIFO_ADDRESS_WIDTH</span></code>.</p>
 </section>
 </td>
 </tr>
@@ -1079,7 +1079,8 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
 <td class="description"><section>
-<p>Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset. For proper operation, the bit needs to be set to 0.</p>
+<p>Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset.
+For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
@@ -1207,12 +1208,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>log2((2^’’CMD_​FIFO_​ADDRESS_​WIDTH’’)-1)</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^CMD_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
 <td class="description"><section>
-<p>Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.</p>
+<p>Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register
+depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.</p>
 </section>
 </td>
 </tr>
@@ -1225,12 +1224,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>log2((2^’’SDO_​FIFO_​ADDRESS_​WIDTH’’)-1)</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^SDO_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
 <td class="description"><section>
-<p>Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.</p>
+<p>Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM
+register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.</p>
 </section>
 </td>
 </tr>
@@ -1260,7 +1257,9 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>Command FIFO register. Writing to this register inserts an entry into the command FIFO. Writing to this register when the command FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x0.</p>
+<p>Command FIFO register. Writing to this register inserts an entry into the command FIFO.
+Writing to this register when the command FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x0.</p>
 </section>
 </td>
 </tr>
@@ -1275,7 +1274,9 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO. Writing to this register when the SDO FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x0.</p>
+<p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x0.</p>
 </section>
 </td>
 </tr>
@@ -1290,7 +1291,9 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO. Reading this register when the SDI FIFO is empty will return undefined data. Writing to it has no effect.</p>
+<p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
+Reading this register when the SDI FIFO is empty will return undefined data.
+Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
@@ -1320,7 +1323,10 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>SDI FIFO peek register. Reading from this register returns the first entry from the SDI FIFO, but without removing it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined data. Writing to it has no effect.</p>
+<p>SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
@@ -1380,7 +1386,9 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>Offload command FIFO register. Writing to this register inserts an entry into the command FIFO of the offload module. Writing to this register when the command FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x0.</p>
+<p>Offload command FIFO register. Writing to this register inserts an entry into the command FIFO
+of the offload module. Writing to this register when the command FIFO is full has no effect
+and the written entry is discarded. Reading from this register always returns 0x0.</p>
 </section>
 </td>
 </tr>
@@ -1395,7 +1403,9 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
-<p>Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO. Writing to this register when the SDO FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x0.</p>
+<p>Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x0.</p>
 </section>
 </td>
 </tr>
@@ -1408,10 +1418,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’CFG_​INFO_​0’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​0</span></code></td>
 <td class="description"><section>
 <p>Configuration Info.</p>
 </section>
@@ -1426,10 +1433,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’CFG_​INFO_​1’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​1</span></code></td>
 <td class="description"><section>
 <p>Configuration Info.</p>
 </section>
@@ -1444,10 +1448,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’CFG_​INFO_​2’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​2</span></code></td>
 <td class="description"><section>
 <p>Configuration Info.</p>
 </section>
@@ -1462,10 +1463,7 @@ generate SPI transactions.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_4</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’CFG_​INFO_​3’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​3</span></code></td>
 <td class="description"><section>
 <p>Configuration Info.</p>
 </section>

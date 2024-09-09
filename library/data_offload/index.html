@@ -1112,10 +1112,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ID’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -1160,10 +1157,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HAS_BYPASS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’HAS_​BYPASS’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">HAS_​BYPASS</span></code></td>
 <td class="description"><section>
 <p>If set the bypass logic is implemented.</p>
 </section>
@@ -1173,12 +1167,10 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RXN_PATH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’TX_​OR_​RXN_​PATH’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TX_​OR_​RXN_​PATH</span></code></td>
 <td class="description"><section>
-<p>If this device was configured for the TX path, this bit will be set to 1. Conversely, the bit will be 0 for the RX path.</p>
+<p>If this device was configured for the TX path, this bit will be set to 1.
+Conversely, the bit will be 0 for the RX path.</p>
 </section>
 </td>
 </tr>
@@ -1186,12 +1178,10 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEMORY_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’MEM_​TYPE’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">MEM_​TYPE</span></code></td>
 <td class="description"><section>
-<p>This bit identifies the type of memory that was chosen during synthesis. A value of 1 identifies external memory, while a value of zero indicates that block ram was used.</p>
+<p>This bit identifies the type of memory that was chosen during synthesis. A value of 1
+identifies external memory, while a value of zero indicates that block ram was used.</p>
 </section>
 </td>
 </tr>
@@ -1204,10 +1194,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEM_SIZE_LSB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>1&lt;&lt;’’MEM_​SIZE_​LOG2’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1&lt;&lt;MEM_​SIZE_​LOG2</span></code></td>
 <td class="description"><section>
 <p>32 bits (LSB) of the storage unit size.</p>
 </section>
@@ -1222,10 +1209,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEM_SIZE_MSB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>(1&lt;&lt;’’MEM_​SIZE_​LOG2’’)&gt;&gt;32</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">(1&lt;&lt;MEM_​SIZE_​LOG2)&gt;&gt;32</span></code></td>
 <td class="description"><section>
 <p>2 bits (MSB) of the storage unit size.</p>
 </section>
@@ -1240,10 +1224,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>(2^’’MEM_​SIZE_​LOG2’’-1)&gt;&gt;6</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">(2^MEM_​SIZE_​LOG2-1)&gt;&gt;6</span></code></td>
 <td class="description"><section>
 <p>The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes.</p>
 </section>
@@ -1293,10 +1274,7 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>‘’AUTO_​BRINGUP’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">AUTO_​BRINGUP</span></code></td>
 <td class="description"><section>
 <p>“Software Reset”: Resets all the internal address registers and state machines.</p>
 </section>
@@ -1311,12 +1289,11 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ONESHOT_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><section>
-<p>~’’TX_​OR_​RXN_​PATH’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">~TX_​OR_​RXN_​PATH</span></code></td>
 <td class="description"><section>
-<p>Enables oneshot mode. This means that the data offload will only play a received buffer once, and then stop. This mode is useful when you want to use the data offload for its synchronization features, but don’t need the repeating output.</p>
+<p>Enables oneshot mode. This means that the data offload will only play a received buffer once,
+and then stop. This mode is useful when you want to use the data offload for its synchronization
+features, but don’t need the repeating output.</p>
 </section>
 </td>
 </tr>
@@ -1326,7 +1303,8 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Enables bypass mode. In this mode pretty much <strong>all</strong> functionality of the data offload is bypassed, and the data offload will simply act as an asynchronous dual-port FIFO and forward your data stream.</p>
+<p>Enables bypass mode. In this mode pretty much <strong>all</strong> functionality of the data offload is bypassed,
+and the data offload will simply act as an asynchronous dual-port FIFO and forward your data stream.</p>
 </section>
 </td>
 </tr>

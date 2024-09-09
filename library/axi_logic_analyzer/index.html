@@ -825,7 +825,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Register used for down sampling the logic analyzer data. Sample data every (divider_counter + 1) samples</p>
+<p>Register used for down sampling the logic analyzer data. Sample data every
+(divider_counter + 1) samples</p>
 </section>
 </td>
 </tr>
@@ -843,7 +844,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Register used for upsampling pattern generator data. Sample data every (divider counter + 1) samples</p>
+<p>Register used for upsampling pattern generator data. Sample data every
+(divider counter + 1) samples</p>
 </section>
 </td>
 </tr>
@@ -861,7 +863,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Selects which pins are inputs(1) and which are outputs (0). Each bit configures the corresponding pin</p>
+<p>Selects which pins are inputs(1) and which are outputs (0). Each bit configures
+the corresponding pin</p>
 </section>
 </td>
 </tr>
@@ -1019,7 +1022,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Controls the depth of the history FIFO. Should be less than the maximum FIFO depth. If set to 0, the FIFO is bypassed and reset</p>
+<p>Controls the depth of the history FIFO. Should be less than the maximum FIFO depth.
+If set to 0, the FIFO is bypassed and reset</p>
 </section>
 </td>
 </tr>
@@ -1037,7 +1041,16 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Final Trigger Selection Multiplexer \ Selects triggers: \   0: TRIGGER_LOGIC \   1: TRIGGER_ADC\   2: TRIGGER_LOGIC AND TRIGGER_ADC \   3: TRIGGER_LOGIC OR  TRIGGER_ADC \   4: TRIGGER_LOGIC XOR TRIGGER_ADC \   7: TRIGGER DISABLED</p>
+<p>Final Trigger Selection Multiplexer \
+Selects triggers: \</p>
+<blockquote>
+<div><p>0: TRIGGER_LOGIC \
+1: TRIGGER_ADC\
+2: TRIGGER_LOGIC AND TRIGGER_ADC \
+3: TRIGGER_LOGIC OR  TRIGGER_ADC \
+4: TRIGGER_LOGIC XOR TRIGGER_ADC \
+7: TRIGGER DISABLED</p>
+</div></blockquote>
 </section>
 </td>
 </tr>
@@ -1065,7 +1078,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Selects between clk(0) and data[0] (1) as clock for the logic analyzer and pattern generator paths</p>
+<p>Selects between clk(0) and data[0] (1) as clock for the logic analyzer and pattern generator
+paths</p>
 </section>
 </td>
 </tr>
@@ -1083,7 +1097,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>If set to 1, the specific data_o pin will be driven by the value written in the OVERWRITE_DATA register, instead of the DMA</p>
+<p>If set to 1, the specific data_o pin will be driven by the value written in the
+OVERWRITE_DATA register, instead of the DMA</p>
 </section>
 </td>
 </tr>
@@ -1191,7 +1206,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>If the streaming bit is set, after the trigger condition is met data will be continuosly captured by the DMA. The streaming bit must be set to 0 to reset triggering.</p>
+<p>If the streaming bit is set, after the trigger condition is met data will be continuosly
+captured by the DMA. The streaming bit must be set to 0 to reset triggering.</p>
 </section>
 </td>
 </tr>
@@ -1209,7 +1225,10 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Defines the time interval, after a trigger event, where the next trigger events will be ignored, until the end of the interval. The time interval is set by counter. Down-counting on the ADC clock(100MHz)/or external clock, if configured. The value written in the register is loaded in the counter at a trigger event</p>
+<p>Defines the time interval, after a trigger event, where the next trigger events
+will be ignored, until the end of the interval. The time interval is set by counter.
+Down-counting on the ADC clock(100MHz)/or external clock, if configured.
+The value written in the register is loaded in the counter at a trigger event</p>
 </section>
 </td>
 </tr>
@@ -1325,7 +1344,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Select if the number of delay taps is chosen by the user(=1) or automatically(=0). Default is 0 or automatically</p>
+<p>Select if the number of delay taps is chosen by the user(=1) or automatically(=0).
+Default is 0 or automatically</p>
 </section>
 </td>
 </tr>
@@ -1335,7 +1355,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>Selects if the rate is generated by the logic analyzer(0) or it comes from the ADC(1). Default is 0 or logic analyzer</p>
+<p>Selects if the rate is generated by the logic analyzer(0) or it comes from the ADC(1).
+Default is 0 or logic analyzer</p>
 </section>
 </td>
 </tr>
@@ -1345,7 +1366,8 @@ any edge, high or low.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
-<p>If MASTER_DELAY_CTRL is set to user delay, the data will be delayed with a number of samples specified it the MANUAL_DATA_DELAY field</p>
+<p>If MASTER_DELAY_CTRL is set to user delay, the data will be delayed with
+a number of samples specified it the MANUAL_DATA_DELAY field</p>
 </section>
 </td>
 </tr>

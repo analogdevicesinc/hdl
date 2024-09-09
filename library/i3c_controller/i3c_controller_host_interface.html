@@ -873,10 +873,7 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEVICE_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><section>
-<p>‘’ID’’</p>
-</section>
-</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -908,7 +905,8 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
-<p>Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset. For proper operation, the bit needs to be set to 0.</p>
+<p>Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset.
+For proper operation, the bit needs to be set to 0.</p>
 </section>
 </td>
 </tr>
@@ -1008,7 +1006,11 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Pending IRQs with mask. Write 1 at the CMDR_PENDING bit to clear it. For CMDR_PENDING and IBI_PENDING, will be cleared if the FIFOs are also empty. For DAA_PENDING, will be cleared if the SDO FIFO is not empty, that means, got dynamic address in the pipeline.</p>
+<p>Pending IRQs with mask.
+Write 1 at the CMDR_PENDING bit to clear it.
+For CMDR_PENDING and IBI_PENDING, will be cleared if the FIFOs are also empty.
+For DAA_PENDING, will be cleared if the SDO FIFO is not empty, that means, got dynamic
+address in the pipeline.</p>
 </section>
 </td>
 </tr>
@@ -1106,7 +1108,13 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd4</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMD_FIFO</span></code></td>
 <td class="description bold"><section>
-<p>Command FIFO register. Writing to this register inserts an entry into the CMD FIFO. Writing to this register when the CMD FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x00000000. The Software is responsive for a valid sequence of commands. If the peripheral does not ACK when required during a command, the procedure exits and the next command in the FIFO is interpreted. See <a class="reference internal" href="interface.html#i3c-controller-instruction-format"><span class="std std-ref">Instruction Set Specification</span></a> for the structure of the command.</p>
+<p>Command FIFO register. Writing to this register inserts an entry into the CMD FIFO.
+Writing to this register when the CMD FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x00000000.
+The Software is responsive for a valid sequence of commands.
+If the peripheral does not ACK when required during a command, the procedure exits and the
+next command in the FIFO is interpreted.
+See <a class="reference internal" href="interface.html#i3c-controller-instruction-format"><span class="std std-ref">Instruction Set Specification</span></a> for the structure of the command.</p>
 </section>
 </td>
 </tr>
@@ -1174,7 +1182,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd8</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO</span></code></td>
 <td class="description bold"><section>
-<p>CMDR FIFO register. Reading from this register removes the first entry from the CMDR FIFO. Reading this register when the CMDR FIFO is empty will return undefined data. Writing to it has no effect.</p>
+<p>CMDR FIFO register. Reading from this register removes the first entry from the CMDR FIFO.
+Reading this register when the CMDR FIFO is empty will return undefined data.
+Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
@@ -1212,7 +1222,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xdc</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDO_FIFO</span></code></td>
 <td class="description bold"><section>
-<p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO. Writing to this register when the SDO FIFO is full has no effect and the written entry is discarded. Reading from this register always returns 0x00000000.</p>
+<p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x00000000.</p>
 </section>
 </td>
 </tr>
@@ -1248,7 +1260,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
 <td class="description bold"><section>
-<p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO. Reading this register when the SDI FIFO is empty will return undefined data. Writing to it has no effect.</p>
+<p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
+Reading this register when the SDI FIFO is empty will return undefined data.
+Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
@@ -1263,7 +1277,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe4</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IBI_FIFO</span></code></td>
 <td class="description bold"><section>
-<p>IBI FIFO register. Reading from this register removes the first entry from the IBI FIFO. Reading this register when the IBI FIFO is empty will return undefined data. Writing to it has no effect.</p>
+<p>IBI FIFO register. Reading from this register removes the first entry from the IBI FIFO.
+Reading this register when the IBI FIFO is empty will return undefined data.
+Writing to it has no effect.</p>
 </section>
 </td>
 </tr>
@@ -1346,7 +1362,8 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>This bit is set to 1 when the bus is not executing any procedure. It is not idle bus condition since it set right after the Stop.</p>
+<p>This bit is set to 1 when the bus is not executing any procedure.
+It is not idle bus condition since it set right after the Stop.</p>
 </section>
 </td>
 </tr>
@@ -1356,7 +1373,12 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Sets the speed grade in push-pull mode. Speed with 100MHz driver clock are: 00:  1.56MHz (default) 01:  3.12MHz 10:  6.25MHz 11: 12.50MHz</p>
+<p>Sets the speed grade in push-pull mode.
+Speed with 100MHz driver clock are:
+00:  1.56MHz (default)
+01:  3.12MHz
+10:  6.25MHz
+11: 12.50MHz</p>
 </section>
 </td>
 </tr>
@@ -1394,7 +1416,10 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during bus available). After the IBI request is resolved, the controller returns to idle, since it is was not doing a cmd transfer. This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is disabled.</p>
+<p>Set this bit to listen for IBI requests (when a peripheral pulls SDA Low during bus available).
+After the IBI request is resolved, the controller returns to idle, since it is was not doing
+a cmd transfer.
+This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is disabled.</p>
 </section>
 </td>
 </tr>
@@ -1404,7 +1429,14 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Set this bit to accept (ACK) IBI requests. If disabled, the controller will NACK IBI requests. If enabled, the controller will ACK the IBI request and receive the MDB. In both cases, the controller will proceed with the cmd transfer after resolving the IBI request, if any. Accepted IBIs fill the IBI_FIFO and generate an interrupt to the PS. IBI_CONFIG_LISTEN set to 1 and IBI_CONFIG_ENABLE set to 0 ensures that incoming IBIs are rejected as they come.</p>
+<p>Set this bit to accept (ACK) IBI requests.
+If disabled, the controller will NACK IBI requests.
+If enabled, the controller will ACK the IBI request and receive the MDB.
+In both cases, the controller will proceed with the cmd transfer after resolving the IBI
+request, if any.
+Accepted IBIs fill the IBI_FIFO and generate an interrupt to the PS.
+IBI_CONFIG_LISTEN set to 1 and IBI_CONFIG_ENABLE set to 0 ensures that incoming IBIs are
+rejected as they come.</p>
 </section>
 </td>
 </tr>
@@ -1412,7 +1444,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x180</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DEV_CHAR</span></code></td>
 <td class="description bold"><section>
-<p>Holds devices characteristics that are looked-up during execution. The content is written only by software. To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
+<p>Holds devices characteristics that are looked-up during execution.
+The content is written only by software.
+To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
@@ -1442,7 +1476,8 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates if the device sends at least MDB during the IBI. 0 does not, 1 does.</p>
+<p>Indicates if the device sends at least MDB during the IBI.
+0 does not, 1 does.</p>
 </section>
 </td>
 </tr>
@@ -1452,7 +1487,8 @@ runtime.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>Indicates if the device can send IBI. 0 does not, 1 does.</p>
+<p>Indicates if the device can send IBI.
+0 does not, 1 does.</p>
 </section>
 </td>
 </tr>
@@ -1470,7 +1506,9 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD_n</span></code></td>
 <td class="description bold"><section>
-<p>Offload command memory. Write commands in sequence to these addresses and update the OFFLOAD_CMD_LENGTH register. Where n is from 0 to 15.</p>
+<p>Offload command memory. Write commands in sequence to these addresses and update the
+OFFLOAD_CMD_LENGTH register.
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
@@ -1488,7 +1526,15 @@ runtime.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_n</span></code></td>
 <td class="description bold"><section>
-<p>Offload SDO memory. Dual access memory sector used to store the SDO payload for the offload execution. The SDO is read by the parsing the OFFLOAD_CMD commands. For example, if the first command on OFFLOAD_CMD is a write with length 3 and the next with length 2, 3 bytes from OFFLOAD_SDO_0 are sent, then 2 bytes from OFFLOAD_SDO_1 are sent. If OPS_OFFLOAD_LENGTH is 2, then the burst concludes and the “pointer” resets to OFFLOAD_SDO_0, otherwise, the execution continues until all commands are resolved, always bounded by OPS_OFFLOAD_LENGTH. Where n is from 0 to 15.</p>
+<p>Offload SDO memory.
+Dual access memory sector used to store the SDO payload for the offload execution.
+The SDO is read by the parsing the OFFLOAD_CMD commands.
+For example, if the first command on OFFLOAD_CMD is a write with length 3 and the next with
+length 2, 3 bytes from OFFLOAD_SDO_0 are sent, then 2 bytes from OFFLOAD_SDO_1 are sent.
+If OPS_OFFLOAD_LENGTH is 2, then the burst concludes and the “pointer” resets to
+OFFLOAD_SDO_0, otherwise, the execution continues until all commands are resolved, always
+bounded by OPS_OFFLOAD_LENGTH.
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
