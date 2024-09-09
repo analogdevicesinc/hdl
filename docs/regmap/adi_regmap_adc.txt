@@ -869,16 +869,16 @@ FIELD
 [19:16] 0x00000000
 ADC_PN_SEL
 RW
-Selects the PN monitor sequence type (available only if ADC supports it). \\
- - 0x0: pn9a (device specific, modified pn9) \\
- - 0x1: pn23a (device specific, modified pn23) \\
- - 0x4: pn7 (standard O.150) \\
- - 0x5: pn15 (standard O.150) \\
- - 0x6: pn23 (standard O.150) \\
- - 0x7: pn31 (standard O.150) \\
- - 0x9: pnX (device specific, e.g. ad9361) \\
- - 0x0A: Nibble ramp (Device specific e.g. adrv9001) \\
- - 0x0B: 16 bit ramp (Device specific e.g. adrv9001) \\
+Selects the PN monitor sequence type (available only if ADC supports it).
+ - 0x0: pn9a (device specific, modified pn9)
+ - 0x1: pn23a (device specific, modified pn23)
+ - 0x4: pn7 (standard O.150)
+ - 0x5: pn15 (standard O.150)
+ - 0x6: pn23 (standard O.150)
+ - 0x7: pn31 (standard O.150)
+ - 0x9: pnX (device specific, e.g. ad9361)
+ - 0x0A: Nibble ramp (Device specific e.g. adrv9001)
+ - 0x0B: 16 bit ramp (Device specific e.g. adrv9001)
 ENDFIELD
 
 FIELD
