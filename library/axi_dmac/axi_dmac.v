@@ -288,7 +288,16 @@ module axi_dmac #(
   output                                   fifo_rd_xfer_req,
 
   // Diagnostics interface
-  output  [7:0] dest_diag_level_bursts
+  output  [7:0] dest_diag_level_bursts,
+
+  // ILA Nets
+  output                                   fifo_wr_en_probe,
+  output                                   fifo_wr_overflow_probe,
+  output [DMA_DATA_WIDTH_SRC-1:0]          fifo_wr_din_probe,
+  output                                   m_dest_axi_wready_probe,
+  output                                   m_dest_axi_wvalid_probe,
+  output                                   m_dest_axi_wlast_probe,
+  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata_probe
 );
 
   localparam DMA_TYPE_AXI_MM = 0;
@@ -433,6 +442,15 @@ module axi_dmac #(
     {DBG_ID_PADDING{1'b0}}, src_address_id,
     {DBG_ID_PADDING{1'b0}}, src_request_id
   };
+
+  assign fifo_wr_en_probe       = fifo_wr_en;
+  assign fifo_wr_overflow_probe = fifo_wr_overflow;
+  assign fifo_wr_din_probe      = fifo_wr_din;
+
+  assign m_dest_axi_wready_probe = m_dest_axi_wready;
+  assign m_dest_axi_wvalid_probe = m_dest_axi_wvalid;
+  assign m_dest_axi_wlast_probe  = m_dest_axi_wlast;
+  assign m_dest_axi_wdata_probe  = m_dest_axi_wdata;
 
   axi_dmac_regmap #(
     .ID(ID),

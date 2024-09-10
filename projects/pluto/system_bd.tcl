@@ -27,11 +27,14 @@ create_bd_port -dir O -from 17 -to 0 gpio_o
 create_bd_port -dir O -from 17 -to 0 gpio_t
 
 create_bd_port -dir O spi_csn_o
+ad_connect spi_csn_o GND
 create_bd_port -dir I spi_csn_i
 create_bd_port -dir I spi_clk_i
 create_bd_port -dir O spi_clk_o
+ad_connect spi_clk_o GND
 create_bd_port -dir I spi_sdo_i
 create_bd_port -dir O spi_sdo_o
+ad_connect spi_sdo_o GND
 create_bd_port -dir I spi_sdi_i
 
 create_bd_port -dir O txdata_o
@@ -104,10 +107,10 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # add external spi
 
-ad_ip_instance axi_quad_spi axi_spi
-ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 1
-ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
+#ad_ip_instance axi_quad_spi axi_spi
+#ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
+#ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 1
+#ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
 ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
@@ -138,14 +141,14 @@ ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
 
 # axi spi connections
 
-ad_connect  sys_cpu_clk  axi_spi/ext_spi_clk
-ad_connect  spi_csn_i  axi_spi/ss_i
-ad_connect  spi_csn_o  axi_spi/ss_o
-ad_connect  spi_clk_i  axi_spi/sck_i
-ad_connect  spi_clk_o  axi_spi/sck_o
-ad_connect  spi_sdo_i  axi_spi/io0_i
-ad_connect  spi_sdo_o  axi_spi/io0_o
-ad_connect  spi_sdi_i  axi_spi/io1_i
+#ad_connect  sys_cpu_clk  axi_spi/ext_spi_clk
+#ad_connect  spi_csn_i  axi_spi/ss_i
+#ad_connect  spi_csn_o  axi_spi/ss_o
+#ad_connect  spi_clk_i  axi_spi/sck_i
+#ad_connect  spi_clk_o  axi_spi/sck_o
+#ad_connect  spi_sdo_i  axi_spi/io0_i
+#ad_connect  spi_sdo_o  axi_spi/io0_o
+#ad_connect  spi_sdi_i  axi_spi/io1_i
 
 # interrupts
 
@@ -333,7 +336,7 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 # External TDD
 set TDD_CHANNEL_CNT 3
 set TDD_DEFAULT_POL 0b110
-set TDD_REG_WIDTH 24
+set TDD_REG_WIDTH 16
 set TDD_BURST_WIDTH 8
 set TDD_SYNC_WIDTH 0
 set TDD_SYNC_INT 0
@@ -365,7 +368,7 @@ ad_connect axi_tdd_0/tdd_channel_2 axi_ad9361_dac_dma/sync
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
-ad_cpu_interconnect 0x7C430000 axi_spi
+#ad_cpu_interconnect 0x7C430000 axi_spi
 ad_cpu_interconnect 0x7C440000 axi_tdd_0
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
@@ -395,7 +398,7 @@ ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
 
 ad_cpu_interrupt ps-13 mb-13 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-12 mb-12 axi_ad9361_dac_dma/irq
-ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
+#ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
 # debug
 
@@ -405,25 +408,57 @@ set_property -dict [list \
   CONFIG.C_DATA_DEPTH {1024} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
-  CONFIG.C_NUM_OF_PROBES {9} \
-  CONFIG.C_PROBE1_TYPE {1} \
+  CONFIG.C_NUM_OF_PROBES {5} \
   CONFIG.C_PROBE2_TYPE {1} \
   CONFIG.C_PROBE3_TYPE {1} \
   CONFIG.C_PROBE4_TYPE {1} \
-  CONFIG.C_PROBE5_TYPE {1} \
-  CONFIG.C_PROBE6_TYPE {1} \
-  CONFIG.C_PROBE8_TYPE {1} \
   CONFIG.C_PROBE4_WIDTH {64} \
-  CONFIG.C_PROBE8_WIDTH {64} \
 ] [get_bd_cells ila_0]
 
 ad_connect ila_0/clk     axi_ad9361/l_clk
 ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_1
-ad_connect ila_0/probe1  axi_ad9361_dac_dma/m_axis_ready
-ad_connect ila_0/probe2  axi_ad9361_dac_dma/m_axis_valid
-ad_connect ila_0/probe3  axi_ad9361_dac_dma/m_axis_xfer_req
-ad_connect ila_0/probe4  axi_ad9361_dac_dma/m_axis_data
-ad_connect ila_0/probe5  axi_ad9361_adc_dma/fifo_wr_en
-ad_connect ila_0/probe6  axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect ila_0/probe7  axi_ad9361_adc_dma/fifo_wr_xfer_req
-ad_connect ila_0/probe8  axi_ad9361_adc_dma/fifo_wr_din
+ad_connect ila_0/probe1  axi_ad9361_adc_dma/fifo_wr_xfer_req
+ad_connect ila_0/probe2  axi_ad9361_adc_dma/fifo_wr_en_probe
+ad_connect ila_0/probe3  axi_ad9361_adc_dma/fifo_wr_overflow_probe
+ad_connect ila_0/probe4  axi_ad9361_adc_dma/fifo_wr_din_probe
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 sync_probe_0
+
+set_property -dict [list \
+  CONFIG.CDC_TYPE {xpm_cdc_single} \
+  CONFIG.DEST_SYNC_FF {2} \
+] [get_bd_cells sync_probe_0]
+
+ad_connect sync_probe_0/src_clk  axi_ad9361/l_clk
+ad_connect sync_probe_0/dest_clk sys_cpu_clk
+ad_connect sync_probe_0/src_in   axi_tdd_0/tdd_channel_1
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 sync_probe_1
+
+set_property -dict [list \
+  CONFIG.CDC_TYPE {xpm_cdc_single} \
+  CONFIG.DEST_SYNC_FF {2} \
+] [get_bd_cells sync_probe_1]
+
+ad_connect sync_probe_1/src_clk  axi_ad9361/l_clk
+ad_connect sync_probe_1/dest_clk sys_cpu_clk
+ad_connect sync_probe_1/src_in   axi_ad9361_adc_dma/fifo_wr_xfer_req
+
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_1
+
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {1024} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {6} \
+  CONFIG.C_PROBE5_TYPE {1} \
+  CONFIG.C_PROBE5_WIDTH {64} \
+] [get_bd_cells ila_1]
+
+ad_connect ila_1/clk     sys_cpu_clk
+ad_connect ila_1/probe0  sync_probe_0/dest_out
+ad_connect ila_1/probe1  sync_probe_1/dest_out
+ad_connect ila_1/probe2  axi_ad9361_adc_dma/m_dest_axi_wready_probe
+ad_connect ila_1/probe3  axi_ad9361_adc_dma/m_dest_axi_wvalid_probe
+ad_connect ila_1/probe4  axi_ad9361_adc_dma/m_dest_axi_wlast_probe
+ad_connect ila_1/probe5  axi_ad9361_adc_dma/m_dest_axi_wdata_probe
