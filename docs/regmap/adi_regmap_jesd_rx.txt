@@ -172,7 +172,11 @@ FIELD
 [9:8]
 DECODER
 RO
-Decoder presence: 01 - 8B10B decoder \\ 10 - 64B66B decoder
+Decoder presence:
+
+* 01 - 8B10B decoder
+* 10 - 64B66B decoder
+
 ENDFIELD
 
 FIELD
@@ -669,16 +673,20 @@ FIELD
 [1:0] 0x00000000
 STATUS_STATE
 RO-V
- - State of the :ref:`8B/10B link state machine <axi_jesd204_rx_8b10b_link_state_machine>`.
+
+* State of the :ref:`8B/10B link state machine <axi_jesd204_rx_8b10b_link_state_machine>`.
+
   - 0 = RESET
   - 1 = WAIT_FOR_PHY
   - 2 = CGS
   - 3 = SYNCHRONIZED
- - State of the :ref:`64B/66B link state machine <axi_jesd204_rx_64b66b_link_state_machine>`.
+* State of the :ref:`64B/66B link state machine <axi_jesd204_rx_64b66b_link_state_machine>`.
+
   - 0 = RESET
   - 1 = WAIT_BS
   - 2 = BLOCK_SYNC
   - 3 = DATA
+
 ENDFIELD
 
 ############################################################################################
