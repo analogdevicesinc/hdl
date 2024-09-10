@@ -53,6 +53,7 @@ module axi_jesd204_rx #(
   output [7:0] core_cfg_octets_per_frame,
   output core_cfg_disable_scrambler,
   output core_cfg_disable_char_replacement,
+  output [1:0] core_cfg_header_mode,
   output [7:0] core_cfg_frame_align_err_threshold,
 
   output [9:0] device_cfg_octets_per_multiframe,
@@ -73,7 +74,7 @@ module axi_jesd204_rx #(
   input core_event_frame_alignment_error,
   input core_event_unexpected_lane_state_error,
 
-  output [6:0] core_ctrl_err_statistics_mask,
+  output [8:0] core_ctrl_err_statistics_mask,
   output core_ctrl_err_statistics_reset,
 
   input [32*NUM_LANES-1:0] core_status_err_statistics_cnt,
@@ -92,7 +93,9 @@ module axi_jesd204_rx #(
 
   localparam PCORE_VERSION = 32'h00010761; // 1.07.a
   localparam PCORE_MAGIC = 32'h32303452; // 204R
-
+  
+  localparam DATA_PATH_WIDTH_LOG2 = (DATA_PATH_WIDTH == 8) ? 3 : 2;
+  
   /* Register interface signals */
   reg [31:0] up_rdata = 'h0;
   reg up_wack = 1'b0;
@@ -209,6 +212,7 @@ module axi_jesd204_rx #(
     .core_cfg_links_disable(core_cfg_links_disable),
     .core_cfg_disable_scrambler(core_cfg_disable_scrambler),
     .core_cfg_disable_char_replacement(core_cfg_disable_char_replacement),
+    .core_cfg_header_mode(core_cfg_header_mode),
 
     .up_extra_cfg({
       /* 00-07 */ up_cfg_frame_align_err_threshold
@@ -240,9 +244,11 @@ module axi_jesd204_rx #(
     .status_synth_params1(status_synth_params1),
     .status_synth_params2(status_synth_params2));
 
-  jesd204_up_sysref i_up_sysref (
-    .up_clk(s_axi_aclk),
-    .up_reset(up_reset),
+  jesd204_up_sysref #(
+    .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
+  ) i_up_sysref (           
+    .up_clk(s_axi_aclk),            
+    .up_reset(up_reset),            
 
     .core_clk(core_clk),
     .device_clk(device_clk),
@@ -263,7 +269,8 @@ module axi_jesd204_rx #(
 
   jesd204_up_rx #(
     .NUM_LANES(NUM_LANES),
-    .DATA_PATH_WIDTH(DATA_PATH_WIDTH)
+    .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+    .DATA_PATH_WIDTH_LOG2(DATA_PATH_WIDTH_LOG2)
   ) i_up_rx (
     .up_clk(s_axi_aclk),
     .up_reset(up_reset),
