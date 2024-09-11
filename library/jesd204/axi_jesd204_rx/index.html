@@ -7,7 +7,7 @@
 
     <title>JESD204B/C Link Receive Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=a3ba2641" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=6d708bb3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -81,10 +81,10 @@
 
   <div class="repotoc-tree overlay">
     <root>
-  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
-  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../../documentation/index.html">System Level</a>
   <a href="../../../index.html" class="current">HDL</a>
   <a href="../../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../../libiio/index.html">libiio</a>
   <a href="../../../../no-OS/index.html">no-OS</a>
   <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
   <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
@@ -201,10 +201,10 @@ Content on this topic
 </label>
 <div class="repotoc-tree">
   <root>
-  <a href="../../../../documentation/eval/index.html">Evaluation Boards</a>
-  <a href="../../../../documentation/university/index.html">University Program</a>
+  <a href="../../../../documentation/index.html">System Level</a>
   <a href="../../../index.html" class="current">HDL</a>
   <a href="../../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
+  <a href="../../../../libiio/index.html">libiio</a>
   <a href="../../../../no-OS/index.html">no-OS</a>
   <a href="../../../../precision-converters-firmware/index.html">Precision Converters Firmware</a>
   <a href="../../../../PrecisionToolbox/index.html">Precision Toolbox</a>
@@ -2185,16 +2185,23 @@ Available starting from version 1.07.a;</p>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[9:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">BUFFER_DEALY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Buffer release opportunity offset from LMFC.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x91</span></code></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x91</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x244</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_CONF3</span></code></td>
 <td class="description bold"><section>
@@ -2202,14 +2209,14 @@ Available starting from version 1.07.a;</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[14:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_INVALID_HEADER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2220,7 +2227,7 @@ Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_UNEXPECTED_EOMB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2231,7 +2238,7 @@ Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_UNEXPECTED_EOEMB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2242,7 +2249,7 @@ Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[11:11]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_CRC_MISMATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2253,7 +2260,7 @@ Valid for 64B/66B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[10:10]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_UNEXPECTEDK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2264,7 +2271,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9:9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_NOTINTABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2275,7 +2282,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MASK_DISPERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2286,14 +2293,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET_COUNTER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -2303,7 +2310,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xa0</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xa0</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x280</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LINK_STATUS</span></code></td>
 <td class="description bold"><section>
@@ -2311,14 +2318,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS_STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
@@ -2351,7 +2358,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_STATUS</span></code></td>
 <td class="description bold"><section>
@@ -2359,14 +2366,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:11]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[10:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EMB_STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2384,14 +2391,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ILAS_READY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
@@ -2401,7 +2408,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IFS_READY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
@@ -2411,14 +2418,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[3:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CGS_STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
@@ -2428,7 +2435,7 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc1</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc1</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x304</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_LATENCY</span></code></td>
 <td class="description bold"><section>
@@ -2436,14 +2443,14 @@ Valid for 8B/10B encoder.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LATENCY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
@@ -2456,7 +2463,7 @@ Its max value is KxF octets.  Where LEMC period = KxF/8 link clock periods.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc2</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc2</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x308</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ERROR_STATISTICS</span></code></td>
 <td class="description bold"><section>
@@ -2464,7 +2471,7 @@ Its max value is KxF octets.  Where LEMC period = KxF/8 link clock periods.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ERROR_REGISTER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2475,7 +2482,7 @@ in LINK_CONF3. It must always be manually reset.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc3</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc3</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_LANE_FRAME_ALIGN_ERR_CNT</span></code></td>
 <td class="description bold"><section>
@@ -2483,7 +2490,7 @@ in LINK_CONF3. It must always be manually reset.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ERROR_REGISTER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2493,7 +2500,7 @@ in LINK_CONF3. It must always be manually reset.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x310</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS0</span></code></td>
 <td class="description bold"><section>
@@ -2502,14 +2509,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[27:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2519,7 +2526,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2529,14 +2536,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc5</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc5</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x314</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS1</span></code></td>
 <td class="description bold"><section>
@@ -2545,14 +2552,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">K</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2562,7 +2569,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">F</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2572,7 +2579,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2582,14 +2589,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[14:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2599,14 +2606,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2616,7 +2623,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc6</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc6</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x318</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS2</span></code></td>
 <td class="description bold"><section>
@@ -2625,7 +2632,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">JESDV</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2635,7 +2642,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">S</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2645,7 +2652,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SUBCLASSV</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2655,7 +2662,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[20:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2665,7 +2672,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2675,14 +2682,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2692,7 +2699,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">M</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2702,7 +2709,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc7</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc7</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31c</span> <span class="pre">+</span> <span class="pre">0x20*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">LANEn_ILAS3</span></code></td>
 <td class="description bold"><section>
@@ -2711,7 +2718,7 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FCHK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2721,14 +2728,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
@@ -2738,14 +2745,14 @@ Where n is from 0 to 31.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
