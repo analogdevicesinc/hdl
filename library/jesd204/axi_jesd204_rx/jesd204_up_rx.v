@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2016-2018, 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2016-2018, 2020-2024 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -150,7 +150,7 @@ module jesd204_up_rx #(
       /* JESD RX configuraton */
       12'h090: begin
         up_cfg_buffer_early_release <= up_wdata[16];
-        up_cfg_buffer_delay <= up_wdata[7:0];
+        up_cfg_buffer_delay <= up_wdata[9:2];
       end
       endcase
     end else if (up_wreq == 1'b1) begin
