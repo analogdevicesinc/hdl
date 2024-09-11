@@ -618,8 +618,8 @@ set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [
 ad_connect clk10_gen/clk_in1 $sys_dma_clk
 ad_connect clk10_gen/resetn $sys_dma_resetn
 
-ad_connect corundum/core_clk $sys_dma_clk
-ad_connect corundum/core_rst $sys_dma_reset
+ad_connect corundum/clk $sys_dma_clk
+ad_connect corundum/rst $sys_dma_reset
 
 ad_connect corundum/sfp_rx_p sfp_rx_p
 ad_connect corundum/sfp_rx_n sfp_rx_n
@@ -669,10 +669,12 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__MAXIGP0__DATA_WIDTH 32
 ad_connect smartconnect_corundum/S00_AXI sys_ps8/M_AXI_HPM0_FPD
 ad_connect sys_ps8/maxihpm0_fpd_aclk $sys_dma_clk
 
-assign_bd_address [get_bd_addr_segs { \
-  corundum/s_axil_ctrl/Reg \
-  corundum/s_axil_app_ctrl/Reg \
-}]
+assign_bd_address -offset 0xA000_0000 [get_bd_addr_segs \
+  corundum/s_axil_ctrl/Reg
+] -target_address_space sys_ps8/Data
+assign_bd_address -offset 0xA800_0000 [get_bd_addr_segs \
+  corundum/s_axil_app_ctrl/Reg
+] -target_address_space sys_ps8/Data
 
 ad_ip_instance util_reduced_logic util_reduced_logic_0
 ad_ip_parameter util_reduced_logic_0 CONFIG.C_OPERATION {or}
