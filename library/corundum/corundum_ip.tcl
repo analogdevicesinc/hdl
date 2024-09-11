@@ -11,10 +11,21 @@ global VIVADO_IP_LIBRARY
 adi_ip_create corundum
 
 set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
-source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
 
-adi_ip_files corundum [list \
-  "corundum.v" \
+# Corundum instantiates both eth_xcvr_gth_full and eth_xcvr_gth_channel,
+# but only the latter is used at our target configuration
+source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
+set rm_gth_chn eth_xcvr_gth_channel
+set rm_gth_chn [ \
+  get_files "[pwd]/corundum.srcs/sources_1/ip/$rm_gth_chn/$rm_gth_chn.xci"
+]
+if {$rm_gth_chn ne ""} {
+  export_ip_user_files -of_objects $rm_gth_chn -no_script -reset -force -quiet
+  remove_files $rm_gth_chn
+}
+
+# Corundum sources
+add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v" \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
@@ -123,7 +134,11 @@ adi_ip_files corundum [list \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/sync_reset.tcl" \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl" \
-  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl"
+]
+
+adi_ip_files corundum [list \
+  "corundum.v"
 ]
 
 adi_ip_properties_lite corundum
@@ -134,8 +149,9 @@ set cc [ipx::current_core]
 set_property display_name "Corundum" $cc
 set_property description "Corundum NIC IP Core" $cc
 
-# Remove all inferred interfaces
+# Remove all inferred interfaces and address spaces
 ipx::remove_all_bus_interface [ipx::current_core]
+ipx::remove_all_address_space [ipx::current_core]
 
 # Interface definitions
 
@@ -183,11 +199,7 @@ adi_add_bus "m_axi_dma" "master" \
     {"m_axi_dma_rvalid" "RVALID"} \
     {"m_axi_dma_rready" "RREADY"} \
   }
-adi_add_bus_clock "core_clk" "m_axi_dma" "core_rst" "master"
-
-set_property master_address_space_ref m_axi_dma \
-  [ipx::get_bus_interfaces m_axi_dma \
-  -of_objects [ipx::current_core]] \
+ipx::infer_address_space [ipx::get_bus_interfaces m_axi_dma -of_objects $cc]
 
 adi_add_bus "s_axil_app_ctrl" "slave" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -213,7 +225,6 @@ adi_add_bus "s_axil_app_ctrl" "slave" \
     {"s_axil_app_ctrl_rvalid" "RVALID"} \
     {"s_axil_app_ctrl_rready" "RREADY"} \
   }
-adi_add_bus_clock "core_clk" "s_axil_app_ctrl" "core_rst"
 
 adi_add_bus "s_axil_ctrl" "slave" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -239,7 +250,7 @@ adi_add_bus "s_axil_ctrl" "slave" \
     {"s_axil_ctrl_rvalid" "RVALID"} \
     {"s_axil_ctrl_rready" "RREADY"} \
   }
-adi_add_bus_clock "core_clk" "s_axil_ctrl" "core_rst"
+adi_add_bus_clock "clk" "m_axi_dma:s_axil_app_ctrl:s_axil_ctrl" "rst"
 
 adi_add_bus "iic" "master" \
   "xilinx.com:interface:iic_rtl:1.0" \

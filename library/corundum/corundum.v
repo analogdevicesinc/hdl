@@ -134,8 +134,8 @@ module corundum #(
   parameter STAT_ID_WIDTH = 12
 ) (
   // Clock and reset
-  input            core_clk,
-  input      [0:0] core_rst,
+  input            clk,
+  input      [0:0] rst,
 
   output reg [IRQ_COUNT-1:0] core_irq,
 
@@ -278,7 +278,7 @@ module corundum #(
   wire sfp_iic_sda_o_w;
   wire sfp_iic_sda_t_w;
 
-  always @(posedge core_clk) begin
+  always @(posedge clk) begin
       scl_o <= sfp_iic_scl_o_w;
       scl_t <= sfp_iic_scl_t_w;
       sda_o <= sfp_iic_sda_o_w;
@@ -295,7 +295,7 @@ module corundum #(
   wire clk_125mhz_int;
   wire rst_125mhz_int;
 
-  wire mmcm_rst = core_rst;
+  wire mmcm_rst = rst;
   wire mmcm_locked;
   wire mmcm_clkfb;
 
@@ -346,13 +346,13 @@ module corundum #(
     .WIDTH(5),
     .N(2)
   ) sync_signal_inst (
-    .clk(core_clk),
+    .clk(clk),
     .in({sfp_tx_fault,      sfp_rx_los,     sfp_mod_abs,     scl_i,   sda_i}),
     .out({sfp_tx_fault_int, sfp_rx_los_int, sfp_mod_abs_int, sfp_iic_scl_i_w, sfp_iic_sda_i_w})
   );
 
-  always @(posedge core_clk) begin
-    if (core_rst) begin
+  always @(posedge clk) begin
+    if (rst) begin
       irq_stretch <= {(IRQ_COUNT*IRQ_STRETCH){1'b0}};
     end else begin
       /* IRQ shift vector */
@@ -662,8 +662,8 @@ module corundum #(
      * Clock: 250 MHz
      * Synchronous reset
      */
-    .clk_250mhz(core_clk),
-    .rst_250mhz(core_rst),
+    .clk_250mhz(clk),
+    .rst_250mhz(rst),
 
     /*
      * PTP clock
