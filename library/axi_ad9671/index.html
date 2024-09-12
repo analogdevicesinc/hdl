@@ -2081,11 +2081,9 @@ Where n is from 0 to 15.</p>
 <p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value
 and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
 this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits).
-If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel</p>
-<blockquote>
-<div><p>with the format 1.1.14 (sign, integer and fractional bits).</p>
-</div></blockquote>
-<p>NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+If SCALECORRECTION_ONLY is set, this implements the scale value correction for the current channel
+with the format 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 </section>
 </td>
 </tr>
@@ -2117,8 +2115,8 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<dl class="simple">
-<dt>Selects the PN monitor sequence type (available only if ADC supports it).</dt><dd><ul class="simple">
+<p>Selects the PN monitor sequence type (available only if ADC supports it).</p>
+<ul class="simple">
 <li><p>0x0: pn9a (device specific, modified pn9)</p></li>
 <li><p>0x1: pn23a (device specific, modified pn23)</p></li>
 <li><p>0x4: pn7 (standard O.150)</p></li>
@@ -2129,8 +2127,6 @@ Where n is from 0 to 15.</p>
 <li><p>0x0A: Nibble ramp (Device specific e.g. adrv9001)</p></li>
 <li><p>0x0B: 16 bit ramp (Device specific e.g. adrv9001)</p></li>
 </ul>
-</dd>
-</dl>
 </section>
 </td>
 </tr>
