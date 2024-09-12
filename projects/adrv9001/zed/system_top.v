@@ -153,6 +153,13 @@ module system_top (
   output                  tx2_strobe_out_n,
   output                  tx2_strobe_out_p,
 
+  output                  dev_mcs_fpga_out_n,
+  output                  dev_mcs_fpga_out_p,
+  input                   fpga_mcs_in_n,
+  input                   fpga_mcs_in_p,
+  input                   fpga_ref_clk_p,
+  input                   fpga_ref_clk_n,
+
   inout                   sm_fan_tach,
   input                   vadj_err,
   output                  platform_status,
@@ -187,8 +194,26 @@ module system_top (
   wire            tdd_sync_loc;
   wire            tdd_sync_i;
   wire            tdd_sync_cntr;
+  wire            fpga_ref_clk;
+  wire            fpga_mcs_in;
+  wire            mcs_out;
 
   // instantiations
+
+  OBUFDS i_obufds_dev_mcs_fpga_in (
+    .I (mcs_out),
+    .O (dev_mcs_fpga_out_p),
+    .OB (dev_mcs_fpga_out_n));
+
+  IBUFDS i_ibufgs_fpga_ref_clk (
+    .I (fpga_ref_clk_p),
+    .IB (fpga_ref_clk_n),
+    .O (fpga_ref_clk));
+
+  IBUFDS i_ibufgs_fpga_mcs_in (
+    .I (fpga_mcs_in_p),
+    .IB (fpga_mcs_in_n),
+    .O (fpga_mcs_in));
 
   // multi-ssi synchronization
 
@@ -305,7 +330,9 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
     //FMC connections
-    .ref_clk (1'b0),
+    .ref_clk (fpga_ref_clk),
+    .mcs_in (fpga_mcs_in),
+    .mcs_out (mcs_out),
     .mssi_sync (mssi_sync),
 
     .tx_output_enable (~vadj_err),

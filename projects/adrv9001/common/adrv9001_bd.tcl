@@ -9,10 +9,11 @@ create_bd_port -dir O adc2_div_clk
 create_bd_port -dir O dac1_div_clk
 create_bd_port -dir O dac2_div_clk
 
-create_bd_port -dir I ref_clk
-
 create_bd_port -dir I tx_output_enable
 
+create_bd_port -dir I ref_clk
+create_bd_port -dir I mcs_in
+create_bd_port -dir O mcs_out
 create_bd_port -dir I mssi_sync
 
 # adrv9001 interface
@@ -161,11 +162,12 @@ ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
 ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
 
-ad_connect ref_clk           axi_adrv9001/ref_clk
-
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001/mssi_sync
+ad_connect ref_clk           axi_adrv9001/ref_clk
+ad_connect mcs_in            axi_adrv9001/mcs_in
+ad_connect mcs_out           axi_adrv9001/mcs_out
+ad_connect mssi_sync         axi_adrv9001/mssi_sync_in
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
