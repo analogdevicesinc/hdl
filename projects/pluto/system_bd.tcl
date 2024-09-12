@@ -336,7 +336,7 @@ ad_connect  cpack/fifo_wr_overflow axi_ad9361/adc_dovf
 # External TDD
 set TDD_CHANNEL_CNT 3
 set TDD_DEFAULT_POL 0b110
-set TDD_REG_WIDTH 16
+set TDD_REG_WIDTH 24
 set TDD_BURST_WIDTH 8
 set TDD_SYNC_WIDTH 0
 set TDD_SYNC_INT 0
@@ -412,7 +412,7 @@ set_property -dict [list \
   CONFIG.C_PROBE2_TYPE {1} \
   CONFIG.C_PROBE3_TYPE {1} \
   CONFIG.C_PROBE4_TYPE {1} \
-  CONFIG.C_PROBE4_WIDTH {64} \
+  CONFIG.C_PROBE4_WIDTH {16} \
 ] [get_bd_cells ila_0]
 
 ad_connect ila_0/clk     axi_ad9361/l_clk
@@ -450,9 +450,11 @@ set_property -dict [list \
   CONFIG.C_DATA_DEPTH {1024} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
-  CONFIG.C_NUM_OF_PROBES {6} \
+  CONFIG.C_NUM_OF_PROBES {9} \
   CONFIG.C_PROBE5_TYPE {1} \
-  CONFIG.C_PROBE5_WIDTH {64} \
+  CONFIG.C_PROBE5_WIDTH {16} \
+  CONFIG.C_PROBE8_TYPE {1} \
+  CONFIG.C_PROBE8_WIDTH {32} \
 ] [get_bd_cells ila_1]
 
 ad_connect ila_1/clk     sys_cpu_clk
@@ -462,3 +464,6 @@ ad_connect ila_1/probe2  axi_ad9361_dac_dma/m_src_axi_rready_probe
 ad_connect ila_1/probe3  axi_ad9361_dac_dma/m_src_axi_rvalid_probe
 ad_connect ila_1/probe4  axi_ad9361_dac_dma/m_src_axi_rlast_probe
 ad_connect ila_1/probe5  axi_ad9361_dac_dma/m_src_axi_rdata_probe
+ad_connect ila_1/probe6  axi_ad9361_dac_dma/m_src_axi_arready_probe
+ad_connect ila_1/probe7  axi_ad9361_dac_dma/m_src_axi_arvalid_probe
+ad_connect ila_1/probe8  axi_ad9361_dac_dma/m_src_axi_araddr_probe

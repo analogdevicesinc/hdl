@@ -293,11 +293,14 @@ module axi_dmac #(
   // ILA Nets
   output                                   m_axis_ready_probe,
   output                                   m_axis_valid_probe,
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data_probe,
+  output [DMA_DATA_WIDTH_DEST/4-1:0]       m_axis_data_probe,
   output                                   m_src_axi_rready_probe,
   output                                   m_src_axi_rvalid_probe,
   output                                   m_src_axi_rlast_probe,
-  output [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata_probe
+  output [DMA_DATA_WIDTH_SRC/4-1:0]        m_src_axi_rdata_probe,
+  output                                   m_src_axi_arready_probe,
+  output                                   m_src_axi_arvalid_probe,
+  output [DMA_AXI_ADDR_WIDTH-1:0]          m_src_axi_araddr_probe
 );
 
   localparam DMA_TYPE_AXI_MM = 0;
@@ -445,12 +448,16 @@ module axi_dmac #(
 
   assign m_axis_ready_probe = m_axis_ready;
   assign m_axis_valid_probe = m_axis_valid;
-  assign m_axis_data_probe  = m_axis_data;
+  assign m_axis_data_probe  = m_axis_data[DMA_DATA_WIDTH_DEST/4-1:0];
 
   assign m_src_axi_rready_probe = m_src_axi_rready;
   assign m_src_axi_rvalid_probe = m_src_axi_rvalid;
   assign m_src_axi_rlast_probe  = m_src_axi_rlast;
-  assign m_src_axi_rdata_probe  = m_src_axi_rdata;
+  assign m_src_axi_rdata_probe  = m_src_axi_rdata[DMA_DATA_WIDTH_SRC/4-1:0];
+
+  assign m_src_axi_arready_probe = m_src_axi_arready;
+  assign m_src_axi_arvalid_probe = m_src_axi_arvalid;
+  assign m_src_axi_araddr_probe  = m_src_axi_araddr;
 
   axi_dmac_regmap #(
     .ID(ID),
