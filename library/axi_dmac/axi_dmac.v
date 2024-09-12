@@ -291,13 +291,13 @@ module axi_dmac #(
   output  [7:0] dest_diag_level_bursts,
 
   // ILA Nets
-  output                                   fifo_wr_en_probe,
-  output                                   fifo_wr_overflow_probe,
-  output [DMA_DATA_WIDTH_SRC-1:0]          fifo_wr_din_probe,
-  output                                   m_dest_axi_wready_probe,
-  output                                   m_dest_axi_wvalid_probe,
-  output                                   m_dest_axi_wlast_probe,
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata_probe
+  output                                   m_axis_ready_probe,
+  output                                   m_axis_valid_probe,
+  output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data_probe,
+  output                                   m_src_axi_rready_probe,
+  output                                   m_src_axi_rvalid_probe,
+  output                                   m_src_axi_rlast_probe,
+  output [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata_probe
 );
 
   localparam DMA_TYPE_AXI_MM = 0;
@@ -443,14 +443,14 @@ module axi_dmac #(
     {DBG_ID_PADDING{1'b0}}, src_request_id
   };
 
-  assign fifo_wr_en_probe       = fifo_wr_en;
-  assign fifo_wr_overflow_probe = fifo_wr_overflow;
-  assign fifo_wr_din_probe      = fifo_wr_din;
+  assign m_axis_ready_probe = m_axis_ready;
+  assign m_axis_valid_probe = m_axis_valid;
+  assign m_axis_data_probe  = m_axis_data;
 
-  assign m_dest_axi_wready_probe = m_dest_axi_wready;
-  assign m_dest_axi_wvalid_probe = m_dest_axi_wvalid;
-  assign m_dest_axi_wlast_probe  = m_dest_axi_wlast;
-  assign m_dest_axi_wdata_probe  = m_dest_axi_wdata;
+  assign m_src_axi_rready_probe = m_src_axi_rready;
+  assign m_src_axi_rvalid_probe = m_src_axi_rvalid;
+  assign m_src_axi_rlast_probe  = m_src_axi_rlast;
+  assign m_src_axi_rdata_probe  = m_src_axi_rdata;
 
   axi_dmac_regmap #(
     .ID(ID),

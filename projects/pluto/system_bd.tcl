@@ -416,11 +416,11 @@ set_property -dict [list \
 ] [get_bd_cells ila_0]
 
 ad_connect ila_0/clk     axi_ad9361/l_clk
-ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_1
+ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_2
 ad_connect ila_0/probe1  axi_ad9361_adc_dma/fifo_wr_xfer_req
-ad_connect ila_0/probe2  axi_ad9361_adc_dma/fifo_wr_en_probe
-ad_connect ila_0/probe3  axi_ad9361_adc_dma/fifo_wr_overflow_probe
-ad_connect ila_0/probe4  axi_ad9361_adc_dma/fifo_wr_din_probe
+ad_connect ila_0/probe2  axi_ad9361_dac_dma/m_axis_ready_probe
+ad_connect ila_0/probe3  axi_ad9361_dac_dma/m_axis_valid_probe
+ad_connect ila_0/probe4  axi_ad9361_dac_dma/m_axis_data_probe
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 sync_probe_0
 
@@ -431,7 +431,7 @@ set_property -dict [list \
 
 ad_connect sync_probe_0/src_clk  axi_ad9361/l_clk
 ad_connect sync_probe_0/dest_clk sys_cpu_clk
-ad_connect sync_probe_0/src_in   axi_tdd_0/tdd_channel_1
+ad_connect sync_probe_0/src_in   axi_tdd_0/tdd_channel_2
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:xpm_cdc_gen:1.0 sync_probe_1
 
@@ -458,7 +458,7 @@ set_property -dict [list \
 ad_connect ila_1/clk     sys_cpu_clk
 ad_connect ila_1/probe0  sync_probe_0/dest_out
 ad_connect ila_1/probe1  sync_probe_1/dest_out
-ad_connect ila_1/probe2  axi_ad9361_adc_dma/m_dest_axi_wready_probe
-ad_connect ila_1/probe3  axi_ad9361_adc_dma/m_dest_axi_wvalid_probe
-ad_connect ila_1/probe4  axi_ad9361_adc_dma/m_dest_axi_wlast_probe
-ad_connect ila_1/probe5  axi_ad9361_adc_dma/m_dest_axi_wdata_probe
+ad_connect ila_1/probe2  axi_ad9361_dac_dma/m_src_axi_rready_probe
+ad_connect ila_1/probe3  axi_ad9361_dac_dma/m_src_axi_rvalid_probe
+ad_connect ila_1/probe4  axi_ad9361_dac_dma/m_src_axi_rlast_probe
+ad_connect ila_1/probe5  axi_ad9361_dac_dma/m_src_axi_rdata_probe
