@@ -96,6 +96,10 @@ module axi_adrv9001_rx #(
   input                   adc_dovf,
 
   output                  adc_sync,
+  input                   adc_sync_status,
+  output                  adc_ext_sync_arm,
+  output                  adc_ext_sync_disarm,
+  output                  adc_ext_sync_manual_req,
 
   // processor interface
   input                   up_rstn,
@@ -372,9 +376,9 @@ module axi_adrv9001_rx #(
       .adc_start_code (),
       .adc_sref_sync (),
       .adc_sync (adc_sync),
-      .adc_ext_sync_arm (),
-      .adc_ext_sync_disarm (),
-      .adc_ext_sync_manual_req (),
+      .adc_ext_sync_arm (adc_ext_sync_arm),
+      .adc_ext_sync_disarm (adc_ext_sync_disarm),
+      .adc_ext_sync_manual_req (adc_ext_sync_manual_req),
       .adc_num_lanes (adc_num_lanes),
       .adc_custom_control (),
       .adc_crc_enable (),

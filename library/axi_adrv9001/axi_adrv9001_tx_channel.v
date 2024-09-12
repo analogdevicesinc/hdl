@@ -170,7 +170,7 @@ module axi_adrv9001_tx_channel #(
       4'h6: dac_data_iq_out <= pn7_data;
       4'h3: dac_data_iq_out <= 16'd0;
       4'h2: dac_data_iq_out <= dac_data_in;
-      4'h1: dac_data_iq_out <= dac_pat_data_1_s;
+      4'h1: dac_data_iq_out <= dac_data_sync ? dac_data_iq_out : dac_pat_data_1_s;
       default: dac_data_iq_out <= dac_dds_data_s;
     endcase
   end

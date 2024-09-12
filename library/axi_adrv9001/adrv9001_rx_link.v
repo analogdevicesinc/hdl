@@ -227,6 +227,7 @@ module adrv9001_rx_link #(
   wire        rx_data16_1_packed_valid;
   wire        rx_data16_0_packed_osof;
   wire        rx_data16_1_packed_osof;
+  wire        rx_data32_0_packed_osof;
 
   wire [31:0] rx_data32_0_packed;
   wire        rx_data32_0_packed_valid;
