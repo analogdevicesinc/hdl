@@ -139,7 +139,7 @@ The following are the parameters of this project that can be configured:
    kilosamples per converter (M)
 -  [ADC/DAC]_DO_MEM_TYPE
 -  Check out this guide on more details regarding these parameters:
-   :dokuwiki:`resources/fpga/docs/axi_tdd`
+   :ref:`axi_tdd`
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -240,7 +240,6 @@ SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 THESE ARE JUST EXAMPLES!!!
-USE WHICHEVER FITS BEST YOUR CASE
 
 .. list-table::
    :widths: 25 25 25 25
@@ -487,7 +486,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
 for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for AD9082-FMCA-EBZ
+.. collapsible:: Default values of the make parameters for AD9082-FMCA-EBZ
 
    +-------------------+-----------------------------------------------+
    | Parameter         | Default value of the parameters               |
