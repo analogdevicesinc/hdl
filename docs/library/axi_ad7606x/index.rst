@@ -67,8 +67,6 @@ Interface
      - Active low parallel data write control
    * - rx_cs_n
      - Active low chip select
-   * - external_clk
-     - External clock if the corresponding option is enabled
    * - rx_busy
      - Active low busy signal
    * - first_data
