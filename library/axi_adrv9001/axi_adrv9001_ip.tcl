@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -35,6 +35,7 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
+  "$ad_hdl_dir/library/common/util_ext_sync.v" \
   "$ad_hdl_dir/library/common/ad_pnmon.v" \
   "$ad_hdl_dir/library/common/ad_pngen.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
@@ -42,6 +43,8 @@ adi_ip_files axi_adrv9001 [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "adrv9001_rx.v" \
   "adrv9001_tx.v" \
   "adrv9001_pack.v" \
@@ -55,7 +58,10 @@ adi_ip_files axi_adrv9001 [list \
   "axi_adrv9001_tx.v" \
   "axi_adrv9001_tx_channel.v" \
   "axi_adrv9001_core.v" \
+  "axi_adrv9001_sync.v" \
+  "axi_adrv9001_sync_ctrl.v" \
   "axi_adrv9001_constr.xdc" \
+  "axi_adrv9001_constr.ttcl" \
   "axi_adrv9001_tdd.v" \
   "axi_adrv9001.v" ]
 
@@ -144,6 +150,12 @@ set_property value_tcl_expr {expr {[info exists USE_RX_CLK_FOR_TX1] ?
                                    ($USE_RX_CLK_FOR_TX1 == 1 || $USE_RX_CLK_FOR_TX2 == 1 )? 0 : 1 : 1}
 } [ipx::get_user_parameters DISABLE_RX1_SSI -of_objects $cc]
 
+ipgui::add_param -name "EN_RX_MCS_TO_STRB_M" -component $cc -parent $page0
+set_property -dict [list \
+  "display_name" "Enable 6'th MCS to Rx strobe measurment" \
+  "widget" "checkBox" \
+] [ipgui::get_guiparamspec -name "EN_RX_MCS_TO_STRB_M" -component $cc]
+
 ipgui::add_param -name "DISABLE_RX2_SSI" -component $cc -parent $page0
 set_property -dict [list \
   "display_name" "Disable Rx2 SSI" \
@@ -176,11 +188,6 @@ set_property -dict [list \
   "widget" "checkBox" \
 ] [ipgui::get_guiparamspec -name "DISABLE_TX2_SSI" -component $cc]
 
-adi_set_ports_dependency "adc_sync_in" \
-	"(spirit:decode(id('MODELPARAM_VALUE.EXT_SYNC')) == 1)"
-adi_set_ports_dependency "dac_sync_in" \
-	"(spirit:decode(id('MODELPARAM_VALUE.EXT_SYNC')) == 1)"
-
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.INDEPENDENT_1R1T_SUPPORT')) == 1 && spirit:decode(id('MODELPARAM_VALUE.DISABLE_TX2_SSI')) == 0} \
   [ipx::get_ports dac_2* -of_objects $cc]
 
@@ -198,7 +205,6 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_R
 
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.DISABLE_RX1_SSI')) == 0} \
   [ipx::get_ports *rx1_* -of_objects $cc]
-set_property driver_value 0 [ipx::get_ports *_sync_in* -of_objects $cc]
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files $cc

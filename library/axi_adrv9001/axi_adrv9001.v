@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -56,16 +56,17 @@ module axi_adrv9001 #(
   parameter SPEED_GRADE = 0,
   parameter DEV_PACKAGE = 0,
   parameter EXT_SYNC = 0,
+  parameter ENABLE_REF_CLK_MON = 0,
+  parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter USE_RX_CLK_FOR_TX1 = 0,
   parameter USE_RX_CLK_FOR_TX2 = 0
 ) (
+  input                   mssi_sync_in,
   input                   ref_clk,
-  input                   mssi_sync,
+  input                   mcs_in,
+  output                  mcs_out,
+  output                  mcs_src,
   input                   tx_output_enable,
-
-  // external synchronization signals
-  input                   adc_sync_in,
-  input                   dac_sync_in,
 
   // physical interface
   input                   rx1_dclk_in_n_NC,
@@ -133,6 +134,7 @@ module axi_adrv9001 #(
   output                  adc_1_enable_q1,
   output      [15:0]      adc_1_data_q1,
   input                   adc_1_dovf,
+  output                  adc_1_start_sync,
 
   output                  adc_2_clk,
   output                  adc_2_rst,
@@ -143,6 +145,7 @@ module axi_adrv9001 #(
   output                  adc_2_enable_q0,
   output      [15:0]      adc_2_data_q0,
   input                   adc_2_dovf,
+  output                  adc_2_start_sync,
 
   output                  dac_1_clk,
   output                  dac_1_rst,
@@ -257,13 +260,24 @@ module axi_adrv9001 #(
   wire            dac_1_valid;
   wire            dac_2_valid;
 
+  wire            adc_1_rst_s;
+  wire            adc_2_rst_s;
+  wire            dac_1_rst_s;
+  wire            dac_2_rst_s;
+  wire            rx1_if_rst;
+  wire            rx2_if_rst;
+  wire            tx1_if_rst;
+  wire            tx2_if_rst;
+
+  wire            mssi_sync;
+  wire            rf_enable_s;
+  wire            mcs_6th_pulse;
+  wire            mcs_tx_rate_sync;
+  wire            transfer_sync;
+
   // internal clocks & resets
   wire            up_rstn;
   wire            up_clk;
-
-  // clock/reset assignments
-  assign up_clk  = s_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
 
   wire    [NUM_LANES-1:0]           up_rx1_dld;
   wire    [DRP_WIDTH*NUM_LANES-1:0] up_rx1_dwdata;
@@ -277,10 +291,49 @@ module axi_adrv9001 #(
   wire                              delay_rx2_locked;
   wire                       [31:0] adc_clk_ratio;
   wire                       [31:0] dac_clk_ratio;
+  wire                       [ 9:0] rx1_mcs_to_strobe_delay;
+  wire                       [ 9:0] rx2_mcs_to_strobe_delay;
+
+  wire                       [31:0] sync_config;
+  wire                       [31:0] mcs_sync_pulse_width;
+  wire                       [31:0] mcs_sync_pulse_1_delay;
+  wire                       [31:0] mcs_sync_pulse_2_delay;
+  wire                       [31:0] mcs_sync_pulse_3_delay;
+  wire                       [31:0] mcs_sync_pulse_4_delay;
+  wire                       [31:0] mcs_sync_pulse_5_delay;
+  wire                       [31:0] mcs_sync_pulse_6_delay;
+
+  // clock/reset assignments
+  assign up_clk  = s_axi_aclk;
+  assign up_rstn = s_axi_aresetn;
+
+  axi_adrv9001_sync #(
+    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .DRP_WIDTH (DRP_WIDTH)
+  ) i_sync (
+    .ref_clk (ref_clk),
+    .request_mcs (mcs_in),
+    .mcs_src (mcs_src),
+    .mssi_sync_in (mssi_sync_in),
+    .sync_config (sync_config),
+    .mcs_sync_pulse_width (mcs_sync_pulse_width),
+    .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
+    .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
+    .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
+    .mcs_sync_pulse_4_delay (mcs_sync_pulse_4_delay),
+    .mcs_sync_pulse_5_delay (mcs_sync_pulse_5_delay),
+    .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
+    .mcs_out (mcs_out),
+    .mcs_6th_pulse (mcs_6th_pulse),
+    .mcs_tx_rate_sync (mcs_tx_rate_sync),
+    .rf_enable (rf_enable_s),
+    .mssi_sync (mssi_sync),
+    .transfer_sync (transfer_sync));
 
   axi_adrv9001_if #(
     .CMOS_LVDS_N (CMOS_LVDS_N),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+    .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
     .NUM_LANES (NUM_LANES),
     .DRP_WIDTH (DRP_WIDTH),
     .RX_USE_BUFG (RX_USE_BUFG),
@@ -299,7 +352,7 @@ module axi_adrv9001 #(
     //
     // Physical interface
     //
-    .ref_clk (ref_clk),
+    .mcs_6th_pulse (mcs_6th_pulse),
     .mssi_sync (mssi_sync),
     .tx_output_enable (tx_output_enable),
 
@@ -363,13 +416,21 @@ module axi_adrv9001 #(
     .up_rx2_drdata (up_rx2_drdata),
 
     //
+    // MCS sync
+    //
+
+    .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
+    .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+
+    //
     // Transport layer interface
     //
 
     // ADC interface
     .adc_clk_ratio (adc_clk_ratio),
     .rx1_clk (adc_1_clk),
-    .rx1_rst (adc_1_rst),
+    .rx1_rst (adc_1_rst_s),
+    .rx1_if_rst (rx1_if_rst),
     .rx1_data_valid (rx1_data_valid),
     .rx1_data_i (rx1_data_i),
     .rx1_data_q (rx1_data_q),
@@ -380,7 +441,8 @@ module axi_adrv9001 #(
     .rx1_symb_8_16b (rx1_symb_8_16b),
 
     .rx2_clk (adc_2_clk),
-    .rx2_rst (adc_2_rst),
+    .rx2_rst (adc_2_rst_s),
+    .rx2_if_rst (rx2_if_rst),
     .rx2_data_valid (rx2_data_valid),
     .rx2_data_i (rx2_data_i),
     .rx2_data_q (rx2_data_q),
@@ -393,7 +455,8 @@ module axi_adrv9001 #(
     // DAC interface
     .dac_clk_ratio (dac_clk_ratio),
     .tx1_clk (dac_1_clk),
-    .tx1_rst (dac_1_rst),
+    .tx1_rst (dac_1_rst_s),
+    .tx1_if_rst (tx1_if_rst),
     .tx1_data_valid (tx1_data_valid),
     .tx1_data_i (tx1_data_i),
     .tx1_data_q (tx1_data_q),
@@ -404,7 +467,8 @@ module axi_adrv9001 #(
     .tx1_symb_8_16b (tx1_symb_8_16b),
 
     .tx2_clk (dac_2_clk),
-    .tx2_rst (dac_2_rst),
+    .tx2_rst (dac_2_rst_s),
+    .tx2_if_rst (tx2_if_rst),
     .tx2_data_valid (tx2_data_valid),
     .tx2_data_i (tx2_data_i),
     .tx2_data_q (tx2_data_q),
@@ -435,11 +499,13 @@ module axi_adrv9001 #(
     .FPGA_FAMILY (FPGA_FAMILY),
     .SPEED_GRADE (SPEED_GRADE),
     .DEV_PACKAGE (DEV_PACKAGE),
-    .EXT_SYNC (EXT_SYNC)
+    .EXT_SYNC (EXT_SYNC),
+    .ENABLE_REF_CLK_MON (ENABLE_REF_CLK_MON)
   ) i_core (
     // ADC interface
     .rx1_clk (adc_1_clk),
-    .rx1_rst (adc_1_rst),
+    .rx1_rst (adc_1_rst_s),
+    .rx1_if_rst (rx1_if_rst),
     .rx1_data_valid (rx1_data_valid),
     .rx1_data_i (rx1_data_i),
     .rx1_data_q (rx1_data_q),
@@ -450,7 +516,8 @@ module axi_adrv9001 #(
     .rx1_symb_8_16b (rx1_symb_8_16b),
 
     .rx2_clk (adc_2_clk),
-    .rx2_rst (adc_2_rst),
+    .rx2_rst (adc_2_rst_s),
+    .rx2_if_rst (rx2_if_rst),
     .rx2_data_valid (rx2_data_valid),
     .rx2_data_i (rx2_data_i),
     .rx2_data_q (rx2_data_q),
@@ -464,7 +531,8 @@ module axi_adrv9001 #(
 
     //DAC interface
     .tx1_clk (dac_1_clk),
-    .tx1_rst (dac_1_rst),
+    .tx1_rst (dac_1_rst_s),
+    .tx1_if_rst (tx1_if_rst),
     .tx1_data_valid (tx1_data_valid),
     .tx1_data_i (tx1_data_i),
     .tx1_data_q (tx1_data_q),
@@ -475,7 +543,8 @@ module axi_adrv9001 #(
     .tx1_symb_8_16b (tx1_symb_8_16b),
 
     .tx2_clk (dac_2_clk),
-    .tx2_rst (dac_2_rst),
+    .tx2_rst (dac_2_rst_s),
+    .tx2_if_rst (tx2_if_rst),
     .tx2_data_valid (tx2_data_valid),
     .tx2_data_i (tx2_data_i),
     .tx2_data_q (tx2_data_q),
@@ -499,6 +568,7 @@ module axi_adrv9001 #(
     .adc_1_enable_q1 (adc_1_enable_q1),
     .adc_1_data_q1 (adc_1_data_q1),
     .adc_1_dovf (adc_1_dovf),
+    .adc_1_start_sync (adc_1_start_sync),
 
     .adc_2_valid (adc_2_valid),
     .adc_2_enable_i (adc_2_enable_i0),
@@ -506,6 +576,7 @@ module axi_adrv9001 #(
     .adc_2_enable_q (adc_2_enable_q0),
     .adc_2_data_q (adc_2_data_q0),
     .adc_2_dovf (adc_2_dovf),
+    .adc_2_start_sync (adc_2_start_sync),
 
     .dac_1_valid (dac_1_valid),
     .dac_1_enable_i0 (dac_1_enable_i0),
@@ -549,9 +620,21 @@ module axi_adrv9001 #(
     .tdd_tx2_rf_en (tdd_tx2_rf_en),
     .tdd_if2_mode (tdd_if2_mode),
 
+    .rate_sync (mcs_tx_rate_sync),
     .ref_clk (ref_clk),
-    .adc_sync_in (adc_sync_in),
-    .dac_sync_in (dac_sync_in),
+    .transfer_sync_in (transfer_sync),
+
+    .rx1_mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
+    .rx2_mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+
+    .sync_config (sync_config),
+    .mcs_sync_pulse_width (mcs_sync_pulse_width),
+    .mcs_sync_pulse_1_delay (mcs_sync_pulse_1_delay),
+    .mcs_sync_pulse_2_delay (mcs_sync_pulse_2_delay),
+    .mcs_sync_pulse_3_delay (mcs_sync_pulse_3_delay),
+    .mcs_sync_pulse_4_delay (mcs_sync_pulse_4_delay),
+    .mcs_sync_pulse_5_delay (mcs_sync_pulse_5_delay),
+    .mcs_sync_pulse_6_delay (mcs_sync_pulse_6_delay),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -563,6 +646,11 @@ module axi_adrv9001 #(
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
+
+  assign adc_1_rst = rx1_if_rst;
+  assign adc_2_rst = rx2_if_rst;
+  assign dac_1_rst = tx1_if_rst;
+  assign dac_2_rst = tx2_if_rst;
 
   assign adc_1_valid_i0 = adc_1_valid;
   assign adc_1_valid_q0 = adc_1_valid;
@@ -578,10 +666,10 @@ module axi_adrv9001 #(
   assign dac_2_valid_i0 = dac_2_valid;
   assign dac_2_valid_q0 = dac_2_valid;
 
-  assign rx1_enable = tdd_if1_mode ? tdd_rx1_rf_en : gpio_rx1_enable_in;
-  assign rx2_enable = tdd_if2_mode ? tdd_rx2_rf_en : gpio_rx2_enable_in;
-  assign tx1_enable = tdd_if1_mode ? tdd_tx1_rf_en : gpio_tx1_enable_in;
-  assign tx2_enable = tdd_if2_mode ? tdd_tx2_rf_en : gpio_tx2_enable_in;
+  assign rx1_enable = (tdd_if1_mode ? tdd_rx1_rf_en : gpio_rx1_enable_in) & rf_enable_s;
+  assign rx2_enable = (tdd_if2_mode ? tdd_rx2_rf_en : gpio_rx2_enable_in) & rf_enable_s;
+  assign tx1_enable = (tdd_if1_mode ? tdd_tx1_rf_en : gpio_tx1_enable_in) & rf_enable_s;
+  assign tx2_enable = (tdd_if2_mode ? tdd_tx2_rf_en : gpio_tx2_enable_in) & rf_enable_s;
 
   // up bus interface
   up_axi #(

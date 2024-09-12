@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -41,6 +41,8 @@ GENERIC_DEPS += axi_adrv9001_rx_channel.v
 GENERIC_DEPS += axi_adrv9001_tdd.v
 GENERIC_DEPS += axi_adrv9001_tx.v
 GENERIC_DEPS += axi_adrv9001_tx_channel.v
+GENERIC_DEPS += axi_adrv9001_sync.v
+GENERIC_DEPS += axi_adrv9001_sync_ctrl.v
 
 XILINX_DEPS += ../xilinx/common/ad_mmcm_drp.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
@@ -54,6 +56,7 @@ XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += adrv9001_rx.v
 XILINX_DEPS += adrv9001_tx.v
 XILINX_DEPS += axi_adrv9001_constr.xdc
+XILINX_DEPS += axi_adrv9001_constr.ttcl
 XILINX_DEPS += axi_adrv9001_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc

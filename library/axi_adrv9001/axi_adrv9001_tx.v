@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -58,6 +58,7 @@ module axi_adrv9001_tx #(
 
   // dac interface
   output                  dac_rst,
+  input                   tx_if_rst,
   input                   dac_clk,
   output                  dac_data_valid_A,
   output       [15:0]     dac_data_i_A,
@@ -77,10 +78,13 @@ module axi_adrv9001_tx #(
 
   input       [ 31:0]     dac_clk_ratio,
 
-  // master/slave
-  input                   dac_sync_in,
+  // main/subordinate
+  input                   dac_rate_sync_in,
+  input                   dac_transfer_sync_in,
   output                  dac_sync_out,
   output                  dac_ext_sync_arm,
+  output                  dac_ext_sync_disarm,
+  input                   dac_sync_in_status,
 
   // dma interface
   output                  dac_valid,
@@ -155,12 +159,13 @@ module axi_adrv9001_tx #(
 
     // internal registers
 
-    reg               dac_data_sync = 'd0;
     reg     [15:0]    dac_rate_cnt = 'd0;
     reg               dac_valid_int = 'd0;
 
     // internal signals
 
+    wire              dac_rate_sync_in_s;
+    wire              dac_transfer_sync_in_s;
     wire              dac_data_sync_s;
     wire    [ 15:0]   dac_data_iq_i0_s;
     wire    [ 15:0]   dac_data_iq_q0_s;
@@ -173,21 +178,29 @@ module axi_adrv9001_tx #(
     wire    [  4:0]   up_rack_s;
     wire    [ 31:0]   up_rdata_s[0:4];
 
-    // master/slave
-
-    assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_sync_in;
-
-    always @(posedge dac_clk) begin
-      dac_data_sync <= dac_data_sync_s;
-    end
 
     // rate counters and data sync signals
 
-    always @(posedge dac_clk) begin
-      if (dac_rst == 1'b1) begin
+    sync_bits i_rate_sync_in (
+      .in_bits(dac_rate_sync_in),
+      .out_clk(dac_clk),
+      .out_resetn(~tx_if_rst),
+      .out_bits(dac_rate_sync_in_s));
+
+    sync_bits i_transfer_sync_in (
+      .in_bits(dac_transfer_sync_in),
+      .out_clk(dac_clk),
+      .out_resetn(~tx_if_rst),
+      .out_bits(dac_transfer_sync_in_s));
+
+    // main/subordinate
+    assign dac_data_sync_s = (EXT_SYNC == 0) ? dac_sync_out : dac_rate_sync_in_s;
+
+    always @(posedge dac_clk, posedge tx_if_rst) begin
+      if (tx_if_rst == 1'b1) begin
         dac_rate_cnt <= 16'b0;
       end else begin
-        if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
+        if ((dac_data_sync_s == 1'b1) || (dac_rate_cnt == 16'd0)) begin
           dac_rate_cnt <= dac_datarate_s;
         end else begin
           dac_rate_cnt <= dac_rate_cnt - 1'b1;
@@ -195,10 +208,14 @@ module axi_adrv9001_tx #(
       end
     end
 
+    // adrv9001 interface
+
+    assign dac_data_valid_A = dac_valid_int & ~dac_rate_sync_in_s;
+    assign dac_data_valid_B = dac_valid_int & ~dac_rate_sync_in_s;
+
     // dma interface
 
-    assign dac_data_valid_A = dac_valid_int;
-    assign dac_data_valid_B = dac_valid_int;
+    assign dac_data_valid = dac_valid_int & ~dac_transfer_sync_in_s;
 
     always @(posedge dac_clk) begin
       if (dac_rst == 1'b1) begin
@@ -240,12 +257,12 @@ module axi_adrv9001_tx #(
       .dac_rst (dac_rst),
       .dac_data_in_req (dac_valid),
       .dac_data_in (dac_data_i0),
-      .dac_data_out_req (dac_data_valid_A),
+      .dac_data_out_req (dac_data_valid),
       .dac_data_out (dac_data_i_A[15:0]),
       .dac_data_iq_in (dac_data_iq_q0_s),
       .dac_data_iq_out (dac_data_iq_i0_s),
       .dac_enable (dac_enable_i0),
-      .dac_data_sync (dac_data_sync),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -275,12 +292,12 @@ module axi_adrv9001_tx #(
       .dac_rst (dac_rst),
       .dac_data_in_req (),
       .dac_data_in (dac_data_q0),
-      .dac_data_out_req (dac_data_valid_A),
+      .dac_data_out_req (dac_data_valid),
       .dac_data_out (dac_data_q_A[15:0]),
       .dac_data_iq_in (dac_data_iq_i0_s),
       .dac_data_iq_out (dac_data_iq_q0_s),
       .dac_enable (dac_enable_q0),
-      .dac_data_sync (dac_data_sync),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -310,12 +327,12 @@ module axi_adrv9001_tx #(
       .dac_rst (dac_rst),
       .dac_data_in_req (),
       .dac_data_in (dac_data_i1),
-      .dac_data_out_req (dac_data_valid_B),
+      .dac_data_out_req (dac_data_valid),
       .dac_data_out (dac_data_i_B[15:0]),
       .dac_data_iq_in (dac_data_iq_q1_s),
       .dac_data_iq_out (dac_data_iq_i1_s),
       .dac_enable (dac_enable_i1),
-      .dac_data_sync (dac_data_sync),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -345,12 +362,12 @@ module axi_adrv9001_tx #(
       .dac_rst (dac_rst),
       .dac_data_in_req (),
       .dac_data_in (dac_data_q1),
-      .dac_data_out_req (dac_data_valid_B),
+      .dac_data_out_req (dac_data_valid),
       .dac_data_out (dac_data_q_B[15:0]),
       .dac_data_iq_in (dac_data_iq_i1_s),
       .dac_data_iq_out (dac_data_iq_q1_s),
       .dac_enable (dac_enable_q1),
-      .dac_data_sync (dac_data_sync),
+      .dac_data_sync (dac_transfer_sync_in_s),
       .dac_dds_format (dac_dds_format_s),
       .up_rstn (up_rstn),
       .up_clk (up_clk),
@@ -387,6 +404,9 @@ module axi_adrv9001_tx #(
       .dac_symb_8_16b (dac_symb_8_16b),
       .dac_sync (dac_sync_out),
       .dac_ext_sync_arm (dac_ext_sync_arm),
+      .dac_ext_sync_disarm (dac_ext_sync_disarm),
+      .dac_ext_sync_manual_req (),
+      .dac_sync_in_status (dac_sync_in_status),
       .dac_frame (),
       .dac_clksel (),
       .dac_custom_wr(),
