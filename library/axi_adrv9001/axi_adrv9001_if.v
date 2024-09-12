@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,6 +38,7 @@
 module axi_adrv9001_if #(
   parameter CMOS_LVDS_N = 0,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter RX_USE_BUFG = 0,
@@ -52,7 +53,7 @@ module axi_adrv9001_if #(
   parameter USE_RX_CLK_FOR_TX1 = 0,
   parameter USE_RX_CLK_FOR_TX2 = 0
 ) (
-  input             ref_clk,
+  input             mcs_6th_pulse,
   input             tx_output_enable,
 
   input             mssi_sync,
@@ -120,8 +121,12 @@ module axi_adrv9001_if #(
   output [ 31:0]    adc_clk_ratio,
   output [ 31:0]    dac_clk_ratio,
 
+  output [  9:0]    rx1_mcs_to_strobe_delay,
+  output [  9:0]    rx2_mcs_to_strobe_delay,
+
   output            rx1_clk,
   input             rx1_rst,
+  output            rx1_if_rst,
   output            rx1_data_valid,
   output    [15:0]  rx1_data_i,
   output    [15:0]  rx1_data_q,
@@ -133,6 +138,7 @@ module axi_adrv9001_if #(
 
   output            rx2_clk,
   input             rx2_rst,
+  output            rx2_if_rst,
   output            rx2_data_valid,
   output    [15:0]  rx2_data_i,
   output    [15:0]  rx2_data_q,
@@ -144,6 +150,7 @@ module axi_adrv9001_if #(
 
   output            tx1_clk,
   input             tx1_rst,
+  output            tx1_if_rst,
   input             tx1_data_valid,
   input     [15:0]  tx1_data_i,
   input     [15:0]  tx1_data_q,
@@ -155,6 +162,7 @@ module axi_adrv9001_if #(
 
   output            tx2_clk,
   input             tx2_rst,
+  output            tx2_if_rst,
   input             tx2_data_valid,
   input     [15:0]  tx2_data_i,
   input     [15:0]  tx2_data_q,
@@ -176,7 +184,6 @@ module axi_adrv9001_if #(
   wire  [7:0] adc_1_data_strobe;
   wire        adc_1_clk;
   wire        adc_1_valid;
-  wire        adc_1_ssi_rst;
 
   wire        adc_2_clk_div;
   wire  [7:0] adc_2_data_0;
@@ -186,7 +193,6 @@ module axi_adrv9001_if #(
   wire  [7:0] adc_2_data_strobe;
   wire        adc_2_clk;
   wire        adc_2_valid;
-  wire        adc_2_ssi_rst;
 
   wire        dac_1_clk_div;
   wire  [7:0] dac_1_data_0;
@@ -208,79 +214,79 @@ module axi_adrv9001_if #(
 
   wire        ext_tx1_clk_div;
   wire        ext_tx1_clk;
-  wire        ext_tx1_ssi_rst;
   wire        ext_tx2_clk_div;
   wire        ext_tx2_clk;
-  wire        ext_tx2_ssi_rst;
 
-  wire        rx_ssi_sync_out;
   generate
   if (DISABLE_RX1_SSI == 0) begin
 
-  adrv9001_rx #(
-    .CMOS_LVDS_N (CMOS_LVDS_N),
-    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-    .NUM_LANES (NUM_LANES),
-    .DRP_WIDTH (DRP_WIDTH),
-    .IODELAY_CTRL (IODELAY_CTRL),
-    .IODELAY_ENABLE (IODELAY_ENABLE),
-    .USE_BUFG (RX_USE_BUFG),
-    .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
-  ) i_rx_1_phy (
-    .rx_dclk_in_n_NC (rx1_dclk_in_n_NC),
-    .rx_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
-    .rx_idata_in_n_idata0 (rx1_idata_in_n_idata0),
-    .rx_idata_in_p_idata1 (rx1_idata_in_p_idata1),
-    .rx_qdata_in_n_qdata2 (rx1_qdata_in_n_qdata2),
-    .rx_qdata_in_p_qdata3 (rx1_qdata_in_p_qdata3),
-    .rx_strobe_in_n_NC (rx1_strobe_in_n_NC),
-    .rx_strobe_in_p_strobe_in (rx1_strobe_in_p_strobe_in),
+    adrv9001_rx #(
+      .CMOS_LVDS_N (CMOS_LVDS_N),
+      .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
+      .NUM_LANES (NUM_LANES),
+      .DRP_WIDTH (DRP_WIDTH),
+      .IODELAY_CTRL (IODELAY_CTRL),
+      .IODELAY_ENABLE (IODELAY_ENABLE),
+      .USE_BUFG (RX_USE_BUFG),
+      .IO_DELAY_GROUP ({IO_DELAY_GROUP,"_rx"})
+    ) i_rx_1_phy (
+      .rx_dclk_in_n_NC (rx1_dclk_in_n_NC),
+      .rx_dclk_in_p_dclk_in (rx1_dclk_in_p_dclk_in),
+      .rx_idata_in_n_idata0 (rx1_idata_in_n_idata0),
+      .rx_idata_in_p_idata1 (rx1_idata_in_p_idata1),
+      .rx_qdata_in_n_qdata2 (rx1_qdata_in_n_qdata2),
+      .rx_qdata_in_p_qdata3 (rx1_qdata_in_p_qdata3),
+      .rx_strobe_in_n_NC (rx1_strobe_in_n_NC),
+      .rx_strobe_in_p_strobe_in (rx1_strobe_in_p_strobe_in),
 
-    .adc_rst (rx1_rst),
-    .adc_clk (adc_1_clk),
-    .adc_clk_div (adc_1_clk_div),
-    .adc_data_0 (adc_1_data_0),
-    .adc_data_1 (adc_1_data_1),
-    .adc_data_2 (adc_1_data_2),
-    .adc_data_3 (adc_1_data_3),
-    .adc_data_strobe (adc_1_data_strobe),
-    .adc_valid (adc_1_valid),
+      .mcs_6th_pulse (mcs_6th_pulse),
 
-    .adc_clk_ratio (adc_clk_ratio),
+      .adc_rst (rx1_rst),
+      .adc_clk (adc_1_clk),
+      .adc_if_rst (rx1_if_rst),
+      .adc_clk_div (adc_1_clk_div),
+      .adc_data_0 (adc_1_data_0),
+      .adc_data_1 (adc_1_data_1),
+      .adc_data_2 (adc_1_data_2),
+      .adc_data_3 (adc_1_data_3),
+      .adc_data_strobe (adc_1_data_strobe),
+      .adc_valid (adc_1_valid),
 
-    .up_clk (up_clk),
-    .up_adc_dld (up_rx1_dld),
-    .up_adc_dwdata (up_rx1_dwdata),
-    .up_adc_drdata (up_rx1_drdata),
-    .delay_clk (delay_clk),
-    .delay_rst (delay_rx1_rst),
-    .delay_locked (delay_rx1_locked),
+      .adc_clk_ratio (adc_clk_ratio),
+      .mcs_to_strobe_delay (rx1_mcs_to_strobe_delay),
 
-    .mssi_sync (mssi_sync),
-    .ssi_sync_out (rx_ssi_sync_out),
-    .ssi_sync_in (rx_ssi_sync_out),
-    .ssi_rst (adc_1_ssi_rst));
+      .up_clk (up_clk),
+      .up_adc_dld (up_rx1_dld),
+      .up_adc_dwdata (up_rx1_dwdata),
+      .up_adc_drdata (up_rx1_drdata),
+      .delay_clk (delay_clk),
+      .delay_rst (delay_rx1_rst),
+      .delay_locked (delay_rx1_locked),
 
-  adrv9001_rx_link #(
-    .CMOS_LVDS_N (CMOS_LVDS_N)
-  ) i_rx_1_link (
-    .adc_rst (rx1_rst),
-    .adc_clk_div (adc_1_clk_div),
-    .adc_data_0 (adc_1_data_0),
-    .adc_data_1 (adc_1_data_1),
-    .adc_data_2 (adc_1_data_2),
-    .adc_data_3 (adc_1_data_3),
-    .adc_data_strobe (adc_1_data_strobe),
-    .adc_valid (adc_1_valid),
-    // ADC interface
-    .rx_clk (rx1_clk),
-    .rx_data_valid (rx1_data_valid),
-    .rx_data_i (rx1_data_i),
-    .rx_data_q (rx1_data_q),
-    .rx_single_lane (rx1_single_lane),
-    .rx_sdr_ddr_n (rx1_sdr_ddr_n),
-    .rx_symb_op (rx1_symb_op),
-    .rx_symb_8_16b (rx1_symb_8_16b));
+      .mssi_sync (mssi_sync));
+
+    adrv9001_rx_link #(
+      .CMOS_LVDS_N (CMOS_LVDS_N)
+    ) i_rx_1_link (
+      .adc_rst (rx1_if_rst),
+      .adc_clk_div (adc_1_clk_div),
+      .adc_data_0 (adc_1_data_0),
+      .adc_data_1 (adc_1_data_1),
+      .adc_data_2 (adc_1_data_2),
+      .adc_data_3 (adc_1_data_3),
+      .adc_data_strobe (adc_1_data_strobe),
+      .adc_valid (adc_1_valid),
+
+      // ADC interface
+      .rx_clk (rx1_clk),
+      .rx_data_valid (rx1_data_valid),
+      .rx_data_i (rx1_data_i),
+      .rx_data_q (rx1_data_q),
+      .rx_single_lane (rx1_single_lane),
+      .rx_sdr_ddr_n (rx1_sdr_ddr_n),
+      .rx_symb_op (rx1_symb_op),
+      .rx_symb_8_16b (rx1_symb_8_16b));
 
   end else begin
     assign delay_rx1_locked = 1'b1;
@@ -297,6 +303,7 @@ module axi_adrv9001_if #(
     adrv9001_rx #(
       .CMOS_LVDS_N (CMOS_LVDS_N),
       .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+      .EN_RX_MCS_TO_STRB_M (EN_RX_MCS_TO_STRB_M),
       .NUM_LANES (NUM_LANES),
       .DRP_WIDTH (DRP_WIDTH),
       .IODELAY_CTRL (DISABLE_RX1_SSI),
@@ -313,8 +320,11 @@ module axi_adrv9001_if #(
       .rx_strobe_in_n_NC (rx2_strobe_in_n_NC),
       .rx_strobe_in_p_strobe_in (rx2_strobe_in_p_strobe_in),
 
+      .mcs_6th_pulse (mcs_6th_pulse),
+
       .adc_rst (rx2_rst),
       .adc_clk (adc_2_clk),
+      .adc_if_rst (rx2_if_rst),
       .adc_clk_div (adc_2_clk_div),
       .adc_data_0 (adc_2_data_0),
       .adc_data_1 (adc_2_data_1),
@@ -323,6 +333,8 @@ module axi_adrv9001_if #(
       .adc_data_strobe (adc_2_data_strobe),
       .adc_valid (adc_2_valid),
 
+      .mcs_to_strobe_delay (rx2_mcs_to_strobe_delay),
+
       .up_clk (up_clk),
       .up_adc_dld (up_rx2_dld),
       .up_adc_dwdata (up_rx2_dwdata),
@@ -330,16 +342,12 @@ module axi_adrv9001_if #(
       .delay_clk (delay_clk),
       .delay_rst (delay_rx2_rst),
       .delay_locked (delay_rx2_locked),
-
-      .mssi_sync (1'b0),
-      .ssi_sync_out (),
-      .ssi_sync_in (rx_ssi_sync_out),
-      .ssi_rst (adc_2_ssi_rst));
+      .mssi_sync (mssi_sync));
 
     adrv9001_rx_link #(
       .CMOS_LVDS_N (CMOS_LVDS_N)
     ) i_rx_2_link (
-      .adc_rst (rx2_rst),
+      .adc_rst (rx2_if_rst),
       .adc_clk_div (adc_2_clk_div),
       .adc_data_0 (adc_2_data_0),
       .adc_data_1 (adc_2_data_1),
@@ -372,15 +380,12 @@ module axi_adrv9001_if #(
     if (USE_RX_CLK_FOR_TX1 == 1) begin
       assign ext_tx1_clk_div = adc_1_clk_div;
       assign ext_tx1_clk = adc_1_clk;
-      assign ext_tx1_ssi_rst = adc_1_ssi_rst;
     end else if (USE_RX_CLK_FOR_TX1 == 2) begin
       assign ext_tx1_clk_div = adc_2_clk_div;
       assign ext_tx1_clk = adc_2_clk;
-      assign ext_tx1_ssi_rst = adc_2_ssi_rst;
     end else begin
       assign ext_tx1_clk_div = 1'b0;
       assign ext_tx1_clk = 1'b0;
-      assign ext_tx1_ssi_rst = 1'b0;
     end
 
   adrv9001_tx #(
@@ -390,7 +395,6 @@ module axi_adrv9001_if #(
     .USE_BUFG (TX_USE_BUFG),
     .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX1)
   ) i_tx_1_phy (
-    .ref_clk (ref_clk),
     .up_clk (up_clk),
 
     .tx_output_enable(tx_output_enable),
@@ -406,11 +410,11 @@ module axi_adrv9001_if #(
     .tx_strobe_out_n_NC (tx1_strobe_out_n_NC),
     .tx_strobe_out_p_strobe_out (tx1_strobe_out_p_strobe_out),
 
-    .rx_clk_div (ext_tx1_clk_div),
-    .rx_clk (ext_tx1_clk),
-    .rx_ssi_rst (ext_tx1_ssi_rst),
+    .rx_clk_div (adc_1_clk_div),
+    .rx_clk (adc_1_clk),
 
     .dac_rst (tx1_rst),
+    .dac_if_rst (tx1_if_rst),
     .dac_clk_div (dac_1_clk_div),
 
     .dac_data_0 (dac_1_data_0),
@@ -464,15 +468,12 @@ module axi_adrv9001_if #(
     if (USE_RX_CLK_FOR_TX2 == 1) begin
       assign ext_tx2_clk_div = adc_1_clk_div;
       assign ext_tx2_clk = adc_1_clk;
-      assign ext_tx2_ssi_rst = adc_1_ssi_rst;
     end else if (USE_RX_CLK_FOR_TX2 == 2) begin
       assign ext_tx2_clk_div = adc_2_clk_div;
       assign ext_tx2_clk = adc_2_clk;
-      assign ext_tx2_ssi_rst = adc_2_ssi_rst;
     end else begin
       assign ext_tx2_clk_div = 1'b0;
       assign ext_tx2_clk = 1'b0;
-      assign ext_tx2_ssi_rst = 1'b0;
     end
 
     adrv9001_tx #(
@@ -482,7 +483,6 @@ module axi_adrv9001_if #(
       .USE_BUFG (TX_USE_BUFG),
       .USE_RX_CLK_FOR_TX (USE_RX_CLK_FOR_TX2)
     ) i_tx_2_phy (
-      .ref_clk (ref_clk),
       .up_clk (up_clk),
 
       .tx_output_enable(tx_output_enable),
@@ -498,13 +498,12 @@ module axi_adrv9001_if #(
       .tx_strobe_out_n_NC (tx2_strobe_out_n_NC),
       .tx_strobe_out_p_strobe_out (tx2_strobe_out_p_strobe_out),
 
-      .rx_clk_div (ext_tx2_clk_div),
-      .rx_clk (ext_tx2_clk),
-      .rx_ssi_rst (ext_tx2_ssi_rst),
+      .rx_clk_div (adc_2_clk_div),
+      .rx_clk (adc_2_clk),
 
       .dac_rst (tx2_rst),
+      .dac_if_rst (tx2_if_rst),
       .dac_clk_div (dac_2_clk_div),
-
       .dac_data_0 (dac_2_data_0),
       .dac_data_1 (dac_2_data_1),
       .dac_data_2 (dac_2_data_2),

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,6 +38,7 @@
 module adrv9001_rx #(
   parameter CMOS_LVDS_N = 0,
   parameter FPGA_TECHNOLOGY = 0,
+  parameter EN_RX_MCS_TO_STRB_M = 0,
   parameter NUM_LANES = 3,
   parameter DRP_WIDTH = 5,
   parameter IODELAY_ENABLE = 1,
@@ -56,18 +57,22 @@ module adrv9001_rx #(
   input                   rx_strobe_in_n_NC,
   input                   rx_strobe_in_p_strobe_in,
 
+  input                   mcs_6th_pulse,
+
   // internal reset and clocks
   input                   adc_rst,
   output                  adc_clk,
+  output                  adc_if_rst,
   output                  adc_clk_div,
   output      [7:0]       adc_data_0,
   output      [7:0]       adc_data_1,
   output      [7:0]       adc_data_2,
   output      [7:0]       adc_data_3,
   output      [7:0]       adc_data_strobe,
-  output                  adc_valid,
+  output reg              adc_valid,
 
   output     [31:0]       adc_clk_ratio,
+  output     [ 9:0]       mcs_to_strobe_delay,
 
   // delay interface (for IDELAY macros)
   input                             up_clk,
@@ -78,10 +83,7 @@ module adrv9001_rx #(
   input                   delay_rst,
   output                  delay_locked,
 
-  input                   mssi_sync,
-  output                  ssi_sync_out,
-  input                   ssi_sync_in,
-  output                  ssi_rst
+  input                   mssi_sync
 );
 
   // Use always DDR mode
@@ -104,8 +106,19 @@ module adrv9001_rx #(
   wire [NUM_LANES-1:0] data_s6;
   wire [NUM_LANES-1:0] data_s7;
   wire                 adc_clk_in_fast;
+  wire                 mcs_6th_pulse_s;
 
   // internal registers
+
+  reg       mssi_sync_d1;
+  reg       mssi_sync_d2;
+  reg       reset_m2;
+  reg       reset_m1;
+  reg       reset;
+  reg       bufdiv_clr = 1'b0;
+  reg       serdes_reset = 1'b0;
+  reg       serdes_next_reset = 1'b0;
+  reg [7:0] serdes_min_reset_cycle = 8'hff;
 
   // data interface
   ad_serdes_in #(
@@ -119,7 +132,7 @@ module adrv9001_rx #(
     .DRP_WIDTH (DRP_WIDTH),
     .SERDES_FACTOR (8)
   ) i_serdes (
-    .rst (adc_rst|ssi_rst),
+    .rst (adc_rst | serdes_reset),
     .clk (adc_clk_in_fast),
     .div_clk (adc_clk_div),
     .data_s0 (data_s0),
@@ -189,8 +202,119 @@ module adrv9001_rx #(
   end
   endgenerate
 
+  // reset logic
+
+  always @(posedge clk_in_s) begin
+    mssi_sync_d1 <= mssi_sync;
+    mssi_sync_d2 <= mssi_sync_d1;
+  end
+
+  always @(posedge clk_in_s, posedge mssi_sync_d2) begin
+    if (mssi_sync_d2 == 1'b1) begin
+      bufdiv_clr <= 1'b1;
+    end else begin
+      bufdiv_clr <= 1'b0;
+    end
+  end
+
+  always @(posedge adc_clk_div, posedge bufdiv_clr) begin
+    if (bufdiv_clr == 1'b1) begin
+      reset_m2 <= 1'b1;
+      reset_m1 <= 1'b1;
+      reset <= 1'b1;
+    end else begin
+      reset_m2 <= 1'b0;
+      reset_m1 <= reset_m2;
+      reset <= reset_m1;
+    end
+  end
+
+  assign adc_if_rst = adc_rst | reset;
+
+  always @(posedge adc_clk_div) begin
+    if (adc_if_rst == 1'b1) begin
+      serdes_reset <= 1'b0;
+      serdes_next_reset <= 1'b1;
+      serdes_min_reset_cycle <= 8'hff;
+    end else begin
+      if (serdes_next_reset == 1'b1) begin
+        serdes_reset <= 1'b1;
+        if (serdes_min_reset_cycle == 8'd0) begin
+          serdes_next_reset <= 1'b0;
+        end else begin
+          serdes_min_reset_cycle <= serdes_min_reset_cycle >> 1;
+        end
+      end else begin
+        serdes_reset <= 1'b0;
+        serdes_next_reset <= 1'b0;
+        serdes_min_reset_cycle <= 8'd0;
+      end
+    end
+  end
+
   generate
+
+  if (EN_RX_MCS_TO_STRB_M == 1'b1) begin
+
+    reg [9:0] mcs_to_strobe_cnt;
+    reg       mcs_6th_pulse_d;
+    reg [9:0] mcs_to_strobe_fine_delay;
+    reg [9:0] mcs_to_strobe_8_delays;
+    reg [9:0] mcs_to_strobe_delay_res;
+    reg       fine_count_run;
+    reg [9:0] fine_count;
+    reg [9:0] coarse_count;
+
+    sync_bits i_mcs_sync_in (
+      .in_bits(mcs_6th_pulse),
+      .out_clk(adc_clk_div),
+      .out_resetn(1'b1),
+      .out_bits(mcs_6th_pulse_s));
+
+    // mcs to strobe measure
+
+    always @(posedge adc_clk_div) begin
+      mcs_6th_pulse_d <= mcs_6th_pulse_s;
+      if (!mcs_6th_pulse_d & mcs_6th_pulse_s) begin
+        mcs_to_strobe_cnt <= 0;
+      end else begin
+        if (mcs_6th_pulse_s & !(|adc_data_strobe) & !fine_count_run) begin
+          mcs_to_strobe_cnt <= mcs_to_strobe_cnt + 1;
+        end
+      end
+    end
+
+    always @(posedge adc_clk_div) begin
+      if (!mcs_6th_pulse_d & mcs_6th_pulse_s) begin
+        mcs_to_strobe_fine_delay <= 'd0;
+        fine_count_run <= 1'b0;
+        fine_count <= 'd0;
+        coarse_count <= 'd0;
+        mcs_to_strobe_8_delays <= 'd0;
+      end else begin
+        if (|adc_data_strobe & !fine_count_run) begin
+          mcs_to_strobe_8_delays <= mcs_to_strobe_cnt;
+          mcs_to_strobe_fine_delay <= {2'b00, adc_data_strobe};
+          fine_count_run <= 1'b1;
+        end else if (fine_count_run) begin
+          if (|mcs_to_strobe_fine_delay) begin
+            fine_count <= fine_count + 1'b1;
+            coarse_count <= mcs_to_strobe_8_delays << 3;
+            mcs_to_strobe_fine_delay <= mcs_to_strobe_fine_delay >> 1;
+          end else begin
+            mcs_to_strobe_delay_res <= fine_count + coarse_count;
+          end
+        end
+      end
+    end
+    assign mcs_to_strobe_delay = mcs_to_strobe_delay_res;
+
+  end else begin
+    assign mcs_to_strobe_delay = 10'd0;
+  end
+
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+    wire adc_clk_div_s;
 
     BUFIO i_clk_buf (
       .I (clk_in_s),
@@ -199,8 +323,8 @@ module adrv9001_rx #(
     BUFR #(
       .BUFR_DIVIDE("4")
     ) i_div_clk_buf (
-      .CLR (mssi_sync),
       .CE (1'b1),
+      .CLR (bufdiv_clr),
       .I (clk_in_s),
       .O (adc_clk_div_s));
 
@@ -212,37 +336,7 @@ module adrv9001_rx #(
       assign adc_clk_div = adc_clk_div_s;
     end
 
-    xpm_cdc_async_rst #(
-      .DEST_SYNC_FF    (10), // DECIMAL; range: 2-10
-      .INIT_SYNC_FF    ( 0), // DECIMAL; 0=disable simulation init values, 1=enable simulation init values
-      .RST_ACTIVE_HIGH ( 1)  // DECIMAL; 0=active low reset, 1=active high reset
-    ) rst_syncro (
-      .src_arst (mssi_sync),
-      .dest_clk (adc_clk_div),
-      .dest_arst(ssi_rst));
-
   end else begin
-    wire adc_clk_in;
-
-    reg mssi_sync_d = 1'b0;
-    reg mssi_sync_2d = 1'b0;
-    reg mssi_sync_3d = 1'b0;
-    reg mssi_sync_edge = 1'b0;
-    always @(posedge adc_clk_in) begin
-      mssi_sync_d <= mssi_sync;
-      mssi_sync_2d <= mssi_sync_d;
-      mssi_sync_3d <= mssi_sync_2d;
-      mssi_sync_edge <= mssi_sync_2d & ~mssi_sync_3d;
-    end
-
-    assign ssi_sync_out = mssi_sync_edge;
-
-    reg ssi_rst_pos;
-    always @(posedge adc_clk_in) begin
-      ssi_rst_pos <= ssi_sync_in;
-    end
-
-    assign adc_clk_in = clk_in_s;
 
     BUFGCE #(
       .CE_TYPE ("SYNC"),
@@ -251,7 +345,7 @@ module adrv9001_rx #(
     ) i_clk_buf_fast (
       .O (adc_clk_in_fast),
       .CE (1'b1),
-      .I (adc_clk_in));
+      .I (clk_in_s));
 
     BUFGCE_DIV #(
       .BUFGCE_DIVIDE (4),
@@ -261,17 +355,22 @@ module adrv9001_rx #(
     ) i_div_clk_buf (
       .O (adc_clk_div),
       .CE (1'b1),
-      .CLR (ssi_rst),
-      .I (adc_clk_in));
-
-    assign ssi_rst = ssi_rst_pos;
+      .CLR (bufdiv_clr),
+      .I (clk_in_s));
 
   end
 
   endgenerate
 
   assign adc_clk = adc_clk_in_fast;
-  assign adc_valid = ~adc_rst;
   assign adc_clk_ratio = 4;
+
+  always @(posedge adc_clk_div, posedge adc_if_rst) begin
+    if (adc_if_rst == 1'b1) begin
+      adc_valid <= 1'b0;
+    end else begin
+      adc_valid <= 1'b1;
+    end
+  end
 
 endmodule

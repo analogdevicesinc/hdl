@@ -1,0 +1,22 @@
+###############################################################################
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+###################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+<: set mcs_to_rx_strobe [getBooleanValue "EN_RX_MCS_TO_STRB_M"] :>
+
+
+<: if {$mcs_to_rx_strobe} { :>
+
+  # sync bits mcs_to_strobe - i_if/i_rx*_phy/i_mcs_sync_in
+  set_false_path \
+    -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_if/i_rx*_phy/i_mcs_sync_in* && IS_SEQUENTIAL}]
+
+<: } :>
