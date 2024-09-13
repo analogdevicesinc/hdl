@@ -42,6 +42,7 @@ Contents
    AD9213-EVB <ad9213_evb/index>
    AD9434-FMC <ad9434_fmc/index>
    AD9467-FMC <ad9467_fmc/index>
+   AD9656-FMC <ad9656_fmc/index>
    AD9739A-FMC <ad9739a_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
