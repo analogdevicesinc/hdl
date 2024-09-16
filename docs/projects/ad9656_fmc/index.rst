@@ -56,31 +56,53 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ad9656_fmc_block_diagram.svg
+Xilinx block diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ad9656_fmc_xilinx_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9656/ZCU102 block diagram
+   :alt: AD9656 /ZCU102 Xilinx block diagram
+
+The Rx links (ADC Path) operate with the following parameters:
+
+-  Rx Deframer parameters: L=4, M=4, S=1, NP=16, N=16
+-  Dual link: No
+-  RX_DEVICE_CLK: 62.5 MHz
+-  REF_CLK: 125MHz
+-  JESD204B Lane Rate: 10Gbps
+-  QPLL0 or CPLL
+
+AD9656 FMC Card block diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: ad9656_fmc_connector_diagram.svg
+   :width: 800
+   :align: center
+   :alt: AD9656-FMC/ZCU102 Xilinx block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :adi:`AD9656` ADC's default clock input is from an on-board 125MHz crystal 
+The :adi:`AD9656` ADC's default clock input is from an on-board 125MHz crystal
 oscillator, which goes through a transformer-coupled circuit to minimize jitter.
-The :adi:`AD9656` has an internal clock divider (ratios 1-8) for higher 
+The :adi:`AD9656` has an internal clock divider (ratios 1-8) for higher
 frequency clocks.
 
 Configuring the clock source for :adi:`AD9656`:
 
-    1. Default Configuration (On-board Oscillator):
-        * The board uses a 125MHz crystal oscillator (Y801) through a 
-          transformer-coupled input network.
+#. Default Configuration (On-board Oscillator):
 
-    2. Using an External Clock Source:
-        * Remove C302 (optional) and Jumper J304: This disables the on-board 
-          oscillator.
-        * Attach the external clock source to the SMA connector labeled
-          CLOCK+ (J302). The external clock should be a clean signal generator, 
-          typically ~2.8V p-p or 13 dBm sine wave input.
+   - The board uses a 125MHz crystal oscillator (Y801) through a
+     transformer-coupled input network.
+
+#. Using an External Clock Source:
+        
+   - Remove C302 (optional) and Jumper J304: This disables the on-board
+     oscillator.
+   - Attach the external clock source to the SMA connector labeled
+     CLOCK+ (J302). The external clock should be a clean signal generator,
+     typically ~2.8V p-p or 13 dBm sine wave input.
 
 For more details, check :adi:`AD9656` schematic.
 
@@ -95,7 +117,7 @@ Check-out the table below to find out the conditions.
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
-rx_ad9656_tpl_core   0x44A00000     
+rx_ad9656_tpl_core   0x44A00000
 axi_ad9656_rx_xcvr   0x44A60000
 axi_ad9656_rx_jesd   0x44AA0000
 axi_ad9656_rx_dma    0x7c400000
@@ -114,7 +136,15 @@ SPI connections
      - CS
    * - PS
      - SPI 0
-     - AD9517
+     - AD9656
+     - 1
+   * - PS
+     - SPI 0
+     - AD9508
+     - 1
+   * - PS
+     - SPI 0
+     - AD9953
      - 1
 
 Interrupts
@@ -150,8 +180,8 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location (**projects/ad9656_fmc/carrier**) and run the
-make command by typing in your command prompt(this example :xilinx:`ZCU102`):
+Then go to the project location (**projects/ad9656_fmc/zcu102**) and run the
+make command by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
 
@@ -159,6 +189,30 @@ make command by typing in your command prompt(this example :xilinx:`ZCU102`):
 
    user@analog:~$ cd hdl/projects/ad9656_fmc/zcu102
    user@analog:~/hdl/projects/ad9656_fmc/zcu102$ make
+
+The following dropdown contains a table with the parameters that are used to
+configure this project, on :xilinx:`ZCU102`.
+
+.. collapsible:: Default values of the ``make`` parameters for AD9656-FMC
+
+   +-------------------------+--------------------------------+
+   | Parameter               | Default value of the parameters|
+   |                         |            depending on carrier|
+   |                         +--------------------------------+
+   |                         | ZCU102                         |
+   +=========================+================================+
+   | JESD_MODE               | :red:`8B10B`                   |
+   +-------------------------+--------------------------------+
+   | RX_NUM_OF_LANES         | 4                              |
+   +-------------------------+--------------------------------+
+   | RX_NUM_OF_CONVERTERS    | 4                              |
+   +-------------------------+--------------------------------+
+   | RX_SAMPLES_PER_FRAME    | 1                              |
+   +-------------------------+--------------------------------+
+   | RX_SAMPLE_WIDTH         | 16                             |
+   +-------------------------+--------------------------------+
+   | RX_SAMPLES_PER_CHANNEL  | 2                              |
+   +-------------------------+--------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -183,7 +237,7 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Product datasheets: :adi:`AD9656`
--  :dokuwiki:`[Wiki] AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
+-  :dokuwiki:`[Wiki] Evaluating the AD9656 ADC converter <resources/eval/ad9656-125ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
