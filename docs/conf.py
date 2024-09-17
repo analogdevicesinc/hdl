@@ -8,13 +8,15 @@ repository = 'hdl'
 project = 'HDL'
 copyright = '2024, Analog Devices, Inc.'
 author = 'Analog Devices, Inc.'
+version = '0.5' # documentation version, will be printed on the cover page
 
 # -- General configuration ----------------------------------------------------
 
 extensions = [
-    "sphinx.ext.todo",
-    "sphinxcontrib.wavedrom",
-    "adi_doctools"
+    'sphinx.ext.todo',
+    'sphinxcontrib.wavedrom',
+    'adi_doctools',
+    'rst2pdf.pdfbuilder'
 ]
 
 needs_extensions = {
