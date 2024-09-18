@@ -357,8 +357,12 @@ module axi_spi_engine #(
       8'h34: up_rdata_ff <= cmd_fifo_room;
       8'h35: up_rdata_ff <= sdo_fifo_room;
       8'h36: up_rdata_ff <= (sdi_fifo_out_valid == 1) ? sdi_fifo_level + 1 : sdi_fifo_level; /* beacuse of first-word-fall-through */
+
       8'h3a: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
-      8'h3b: up_rdata_ff <= sdi_fifo_out_data_msb_s; /* store SDI's 32 bits MSB, if exists */
+      8'h3b: up_rdata_ff <= sdi_fifo_out_data[(2*DATA_WIDTH)-1:DATA_WIDTH];
+      8'h3c: up_rdata_ff <= sdi_fifo_out_data[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
+      8'h3d: up_rdata_ff <= sdi_fifo_out_data[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
+
       8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
       8'h40: up_rdata_ff <= {offload0_enable_reg};
       8'h41: up_rdata_ff <= {offload0_enabled_s};
