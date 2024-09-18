@@ -93,9 +93,9 @@ module system_top (
 
   // internal signals
 
-  wire    [34:0]  gpio_i;
-  wire    [34:0]  gpio_o;
-  wire    [34:0]  gpio_t;
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -109,6 +109,7 @@ module system_top (
   assign gain0_o = gpio_o[32];
   assign gain1_o = gpio_o[33];
 
+  assign gpio_i[63:35] = gpio_o[63:35];
   assign gpio_i[34] = spi_sdi; // Interrupt
   assign gpio_i[33] = gpio_o[33];
   assign gpio_i[32] = gpio_o[32];

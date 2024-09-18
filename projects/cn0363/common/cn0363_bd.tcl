@@ -26,12 +26,6 @@ proc load_fir_filter_vector {filter_file} {
 	return $filter
 }
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 35
-
-set_property LEFT 34 [get_bd_ports GPIO_I]
-set_property LEFT 34 [get_bd_ports GPIO_O]
-set_property LEFT 34 [get_bd_ports GPIO_T]
-
 ad_ip_instance axi_dmac axi_dma
 ad_ip_parameter axi_dma CONFIG.FIFO_SIZE 2
 ad_ip_parameter axi_dma CONFIG.DMA_TYPE_SRC 2
