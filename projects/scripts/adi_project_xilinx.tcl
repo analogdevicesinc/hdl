@@ -122,6 +122,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
     set device "xcvc1902-vsva2197-2MP-e-S"
     set board [lindex [lsearch -all -inline [get_board_parts] *vck190*] end]
   }
+  if [regexp "_vhk158" $project_name] {
+    set device "xcvh1582-vsva3697-2MP-e-S"
+    set board [lindex [lsearch -all -inline [get_board_parts] *vhk158*] end]
+  }
   if [regexp "_vpk180" $project_name] {
     set device "xcvp1802-lsvc4072-2MP-e-S"
     set board [lindex [lsearch -all -inline [get_board_parts] *vpk180*] end]
@@ -708,4 +712,3 @@ proc adi_project_verify {project_name} {
     return -code error [format "ERROR: Timing Constraints NOT met!"]
   }
 }
-
