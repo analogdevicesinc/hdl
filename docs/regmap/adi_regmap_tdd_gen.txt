@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x0000
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 2.00.61.
+Version of the peripheral. Follows semantic versioning. Current version 2.00.62.
 ENDREG
 
 FIELD
@@ -25,7 +25,7 @@ R
 ENDFIELD
 
 FIELD
-[7:0] 0x00000061
+[7:0] 0x00000062
 VERSION_PATCH
 R
 ENDFIELD
@@ -252,7 +252,7 @@ FIELD
 [31:0] 0x00000000
 STARTUP_DELAY
 RW
-The initial delay value before the beginning of the first frame; defined in clock cycles.
+The initial delay value before the beginning of the first frame; defined in clock cycles-1.
 ENDFIELD
 
 ############################################################################################
@@ -268,7 +268,7 @@ FIELD
 [31:0] 0x00000000
 FRAME_LENGTH
 RW
-The length of the transmission frame; defined in clock cycles.
+The length of the transmission frame; defined in clock cycles-1.
 ENDFIELD
 
 ############################################################################################
@@ -276,15 +276,15 @@ ENDFIELD
 
 REG
 0x0016
-SYNC_COUNTER_LOW
+SYNC_PERIOD_LOW
 TDD Sync counter
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-SYNC_COUNTER_LOW
+SYNC_PERIOD_LOW
 RW
-The LSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if ''SYNC_COUNT_WIDTH''>0.
+The LSB slice of the internal sync pulse period defined in clock cycles-1. This register is implemented if ''SYNC_COUNT_WIDTH''>0.
 ENDFIELD
 
 ############################################################################################
@@ -292,15 +292,15 @@ ENDFIELD
  
 REG
 0x0017
-SYNC_COUNTER_HIGH
+SYNC_PERIOD_HIGH
 TDD Sync counter
 ENDREG
 
 FIELD
 [31:0] 0x00000000
-SYNC_COUNTER_HIGH
+SYNC_PERIOD_HIGH
 RW
-The MSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if ''SYNC_COUNT_WIDTH''>32.
+The MSB slice of the internal sync pulse period defined in clock cycles-1. This register is implemented if ''SYNC_COUNT_WIDTH''>32.
 ENDFIELD
 
 ############################################################################################
