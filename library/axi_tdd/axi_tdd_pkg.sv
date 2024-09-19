@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,7 +42,7 @@ package axi_tdd_pkg;
     RUNNING = 2'b11} state_t;
 
   localparam
-    PCORE_VERSION = 32'h00020061,
+    PCORE_VERSION = 32'h00020062,
     PCORE_MAGIC   = 32'h5444444E; // "TDDN", big endian
 
   // register address offset

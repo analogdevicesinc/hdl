@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -140,7 +140,7 @@ module axi_tdd_channel #(
     if (resetn == 1'b0) begin
       tdd_ch_rst <= 1'b0;
     end else begin
-      if (((tdd_cstate == RUNNING) && (tdd_counter == t_low)) || (tdd_endof_frame == 1'b1)) begin
+      if ((tdd_cstate == RUNNING) && (tdd_counter == t_low)) begin
         tdd_ch_rst <= 1'b1;
       end else begin
         tdd_ch_rst <= 1'b0;
@@ -158,8 +158,6 @@ module axi_tdd_channel #(
       end else begin
         if (tdd_ch_set == 1'b1) begin
           out <= ~ch_pol;
-        end else begin
-          out <= out;
         end
       end
     end
