@@ -133,7 +133,7 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($T
 
 # TODO: Increase the maximum number of quads if necessary
 set max_num_quads 2
-set num_quads [expr int(round(1.0 * $RX_NUM_OF_LANES / 4))]
+set num_quads [expr int(ceil(1.0 * $RX_NUM_OF_LANES / 4))]
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
