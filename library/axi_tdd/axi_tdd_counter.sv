@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -64,7 +64,6 @@ module axi_tdd_counter #(
   logic [REGISTER_WIDTH-1:0]    tdd_frame_length;
   logic [BURST_COUNT_WIDTH-1:0] tdd_burst_counter;
   logic                         tdd_delay_done;
-  logic                         tdd_delay_skip;
   logic                         tdd_endof_burst;
   logic                         tdd_last_burst;
   state_t                       tdd_cstate_ns;
@@ -76,7 +75,6 @@ module axi_tdd_counter #(
     tdd_cstate = IDLE;
     tdd_cstate_ns = IDLE;
     tdd_delay_done = 1'b0;
-    tdd_delay_skip = 1'b0;
     tdd_endof_frame = 1'b0;
     tdd_last_burst = 1'b0;
   end
@@ -138,7 +136,7 @@ module axi_tdd_counter #(
         if (tdd_enable == 1'b0) begin
           tdd_cstate_ns = IDLE;
         end else if (tdd_sync == 1'b1) begin
-          tdd_cstate_ns = (tdd_delay_skip == 1'b1) ? RUNNING : WAITING;
+          tdd_cstate_ns = (tdd_startup_delay == 0) ? RUNNING : WAITING;
         end
       end
 
@@ -162,22 +160,10 @@ module axi_tdd_counter #(
     if (resetn == 1'b0) begin
       tdd_delay_done <= 1'b0;
     end else begin
-      if (tdd_counter == (tdd_startup_delay - 1'b1)) begin
+      if ((tdd_cstate == WAITING) && (tdd_counter == (tdd_startup_delay - 1'b1))) begin
         tdd_delay_done <= 1'b1;
       end else begin
         tdd_delay_done <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge clk) begin
-    if (resetn == 1'b0) begin
-      tdd_delay_skip <= 1'b0;
-    end else begin
-      if (tdd_startup_delay == 0) begin
-        tdd_delay_skip <= 1'b1;
-      end else begin
-        tdd_delay_skip <= 1'b0;
       end
     end
   end
