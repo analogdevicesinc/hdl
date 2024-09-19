@@ -1,0 +1,126 @@
+FMC_pin FMC_port_name          FPGA_pin       FPGA_port_name                       Comments
+
+H4      FMCP1_CLK0_M2C_P        BG53           IO_L12P_GC_XCC_N4P0_712               -
+H5      FMCP1_CLK0_M2C_N        BG54           IO_L12N_GC_XCC_N4P1_712               -
+G2      FMCP1_CLK1_M2C_P        BP53           IO_L12P_GC_XCC_N4P0_M3P132_711        -
+G3      FMCP1_CLK1_M2C_N        BR53           IO_L12N_GC_XCC_N4P1_M3P133_711        -
+G6      FMCP1_LA00_CC_P         BG58           IO_L6P_GC_XCC_N2P0_712                -
+G7      FMCP1_LA00_CC_N         BG59           IO_L6N_GC_XCC_N2P1_712                -
+D8      FMCP1_LA01_CC_P         BK57           IO_L9P_GC_XCC_N3P0_712                -
+D9      FMCP1_LA01_CC_N         BJ58           IO_L9N_GC_XCC_N3P1_712                -
+H7      FMCP1_LA02_P            BM56           IO_L17P_N5P4_712                      -
+H8      FMCP1_LA02_N            BM57           IO_L17N_N5P5_712                      -
+G9      FMCP1_LA03_P            BG60           IO_L0P_XCC_N0P0_712                   -
+G10     FMCP1_LA03_N            BF61           IO_L0N_XCC_N0P1_712                   -
+H10     FMCP1_LA04_P            BH61           IO_L1P_N0P2_712                       -
+H11     FMCP1_LA04_N            BG61           IO_L1N_N0P3_712                       -
+D11     FMCP1_LA05_P            BK55           IO_L14P_N4P4_712                      -
+D12     FMCP1_LA05_N            BJ55           IO_L14N_N4P5_712                      -
+C10     FMCP1_LA06_P            BJ54           IO_L13P_N4P2_712                      -
+C11     FMCP1_LA06_N            BH54           IO_L13N_N4P3_712                      -
+H13     FMCP1_LA07_P            BJ60           IO_L2P_N0P4_712                       -
+H14     FMCP1_LA07_N            BJ61           IO_L2N_N0P5_712                       -
+G12     FMCP1_LA08_P            BJ59           IO_L8P_N2P4_712                       -
+G13     FMCP1_LA08_N            BH59           IO_L8N_N2P5_712                       -
+D14     FMCP1_LA09_P            BN54           IO_L16P_N5P2_712                      -
+D15     FMCP1_LA09_N            BM54           IO_L16N_N5P2_712                      -
+C14     FMCP1_LA10_P            BL54           IO_L15P_XCC_N5P0_712                  -
+C15     FMCP1_LA10_N            BL55           IO_L15N_XCC_N5P0_712                  -
+H16     FMCP1_LA11_P            BM59           IO_L4P_N1P2_712                       -
+H17     FMCP1_LA11_N            BL60           IO_L4N_N1P2_712                       -
+G15     FMCP1_LA12_P            BH57           IO_L7P_N2P2_712                       -
+G16     FMCP1_LA12_N            BH58           IO_L7N_N2P2_712                       -
+D17     FMCP1_LA13_P            BK60           IO_L3P_XCC_N1P0_712                   -
+D18     FMCP1_LA13_N            BK61           IO_L3N_XCC_N1P0_712                   -
+C18     FMCP1_LA14_P            BL57           IO_L10P_N3P2_712                      -
+C19     FMCP1_LA14_N            BK58           IO_L10N_N3P2_712                      -
+H19     FMCP1_LA15_P            BM60           IO_L5P_N1P4_712                       -
+H20     FMCP1_LA15_N            BM61           IO_L5N_N1P4_712                       -
+G18     FMCP1_LA16_P            BL58           IO_L11P_N3P4_712                      -
+G19     FMCP1_LA16_N            BL59           IO_L11N_N3P5_712                      -
+D20     FMCP1_LA17_CC_P         BU54           IO_L6P_GC_XCC_N2P0_M3P120_711         -
+D21     FMCP1_LA17_CC_N         BV54           IO_L6N_GC_XCC_N2P1_M3P121_711         -
+C22     FMCP1_LA18_CC_P         BV53           IO_L9P_GC_XCC_N3P0_M3P126_711         -
+C23     FMCP1_LA18_CC_N         BW53           IO_L9N_GC_XCC_N3P1_M3P127_711         -
+H22     FMCP1_LA19_P            BR54           IO_L13P_N4P2_M3P134_711               -
+H23     FMCP1_LA19_N            BT54           IO_L13N_N4P3_M3P135_711               -
+G21     FMCP1_LA20_P            BR55           IO_L14P_N4P4_M3P136_711               -
+G22     FMCP1_LA20_N            BR56           IO_L14N_N4P5_M3P137_711               -
+H25     FMCP1_LA21_P            BW58           IO_L4P_N1P2_M3P116_711                -
+H26     FMCP1_LA21_N            BY58           IO_L4N_N1P3_M3P117_711                -
+G24     FMCP1_LA22_P            BY57           IO_L5P_N1P4_M3P118_711                -
+G25     FMCP1_LA22_N            CA57           IO_L5N_N1P5_M3P119_711                -
+D23     FMCP1_LA23_P            BY55           IO_L2P_N0P4_M3P112_711                -
+D24     FMCP1_LA23_N            BY56           IO_L2N_N0P5_M3P113_711                -
+H28     FMCP1_LA24_P            BV56           IO_L11P_N3P4_M3P130_711               -
+H29     FMCP1_LA24_N            BW56           IO_L11N_N3P5_M3P131_711               -
+G27     FMCP1_LA25_P            CA54           IO_L1P_N0P2_M3P110_711                -
+G28     FMCP1_LA25_N            CA55           IO_L1N_N0P3_M3P111_711                -
+D26     FMCP1_LA26_P            BV58           IO_L3P_XCC_N1P0_M3P114_711            -
+D27     FMCP1_LA26_N            BW59           IO_L3N_XCC_N1P1_M3P115_711            -
+C26     FMCP1_LA27_P            BY53           IO_L0P_XCC_N0P0_M3P108_711            -
+C27     FMCP1_LA27_N            CA53           IO_L0N_XCC_N0P1_M3P109_711            -
+H31     FMCP1_LA28_P            BR58           IO_L16P_N5P2_M3P140_711               -
+H32     FMCP1_LA28_N            BT58           IO_L16N_N5P3_M3P141_711               -
+G30     FMCP1_LA29_P            BU57           IO_L8P_N2P4_M3P124_711                -
+G31     FMCP1_LA29_N            BV57           IO_L8N_N2P5_M3P125_711                -
+H34     FMCP1_LA30_P            BR60           IO_L17P_N5P4_M3P142_711               -
+H35     FMCP1_LA30_N            BR61           IO_L17N_N5P5_M3P143_711               -
+G33     FMCP1_LA31_P            BR57           IO_L15P_XCC_N5P0_M3P138_711           -
+G34     FMCP1_LA31_N            BT57           IO_L15N_XCC_N5P1_M3P139_711           -
+H37     FMCP1_LA32_P            BW54           IO_L10P_N3P2_M3P128_711               -
+H38     FMCP1_LA32_N            BW55           IO_L10N_N3P3_M3P129_711               -
+G36     FMCP1_LA33_P            BU55           IO_L7P_N2P2_M3P122_711                -
+G37     FMCP1_LA33_N            BU56           IO_L7N_N2P3_M3P123_711                -
+D5      FMCP1_GBTCLK0_M2C_C_N   BF48           GTYP_REFCLKP1_200                     -
+D4      FMCP1_GBTCLK0_M2C_C_P   BF47           GTYP_REFCLKN1_200                     -
+B21     FMCP1_GBTCLK1_M2C_C_N   BB48           GTYP_REFCLKN1_201                     -
+B20     FMCP1_GBTCLK1_M2C_C_P   BB47           GTYP_REFCLKP1_201                     -
+C3      FMCP1_DP0_C2M_N         BE54           GTYP_TXN0_200                         -
+C2      FMCP1_DP0_C2M_P         BE53           GTYP_TXP0_200                         -
+C7      FMCP1_DP0_M2C_N         BE59           GTYP_RXN0_200                         -
+C6      FMCP1_DP0_M2C_P         BE58           GTYP_RXP0_200                         -
+A23     FMCP1_DP1_C2M_N         BD56           GTYP_TXN1_200                         -
+A22     FMCP1_DP1_C2M_P         BD55           GTYP_TXP1_200                         -
+A3      FMCP1_DP1_M2C_N         BD61           GTYP_RXN1_200                         -
+A2      FMCP1_DP1_M2C_P         BD60           GTYP_RXP1_200                         -
+A27     FMCP1_DP2_C2M_N         BD52           GTYP_TXN2_200                         -
+A26     FMCP1_DP2_C2M_P         BD51           GTYP_TXP2_200                         -
+A7      FMCP1_DP2_M2C_N         BC59           GTYP_RXN2_200                         -
+A6      FMCP1_DP2_M2C_P         BC58           GTYP_RXP2_200                         -
+A31     FMCP1_DP3_C2M_N         BC54           GTYP_TXN3_200                         -
+A30     FMCP1_DP3_C2M_P         BC53           GTYP_TXP3_200                         -
+A11     FMCP1_DP3_M2C_N         BB61           GTYP_RXN3_200                         -
+A10     FMCP1_DP3_M2C_P         BB60           GTYP_RXP3_200                         -
+A35     FMCP1_DP4_C2M_N         BB52           GTYP_TXN0_201                         -
+A34     FMCP1_DP4_C2M_P         BB51           GTYP_TXP0_201                         -
+A15     FMCP1_DP4_M2C_N         BB57           GTYP_RXN0_201                         -
+A14     FMCP1_DP4_M2C_P         BB56           GTYP_RXP0_201                         -
+A39     FMCP1_DP5_C2M_N         BA54           GTYP_TXN1_201                         -
+A38     FMCP1_DP5_C2M_P         BA53           GTYP_TXP1_201                         -
+A19     FMCP1_DP5_M2C_N         BA59           GTYP_RXN1_201                         -
+A18     FMCP1_DP5_M2C_P         BA58           GTYP_RXP1_201                         -
+B37     FMCP1_DP6_C2M_N         AY56           GTYP_TXN2_201                         -
+B36     FMCP1_DP6_C2M_P         AY55           GTYP_TXP2_201                         -
+B17     FMCP1_DP6_M2C_N         AY61           GTYP_RXN2_201                         -
+B16     FMCP1_DP6_M2C_P         AY60           GTYP_RXP2_201                         -
+B33     FMCP1_DP7_C2M_N         AY52           GTYP_TXN3_201                         -
+B32     FMCP1_DP7_C2M_P         AY51           GTYP_TXP3_201                         -
+B13     FMCP1_DP7_M2C_N         AW59           GTYP_RXN3_201                         -
+B12     FMCP1_DP7_M2C_P         AW58           GTYP_RXP3_201                         -
+B29     FMCP1_DP8_C2M_N                        GTYP_TXN0_203                         -
+B28     FMCP1_DP8_C2M_P                        GTYP_TXP0_203                         -
+B9      FMCP1_DP8_M2C_N                        GTYP_RXN0_203                         -
+B8      FMCP1_DP8_M2C_P                        GTYP_RXP0_203                         -
+B25     FMCP1_DP9_C2M_N                        GTYP_TXN1_203                         -
+B24     FMCP1_DP9_C2M_P                        GTYP_TXP1_203                         -
+B5      FMCP1_DP9_M2C_N                        GTYP_RXN1_203                         -
+B4      FMCP1_DP9_M2C_P                        GTYP_RXP1_203                         -
+Z25     FMCP1_DP10_C2M_N                       GTYP_TXN2_203                         -
+Z24     FMCP1_DP10_C2M_P                       GTYP_TXP2_203                         -
+Y11     FMCP1_DP10_M2C_N                       GTYP_RXN2_203                         -
+Y10     FMCP1_DP10_M2C_P                       GTYP_RXP2_203                         -
+Y27     FMCP1_DP11_C2M_N                       GTYP_TXN3_203                         -
+Y26     FMCP1_DP11_C2M_P                       GTYP_TXP3_203                         -
+Z13     FMCP1_DP11_M2C_N                       GTYP_RXN3_203                         -
+Z12     FMCP1_DP11_M2C_P                       GTYP_RXP3_203                         -
