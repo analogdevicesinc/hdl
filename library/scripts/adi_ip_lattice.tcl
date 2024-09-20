@@ -33,7 +33,7 @@ namespace eval ipl {
                     {href} {{} {} {https://wiki.analog.com/resources/fpga/docs/ip_cores} {}}
                 }
             }
-            {lsccip:settings} {{} {} {} {}}
+            {lsccip:settings} {{lsccip:settings} {} {} {}}
             {lsccip:ports} {{} {} {} {}}
             {lsccip:outFileConfigs} {{} {} {} {
                 wrapper_type {{} {} {} {}}
@@ -1567,6 +1567,30 @@ namespace eval ipl {
             }
         }
         return $file_list
+    }
+
+    proc adi_ip_files {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -flist "" \
+            -dpath "rtl" \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set flist $opt(-flist)
+        set dpath $opt(-dpath)
+
+        set checkext {^.+\.sv$}
+        foreach file $flist {
+            if {[regexp $checkext $file]} {
+                set ip [ipl::setwrtype -ip $ip -file_ext sv]
+            }
+        }
+
+        set node [ipl::getnode fdeps $dpath $ip]
+        if {$node != ""} {
+            set flist [list {*}$node {*}$flist]
+        }
+        return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
     # to do check the ports to select the interface type
