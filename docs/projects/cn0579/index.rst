@@ -51,12 +51,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../cn0579/cn0579_block_diagram.svg
+.. image:: cn0579_block_diagram.svg
    :width: 1000
    :align: center
    :alt: CN0579 block diagram
@@ -64,7 +61,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../cn0579/cn0579_clock_diagram.svg
+.. image:: cn0579_clock_diagram.svg
    :width: 800
    :align: center
    :alt: CN0579 clock scheme block diagram
@@ -146,8 +143,6 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Add explanation depending on your case**
-
 .. list-table::
    :widths: 25 20 20 20 15
    :header-rows: 2
@@ -190,8 +185,6 @@ cn0579_dma**     5                          45              77
 Building the HDL project
 -------------------------------------------------------------------------------
 
-**\*YOU CAN KEEP THE FIRST PARAGRAPH SINCE IT IS GENERIC**\ \*
-
 The design is built upon ADI's generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 :dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
@@ -202,16 +195,17 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
+Make for CoraZ7s project:
+
 .. code-block::
    :linenos:
-
-   Make for CoraZ7s project:
-
    user@analog:~$ cd hdl/projects/cn0579/coraz7s
    user@analog:~/hdl/projects/cn0579/coraz7s$ make
 
-   Make for De10Nano project:
+Make for De10Nano project:
 
+.. code-block::
+   :linenos:
    user@analog:~$ cd hdl/projects/cn0579/de10nano
    user@analog:~/hdl/projects/cn0579/de10nano$ make
 
@@ -224,7 +218,7 @@ Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :dokuwiki:`[Wiki] EVAL-CN0579-ARDZ User Guide </resources/eval/user-guides/circuits-from-the-lab/cn0579>`
--  `Circuit Note CN-0579 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0579.pdf>`__
+-  :adi:`Circuit Note CN-0579 <media/en/reference-design-documentation/reference-designs/cn0579.pdf>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -271,10 +265,9 @@ Software related
 
 -  Python support:
 
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
-   -  `PyADI-IIO CN0579 class <https://github.com/analogdevicesinc/pyadi-iio/blob/main/adi/cn0579.py>`__
-   -  `PyADI-IIO CN0579 example 
-      <https://github.com/analogdevicesinc/pyadi-iio/blob/main/examples/cn0579/cn0579_example.py>`__
+   - :git-pyadi-iio:`PyADI-IIO documentation </>`
+   - :git-pyadi-iio:`PyADI-IIO CN0579 class <adi/cn0579.py>`
+   - :git-pyadi-iio:`PyADI-IIO CN0579 example <examples/cn0579/cn0579_example.py>`
 
 -  CN0579 on Cora Z7s Linux device tree 
    :git-linux:`zynq-coraz7s-cn0579_i2c.dts <arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts>`
