@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AD469X-FMC HDL project &#8212; HDL  documentation</title>
+    <title>AD9213-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=434060ed" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -15,11 +15,12 @@
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD485x_FMCZ HDL project" href="../ad485x_fmcz/index.html" />
-    <link rel="prev" title="AD4630-FMC HDL project" href="../ad4630_fmc/index.html" />
+    <link rel="next" title="AD9434-FMC HDL project" href="../ad9434_fmc/index.html" />
+    <link rel="prev" title="AD9265-FMC HDL project" href="../ad9265_fmc/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -100,16 +101,17 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD469X-FMC HDL project</a><ul>
+<li><a class="reference internal" href="#">AD9213-EVB HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#clock-scheme">Clock scheme</a><ul>
+<li><a class="reference internal" href="#vcu118">VCU118</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
@@ -119,7 +121,6 @@
 <li><a class="reference internal" href="#resources">Resources</a><ul>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
-<li><a class="reference internal" href="#software-related">Software related</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#more-information">More information</a></li>
@@ -267,7 +268,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
@@ -280,7 +281,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9265_fmc/index.html">AD9265-FMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad9213_evb/index.html">AD9213-EVB</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD9213-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9467_fmc/index.html">AD9467-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/index.html">AD9739A-FMC</a></li>
@@ -313,124 +314,106 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="ad469x-fmc-hdl-project">
-<span id="ad469x-fmc"></span><h1>AD469X-FMC HDL project<a class="headerlink" href="#ad469x-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="ad9213-evb-hdl-project">
+<span id="ad9213-evb"></span><h1>AD9213-EVB HDL project<a class="headerlink" href="#ad9213-evb-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The AD469X HDL reference design provides all the interfaces that are
-necessary to interact with the devices on the <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4696">EVAL-AD4696</a>
-board.</p>
-<p>The design has a SPI Engine instance to control and acquire data from the
-<a class="icon adi reference external" href="https://www.analog.com/AD4696">AD4696</a> 16-bit precisions ADC, providing support to capture continuous
-samples at maximum sampling rate. Currently the design supports the Zedboard.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9213">AD9213-EVB</a> reference design is a processor based
+(e.g. Microblaze) embedded system.</p>
+<p>The design implements a high-speed receive chain using JESD204B.</p>
+<p>The receive chain transports the captured samples from ADC to the system
+memory (DDR). Before transferring the data to DDR the samples are stored
+in a buffer implemented on block rams from the FPGA fabric
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo">util_adcfifo</a>).</p>
+<p>All cores from the receive chain are programmable through
+an AXI-Lite interface.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4696">EVAL-AD4696</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9213">AD9213-EVB</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4695">AD4695</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4696">AD4696</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4697">AD4697</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4698">AD4698</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
-</ul>
-</section>
-<section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<p>The reference design uses the standard <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework</span></a>
-to interface the <a class="icon adi reference external" href="https://www.analog.com/AD4696">AD4696</a> ADC in single SDO Mode.
-The <a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload module</span></a>, which can be used to
-capture continuous data stream at maximum data rate, is triggered by the BUSY
-signal of the device.</p>
-<section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
-<p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad469x_hdl.svg"><img alt="AD469X_FMC block diagram" class="align-center" src="../../_images/ad469x_hdl.svg" width="800" /></a>
-</section>
-<section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
-<p>The SPI_4WIRE configuration parameter defines if CNV signal is linked to PWM or
-to SPI_CS to enable interfacing with a single 4-wire SPI port. By default it is
-set to 0. Depending on the required pin functionality, some hardware
-modifications need to be done on the board and/or <code class="docutils literal notranslate"><span class="pre">make</span></code> command:</p>
-<p>In case we link CNV signal to PWM:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SPI_4WIRE</span><span class="o">=</span><span class="mi">0</span>
-</pre></div>
-</div>
-<p>In case we link CNV signal to SPI_CS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">SPI_4WIRE</span><span class="o">=</span><span class="mi">1</span>
-</pre></div>
-</div>
-</section>
-<section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
-<p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
-<div class="table-wrapper docutils container">
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+<col style="width: 30.0%" />
+</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Address</p></th>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Carrier</p></th>
+<th class="head"><p>FMC slot</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad469x_dma</p></td>
-<td><p>0x44A3_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>spi_clkgen</p></td>
-<td><p>0x44A7_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>spi_ad469x_axi_regmap</p></td>
-<td><p>0x44A0_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>ad469x_trigger_gen</p></td>
-<td><p>0x44B0_0000</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9213">AD9213-EVB</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
+<td><p>FMC+</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<p>The data path and clock domains are depicted in the below diagrams:</p>
+<a class="reference internal image-reference" href="../../_images/ad9213_jesd_diagram.svg"><img alt="AD9213-EVB JESD204B M=1 L=16 block diagram" class="align-center" src="../../_images/ad9213_jesd_diagram.svg" width="800" /></a>
+<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx parameters: L=16, M=1, F=2, S=16, NP=16, N=16</p></li>
+<li><p>Sample Rate: 10 GSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 312.25 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 625 MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 12.5 Gbps</p></li>
+<li><p>QPLL0</p></li>
+</ul>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}\]</div>
+</div>
+<section id="clock-scheme">
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
+<p>The clock sources depend on the carrier that is used:</p>
+<section id="vcu118">
+<h4><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a><a class="headerlink" href="#vcu118" title="Permalink to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9213_clocks.svg"><img alt="AD9213-EVB VCU118 clock scheme" class="align-center" src="../../_images/ad9213_clocks.svg" width="500" /></a>
+</section>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+<p>Check-out the table below to find out the conditions.</p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>I2C type</p></th>
-<th class="head"><p>I2C manager instance</p></th>
-<th class="head"><p>Alias</p></th>
-<th class="head"><p>Address</p></th>
-<th class="head"><p>I2C subordinate</p></th>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Zynq/Microblaze</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>PL</p></td>
-<td><p>iic_fmc</p></td>
-<td><p>axi_iic_fmc</p></td>
-<td><p>0x4162_0000</p></td>
-<td><p>—</p></td>
+<tr class="row-even"><td><p>axi_ad9213_xcvr</p></td>
+<td><p>0x44A6_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>PL</p></td>
-<td><p>iic_main</p></td>
-<td><p>axi_iic_main</p></td>
-<td><p>0x4160_0000</p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>rx_ad9213_tpl_core</p></td>
+<td><p>0x44A1_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_ad9213_jesd</p></td>
+<td><p>0x44A9_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_ad9213_dma</p></td>
+<td><p>0x7C42_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -455,9 +438,19 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PL</p></td>
-<td><p>axi_spi_engine</p></td>
-<td><p>ad469x</p></td>
+<td><p>spi0</p></td>
+<td><p>axi_spi</p></td>
 <td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>hmc7044_spi</p></td>
+<td><p>HMC7044</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td><p>ADF4371</p></td>
+<td><p>1</p></td>
 </tr>
 </tbody>
 </table>
@@ -465,47 +458,39 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
-<p>The Software GPIO number is calculated as follows:</p>
-<ul class="simple">
-<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
-</ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
+<col style="width: 38.5%" />
+<col style="width: 30.8%" />
+<col style="width: 30.8%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
 <th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
 <th class="head"><p>(from FPGA view)</p></th>
 <th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ad469x_resetn</p></td>
-<td><p>INOUT</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
+<tr class="row-odd"><td><p>rstb</p></td>
+<td><p>OUT</p></td>
+<td><p>38</p></td>
 </tr>
-<tr class="row-even"><td><p>gpio[33]</p></td>
-<td><p>IN</p></td>
-<td><p>33</p></td>
-<td><p>87</p></td>
+<tr class="row-even"><td><p>hmc_sync_req</p></td>
+<td><p>OUT</p></td>
+<td><p>37</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio[4:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>36:32</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>BSY_ALT_GP0 pin can be configured to function as a general-purpose input/output
-(GPIO), the threshold detection alert indicator, the busy indicator, or the
-second serial data output in dual-sdo MODE</p>
 </section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
@@ -514,21 +499,18 @@ second serial data output in dual-sdo MODE</p>
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
-<th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
+<th class="head"><p>IRQ number</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad469x_dma</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
+<tr class="row-even"><td><p>hmc7044_spi</p></td>
+<td><p>5</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_ad469x</p></td>
+<tr class="row-odd"><td><p>axi_ad9213_dma</p></td>
 <td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_ad9213_jesd</p></td>
+<td><p>13</p></td>
 </tr>
 </tbody>
 </table>
@@ -542,18 +524,10 @@ ADI distributes the bit/elf files of these projects as part of the
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
 If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
-the HDL repository, and then build the project as follows:</p>
-<p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad469x_fmc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad469x_fmc/zed$ make SPI_4WIRE=0
-</pre></div>
-</div>
-<p>The result of the build, if parameters were used, will be in a folder named
-by the configuration used:</p>
-<p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">SPI_4WIRE=0</span></code></p>
-<p>then the folder name will be:</p>
-<p><code class="docutils literal notranslate"><span class="pre">SPI4WIRE0</span></code></p>
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the HDL repository.</p>
+<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_evb">projects/ad9213_evb</a>
+location and run the “make” command by typing in your command prompt.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
@@ -561,19 +535,19 @@ by the configuration used:</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheet:</p>
+<li><p>Product datasheets:</p>
 <ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4695">AD4695</a>/<a class="icon adi reference external" href="https://www.analog.com/AD4696">AD4696</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4697">AD4697</a>/<a class="icon adi reference external" href="https://www.analog.com/AD4698">AD4698</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4696fmcz-ug-1882.pdf">UG-1882, EVAL-AD4694FMCZ User Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/AD9213.pdf">Device data sheet</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9213.html">Evaluation Board</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad469x_fmc">AD469X_FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_evb">AD9213_EVB HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -589,70 +563,40 @@ by the configuration used:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>SYSID_ROM</p></td>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
+<tr class="row-odd"><td><p>UTIL_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <ul class="simple">
-<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
-</ul>
-</section>
-<section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad469x_fmcz">AD469X_FMCZ No-OS project source code</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/no-os/build">How to build No-OS</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds">[Wiki] Generic JESD204B block designs</a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
 </ul>
 </section>
 </section>
@@ -688,8 +632,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad4630_fmc/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD4630-FMC HDL project</a>
-    <a href="../ad485x_fmcz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD485x_FMCZ HDL project</a>
+    <a href="../ad9265_fmc/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9265-FMC HDL project</a>
+    <a href="../ad9434_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9434-FMC HDL project</a>
               </div>
           
         </div>
