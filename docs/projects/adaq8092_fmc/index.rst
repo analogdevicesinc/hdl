@@ -47,12 +47,13 @@ Block design
 -------------------------------------------------------------------------------
 
 .. warning::
+
     The VADJ for the Zedboard must be set to 2.5V.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../adaq8092_fmc/adaq8092_zed_hdl_block_diagram.svg
+.. image:: adaq8092_zed_hdl_block_diagram.svg
    :width: 800
    :align: center
    :alt: ADAQ8092-FMC/ZedBoard block diagram
@@ -234,9 +235,9 @@ Software related
 
 -  Python support :
 
-   -  `ADAQ8092 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.adaq8092.html>`__
-   -  `ADAQ8092 PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/main/examples/adaq8092_example.py>`__
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+   -  `ADAQ8092 Python class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.adaq8092.html>`__
+   -  :git-pyadi-iio:`ADAQ8092 PyADI-IIO example <examples/adaq8092_example.py>`
+   -  :git-pyadi-iio:`PyADI-IIO documentation </>`
 
 .. include:: ../common/more_information.rst
 
