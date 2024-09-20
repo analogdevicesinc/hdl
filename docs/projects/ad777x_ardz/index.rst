@@ -68,7 +68,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ad777x_ardz/ad777x_hdl_block_diagram.svg
+.. image:: ad777x_hdl_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD777X/ZedBoard/DE10-Nano block diagram
@@ -76,7 +76,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ../ad777x_ardz/ad777x_clock_scheme.svg
+.. image:: ad777x_clock_scheme.svg
    :width: 700
    :align: center
    :alt: AD777x clocking scheme
@@ -194,13 +194,19 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
+Make for ZedBoard project:
+
 .. code-block::
    :linenos:
 
-   Make for ZedBoard project:
    user@analog:~$ cd hdl/projects/ad777x_ardz/zed
    user@analog:~/hdl/projects/ad777x_ardz/zed$ make
-   Make for De10Nano project:
+
+Make for De10Nano project:
+
+.. code-block::
+   :linenos:
+
    user@analog:~$ cd hdl/projects/ad777x_ardz/de10nano
    user@analog:~/hdl/projects/ad777x_ardz/de10nano$ make
 
