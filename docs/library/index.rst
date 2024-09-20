@@ -61,8 +61,8 @@ Video
 .. toctree::
    :maxdepth: 1
 
-   axi_hdmi_tx/index
    axi_hdmi_rx/index
+   axi_hdmi_tx/index
 
 Utilities
 -------------------------------------------------------------------------------
