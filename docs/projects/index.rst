@@ -54,8 +54,8 @@ Contents
    ADRV904x <adrv904x/index>
    ADV7511 <adv7511/index>
    CN0363 <cn0363/index>
-   CN0540 <cn0540/index>
    CN0506 <cn0506/index>
+   CN0540 <cn0540/index>
    CN0561 <cn0561/index>
    CN0577 <cn0577/index>
    CN0579 <cn0579/index>
