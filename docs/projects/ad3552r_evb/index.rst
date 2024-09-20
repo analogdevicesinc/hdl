@@ -44,6 +44,7 @@ Block design
 -------------------------------------------------------------------------------
 
 .. warning::
+
     The VADJ for the Zedboard must be set to 1.8V.
 
 Block diagram
@@ -51,7 +52,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ad3552r_evb/ad3552r_evb_zed_block_diagram.svg
+.. image:: ad3552r_evb_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: EVAL-AD3552R/ZedBoard block diagram
@@ -169,7 +170,8 @@ Hardware related
 -  Product datasheets:
 
    -  :adi:`AD3552R`
--  `UG-2217, User Guide | EVAL-AD3552R <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`__
+
+-  :adi:`UG-2217, User Guide | EVAL-AD3552R <media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
