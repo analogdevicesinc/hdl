@@ -132,3 +132,7 @@ cab be found here:
 ## Comprehensive user guide
 
 See [HDL User Guide](https://wiki.analog.com/resources/fpga/docs/hdl) for a more detailed guide.
+
+### Contributors
+
+<img src="https://markupgo.com/github/analogdevicesinc/hdl/contributors?count=0&circleSize=40&circleRadius=40&center=true" width="100%" /> 
