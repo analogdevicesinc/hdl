@@ -109,3 +109,4 @@ _build
 .github/PULL_REQUEST_TEMPLATE.md
 library/**/.lock
 library/**/interfaces/*.sv
+.backstage_yaml
