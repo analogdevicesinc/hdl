@@ -101,7 +101,6 @@ set ip [ipl::addif -ip $ip \
         {"fifo_wr_en" "EN"} \
         {"fifo_wr_din" "DATA"} \
         {"fifo_wr_overflow" "OVERFLOW"} \
-        {"fifo_wr_sync" "SYNC"} \
         {"fifo_wr_xfer_req" "XFER_REQ"} \
     } \
     -vendor analog.com -library ADI -name fifo_wr -version 1.0]
@@ -233,14 +232,14 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Source} \
     -group2 Config]
 set ip [ipl::settpar -ip $ip \
-    -id SYNC_TRANSFER_START \
+    -id AXIS_TUSER_SYNC \
     -type param \
     -value_type int \
     -conn_mod axi_dmac \
-    -title {Transfer Start Synchronization Support} \
+    -title {TUSER Synchronization} \
     -options {[(True, 1), (False, 0)]} \
-    -editable {not(DMA_TYPE_SRC == 0)} \
-    -default 0 \
+    -editable {(DMA_TYPE_SRC == 1 and SYNC_TRANSFER_START == 1)} \
+    -default 1 \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
@@ -315,6 +314,9 @@ set ip [ipl::igiports -ip $ip \
     -mod_data $mod_data \
     -v_name fifo_wr \
     -expression {not(DMA_TYPE_DEST == 2)}]
+set ip [ipl::igports -ip $ip \
+    -portlist {sync} \
+    -expression {not((SYNC_TRANSFER_START == 1) and  (DMA_TYPE_SRC != 1 or AXIS_TUSER_SYNC != 1))}]
 
 # scatter gather
 set ip [ipl::settpar -ip $ip \
@@ -450,6 +452,17 @@ set ip [ipl::settpar -ip $ip \
     -value_type int \
     -conn_mod axi_dmac \
     -title {2D Transfer Support} \
+    -options {[(True, 1), (False, 0)]} \
+    -default 0 \
+    -output_formatter nostr \
+    -group1 {Features} \
+    -group2 Config]
+set ip [ipl::settpar -ip $ip \
+    -id SYNC_TRANSFER_START \
+    -type param \
+    -value_type int \
+    -conn_mod axi_dmac \
+    -title {Transfer Start Synchronization Support} \
     -options {[(True, 1), (False, 0)]} \
     -default 0 \
     -output_formatter nostr \
