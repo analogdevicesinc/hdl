@@ -8,7 +8,7 @@ repository = 'hdl'
 project = 'HDL'
 copyright = '2024, Analog Devices, Inc.'
 author = 'Analog Devices, Inc.'
-version = '0.5' # documentation version, will be printed on the cover page
+version = '' # documentation version, will be printed on the cover page
 
 # -- General configuration ----------------------------------------------------
 

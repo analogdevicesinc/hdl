@@ -615,7 +615,7 @@ the following order:
    * - 32-bit
      - y_len
      - This field contains the number of rows to transfer, minus one.
-   * - 32bit
+   * - 32-bit
      - x_len
      - This field contains the number of bytes to transfer, minus one.
    * - 32-bit
