@@ -7,7 +7,7 @@
 
     <title>AXI CLK Generator &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=434060ed" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=990931db" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -82,6 +82,7 @@
     <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -133,6 +134,7 @@ Content on this topic
   <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -791,7 +793,6 @@ the status of the MMCM lock and controlling the DRP interface.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>MMCM reset (required for DRP access).
 Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
@@ -802,7 +803,6 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
 </section>
@@ -820,7 +820,6 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select betwen CLKIN1 (0x0) or CLKIN2 (0x1) input clock for the MMCM</p>
 </section>
@@ -838,7 +837,6 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>LOCKED status of the MMCM</p>
 </section>
@@ -856,7 +854,6 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>DRP read (0x1) or write (0x0) select (does not include GTX lanes).</p>
 </section>
@@ -866,7 +863,6 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
 <td class="description"><section>
 <p>DRP address, designs that contain more than one DRP accessible primitives
 have selects based on the most significant bits (does not include GTX lanes).</p>
@@ -877,7 +873,6 @@ have selects based on the most significant bits (does not include GTX lanes).</p
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_WDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>DRP write data (does not include GTX lanes).</p>
 </section>
@@ -895,7 +890,6 @@ have selects based on the most significant bits (does not include GTX lanes).</p
 <td><code class="docutils literal notranslate"><span class="pre">[17:17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>LOCKED status of the MMCM</p>
 </section>
@@ -905,7 +899,6 @@ have selects based on the most significant bits (does not include GTX lanes).</p
 <td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set indicates busy (access pending). The read data may not be valid if
 this bit is set (does not include GTX lanes).</p>
@@ -916,7 +909,6 @@ this bit is set (does not include GTX lanes).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>DRP read data (does not include GTX lanes).</p>
 </section>
@@ -934,7 +926,6 @@ this bit is set (does not include GTX lanes).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_VOLTAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The voltage of the FPGA device in mv</p>
 </section>

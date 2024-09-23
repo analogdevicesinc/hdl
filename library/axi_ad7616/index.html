@@ -7,7 +7,7 @@
 
     <title>AXI AD7616 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=434060ed" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=990931db" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -82,6 +82,7 @@
     <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -133,6 +134,7 @@ Content on this topic
   <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -675,7 +677,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00001002</span></code></td>
 <td class="description"><section>
 <p>Version number</p>
 </section>
@@ -693,7 +694,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Version number</p>
 </section>
@@ -711,7 +711,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Version number</p>
 </section>
@@ -729,7 +728,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CNVST_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable the CNVST pulse generator of core.</p>
 </section>
@@ -739,7 +737,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
 </section>
@@ -757,7 +754,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_CONV_RATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Rate of the conversion pulse signal, it’s relative to the system clock (s_axis_clk).</p>
 </section>
@@ -775,7 +771,6 @@ DMAC.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_BURST_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Define the actual burst length. The value must be equal to burst length - 1 . This register
 is active just on PARALLEL mode.</p>
@@ -794,7 +789,6 @@ is active just on PARALLEL mode.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_READ_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register can be used to read the device registers on PARALLEL software mode.</p>
 </section>
@@ -812,7 +806,6 @@ is active just on PARALLEL mode.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_WRITE_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register can be used to write the device registers on PARALLEL software mode.</p>
 </section>

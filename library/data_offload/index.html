@@ -7,7 +7,7 @@
 
     <title>Data Offload &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=434060ed" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=990931db" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
@@ -82,6 +82,7 @@
     <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -165,6 +166,7 @@ Content on this topic
   <root>
   <a href="../../../documentation/index.html">System Level</a>
   <a href="../../index.html" class="current">HDL</a>
+  <a href="../../../testbenches/index.html">HDL Testbenches</a>
   <a href="../../../pyadi-iio/index.html">Hardware Python Interfaces</a>
   <a href="../../../libiio/index.html">libiio</a>
   <a href="../../../no-OS/index.html">no-OS</a>
@@ -1091,21 +1093,18 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1117,7 +1116,6 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -1132,7 +1130,6 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -1147,7 +1144,6 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x44414f46</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘D’, ‘A’, ‘O’, ‘F’).</p>
 </section>
@@ -1162,7 +1158,6 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HAS_BYPASS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">HAS_​BYPASS</span></code></td>
 <td class="description"><section>
 <p>If set the bypass logic is implemented.</p>
 </section>
@@ -1172,7 +1167,6 @@ except when in bypass mode (thus disabling all other functionality).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RXN_PATH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">TX_​OR_​RXN_​PATH</span></code></td>
 <td class="description"><section>
 <p>If this device was configured for the TX path, this bit will be set to 1.
 Conversely, the bit will be 0 for the RX path.</p>
@@ -1183,7 +1177,6 @@ Conversely, the bit will be 0 for the RX path.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEMORY_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">MEM_​TYPE</span></code></td>
 <td class="description"><section>
 <p>This bit identifies the type of memory that was chosen during synthesis. A value of 1
 identifies external memory, while a value of zero indicates that block ram was used.</p>
@@ -1199,7 +1192,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEM_SIZE_LSB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">1&lt;&lt;MEM_​SIZE_​LOG2</span></code></td>
 <td class="description"><section>
 <p>32 bits (LSB) of the storage unit size.</p>
 </section>
@@ -1214,7 +1206,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MEM_SIZE_MSB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">(1&lt;&lt;MEM_​SIZE_​LOG2)&gt;&gt;32</span></code></td>
 <td class="description"><section>
 <p>2 bits (MSB) of the storage unit size.</p>
 </section>
@@ -1229,7 +1220,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">(2^MEM_​SIZE_​LOG2-1)&gt;&gt;6</span></code></td>
 <td class="description"><section>
 <p>The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes.</p>
 </section>
@@ -1244,7 +1234,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UNDERFLOW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that storage could not handle data rate during play. Available when core is in TX mode.</p>
 </section>
@@ -1254,7 +1243,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OVERFLOW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that storage could not handle data rate during capture. Available when core is in RX mode.</p>
 </section>
@@ -1264,7 +1252,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CALIB_COMPLETE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that the memory initialization and calibration have completed successfully.</p>
 </section>
@@ -1279,7 +1266,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">AUTO_​BRINGUP</span></code></td>
 <td class="description"><section>
 <p>“Software Reset”: Resets all the internal address registers and state machines.</p>
 </section>
@@ -1294,7 +1280,6 @@ identifies external memory, while a value of zero indicates that block ram was u
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ONESHOT_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">~TX_​OR_​RXN_​PATH</span></code></td>
 <td class="description"><section>
 <p>Enables oneshot mode. This means that the data offload will only play a received buffer once,
 and then stop. This mode is useful when you want to use the data offload for its synchronization
@@ -1306,7 +1291,6 @@ features, but don’t need the repeating output.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_BYPASS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enables bypass mode. In this mode pretty much <strong>all</strong> functionality of the data offload is bypassed,
 and the data offload will simply act as an asynchronous dual-port FIFO and forward your data stream.</p>
@@ -1322,7 +1306,6 @@ and the data offload will simply act as an asynchronous dual-port FIFO and forwa
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_TRIGGER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Software trigger for software sync mode.</p>
 </section>
@@ -1337,7 +1320,6 @@ and the data offload will simply act as an asynchronous dual-port FIFO and forwa
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_CONFIG</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Synchronization mode: 0: Auto, 1: Hardware trigger, 2: Software trigger, 3: Reserved.</p>
 </section>
@@ -1352,7 +1334,6 @@ and the data offload will simply act as an asynchronous dual-port FIFO and forwa
 <td><code class="docutils literal notranslate"><span class="pre">[11:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FSM_STATE_READ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
 <p>It force the Rx side offload state machine into the required state.</p>
 </section>
@@ -1362,7 +1343,6 @@ and the data offload will simply act as an asynchronous dual-port FIFO and forwa
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FSM_STATE_WRITE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
 <td class="description"><section>
 <p>The current state of the offload state machine.</p>
 </section>
