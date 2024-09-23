@@ -80,9 +80,11 @@ prescaled) before for the internal logic.
 
 .. math::
 
-   delay_{before} = 2+ t * \frac{(div + 1)*2}{f_{clk}}
+   delay\_{before} = 2+ t * \frac{(div + 1)*2}{f_{clk}}
 
-   delay_{after}  = t * \frac{(div + 1)*2}{f_{clk}}
+.. math::
+
+   delay\_{after}  = t * \frac{(div + 1)*2}{f_{clk}}
 
 .. list-table::
    :widths: 10 15 75
@@ -292,7 +294,7 @@ using the following formula:
 
 .. math::
 
-   f_{sclk} = \frac{f_{clk}}{((div + 1) * 2)}
+   f\_{sclk} = \frac{f_{clk}}{((div + 1) * 2)}
 
 
 If no prescaler block is present div is 0.

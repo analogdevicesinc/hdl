@@ -1,3 +1,4 @@
 sphinx
+rst2pdf.pdfbuilder
 https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-doctools.tar.gz
 sphinxcontrib.wavedrom

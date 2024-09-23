@@ -126,7 +126,7 @@ reference signal using an internal prescaler with this formula:
 
 .. math::
 
-   f_{sclk} = \frac{f_{clk}}{((div + 1) * 2)}
+   f\_{sclk} = \frac{f_{clk}}{((div + 1) * 2)}
 
 Therefore a 160MHz reference clock will be needed for the 40 and 80MHz variants
 and 100MHz for the 50MHz SCLK. The axi_clkgen IP core will be used to obtain the
