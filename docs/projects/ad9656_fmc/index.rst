@@ -53,16 +53,13 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Xilinx block diagram
+ZCU102 block diagram
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad9656_fmc_xilinx_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9656 /ZCU102 Xilinx block diagram
+   :alt: AD9656-FMC/ZCU102 block diagram
 
 The Rx links (ADC Path) operate with the following parameters:
 
@@ -79,7 +76,7 @@ AD9656 FMC Card block diagram
 .. image:: ad9656_fmc_connector_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9656-FMC/ZCU102 Xilinx block diagram
+   :alt: AD9656-FMC/ZCU102 FMC Card block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
