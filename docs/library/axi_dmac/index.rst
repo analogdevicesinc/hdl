@@ -591,7 +591,7 @@ the following order:
    * - Size
      - Name
      - Description
-   * - 32‑bit
+   * - 32-bit
      - flags
      - | This field includes 2 control bits:
 
@@ -600,25 +600,25 @@ the following order:
          next DMA descriptor pointed to by ``next_sg_addr`` will be loaded.
        * bit1: if set, an end-of-transfer interrupt will be raised after the
          memory segment pointed to by this descriptor has been transferred.
-   * - 32‑bit
+   * - 32-bit
      - id
      - This field corresponds to an identifier of the descriptor.
-   * - 64‑bit
+   * - 64-bit
      - dest_addr
      - This field contains the destination address of the transfer.
-   * - 64‑bit
+   * - 64-bit
      - src_addr
      - This field contains the source address of the transfer.
-   * - 64‑bit
+   * - 64-bit
      - next_sg_addr
      - This field contains the address of the next descriptor.
-   * - 32‑bit
+   * - 32-bit
      - y_len
      - This field contains the number of rows to transfer, minus one.
-   * - 32‑bit
+   * - 32-bit
      - x_len
      - This field contains the number of bytes to transfer, minus one.
-   * - 32‑bit
+   * - 32-bit
      - src_stride
      - This field contains the number of bytes between the start of one row and
        the next row for the source address.
