@@ -1,6 +1,6 @@
+https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-doctools.tar.gz
 sphinx
 matplotlib
 rst2pdf
 svglib
-https://github.com/analogdevicesinc/doctools/releases/download/latest/adi-doctools.tar.gz
 sphinxcontrib.wavedrom
