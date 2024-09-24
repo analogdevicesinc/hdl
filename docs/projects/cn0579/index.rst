@@ -6,16 +6,16 @@ CN0579 HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`CN0579 <CN0579>`  is a 4-channel, high resolution, wide bandwidth, 
-high dynamic range, integrated electronics piezoelectric (IEPE)-compatible 
-interface data acquisition (DAQ) system that interfaces with IC piezoelectric 
-(ICP®)/IEPE sensors. The solution provides flexible sensor interfacing to 
-either piezoelectric or micro-electromechanical systems (MEMS) sensor with 
-measurement capabilities that extend the frequency response to DC. 
-The design provides four channels of full bandwidth, synchronized vibration 
-data to the processor, where data analysis can be done locally or on a remote 
-host over Ethernet via standard IIO framework. Large buffers of continuous 
-data can be streamed and analyzed using standard fast Fourier transform (FFT) 
+The :adi:`CN0579 <CN0579>`  is a 4-channel, high resolution, wide bandwidth,
+high dynamic range, integrated electronics piezoelectric (IEPE)-compatible
+interface data acquisition (DAQ) system that interfaces with IC piezoelectric
+(ICP®)/IEPE sensors. The solution provides flexible sensor interfacing to
+either piezoelectric or micro-electromechanical systems (MEMS) sensor with
+measurement capabilities that extend the frequency response to DC.
+The design provides four channels of full bandwidth, synchronized vibration
+data to the processor, where data analysis can be done locally or on a remote
+host over Ethernet via standard IIO framework. Large buffers of continuous
+data can be streamed and analyzed using standard fast Fourier transform (FFT)
 techniques for system characterization and machine learning algorithms.
 
 Supported boards
@@ -45,7 +45,7 @@ Supported carriers
      - :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>`
      - Arduino headers
    * -
-     - :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` 
+     - :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino headers
 
 Block design
@@ -75,9 +75,9 @@ added to the base address from HDL (see more at :ref:`architecture`).
 ==================== =============== ===============
 Instance             Zynq            Cyclone V
 ==================== =============== ===============
-axi_ad77684_adc      0x44A0_0000     0x0002_8000     
-cn0579_dma           0x44A3_0000     0x0003_0000     
-axi_iic_dac*         0x44A4_0000          
+axi_ad77684_adc      0x44A0_0000     0x0002_8000
+cn0579_dma           0x44A3_0000     0x0003_0000
+axi_iic_dac*         0x44A4_0000
 ==================== =============== ===============
 
 .. admonition:: Legend
@@ -102,15 +102,15 @@ I2C connections
      - axi_iic_dac
      - 0x0C
      - AD5696R
-   * - PS** 
+   * - PS**
      - I2C1
-     - 
+     -
      - 0x0C
      - AD5696R
 
 .. admonition:: Legend
    :class: note
-   
+
    -  ``*``  only for Cora Z7-07S
    -  ``**`` only for De10-Nano
 
@@ -125,18 +125,18 @@ SPI connections
      - SPI manager instance
      - SPI subordinate
      - CS
-   * - PS* 
+   * - PS*
      - SPI 0
      - AD7786-4
      - 0
-   * - PL** 
+   * - PL**
      - SYS_SPI
      - AD7786-4
      - 0
 
 .. admonition:: Legend
    :class: note
-   
+
    -  ``*``  only for Cora Z7-07S
    -  ``**`` only for De10-Nano
 
@@ -171,14 +171,14 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === ========== =========== =============== ================
 Instance name    HDL Linux Zynq Actual Zynq Linux Cyclone V Actual Cyclone V
 ================ === ========== =========== =============== ================
-cn0579_dma*      13  57         89          
-axi_iic_dac*     12  56         88          
+cn0579_dma*      13  57         89
+axi_iic_dac*     12  56         88
 cn0579_dma**     5                          45              77
 ================ === ========== =========== =============== ================
 
 .. admonition:: Legend
    :class: note
-   
+
    -  ``*``  only for Cora Z7-07S
    -  ``**`` only for De10-Nano
 
@@ -199,6 +199,7 @@ Make for CoraZ7s project:
 
 .. code-block::
    :linenos:
+
    user@analog:~$ cd hdl/projects/cn0579/coraz7s
    user@analog:~/hdl/projects/cn0579/coraz7s$ make
 
@@ -206,6 +207,7 @@ Make for De10Nano project:
 
 .. code-block::
    :linenos:
+
    user@analog:~$ cd hdl/projects/cn0579/de10nano
    user@analog:~/hdl/projects/cn0579/de10nano$ make
 
@@ -269,9 +271,9 @@ Software related
    - :git-pyadi-iio:`PyADI-IIO CN0579 class <adi/cn0579.py>`
    - :git-pyadi-iio:`PyADI-IIO CN0579 example <examples/cn0579/cn0579_example.py>`
 
--  CN0579 on Cora Z7s Linux device tree 
+-  CN0579 on Cora Z7s Linux device tree
    :git-linux:`zynq-coraz7s-cn0579_i2c.dts <arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts>`
--  CN0579 on De10Nano Linux device tree 
+-  CN0579 on De10Nano Linux device tree
    :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts <arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts>`
 -  AD7768 Linux driver :git-linux:`ad7768.c <drivers/iio/adc/ad7768.c>`
 
