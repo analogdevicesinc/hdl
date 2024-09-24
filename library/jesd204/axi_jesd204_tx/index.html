@@ -1511,18 +1511,21 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1549,6 +1552,7 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -1563,6 +1567,7 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x32303454</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘2’, ‘0’, ‘4’, ‘T’).</p>
 </section>
@@ -1592,12 +1597,14 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x02</span></code></td>
 <td class="description"><section>
 <p>Data path width in octets at Transport Layer interface. Available starting from version 1.06.a;</p>
 </section>
@@ -1607,6 +1614,7 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNTH_DATA_PATH_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x02</span></code></td>
 <td class="description"><section>
 <p>Log2 of internal data path width in octets. Represents the datapath width towards the physical interface.</p>
 </section>
@@ -1624,12 +1632,14 @@ peripheral.</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:19]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[18:18]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE_CHAR_REPLACE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit reflects the presence of character replacement insertion logic for cases when scrambling is disabled.
 Available starting from version 1.06.a;</p>
@@ -1640,6 +1650,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ASYNC_​CLK</span></code></td>
 <td class="description"><section>
 <p>This bit is set if link clock and device clock are connected to different sources.
 This is useful for supporting modes where datapath width is not integer multiple of F.
@@ -1676,6 +1687,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Interrupt enable.</p>
 </section>
@@ -1690,6 +1702,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pending and enabled interrupts.</p>
 </section>
@@ -1704,6 +1717,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pending interrupts.</p>
 </section>
@@ -1721,12 +1735,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>0 = Enable link, 1 = Disable link.</p>
 </section>
@@ -1744,6 +1760,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
@@ -1760,6 +1777,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>0 = Link enabled, 1 = Link disabled.</p>
 </section>
@@ -1808,12 +1826,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_ONESHOT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>In oneshot mode only the first occurrence of the SYSREF signal is used for alignment.</p>
 </section>
@@ -1823,6 +1843,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable/Disable SYSREF handling.</p>
 </section>
@@ -1840,12 +1861,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:10]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_LMFC_OFFSET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
 <td class="description"><section>
 <p>Offset between SYSREF event and internal LMFC event in octets.</p>
 </section>
@@ -1863,12 +1886,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_ALIGNMENT_ERROR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that an external SYSREF event has been observed that was unaligned to a previously
 observed event.</p>
@@ -1879,6 +1904,7 @@ observed event.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_DETECTED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that an external SYSREF event has been observed.</p>
 </section>
@@ -1896,6 +1922,7 @@ observed event.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[n]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LANE_DISABLEn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable/Disable n-th lane (0 = enabled, 1 = disabled).
 Where n is from 0 to 31.</p>
@@ -1914,12 +1941,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:19]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[18:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OCTETS_PER_FRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Number of octets per frame - 1 (F).</p>
 </section>
@@ -1929,12 +1958,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:10]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[9:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OCTETS_PER_MULTIFRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x003</span></code></td>
 <td class="description"><section>
 <p>Number of octets per multi-frame - 1 (K x F).
 In 64B/66B mode represents the number of octets per extended multiblock.</p>
@@ -1953,12 +1984,14 @@ In 64B/66B mode represents the number of octets per extended multiblock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHAR_REPLACEMENT_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable/Disable user data alignment character replacement (0 = enabled, 1 = disabled).
 Valid for 8B/10B link.</p>
@@ -1969,6 +2002,7 @@ Valid for 8B/10B link.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRAMBLER_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable/Disable user data descrambling (0 = enabled, 1 = disabled).</p>
 </section>
@@ -1987,6 +2021,7 @@ Valid for 8B/10B link.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[n]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_DISABLEn</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable/Disable n-th link (0 = enabled, 1 = disabled).
 Where n is from 0 to 31.</p>
@@ -2005,12 +2040,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TPL_BEATS_PER_MULTIFRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Number of beats per multi-frame - 1 (K x F / TPL_DATA_PATH_WIDTH) at interface to Transport Layer.
 In 64B/66B mode represents the number of octets per extended multiblock.
@@ -2030,12 +2067,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SKIP_ILAS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Skip ILAS sequence during link startup.</p>
 </section>
@@ -2045,6 +2084,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CONTINUOUS_ILAS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Continuously transmit ILAS sequence.</p>
 </section>
@@ -2054,6 +2094,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CONTINUOUS_CGS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Continuously transmit CGS sequence.</p>
 </section>
@@ -2071,12 +2112,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MFRAMES_PER_ILAS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x03</span></code></td>
 <td class="description"><section>
 <p>Number of multi-frames in the ILAS sequence - 1.</p>
 </section>
@@ -2094,12 +2137,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">W1S</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Trigger manual synchronization request.</p>
 </section>
@@ -2117,6 +2162,7 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
@@ -2133,12 +2179,14 @@ Available starting from version 1.06.a;</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS_STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>State of the 8B/10B link state machine. (0 = WAIT, 1 = CGS, 2 = ILAS, 3 = DATA); 
 State of the 64B/66B link state machine. (0 = RESET, 3 = DATA)</p>
@@ -2158,12 +2206,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[27:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>BID (Bank ID) field of the ILAS config sequence.</p>
 </section>
@@ -2173,6 +2223,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>DID (Device ID) field of the ILAS config sequence.</p>
 </section>
@@ -2182,6 +2233,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc5</span> <span class="pre">+</span> <span class="pre">0x8*n</span></code></td>
@@ -2197,12 +2249,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">K</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>K (Frames per multi-frame) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2212,6 +2266,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">F</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>F (Octets per frame) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2221,6 +2276,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>SCR (Scrambling enabled) field of the ILAS config sequence.</p>
 </section>
@@ -2230,12 +2286,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[14:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>L (Number of lanes) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2245,12 +2303,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>LID (Lane ID) field of the ILAS config sequence.</p>
 </section>
@@ -2269,6 +2329,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:29]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">JESDV</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>JESDV (JESD204 version) field of the ILAS config sequence.</p>
 </section>
@@ -2278,6 +2339,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[28:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">S</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>S (Samples per frame) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2287,6 +2349,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SUBCLASSV</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>SUBCLASSV (JESD204B subclass) field of the ILAS config sequence.</p>
 </section>
@@ -2296,6 +2359,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[20:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>N’ (Total number of bits per sample) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2305,6 +2369,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>CS (Control bits per sample) field of the ILAS config sequence.</p>
 </section>
@@ -2314,12 +2379,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>N (Converter resolution) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2329,6 +2396,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">M</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>M (Number of converters) field of the ILAS config sequence - 1.</p>
 </section>
@@ -2347,6 +2415,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FCHK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>FCHK (Checksum) field of the ILAS config sequence.</p>
 </section>
@@ -2356,12 +2425,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>HD (High-density) field of the ILAS config sequence.</p>
 </section>
@@ -2371,12 +2442,14 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[6:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>CF (control words per frame) field of the ILAS config sequence</p>
 </section>

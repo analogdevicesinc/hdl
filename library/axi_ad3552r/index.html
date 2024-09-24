@@ -844,6 +844,7 @@ The axi_ad3552r_core module instantiates 2 axi_ad3552r channel modules.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
 Once the external sync signal goes high it synchronizes channels within a DAC, and across multiple instances.
@@ -864,6 +865,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface type (1 represents SDR, 0 represents DDR)</p>
 </section>
@@ -873,6 +875,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[14:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b)</p>
 </section>
@@ -890,6 +893,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_WRITE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>Configuration data for the AD3552R device registers. 8/16 LSB are used depending on the
 8b/16b configuration.</p>
@@ -908,6 +912,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IF_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface busy. If set, indicates that the data interface is busy.</p>
 </section>
@@ -925,6 +930,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Register address when the AD3552R is configured or stream start address when the
 FSM is in stream state.</p>
@@ -935,6 +941,7 @@ FSM is in stream state.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STREAM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will trigger a stream transfer based on the SDR/DDR
 configuration and address.</p>
@@ -945,6 +952,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will trigger a single transfer based on the SDR/DDR,
 8b/16b configuration, address, and data_write.</p>
@@ -1011,6 +1019,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select internal data sources (available only if the DAC supports it).</p>
 <ul class="simple">
@@ -1042,6 +1051,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select internal data sources (available only if the DAC supports it).</p>
 <ul class="simple">
@@ -1121,6 +1131,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Version number. Unique to all cores.</p>
 </section>
@@ -1138,6 +1149,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Instance identifier number.</p>
 </section>
@@ -1155,6 +1167,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register.</p>
 </section>
@@ -1172,6 +1185,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCORRECTION_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the IQ Correction module was not implemented. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1181,6 +1195,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILTER_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the DC Filter module was not implemented. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1190,6 +1205,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the Data Format module was not implemented. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1199,6 +1215,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the logic related to the User Data Format (e.g. decimation) was not implemented. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1208,6 +1225,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MODE_1R1T</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the core was implemented in 1 channel mode. (e.g. refer to AD9361 data sheet)</p>
 </section>
@@ -1217,6 +1235,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the delay control is disabled for this IP. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1226,6 +1245,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the DDS is disabled for this IP. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1235,6 +1255,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMOS_OR_LVDS_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>CMOS or LVDS mode is used for the interface. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1244,6 +1265,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_RECEIVER_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates the PPS receiver is enabled. (as a result of a configuration of the IP instance)</p>
 </section>
@@ -1253,6 +1275,7 @@ configuration and address.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[9:9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCALECORRECTION_ONLY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates that the IQ Correction module implements only scale correction.
 IQ correction must be enabled. (as a result of a configuration of the IP instance)</p>
@@ -1263,6 +1286,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set the transport layer cores (ADC/DAC) have implemented the support for external synchronization signal.</p>
 </section>
@@ -1272,6 +1296,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RD_RAW_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, the ADC has the capability to read raw data in register CHAN_RAW_DATA from adc_channel.</p>
 </section>
@@ -1289,6 +1314,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Mask bit for the 1PPS receiver interrupt</p>
 </section>
@@ -1308,6 +1334,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Encoded value describing the technology/generation of the FPGA device (arria 10/7series)</p>
 </section>
@@ -1317,6 +1344,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Encoded value describing the family variant of the FPGA device(e.g., SX, GX, GT or zynq, kintex, virtex)</p>
 </section>
@@ -1326,6 +1354,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Encoded value describing the FPGA’s speed-grade</p>
 </section>
@@ -1335,6 +1364,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Encoded value describing the device package. The package might affect high-speed interfaces</p>
 </section>
@@ -1383,6 +1413,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CE_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of
 the module to control clock enables</p>
@@ -1393,6 +1424,7 @@ the module to control clock enables</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>MMCM reset only (required for DRP access).
 Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
@@ -1403,6 +1435,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
 </section>
@@ -1420,6 +1453,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit synchronizes channels within a DAC, and across multiple instances.
 This bit self clears.</p>
@@ -1430,6 +1464,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
 Once the external sync signal goes high it synchronizes channels within a DAC, and across multiple instances.
@@ -1442,6 +1477,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_DISARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will disarm the trigger mechanism sensitive to an external sync signal.
 This bit has an effect only the EXT_SYNC synthesis parameter is set.
@@ -1453,6 +1489,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Setting this bit will issue an external sync event if it is hooked up inside the fabric.
 This bit has an effect only the EXT_SYNC synthesis parameter is set.
@@ -1472,6 +1509,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface type (1 represents SDR, 0 represents DDR)</p>
 </section>
@@ -1481,6 +1519,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_OP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select data symbol format mode (0x1)</p>
 </section>
@@ -1490,6 +1529,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[14:14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b)</p>
 </section>
@@ -1499,6 +1539,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)</p>
 </section>
@@ -1508,6 +1549,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select parity even (0x0) or odd (0x1).</p>
 </section>
@@ -1517,6 +1559,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select parity (0x1) or frame (0x0) mode.</p>
 </section>
@@ -1526,6 +1569,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R1_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select number of RF channels 1 (0x1) or 2 (0x0).</p>
 </section>
@@ -1535,6 +1579,7 @@ This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_FORMAT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select data format 2’s complement (0x0) or offset binary (0x1).
 NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
@@ -1545,6 +1590,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NA</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reserved</p>
 </section>
@@ -1562,6 +1608,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>The effective dac rate (the maximum possible rate is dependent on the interface clock).
 The samples are generated at 1/RATE of the interface clock.</p>
@@ -1580,6 +1627,7 @@ The samples are generated at 1/RATE of the interface clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The use of frame is device specific. Usually setting this bit to 1 generates a FRAME (1
 DCI clock period) pulse on the interface. This bit self clears.</p>
@@ -1598,6 +1646,7 @@ DCI clock period) pulse on the interface. This bit self clears.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Interface clock frequency. This is relative to the processor clock and in many cases is
 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
@@ -1620,6 +1669,7 @@ parameters to calculate the final sampling clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Interface clock ratio - as a factor actual received clock. This is implementation specific
 and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
@@ -1638,6 +1688,7 @@ and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface status, if set indicates no errors. If not set, there
 are errors, software may try resetting the cores.</p>
@@ -1656,6 +1707,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CLKSEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Allows changing of the clock polarity. Note: its default value is CLK_EDGE_SEL</p>
 </section>
@@ -1673,6 +1725,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>DAC synchronization status. Will be set to 1 while waiting for the external synchronization signal
 This bit has an effect only the EXT_SYNC synthesis parameter is set.</p>
@@ -1691,6 +1744,7 @@ This bit has an effect only the EXT_SYNC synthesis parameter is set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>DRP read (0x1) or write (0x0) select (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
@@ -1701,6 +1755,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
 <td class="description"><section>
 <p>DRP address, designs that contain more than one DRP accessible primitives
 have selects based on the most significant bits (does not include GTX lanes).
@@ -1712,6 +1767,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Reserved for backwards compatibility</p>
 </section>
@@ -1729,6 +1785,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[17:17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set indicates the MMCM/PLL is locked</p>
 </section>
@@ -1738,6 +1795,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set indicates busy (access pending). The read data may not be valid if
 this bit is set (does not include GTX lanes).
@@ -1749,6 +1807,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Reserved for backwards compatibility</p>
 </section>
@@ -1766,6 +1825,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_WDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>DRP write data (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
@@ -1784,6 +1844,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RDATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>DRP read data (does not include GTX lanes).
 NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
@@ -1802,6 +1863,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_RD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Custom Read of the available registers.</p>
 </section>
@@ -1819,6 +1881,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_WR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Custom Write of the available registers.</p>
 </section>
@@ -1836,6 +1899,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IF_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface busy. If set, indicates that the data interface is busy.</p>
 </section>
@@ -1845,6 +1909,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_OVF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>User Interface overflow. If set, indicates an overflow occurred during data transfer at
 the user interface (FIFO interface). Software must write a 0x1 to clear this register
@@ -1856,6 +1921,7 @@ bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_UNF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>User Interface underflow. If set, indicates an underflow occurred during data transfer at
 the user interface (FIFO interface). Software must write a 0x1 to clear this register
@@ -1875,6 +1941,7 @@ bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_CTRL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Custom Control of the available registers.</p>
 </section>
@@ -1892,6 +1959,7 @@ bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_CHANMAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>This indicates the maximum number of inputs for the channel data multiplexers. User may add
 different processing modules as inputs to the dac.
@@ -1911,6 +1979,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_IN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This reads auxiliary GPI pins of the DAC core</p>
 </section>
@@ -1928,6 +1997,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_OUT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This controls auxiliary GPO pins of the DAC core
 NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
@@ -1978,6 +2048,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[21:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_PHASE_DW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>The DDS phase data width offers the HDL parameter configuration with the same
 name. This information is used in conjunction with CHAN_CNTRL_9 and CHAN_CNTRL_10.
@@ -1989,6 +2060,7 @@ More info at <a class="reference internal" href="../common/ad_dds/index.html#ad-
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS scale for tone 1. Sets the amplitude of the tone. The format is 1.1.14
 fixed point (signed, integer, fractional). The DDS in general runs on 16-bits,
@@ -2011,6 +2083,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS phase initialization for tone 1. Sets the initial phase offset
 of the tone. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
@@ -2021,6 +2094,7 @@ of the tone. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Sets the frequency of the phase accumulator. Its value can be calculated
 by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the
@@ -2045,6 +2119,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS scale for tone 2. Sets the amplitude of the tone. The format
 is 1.1.14 fixed point (signed, integer, fractional).
@@ -2068,6 +2143,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS phase initialization for tone 2. Sets the initial phase offset of the
 tone. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase init
@@ -2080,6 +2156,7 @@ set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Sets the frequency of the phase accumulator. Its value can be calculated by
 <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the generated
@@ -2104,6 +2181,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS data pattern for this channel.</p>
 </section>
@@ -2113,6 +2191,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The DDS data pattern for this channel.</p>
 </section>
@@ -2131,6 +2210,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>if set, enables IQ correction.
 NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
@@ -2141,6 +2221,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, forces DAC_DDS_SEL to 0x8, loopback
 If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
@@ -2151,6 +2232,7 @@ If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>IF set, forces DAC_DDS_SEL to 0x09, device specific pnX
 If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
@@ -2170,6 +2252,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select internal data sources (available only if the DAC supports it).</p>
 <ul class="simple">
@@ -2202,6 +2285,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value
 and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
@@ -2214,6 +2298,7 @@ NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the offset value
 and the format is 2’s complement. If matrix multiplication is used, this is the channel Q coefficient
@@ -2235,6 +2320,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[25:25]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The user data type format- if set, indicates big endian (default is little endian).
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
@@ -2245,6 +2331,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[24:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The user data type format- if set, indicates signed (2’s complement) data (default is unsigned).
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
@@ -2255,6 +2342,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SHIFT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>The user data type format- the amount of right shift for actual samples within the total number
 of bits.
@@ -2266,6 +2354,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_TOTAL_BITS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>The user data type format- number of total bits used for a sample. The total number of bits must
 be an integer multiple of 8 (byte aligned).
@@ -2277,6 +2366,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BITS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>The user data type format- number of bits in a sample. This indicates the actual sample data bits.
 NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
@@ -2296,6 +2386,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_M</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This holds the user interpolation M value of the channel that is currently being
 selected on the multiplexer above. The total interpolation factor is of the
@@ -2307,6 +2398,7 @@ form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This holds the user interpolation N value of the channel that is currently being selected on
 the multiplexer above. The total interpolation factor is of the form M/N.
@@ -2327,6 +2419,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable complex mode. In this mode the driven data to the DAC must be a sequence
 of I and Q sample pairs.</p>
@@ -2337,6 +2430,7 @@ of I and Q sample pairs.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Allows IQ swapping in complex mode. Only takes effect if complex mode
 is enabled.</p>
@@ -2356,6 +2450,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1_EXTENDED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The extended DDS phase initialization for tone 1. Sets the initial phase offset
 of the tone. The extended init(phase) value should be calculated according to
@@ -2368,6 +2463,7 @@ set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1_EXTENDED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Sets the frequency of tone 1’s phase accumulator. Its value can be calculated
 by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the
@@ -2391,6 +2487,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2_EXTENDED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>The extended DDS phase initialization for tone 2. Sets the initial phase offset
 of the tone. The extended init(phase)  value should be calculated according to
@@ -2403,6 +2500,7 @@ set (0x1).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2_EXTENDED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Sets the frequency of tone 2’s phase accumulator. Its value can be calculated
 by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the

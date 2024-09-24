@@ -911,18 +911,21 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -934,6 +937,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -948,6 +952,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -962,6 +967,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x46414e43</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘F’, ‘A’, ‘N’, ‘C’).</p>
 </section>
@@ -976,6 +982,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TACHO_MEASUREMENT_DONE IRQ.</p>
 </section>
@@ -985,6 +992,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TEMP_INCREASE IRQ.</p>
 </section>
@@ -994,6 +1002,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TACHO_ERR IRQ.</p>
 </section>
@@ -1003,6 +1012,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the PWM_CHANGED IRQ.</p>
 </section>
@@ -1017,6 +1027,7 @@ seconds.</p></li>
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when the hardware has written a new value to the
 TACHO_MEASUREMENT register if the NEW_TACHO_MEASUREMENT bit in the IRQ_MASK
@@ -1028,6 +1039,7 @@ register is not set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted whenever the HW decides to increase the PWM
 duty-cycle, indicating a rise in temperature, and if the TEMP_INCREASE bit in
@@ -1039,6 +1051,7 @@ the IRQ_MASK register is not set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when a fault related to the tacho signal is detected.
 This can either mean that the tacho has not toggled in 5 seconds or that the
@@ -1051,6 +1064,7 @@ Also, the TACHO_ERR bit in the IRQ_MASK register must not be set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when a 5 second delay expires after the PWM width was
 changed. The delay is used to allow the fan rotation speed to stabilize. Also,
@@ -1067,6 +1081,7 @@ the PWM_CHANGED bit in the IRQ_MASK register must not be set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when the hardware has written a new value to the
 TACHO_MEASUREMENT register.</p>
@@ -1077,6 +1092,7 @@ TACHO_MEASUREMENT register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted whenever the hardware decides to increase the PWM
 duty-cycle indicating a rise in temperature.</p>
@@ -1087,6 +1103,7 @@ duty-cycle indicating a rise in temperature.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when a fault related to the tacho signal is detected.
 This can either mean that the tacho has not toggled in 5 seconds or that the
@@ -1098,6 +1115,7 @@ period of the tacho signal is no longer whithin the defined valid interval.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted when a 5 second delay expires after the PWM width was
 changed. The delay is used to allow the fan rotation speed to stabilize.</p>
@@ -1113,6 +1131,7 @@ changed. The delay is used to allow the fan rotation speed to stabilize.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
 </section>
@@ -1127,6 +1146,7 @@ changed. The delay is used to allow the fan rotation speed to stabilize.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PWM_​PERIOD</span></code></td>
 <td class="description"><section>
 <p>This register contains the width of the PWM output signal. By default its
 value is established by the hardware after reading the temperature. By writing
@@ -1145,6 +1165,7 @@ not exceeding the PWM period.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>After using the PWM_WIDTH register to request a different duty-cycle, the
 software can use this register to define the target period of the tacho signal.
@@ -1164,6 +1185,7 @@ coming from the fan.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_TOLERANCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register is used together with the TACHO_PERIOD register to define an
 interval for the fan’s tacho signal. Writing to this register enables the
@@ -1181,6 +1203,7 @@ the TACHO_PERIOD register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_DATA_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">INTERNAL_​SYSMONE</span></code></td>
 <td class="description"><section>
 <p>This register copies the value from the INTERNAL_SYSMONE register and is used to inform
 the software what the source of the temperature information is.</p>
@@ -1196,6 +1219,7 @@ the software what the source of the temperature information is.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00004e20</span></code></td>
 <td class="description"><section>
 <p>This register contains the period for the PWM output signal. Derived from the
 PWM_FREQUENCY_HZ parameter.</p>
@@ -1211,6 +1235,7 @@ PWM_FREQUENCY_HZ parameter.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the measurement results of the tacho signal period
 performed by the hardware.</p>
@@ -1226,6 +1251,7 @@ performed by the hardware.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMPERATURE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the latest temperature reading from the SYSMONE
 primitive.</p>
@@ -1241,6 +1267,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_00_H</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​00_​H</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold below which PWM should be 0%</p>
 </section>
@@ -1255,6 +1282,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_25_L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​25_​L</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold above which PWM should be 25%</p>
 </section>
@@ -1269,6 +1297,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_25_H</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​25_​H</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold below which PWM should be 25%</p>
 </section>
@@ -1283,6 +1312,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_50_L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​50_​L</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold above which PWM should be 50%</p>
 </section>
@@ -1297,6 +1327,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_50_H</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​50_​H</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold below which PWM should be 50%</p>
 </section>
@@ -1311,6 +1342,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_75_L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​75_​L</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold above which PWM should be 75%</p>
 </section>
@@ -1325,6 +1357,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_75_H</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​75_​H</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold below which PWM should be 75%</p>
 </section>
@@ -1339,6 +1372,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_100_L</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TEMP_​100_​L</span></code></td>
 <td class="description"><section>
 <p>Temperature threshold above which PWM should be 100%</p>
 </section>
@@ -1353,6 +1387,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_25</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T25</span></code></td>
 <td class="description"><section>
 <p>Nominal tacho period at 25% PWM</p>
 </section>
@@ -1367,6 +1402,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_50</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T50</span></code></td>
 <td class="description"><section>
 <p>Nominal tacho period at 50% PWM</p>
 </section>
@@ -1381,6 +1417,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_75</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T75</span></code></td>
 <td class="description"><section>
 <p>Nominal tacho period at 75% PWM</p>
 </section>
@@ -1395,6 +1432,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_100</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T100</span></code></td>
 <td class="description"><section>
 <p>Nominal tacho period at 100% PWM</p>
 </section>
@@ -1409,6 +1447,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_25_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T25*TACHO_​TOL_​PERCENT/100</span></code></td>
 <td class="description"><section>
 <p>Tolerance for the 25% PWM tacho period</p>
 </section>
@@ -1423,6 +1462,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_50_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T50*TACHO_​TOL_​PERCENT/100</span></code></td>
 <td class="description"><section>
 <p>Tolerance for the 50% PWM tacho period</p>
 </section>
@@ -1437,6 +1477,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_75_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T75*TACHO_​TOL_​PERCENT/100</span></code></td>
 <td class="description"><section>
 <p>Tolerance for the 75% PWM tacho period</p>
 </section>
@@ -1451,6 +1492,7 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_100_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T100*TACHO_​TOL_​PERCENT/100</span></code></td>
 <td class="description"><section>
 <p>Tolerance for the 100% PWM tacho period</p>
 </section>

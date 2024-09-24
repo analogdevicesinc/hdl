@@ -894,6 +894,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00030000</span></code></td>
 <td class="description"><section>
 <p>Version number</p>
 </section>
@@ -911,6 +912,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register</p>
 </section>
@@ -928,6 +930,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Set TRIGGER_O_1 value</p>
 </section>
@@ -937,6 +940,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Set TRIGGER_O_0 value</p>
 </section>
@@ -954,6 +958,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select output trigger pin 1 (To PIN):</p>
 <p>0: SOFTWARE TRIGGER - TRRIGER_O_1(0x0004)
@@ -967,6 +972,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_O_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select output trigger pin 0 (Ti PIN):</p>
 <p>0: SOFTWARE TRIGGER - TRRIGER_O_0(0x0004)
@@ -980,6 +986,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IO_SELECTION_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Drives the TRIGGER_T[1](To) pin.</p>
 </section>
@@ -989,6 +996,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IO_SELECTION_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Drives the TRIGGER_T[0](Ti) pin.</p>
 </section>
@@ -1006,6 +1014,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[9:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FALL_EDGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable falling edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
 </section>
@@ -1015,6 +1024,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RISE_EDGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable rising edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
 </section>
@@ -1024,6 +1034,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ANY_EDGE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable any edge triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
 </section>
@@ -1033,6 +1044,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HIGH_LEVEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable high level triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
 </section>
@@ -1042,6 +1054,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LOW_LEVEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable low level triggering for TRIGGER[0] or TRIGGER[1] pin.</p>
 </section>
@@ -1059,6 +1072,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LIMIT_A</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Analog trigger level for channel A. 2’s complement.</p>
 </section>
@@ -1076,6 +1090,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_FUNCTION_A</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Analog triggering function for channel A:</p>
 <p>0: Lower than limit
@@ -1097,6 +1112,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_A</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Used for the passthrough functions.</p>
 </section>
@@ -1114,6 +1130,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_A</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Selects trigger a mode:</p>
 <p>0: Always on
@@ -1141,6 +1158,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LIMIT_B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>Analog trigger level for channel B. 2’s complement.</p>
 </section>
@@ -1158,6 +1176,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_FUNCTION_B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Analog triggering function for channel B:</p>
 <p>0: Lower than limit
@@ -1179,6 +1198,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HYSTERESIS_B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Used for the passthrough functions.</p>
 </section>
@@ -1196,6 +1216,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Selects trigger a mode:</p>
 <p>0: Always on
@@ -1223,6 +1244,7 @@ The FIFO depth is controlled using the trigger_offset bus of this IP.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EMBEDDED_TRIGGER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set the bit 15 of the out channel data will be the trigger.
 This allows to keep the data in sync with the trigger in future data processing,
@@ -1235,6 +1257,7 @@ When set a util_extract module is required in the system.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_MUX_OUT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Final Trigger Selection Multiplexer.
 Selects trigger a mode:</p>
@@ -1262,6 +1285,7 @@ Selects trigger a mode:</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FIFO_DEPTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Controls the depth of the history FIFO. Should be less than the maximum FIFO depth.
 If set to 0, the FIFO is bypassed.</p>
@@ -1280,6 +1304,7 @@ If set to 0, the FIFO is bypassed.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGERED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates if the trigger has been triggered since the last time this register has been
 reset.</p>
@@ -1298,6 +1323,7 @@ reset.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_DELAY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Delays the start of data capture with TRIGGER_DELAY number of samples after the trigger.</p>
 </section>
@@ -1315,6 +1341,7 @@ reset.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STREAMING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If the streaming bit is set, after the trigger condition is met data will be continuously
 captured by the DMA. The streaming bit must be set to 0 to reset triggering.</p>
@@ -1333,6 +1360,7 @@ captured by the DMA. The streaming bit must be set to 0 to reset triggering.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_HOLDOFF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Defines the time interval, after a trigger event, where the next trigger events will be
 ignored, until the end of the interval. The time interval is set by counter. Down-counting
@@ -1353,6 +1381,7 @@ trigger event.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRIGGER_OUT_HOLD_PINS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Defines a time period, in which the external trigger pins, configured as outputs, will hold
 the new logic level after a transition. The down-counter, counting on ADC clock, is loaded

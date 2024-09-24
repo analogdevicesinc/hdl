@@ -850,18 +850,21 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0002</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -873,6 +876,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -887,6 +891,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -901,6 +906,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x5444444e</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘T’, ‘D’, ‘D’, ‘N’).</p>
 </section>
@@ -915,6 +921,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[30:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​COUNT_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>Width of internal synchronization counter.</p>
 </section>
@@ -924,6 +931,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[21:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BURST_COUNT_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">BURST_​COUNT_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>Width of burst counter.</p>
 </section>
@@ -933,6 +941,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[13:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">REGISTER_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">REGISTER_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>Width of internal reference counter and timing registers.</p>
 </section>
@@ -942,6 +951,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXTERNAL_CDC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​EXTERNAL_​CDC</span></code></td>
 <td class="description"><section>
 <p>Enable CDC for external synchronization pulse.</p>
 </section>
@@ -951,6 +961,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXTERNAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​EXTERNAL</span></code></td>
 <td class="description"><section>
 <p>Enable external synchronization support.</p>
 </section>
@@ -960,6 +971,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_INTERNAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​INTERNAL</span></code></td>
 <td class="description"><section>
 <p>Enable internal synchronization support.</p>
 </section>
@@ -969,6 +981,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHANNEL_COUNT_EXTRA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CHANNEL_​COUNT-1</span></code></td>
 <td class="description"><section>
 <p>Number of channels starting from CH1, excluding CH0.</p>
 </section>
@@ -983,6 +996,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEFAULT_POLARITY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DEFAULT_​POLARITY</span></code></td>
 <td class="description"><section>
 <p>Default polarity per every channel - LSB corresponds to CH0, MSB to CH31.</p>
 </section>
@@ -1000,6 +1014,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_SOFT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Trigger the TDD core through a register write.</p>
 </section>
@@ -1009,6 +1024,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable external sync trigger. This bit is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_EXTERNAL</span></code> is set.</p>
 </section>
@@ -1018,6 +1034,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_INT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Enable internal sync trigger. This bit is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_INTERNAL</span></code> is set.</p>
 </section>
@@ -1027,6 +1044,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_RST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset the internal counter while running when receiving a sync event.</p>
 </section>
@@ -1036,6 +1054,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Module enable.</p>
 </section>
@@ -1053,6 +1072,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHANNEL_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Enable bits per channel - LSB corresponds to CH0, MSB to CH31.</p>
 </section>
@@ -1070,6 +1090,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHANNEL_POLARITY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Polarity bits per channel - LSB corresponds to CH0, MSB to CH31.</p>
 </section>
@@ -1087,6 +1108,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BURST_COUNT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>If set to 0 and enabled - the controller operates in TDD mode as long as the ENABLE bit is set. If set to a non-zero value, the controller operates for the set number of frames and then stops.</p>
 </section>
@@ -1104,6 +1126,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STARTUP_DELAY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The initial delay value before the beginning of the first frame; defined in clock cycles.</p>
 </section>
@@ -1121,6 +1144,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FRAME_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The length of the transmission frame; defined in clock cycles.</p>
 </section>
@@ -1138,6 +1162,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_LOW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The LSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;0.</p>
 </section>
@@ -1155,6 +1180,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The MSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;32.</p>
 </section>
@@ -1172,6 +1198,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The current state of the peripheral FSM; used for debugging purposes.</p>
 </section>
@@ -1190,6 +1217,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHn_ON</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The offset (from frame count equal zero), when CHn is set.</p>
 </section>
@@ -1208,6 +1236,7 @@ Where n is from 0 to 31.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CHn_OFF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The offset (from frame count equal zero), when CHn is reset.</p>
 </section>

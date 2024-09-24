@@ -2124,18 +2124,21 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0004</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x63</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -2147,6 +2150,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.</p>
 </section>
@@ -2161,6 +2165,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -2175,6 +2180,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IDENTIFICATION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x444d4143</span></code></td>
 <td class="description"><section>
 <p>Peripheral identification (‘D’, ‘M’, ‘A’, ‘C’).</p>
 </section>
@@ -2189,6 +2195,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2(DMA_​DATA_​WIDTH_​DEST/8)</span></code></td>
 <td class="description"><section>
 <p>Width of data bus on destination interface. Log2 of interface data widths in bytes.</p>
 </section>
@@ -2198,6 +2205,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DMA_​TYPE_​DEST</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code> parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )</p>
 </section>
@@ -2207,6 +2215,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[11:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2(DMA_​DATA_​WIDTH_​SRC/8)</span></code></td>
 <td class="description"><section>
 <p>Width of data bus on source interface. Log2 of interface data widths in bytes.</p>
 </section>
@@ -2216,6 +2225,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DMA_​TYPE_​SRC</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">DMA_TYPE_SRC</span></code> parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )</p>
 </section>
@@ -2225,6 +2235,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[19:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">BYTES_​PER_​BURST_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">BYTES_PER_BURST_WIDTH</span></code> interface parameter. Log2 of the real <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code>.
 The starting address of the transfer must be aligned with <code class="docutils literal notranslate"><span class="pre">MAX_BYTES_PER_BURST</span></code> to avoid crossing
@@ -2241,6 +2252,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CACHE_​COHERENT</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">CACHE_COHERENT</span></code> parameter.(0 - Disabled, 1 -  Enabled )</p>
 </section>
@@ -2250,6 +2262,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">AXI_​AXCACHE</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">AXI_AXCACHE</span></code> parameter.</p>
 </section>
@@ -2259,6 +2272,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[10:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">AXI_​AXPROT</span></code></td>
 <td class="description"><section>
 <p>Value of <code class="docutils literal notranslate"><span class="pre">AXI_AXPROT</span></code> parameter.</p>
 </section>
@@ -2273,6 +2287,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TRANSFER_COMPLETED IRQ.</p>
 </section>
@@ -2282,6 +2297,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Masks the TRANSFER_QUEUED IRQ.</p>
 </section>
@@ -2296,6 +2312,7 @@ the 4kB address boundary.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed and the
 TRANSFER_COMPLETED bit in the IRQ_MASK register is not set. Either if all bytes have been
@@ -2307,6 +2324,7 @@ transferred or an error occurred during the transfer.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been queued and it is possible to queue
 the next transfer. It can be masked out by setting the TRANSFER_QUEUED bit in the 
@@ -2323,6 +2341,7 @@ IRQ_MASK register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_COMPLETED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been completed. Either if all bytes have been
 transferred or an error occurred during the transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
@@ -2333,6 +2352,7 @@ transferred or an error occurred during the transfer. Cleared together with the 
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_QUEUED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit will be asserted if a transfer has been queued and it is possible to queue
 the next transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
@@ -2348,6 +2368,7 @@ the next transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HWDESC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the scatter-gather transfers are enabled.</p>
 <p>Note, this field is only valid if the DMA channel has been configured with SG transfer support.</p>
@@ -2358,6 +2379,7 @@ the next transfer. Cleared together with the corresponding IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAUSE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the currently active transfer is paused. It will be resumed once the bit is
 cleared again.</p>
@@ -2368,6 +2390,7 @@ cleared again.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When set to 1 the DMA channel is enabled.</p>
 </section>
@@ -2382,6 +2405,7 @@ cleared again.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This register contains the ID of the next transfer. The ID is generated by the DMAC and after the
 transfer has been started can be used to check if the transfer has finished by checking the
@@ -2399,6 +2423,7 @@ TRANSFER_SUBMIT is 0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_SUBMIT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Writing a 1 to this register queues a new transfer. The bit transitions back to 0 once
 the transfer has been queued or the DMA channel is disabled.</p>
@@ -2415,6 +2440,7 @@ the transfer has been queued or the DMA channel is disabled.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CYCLIC</span></code></td>
 <td class="description"><section>
 <p>Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
 the controller will re-start a transfer again once it has finished. In cyclic
@@ -2426,6 +2452,7 @@ mode no end-of-transfer interrupts will be generated.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>When setting this bit for a MM to AXIS transfer the TLAST signal
 will be asserted during the last beat of the transfer.
@@ -2438,6 +2465,7 @@ After its occurrence all descriptors are ignored until this bit is set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_REPORTING_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>When setting this bit the length of partial transfers caused eventually by TLAST will be recorded.</p>
 </section>
@@ -2452,6 +2480,7 @@ After its occurrence all descriptors are ignored until this bit is set.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the destination address of the transfer. The address needs to be aligned
 to the bus width.</p>
@@ -2468,6 +2497,7 @@ to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the source address of the transfer. The address needs to be aligned
 to the bus width.</p>
@@ -2484,6 +2514,7 @@ to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">2^log2(max(DMA_​DATA_​WIDTH_​SRC,</span> <span class="pre">DMA_​DATA_​WIDTH_​DEST)/8)-1</span></code></td>
 <td class="description"><section>
 <p>Number of bytes to transfer - 1.</p>
 </section>
@@ -2498,6 +2529,7 @@ to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">Y_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Number of rows to transfer - 1.</p>
 <p>Note, this field is only valid if the DMA channel has been configured with 2D transfer support.</p>
@@ -2513,6 +2545,7 @@ to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_STRIDE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the
 destination address. Needs to be aligned to the bus width.</p>
@@ -2530,6 +2563,7 @@ transfer support and write to memory support.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_STRIDE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The number of bytes between the start of one row and the next row for the source
 address. Needs to be aligned to the bus width.</p>
@@ -2551,6 +2585,7 @@ be cleared when a new transfer with this ID is queued and will be set when the t
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_0_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 0 has been completed.</p>
 </section>
@@ -2560,6 +2595,7 @@ be cleared when a new transfer with this ID is queued and will be set when the t
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_1_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 1 has been completed.</p>
 </section>
@@ -2569,6 +2605,7 @@ be cleared when a new transfer with this ID is queued and will be set when the t
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_2_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 2 has been completed.</p>
 </section>
@@ -2578,6 +2615,7 @@ be cleared when a new transfer with this ID is queued and will be set when the t
 <td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_3_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set the transfer with ID 3 has been completed.</p>
 </section>
@@ -2587,6 +2625,7 @@ be cleared when a new transfer with this ID is queued and will be set when the t
 <td><code class="docutils literal notranslate"><span class="pre">[31:31]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_DONE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If this bit is set at least one partial transfer was transferred.
 This field will reset when the ENABLE control bit is reset or when
@@ -2604,6 +2643,7 @@ PARTIAL_TRANSFER_ID registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[4:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ACTIVE_TRANSFER_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><section>
 <p>ID of the currently active transfer. When no transfer is active this register will be equal to
 the TRANSFER_ID register.</p>
@@ -2619,6 +2659,7 @@ the TRANSFER_ID register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register is reserved for future usage. Reading it will always return 0.</p>
 </section>
@@ -2633,6 +2674,7 @@ the TRANSFER_ID register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Address to which the next data sample is written to.</p>
 <p>This register is only valid if the DMA channel has been configured for write to memory support.</p>
@@ -2648,6 +2690,7 @@ the TRANSFER_ID register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Address form which the next data sample is read.</p>
 <p>This register is only valid if the DMA channel has been configured for read from memory support.</p>
@@ -2663,6 +2706,7 @@ the TRANSFER_ID register.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TRANSFER_PROGRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This field presents the number of bytes transferred to the destination for the current transfer.
 This register will be cleared once the transfer completes.
@@ -2679,6 +2723,7 @@ This should be used for debugging purposes only.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Length of the partial transfer in bytes. Represents the number of bytes received
 until the moment of TLAST assertion. This will be smaller than the programmed length
@@ -2698,6 +2743,7 @@ from the X_LENGTH and Y_LENGTH registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PARTIAL_TRANSFER_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>ID of the transfer that was partial.</p>
 </section>
@@ -2712,6 +2758,7 @@ from the X_LENGTH and Y_LENGTH registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DESCRIPTOR_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>ID of the descriptor that points to the current memory segment being transferred.
 If HWDESC is set to 0, then this register returns 0.</p>
@@ -2727,6 +2774,7 @@ If HWDESC is set to 0, then this register returns 0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SG_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the starting address of the scatter-gather transfer. The address needs
 to be aligned to the bus width.</p>
@@ -2743,6 +2791,7 @@ to be aligned to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEST_ADDRESS_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the HIGH segment of the destination address of the transfer.</p>
 <p>This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if DMA channel
@@ -2759,6 +2808,7 @@ has been configured for write to memory support.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SRC_ADDRESS_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the HIGH segment of the source address of the transfer.</p>
 <p>This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
@@ -2775,6 +2825,7 @@ has been configured for read from memory support.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_DEST_ADDRESS_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>HIGH segment of the address to which the next data sample is written to.</p>
 <p>This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
@@ -2791,6 +2842,7 @@ has been configured for write to memory support.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CURRENT_SRC_ADDRESS_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>HIGH segment of the address from which the next data sample is read.</p>
 <p>This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel
@@ -2807,6 +2859,7 @@ has been configured for read from memory support.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SG_ADDRESS_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>HIGH segment of the starting address of the scatter-gather transfer.</p>
 <p>This register is only valid if the DMA_AXI_ADDR_WIDTH is bigger than 32 and if the DMA channel

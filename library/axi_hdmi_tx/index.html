@@ -963,6 +963,7 @@ required resolution.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reset, a common reset is used for all the interface modules,
 The default is reset (0x0), software must write 0x1 to bring up the core.</p>
@@ -981,6 +982,7 @@ The default is reset (0x0), software must write 0x1 to bring up the core.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SS_BYPASS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set (0x1) bypasses the chroma sub-sampler. This is primarily intended to be used to send
 the test-pattern directly to the HDMI transmitter without modifying it.</p>
@@ -991,6 +993,7 @@ the test-pattern directly to the HDMI transmitter without modifying it.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Reserved</p>
 </section>
@@ -1000,6 +1003,7 @@ the test-pattern directly to the HDMI transmitter without modifying it.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CSC_BYPASS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set (0x1) bypasses color space conversion (if equipped). And depending on its value, the
 default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN registers.</p>
@@ -1018,6 +1022,7 @@ default value of color space boundaries is set in the CLIPP_MAX and CLIPP_MIN re
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SOURCE_SEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Select the HDMI data source- register constant (0x3), incr-pattern (0x2),
 input (0x1) or disabled (0x0).</p>
@@ -1036,6 +1041,7 @@ input (0x1) or disabled (0x0).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CONST_RGB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000000</span></code></td>
 <td class="description"><section>
 <p>This is the RGB value transmitted, if the source is constant (see above).</p>
 </section>
@@ -1053,6 +1059,7 @@ input (0x1) or disabled (0x0).</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Interface clock frequency. This is relative to the processor clock and in many cases is
 100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
@@ -1075,6 +1082,7 @@ parameters to calculate the final sampling clock.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Interface clock ratio - as a factor actual received clock. This is implementation specific
 and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
@@ -1093,6 +1101,7 @@ and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Interface status, if set indicates no errors. If not set, there 
 are errors, software may try resetting the cores.</p>
@@ -1111,6 +1120,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VDMA_OVF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates vdma overflow.</p>
 </section>
@@ -1120,6 +1130,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VDMA_UNF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates vdma underflow.</p>
 </section>
@@ -1137,6 +1148,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">HDMI_TPM_OOS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates TPM OOS at the HDMI interface.</p>
 </section>
@@ -1146,6 +1158,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VDMA_TPM_OOS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>If set, indicates TPM OOS at the VDMA interface.</p>
 </section>
@@ -1163,6 +1176,7 @@ are errors, software may try resetting the cores.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R_MAXorCR_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
 <td class="description"><section>
 <p>Defines the maximum value for clipping the red or red-difference chroma component.
 Default value are 0xf0 for red-difference chroma and 0xfe for red.</p>
@@ -1173,6 +1187,7 @@ Default value are 0xf0 for red-difference chroma and 0xfe for red.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">G_MAXorY_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0eb</span></code></td>
 <td class="description"><section>
 <p>Defines the maximum value for clipping the green or luma component.
 Default values are 0xeb for luma and and 0xfe for green.</p>
@@ -1183,6 +1198,7 @@ Default values are 0xeb for luma and and 0xfe for green.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">B_MAXorCB_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
 <td class="description"><section>
 <p>Defines the maximum value for clipping the blue or blue-difference chroma component.
 Default value are 0xf0 for blue-difference chroma and 0xfe for blue.</p>
@@ -1201,6 +1217,7 @@ Default value are 0xf0 for blue-difference chroma and 0xfe for blue.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R_MINorCR_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
 <td class="description"><section>
 <p>Defines the minimum value for clipping the red or red-difference chroma component.
 Default value are 0x10 for red-difference chroma and 0x01 for red.</p>
@@ -1211,6 +1228,7 @@ Default value are 0x10 for red-difference chroma and 0x01 for red.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[16:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">G_MINorY_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x010</span></code></td>
 <td class="description"><section>
 <p>Defines the minimum value for clipping the green or luma component.
 Default values are 0x10 for luma and and 0x01 for green.</p>
@@ -1221,6 +1239,7 @@ Default values are 0x10 for luma and and 0x01 for green.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">B_MINorCB_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
 <td class="description"><section>
 <p>Defines the minimum value for clipping the blue or blue-difference chroma component.
 Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
@@ -1239,6 +1258,7 @@ Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">H_LINE_ACTIVE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the horizontal line active pixel width (active resolution length). e.g. 1920 (1080p)</p>
 </section>
@@ -1248,6 +1268,7 @@ Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">H_LINE_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the horizontal line width (no. of pixel clocks per line). e.g. 2200 (1080p)</p>
 </section>
@@ -1265,6 +1286,7 @@ Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">H_SYNC_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the horizontal sync width (no. of pixel clocks). e.g. 44 (1080p)</p>
 </section>
@@ -1282,6 +1304,7 @@ Default value are 0x10 for blue-difference chroma and 0x01 for blue.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">H_ENABLE_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the horizontal data enable maximum. It is the sum of H_ENABLE_MIN and the active
 pixel width. e.g. 2112 (192 + 1920) (1080p)</p>
@@ -1292,6 +1315,7 @@ pixel width. e.g. 2112 (192 + 1920) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">H_ENABLE_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the horizontal data enable minimum. It is the sum of horizontal back porch (number
 of clock cycles between the falling edge of HSYNC to the rising edge of DE) and the sync
@@ -1311,6 +1335,7 @@ width. e.g. 192 (44 + 148) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">V_FRAME_ACTIVE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the vertical frame active line width (active resolution height). e.g. 1080 (1080p)</p>
 </section>
@@ -1320,6 +1345,7 @@ width. e.g. 192 (44 + 148) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">V_FRAME_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the vertical frame width (no. of lines per frame). e.g. 1125 (1080p)</p>
 </section>
@@ -1337,6 +1363,7 @@ width. e.g. 192 (44 + 148) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">V_SYNC_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the vertical sync width (no. of lines). e.g. 5 (1080p)</p>
 </section>
@@ -1354,6 +1381,7 @@ width. e.g. 192 (44 + 148) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">V_ENABLE_MAX</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the vertical data enable maximum. It is the sum of V_ENABLE_MIN and the active
 pixel height. e.g. 1121 (41 + 1080) (1080p)</p>
@@ -1364,6 +1392,7 @@ pixel height. e.g. 1121 (41 + 1080) (1080p)</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">V_ENABLE_MIN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>This is the vertical data enable minimum. It is the sum of vertical back porch (number of lines
 between the falling edge of VSYNC to the rising edge of DE) and the sync width.

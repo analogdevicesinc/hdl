@@ -698,18 +698,21 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x01</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -721,6 +724,7 @@ programmable registers.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
 <p>Value of the ID configuration parameter.
 In case of multiple instances, each instance will have a unique ID.</p>
@@ -736,6 +740,7 @@ In case of multiple instances, each instance will have a unique ID.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Scratch register useful for debug.</p>
 </section>
@@ -753,6 +758,7 @@ In case of multiple instances, each instance will have a unique ID.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>Reset bit of the core. By default the core is in reset.</p>
 </section>
@@ -770,6 +776,7 @@ In case of multiple instances, each instance will have a unique ID.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PULSE_​PERIOD</span></code></td>
 <td class="description"><section>
 <p>The period of the generated signal. The resolution is the core clock’s time period.
 LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
@@ -788,6 +795,7 @@ LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">PULSE_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>The pulse width of the generated signal. The resolution is the core clock’s time period.
 LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.</p>
@@ -806,6 +814,7 @@ LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRIVER_OTW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The status of the OTW (over temperature warning flag) pin of the MOSFET driver.</p>
 </section>
@@ -823,6 +832,7 @@ LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_CLK_FREQ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>The core clock’s frequency. This clock is used for example by PWM counter too.
 The number is represented as unsigned 16.16 format. Assuming a 100MHz processor clock the
@@ -842,6 +852,7 @@ minimum is 1.523kHz and maximum is 6.554THz.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PULSE_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if a pulse was generated, and the IRQ_PULSE_MASK bit is not set. Set this
 bit after the interrupt was handled as required.</p>
@@ -852,6 +863,7 @@ bit after the interrupt was handled as required.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_ENTER_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_ENTER_MASK bit is
 not set. Set this bit after the interrupt was handled as required.</p>
@@ -862,6 +874,7 @@ not set. Set this bit after the interrupt was handled as required.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_EXIT_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if the MOSFET driver enters in OTW state, and the IRQ_OTW_EXIT_MASK bit is
 not set. Set this bit after the interrupt was handled as required.</p>
@@ -880,6 +893,7 @@ not set. Set this bit after the interrupt was handled as required.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PULSE_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if a pulse was generated. Cleared together with the corresponding
 IRQ_PENDING bit.</p>
@@ -890,6 +904,7 @@ IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_ENTER_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if the MOSFET driver enters in OTW state. Cleared together with the
 corresponding IRQ_PENDING bit.</p>
@@ -900,6 +915,7 @@ corresponding IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_EXIT_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>This bit is set if the MOSFET driver exits in OTW state. Cleared together with the
 corresponding IRQ_PENDING bit.</p>
@@ -918,6 +934,7 @@ corresponding IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCER_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Set this bit to enable the TIA channel sequencer.</p>
 </section>
@@ -927,6 +944,7 @@ corresponding IRQ_PENDING bit.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AUTO_SEQUENCE_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>If set, the sequencer runs in auto mode, using the predefined sequence. Otherwise the
 software must set the TIA_MANUAL_CONFIG register to change the TIA channel selection.</p>
@@ -945,6 +963,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TIA_CHSEL_OFFSET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Defines the time between setting the TIA channel select lines and the next generated pulse.</p>
 </section>
@@ -962,6 +981,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCE_VALUE0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA channel selects lines in the first sequence.</p>
 </section>
@@ -971,6 +991,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCE_VALUE1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA channel selects lines in the second sequence.</p>
 </section>
@@ -980,6 +1001,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[9:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCE_VALUE2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA channel selects lines in the third sequence.</p>
 </section>
@@ -989,6 +1011,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCE_VALUE3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA channel selects lines in the fourth sequence.</p>
 </section>
@@ -1006,6 +1029,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TIA0_CHSEL_MANUAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA0 channel selects lines in manual mode.</p>
 </section>
@@ -1015,6 +1039,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[5:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TIA1_CHSEL_MANUAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA0 channel selects lines in manual mode.</p>
 </section>
@@ -1024,6 +1049,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[9:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TIA2_CHSEL_MANUAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA0 channel selects lines in manual mode.</p>
 </section>
@@ -1033,6 +1059,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 <td><code class="docutils literal notranslate"><span class="pre">[13:12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TIA3_CHSEL_MANUAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>The value of the TIA0 channel selects lines in manual mode</p>
 </section>
