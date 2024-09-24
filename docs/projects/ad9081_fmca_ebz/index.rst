@@ -81,7 +81,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-     - `A10SoC`_
+     - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - FMCA
    * -
      - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
@@ -130,8 +130,10 @@ Supported carriers
 
 .. warning::
 
-   For `A10SoC`_ setups, the following reworks are required on the evaluation
-   board:
+   When using
+   :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
+   in your setup, the following reworks are required **on the evaluation
+   board**:
 
    -  To avoid using an external clock source and fully rely on the HMC7044
       clock chip, rotate the C6D/C4D caps in C5D/C3D position
@@ -141,16 +143,21 @@ Supported carriers
    -  If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M
       and populate R2M**
 
-   For the carrier, `A10SoC`_, the following reworks are mandatory:
+   For the carrier,
+   :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`,
+   the following reworks are mandatory:
    :dokuwiki:`[Wiki] FMC Pin Connection Configuration <resources/eval/user-guides/ad9081/quickstart/a10soc#fmc_pin_connection_configuration_change>`
 
 .. warning::
-   For `FM87`_ setups, the following reworks are required on the evaluation
-   board:
+   For
+   :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+   setups, the following reworks are required on the evaluation board:
 
    - C39B, C40B: 50 ohm
 
-   For the carrier, `FM87`_, the following reworks are required:
+   For the carrier
+   :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`,
+   the following reworks are required:
 
    - R1433, R1434: 50 ohm
    - R1777, R1778: 50 ohm
@@ -832,7 +839,3 @@ Software related
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
-
-.. _FM87: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html
