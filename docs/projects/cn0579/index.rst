@@ -6,7 +6,7 @@ CN0579 HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`CN0579 <CN0579>`  is a 4-channel, high resolution, wide bandwidth,
+The :adi:`CN0579 <CN0579>` is a 4-channel, high resolution, wide bandwidth,
 high dynamic range, integrated electronics piezoelectric (IEPE)-compatible
 interface data acquisition (DAQ) system that interfaces with IC piezoelectric
 (ICP®)/IEPE sensors. The solution provides flexible sensor interfacing to
@@ -137,7 +137,7 @@ SPI connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only for Cora Z7-07S
+   -  ``*`` only for Cora Z7-07S
    -  ``**`` only for De10-Nano
 
 GPIOs
@@ -179,7 +179,7 @@ cn0579_dma**     5                          45              77
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only for Cora Z7-07S
+   -  ``*`` only for Cora Z7-07S
    -  ``**`` only for De10-Nano
 
 Building the HDL project
