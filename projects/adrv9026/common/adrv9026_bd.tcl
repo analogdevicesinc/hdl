@@ -3,19 +3,32 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set JESD_MODE  $ad_project_params(JESD_MODE)
+set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
+set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
+
+set TX_NUM_LINKS $ad_project_params(TX_NUM_LINKS)
+set RX_NUM_LINKS $ad_project_params(RX_NUM_LINKS)
+
+set TX_JESD_L $ad_project_params(TX_JESD_L)
+set TX_JESD_M $ad_project_params(TX_JESD_M)
+
+set RX_JESD_L $ad_project_params(RX_JESD_L)
+set RX_JESD_M $ad_project_params(RX_JESD_M)
+
 # TX parameters
-set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
-set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M) ; # M
-set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S) ; # S
-set TX_SAMPLE_WIDTH 16                                 ; # N/NP
+set TX_NUM_OF_LANES [expr $TX_JESD_L * $TX_NUM_LINKS]      ; # L
+set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_LINKS] ; # M
+set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S)     ; # S
+set TX_SAMPLE_WIDTH 16                                     ; # N/NP
 
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
-set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
-set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
-set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S) ; # S
-set RX_SAMPLE_WIDTH 16                                 ; # N/NP
+set RX_NUM_OF_LANES [expr $RX_JESD_L * $RX_NUM_LINKS]      ; # L
+set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS] ; # M
+set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)     ; # S
+set RX_SAMPLE_WIDTH 16                                     ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
@@ -76,7 +89,7 @@ ad_ip_parameter axi_adrv9026_rx_xcvr CONFIG.TX_OR_RX_N 0
 ad_ip_parameter axi_adrv9026_rx_xcvr CONFIG.SYS_CLK_SEL 0
 ad_ip_parameter axi_adrv9026_rx_xcvr CONFIG.OUT_CLK_SEL 3
 
-adi_axi_jesd204_rx_create axi_adrv9026_rx_jesd $RX_NUM_OF_LANES
+adi_axi_jesd204_rx_create axi_adrv9026_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS
 
 ad_ip_instance util_cpack2 util_adrv9026_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -99,7 +112,7 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES]
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 
@@ -108,8 +121,9 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_instance util_adxcvr util_adrv9026_xcvr
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_RATE 10
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_RATE 10
+ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_OUT_DIV 1
 ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 4
 ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV_4_5 5
@@ -214,7 +228,7 @@ ad_cpu_interconnect 0x7c400000 axi_adrv9026_rx_dma
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
 
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
+ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9026_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
@@ -228,5 +242,5 @@ ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
 
 ad_cpu_interrupt ps-10 mb-15 axi_adrv9026_tx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_adrv9026_rx_jesd/irq
-ad_cpu_interrupt ps-13 mb-12 axi_adrv9026_tx_dma/irq
-ad_cpu_interrupt ps-14 mb-11 axi_adrv9026_rx_dma/irq
+ad_cpu_interrupt ps-13 mb-13 axi_adrv9026_tx_dma/irq
+ad_cpu_interrupt ps-14 mb-12 axi_adrv9026_rx_dma/irq
