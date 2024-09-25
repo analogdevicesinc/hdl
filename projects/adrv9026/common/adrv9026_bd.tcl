@@ -144,7 +144,7 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES]
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 
@@ -372,8 +372,8 @@ ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
 
 ad_cpu_interrupt ps-10 mb-15 axi_adrv9026_tx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_adrv9026_rx_jesd/irq
-ad_cpu_interrupt ps-13 mb-12 axi_adrv9026_tx_dma/irq
-ad_cpu_interrupt ps-14 mb-11 axi_adrv9026_rx_dma/irq
+ad_cpu_interrupt ps-13 mb-13 axi_adrv9026_tx_dma/irq
+ad_cpu_interrupt ps-14 mb-12 axi_adrv9026_rx_dma/irq
 
 # Dummy outputs for unused lanes
 if {$ADI_PHY_SEL == 1} {
