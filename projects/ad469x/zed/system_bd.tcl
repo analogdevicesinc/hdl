@@ -15,7 +15,7 @@ set adc_resolution 16
 # specify ADC sampling rate in samples/seconds
 set adc_sampling_rate 1000000
 
-adi_project_files ad469x_fmc_zed [list \
+adi_project_files ad469x_zed [list \
 	"../../../library/common/ad_edge_detect.v" \
 	"../../../library/util_cdc/sync_bits.v" \
 ]
