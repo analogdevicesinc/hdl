@@ -48,13 +48,13 @@ Supported carriers
      - FMC slot
    * - :adi:`EVAL-AD9656 <EVAL-AD9656>`
      - :xilinx:`ZCU102`
-     - FMC HPC1
+     - FMC HPC0
 
 Block design
 -------------------------------------------------------------------------------
 
 ZCU102 block diagram
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: ad9656_fmc_xilinx_block_diagram.svg
    :width: 800
@@ -71,12 +71,12 @@ The Rx links (ADC Path) operate with the following parameters:
 -  QPLL0 or CPLL
 
 AD9656 FMC Card block diagram
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: ad9656_fmc_connector_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9656-FMC/ZCU102 FMC Card block diagram
+   :alt: AD9656-FMC card block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +86,7 @@ oscillator, which goes through a transformer-coupled circuit to minimize jitter.
 The :adi:`AD9656` has an internal clock divider (ratios 1-8) for higher
 frequency clocks.
 
-Configuring the clock source for :adi:`AD9656`:
+There are two ways to configure the clock source for :adi:`AD9656`:
 
 #. Default Configuration (On-board Oscillator):
 
@@ -94,14 +94,14 @@ Configuring the clock source for :adi:`AD9656`:
      transformer-coupled input network.
 
 #. Using an External Clock Source:
-        
+
    - Remove C302 (optional) and Jumper J304: This disables the on-board
      oscillator.
    - Attach the external clock source to the SMA connector labeled
      CLOCK+ (J302). The external clock should be a clean signal generator,
      typically ~2.8V p-p or 13 dBm sine wave input.
 
-For more details, check :adi:`AD9656` schematic.
+For more details, check :adi:`EVAL-AD9656` schematic.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,14 +111,14 @@ added to the base address from HDL (see more at :ref:`architecture`).
 
 Check-out the table below to find out the conditions.
 
-==================== ===============
-Instance             Zynq/Microblaze
-==================== ===============
-rx_ad9656_tpl_core   0x44A00000
-axi_ad9656_rx_xcvr   0x44A60000
-axi_ad9656_rx_jesd   0x44AA0000
-axi_ad9656_rx_dma    0x7c400000
-==================== ===============
+================== ===============
+Instance           Zynq/Microblaze
+================== ===============
+rx_ad9656_tpl_core 0x44A00000
+axi_ad9656_rx_xcvr 0x44A60000
+axi_ad9656_rx_jesd 0x44AA0000
+axi_ad9656_rx_dma  0x7C400000
+================== ===============
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,7 +138,7 @@ SPI connections
    * - PS
      - SPI 0
      - AD9508
-     - 1
+     - 0
    * - PS
      - SPI 0
      - AD9953
@@ -177,9 +177,6 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location (**projects/ad9656_fmc/zcu102**) and run the
-make command by typing in your command prompt:
-
 **Linux/Cygwin/WSL**
 
 .. code-block::
@@ -190,45 +187,18 @@ make command by typing in your command prompt:
 The following dropdown contains a table with the parameters that are used to
 configure this project, on :xilinx:`ZCU102`.
 
-.. collapsible:: Default values of the ``make`` parameters for AD9656-FMC
+-  JESD_MODE :red:`8B10B`
+-  RX_NUM_OF_LANES 4
+-  RX_NUM_OF_CONVERTERS 4
+-  RX_SAMPLES_PER_FRAME 1
+-  RX_SAMPLE_WIDTH 16
+-  RX_SAMPLES_PER_CHANNEL 2
 
-   +-------------------------+--------------------------------+
-   | Parameter               | Default value of the parameters|
-   |                         |            depending on carrier|
-   |                         +--------------------------------+
-   |                         | ZCU102                         |
-   +=========================+================================+
-   | JESD_MODE               | :red:`8B10B`                   |
-   +-------------------------+--------------------------------+
-   | RX_NUM_OF_LANES         | 4                              |
-   +-------------------------+--------------------------------+
-   | RX_NUM_OF_CONVERTERS    | 4                              |
-   +-------------------------+--------------------------------+
-   | RX_SAMPLES_PER_FRAME    | 1                              |
-   +-------------------------+--------------------------------+
-   | RX_SAMPLE_WIDTH         | 16                             |
-   +-------------------------+--------------------------------+
-   | RX_SAMPLES_PER_CHANNEL  | 2                              |
-   +-------------------------+--------------------------------+
-
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user
+guide.
 
 Resources
 -------------------------------------------------------------------------------
-
-Systems related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Here you can find the quick start guides available for these evaluation boards:
-
-.. list-table::
-   :widths: 20 10
-   :header-rows: 1
-
-   * - Evaluation board
-     - Zynq UltraScale+ MP
-   * - AD9656-FMC
-     - :dokuwiki:`ZCU102 <resources/eval/user-guides/ad9656/reference_hdl>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -239,6 +209,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-  :dokuwiki:`[Wiki] AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
 -  :git-hdl:`AD9656-FMC HDL project source code <projects/ad9656_fmc>`
 
 .. list-table::
@@ -249,31 +220,31 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
      - :ref:`here <axi_dmac>`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
      - :ref:`here <axi_sysid>`
    * - AD_IP_JESD204_TPL_ADC
-     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc <library/jesd204/ad_ip_jesd204_tpl_adc>`
+     - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
      - :ref:`here <ad_ip_jesd204_tpl_adc>`
    * - AXI_JESD204_RX
-     - :git-hdl:`library/jesd204/axi_jesd204_rx <library/jesd204/axi_jesd204_rx>`
+     - :git-hdl:`library/jesd204/axi_jesd204_rx`
      - :ref:`here <axi_jesd204_rx>`
    * - JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
      - :ref:`here <axi_jesd204_rx>`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
+     - :git-hdl:`library/sysid_rom`
      - :ref:`here <axi_sysid>`
    * - UTIL_CPACK2
-     - :git-hdl:`library/util_pack/util_cpack2 <library/util_pack/util_cpack2>`
+     - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`here <util_cpack2>`
    * - AXI_ADXCVR
-     - :git-hdl:`library/xilinx/axi_adxcvr <library/xilinx/axi_adxcvr>`
+     - :git-hdl:`library/xilinx/axi_adxcvr`
      - :ref:`here <axi_adxcvr>`
    * - UTIL_ADXCVR
-     - :git-hdl:`library/xilinx/util_adxcvr <library/xilinx/util_adxcvr>`
+     - :git-hdl:`library/xilinx/util_adxcvr`
      - :ref:`here <util_adxcvr>`
 
 Software related
