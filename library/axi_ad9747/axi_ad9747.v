@@ -45,19 +45,15 @@ module axi_ad9747 #(
     parameter   DAC_DDS_TYPE = 2,
     parameter   DAC_DDS_CORDIC_DW = 16,
     parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
-    parameter   DAC_DATAPATH_DISABLE = 0
+    parameter   DAC_DATAPATH_DISABLE = 0,
+    parameter   ONEPORT = 0 // default, dual-port mode on
 ) (
     // dac interface
-    // from dco1_p
-    input                   dac_clk_in_p,
-    // from dco1_n
-    input                   dac_clk_in_n,
-    // to dci_p
-    output                  dac_clk_out_p,
-    // to dci_n
-    output                  dac_clk_out_n,
-    output      [ 15:0]     dac_data_out_p,
-    output      [ 15:0]     dac_data_out_n,
+    // from dco
+    input                   dac_clk_in,
+    
+    output      [ 15:0]     dac_data_out_p1,
+    output      [ 15:0]     dac_data_out_p2,
 
     // dma interface
     
@@ -73,8 +69,7 @@ module axi_ad9747 #(
     // axi interface
     
     input                   s_axi_aclk,
-    input                   s_axi_aresetn
-    /*
+    input                   s_axi_aresetn,
     input                   s_axi_awvalid,
     input       [ 15:0]     s_axi_awaddr,
     output                  s_axi_awready,
@@ -94,7 +89,6 @@ module axi_ad9747 #(
     input                   s_axi_rready,
     input       [  2:0]     s_axi_awprot,
     input       [  2:0]     s_axi_arprot
-    */
 );
     
     // internal clocks and resets
@@ -125,22 +119,19 @@ module axi_ad9747 #(
     wire    [ 31:0]   up_rdata_s;
     wire              up_rack_s;
 
-    // temp: singals used in the AXI IP
+    // temp: signals used in the AXI IP
     assign up_clk  = s_axi_aclk;
     assign up_rstn = s_axi_aresetn;
-    //assign dac_rst = dac_rst_s;
+    assign dac_rst = dac_rst_s;
 
     // device interface
 
     axi_ad9747_if #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
   ) i_if (
-    .dac_clk_in_p (dac_clk_in_p),
-    .dac_clk_in_n (dac_clk_in_n),
-    .dac_clk_out_p (dac_clk_out_p),
-    .dac_clk_out_n (dac_clk_out_n),
-    .dac_data_out_p (dac_data_out_p),
-    .dac_data_out_n (dac_data_out_n),
+    .dac_clk_in (dac_clk_in),
+    .dac_data_out_p1 (dac_data_out_p1),
+    .dac_data_out_p2 (dac_data_out_p2),
     .dac_rst (dac_rst),
     .dac_div_clk (dac_div_clk),
     .dac_status (dac_status_s),
@@ -164,7 +155,8 @@ module axi_ad9747 #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE)
+    .DATAPATH_DISABLE(DAC_DATAPATH_DISABLE),
+    .ONEPORT (ONEPORT)
   ) i_core (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -196,7 +188,6 @@ module axi_ad9747 #(
     
 
     // axi interface
-    /*
     up_axi i_up_axi (
         .up_rstn (up_rstn),
         .up_clk (up_clk),
@@ -225,5 +216,4 @@ module axi_ad9747 #(
         .up_raddr (up_raddr_s),
         .up_rdata (up_rdata_s),
         .up_rack (up_rack_s));
-    */
-endmodule;
+endmodule

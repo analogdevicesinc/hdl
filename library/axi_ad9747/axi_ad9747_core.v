@@ -45,7 +45,8 @@ module axi_ad9747_core #(
   parameter   DAC_DDS_TYPE = 1,
   parameter   DAC_DDS_CORDIC_DW = 16,
   parameter   DAC_DDS_CORDIC_PHASE_DW = 16,
-  parameter   DATAPATH_DISABLE = 0
+  parameter   DATAPATH_DISABLE = 0,
+  parameter   ONEPORT = 0
 ) (
 
   // dac interface
@@ -130,7 +131,7 @@ module axi_ad9747_core #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DATAPATH_DISABLE)
+    .DATAPATH_DISABLE(DATAPATH_DISABLE),
   ) i_channel_0 (
     .dac_div_clk (dac_div_clk),
     .dac_rst (dac_rst),
@@ -153,85 +154,90 @@ module axi_ad9747_core #(
     .up_rdata (up_rdata_0_s),
     .up_rack (up_rack_0_s));
 
-  axi_ad9747_channel #(
-    .CHANNEL_ID(1),
-    .DAC_DDS_TYPE (DAC_DDS_TYPE),
-    .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
-    .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE(DATAPATH_DISABLE)
-  ) i_channel_1 (
-    .dac_div_clk (dac_div_clk),
-    .dac_rst (dac_rst),
-    .dac_enable (dac_enable_1_reg),
-    .dac_data0 (dac_data_b0),
-    .dac_data1 (dac_data_b1),
-    .dac_data2 (dac_data_b2),
-    .dac_data3 (dac_data_b3),
-    .dma_data (dac_ddata_1),
-    .dac_data_sync (dac_sync_s),
-    .dac_dds_format (dac_datafmt_s),
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq),
-    .up_waddr (up_waddr),
-    .up_wdata (up_wdata),
-    .up_wack (up_wack_1_s),
-    .up_rreq (up_rreq),
-    .up_raddr (up_raddr),
-    .up_rdata (up_rdata_1_s),
-    .up_rack (up_rack_1_s));
+  // if one-port mode is desired, this channel won't be initialized
+  generate
+    if (ONEPORT == 0) begin
+      axi_ad9747_channel #(
+        .CHANNEL_ID(1),
+        .DAC_DDS_TYPE (DAC_DDS_TYPE),
+        .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
+        .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
+        .DATAPATH_DISABLE(DATAPATH_DISABLE),
+      ) i_channel_1 (
+        .dac_div_clk (dac_div_clk),
+        .dac_rst (dac_rst),
+        .dac_enable (dac_enable_1_reg),
+        .dac_data0 (dac_data_b0),
+        .dac_data1 (dac_data_b1),
+        .dac_data2 (dac_data_b2),
+        .dac_data3 (dac_data_b3),
+        .dma_data (dac_ddata_1),
+        .dac_data_sync (dac_sync_s),
+        .dac_dds_format (dac_datafmt_s),
+        .up_rstn (up_rstn),
+        .up_clk (up_clk),
+        .up_wreq (up_wreq),
+        .up_waddr (up_waddr),
+        .up_wdata (up_wdata),
+        .up_wack (up_wack_1_s),
+        .up_rreq (up_rreq),
+        .up_raddr (up_raddr),
+        .up_rdata (up_rdata_1_s),
+        .up_rack (up_rack_1_s));
+    end
+  endgenerate
 
   // dac common processor interface
 
-//  up_dac_common #(
-//    .ID (ID),
-//    .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
-//    .FPGA_FAMILY (FPGA_FAMILY),
-//    .SPEED_GRADE (SPEED_GRADE),
-//    .DEV_PACKAGE (DEV_PACKAGE)
-//  ) i_up_dac_common (
-//    .mmcm_rst (),
-//    .dac_clk (dac_div_clk),
-//    .dac_rst (dac_rst),
-//    .dac_sync (dac_sync_s),
-//    .dac_frame (),
-//    .dac_clksel (),
-//    .dac_custom_wr(),
-//    .dac_custom_rd(32'b0),
-//    .dac_custom_control(),
-//    .dac_status_if_busy(1'b0),
-//    .dac_par_type (),
-//    .dac_par_enb (),
-//    .dac_r1_mode (),
-//    .dac_datafmt (dac_datafmt_s),
-//    .dac_datarate (),
-//    .dac_status (dac_status),
-//    .dac_status_unf (dac_dunf),
-//    .dac_clk_ratio (32'd16),
-//    .up_dac_ce (),
-//    .up_pps_rcounter (31'd0),
-//    .up_pps_status (1'd0),
-//    .up_pps_irq_mask (),
-//    .up_drp_sel (),
-//    .up_drp_wr (),
-//    .up_drp_addr (),
-//    .up_drp_wdata (),
-//    .up_drp_rdata (32'd0),
-//    .up_drp_ready (1'd1),
-//    .up_drp_locked (1'd1),
-//    .up_usr_chanmax (),
-//    .dac_usr_chanmax (8'd1),
-//    .up_dac_gpio_in (32'd0),
-//    .up_dac_gpio_out (),
-//    .up_rstn (up_rstn),
-//    .up_clk (up_clk),
-//    .up_wreq (up_wreq),
-//    .up_waddr (up_waddr),
-//    .up_wdata (up_wdata),
-//    .up_wack (up_wack_s),
-//    .up_rreq (up_rreq),
-//    .up_raddr (up_raddr),
-//    .up_rdata (up_rdata_s),
-//    .up_rack (up_rack_s));
+ up_dac_common #(
+   .ID (ID),
+   .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
+   .FPGA_FAMILY (FPGA_FAMILY),
+   .SPEED_GRADE (SPEED_GRADE),
+   .DEV_PACKAGE (DEV_PACKAGE)
+ ) i_up_dac_common (
+   .mmcm_rst (),
+   .dac_clk (dac_div_clk),
+   .dac_rst (dac_rst),
+   .dac_sync (dac_sync_s),
+   .dac_frame (),
+   .dac_clksel (),
+   .dac_custom_wr(),
+   .dac_custom_rd(32'b0),
+   .dac_custom_control(),
+   .dac_status_if_busy(1'b0),
+   .dac_par_type (),
+   .dac_par_enb (),
+   .dac_r1_mode (),
+   .dac_datafmt (dac_datafmt_s),
+   .dac_datarate (),
+   .dac_status (dac_status),
+   .dac_status_unf (dac_dunf),
+   .dac_clk_ratio (32'd16),
+   .up_dac_ce (),
+   .up_pps_rcounter (31'd0),
+   .up_pps_status (1'd0),
+   .up_pps_irq_mask (),
+   .up_drp_sel (),
+   .up_drp_wr (),
+   .up_drp_addr (),
+   .up_drp_wdata (),
+   .up_drp_rdata (32'd0),
+   .up_drp_ready (1'd1),
+   .up_drp_locked (1'd1),
+   .up_usr_chanmax (),
+   .dac_usr_chanmax (8'd1),
+   .up_dac_gpio_in (32'd0),
+   .up_dac_gpio_out (),
+   .up_rstn (up_rstn),
+   .up_clk (up_clk),
+   .up_wreq (up_wreq),
+   .up_waddr (up_waddr),
+   .up_wdata (up_wdata),
+   .up_wack (up_wack_s),
+   .up_rreq (up_rreq),
+   .up_raddr (up_raddr),
+   .up_rdata (up_rdata_s),
+   .up_rack (up_rack_s));
 
 endmodule

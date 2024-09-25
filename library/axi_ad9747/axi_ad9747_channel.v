@@ -85,7 +85,7 @@ module axi_ad9747_channel #(
   wire    [15:0]   dac_dds_incr_2_s;
   wire    [15:0]   dac_pat_data_1_s;
   wire    [15:0]   dac_pat_data_2_s;
-  reg    [ 3:0]   dac_data_sel_s = 4'h2;
+  reg     [ 3:0]   dac_data_sel_s = 4'h2;
 
   reg     [23:0]   dac_prbs_data = 'd0;
   reg     [15:0]   dac_prbs_counter = 'd0;
@@ -100,7 +100,7 @@ module axi_ad9747_channel #(
     end
   endfunction
 
-  // dac data select
+  // register_dac_data_sel
 
   always @(posedge dac_div_clk) begin
     dac_enable <= (dac_data_sel_s == 4'h2) ? 1'b1 : 1'b0;
@@ -171,47 +171,47 @@ module axi_ad9747_channel #(
 
   // single channel processor
 
-//  up_dac_channel #(
-//    .CHANNEL_ID(CHANNEL_ID)
-//  ) i_up_dac_channel (
-//    .dac_clk (dac_div_clk),
-//    .dac_rst (dac_rst),
-//    .dac_dds_scale_1 (dac_dds_scale_1_s),
-//    .dac_dds_init_1 (dac_dds_init_1_s),
-//    .dac_dds_incr_1 (dac_dds_incr_1_s),
-//    .dac_dds_scale_2 (dac_dds_scale_2_s),
-//    .dac_dds_init_2 (dac_dds_init_2_s),
-//    .dac_dds_incr_2 (dac_dds_incr_2_s),
-//    .dac_pat_data_1 (dac_pat_data_1_s),
-//    .dac_pat_data_2 (dac_pat_data_2_s),
-//    .dac_data_sel (dac_data_sel_s),
-//    .dac_iq_mode (),
-//    .dac_iqcor_enb (),
-//    .dac_iqcor_coeff_1 (),
-//    .dac_iqcor_coeff_2 (),
-//    .up_usr_datatype_be (),
-//    .up_usr_datatype_signed (),
-//    .up_usr_datatype_shift (),
-//    .up_usr_datatype_total_bits (),
-//    .up_usr_datatype_bits (),
-//    .up_usr_interpolation_m (),
-//    .up_usr_interpolation_n (),
-//    .dac_usr_datatype_be (1'b0),
-//    .dac_usr_datatype_signed (1'b1),
-//    .dac_usr_datatype_shift (8'd0),
-//    .dac_usr_datatype_total_bits (8'd16),
-//    .dac_usr_datatype_bits (8'd16),
-//    .dac_usr_interpolation_m (16'd1),
-//    .dac_usr_interpolation_n (16'd1),
-//    .up_rstn (up_rstn),
-//    .up_clk (up_clk),
-//    .up_wreq (up_wreq),
-//    .up_waddr (up_waddr),
-//    .up_wdata (up_wdata),
-//    .up_wack (up_wack),
-//    .up_rreq (up_rreq),
-//    .up_raddr (up_raddr),
-//    .up_rdata (up_rdata),
-//    .up_rack (up_rack));
+ up_dac_channel #(
+   .CHANNEL_ID(CHANNEL_ID)
+ ) i_up_dac_channel (
+   .dac_clk (dac_div_clk),
+   .dac_rst (dac_rst),
+   .dac_dds_scale_1 (dac_dds_scale_1_s),
+   .dac_dds_init_1 (dac_dds_init_1_s),
+   .dac_dds_incr_1 (dac_dds_incr_1_s),
+   .dac_dds_scale_2 (dac_dds_scale_2_s),
+   .dac_dds_init_2 (dac_dds_init_2_s),
+   .dac_dds_incr_2 (dac_dds_incr_2_s),
+   .dac_pat_data_1 (dac_pat_data_1_s),
+   .dac_pat_data_2 (dac_pat_data_2_s),
+   .dac_data_sel (dac_data_sel_s),
+   .dac_iq_mode (),
+   .dac_iqcor_enb (),
+   .dac_iqcor_coeff_1 (),
+   .dac_iqcor_coeff_2 (),
+   .up_usr_datatype_be (),
+   .up_usr_datatype_signed (),
+   .up_usr_datatype_shift (),
+   .up_usr_datatype_total_bits (),
+   .up_usr_datatype_bits (),
+   .up_usr_interpolation_m (),
+   .up_usr_interpolation_n (),
+   .dac_usr_datatype_be (1'b0),
+   .dac_usr_datatype_signed (1'b1),
+   .dac_usr_datatype_shift (8'd0),
+   .dac_usr_datatype_total_bits (8'd16),
+   .dac_usr_datatype_bits (8'd16),
+   .dac_usr_interpolation_m (16'd1),
+   .dac_usr_interpolation_n (16'd1),
+   .up_rstn (up_rstn),
+   .up_clk (up_clk),
+   .up_wreq (up_wreq),
+   .up_waddr (up_waddr),
+   .up_wdata (up_wdata),
+   .up_wack (up_wack),
+   .up_rreq (up_rreq),
+   .up_raddr (up_raddr),
+   .up_rdata (up_rdata),
+   .up_rack (up_rack));
 
 endmodule

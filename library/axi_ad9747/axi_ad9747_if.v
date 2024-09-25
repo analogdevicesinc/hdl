@@ -44,12 +44,9 @@ module axi_ad9747_if #(
 
   // dac interface
 
-  input            dac_clk_in_p,
-  input            dac_clk_in_n,
-  output           dac_clk_out_p,
-  output           dac_clk_out_n,
-  output  [15:0]   dac_data_out_p,
-  output  [15:0]   dac_data_out_n,
+  input            dac_clk_in,
+  output  [15:0]   dac_data_out_p1,
+  output  [15:0]   dac_data_out_p2,
 
   // internal resets and clocks
 
@@ -107,40 +104,37 @@ module axi_ad9747_if #(
     .data_s5 (dac_data_b2),
     .data_s6 (dac_data_a3),
     .data_s7 (dac_data_b3),
-    .data_out_se (),
-    .data_out_p (dac_data_out_p),
-    .data_out_n (dac_data_out_n));
+    .data_out_se (dac_data_out_p1),
+    .data_out_p (),
+    .data_out_n ());
 
-  // dac clock output serdes & buffer
-
-  ad_serdes_out #(
+    ad_serdes_out #(
     .DDR_OR_SDR_N(1),
-    .DATA_WIDTH(1),
+    .DATA_WIDTH(16),
     .SERDES_FACTOR(8),
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY)
-  ) i_serdes_out_clk (
+  ) i_serdes_out_data (
     .rst (dac_rst),
     .clk (dac_clk_s),
     .div_clk (dac_div_clk),
     .data_oe (1'b1),
-    .data_s0 (1'b1),
-    .data_s1 (1'b0),
-    .data_s2 (1'b1),
-    .data_s3 (1'b0),
-    .data_s4 (1'b1),
-    .data_s5 (1'b0),
-    .data_s6 (1'b1),
-    .data_s7 (1'b0),
-    .data_out_se (),
-    .data_out_p (dac_clk_out_p),
-    .data_out_n (dac_clk_out_n));
+    .data_s0 (dac_data_a0),
+    .data_s1 (dac_data_b0),
+    .data_s2 (dac_data_a1),
+    .data_s3 (dac_data_b1),
+    .data_s4 (dac_data_a2),
+    .data_s5 (dac_data_b2),
+    .data_s6 (dac_data_a3),
+    .data_s7 (dac_data_b3),
+    .data_out_se (dac_data_out_p2),
+    .data_out_p (),
+    .data_out_n ());
 
-  // dac clock input buffers
+  // dac clock buffers
 
-  IBUFGDS i_dac_clk_in_ibuf (
-    .I (dac_clk_in_p),
-    .IB (dac_clk_in_n),
-    .O (dac_clk_s));
+  IBUF #(
+    .I (dac_clk_in),
+    .O (dac_clk_s)); 
 
   BUFGCE_DIV #(
     .BUFGCE_DIVIDE (4),
@@ -153,7 +147,7 @@ module axi_ad9747_if #(
     .CLR (1'b0),
     .I (dac_clk_s));
 
-  BUFG i_dac_div_clk_gbuf (
+  BUFG i_dac_div_clk_bufg (
     .I (dac_div_clk_s),
     .O (dac_div_clk));
 
