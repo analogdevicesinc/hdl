@@ -1,10 +1,10 @@
-###############################################################################
-## Copyright (C) 2018-2024 Analog Devices, Inc.
+####################################################################################
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
-###############################################################################
+####################################################################################
 
-PROJECT_NAME := template_zed
+PROJECT_NAME := ad9747_ebz_zed
 
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc

@@ -35,7 +35,10 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter ONEPORT = 0
+)
+(
 
   inout   [14:0]  ddr_addr,
   inout   [ 2:0]  ddr_ba,
@@ -86,7 +89,7 @@ module system_top (
   // relevant signals
   
   // leaves the chip
-  //input           dco,
+  input           dco,
 
   output  [15:0]  data_p1,
   output  [15:0]  data_p2,
@@ -189,7 +192,11 @@ module system_top (
 
     .otg_vbusoc (otg_vbusoc),
 
-    .spi0_clk_i (1'b0),
+    .dco (dco),
+    .data_p1 (data_p1),
+    .data_p2 (data_p2),
+
+    .spi0_clk_i (),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
     .spi0_csn_1_o (),
