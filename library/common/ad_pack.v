@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,9 +38,10 @@
 // Packer:
 //   - pack I_W number of data units into O_W number of data units
 //   - data unit defined in bits by UNIT_W e.g 8 is a byte
+//   - align data to LSB or MSB
 //
 // Constraints:
-//   - O_W > I_W
+//   - O_W >= I_W
 //   - no backpressure
 //
 // Data format:
@@ -52,16 +53,25 @@
 //  O_W = 6
 //  UNIT_W = 8
 //
+//  Data aligned to LSB
+//
 //  idata : [B3,B2,B1,B0],[B7,B6,B5,B4],[B11,B10,B9,B8]
 //  odata:                             [B5,B4,B3,B2,B1,B0],[B11,B10,B9,B8,B7,B6]
 //
+//  or
+//
+//  Data aligned to MSB
+//
+//  idata : [B0,B1,B2,B3],[B4,B5,B6,B7],[B8,B9,B10,B11]
+//  odata:                             [B0,B1,B2,B3,B4,B5],[B6,B7,B8,B9,B10,B11]
 
 module ad_pack #(
   parameter I_W = 4,
   parameter O_W = 6,
   parameter UNIT_W = 8,
   parameter I_REG = 0,
-  parameter O_REG = 1
+  parameter O_REG = 1,
+  parameter ALIGN_TO_MSB = 0
 ) (
   input                   clk,
   input                   reset,
@@ -89,18 +99,18 @@ module ad_pack #(
   wire pack_wr;
 
   function [31:0] gcd;
-    input [31:0]  a;
-    input [31:0]  b;
-    begin
-      while (a != b) begin
-        if (a > b) begin
-          a = a-b;
-        end else begin
-          b = b-a;
-        end
+  input [31:0]  a;
+  input [31:0]  b;
+  begin
+    while (a != b) begin
+      if (a > b) begin
+        a = a-b;
+      end else begin
+        b = b-a;
       end
-      gcd = a;
     end
+    gcd = a;
+  end
   endfunction
 
   generate
@@ -117,12 +127,23 @@ module ad_pack #(
         ivalid_d = ivalid;
         idata_d = idata;
       end
-
     end
   endgenerate
 
-  assign idata_dd_nx = {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
-  assign in_use_nx = {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+  assign idata_dd_nx = ALIGN_TO_MSB ?
+                       {idata_dd,idata_d} :
+                       {idata_d,idata_dd[SH_W*UNIT_W-1:I_W*UNIT_W]};
+  assign in_use_nx = ALIGN_TO_MSB ?
+                       {in_use,{I_W{ivalid_d}}} :
+                       {{I_W{ivalid_d}},in_use[SH_W-1:I_W]};
+
+  // Keep track of accumulated elements,
+  // at every output valid, the number of elements that are left in the
+  // storage is changing if O_W is not integer multiple of I_W,
+  // these are packed together with future data.
+  // If the number of accumulated elements from previous operation together
+  // with the current input word form an output word a valid data can be
+  // generated.
 
   always @(posedge clk) begin
     if (reset) begin
@@ -139,18 +160,42 @@ module ad_pack #(
   end
 
   integer i;
+  generate
+
+  // Location of the output data in the storage differs from operation to
+  // operation and is tracked by the in_use register.
+  // Depending on the ALIGN_TO_MSB parameter either (1) the left most bits will be
+  // output or (0) the right most ones.
+  // out_mask represents the bits that are currently outputted, these get
+  // removed from the in_use register for the next operation
+
+  if (ALIGN_TO_MSB == 0) begin  // Data aligned to LSB
+    always @(*) begin
+      out_mask = 'b0;
+      idata_packed = 'b0;
+      for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
+        if (in_use_nx[i]) begin
+          out_mask = {O_W{1'b1}} << i;
+          idata_packed = idata_dd_nx >> i*UNIT_W;
+        end
+      end
+    end
+
+    assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+  end else begin  // Data aligned to MSB
   always @(*) begin
     out_mask = 'b0;
     idata_packed = 'b0;
-    for (i = SH_W-O_W; i >= 0; i=i-STEP) begin
-      if (in_use_nx[i]) begin
-        out_mask = {O_W{1'b1}} << i;
-        idata_packed = idata_dd_nx >> i*UNIT_W;
+      for (i = O_W-1 ; i <= SH_W-1; i=i+STEP) begin
+        if (in_use_nx[i]) begin
+          out_mask = {O_W{1'b1}} << (i-O_W+1);
+          idata_packed = idata_dd_nx >> (i-O_W+1)*UNIT_W;
+        end
       end
-    end
   end
-
-  assign pack_wr = ivalid_d & |in_use_nx[SH_W-O_W:0];
+  assign pack_wr = ivalid_d & |in_use_nx[SH_W-1:O_W-1];
+  end
+  endgenerate
 
   generate
     if (O_REG) begin : o_reg
@@ -168,12 +213,10 @@ module ad_pack #(
       end
 
     end else begin
-
       always @(*) begin
         ovalid = pack_wr;
         odata = idata_packed;
       end
-
     end
   endgenerate
 
