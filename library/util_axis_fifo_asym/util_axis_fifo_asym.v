@@ -106,6 +106,8 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] s_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS-1:0] s_axis_room_int_s;
 
+  wire m_axis_valid_int;
+
   // instantiate the FIFOs
   genvar i;
   generate
@@ -150,7 +152,17 @@ module util_axis_fifo_asym #(
 
       for (i=0; i<RATIO; i=i+1) begin
         assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
-        assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? s_axis_tlast : 1'b0;
+                
+        if (TKEEP_EN) begin
+
+          assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? ((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) ? s_axis_tlast : 1'b0) :
+            (((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) & (~(|s_axis_tkeep[M_DATA_WIDTH/8*(i+1)+:M_DATA_WIDTH/8]))) ? s_axis_tlast : 1'b0);
+
+        end else begin
+
+          assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? s_axis_tlast : 1'b0;
+
+        end
       end
 
       assign s_axis_tkeep_int_s = s_axis_tkeep;
@@ -213,7 +225,8 @@ module util_axis_fifo_asym #(
       assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
-      assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
+      assign m_axis_valid_int = m_axis_valid_int_s >> m_axis_counter;
+      assign m_axis_valid = m_axis_valid_int & (|m_axis_tkeep);
       assign m_axis_tlast = m_axis_tlast_int_s >> m_axis_counter;
 
       // the FIFO has the same level as the last atomic instance
@@ -239,7 +252,8 @@ module util_axis_fifo_asym #(
       assign m_axis_data = m_axis_data_int_s;
       // if every instance has a valid data, the interface has valid data,
       // otherwise valid is asserted only if TLAST is asserted
-      assign m_axis_valid = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      assign m_axis_valid = m_axis_valid_int;
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
       assign m_axis_almost_empty = |m_axis_almost_empty_int_s;
@@ -307,7 +321,7 @@ module util_axis_fifo_asym #(
         if (!m_axis_aresetn) begin
           m_axis_counter <= 0;
         end else begin
-          if (m_axis_ready && m_axis_valid) begin
+          if (m_axis_ready && m_axis_valid_int) begin
             m_axis_counter <= m_axis_counter + 1'b1;
           end
         end
