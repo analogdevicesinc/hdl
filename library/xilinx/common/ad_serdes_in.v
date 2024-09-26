@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -46,12 +46,14 @@ module ad_serdes_in #(
   parameter   IODELAY_ENABLE = 1,
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
-  parameter   REFCLK_FREQUENCY = 200
+  parameter   REFCLK_FREQUENCY = 200,
+  parameter   EXT_SERDES_RESET = 0
 ) (
 
   // reset and clocks
 
   input                           rst,
+  input                           ext_serdes_rst,
   input                           clk,
   input                           div_clk,
 
@@ -108,7 +110,9 @@ module ad_serdes_in #(
   wire  [(DATA_WIDTH-1):0]      data_in_idelay_s;
   wire  [(DATA_WIDTH-1):0]      data_shift1_s;
   wire  [(DATA_WIDTH-1):0]      data_shift2_s;
-  wire  serdes_rst = serdes_rst_seq[6];
+
+  wire  serdes_rst = (EXT_SERDES_RESET == 1) ? ext_serdes_rst :
+                                               serdes_rst_seq[6];
 
   // delay controller
 
@@ -127,7 +131,6 @@ module ad_serdes_in #(
   endgenerate
 
   // received data interface: ibuf -> idelay -> iserdes
-
   // ibuf
 
   genvar l_inst;
@@ -138,11 +141,11 @@ module ad_serdes_in #(
         .I (data_in_p[l_inst]),
         .IB (data_in_n[l_inst]),
         .O (data_in_ibuf_s[l_inst]));
-     end else begin
-       IBUF i_ibuf (
+    end else begin
+      IBUF i_ibuf (
         .I (data_in_p[l_inst]),
         .O (data_in_ibuf_s[l_inst]));
-     end
+    end
   end
   endgenerate
 
@@ -241,97 +244,96 @@ module ad_serdes_in #(
         .RST (serdes_rst),
         .SHIFTIN1 (1'b0),
         .SHIFTIN2 (1'b0));
-      end /* g_data */
-
-    end
+    end /* g_data */
+  end
   endgenerate
 
   generate
   if (FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
     for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_data
 
-    wire   div_dld;
-    wire   en_vtc;
-    wire   ld_cnt;
-    reg [4:0] vtc_cnt = {5{1'b1}};
+      wire   div_dld;
+      wire   en_vtc;
+      wire   ld_cnt;
+      reg [4:0] vtc_cnt = {5{1'b1}};
 
-    sync_event sync_load (
-      .in_clk (up_clk),
-      .in_event (up_dld[l_inst]),
-      .out_clk (div_clk),
-      .out_event (div_dld));
+      sync_event sync_load (
+        .in_clk (up_clk),
+        .in_event (up_dld[l_inst]),
+        .out_clk (div_clk),
+        .out_event (div_dld));
 
-    if (IODELAY_ENABLE == 1) begin
-      (* IODELAY_GROUP = IODELAY_GROUP *)
-      IDELAYE3 #(
-        .CASCADE ("NONE"),          // Cascade setting (MASTER, NONE, SLAVE_END, SLAVE_MIDDLE)
-        .DELAY_FORMAT ("TIME"),     // Units of the DELAY_VALUE (COUNT, TIME)
-        .DELAY_SRC ("IDATAIN"),     // Delay input (DATAIN, IDATAIN)
-        .DELAY_TYPE ("VAR_LOAD"),   // Set the type of tap delay line (FIXED, VARIABLE, VAR_LOAD)
-        .DELAY_VALUE (0),           // Input delay value setting
+      if (IODELAY_ENABLE == 1) begin
+        (* IODELAY_GROUP = IODELAY_GROUP *)
+        IDELAYE3 #(
+          .CASCADE ("NONE"),          // Cascade setting (MASTER, NONE, SLAVE_END, SLAVE_MIDDLE)
+          .DELAY_FORMAT ("TIME"),     // Units of the DELAY_VALUE (COUNT, TIME)
+          .DELAY_SRC ("IDATAIN"),     // Delay input (DATAIN, IDATAIN)
+          .DELAY_TYPE ("VAR_LOAD"),   // Set the type of tap delay line (FIXED, VARIABLE, VAR_LOAD)
+          .DELAY_VALUE (0),           // Input delay value setting
+          .IS_CLK_INVERTED (1'b0),    // Optional inversion for CLK
+          .IS_RST_INVERTED (1'b0),    // Optional inversion for RST
+          .REFCLK_FREQUENCY (500.0),  // IDELAYCTRL clock input frequency in MHz (200.0-2667.0)
+          .SIM_DEVICE (SIM_DEVICE),   // Set the device version (ULTRASCALE, ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1,
+                                       // ULTRASCALE_PLUS_ES2)
+           .UPDATE_MODE ("ASYNC")      // Determines when updates to the delay will take effect (ASYNC, MANUAL, SYNC)
+        ) i_idelay (
+          .CASC_OUT (),                                       // 1-bit output: Cascade delay output to ODELAY input cascade
+          .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]), // 9-bit output: Counter value output
+          .DATAOUT (data_in_idelay_s[l_inst]),                // 1-bit output: Delayed data output
+          .CASC_IN (1'b0),                                    // 1-bit input: Cascade delay input from slave ODELAY CASCADE_OUT
+          .CASC_RETURN (1'b0),                                // 1-bit input: Cascade delay returning from slave ODELAY DATAOUT
+          .CE (1'b0),                                         // 1-bit input: Active high enable increment/decrement input
+          .CLK (div_clk),                                     // 1-bit input: Clock input
+          .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),   // 9-bit input: Counter value input
+          .DATAIN (1'b0),                                     // 1-bit input: Data input from the logic
+          .EN_VTC (en_vtc),                                   // 1-bit input: Keep delay constant over VT
+          .IDATAIN (data_in_ibuf_s[l_inst]),                  // 1-bit input: Data input from the IOBUF
+          .INC (1'b0),                                        // 1-bit input: Increment / Decrement tap delay input
+          .LOAD (ld_cnt),                                     // 1-bit input: Load DELAY_VALUE input
+          .RST (rst));                                        // 1-bit input: Asynchronous Reset to the DELAY_VALUE
+      end
+
+      always @(posedge div_clk) begin
+        if (div_dld) begin
+          vtc_cnt <= 'h0;
+        end else if (~(&vtc_cnt)) begin
+          vtc_cnt <= vtc_cnt + 1;
+        end
+      end
+
+      assign en_vtc = &vtc_cnt;
+      assign ld_cnt = ~vtc_cnt[4] & (&vtc_cnt[3:0]);
+
+      ISERDESE3 #(
+        .DATA_WIDTH (8),            // Parallel data width (4,8)
+        .FIFO_ENABLE ("FALSE"),     // Enables the use of the FIFO
+        .FIFO_SYNC_MODE ("FALSE"),  // Enables the use of internal 2-stage synchronizers on the FIFO
+        .IS_CLK_B_INVERTED (1'b0),  // Optional inversion for CLK_B
         .IS_CLK_INVERTED (1'b0),    // Optional inversion for CLK
         .IS_RST_INVERTED (1'b0),    // Optional inversion for RST
-        .REFCLK_FREQUENCY (500.0),  // IDELAYCTRL clock input frequency in MHz (200.0-2667.0)
-        .SIM_DEVICE (SIM_DEVICE),   // Set the device version (ULTRASCALE, ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1,
+        .SIM_DEVICE (SIM_DEVICE)    // Set the device version (ULTRASCALE, ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1,
                                     // ULTRASCALE_PLUS_ES2)
-        .UPDATE_MODE ("ASYNC")      // Determines when updates to the delay will take effect (ASYNC, MANUAL, SYNC)
-      ) i_idelay (
-        .CASC_OUT (),                                       // 1-bit output: Cascade delay output to ODELAY input cascade
-        .CNTVALUEOUT (up_drdata[DRP_WIDTH*l_inst +: DRP_WIDTH]), // 9-bit output: Counter value output
-        .DATAOUT (data_in_idelay_s[l_inst]),                // 1-bit output: Delayed data output
-        .CASC_IN (1'b0),                                    // 1-bit input: Cascade delay input from slave ODELAY CASCADE_OUT
-        .CASC_RETURN (1'b0),                                // 1-bit input: Cascade delay returning from slave ODELAY DATAOUT
-        .CE (1'b0),                                         // 1-bit input: Active high enable increment/decrement input
-        .CLK (div_clk),                                     // 1-bit input: Clock input
-        .CNTVALUEIN (up_dwdata[DRP_WIDTH*l_inst +: DRP_WIDTH]),   // 9-bit input: Counter value input
-        .DATAIN (1'b0),                                     // 1-bit input: Data input from the logic
-        .EN_VTC (en_vtc),                                   // 1-bit input: Keep delay constant over VT
-        .IDATAIN (data_in_ibuf_s[l_inst]),                  // 1-bit input: Data input from the IOBUF
-        .INC (1'b0),                                        // 1-bit input: Increment / Decrement tap delay input
-        .LOAD (ld_cnt),                                     // 1-bit input: Load DELAY_VALUE input
-        .RST (rst));                                        // 1-bit input: Asynchronous Reset to the DELAY_VALUE
+      ) i_iserdes(
+        .FIFO_EMPTY (),                // 1-bit output: FIFO empty flag
+        .INTERNAL_DIVCLK (),           // 1-bit output: Internally divided down clock used when FIFO is
+                                       // disabled (do not connect)
+        .Q ({data_s0[l_inst],
+             data_s1[l_inst],
+             data_s2[l_inst],
+             data_s3[l_inst],
+             data_s4[l_inst],
+             data_s5[l_inst],
+             data_s6[l_inst],
+             data_s7[l_inst]}),        // 8-bit registered output
+        .CLK (clk),                    // 1-bit input: High-speed clock
+        .CLKDIV (div_clk),             // 1-bit input: Divided Clock
+        .CLK_B (~clk),                 // 1-bit input: Inversion of High-speed clock CLK
+        .D (data_in_idelay_s[l_inst]), // 1-bit input: Serial Data Input
+        .FIFO_RD_CLK (div_clk),        // 1-bit input: FIFO read clock
+        .FIFO_RD_EN (1'b1),            // 1-bit input: Enables reading the FIFO when asserted
+        .RST (serdes_rst));            // 1-bit input: Asynchronous Reset
     end
-
-    always @(posedge div_clk) begin
-      if (div_dld) begin
-        vtc_cnt <= 'h0;
-      end else if (~(&vtc_cnt)) begin
-        vtc_cnt <= vtc_cnt + 1;
-      end
-    end
-
-    assign en_vtc = &vtc_cnt;
-    assign ld_cnt = ~vtc_cnt[4] & (&vtc_cnt[3:0]);
-
-    ISERDESE3 #(
-      .DATA_WIDTH (8),            // Parallel data width (4,8)
-      .FIFO_ENABLE ("FALSE"),     // Enables the use of the FIFO
-      .FIFO_SYNC_MODE ("FALSE"),  // Enables the use of internal 2-stage synchronizers on the FIFO
-      .IS_CLK_B_INVERTED (1'b0),  // Optional inversion for CLK_B
-      .IS_CLK_INVERTED (1'b0),    // Optional inversion for CLK
-      .IS_RST_INVERTED (1'b0),    // Optional inversion for RST
-      .SIM_DEVICE (SIM_DEVICE)    // Set the device version (ULTRASCALE, ULTRASCALE_PLUS, ULTRASCALE_PLUS_ES1,
-                                  // ULTRASCALE_PLUS_ES2)
-    ) i_iserdes(
-      .FIFO_EMPTY (),                // 1-bit output: FIFO empty flag
-      .INTERNAL_DIVCLK (),           // 1-bit output: Internally divided down clock used when FIFO is
-                                     // disabled (do not connect)
-      .Q ({data_s0[l_inst],
-           data_s1[l_inst],
-           data_s2[l_inst],
-           data_s3[l_inst],
-           data_s4[l_inst],
-           data_s5[l_inst],
-           data_s6[l_inst],
-           data_s7[l_inst]}),        // 8-bit registered output
-      .CLK (clk),                    // 1-bit input: High-speed clock
-      .CLKDIV (div_clk),             // 1-bit input: Divided Clock
-      .CLK_B (~clk),                 // 1-bit input: Inversion of High-speed clock CLK
-      .D (data_in_idelay_s[l_inst]), // 1-bit input: Serial Data Input
-      .FIFO_RD_CLK (div_clk),        // 1-bit input: FIFO read clock
-      .FIFO_RD_EN (1'b1),            // 1-bit input: Enables reading the FIFO when asserted
-      .RST (serdes_rst));            // 1-bit input: Asynchronous Reset
-   end
   end
   endgenerate
 endmodule
