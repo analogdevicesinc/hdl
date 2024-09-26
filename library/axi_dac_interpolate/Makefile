@@ -17,7 +17,6 @@ GENERIC_DEPS += fir_interp.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += axi_dac_interpolate_constr.xdc
 XILINX_DEPS += axi_dac_interpolate_ip.tcl
 
 include ../scripts/library.mk
