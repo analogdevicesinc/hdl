@@ -1,9 +1,0 @@
-FMC_pin     FMC_port            Schematic_name      System_top_name     IOSTANDARD  Termination
-
-# ad40xx
-
-H7          FMC_LA02_P          SDI_FMC             ad40xx_spi_sdo      LVCMOS25    IOB TRUE
-D8          FMC_LA01_CC_P       SDO_FMC             ad40xx_spi_sdi      LVCMOS25    IOB TRUE
-G6          FMC_LA00_CC_P       SCK_FMC             ad40xx_spi_sclk     LVCMOS25    IOB TRUE
-G7          FMC_LA00_CC_N       CNV_FMC             ad40xx_spi_cs       LVCMOS25    IOB TRUE
-G10         FMC_LA03_N          AMP_PD              ad40xx_amp_pd       LVCMOS25    IOB TRUE

@@ -1,1 +1,0 @@
-https://wiki.analog.com/resources/fpga/docs/axi_clock_monitor
