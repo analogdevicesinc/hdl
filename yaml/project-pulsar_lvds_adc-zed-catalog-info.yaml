@@ -1,0 +1,105 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_lvds_adc-zed
+  title: PULSAR-LVDS-ADC HDL project
+  description: >
+    The AD7625, AD7626, AD7960, AD7961 devices are parts from ADC LVDS PulSAR family.
+    The AD7625 / AD7626 is a 16-bit, 6 MSPS / 10 MSPS, charge redistribution successive
+    approximation register (SAR) architecture, analog to-digital converter (ADC).
+    SAR architecture allows unmatched performance both in noise (92dB SNR) and in
+    linearity (±1 LSB INL / ±0.45 LSB INL). The AD7626 contains a high speed 16-bit
+    sampling ADC, an internal conversion clock, and an internal buffered reference.
+    On the CNV edge, it samples the voltage difference between IN+ and IN- pins. The
+    voltages on these pins swing in opposite phase between 0 V and REF.
+
+    The 4.096V reference voltage, REF, can be generated internally or applied externally.
+    All converted results are available on a single LVDS self-clocked or echoed-clock
+    serial interface reducing external hardware connections. The AD7625 / AD7626 is
+    available in a 32-lead LFCSP (5mm by 5mm) with operation specified from -40°C
+    to +85°C.
+
+    The AD7960 / AD7961 is an 18-bit/16-bit, 5 MSPS, charge redistribution successive
+    approximation (SAR), analog-to-digital converter (ADC). The SAR architecture allows
+    unmatched performance both in noise and in linearity. The AD7960 / AD7961 contains
+    a low power, high speed, 18-bit/16-bit sampling ADC, an internal conversion clock,
+    and an internal reference buffer.
+
+    On the CNV± edge, the AD7960 / AD7961 samples the voltage difference between the
+    IN+ and IN− pins. The voltages on these pins swing in opposite phase between 0
+    V and 4.096 V and between 0 V and 5 V. The reference voltage is applied to the
+    part externally. All conversion results are available on a single LVDS self clocked
+    or echoed clock serial interface. The AD7960 is available in a 32-lead LFCSP (QFN)
+    with operation specified from −40°C to +85°C.
+
+    Applications:
+
+    - Digital imaging systems
+
+    - High speed data acquisition
+
+    - High dynamic range telecommunications receivers
+
+    - Spectrum analysis
+
+    - Test equipment
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_lvds_adc/zed
+  tags:
+  - ad7625
+  - ad7626
+  - ad7960
+  - ad7961
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/pulsar_lvds_adc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_lvds_adc-zed-2023_R2
+  title: PULSAR_LVDS_ADC_ZED HDL project 2023_R2
+  description: PULSAR_LVDS_ADC_ZED HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/pulsar_lvds_adc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-pulsar_lvds_adc-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_i2s_adi-2023_R2
+  - Component:hdl-library-axi_pulsar_lvds-2023_R2
+  - Component:hdl-library-axi_pwm_gen-2023_R2
+  - Component:hdl-library-axi_spdif_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_i2c_mixer-2023_R2

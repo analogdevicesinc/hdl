@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad3552r_evb-zed
+  title: AD3552R-EVB HDL project
+  description: >
+    The EVAL-AD3552R is an evaluation board for the AD3552R, a dual-channel, 16-bit
+    fast precision digital-to-analog converter (DAC). Each channel of the AD3552R
+    is equipped with a different transimpedance amplifier: Channel 0 has a fast amplifier
+    that achieves the optimal dynamic performance and Channel 1 has a precision amplifier
+    that guarantees the optimal DC precision over temperature.
+
+    The board allows testing all the output ranges of the DAC, waveform generation,
+    power supply and reference options.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad3552r_evb/zed
+  tags:
+  - ad3552r
+  - eval-ad3552r
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad3552r_evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
