@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-s10soc-2022_r2_p1
+  title: TEMPLATE_S10SOC HDL project 2022_r2_p1
+  description: >
+    Template project.It targets the Intel Altera S10SOC.
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/common/s10soc
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - s10soc
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-common-s10soc

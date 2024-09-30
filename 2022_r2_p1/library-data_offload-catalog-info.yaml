@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-data_offload-2022_r2_p1
+  title: DATA_OFFLOAD HDL IP core 2022_r2_p1
+  description: DATA_OFFLOAD HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/data_offload
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-data_offload
+  dependsOn:
+  - Component:hdl-library-util_axis_fifo_asym-2022_r2_p1
+  - Component:hdl-library-util_cdc-2022_r2_p1

@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_ltc2387
+  title: AXI LTC2387 HDL IP core
+  description: >
+    The AXI LTC2387 IP core can be used to interface LTC2387-18, LTC2386-18, LTC2385-18
+    and ADAQ23878 devices.
+
+    This documentation only covers the IP core and requires that one must be familiar
+    with the device for a complete and better understanding.
+
+    More about the generic framework interfacing ADCs can be read in axi_adc.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387
+  tags:
+  - adaq23878
+  - hdl
+  - ip-core
+  - library
+  - ltc2385-18
+  - ltc2386-18
+  - ltc2387-18
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_ltc2387/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

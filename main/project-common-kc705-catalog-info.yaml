@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-kc705
+  title: TEMPLATE_KC705 HDL project
+  description: >
+    Template project.It targets the AMD Xilinx KC705.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/common/kc705
+  tags:
+  - hdl
+  - kc705
+  - project
+  - reference-design
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

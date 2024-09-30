@@ -1,0 +1,102 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pluto
+  title: PLUTO HDL Project
+  description: >
+    The ADALM-PLUTO Active Learning Module (PlutoSDR) is an easy to use tool available
+    from Analog Devices Inc. (ADI) that can be used to introduce fundamentals of Software
+    Defined Radio (SDR) <https://en.wikipedia.org/wiki/Software-defined_radio>_ or
+    Radio Frequency (RF) <https://en.wikipedia.org/wiki/Radio_frequency>_ or Communications
+    <https://en.wikipedia.org/wiki/Communication_theory>_ as advanced topics in electrical
+    engineering in a self or instructor lead setting.
+
+    Based on the AD9363, it offers one receive channel and one transmit channel which
+    can be operated in full duplex, capable of generating or measuring RF analog signals
+    from 325 to 3800 MHz, at up to 61.44 Mega Samples per Second (MSPS) with a 20
+    MHz bandwidth. The PlutoSDR is completely self-contained, fits nicely in a shirt
+    pocket or backpack, and is entirely USB powered with the default firmware. With
+    support for OS X™, Windows™ and Linux™, it allows exploration and understanding
+    of RF systems no matter where the user is or when.
+
+    The 2nd Rx/Tx channel internal to the rev D is not test during production test.
+    If it works - bonus! If it doesn't work, Pluto is only advertised as a 1 Rx, 1
+    Tx radio, and that is guaranteed/production tested on each unit - and that is
+    what you received.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/pluto
+  tags:
+  - ad9363
+  - adalm-pluto
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/pluto/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pluto-2022_r2_p1
+  title: PLUTO HDL project 2022_r2_p1
+  description: PLUTO HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/pluto
+  tags:
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-pluto
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pluto-2023_R2
+  title: PLUTO HDL project 2023_R2
+  description: PLUTO HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/pluto
+  tags:
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-pluto
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_tdd-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
+  - Component:hdl-library-util_pack-util_upack2-2023_R2
