@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad6676evb-vc707
+  title: AD6676EVB HDL project
+  description: >
+    The AD6676-EBZ supports the AD6676 highly integrated IF subsystem that can digitize
+    radio frequency (RF) bands up to 160 MHz in width centered on an intermediate
+    frequency (IF) of 70 MHz to 450 MHz.
+
+    Unlike traditional Nyquist IF sampling ADCs, the AD6676 relies on a tunable band-pass
+    Σ-Δ ADC with a high oversampling ratio to eliminate the need for band specific
+    IF SAW filters and gain stages, resulting in significant simplification of the
+    wideband radio receiver architecture.
+
+    On-chip quadrature digital downconversion followed by selectable decimation filters
+    reduces the complex data rate to a manageable rate between 62.5 MSPS to 266.7
+    MSPS. The 16-bit complex output data is transferred to the host via a single or
+    dual lane JESD204B interface supporting lane rates up to 5.333 Gbps.
+
+    It targets the AMD Xilinx VC707.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad6676evb/vc707
+  tags:
+  - ad6676
+  - eval-ad6676
+  - hdl
+  - project
+  - reference-design
+  - vc707
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad6676evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
