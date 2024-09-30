@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9739a_fmc-zc706
+  title: AD9739A-FMC HDL project
+  description: >
+    The AD9739A is a 14-bit, 2.5 GSPS high performance RF DAC capable of synthesizing
+    wideband signals with up to 1.25GHz of bandwidth, from DC up to 3 GHz.
+
+    This reference design includes a single tone sine generator (DDS) and allows programming
+    the device and monitoring its internal status registers. It also programs the
+    ADF4350 clock chip which can generate a 1.6G Hz to 2.5 GHz clock for the AD9739A
+    from the on-board 25MHz crystal. An alternate clock path using an ADCLK914 is
+    available for driving the clock externally.
+
+    It targets the AMD Xilinx ZC706.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9739a_fmc/zc706
+  tags:
+  - ad9739a
+  - adclk914
+  - adf4350
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9739a_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

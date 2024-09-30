@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-de10nano
+  title: TEMPLATE_DE10NANO HDL project
+  description: >
+    Template project.It targets the Intel Altera DE10NANO.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/common/de10nano
+  tags:
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
