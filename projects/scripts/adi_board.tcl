@@ -285,6 +285,12 @@ proc ad_disconnect {p_name_1 p_name_2} {
     delete_bd_objs -quiet $m_name_1
     return
   }
+
+  if {[get_property CLASS $m_name_1] eq "bd_intf_pin"} {
+    delete_bd_objs -quiet [get_bd_intf_nets -of_objects [get_bd_intf_ports $m_name_1]]
+    delete_bd_objs -quiet [get_bd_intf_ports $m_name_1]
+    return
+  }
 }
 
 ## Define all the connections between the transceiver IP, the transceiver
