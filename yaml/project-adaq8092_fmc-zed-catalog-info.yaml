@@ -1,0 +1,74 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adaq8092_fmc-zed
+  title: ADAQ8092-FMC HDL project
+  description: >
+    The EVAL-ADAQ8092 evaluates the ADAQ8092, a 14-bit, 105MSPS , high-speed dual-channel
+    data acquisition uModule solution. This device uses the System-in-Package (SiP)
+    that integrates three common signal processing and conditioning blocks.
+
+    This EVAL-ADAQ8092 board does not need an external power supply to operate and
+    requires a very small jitter in the clock source. We recommend to use the DC1075B
+    to improve the clock signal source. For full details on the ADAQ8092, see the
+    ADAQ8092 data sheet, which must be consulted in conjunction with this user guide
+    when using the EVAL-ADAQ8092.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adaq8092_fmc/zed
+  tags:
+  - adaq8092
+  - dc1075b
+  - eval-adaq8092
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adaq8092_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adaq8092_fmc-zed-2022_r2_p1
+  title: ADAQ8092_FMC_ZED HDL project 2022_r2_p1
+  description: ADAQ8092_FMC_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/adaq8092_fmc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adaq8092_fmc-zed
+  dependsOn:
+  - Component:hdl-library-axi_adaq8092-2022_r2_p1
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1

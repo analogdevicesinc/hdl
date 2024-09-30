@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9009zu11eg-adrv2crr_fmcxmwbr1
+  title: ADRV9009ZU11EG_FMCXMWBR1 HDL project
+  description: ADRV9009ZU11EG_FMCXMWBR1 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009zu11eg/adrv2crr_fmcxmwbr1
+  tags:
+  - adrv2crr-fmcxmwbr1
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

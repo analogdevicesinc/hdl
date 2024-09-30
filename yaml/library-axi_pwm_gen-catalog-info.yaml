@@ -1,0 +1,52 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_pwm_gen
+  title: AXI_PWM_GEN HDL IP core
+  description: >
+    The AXI PWM Generator core is used to generate a maximum of 16 configurable signals
+    (Pulse-Width Modulations). The pulses are generated according to the state of
+    a counter; there is one counter for each pulse.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_pwm_gen/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_pwm_gen-2022_r2_p1
+  title: AXI_PWM_GEN HDL IP core 2022_r2_p1
+  description: AXI_PWM_GEN HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_pwm_gen
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_pwm_gen
+  dependsOn:
+  - Component:hdl-library-util_cdc-2022_r2_p1

@@ -1,0 +1,56 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_tdd
+  title: AXI_TDD HDL IP core
+  description: >
+    The AXI Time-Division Duplexing Controller IP core is a pulse wave generator capable
+    of addressing RF applications which require Time Division Duplexing, as well as
+    controlling other modules of general applications through its dedicated 32 channel
+    outputs.
+
+    The reason of creating the generic TDD controller was to reduce the naming confusion
+    around the existing repurposed TDD core built for AD9361, as well as expanding
+    its number of output channels for systems which require more than six controlling
+    signals.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_tdd/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_tdd-2022_r2_p1
+  title: AXI_TDD HDL IP core 2022_r2_p1
+  description: AXI_TDD HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_tdd
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_tdd

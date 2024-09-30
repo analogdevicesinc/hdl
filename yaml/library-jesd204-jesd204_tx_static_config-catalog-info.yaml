@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-jesd204_tx_static_config
+  title: JESD204_TX_STATIC_CONFIG HDL IP core
+  description: JESD204_TX_STATIC_CONFIG HDL IP core
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_tx_static_config
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  title: JESD204_TX_STATIC_CONFIG HDL IP core 2022_r2_p1
+  description: JESD204_TX_STATIC_CONFIG HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/jesd204/jesd204_tx_static_config
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-jesd204-jesd204_tx_static_config

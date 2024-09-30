@@ -1,0 +1,106 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9081_fmca_ebz-zc706
+  title: AD9081/AD9082/AD9986/AD9988 HDL project
+  description: >
+    The AD9081-FMCA-EBZ / AD9082-FMCA-EBZ reference design (also known as Single MxFE)
+    is a processor based (e.g. Microblaze) embedded system. This reference design
+    works with EVAL-AD9986 and EVAL-AD9988 as well. The design consists from a receive
+    and a transmit chain.
+
+    The receive chain transports the captured samples from ADC to the system memory
+    (DDR). Before transferring the data to DDR the samples are stored in a buffer
+    implemented on block rams from the FPGA fabric (util_adcfifo). The space allocated
+    in the buffer for each channel depends on the number of currently active channels.
+    It goes up to M x 64k samples if a single channel is selected or 64k samples per
+    channel if all channels are selected.
+
+    The transmit chain transports samples from the system memory to the DAC devices.
+    Before streaming out the data to the DAC through the JESD link the samples first
+    are loaded into a buffer (util_dacfifo) which will cyclically stream the samples
+    at the tx_device_clk data rate. The space allocated in the transmit buffer for
+    each channel depends on the number of currently active channels. It goes up to
+    M x 64k samples if a single channel is selected or 64k samples per channel if
+    all channels are selected.
+
+    All cores from the receive and transmit chains are programmable through an AXI-Lite
+    interface.
+
+    The transmit and receive chains can operate at different data rates having separate
+    rx_device_clk/tx_device_clk and corresponding lane rates but must share the same
+    reference clock.
+
+    It targets the AMD Xilinx ZC706.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706
+  tags:
+  - eval-ad9081
+  - eval-ad9082
+  - eval-ad9986
+  - eval-ad9988
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9081_fmca_ebz-zc706-2022_r2_p1
+  title: AD9081_FMCA_EBZ_ZC706 HDL project 2022_r2_p1
+  description: AD9081_FMCA_EBZ_ZC706 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9081_fmca_ebz/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9081_fmca_ebz-zc706
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-axi_tdd-2022_r2_p1
+  - Component:hdl-library-data_offload-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_versal_gt_adapter_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_versal_gt_adapter_tx-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_adcfifo-2022_r2_p1
+  - Component:hdl-library-util_dacfifo-2022_r2_p1
+  - Component:hdl-library-util_do_ram-2022_r2_p1
+  - Component:hdl-library-util_hbm-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_adxcvr-2022_r2_p1
+  - Component:hdl-library-xilinx-util_adxcvr-2022_r2_p1

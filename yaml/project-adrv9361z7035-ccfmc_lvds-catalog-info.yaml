@@ -1,0 +1,64 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9361z7035-ccfmc_lvds
+  title: ADRV9361Z7035_CCFMC_LVDS HDL project
+  description: ADRV9361Z7035_CCFMC_LVDS HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9361z7035/ccfmc_lvds
+  tags:
+  - ccfmc-lvds
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9361z7035-ccfmc_lvds-2022_r2_p1
+  title: ADRV9361Z7035_CCFMC_LVDS HDL project 2022_r2_p1
+  description: ADRV9361Z7035_CCFMC_LVDS HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/adrv9361z7035/ccfmc_lvds
+  tags:
+  - ccfmc-lvds
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adrv9361z7035-ccfmc_lvds
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2022_r2_p1
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_gpreg-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_gmii_to_rgmii-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+  - Component:hdl-library-util_rfifo-2022_r2_p1
+  - Component:hdl-library-util_tdd_sync-2022_r2_p1
+  - Component:hdl-library-util_wfifo-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_xcvrlb-2022_r2_p1
+  - Component:hdl-library-xilinx-util_clkdiv-2022_r2_p1

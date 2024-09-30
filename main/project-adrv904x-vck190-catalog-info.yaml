@@ -1,0 +1,34 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv904x-vck190
+  title: ADRV904X_VCK190 HDL project
+  description: >
+    The ADRV904x is a highly integrated, system on chip (SoC) radio frequency (RF)
+    agile transceiver with integrated digital front end (DFE). The SoC contains eight
+    transmitters, two observation receivers for monitoring transmitter channels, eight
+    receivers, integrated LO and clock synthesizers, and digital signal processing
+    functions. The SoC meets the high radio performance and low power consumption
+    demanded by cellular infrastructure applications including small cell basestation
+    radios, macro 3G/4G/5G systems, and massive MIMO base stations.
+
+    It targets the AMD Xilinx VCK190.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x/vck190
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vck190
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adrv904x/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

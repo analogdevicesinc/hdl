@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_adc-zed
+  title: PULSAR_ADC_PMDZ_ZED HDL project
+  description: >
+    Depending on the type of connector it uses, the PulSAR family is divided into
+    the products which have PMOD connectors and FMC connectors.
+
+    PulSAR converters which have PMOD boards associated with them are low power ADCs
+    which offer very high performance from 14-bits up to 18-bits with throughputs
+    ranging from 100ksps to 1.3MSPS. The boards are designed to demonstrate the ADC's
+    performance and to provide an easy digital interface for a variety of system applications.
+    The PulSAR family share the same interface and the same PCB, the differences being
+    found in their performance. A full description of these products are available
+    in their respective data sheets and should be consulted when utilizing the boards.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/pulsar_adc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

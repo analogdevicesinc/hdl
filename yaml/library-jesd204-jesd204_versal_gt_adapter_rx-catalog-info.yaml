@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-jesd204_versal_gt_adapter_rx
+  title: JESD204_VERSAL_GT_ADAPTER_RX HDL IP core
+  description: JESD204_VERSAL_GT_ADAPTER_RX HDL IP core
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-jesd204_versal_gt_adapter_rx-2022_r2_p1
+  title: JESD204_VERSAL_GT_ADAPTER_RX HDL IP core 2022_r2_p1
+  description: JESD204_VERSAL_GT_ADAPTER_RX HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/jesd204/jesd204_versal_gt_adapter_rx
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-jesd204-jesd204_versal_gt_adapter_rx
