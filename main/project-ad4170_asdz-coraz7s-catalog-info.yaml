@@ -1,0 +1,47 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad4170_asdz-coraz7s
+  title: AD4170_ASDZ HDL project
+  description: >
+    The HDL reference design for the AD4170-4 and AD4190-4 provides a high resolution,
+    24-Bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise Precision Sigma-Delta
+    ADC with PGA.
+
+    The data acquisition board incorporates the AD4170-4, a DC to 50 kHz input bandwidth,
+    low noise, high speed, completely integrated analog front end for high precision
+    measurement applications.
+
+    The AD4170-4 offers output data rates from 7.6 SPS up to 500 kSPS, while the AD4190-4
+    offers output data rates from 3.8 SPS up to 62.5 kSPS. The devices contains a
+    low noise, 24-bit Σ-Δ analog-to-digital converter (ADC), and can be configured
+    to have 4 differential inputs or 8 single-ended or pseudodifferential inputs.
+    The on-chip low noise gain stage ensures that signals of small amplitude can be
+    interfaced directly to the devices.
+
+    This project has a spi_engine instance to control and acquire data from the AD4170-4
+    or AD4190-4 24-bit precision ADC. This instance provides support for capturing
+    continuous samples at the maximum sample rate.
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4170_asdz/coraz7s
+  tags:
+  - ad4170-4
+  - ad4190-4
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad4170_asdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

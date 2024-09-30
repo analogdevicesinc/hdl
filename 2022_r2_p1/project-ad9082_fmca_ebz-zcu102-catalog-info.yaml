@@ -1,0 +1,45 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9082_fmca_ebz-zcu102-2022_r2_p1
+  title: AD9082_FMCA_EBZ_ZCU102 HDL project 2022_r2_p1
+  description: AD9082_FMCA_EBZ_ZCU102 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9082_fmca_ebz/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9082_fmca_ebz-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-axi_tdd-2022_r2_p1
+  - Component:hdl-library-data_offload-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_versal_gt_adapter_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_versal_gt_adapter_tx-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_adcfifo-2022_r2_p1
+  - Component:hdl-library-util_dacfifo-2022_r2_p1
+  - Component:hdl-library-util_do_ram-2022_r2_p1
+  - Component:hdl-library-util_hbm-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_adxcvr-2022_r2_p1
+  - Component:hdl-library-xilinx-util_adxcvr-2022_r2_p1
