@@ -1,0 +1,29 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_mii_to_rmii
+  title: Util MII to RMII HDL IP core
+  description: >
+    The Util MII to RMII core is designed to interface the Zynq-7000/Zynq UltraScale+
+    MPSoC - PS Gigabit Ethernet MAC and Reduced Media Independent Interface (RMII)
+    ADIN1300 PHY from the CN0506 Dual PHY Ethernet evaluation board.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/util_mii_to_rmii
+  tags:
+  - adin1300
+  - cn0506
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/util_mii_to_rmii/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

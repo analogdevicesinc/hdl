@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  title: AXI_JESD204_RX HDL IP core 2022_r2_p1
+  description: AXI_JESD204_RX HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/jesd204/axi_jesd204_rx
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-jesd204-axi_jesd204_rx
+  dependsOn:
+  - Component:hdl-library-jesd204-axi_jesd204_common-2022_r2_p1
