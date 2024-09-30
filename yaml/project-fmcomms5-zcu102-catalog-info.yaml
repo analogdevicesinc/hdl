@@ -1,0 +1,114 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms5-zcu102
+  title: FMCOMMS5 HDL Project
+  description: >
+    The FMCOMMS5 is a high-speed analog module designed to showcase the AD9361 in
+    multiple-input, multiple-output (MIMO) applications. The AD9361 is a high performance,
+    highly integrated RF transceiver that operates from 70 MHz to 6 GHz, and supports
+    bandwidths from less than 200 kHz to 56 MHz. The FMCOMMS5 supports dual AD9361
+    devices, allowing for the creation of a 4x4 MIMO system. This platform is intended
+    to enable the prototyping and development of many software defined radio applications.
+
+    The AD9361 consists of 2 receive and 2 transmit paths (2 Rx, 2 Tx).
+
+    The only difference between AD9361 and AD9364 (1 Rx, 1 Tx) is the number of channels.
+    Software, HDL, pinout, etc - is all the same.
+
+    The digital interface consists of 12 bits of DDR data and supports full duplex
+    operation in all configurations up to 4x4. The transmit and receive data paths
+    share a single clock. The data is sent or received based on the configuration
+    (programmable) from separate transmit and to separate receive chains.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms5/zcu102
+  tags:
+  - ad9361
+  - ad9364
+  - eval-ad-fmcomms5
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/fmcomms5/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms5-zcu102-2022_r2_p1
+  title: FMCOMMS5_ZCU102 HDL project 2022_r2_p1
+  description: FMCOMMS5_ZCU102 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/fmcomms5/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-fmcomms5-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+  - Component:hdl-library-util_rfifo-2022_r2_p1
+  - Component:hdl-library-util_wfifo-2022_r2_p1
+  - Component:hdl-library-xilinx-util_clkdiv-2022_r2_p1
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms5-zcu102-2023_R2
+  title: FMCOMMS5_ZCU102 HDL project 2023_R2
+  description: FMCOMMS5_ZCU102 HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/fmcomms5/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-fmcomms5-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
+  - Component:hdl-library-util_pack-util_upack2-2023_R2
+  - Component:hdl-library-util_rfifo-2023_R2
+  - Component:hdl-library-util_wfifo-2023_R2
+  - Component:hdl-library-xilinx-util_clkdiv-2023_R2

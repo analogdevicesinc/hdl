@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9001-zc706
+  title: ADRV9001_ZC706 HDL project
+  description: >
+    This design allows controlling, receiving and transmitting sample stream from/to
+    an ADRV9001/ADRV9002 device through two independent source-synchronous interface.
+    Supports both CMOS and LVDS interface, but not at the same time. The selection
+    of the I/O standard must be done by setting a parameter before building the project.
+
+    The design supports SDR or DDR modes in CMOS mode with 1 or 4 lanes, and in LVDS
+    mode with 1 or 2 lanes. This is runtime configurable.. The complete list of supported
+    modes can be consulted in the axi_adrv9001 Interface Core documentation.
+
+    It targets the AMD Xilinx ZC706.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adrv9001/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-intel-adi_jesd204-2023_R2
+  title: ADI_JESD204 HDL IP core 2023_R2
+  description: ADI_JESD204 HDL IP core 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/library/intel/adi_jesd204
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-intel-adi_jesd204

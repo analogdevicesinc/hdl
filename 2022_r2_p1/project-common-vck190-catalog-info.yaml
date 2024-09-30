@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-vck190-2022_r2_p1
+  title: TEMPLATE_VCK190 HDL project 2022_r2_p1
+  description: >
+    Template project.It targets the AMD Xilinx VCK190.
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/common/vck190
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - template
+  - vck190
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-common-vck190
+  dependsOn:
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
