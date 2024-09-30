@@ -1,0 +1,64 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: hdl-locations-3
+spec:
+  owner: group:default/hdl-sw-team
+  targets:
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-common-vpk180-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-common-zc702-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-common-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-common-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-common-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-dac_fmc_ebz-a10soc-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-dac_fmc_ebz-vcu118-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-dac_fmc_ebz-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-dac_fmc_ebz-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq2-a10soc-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq2-kc705-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq2-kcu105-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq2-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq2-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq3-kcu105-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq3-vcu118-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq3-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-daq3-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-dc2677a-c5soc-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcadc2-vc707-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcadc2-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcadc5-vc707-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcjesdadc1-kc705-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcjesdadc1-vc707-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcjesdadc1-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms11-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-kc705-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-kcu105-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-vc707-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-zc702-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms2-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms5-zc702-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms5-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms5-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms8-a10soc-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-fmcomms8-zcu102-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-imageon-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-jupiter_sdr-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-ltc2378_fmc-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-m2k-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-m2k-standalone-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-max96724-kv260-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-pluto-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-pulsar_adc-coraz7s-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-pulsar_adc-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-pulsar_adc_pmdz-coraz7s-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-pulsar_lvds_adc-zed-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-sidekiqz2-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-usrpe31x-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-xcvr_wizard-kc705-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-xcvr_wizard-kcu105-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-xcvr_wizard-vcu118-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-xcvr_wizard-zc706-catalog-info.yaml
+  - https://github.com/analogdevicesinc/hdl/tree/backstage_yaml/yaml/project-xcvr_wizard-zcu102-catalog-info.yaml
+  type: url

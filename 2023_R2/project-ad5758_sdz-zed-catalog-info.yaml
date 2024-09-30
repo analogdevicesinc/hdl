@@ -1,0 +1,32 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5758_sdz-zed-2023_R2
+  title: AD5758_SDZ_ZED HDL project 2023_R2
+  description: AD5758_SDZ_ZED HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad5758_sdz/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad5758_sdz-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_i2s_adi-2023_R2
+  - Component:hdl-library-axi_spdif_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_i2c_mixer-2023_R2

@@ -1,0 +1,55 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad57xx_ardz-coraz7s
+  title: AD57XX_ARDZ HDL project
+  description: >
+    This page documents the HDL reference design for the EVAL-AD5780ARDZ, EVAL-AD5781ARDZ
+    and EVAL-AD5791ARDZ evaluation boards.
+
+    The EVAL-AD5780ARDZ facilitates fast prototyping of the AD5780 circuit, and can
+    be substituted with either the AD5760 or AD5790, which must be ordered separately.
+    Similarly, the EVAL-AD5781ARDZ and EVAL-AD5791ARDZ come with the AD5781 and AD5791
+    respectively.
+
+    The AD5790, AD5791, AD5760, AD5780 and AD5781 are a family of precision, single-channel
+    voltage output DACs, with resolutions from 16-bits up to 20-bits. They offer guaranteed
+    monotonic operation, and low nonlinearity (down to 0.5 LSB INL and DNL)
+
+    The evaluation boards provide an on-board -14 V and +14 V dual power supply. These
+    evaluation boards also utilize external reference boards with an output voltage
+    of +10 V and -10 V. The eval boards are connected to the carrier board through
+    the Arduino Shield connector.
+
+    This project has a spi_engine instance to control and acquire data from the DAC.
+    This instance provides support for sending continuous samples at the maximum sample
+    rate.
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad57xx_ardz/coraz7s
+  tags:
+  - ad5760
+  - ad5780
+  - ad5781
+  - ad5790
+  - ad5791
+  - coraz7s
+  - eval-ad5780ardz
+  - eval-ad5781ardz
+  - eval-ad5791ardz
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad57xx_ardz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

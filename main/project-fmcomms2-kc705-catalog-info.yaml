@@ -1,0 +1,47 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms2-kc705
+  title: FMCOMMS2/3/4 HDL Project
+  description: >
+    The AD-FMCOMMS2/3/4/5-EBZ are a high-speed analog modules designed to showcase
+    the AD9361 or AD9364, a high performance, highly integrated RF agile transceiver
+    intended for use in RF applications.
+
+    The AD9361 and AD9364 chips operate in the 70MHz to 6GHz range, covering most
+    licensed and unlicensed bands. The boards, due to discrete external components
+    may have less performance on some of the RF input/output connectors (for example
+    - the FMCOMMS2 and specific connectors on the FMCOMMS5 are specifically tuned
+    to 2.4GHz). The AD9361 and AD9364 both supports channel bandwidths from less than
+    200kHz to 56MHz by both changing sample rate, and by changing digital filters,
+    and decimation inside the device itself.
+
+    The digital interface consists of 12 bits of DDR data and supports full duplex
+    operation in all configurations up to 2×2. The transmit and receive data paths
+    share a single clock. The data is sent or received based on the configuration
+    (programmable) from separate transmit and to separate receive chains.
+
+    It targets the AMD Xilinx KC705.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/kc705
+  tags:
+  - ad9361
+  - ad9364
+  - eval-ad-fmcomms2
+  - eval-ad-fmcomms5
+  - hdl
+  - kc705
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/fmcomms2/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

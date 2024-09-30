@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-admx100x_evb-zed
+  title: ADMX100X-EVB HDL project
+  description: >
+    The EVAL-ADMX1001 and EVAL-ADMX1002 modules are ultra-low-distortion, low-noise
+    signal generators. They support output frequencies up to 40 kHz when the digital
+    pre-distortion (DPD) algorithm is disabled, and up to 20 kHz with DPD enabled
+    while maintaining a typical total harmonic distortion (THD) of −130 dB at 1 kHz.
+    The ADMX1001 includes a built-in acquisition channel that enables simultaneous
+    generation and capture of differential signals, making it ideal for characterization
+    and closed-loop evaluation of high-performance ADCs, audio converters, and precision
+    sensing systems. The integrated DPD algorithm minimizes distortion typically introduced
+    by DAC and amplifier stages, enabling the generation of extremely clean test signals
+    for precision measurement applications. The ADMX1002 focuses solely on high-fidelity
+    signal generation, providing a streamlined solution for setups where local signal
+    acquisition is not required. Note that in the current HDL release, only the TX
+    path is implemented and supported.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/admx100x_evb/zed
+  tags:
+  - eval-admx1001
+  - eval-admx1002
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/admx100x_evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

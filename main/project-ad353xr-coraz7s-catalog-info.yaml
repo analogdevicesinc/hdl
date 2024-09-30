@@ -1,0 +1,64 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad353xr-coraz7s
+  title: AD353XR HDL project
+  description: >
+    The AD3530R/ AD3530 and AD3531R/ AD3531 are low power, 16-bit, buffered voltage
+    output, digital-to-analog converters (DACs) that include a gain bit field, resulting
+    in a full-scale output of 2.5V (gain = 1) or 5V (gain = 2) for a reference voltage
+    of 2.5V. AD3530/ AD3530R has 8 channels, and AD3531/ AD3531R has 4 channels. AD3530R
+    and AD3531R has an on-chip, buffered, 2.5V reference available at the VREF pin,
+    capable of sourcing external loads up to +5mA.
+
+    Each DAC channel has its own Input register and DAC register. The DAC Register
+    stores digital code equivalent to the DAC output voltage while the Input Register
+    acts as a temporary staging register before being passed on the DAC Register.
+    With the LDAC function, one or more DAC registers could be updated in parallel
+    with the data held in the Input Register. The DAC registers can also be directly
+    written to, in which the corresponding output updates immediately without an LDAC.
+
+    AD3530R/ AD3530 contains eight buffered voltage output DAC channels capable of
+    sourcing 50mA and sinking up to 40mA of current. AD3531R/ AD3531 contains four
+    buffered voltage output DAC channels capable of sourcing 100mA and sinking 80
+    mA of current.
+
+    The AD3530R/ AD3530 contains a 27:1 multiplexer while AD3531R/ AD3531 contains
+    a 15:1 multiplexer, in which both could output a voltage on the MUX_OUT pin that
+    is a representative of either the output voltage or output current of a chosen
+    channel, or the internal die temperature of the device.
+
+    Applications:
+
+    - Optical transceivers
+
+    - Test and measurement
+
+    - Industrial automation
+
+    - Data acquisition systems
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad353xr/coraz7s
+  tags:
+  - ad3530
+  - ad3530r
+  - ad3531
+  - ad3531r
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad353xr/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

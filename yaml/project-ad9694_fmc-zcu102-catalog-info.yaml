@@ -1,0 +1,88 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9694_fmc-zcu102
+  title: AD9694-FMC HDL project
+  description: >
+    The AD9694-500EBZ supports the AD9694, a quad, 14-bit, 500 MSPS ADC. The device
+    has an on-chip buffer and a sample-and-hold circuit designed for low power, small
+    size, and ease of use. This device is designed for sampling wide bandwidth analog
+    signals of up to 1.4 GHz. The AD9694 is optimized for wide input bandwidth, high
+    sampling rate, excellent linearity, and low power in a small package.
+
+    Product highlights:
+
+    - Low power consumption per channel
+
+    - JESD204B lane rate support up to 15 Gbps
+
+    - Wide full power bandwidth supports IF sampling of signals up to 1.4 GHz
+
+    - Buffered inputs ease filter design and implementation
+
+    - Four integrated wideband decimation filters and NCO blocks supporting multiband
+    receivers
+
+    - Programmable fast overrange detection
+
+    - On-chip temperature diode for system thermal management
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9694_fmc/zcu102
+  tags:
+  - ad9694
+  - eval-ad9694
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9694_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9694_fmc-zcu102-2023_R2
+  title: AD9694_FMC_ZCU102 HDL project 2023_R2
+  description: AD9694_FMC_ZCU102 HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad9694_fmc/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9694_fmc-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
+  - Component:hdl-library-xilinx-axi_adxcvr-2023_R2
+  - Component:hdl-library-xilinx-util_adxcvr-2023_R2

@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7616_sdz-zc706
+  title: AD7616_SDZ_ZC706 HDL project
+  description: AD7616_SDZ_ZC706 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad7616_sdz/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

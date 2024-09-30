@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adv7513-de10nano-2023_R2
+  title: ADV7513_DE10NANO HDL project 2023_R2
+  description: ADV7513_DE10NANO HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/adv7513/de10nano
+  tags:
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adv7513-de10nano
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2

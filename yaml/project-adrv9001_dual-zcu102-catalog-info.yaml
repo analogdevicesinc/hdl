@@ -1,0 +1,36 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9001_dual-zcu102
+  title: ADRV9001_DUAL_ZCU102 HDL project
+  description: >
+    This design allows controlling, receiving and transmitting sample stream from/to
+    two ADRV9001/ADRV9002 devices(2x eval b) through four independent source synchronous
+    interfaces for each direction and for each device. Supports both CMOS and LVDS
+    interface, but not in the same time. The selection of the I/O standard must be
+    done with a parameter during build.
+
+    The design supports SDR or DDR modes in CMOS mode with one of four lanes, as in
+    LVDS mode one or two lane mode. This is runtime selectable. The complete list
+    of supported modes can be consulted in the axi_adrv9001 Interface Core documentation.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9001_dual/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adrv9001_dual/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

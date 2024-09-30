@@ -1,0 +1,46 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad408x_fmc_evb-zed
+  title: AD408X-FMC-EVB HDL project
+  description: >
+    The EVAL-AD4080-FMC is designed to demonstrate the AD4080 performance.
+
+    The EVAL-AD4080-FMC HDL design supports the following AD4080 features:
+
+    - Single/Dual lane DDR data capture
+
+    - Self synchronization using the fixed pattern and bit-slip feature
+
+    - Capturing digital averaging filter with up to 2^10 decimation
+
+    - Analog-to-digital converter (ADC) configuration via serial peripheral interface
+    (SPI)
+
+    - Sampling rate capability between 1.25 MSPS and 40 MSPS
+
+    The EVAL-AD4080-FMC evaluation board was designed for use with the Digilent ZedBoard
+    via the field programmable gate array(FPGA) mezzanine card (FMC) connector.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad408x_fmc_evb/zed
+  tags:
+  - ad4080
+  - eval-ad4080-fmc
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad408x_fmc_evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

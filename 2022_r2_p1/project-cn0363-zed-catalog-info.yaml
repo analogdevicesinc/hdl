@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0363-zed-2022_r2_p1
+  title: CN0363_ZED HDL project 2022_r2_p1
+  description: CN0363_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0363/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0363-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_generic_adc-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-cn0363-cn0363_dma_sequencer-2022_r2_p1
+  - Component:hdl-library-cn0363-cn0363_phase_data_sync-2022_r2_p1
+  - Component:hdl-library-cordic_demod-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_axis_resize-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+  - Component:hdl-library-util_sigma_delta_spi-2022_r2_p1

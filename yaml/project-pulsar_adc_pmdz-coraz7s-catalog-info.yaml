@@ -1,0 +1,59 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_adc_pmdz-coraz7s
+  title: PULSAR_ADC_PMDZ_CORAZ7S HDL project
+  description: >
+    PULSAR_ADC_PMDZ_CORAZ7S HDL project
+
+    Renamed to PULSAR-ADC HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/pulsar_adc_pmdz/coraz7s
+  tags:
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-pulsar_adc_pmdz-coraz7s-2022_r2_p1
+  title: PULSAR_ADC_PMDZ_CORAZ7S HDL project 2022_r2_p1
+  description: PULSAR_ADC_PMDZ_CORAZ7S HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/pulsar_adc_pmdz/coraz7s
+  tags:
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-pulsar_adc_pmdz-coraz7s
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_pwm_gen-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad_fmclidar1_ebz-zc706-2023_R2
+  title: AD_FMCLIDAR1_EBZ_ZC706 HDL project 2023_R2
+  description: AD_FMCLIDAR1_EBZ_ZC706 HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad_fmclidar1_ebz/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad_fmclidar1_ebz-zc706
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_laser_driver-2023_R2
+  - Component:hdl-library-axi_spdif_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
+  - Component:hdl-library-xilinx-axi_adxcvr-2023_R2
+  - Component:hdl-library-xilinx-util_adxcvr-2023_R2

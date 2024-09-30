@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad485x_fmcz-zed
+  title: AD485x_FMCZ HDL project
+  description: >
+    This design is meant to support the AD485x family. For example, EVAL-AD4858 board
+    contains AD4858 chip, which is a 20-bit, low noise 8-channel simultaneous sampling
+    successive approximation register (SAR) ADC, with buffered differential, wide
+    common range picoamp inputs.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad485x_fmcz/zed
+  tags:
+  - ad4858
+  - eval-ad4858
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad485x_fmcz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

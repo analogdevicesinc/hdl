@@ -1,0 +1,42 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad4062_ardz-coraz7s
+  title: AD4062-ARDZ HDL project
+  description: >
+    The HDL reference design for the AD4060, AD4062. They are versatile, 16-bit/12-bit,
+    successive approximation register (SAR) analog-to-digital converters (ADCs) that
+    enable low-power, high-density data acquisition solutions without sacrificing
+    precision. These ADCs offer a unique balance of performance and power efficiency,
+    plus innovative features for seamlessly switching between high-resolution and
+    low-power modes tailored to the immediate needs of the system.
+
+    The AD4060/AD4062 evaluation boards enable quick and easy evaluation of the performance
+    and features of the AD4060 or the AD4062, respectively.
+
+    This project has an i3c_controller instance to control and acquire data from the
+    precision ADC.
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4062_ardz/coraz7s
+  tags:
+  - ad4060
+  - ad4062
+  - coraz7s
+  - eval-ad4060-eval-ad4062
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad4062_ardz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

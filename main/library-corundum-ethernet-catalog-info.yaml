@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-corundum-ethernet
+  title: ETHERNET HDL IP core
+  description: >
+    The Corundum Ethernet Core is used by the Corundum Network Stack. The Ethernet
+    Core is specific to each FPGA board and encompasses the Ethernet physical layer
+    and other auxiliary structures such as SPI and I2C that are required by the Corundum
+    system. The configurations are based on Corundum NIC <https://github.com/ucsdsysnet/corundum>__
+    reference designs that were adapted to suit the ADI workflow.
+
+    Depending on the board for which the IP is built, different HDL component diagrams
+    will be available.
+
+    - corundum_ethernet_core_vcu118
+
+    - corundum_ethernet_core_k26
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - BSD-2-Clause-Views
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/corundum/ethernet
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
