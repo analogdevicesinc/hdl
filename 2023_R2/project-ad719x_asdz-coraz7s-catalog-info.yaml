@@ -1,0 +1,36 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad719x_asdz-coraz7s-2023_R2
+  title: AD719X_ASDZ_CORAZ7S HDL project 2023_R2
+  description: >
+    The AD719x family uses a low noise, higher speed, high precision ADC. They can
+    be used in a wide range of applications where the input signals can vary from
+    the milli-volt to volt level. The parts also operate with a wide range of output
+    data rates while still maintaining excellent noise performance over the complete
+    rate of output data ranges.
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad719x_asdz/coraz7s
+  tags:
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/2023_R2/projects/ad719x_asdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad719x_asdz-coraz7s
+  dependsOn:
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
