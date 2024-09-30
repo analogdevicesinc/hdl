@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-axi_jesd204_rx
+  title: AXI_JESD204_RX HDL IP core
+  description: >
+    The Analog Devices JESD204B/C Link Receive Peripheral implements the link layer
+    handling of a JESD204 receive logic device. Implements the 8B/10B based link layer
+    defined in JESD204C standard that is similar to the link layer defined in JESD204B.
+    This includes handling of the SYSREF and SYNC~ and controlling the link state
+    machine accordingly as well as performing per lane descrambling and character
+    replacement. Implements the 64B/66B based link layer defined in the JESD204C standard.
+    This includes handling of the SYSREF, per lane decoding of sync header, descrambling,
+    CRC checking of data blocks and error monitoring.
+
+    The type of link layer is selectable during implementation phase through the LINK_MODE
+    synthesis parameter.
+
+    It has been designed for interoperability with Analog Devices JESD204 ADC converter
+    products. To form a complete JESD204 receive logic device, it has to be combined
+    with a PHY layer and transport layer peripheral.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/jesd204/axi_jesd204_rx/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

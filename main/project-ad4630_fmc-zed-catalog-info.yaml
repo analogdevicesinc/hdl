@@ -1,0 +1,91 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad4630_fmc-zed
+  title: AD4630-FMC HDL project
+  description: >
+    The AD4630-24 is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS successive
+    approximation register (SAR) analog-to-digital converter (ADC). The AD4030-24
+    is the single channel version. With a guaranteed maximum ±0.9 ppm INL and no missing
+    codes at 24-bits, the AD4630-24 and AD4030-24 achieve unparalleled precision from
+    −40°C to +125°C. The AD4030-16 is a 16-bit dual channel version.
+
+    A low-drift, internal precision reference buffer eases voltage reference sharing
+    with other system circuitry. The AD4630-24 offers a typical dynamic range of 106
+    dB when using a 5 V reference. The AD4030-24 offers a typical dynamic range of
+    109 dB using a 5 V reference. The low noise floor enables signal chains requiring
+    less gain and lower power. A block averaging filter with programmable decimation
+    ratio can increase dynamic range up to 153 dB and 155.5dB for the AD4030. The
+    wide differential input and common mode ranges allow inputs to use the full ±VREF
+    range without saturating, simplifying signal conditioning requirements and system
+    calibration. The improved settling of the Easy Drive analog inputs broadens the
+    selection of analog front-end components compatible with the AD4630-24, AD4630-16
+    and AD4030-24. Both single-ended and differential signals are supported.
+
+    The versatile Flexi-SPI serial interface eases host processor and ADC integration.
+    A wide data clocking window, multiple SDO lanes, and optional DDR data clocking
+    can reduce the serial clock to 10 MHz while operating at a sample rate of 2 MSPS.
+    Echo clock mode and ADC master clock mode relax the timing requirements and simplify
+    the use of digital isolators.
+
+    The AD4630-24's, AD4630-16's and AD4030-24's BGA package integrates all critical
+    power supply and reference bypass capacitors, reducing the footprint and system
+    component count, and lessening sensitivity to board layout.
+
+    The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain solution
+    that reduces the development cycle of a precision measurement system by transferring
+    the signal chain design challenge of component selection, optimization, and layout
+    from the designer to the device. With a guaranteed maximum ±TBD ppm INL and no
+    missing codes at 24 bits, the ADAQ4224 achieves unparalleled precision from −40°C
+    to +85°C.
+
+    The HDL reference design for the EVAL-AD4630_FMCZ and EVAL-AD4030_FMCZ provides
+    all the interfaces that are necessary to interact with the device using a Xilinx
+    FPGA development board. The design has all the necessary infrastructure to acquire
+    data from the AD4630-24 24-bit dual-channel precision SAR ADC, AD4630-16 16-bit
+    dual channel precision SAR ADC and AD4030-24 single channel ADC, supporting continuous
+    data capture at maximum 2 MSPS data rate. The design targeted to the Zedboard,
+    which is a low cost FPGA carrier board from Digilent, using a Zynq-7000 re-programmable
+    SoC from Xilinx.
+
+    Applications:
+
+    - Automatic test equipment
+
+    - Digital control loops
+
+    - Medical instrumentation
+
+    - Seismology
+
+    - Semiconductor manufacturing
+
+    - Scientific instrumentation
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/zed
+  tags:
+  - ad4030
+  - ad4030-16
+  - ad4030-24
+  - ad4630-16
+  - ad4630-24
+  - eval-ad4030-fmcz
+  - eval-ad4630-fmcz
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad4630_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
