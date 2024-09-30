@@ -1,0 +1,47 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad_gmsl2eth_sl-k26
+  title: AD-GMSL2ETH-SL HDL project
+  description: >
+    The AD-GMSL2ETH-SL is an edge compute platform enabling low-latency data transfer
+    from eight Gigabit Multimedia Serial Link™ (GMSL) interfaces on to a 10 Gb Ethernet
+    link. The target applications include autonomous robots and vehicles where machine
+    vision and real-time sensor fusion is critical.
+
+    The system includes two MAX96724 Quad Tunneling GMSL2/1 to CSI-2 Deserializers,
+    enabling connectivity to eight GMSL cameras. The video data from the cameras is
+    transferred from the MAX96724 deserializers via MIPI CSI2 interfaces to an AMD
+    K26 System on Module which implements the logic to aggregate the video data from
+    all the GMSL cameras into a 10 Gb Ethernet link, so that it can be sent to a central
+    processing unit.
+
+    The IEEE 1588 Precision Time Protocol (PTP) with hardware timestamping is supported,
+    enabling accurate synchronization with host systems and other edge devices. The
+    AD9545 Quad Input, 10-Output, Dual DPLL/IEEE 1588, 1 pps Synchronizer and Jitter
+    Cleaner is used to generate the required clocks for the 10 Gb Ethernet interface
+    and the PTP logic.
+
+    It targets the AMD Xilinx K26.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_gmsl2eth_sl/k26
+  tags:
+  - ad-gmsl2eth-sl
+  - ad9545
+  - hdl
+  - k26
+  - max96724
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad_gmsl2eth_sl/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

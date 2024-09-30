@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-dc2677a-c5soc
+  title: DC2677A HDL project
+  description: >
+    Demonstration circuit 2677A (DC2677A) is a reference design for robust industrial
+    data acquisition applications for the LTC2358-18. The LTC2358-18 is capable of
+    high voltage measurements with a large input common range; however, the DC2677A
+    implements input protection that allows up to 400V of continuous input protection.
+    Combined with gas discharge tubes, which provide protection from surges, the DC2677A
+    is capable of surviving extreme abuse.
+
+    This reference design includes the LTC2358-18 SAR ADC, ADA4522-2 dual zero-drift
+    operational amplifier, and an LT6658 dual-output, high current reference for sensor
+    excitation.
+
+    The digital interface is an HSMC (high-speed mezzanine connector), which is compatible
+    with Altera Cyclone V SoCkit and other Altera FPGA evaluation boards that support
+    3.3V CMOS I/O.
+
+    Applications:
+
+    - Programmable Logic Controllers
+
+    - Industrial Process Control
+
+    - Power Line Monitoring
+
+    - Test and Measurement
+
+    It targets the Intel Altera C5SOC.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/dc2677a/c5soc
+  tags:
+  - ada4522-2
+  - c5soc
+  - dc2677a
+  - hdl
+  - lt6658
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/dc2677a/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

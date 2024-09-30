@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ada4355_fmc-zed
+  title: ADA4355-FMC HDL project
+  description: "The ADA4355 is a complete, high performance, current input µModule.\
+    \ For space savings, the ADA4355 includes all the required active and passive\
+    \ components to realize a complete current to bits data acquisition solution,\
+    \ supporting a small form factor, optical modules as well as multichannel systems.\
+    \ \nThe high speed transimpedance amplifier (TIA) of the device supports 10 ns\
+    \ pulse widths, allowing high spatial resolution for Time of Flight (ToF) measurements.\
+    \ Additionally, the ADA4355 includes three TIA gain (TZ) settings to maximize\
+    \ dynamic range. An internal, selectable, analog low-pass filter (LPF) can limit\
+    \ the device bandwidth with a corner frequency of 100 MHz to minimize broadband\
+    \ noise while also serving as an antialiasing filter for the 125 MSPS ADC.\nThe\
+    \ 14-bit ADC converts the amplified voltage signal at a rate of up to 125 MSPS\
+    \ and outputs the digitized signals through two serial, low voltage differential\
+    \ signaling (LVDS) data lanes, operating at rates of up to 1 Gbps per lane. The\
+    \ data clock output (DCO) operates at frequencies of up to 500 MHz and supports\
+    \ double data rate (DDR) operation.\nIt targets the AMD Xilinx ZED.\n"
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ada4355_fmc/zed
+  tags:
+  - ada4355
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ada4355_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

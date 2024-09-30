@@ -1,0 +1,53 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-arradio-c5soc
+  title: ARRADIO HDL Project
+  description: >
+    The ARRADIO <https://www.terasic.com.tw/cgi-bin/page/archive.pl?No=946>__ board
+    is an HSMC <http://www.altera.com/literature/ds/hsmc_spec.pdf>__ board by Arrow
+    <https://www.arrow.com/en/manufacturers/analog-devices>__ & Terasic <http://arradio.terasic.com/>_
+    for the AD9361, a highly integrated RF Agile Transceiver. The complete chip level
+    design package can be found on the ADI web site ad9361_design_files. Information
+    on the card, and how to use it, the design package that surrounds it, and the
+    software which can make it work, can be found on this page.
+
+    The purpose of the ARRADIO board is to provide an RF platform which shows the
+    maximum performance of the AD9361. It's expected that the RF performance of this
+    platform can meet the datasheet specifications without issues at 2.4 GHz. This
+    is due to the external Johanson Technology's 2450BL15B050E <https://www.johansontechnology.com/datasheets/baluns/JTI_Balun-2450BL15B050_12-03.pdf>__
+    2.45 GHz Balun that is on the board. This balun is rated for an operating frequency
+    of 2400~2500 MHz.
+
+    This platform is primarily for hardware/RF investigation and bring-up of various
+    waveforms from a RF team before their custom hardware is complete. Take a look
+    at the :dokuwiki:Configuration options<resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>
+    section).
+
+    The ARRADIO board is very similar to the AD-ARRADIO-EBZ, except it utilizes the
+    HSMC connector which connects to the Arrow SoCKit <https://www.arrow.com/en/products/sockit/arrow-development-tools>__
+    .
+
+    It targets the Intel Altera C5SOC.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc
+  tags:
+  - ad-arradio-ebz
+  - ad9361
+  - ad9361-design-files
+  - c5soc
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/arradio/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
