@@ -1,0 +1,124 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad77681evb-zed
+  title: AD77681EVB HDL project
+  description: >
+    The AD7768-1/ADAQ7768-1 is a low power, high performance, Σ-Δ analog-to-digital
+    converter (ADC), with a Σ-Δ modulator and digital filter for precision conversion
+    of both AC and DC signals. The AD7768-1 is a single channel version of the AD7768,
+    an 8-channel, simultaneously sampling, Σ-Δ ADC. The AD7768-1 provides a single
+    configurable and reusable data acquisition footprint, which establishes a new
+    industry standard in combined AC and DC performance and enables instrumentation
+    and industrial system designers to design across multiple measurement variants
+    for both isolated and nonisolated applications.
+
+    The AD7768-1 achieves a 108.5 dB dynamic range when using the low ripple, finite
+    impulse response (FIR) digital filter at 256 kSPS, giving 110.8 kHz input bandwidth
+    (BW), combined with ±1.1 ppm integral nonlinearity (INL), ±30 µV offset error,
+    and ±30 ppm gain error. Wider bandwidth, up to 500 kHz Nyquist, 204 kHz, −3 dB,
+    is available using the sinc5 filter, enabling a view of signals over an extended
+    range.
+
+    A 1.024 MHz sinc5 filter path exists for users seeking an even higher output data
+    rate. This path is quantization noise limited; therefore, it is best suited for
+    customers requiring minimum latency for control loops or implementing custom digital
+    filtering on an external field programmable gate array (FPGA) or digital signal
+    processor (DSP).
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad77681evb/zed
+  tags:
+  - ad7768-1
+  - adaq7768-1
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad77681evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad77681evb-zed-2022_r2_p1
+  title: AD77681EVB_ZED HDL project 2022_r2_p1
+  description: AD77681EVB_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad77681evb/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad77681evb-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad77681evb-zed-2023_R2
+  title: AD77681EVB_ZED HDL project 2023_R2
+  description: AD77681EVB_ZED HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad77681evb/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad77681evb-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_i2s_adi-2023_R2
+  - Component:hdl-library-axi_spdif_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-spi_engine-axi_spi_engine-2023_R2
+  - Component:hdl-library-spi_engine-spi_engine_execution-2023_R2
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2023_R2
+  - Component:hdl-library-spi_engine-spi_engine_offload-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_i2c_mixer-2023_R2
