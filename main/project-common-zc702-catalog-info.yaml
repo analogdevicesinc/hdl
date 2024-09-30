@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-zc702
+  title: TEMPLATE_ZC702 HDL project
+  description: >
+    Template project.It targets the AMD Xilinx ZC702.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/common/zc702
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - template
+  - zc702
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

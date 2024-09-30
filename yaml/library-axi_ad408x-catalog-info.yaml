@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_ad408x
+  title: AXI AD408x HDL IP core
+  description: >
+    The AXI AD408x IP core can be used to interface the AD4080 device. This documentation
+    only covers the IP core and requires one to be familiar with the device, for a
+    complete and better understanding.
+
+    More about the generic framework interfacing ADCs can be read in axi_adc.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad408x
+  tags:
+  - ad4080
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_ad408x/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
