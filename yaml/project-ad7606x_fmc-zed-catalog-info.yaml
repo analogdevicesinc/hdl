@@ -1,0 +1,92 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7606x_fmc-zed
+  title: AD7606X-FMCZ HDL project
+  description: >
+    The AD7606 is a 8-/6-/4-Channel DAS with 16-Bit, Bipolar Input, Simultaneous Sampling
+    ADC. Each part contains analog input clamp protection, a second-order antialiasing
+    filter, a track-and-hold amplifier, a 16-bit charge redistribution successive
+    approximation analog-to-digital converter (ADC), a flexible digital filter, a
+    2.5 V reference and reference buffer, and high speed serial and parallel interfaces.
+    The AD7606 operate from a single 5 V supply and can accommodate ±10 V and ±5 V
+    true bipolar input signals while sampling at throughput rates up to 200 kSPS for
+    all channels. The input clamp protection circuitry can tolerate voltages up to
+    ±16.5 V. The AD7606 has 1 MΩ analog input impedance regardless of sampling frequency.
+    The single supply operation, on-chip filtering, and high input impedance eliminate
+    the need for driver op amps and external bipolar supplies.
+
+    The AD7606C is a directly pin replacement (software and hardware) for both AD7608
+    and AD7609, with higher input impedance, throughput rate and extended temperature
+    range with additional features such as 16/18-bit sample size, system gain/offset/phase
+    calibration, sensor disconnect detection, lower Vdrive operation, diagnostics,
+    additional oversampling ratios and per channel analog input range selection with
+    bipolar differential, bipolar single-ended and unipolar single-ended options.
+
+    The EVAL-AD7606B-FMCZ and EVAL-AD7606C-18 evaluation boards are designed to help
+    users to easily evaluate the features of AD7606B, AD7606C-16 and AD7606C-18 analog-to-digital
+    converters (ADCs).
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7606x_fmc/zed
+  tags:
+  - ad7606
+  - ad7606b
+  - ad7606c
+  - ad7606c-16
+  - ad7606c-18
+  - eval-ad7606b-fmcz
+  - eval-ad7606c-18
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad7606x_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7606x_fmc-zed-2022_r2_p1
+  title: AD7606X_FMC_ZED HDL project 2022_r2_p1
+  description: AD7606X_FMC_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad7606x_fmc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad7606x_fmc-zed
+  dependsOn:
+  - Component:hdl-library-axi_ad7606x-2022_r2_p1
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_pwm_gen-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1

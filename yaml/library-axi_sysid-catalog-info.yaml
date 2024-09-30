@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_sysid
+  title: AXI_SYSID HDL IP core
+  description: >
+    The System ID solution is comprised of 2 IP cores: the AXI System ID which provides
+    the AXI Lite interface and System ID ROM which acts as a ROM and contains the
+    data. Together, they provide the user with information regarding the conditions
+    in which the hardware system was built. The System ID information is used to provide
+    information about the system’s bit file, to facilitate future debugging actions.
+    This information will be stored internally in a ROM and will be made available
+    to the system via the AXI Lite interface.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_sysid/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_sysid-2022_r2_p1
+  title: AXI_SYSID HDL IP core 2022_r2_p1
+  description: AXI_SYSID HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_sysid
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_sysid

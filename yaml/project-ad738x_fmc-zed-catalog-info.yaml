@@ -1,0 +1,120 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad738x_fmc-zed
+  title: AD738x_FMC HDL project
+  description: >
+    The AD7380/ AD7381 are a 16-bit and 14-bit pin-compatible family of dual simultaneous
+    sampling, high speed, low power, successive approximation register (SAR) analog-to-digital
+    converters (ADCs) that operate from a 3.3 V power supply and feature throughput
+    rates up to 4 MSPS.The analog input type is differential for the AD7380, AD7381,
+    AD4680, AD4681, AD7380-4, AD7389-4, AD7381-4 can accepts a wide common-mode input
+    voltage, and is sampled and converted on the falling edge of CS.
+
+    The AD7383, AD7384, AD4682 and AD4683 have the pseudo-differential input while
+    the AD7386, AD7387, AD7388, AD4684 and AD4685 have single-ended input. The AD7380
+    family has optional integrated on-chip oversampling blocks to improve dynamic
+    range and reduce noise at lower bandwidths. An internal 2.5 V reference is included.
+    Alternatively, an external reference up to 3.3 V can be used.
+
+    The conversion process and data acquisition use standard control inputs allowing
+    for easy interfacing to microprocessors or DSPs. It is compatible with 1.8 V,
+    2.5 V, and 3.3 V interfaces, using a separate logic supply.
+
+    The dual AD7380, AD7381, AD4680, AD4681, AD7383, AD7384, AD4682, AD4683, AD7386,
+    AD7387, AD7388, AD4684 and AD4685 family are available in a 16-lead 3mm x 3mm
+    LFCSP package while the quad generics AD7380-4, AD7389-4, and AD7381-4 are available
+    in 4mmx4mm LFCSP package. Both the duals and quad generic operate in specified
+    from -40°C to +125°C temperature range.
+
+    Applications:
+
+    - Motor control position feedback
+
+    - Motor control current sense
+
+    - Data acquisition system
+
+    - EDFA applications
+
+    - I and Q demodulation
+
+    - SONAR
+
+    - Power Quality
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad738x_fmc/zed
+  tags:
+  - ad4680
+  - ad4681
+  - ad4682
+  - ad4683
+  - ad4684
+  - ad4685
+  - ad7380
+  - ad7380-4
+  - ad7381
+  - ad7381-4
+  - ad7383
+  - ad7384
+  - ad7386
+  - ad7387
+  - ad7388
+  - ad7389-4
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad738x_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad738x_fmc-zed-2022_r2_p1
+  title: AD738X_FMC_ZED HDL project 2022_r2_p1
+  description: AD738X_FMC_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad738x_fmc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad738x_fmc-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_axis_upscale-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+  - Component:hdl-library-util_pulse_gen-2022_r2_p1

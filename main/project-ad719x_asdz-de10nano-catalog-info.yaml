@@ -1,0 +1,41 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad719x_asdz-de10nano
+  title: AD719X-ASDZ HDL project
+  description: >
+    The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
+    EVAL-AD7190ASDZ, EVAL-AD7193ASDZ and EVAL-AD7195ASDZ, each evaluation kit featuring
+    its own chip, the AD7190, AD7193 and AD7195 respectively - 4.8 kHz ultralow noise
+    24-bit sigma-delta ADC, each with its own particularities.
+
+    The on-chip low noise gain stage means that signals of small amplitude can interface
+    directly to the ADC. The internal clock option provides a compact solution for
+    low BW requirements.
+
+    It targets the Intel Altera DE10NANO.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad719x_asdz/de10nano
+  tags:
+  - ad7190
+  - ad7193
+  - ad7195
+  - de10nano
+  - eval-ad7190asdz
+  - eval-ad7193asdz
+  - eval-ad7195asdz
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

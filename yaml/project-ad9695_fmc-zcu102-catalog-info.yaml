@@ -1,0 +1,76 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9695_fmc-zcu102
+  title: AD9695-FMC HDL project
+  description: >
+    The AD9695 is a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC) featuring
+    an on-chip buffer and a sample-and-hold circuit designed for low power, small
+    size, and ease of use. The dual ADC cores feature a multistage, differential pipelined
+    architecture with integrated output error correction logic. Each ADC features
+    wide bandwidth inputs supporting a variety of user-selectable input ranges.
+
+    The AD9695-FMC reference design is a processor based (e.g. Microblaze) embedded
+    system. The design consists of a receive chain that transports the captured samples
+    from the ADC to the system memory (DDR).
+
+    All cores from the receive chain are programmable through an AXI-Lite interface.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9695_fmc/zcu102
+  tags:
+  - ad9695
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9695_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9695_fmc-zcu102-2022_r2_p1
+  title: AD9695_FMC_ZCU102 HDL project 2022_r2_p1
+  description: AD9695_FMC_ZCU102 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9695_fmc/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9695_fmc-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_adxcvr-2022_r2_p1
+  - Component:hdl-library-xilinx-util_adxcvr-2022_r2_p1

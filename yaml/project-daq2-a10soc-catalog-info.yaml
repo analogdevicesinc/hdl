@@ -1,0 +1,58 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-daq2-a10soc
+  title: DAQ2_A10SOC HDL project
+  description: DAQ2_A10SOC HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/a10soc
+  tags:
+  - a10soc
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-daq2-a10soc-2022_r2_p1
+  title: DAQ2_A10SOC HDL project 2022_r2_p1
+  description: DAQ2_A10SOC HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/daq2/a10soc
+  tags:
+  - a10soc
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-daq2-a10soc
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-intel-adi_jesd204-2022_r2_p1
+  - Component:hdl-library-intel-avl_adxcfg-2022_r2_p1
+  - Component:hdl-library-intel-avl_dacfifo-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_adcfifo-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1

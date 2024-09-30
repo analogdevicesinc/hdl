@@ -1,0 +1,53 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-vc709
+  title: TEMPLATE_VC709 HDL project
+  description: >
+    Template project.It targets the AMD Xilinx VC709.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/common/vc709
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - template
+  - vc709
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-vc709-2022_r2_p1
+  title: TEMPLATE_VC709 HDL project 2022_r2_p1
+  description: >
+    Template project.It targets the AMD Xilinx VC709.
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/common/vc709
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - template
+  - vc709
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-common-vc709
+  dependsOn:
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
