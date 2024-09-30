@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9434_fmc-zed
+  title: AD9434-FMC HDL project
+  description: >
+    The AD9434 is a 12-bit monolithic sampling analog-to-digital converter (ADC) optimized
+    for high performance, low power, and ease of use. The part operates at up to a
+    500 MSPS conversion rate and is optimized for outstanding dynamic performance
+    in wideband carrier and broadband systems. All necessary functions, including
+    a sample-and-hold and voltage reference, are included on the chip to provide a
+    complete signal conversion solution. This reference design includes a data capture
+    interface and the external DDR-DRAM interface for sample storage. It allows programming
+    the device and monitoring its internal status registers. The board also provides
+    other options to drive the clock and analog inputs of the ADC.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9434_fmc/zed
+  tags:
+  - ad9434
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9434_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

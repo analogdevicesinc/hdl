@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-cn0363-cn0363_phase_data_sync
+  title: CN0363 Phase Data Sync HDL IP core
+  description: >
+    The CN0363 Phase Data Sync FPGA Peripheral is part of the EVAL-CN0363-PMDZ HDL
+    reference design and is responsible for preparing the ADC conversion result data
+    and aligning it with the phase and feeding both to the processing pipeline.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/cn0363/cn0363_phase_data_sync
+  tags:
+  - cn0363
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/cn0363/cn0363_phase_data_sync.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

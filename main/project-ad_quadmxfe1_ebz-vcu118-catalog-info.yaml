@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad_quadmxfe1_ebz-vcu118
+  title: AD_QUADMXFE1_EBZ_VCU118 HDL project
+  description: AD_QUADMXFE1_EBZ_VCU118 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_quadmxfe1_ebz/vcu118
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

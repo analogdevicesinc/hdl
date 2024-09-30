@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0585-zed
+  title: CN0585 HDL project
+  description: >
+    The EVAL-CN0585-FMCZ Low Latency Development Kit (LLDK) board is a development
+    board consisting of 4 x 16-bit ADC channels and 4 x 16-bit DAC channels that are
+    interfaced with an FPGA through the FMC Low Pin Count (LPC) Connector. Current
+    revision of EVAL-CN0585-FMCZ is Rev B. EVAL-CN0585-FMCZ, EVAL-CN0585-FMCZ and
+
+    - ZedBoard are connected together to build a development system setup.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0585/zed
+  tags:
+  - cn0584
+  - cn0585
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0585/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
