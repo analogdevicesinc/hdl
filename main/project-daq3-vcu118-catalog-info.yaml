@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-daq3-vcu118
+  title: DAQ3 HDL Project
+  description: >
+    The DAQ3 reference design showcases the EVAL-FMCDAQ3-EBZ evaluation board, which
+    is comprised of the AD9680 dual, 14-bit, 1.25 GSPS, JESD204B (subclass 1) ADC,
+    the AD9152 dual, 16-bit, 2.5 GSPS, JESD204B (subclass 1) DAC, and the AD9528 JESD204B/C
+    clock generator, and some power management components. It is clocked by an internally
+    generated carrier platform via the FMC connector, comprising a completely self
+    contained data acquisition and signal synthesis prototyping platform.
+
+    It targets the AMD Xilinx VCU118.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/vcu118
+  tags:
+  - ad9152
+  - ad9528
+  - ad9680
+  - eval-fmcdaq3-ebz
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/daq3/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

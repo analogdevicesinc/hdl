@@ -1,0 +1,53 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-admx6001_ebz-vcu118
+  title: ADMX6001-EBZ HDL project
+  description: >
+    The EVAL-ADMX6001-EBZ is a reference design of a DC-coupled single channel 10GSPS
+    digitizer featuring the low noise 12-bit high-speed ADC AD9213 and the 20-bit
+    precision ADC AD4080. The dual-path design achieves true low noise digitization
+    in the broad band from DC to 5GHz. By biasing the ADC driver ADL5580 with the
+    precision DAC LTC2664, it is capable of handling unipolar and bipolar signals
+    at various DC levels, maximizing utility of the input dynamic range of AD9213.
+    This design is ideal for high performance time-domain instruments such as time-of-flight
+    mass spectrometry (TOFMS), distributed fiber optic sensing (DFOS), and digital
+    oscilloscope.
+
+    The EVAL-ADMX6001-EBZ reference design is a processor based (e.g. Microblaze)
+    embedded system.
+
+    The design implements a high-speed receive chain using JESD204B and a precision
+    data path using the custom interface IP axi_ad408x.
+
+    The receive chain transports the captured samples from ADC to the system memory
+    (DDR). Before transferring the data to DDR the samples are stored in a buffer
+    implemented on block rams from the FPGA fabric (util_adcfifo).
+
+    All cores from the receive chain are programmable through an AXI-Lite interface.
+
+    It targets the AMD Xilinx VCU118.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/admx6001_ebz/vcu118
+  tags:
+  - ad4080
+  - ad9213
+  - adl5580
+  - eval-admx6001-ebz
+  - hdl
+  - ltc2664
+  - project
+  - reference-design
+  - vcu118
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/admx6001_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
