@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-spi_engine-spi_engine_interconnect
+  title: SPI_ENGINE_INTERCONNECT HDL IP core
+  description: >
+    The SPI Engine Interconnect allows connecting multiple spi_engine control-interface
+    managers to a single spi_engine control-interface subordinate. This enables multiple
+    command stream generators to connect to a single spi_engine execution and consequential
+    give them access to the same SPI bus. The interconnect modules take care of properly
+    arbitrating between the different command streams.
+
+    Combining multiple command stream generators in a design and connecting them to
+    a single execution module allows for the creation of flexible and efficient designs
+    using standard components.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_interconnect.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

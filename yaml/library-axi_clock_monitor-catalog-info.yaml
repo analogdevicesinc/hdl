@@ -1,0 +1,72 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_clock_monitor
+  title: AXI_CLOCK_MONITOR HDL IP core
+  description: >
+    The AXI Clock Monitor IP is used to measure clocks in the system. It allows up
+    to 16 clocks to be measured at a time.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clock_monitor
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_clock_monitor/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_clock_monitor-2022_r2_p1
+  title: AXI_CLOCK_MONITOR HDL IP core 2022_r2_p1
+  description: AXI_CLOCK_MONITOR HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_clock_monitor
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_clock_monitor
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_clock_monitor-2023_R2
+  title: AXI_CLOCK_MONITOR HDL IP core 2023_R2
+  description: AXI_CLOCK_MONITOR HDL IP core 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/library/axi_clock_monitor
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_clock_monitor

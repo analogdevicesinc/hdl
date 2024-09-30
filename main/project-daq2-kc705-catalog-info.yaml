@@ -1,0 +1,43 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-daq2-kc705
+  title: DAQ2 HDL Project
+  description: >
+    The AD-FMCDAQ2-EBZ module is comprised of the AD9680 dual, 14-bit, 1.0 GSPS, JESD204B
+    ADC, the AD9144 quad, 16-bit, 2.8 GSPS, JESD204B DAC, the AD9523-1 clock, and
+    power management components. It is clocked by an internally generated carrier
+    platform via the FMC connector, comprising a completely self contained data acquisition
+    and signal synthesis prototyping platform. In an FMC footprint, the module's combination
+    of wideband data conversion, clocking, and power closely approximates real-world
+    hardware and software for system prototyping and design, with no compromise in
+    signal chain performance.
+
+    The HDL reference design is an embedded system built around a processor core either
+    ARM, NIOS-II or Microblaze. The high speed digital interface of the converters
+    is handled by the JESD204B framework.
+
+    It targets the AMD Xilinx KC705.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/kc705
+  tags:
+  - ad9144
+  - ad9523-1
+  - ad9680
+  - eval-ad-fmcdaq2-ebz
+  - hdl
+  - kc705
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/daq2/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
