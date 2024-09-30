@@ -1,0 +1,143 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9208_dual_ebz-vcu118
+  title: AD9208-DUAL-EBZ HDL Project
+  description: >
+    The AD9208-DUAL-EBZ evaluation board features the AD9208 dual, 14-bit, 3 GSPS
+    ADC.
+
+    The reference design is a processor-based (e.g. Microblaze) embedded system. The
+    device interfaces to the FPGA transceivers followed by the individual JESD204B
+    and ADC cores. The cores are programmable through an AXI-Lite interface. The samples
+    are passed to the system memory (DDR).
+
+    The device has an on-chip buffer and a sample-andhold circuit designed for low
+    power, small size, and ease of use. This product is designed to support communications
+    applications capable of direct sampling wide bandwidth analog signals of up to
+    5 GHz. The -3 dB bandwidth of the ADC input is 9 GHz.
+
+    The AD9208 is optimized for wide input bandwidth, high sampling rate, excellent
+    linearity, and low power in a small package. The dual ADC cores feature a multistage,
+    differential pipelined architecture with integrated output error correction logic.
+    Each ADC features wide bandwidth inputs supporting a variety of user-selectable
+    input ranges.
+
+    The user can configure the Subclasss 1 JESD204B-based high-speed serialized output
+    in a variety of 1-lane, 2-lane, 4-lane, and 8-lane configurations, depending on
+    the DDC configuration and the acceptable lane rate of the receiving logic device.
+    Multidevice synchronization is supported through the SYSREF± and SYNCINB± input
+    pins. The AD9208 has flexible power-down options that allow significant power
+    savings when desired. All of these features can be programmed using a 3-wire serial
+    port interface (SPI).
+
+    Features:
+
+    - Up to 4 channels available
+
+    - JESD204B (Subclass 1) coded serial digital outputs
+
+    - 2 integrated, wideband digital processors per channel
+
+    - Phase coherent NCO switching
+
+    - 9 GHz analog input full power bandwidth (-3 dB)
+
+    It targets the AMD Xilinx VCU118.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9208_dual_ebz/vcu118
+  tags:
+  - ad9208
+  - eval-ad9208
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9208_dual_ebz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9208_dual_ebz-vcu118-2022_r2_p1
+  title: AD9208_DUAL_EBZ_VCU118 HDL project 2022_r2_p1
+  description: AD9208_DUAL_EBZ_VCU118 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9208_dual_ebz/vcu118
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9208_dual_ebz-vcu118
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_adcfifo-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_adxcvr-2022_r2_p1
+  - Component:hdl-library-xilinx-util_adxcvr-2022_r2_p1
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9208_dual_ebz-vcu118-2023_R2
+  title: AD9208_DUAL_EBZ_VCU118 HDL project 2023_R2
+  description: AD9208_DUAL_EBZ_VCU118 HDL project 2023_R2
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/ad9208_dual_ebz/vcu118
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9208_dual_ebz-vcu118
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2023_R2
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_rx-2023_R2
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_adcfifo-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
+  - Component:hdl-library-xilinx-axi_adxcvr-2023_R2
+  - Component:hdl-library-xilinx-util_adxcvr-2023_R2
