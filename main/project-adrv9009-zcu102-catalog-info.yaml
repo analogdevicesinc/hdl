@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9009-zcu102
+  title: ADRV9009_ZCU102 HDL project
+  description: >
+    The HDL reference design is an embedded system built around a processor core either
+    ARM, NIOS-II or Microblaze. A functional block diagram of the system is shown
+    below. The device digital interface is handled by the transceiver IP followed
+    by the JESD204B and device specific cores. The JESD204B lanes are shared among
+    the 4 transmit, 2 receive and 2 observation/sniffer receive data paths by the
+    same set of transceivers within the IP. The cores are programmable through an
+    AXI-lite interface. The delineated data is then passed on to independent DMA cores
+    for the transmit, receive and observation/sniffer paths.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adrv9009/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

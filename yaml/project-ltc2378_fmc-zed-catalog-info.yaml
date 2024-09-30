@@ -1,0 +1,63 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ltc2378_fmc-zed
+  title: LTC2378-FMC HDL project
+  description: >
+    The LTC2378-20 is a low noise, low power, high speed 20-bit successive approximation
+    register (SAR) ADC. Operating from a 2.5V supply, the LTC2378-20 has a ±VREF fully
+    differential input range with VREF ranging from 2.5V to 5.1V. The LTC2378-20 consumes
+    only 21mW and achieves ±2ppm INL maximum, no missing codes at 20 bits with 104dB
+    SNR.
+
+    The LTC2378-20 has a high speed SPI-compatible serial interface that supports
+    1.8V, 2.5V, 3.3V and 5V logic while also featuring a daisy-chain mode. The fast
+    1Msps throughput with no cycle latency makes the LTC2378-20 ideally suited for
+    a wide variety of high speed applications. An internal oscillator sets the conversion
+    time, easing external timing considerations. The LTC2378-20 automatically powers
+    down between conversions, leading to reduced power dissipation that scales with
+    the sampling rate.
+
+    The LTC2378-20 features a unique digital gain compression (DGC) function, which
+    eliminates the driver amplifier's negative supply while preserving the full resolution
+    of the ADC. When enabled, the ADC performs a digital scaling function that maps
+    zero-scale code from 0V to 0.1 x VREF and full-scale code from VREF to 0.9 x VREF.
+    For a typical reference voltage of 5V, the full-scale input range is now 0.5V
+    to 4.5V, which provides adequate headroom for powering the driving amplifier from
+    a single 5.5V supply.
+
+    Applications:
+
+    - Medical Imaging
+
+    - High Speed Data Acquisition
+
+    - Portable or Compact Instrumentation
+
+    - Industrial Process Control
+
+    - Low Power Battery-Operated Instrumentation
+
+    - ATE
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ltc2378_fmc/zed
+  tags:
+  - hdl
+  - ltc2378-20
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ltc2378_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
