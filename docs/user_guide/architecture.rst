@@ -300,6 +300,8 @@ HDL riscv-rx no-OS
 Board design and capabilities
 -------------------------------------------------------------------------------
 
+.. _architecture amd-platforms:
+
 AMD platforms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -434,6 +436,8 @@ AMD platforms
    FMC1 & FMC2 columns -> depending on the power supply of the device
    connected to the FMC, the custom VADJ will have the value supported by
    both the carrier and the device(s)
+
+.. _architecture intel-platforms:
 
 Intel platforms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
