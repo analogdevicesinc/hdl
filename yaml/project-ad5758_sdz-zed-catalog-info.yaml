@@ -1,0 +1,87 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5758_sdz-zed
+  title: AD5758-SDZ HDL project
+  description: >
+    The AD5758 is a single-channel, voltage and current output digital-to-analog converter
+    (DAC) that operates with a power supply range from −33 V (minimum) on AVSS to
+    +33 V (maximum) on AVDD1 with a maximum operating voltage between the two rails
+    of 60 V. On-chip DPC (dynamic power control) minimizes package power dissipation,
+    which is achieved by regulating the supply voltage (VDPC+) to the VIOUT output
+    driver circuitry from 5 V to 27 V using a buck dc-to-dc converter, optimized for
+    minimum on-chip power dissipation. The CHART pin enables a HART signal to be coupled
+    onto the current output.
+
+    The device uses a versatile 4-wire serial peripheral interface (SPI) that operates
+    at clock rates of up to 50 MHz and is compatible with standard SPI, QSPI™, MICROWIRE™,
+    DSP, and microcontroller interface standards. The interface also features an optional
+    SPI cyclic redundancy check (CRC) and a watchdog timer. The AD5758 offers improved
+    diagnostic features from its predecessors, such as output current monitoring and
+    an integrated 12-bit diagnostic ADC. Additional robustness is provided by the
+    inclusion of a fault protection switch on VIOUT, +VSENSE, and −VSENSE pins.
+
+    Applications:
+
+    - Process control
+
+    - Actuator control
+
+    - PLC and distributed control systems (DCS) applications
+
+    - HART network connectivity
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5758_sdz/zed
+  tags:
+  - ad5758
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad5758_sdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5758_sdz-zed-2022_r2_p1
+  title: AD5758_SDZ_ZED HDL project 2022_r2_p1
+  description: AD5758_SDZ_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad5758_sdz/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad5758_sdz-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1

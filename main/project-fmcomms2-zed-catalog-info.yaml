@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms2-zed
+  title: FMCOMMS2_ZED HDL project
+  description: FMCOMMS2_ZED HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms2/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

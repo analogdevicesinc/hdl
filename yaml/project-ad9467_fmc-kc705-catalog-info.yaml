@@ -1,0 +1,67 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9467_fmc-kc705
+  title: AD9467-FMC HDL project
+  description: >
+    The AD9467 chip used on EVAL-AD9467 is a 16-bit, monolithic, IF sampling analog-to-digital
+    converter (ADC) with a conversion rate of up to 250 MSPS. This reference design
+    includes a data capture interface and the external DDR-DRAM interface for sample
+    storage. It allows programming the device and monitoring its internal status registers.
+    The board also provides other options to drive the clock and analog inputs of
+    the ADC. This can be done by programming the AD9517-4 clock chip and/or setting
+    up the ADL5565 differential amplifier, respectively.
+
+    It targets the AMD Xilinx KC705.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9467_fmc/kc705
+  tags:
+  - ad9467
+  - ad9517-4
+  - adl5565
+  - eval-ad9467
+  - hdl
+  - kc705
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9467_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9467_fmc-kc705-2022_r2_p1
+  title: AD9467_FMC_KC705 HDL project 2022_r2_p1
+  description: AD9467_FMC_KC705 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9467_fmc/kc705
+  tags:
+  - hdl
+  - kc705
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9467_fmc-kc705
+  dependsOn:
+  - Component:hdl-library-axi_ad9467-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

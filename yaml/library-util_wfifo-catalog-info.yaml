@@ -1,0 +1,65 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_wfifo
+  title: UTIL_WFIFO HDL IP core
+  description: >
+    The Util WFIFO core is designed to downscale the clock rate of the RX data path.
+    There are scenarios when the device clock (interface clock) is too high (above
+    200 MHz), making it a challenge to integrate any processing cores between the
+    device core and CPACK/DMA, because of the small timing margins. By reducing the
+    clock rate of the data path, the user can easily integrate any custom processing
+    core into the design.
+
+    To define the correct configuration, the following questions need to be answered:
+
+    #. What is the clock rate of the device core's data interface? (dout_clk) #. What
+    is the data rate of the device core's data interface? (dout_valid@dout_clk) #.
+    What is the targeted clock rate of the data path (din_clk), and how we can achieve
+    it, respecting the main rule of thumb: input data rate must be equal to the output
+    data rate?
+
+    If the device clock rate is equal to the device data rate, the only solution to
+    downscale the clock rate is to increase the data width of the output ports of
+    the FIFO. Currently the util_wfifo supports four data width ratios: 1:1/1:2/1:4/1:8.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/util_wfifo/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_wfifo-2022_r2_p1
+  title: UTIL_WFIFO HDL IP core 2022_r2_p1
+  description: UTIL_WFIFO HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/util_wfifo
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-util_wfifo

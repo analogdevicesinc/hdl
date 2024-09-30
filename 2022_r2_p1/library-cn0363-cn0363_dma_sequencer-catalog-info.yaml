@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-cn0363-cn0363_dma_sequencer-2022_r2_p1
+  title: CN0363_DMA_SEQUENCER HDL IP core 2022_r2_p1
+  description: CN0363_DMA_SEQUENCER HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/cn0363/cn0363_dma_sequencer
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-cn0363-cn0363_dma_sequencer

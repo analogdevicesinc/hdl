@@ -1,0 +1,58 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9364z7020-ccbob_cmos
+  title: ADRV9364Z7020_CCBOB_CMOS HDL project
+  description: ADRV9364Z7020_CCBOB_CMOS HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9364z7020/ccbob_cmos
+  tags:
+  - ccbob-cmos
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9364z7020-ccbob_cmos-2022_r2_p1
+  title: ADRV9364Z7020_CCBOB_CMOS HDL project 2022_r2_p1
+  description: ADRV9364Z7020_CCBOB_CMOS HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/adrv9364z7020/ccbob_cmos
+  tags:
+  - ccbob-cmos
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adrv9364z7020-ccbob_cmos
+  dependsOn:
+  - Component:hdl-library-axi_ad9361-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_gpreg-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
+  - Component:hdl-library-util_rfifo-2022_r2_p1
+  - Component:hdl-library-util_tdd_sync-2022_r2_p1
+  - Component:hdl-library-util_wfifo-2022_r2_p1
+  - Component:hdl-library-xilinx-util_clkdiv-2022_r2_p1

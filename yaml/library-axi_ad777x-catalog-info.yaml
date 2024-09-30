@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_ad777x
+  title: AXI AD777x HDL IP core
+  description: >
+    The AXI AD777x IP core can be used to interface the AD7770, AD7771 and AD7779
+    converters using an FPGA in 1, 2, or 4 data lines active. More about the generic
+    framework interfacing ADCs, that contains the up_adc_channel and up_adc_common
+    modules, can be read in axi_adc.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad777x
+  tags:
+  - ad7770
+  - ad7771
+  - ad7779
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_ad777x/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_ad777x-2022_r2_p1
+  title: AXI_AD777X HDL IP core 2022_r2_p1
+  description: AXI_AD777X HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_ad777x
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_ad777x

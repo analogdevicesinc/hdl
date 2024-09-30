@@ -1,0 +1,50 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_logic_analyzer
+  title: AXI_LOGIC_ANALYZER HDL IP core
+  description: >
+    The AXI Logic Analyzer IP core implements both a logic analyzer and a pattern
+    generator, sharing the same pins. More about the generic framework interfacing
+    ADCs can be read here at axi_adc. and for DACs at axi_dac.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/axi_logic_analyzer
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/axi_logic_analyzer/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_logic_analyzer-2022_r2_p1
+  title: AXI_LOGIC_ANALYZER HDL IP core 2022_r2_p1
+  description: AXI_LOGIC_ANALYZER HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/axi_logic_analyzer
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_logic_analyzer

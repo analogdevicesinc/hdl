@@ -1,0 +1,53 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_axis_fifo
+  title: UTIL_AXIS_FIFO HDL IP core
+  description: >
+    The AXI Stream FIFO core is a simple FIFO (First Input First Output) with AXI
+    streaming interfaces, supporting synchronous and asynchronous operation modes.
+    It can be used to mitigate data rate differences or transfer an AXI stream to
+    a different clock domain.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/util_axis_fifo
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/util_axis_fifo/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_axis_fifo-2022_r2_p1
+  title: UTIL_AXIS_FIFO HDL IP core 2022_r2_p1
+  description: UTIL_AXIS_FIFO HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/util_axis_fifo
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-util_axis_fifo
+  dependsOn:
+  - Component:hdl-library-util_cdc-2022_r2_p1

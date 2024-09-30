@@ -1,0 +1,70 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad777x_ardz-de10nano
+  title: AD777X-ARDZ HDL project
+  description: >
+    The EVAL-AD7770-ARDZ / EVAL-AD7771-ARDZ / EVAL-AD7779-ARDZ evaluation kit features
+    the AD7770, AD7771, and AD7779 24-bit, analog-to-digital converters (ADCs).
+
+    The AD777x is an 8-channel, simultaneous sampling analog-to-digital converter
+    (ADC). Eight full Σ-Δ ADCs are on-chip. The AD777x provides an ultralow input
+    current to allow direct sensor connection. Each input channel has a programmable
+    gain stage allowing gains of 1, 2, 4, and 8 to map lower amplitude sensor outputs
+    into the full-scale ADC input range, maximizing the dynamic range of the signal
+    chain.
+
+    It targets the Intel Altera DE10NANO.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad777x_ardz/de10nano
+  tags:
+  - ad7770
+  - ad7771
+  - ad7779
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad777x_ardz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad777x_ardz-de10nano-2022_r2_p1
+  title: AD777X_ARDZ_DE10NANO HDL project 2022_r2_p1
+  description: AD777X_ARDZ_DE10NANO HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad777x_ardz/de10nano
+  tags:
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad777x_ardz-de10nano
+  dependsOn:
+  - Component:hdl-library-axi_ad777x-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
