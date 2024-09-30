@@ -1,0 +1,60 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad4110-zed
+  title: AD4110 HDL project
+  description: >
+    The AD4110-1 is a complete, single-channel, universal input analog-to-digital
+    front end for industrial process control systems where sensor type flexibility
+    is required.
+
+    The high voltage input is fully software configurable for current or voltage ranges
+    and allow direct interface to all standard industrial analog signal sources such
+    as, ±20 mA, ±4 mA to ±20 mA, ±10 V, and all thermocouple types. Field power can
+    be supplied for loop powered current output sensors. A range of excitation current
+    sources for RTD sensors and other resistive sensors are included. The integrated
+    programmable gain amplifier, PGA, offers sixteen gain settings from 0.2 to 24.
+
+    The high voltage input can be programmed to power up in either voltage or current
+    mode. When programmed to current mode, the unique input circuit architecture provides
+    a path for the loop current even in the absence of the system module power supply.
+
+    The AD4110-1 provides internal front-end diagnostic functions to indicate overvoltage,
+    undervoltage, open wire, overcurrent and overtemperature conditions. The high
+    voltage input is overcurrent limited and overvoltage protected up to ±35 V.
+
+    The AD4110-1 incorporates a 24-bit sigma delta analog to digital converter offering
+    conversion rates from 5 SPS to 125 kSPS with simultaneous 50 Hz and 60 Hz noise
+    rejection.
+
+    Applications:
+
+    - Process control and industrial automation
+
+    - Remote and distributed control systems
+
+    - Instrumentation and measurement
+
+    - Sensor and data acquisition
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4110/zed
+  tags:
+  - ad4110-1
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad4110/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

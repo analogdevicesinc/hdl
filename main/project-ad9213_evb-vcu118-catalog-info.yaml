@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9213_evb-vcu118
+  title: AD9213-EVB HDL project
+  description: >
+    The AD9213-EVB reference design is a processor based (e.g. Microblaze) embedded
+    system.
+
+    The design implements a high-speed receive chain using JESD204B.
+
+    The receive chain transports the captured samples from ADC to the system memory
+    (DDR). Before transferring the data to DDR the samples are stored in a buffer
+    implemented on block rams from the FPGA fabric (util_adcfifo).
+
+    All cores from the receive chain are programmable through an AXI-Lite interface.
+
+    It targets the AMD Xilinx VCU118.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_evb/vcu118
+  tags:
+  - eval-ad9213
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9213_evb/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
