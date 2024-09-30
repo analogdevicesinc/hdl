@@ -1,0 +1,75 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adv7511-zc702
+  title: ADV7511 HDL project
+  description: >
+    The ADV7511 is a 225 MHz High-Definition Multimedia Interface (HDMI®) transmitter,
+    which is ideal for home entertainment products including DVD players/recorders,
+    digital set top boxes, A/V receivers, gaming consoles, and PCs.
+
+    The digital video interface contains an HDMI 1.4- and a DVI 1.0-compatible transmitter,
+    and supports all HDTV formats (including 1080p with 12-bit Deep Color). The ADV7511
+    supports the HDMI 1.4-specific features, HEAC (ARC), and 3D video. In addition
+    to these features, the ADV7511 supports x.v.Color™, high bit rate audio, and programmable
+    AVI InfoFrames. With the inclusion of HDCP, the ADV7511 allows the secure transmission
+    of protected content as specified by the HDCP 1.4 protocol.
+
+    The ADV7511 supports both S/PDIF and 8-channel I2S audio. Its high fidelity 8-channel
+    I2S can transmit either stereo or 7.1 surround audio up to 768 kHz. The S/PDIF
+    can carry compressed audio including Dolby® Digital, DTS®, and THX®. Fabricated
+    in an advanced CMOS process, the ADV7511 is provided in a 100-lead LQFP surface-mount
+    plastic package and is specified over the 0°C to +70°C temperature range.
+
+    It targets the AMD Xilinx ZC702.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7511/zc702
+  tags:
+  - adv7511
+  - hdl
+  - project
+  - reference-design
+  - zc702
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/adv7511/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adv7511-zc702-2022_r2_p1
+  title: ADV7511_ZC702 HDL project 2022_r2_p1
+  description: ADV7511_ZC702 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/adv7511/zc702
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc702
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adv7511-zc702
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

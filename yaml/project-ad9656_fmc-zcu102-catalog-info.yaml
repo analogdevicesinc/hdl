@@ -1,0 +1,83 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9656_fmc-zcu102
+  title: AD9656-FMC HDL project
+  description: >
+    The AD9656 is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC) featuring
+    an on-chip sample and hold circuit. It is designed to be low cost, low power and
+    compact, making it easy to use.
+
+    AD9656 operates at a conversion rate of up to 125 MSPS, optimized for excellent
+    dynamic performance and low power consumption, which is crucial for applications
+    requiring a small package size. It requires a single 1.8 V power supply and supports
+    LVPECL, CMOS, and LVDS-compatible sample rate clocks for full performance. The
+    ADC does not need external reference or driver components for many applications.
+    It also includes features to enhance flexibility and reduce system costs, such
+    as a programmable output clock, data alignment and digital test pattern generation.
+
+    An on-chip phase-locked loop (PLL) allows users to provide a single ADC sampling
+    clock. The PLL multiplies the ADC sampling clock to produce the corresponding
+    JESD204B data rate clock. The configurable JESD204B output block supports up to
+    8.0 Gbps per lane. JESD204B output block supports one, two, and four lane configurations.
+    The SPI control offers a wide range of flexible features to meet specific system
+    requirements
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9656_fmc/zcu102
+  tags:
+  - ad9656
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad9656_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad9656_fmc-zcu102-2022_r2_p1
+  title: AD9656_FMC_ZCU102 HDL project 2022_r2_p1
+  description: AD9656_FMC_ZCU102 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad9656_fmc/zcu102
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad9656_fmc-zcu102
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  - Component:hdl-library-jesd204-ad_ip_jesd204_tpl_dac-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-axi_jesd204_tx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_rx-2022_r2_p1
+  - Component:hdl-library-jesd204-jesd204_tx_static_config-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-xilinx-axi_adxcvr-2022_r2_p1
+  - Component:hdl-library-xilinx-util_adxcvr-2022_r2_p1

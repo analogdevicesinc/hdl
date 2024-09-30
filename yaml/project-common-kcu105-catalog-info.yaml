@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-kcu105
+  title: TEMPLATE_KCU105 HDL project
+  description: >
+    Template project.It targets the AMD Xilinx KCU105.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/common/kcu105
+  tags:
+  - hdl
+  - kcu105
+  - project
+  - reference-design
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-kcu105-2022_r2_p1
+  title: TEMPLATE_KCU105 HDL project 2022_r2_p1
+  description: >
+    Template project.It targets the AMD Xilinx KCU105.
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/common/kcu105
+  tags:
+  - hdl
+  - kcu105
+  - project
+  - reference-design
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-common-kcu105
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

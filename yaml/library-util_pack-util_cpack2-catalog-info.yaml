@@ -1,0 +1,55 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_pack-util_cpack2
+  title: UTIL_CPACK2 HDL IP core
+  description: >
+    The channel CPACK utility core is meant to allow one or more channels to be enabled
+    by software without any padding. This allows full usage of the DMA bandwidth without
+    any overhead. This core normally works with an ADC and DMA modules. The ADC interface
+    is channel based (one interface per each ADC channel) and consists of enable,
+    valid and data signals. The DMA interface is a single FIFO interface consisting
+    of valid and data signals. The enable signals are usually controlled by software.
+    The core simply packs the ADC data of the individual channels into a single data
+    bus, as defined by the ADC enables.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/util_pack/util_cpack2.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-util_pack-util_cpack2-2022_r2_p1
+  title: UTIL_CPACK2 HDL IP core 2022_r2_p1
+  description: UTIL_CPACK2 HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/util_pack/util_cpack2
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-util_pack-util_cpack2

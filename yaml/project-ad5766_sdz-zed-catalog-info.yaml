@@ -1,0 +1,99 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5766_sdz-zed
+  title: AD5766-SDZ HDL project
+  description: >
+    The AD5766/ AD5767 are 16-channel, 16-/12-bit, voltage output Digital-to-Analog
+    Converters (DAC). The DAC generates output voltage ranges from an external 2.5
+    V reference. Depending on the span selected, the mid-point of the output span
+    can be adjusted allowing for a minimum output voltage as low as −20 V or a maximum
+    output voltage of up to +14 V.
+
+    The AD5766/ AD5767 have integrated output buffers which can sink or source up
+    to 20 mA. This makes the AD5766/AD5767 suitable for Indium Phosphide Mach Zehnder
+    Modulator (InP-MZM) biasing applications.
+
+    The part incorporates a power-on reset circuit that ensures that the DAC outputs
+    power up to 0V and remain at this level until the output range of the DAC is configured.
+    The outputs of all DACs are updated through register configuration, with the added
+    functionality of user-selectable DAC channels to be simultaneously updated.
+
+    The AD5766/ AD5767 require four power supplies. AVCC is the analog supply for
+    the low voltage DAC circuitry. AVDD and AVSS are the positive and negative high
+    voltage power supplies for the output amplifiers. A VLOGIC supply pin is provided
+    to set the logic levels for the digital interface pins. The AD5766/ AD5767 utilize
+    a versatile 4-wire serial interface that operates at clock rates of up to 50 MHz
+    for write mode and up to 10MHz for readback and daisy-chain mode, and is compatible
+    with SPIR, QSPI., MICROWIRE. and DSP interface standards.
+
+    The AD5766/ AD5767 are available in a 4mm x 4mm WLCSP package and operates at
+    the range of -40C to +105C.
+
+    Applications:
+
+    - Mach Zehnder Modulator Bias Control
+
+    - Analog Output Modules
+
+    - Process Control
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5766_sdz/zed
+  tags:
+  - ad5766
+  - ad5767
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad5766_sdz/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad5766_sdz-zed-2022_r2_p1
+  title: AD5766_SDZ_ZED HDL project 2022_r2_p1
+  description: AD5766_SDZ_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad5766_sdz/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad5766_sdz-zed
+  dependsOn:
+  - Component:hdl-library-axi_ad5766-2022_r2_p1
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
