@@ -20,6 +20,7 @@ Contents
    Git repository <git_repository>
    Releases <releases>
    Build an HDL project <build_hdl>
+   Build the BOOT.BIN <build_boot_bin>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
    Porting reference designs <porting_project>
