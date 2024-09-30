@@ -1,0 +1,31 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-axi_adc_decimate-2023_R2
+  title: AXI_ADC_DECIMATE HDL IP core 2023_R2
+  description: >
+    The AXI ADC Decimate IP core allows decimating the input data by 10/100/1000/10000/100000,
+    with filtering and arbitrary decimation by dropping samples.
+
+    More about the generic framework interfacing ADCs can be read here at axi_adc.
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/library/axi_adc_decimate
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/2023_R2/library/axi_adc_decimate/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-axi_adc_decimate
+  dependsOn:
+  - Component:hdl-library-util_cic-2023_R2

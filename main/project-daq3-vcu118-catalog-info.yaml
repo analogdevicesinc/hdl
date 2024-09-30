@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-daq3-vcu118
+  title: DAQ3_VCU118 HDL project
+  description: DAQ3_VCU118 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/vcu118
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vcu118
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
