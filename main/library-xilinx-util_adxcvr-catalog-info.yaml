@@ -1,0 +1,37 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-xilinx-util_adxcvr
+  title: UTIL_ADXCVR HDL IP core
+  description: >
+    The util_adxcvr IP core instantiates a Gigabit Transceiver (GT) and sets up the
+    required configuration. Basically, it is a simple wrapper file for a GT\ Column,
+    exposing just the necessary ports and attributes.
+
+    Currently this IP supports three different GT types:
+
+    - GTXE2 (7 Series devices)
+
+    - GTHE3 (Ultrascale and Ultrascale+)
+
+    - GTHE4 (Ultrascale and Ultrascale+)
+
+    - GTYE4 (Ultrascale and Ultrascale+)
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/xilinx/util_adxcvr/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

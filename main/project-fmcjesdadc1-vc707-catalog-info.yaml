@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcjesdadc1-vc707
+  title: FMCJESDADC1_VC707 HDL project
+  description: FMCJESDADC1_VC707 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcjesdadc1/vc707
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - vc707
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
