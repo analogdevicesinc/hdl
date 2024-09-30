@@ -1,0 +1,36 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcomms8-zcu102
+  title: FMCOMMS8 HDL reference design
+  description: >
+    The HDL reference design is an embedded system built around a processor core either
+    ARM, NIOS-II or Microblaze. A functional block diagram of the system is shown
+    below. The two ADRV9009's digital interface is handled by the transceiver IP followed
+    by the JESD204B and device specific cores. The JESD204B lanes are shared among
+    the 8 transmit, 4 receive and 4 observation/sniffer receive data paths by the
+    same set of transceivers within the IP. The cores are programmable through an
+    AXI-lite interface. The delineated data is then passed on to independent DMA cores
+    for the transmit, receive and observation/sniffer paths.
+
+    It targets the AMD Xilinx ZCU102.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/zcu102
+  tags:
+  - adrv9009
+  - hdl
+  - project
+  - reference-design
+  - zcu102
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/fmcomms8/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

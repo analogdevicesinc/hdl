@@ -1,0 +1,35 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad469x_fmc-zed
+  title: AD469X-FMC HDL project
+  description: >
+    The AD469X HDL reference design provides all the interfaces that are necessary
+    to interact with the devices on the EVAL-AD4696 board.
+
+    The design has a SPI Engine instance to control and acquire data from the AD4696
+    16-bit precisions ADC, providing support to capture continuous samples at maximum
+    sampling rate. Currently the design supports the Zedboard.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad469x_fmc/zed
+  tags:
+  - ad4696
+  - eval-ad4696
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad469x_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
