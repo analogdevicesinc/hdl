@@ -1,0 +1,85 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0540-de10nano
+  title: CN0540 HDL project
+  description: >
+    The HDL reference design for the CN0540 provides a high resolution, wide-bandwidth,
+    high dynamic range, Integrated Electronics Piezoelectric (IEPE) compatible interface
+    data acquisition system (DAQ) for interfacing with Integrated Circuit Piezo (ICP)/IEPE
+    piezo vibration sensors. Most solutions which interface with piezo sensors in
+    the market are AC coupled, lacking DC and sub-hertz measurement capability. This
+    reference design is a DC coupled solution in which DC and sub-hertz precision
+    are achieved. By looking at the complete data set from the vibration sensor in
+    the frequency domain (DC - 50 kHz), the type and source of a machine fault can
+    be better predicted using the; position, amplitude and number of harmonics found
+    in the FFT spectrum.
+
+    The data acquisition board incorporates a precision 24-bit, 1024kSPS Sigma-delta
+    ADC AD7768-1 and a 16-bit voltage output DAC LTC2606. Used as the ADC driver is
+    a high linearity FDA ADA4945-1 and a 200mA programmable 2-terminal current source
+    LT3092. Analog input protection is provided by the switch ADG5421F.
+
+    This project has a SPI Engine instance to control and acquire data from the AD7768-1
+    24-bit precision ADC. This instance provides support for capturing continuous
+    samples at the maximum sample rate.
+
+    It targets the Intel Altera DE10NANO.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano
+  tags:
+  - ad7768-1
+  - ada4945-1
+  - adg5421f
+  - cn0540
+  - de10nano
+  - hdl
+  - lt3092
+  - ltc2606
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0540/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0540-de10nano-2022_r2_p1
+  title: CN0540_DE10NANO HDL project 2022_r2_p1
+  description: CN0540_DE10NANO HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0540/de10nano
+  tags:
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0540-de10nano
+  dependsOn:
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

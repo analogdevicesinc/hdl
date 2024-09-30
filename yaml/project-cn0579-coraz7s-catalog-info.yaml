@@ -1,0 +1,70 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0579-coraz7s
+  title: CN0579 HDL project
+  description: >
+    The CN0579 is a 4-channel, high resolution, wide bandwidth, high dynamic range,
+    integrated electronics piezoelectric (IEPE)-compatible interface data acquisition
+    (DAQ) system that interfaces with IC piezoelectric (ICP®)/IEPE sensors. The solution
+    provides flexible sensor interfacing to either piezoelectric or micro-electromechanical
+    systems (MEMS) sensor with measurement capabilities that extend the frequency
+    response to DC.
+
+    The design provides four channels of full bandwidth, synchronized vibration data
+    to the processor, where data analysis can be done locally or on a remote host
+    over Ethernet via standard IIO framework. Large buffers of continuous data can
+    be streamed and analyzed using standard fast Fourier transform (FFT) techniques
+    for system characterization and machine learning algorithms.
+
+    It targets the AMD Xilinx CORAZ7S.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0579/coraz7s
+  tags:
+  - cn0579
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0579/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0579-coraz7s-2022_r2_p1
+  title: CN0579_CORAZ7S HDL project 2022_r2_p1
+  description: CN0579_CORAZ7S HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0579/coraz7s
+  tags:
+  - coraz7s
+  - hdl
+  - project
+  - reference-design
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0579-coraz7s
+  dependsOn:
+  - Component:hdl-library-axi_ad7768-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1

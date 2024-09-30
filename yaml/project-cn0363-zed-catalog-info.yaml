@@ -1,0 +1,96 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0363-zed
+  title: CN0363 HDL project
+  description: >
+    The EVAL-CN0363-PMDZ is a dual channel colorimeter featuring a modulated light
+    source transmitter, programmable gain transimpedance amplifiers on each channel,
+    and a very low noise, 24-bit sigma delta ADC. The output of the ADC connects via
+    a standard PMOD connector to a FPGA. The FPGA takes the sampled data from the
+    ADC and implements a synchronous detection algorithm. By using modulated light
+    and digital synchronous detection, rather than a constant (dc) source, the system
+    strongly rejects any noise sources at frequencies other than the modulation frequency,
+    providing excellent accuracy.
+
+    The dual channel circuit measures the ratio of light absorbed by the liquids in
+    the sample and reference containers at three different wavelengths. This forms
+    the basis of many chemical analysis and environmental monitoring instruments used
+    to measure concentrations and characterize materials through absorption spectroscopy.
+
+    The EVAL-CN0363-PMDZ HDL reference design is based on the Analog Devices base
+    reference design for the ZED board. In addition to the base reference design EVAL-CN0363-PMDZ
+    HDL reference design implements function blocks to communicate over a SPI bus
+    with the AD7175-2 Sigma-Delta ADC to configure it and receive the raw ADC data
+    as well a configure the AD5201 digital potentiometer. The data received from the
+    ADC is passed to a processing pipeline which performs a digital synchronous detector
+    and finally write the data to system memory using a DMA. The HDL reference design
+    is also responsible for generating the LED excitation signal. A simplified functional
+    block diagram of the system is given below.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0363/zed
+  tags:
+  - ad5201
+  - ad7175-2
+  - cn0363
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0363/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0363-zed-2022_r2_p1
+  title: CN0363_ZED HDL project 2022_r2_p1
+  description: CN0363_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0363/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0363-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_generic_adc-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-cn0363-cn0363_dma_sequencer-2022_r2_p1
+  - Component:hdl-library-cn0363-cn0363_phase_data_sync-2022_r2_p1
+  - Component:hdl-library-cordic_demod-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_axis_resize-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
+  - Component:hdl-library-util_sigma_delta_spi-2022_r2_p1

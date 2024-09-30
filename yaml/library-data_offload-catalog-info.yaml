@@ -1,0 +1,57 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-data_offload
+  title: DATA_OFFLOAD HDL IP core
+  description: >
+    The Data Offload Engine is, in essence, a clock-domain crossing store-and-forward
+    buffer (or FIFO) with some extra features useful in bursty RF applications. More
+    specifically, it was designed to sit between the DMA and the DAC for the TX and
+    between the ADC and the DMA for the RX path of a digital RF chain. This is reflected
+    in the synthesis settings of the device, that also enable or disable certain other
+    settings of features where appropriate. For example, in the receive path cyclic
+    operation isn't supported.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/data_offload/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-data_offload-2022_r2_p1
+  title: DATA_OFFLOAD HDL IP core 2022_r2_p1
+  description: DATA_OFFLOAD HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/data_offload
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-data_offload
+  dependsOn:
+  - Component:hdl-library-util_axis_fifo_asym-2022_r2_p1
+  - Component:hdl-library-util_cdc-2022_r2_p1

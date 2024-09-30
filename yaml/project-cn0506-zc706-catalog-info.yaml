@@ -1,0 +1,76 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0506-zc706
+  title: CN0506 HDL project
+  description: >
+    The CN0506 is a dual channel, low latency, low power Ethernet PHY card supporting
+    speeds of 10/100/1000 Mbps for Industrial Ethernet applications. The circuit consists
+    of two indivudual, independent 10/100/1000Mb ADIN1300 PHYs, each with an energy
+    efficient Ethernet (EEE) physical layer device (PHY) core with all associated
+    common analog circuitry, input and output clock buffering, management interface,
+    subsystem registers, MAC interface and control logic.
+
+    The design is powered from the host field programmable gate array (FPGA) mezzanine
+    card (FMC) development board, eliminating the need for an external power supply.
+    A software programmable clock enables media independent interface (MII), reduced
+    MII (RMII), and reduced Gigabit MII (RGMII) MAC interface modes. RJ45 ports with
+    integrated magnetics keep the solution as compact as possible. The solution supports
+    cable lengths up to 150 meters at gigabit speeds and up to 180 meters at 100 Mbps
+    or 10 Mbps.
+
+    It targets the AMD Xilinx ZC706.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0506/zc706
+  tags:
+  - adin1300
+  - cn0506
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0506/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0506-zc706-2022_r2_p1
+  title: CN0506_ZC706 HDL project 2022_r2_p1
+  description: CN0506_ZC706 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0506/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0506-zc706
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_gmii_to_rgmii-2022_r2_p1
+  - Component:hdl-library-util_mii_to_rmii-2022_r2_p1

@@ -1,0 +1,57 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-ad_ip_jesd204_tpl_adc
+  title: AD_IP_JESD204_TPL_ADC HDL IP core
+  description: >
+    The ADC JESD204B/C Transport Peripheral implements the transport level handling
+    of a JESD204B/C transmitter device. It is compatible with a wide range of Analog
+    Devices high-speed analog-to-digital converters.
+
+    The core handles the JESD204B/C deframing of the payload data.
+
+    The peripheral can be configured at runtime through a AXI4-Lite memory mapped
+    register map.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/library/jesd204/ad_ip_jesd204_tpl_adc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-library-jesd204-ad_ip_jesd204_tpl_adc-2022_r2_p1
+  title: AD_IP_JESD204_TPL_ADC HDL IP core 2022_r2_p1
+  description: AD_IP_JESD204_TPL_ADC HDL IP core 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  - ADIJESD204
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/library/jesd204/ad_ip_jesd204_tpl_adc
+  tags:
+  - hdl
+  - ip-core
+  - library
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-library-jesd204-ad_ip_jesd204_tpl_adc

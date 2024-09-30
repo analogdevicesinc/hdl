@@ -1,0 +1,75 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0577-zed
+  title: CN0577 HDL project
+  description: >
+    The CN0577 provides an analog front-end and an FMC digital interface for LTC2387-18,
+    its core. It is a low noise, high speed successive approximation register (SAR)
+    ADC with a resolution of 18 bits and sampling rate up to 15MSPS.
+
+    CN0577 includes an on-board reference oscillator and a retiming circuit to minimize
+    signal-to-noise ratio (SNR) degradation due to the FPGA additive jitter.
+
+    In order to support high speed operations while minimizing the number of data
+    lines, a serial LVDS digital interface is used. It has a one-lane and two-lane
+    output modes, allowing the user to optimize the interface data rate for each application,
+    through setting a parameter.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0577/zed
+  tags:
+  - cn0577
+  - hdl
+  - ltc2387-18
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/cn0577/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0577-zed-2022_r2_p1
+  title: CN0577_ZED HDL project 2022_r2_p1
+  description: CN0577_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/cn0577/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0577-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_ltc2387-2022_r2_p1
+  - Component:hdl-library-axi_pwm_gen-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1

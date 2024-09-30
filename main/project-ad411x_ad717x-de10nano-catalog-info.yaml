@@ -1,0 +1,70 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad411x_ad717x-de10nano
+  title: AD411x-AD717x HDL project
+  description: >
+    The AD4111 /AD4112 /AD4114 /AD4415/ AD4116 is a low power, low noise, 24-bit,
+    sigma-delta (Σ-Δ) analog-to-digital converter (ADC), high impedance (≥1 MΩ) bipolar,
+    ±10 V voltage inputs, and 0 mA to 20 mA current inputs. The AD4113 differ from
+    device above, in that it is 16-bit resultion. The AD4111 /AD4112 /AD4113 /AD4114
+    / AD4415 /AD4116 also integrates key analog and digital signal conditioning blocks
+    to configure eight individual setups for each analog input channel in use.
+
+    The AD4111 /AD4112 /AD4113 /AD4114 features a maximum output data rate of 31.25
+    kSPS, AD4115 features a maximum output data rate of 125 kSPS and AD4116 features
+    a maximum output data rate of 62.5 kSPS.
+
+    The AD7172-2 /AD7172-4 /AD7173-8 /AD7175-2/ AD7175-8 /AD7176-2 /AD7177-2 is a
+    low noise, low power, multiplexed, Σ-Δ analog-to-digital converter (ADC) for low
+    bandwidth input signals. The AD7172-2 /AD7172-4 /AD7173-8 /AD7175-2 / AD7175-8
+    /AD7176-2 /AD7177-2 integrates key analog and digital signal conditioning blocks
+    to allow users to configure an individual setup for each analog input channel
+    in use.
+
+    The AD7172-2 /AD7172-4 /AD7173-8 features a maximum output data rate of 31.25
+    kSPS, AD7175-2/ AD7175-8 /AD7176-2 features a maximum output data rate of 250
+    kSPS and AD7177-2 features a maximum output data rate of 10 kSPS.
+
+    The digital filter allows flexible settings, including simultaneous 50 Hz and
+    60 Hz rejection at a 27.27 SPS output data rate. The user can select different
+    filter settings depending on the requirements of each channel in the application.
+
+    This project has a spi_engine instance to control and acquire data from the AD411x/AD717x
+    precision ADC. This instance provides support for capturing continuous samples
+    at the maximum sample rate.
+
+    It targets the Intel Altera DE10NANO.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad411x_ad717x/de10nano
+  tags:
+  - ad4111
+  - ad4112
+  - ad4113
+  - ad4114
+  - ad4115
+  - ad4116
+  - ad4415
+  - ad7172-2
+  - ad7172-4
+  - ad7173-8
+  - ad7175-2
+  - ad7175-8
+  - ad7176-2
+  - ad7177-2
+  - de10nano
+  - hdl
+  - project
+  - reference-design
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad411x_ad717x/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

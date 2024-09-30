@@ -1,0 +1,95 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7134_fmc-zed
+  title: AD7134-FMC HDL project
+  description: >
+    The AD7134 is a quad channel, low noise, simultaneous sampling, precision analog-to-digital
+    converter (ADC), based on the continuous time sigma-delta (CTSD) modulation scheme.
+    The CTSD architecture inherently rejects signals around the ADC aliasing frequency
+    band, giving the device its inherent antialiasing capability, and removes the
+    need for a complex external antialiasing filter.
+
+    The device has four independent converter channels in parallel, each with a CTSD
+    modulator and a digital decimation and filtering path. The bandwidth of each ADC
+    channel ranges from dc to 391.5 kHz, making the device an ideal candidate for
+    universal precision data acquisition solutions supporting a breadth of sensor
+    types, from temperature and pressure to vibration and shock.
+
+    It supports a wide range of ODR frequencies, from 0.01 kSPS to 1496 kSPS with
+    less than 0.01 SPS adjustment resolution, allowing the user to granularly vary
+    sampling speed to achieve coherent sampling. The adc offers three main digital
+    filter profile options: a wideband low ripple filter (2.5 kSPS to 374 kSPS), a
+    fast responding sinc3 filter (0.01 kSPS to 1496 kSPS), and a balanced sinc6 filter
+    with an ODR range 2.5 kSPS to 1.496 MSPS.
+     The AD7134 supports two device configuration schemes: serial peripheral interface
+    (SPI) and hardware pin configuration (pin control mode). The SPI control mode
+    offers access to all the features and configuration options available on the chip.
+    Pin control mode offers the benefit of simplifying the device configuration, enabling
+    the device to operate autonomously after power -up operating in a standalone mode.
+    In addition to the optional SPI, it has a flexible and independent data interface
+    for transmitting the ADC output data.
+    The EVAL-AD7134FMCZ evaluation kit features the AD7134 24-bit, 4-channel, simultaneous
+    sampling adc. Two on-board AD7134 ADCs are included to demonstrate multidevice
+    simultaneous sampling. The HDL reference design provides all the interfaces necessary
+    to interact with the device using a Xilinx FPGA development board.
+
+    It targets the AMD Xilinx ZED.
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7134_fmc/zed
+  tags:
+  - ad7134
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/projects/ad7134_fmc/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-ad7134_fmc-zed-2022_r2_p1
+  title: AD7134_FMC_ZED HDL project 2022_r2_p1
+  description: AD7134_FMC_ZED HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/ad7134_fmc/zed
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-ad7134_fmc-zed
+  dependsOn:
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_i2s_adi-2022_r2_p1
+  - Component:hdl-library-axi_pwm_gen-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-spi_engine-axi_spi_engine-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_execution-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_interconnect-2022_r2_p1
+  - Component:hdl-library-spi_engine-spi_engine_offload-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_i2c_mixer-2022_r2_p1
