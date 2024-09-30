@@ -1,0 +1,49 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-cn0585-zed-2023_R2
+  title: CN0585 HDL project 2023_R2
+  description: >
+    The EVAL-CN0585-FMCZ Low Latency Development Kit (LLDK) board is a development
+    board consisting of 4 x 16-bit ADC channels and 4 x 16-bit DAC channels that are
+    interfaced with an FPGA through the FMC Low Pin Count (LPC) Connector. Current
+    revision of EVAL-CN0585-FMCZ is Rev B. EVAL-CN0585-FMCZ, EVAL-CN0585-FMCZ and
+
+    - ZedBoard are connected together to build a development system setup.
+
+    It targets the AMD Xilinx ZED.
+  version: 2023_R2
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2023_R2/projects/cn0585/zed
+  tags:
+  - cn0584
+  - cn0585
+  - hdl
+  - project
+  - reference-design
+  - zed
+  links:
+  - url: https://analogdevicesinc.github.io/hdl/2023_R2/projects/cn0585/index.html
+    title: Documentation
+    icon: web
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-cn0585-zed
+  dependsOn:
+  - Component:hdl-library-axi_ad3552r-2023_R2
+  - Component:hdl-library-axi_clkgen-2023_R2
+  - Component:hdl-library-axi_dmac-2023_R2
+  - Component:hdl-library-axi_hdmi_tx-2023_R2
+  - Component:hdl-library-axi_i2s_adi-2023_R2
+  - Component:hdl-library-axi_ltc2387-2023_R2
+  - Component:hdl-library-axi_pwm_gen-2023_R2
+  - Component:hdl-library-axi_spdif_tx-2023_R2
+  - Component:hdl-library-axi_sysid-2023_R2
+  - Component:hdl-library-sysid_rom-2023_R2
+  - Component:hdl-library-util_i2c_mixer-2023_R2
+  - Component:hdl-library-util_pack-util_cpack2-2023_R2
