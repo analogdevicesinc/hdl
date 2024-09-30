@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-fmcadc2-zc706
+  title: FMCADC2_ZC706 HDL project
+  description: FMCADC2_ZC706 HDL project
+  version: main
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc2/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain

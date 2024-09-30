@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-common-kv260-2022_r2_p1
+  title: TEMPLATE_KV260 HDL project 2022_r2_p1
+  description: >
+    Template project.It targets the AMD Xilinx KV260.
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/common/kv260
+  tags:
+  - hdl
+  - kv260
+  - project
+  - reference-design
+  - template
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-common-kv260
+  dependsOn:
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1

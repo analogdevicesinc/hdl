@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: hdl-project-adrv9001-zc706-2022_r2_p1
+  title: ADRV9001_ZC706 HDL project 2022_r2_p1
+  description: ADRV9001_ZC706 HDL project 2022_r2_p1
+  version: 2022_r2_p1
+  classification: software
+  license:
+  - ADI BSD License
+  annotations:
+    backstage.io/source-location: url:https://github.com/analogdevicesinc/hdl/tree/2022_r2_p1/projects/adrv9001/zc706
+  tags:
+  - hdl
+  - project
+  - reference-design
+  - zc706
+  links: []
+spec:
+  owner: group:default/hdl-sw-team
+  type: source
+  lifecycle: sustain
+  subcomponentOf: hdl-project-adrv9001-zc706
+  dependsOn:
+  - Component:hdl-library-axi_adrv9001-2022_r2_p1
+  - Component:hdl-library-axi_clkgen-2022_r2_p1
+  - Component:hdl-library-axi_dmac-2022_r2_p1
+  - Component:hdl-library-axi_hdmi_tx-2022_r2_p1
+  - Component:hdl-library-axi_spdif_tx-2022_r2_p1
+  - Component:hdl-library-axi_sysid-2022_r2_p1
+  - Component:hdl-library-sysid_rom-2022_r2_p1
+  - Component:hdl-library-util_pack-util_cpack2-2022_r2_p1
+  - Component:hdl-library-util_pack-util_upack2-2022_r2_p1
