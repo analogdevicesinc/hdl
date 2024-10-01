@@ -20,7 +20,7 @@ extensions = [
 ]
 
 needs_extensions = {
-    'adi_doctools': '0.3'
+    'adi_doctools': '0.3.47'
 }
 
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -28,7 +28,7 @@ source_suffix = '.rst'
 
 # -- External docs configuration ----------------------------------------------
 
-interref_repos = ['doctools']
+interref_repos = ['doctools', 'documentation']
 
 # -- Custom extensions configuration ------------------------------------------
 
