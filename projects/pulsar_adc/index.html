@@ -102,7 +102,11 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">PULSAR-ADC HDL project</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#with-pmod">With PMOD</a></li>
+<li><a class="reference internal" href="#with-fmc">With FMC</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
@@ -221,6 +225,7 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/index.html">AXI AD408x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/index.html">AXI AD485x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
@@ -270,6 +275,7 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad3552r_evb/index.html">AD3552R-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
@@ -277,6 +283,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
@@ -328,7 +335,7 @@ Content on this topic
 <span id="pulsar-adc"></span><h1>PULSAR-ADC HDL project<a class="headerlink" href="#pulsar-adc-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>Depending on the type of connector it uses, the Pulsar family is divided into
+<p>Depending on the type of connector it uses, the PulSAR family is divided into
 the products which have <strong>PMOD</strong> connectors and <strong>FMC</strong> connectors.</p>
 <p>PulSAR converters which have PMOD boards associated with them are low power ADCs
 which offer very high performance from 14-bits up to 18-bits with throughputs
@@ -338,11 +345,14 @@ system applications. The PulSAR family share the same interface and the same PCB
 the differences being found in their performance.  A full description of these
 products are available in their respective data sheets and should be consulted
 when utilizing the boards.</p>
-<p>ADAQ40xx families is also part of the family of pulsar converters with PMOD
-connector. This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a> PMOD to
+<section id="with-pmod">
+<h3>With PMOD<a class="headerlink" href="#with-pmod" title="Permalink to this heading">#</a></h3>
+<p>ADAQ40xx families is also part of the family of PulSAR converters with PMOD
+connector.</p>
+<p>This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a> PMOD to
 field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
-interfaces with the system demonstration controller board.
-The <a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
+interfaces with the system demonstration controller board.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
 design on a laminate that includes the <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> ADC with a fully
 differential driver the <a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a>, a reference buffer
 (the <a class="icon adi reference external" href="https://www.analog.com/ADA4807-1">ADA4807-1</a>), a precision resistor iPassive network on a separate die
@@ -350,8 +360,11 @@ along with discrete capacitors and resistors. The device solves many design
 challenges for a wide range of applications similar to AD400x, yet it still
 provides the flexibility. It offers over 75% area savings compared to discrete
 design and reduces TTM.</p>
-<p>PulSAR converters which have FMC boards associated with them are AD40xx family.
-The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a> are low noise,
+</section>
+<section id="with-fmc">
+<h3>With FMC<a class="headerlink" href="#with-fmc" title="Permalink to this heading">#</a></h3>
+<p>PulSAR converters which have FMC boards associated with them are AD40xx family.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a> are low noise,
 low power, high speed, 18-bit, precision successive approximation register (SAR)
 analog-to-digital converters (ADCs). The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a>, and
 <a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> offer 2 MSPS, 1 MSPS, and 500 kSPS throughputs, respectively.
@@ -376,25 +389,26 @@ task of sending data across digital isolation.</p>
 <li><p>Machine automation</p></li>
 </ul>
 </section>
+</section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <p>PulSAR with PMOD connector:</p>
 <ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ">EVAL-AD7685-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ">EVAL-AD7686-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ">EVAL-AD7687-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ">EVAL-AD7688-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ">EVAL-AD7690-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ">EVAL-AD7691-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ">EVAL-AD7693-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7942-PMDZ">EVAL-AD7942-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7946-PMDZ">EVAL-AD7946-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ">EVAL-AD7988-1-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ">EVAL-AD7685-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ">EVAL-AD7687-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ">EVAL-AD7691-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ">EVAL-AD7686-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ">EVAL-AD7688-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ">EVAL-AD7693-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ">EVAL-AD7988-5-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7980-PMDZ">EVAL-AD7980-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ">EVAL-AD7983-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ">EVAL-AD7690-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7982-PMDZ">EVAL-AD7982-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ">EVAL-AD7983-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7984-PMDZ">EVAL-AD7984-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ">EVAL-AD7988-1-PMDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ">EVAL-AD7988-5-PMDZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ40xx">EVAL-ADAQ40xx</a></p></li>
 </ul>
 <p>PulSAR with FMC connector:</p>
@@ -406,21 +420,21 @@ task of sending data across digital isolation.</p>
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <p>PulSAR with PMOD connector:</p>
 <ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
 </ul>
 <p>PulSAR with FMC connector:</p>
@@ -464,16 +478,25 @@ task of sending data across digital isolation.</p>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
-<p>For AD40xx/ADAQ40xx projects the AD40XX_ADAQ400X_N parameter defines the type
-of ADC (AD40xx or ADAQ40xx). By default is set to 1. Depending on the project,
-some hardware modifications need to be done on the board and/or make command:</p>
-<p>In case of the <strong>ADAQ40xx</strong> project:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">AD40XX_ADAQ400X_N</span><span class="o">=</span><span class="mi">0</span>
-</pre></div>
-</div>
-<p>In case of the <strong>AD40xx</strong> project:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">AD40XX_ADAQ400X_N</span><span class="o">=</span><span class="mi">1</span>
-</pre></div>
+<p>The Zedboard-based PulSAR ADC project can be built to use either the FMC
+connector or the Pmod JA connector.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD</span></code> parameter is used to select between the them:</p>
+<ul class="simple">
+<li><p>0 - for PMOD</p></li>
+<li><p>1 - for FMC (default)</p></li>
+</ul>
+<p>The PulSAR project supports different configurations required for certain
+ADCs, like the AD7944.</p>
+<p>These modes are selected using the <code class="docutils literal notranslate"><span class="pre">SPI_OP_MODE</span></code> parameter:</p>
+<ul class="simple">
+<li><p>0 - for normal SPI Engine connections (default)</p></li>
+<li><p>1 - for 3-wire “single” mode where CS drives the SDO line while the CS line
+is driven by GPIO</p></li>
+<li><p>2 - SDO is driven by GPIO and the CS line is driven by CS.</p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>The SPI_OP_MODE parameter must only be used for the FMC variant.</p>
 </div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
@@ -580,10 +603,10 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
+<col style="width: 34.8%" />
+<col style="width: 21.7%" />
+<col style="width: 21.7%" />
+<col style="width: 21.7%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
@@ -596,17 +619,22 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <th class="head"></th>
 <th class="head"><p>Zynq-7000</p></th>
 </tr>
+<tr class="row-odd"><th class="head"><p>pulsar_gpio[0] (PD)*</p></th>
+<th class="head"><p>INOUT</p></th>
+<th class="head"><p>32</p></th>
+<th class="head"><p>86</p></th>
+</tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>pulsar_adc_spi_pd *</p></td>
-<td><p>OUT</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
-</tr>
-<tr class="row-even"><td><p>ad40xx_amp_pd **</p></td>
+<tr class="row-even"><td><p>pulsar_gpio[1] (TURBO)**</p></td>
 <td><p>INOUT</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>pulsar_gpio[2] (SDO - SPI_OP_MODE=2)**</p></td>
+<td><p>INOUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
 </tr>
 </tbody>
 </table>
@@ -615,7 +643,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <p class="admonition-title">Legend</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for PulSAR_ADC_PMDZ projects</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for AD40XX_ADAQ400X_N=1 (AD40xx)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for FMC_N_PMOD=1 (AD40xx)</p></li>
 </ul>
 </div>
 </section>
@@ -658,25 +686,45 @@ If you want to build the sources, ADI makes them available on the
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/pulsar_adc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/pulsar_adc/zed$ make AD40XX_ADAQ400X_N=1
+<span class="linenos">2</span>user@analog:~/hdl/projects/pulsar_adc/zed$ make FMC_N_PMOD=1 SPI_OP_MODE=0
+</pre></div>
+</div>
+<p>Build examples:</p>
+<p>Zedboard Pmod support</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>Zedboard standard configuration FMC support (default)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">0</span> <span class="o">-</span> <span class="n">builds</span> <span class="n">standard</span> <span class="n">FMC</span> <span class="n">version</span>
+</pre></div>
+</div>
+<p>Zedboard FMC support for AD7944 4-wire mode (“multi”)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>Zedboard FMC support for AD7944 chain mode or 3-wire “single”</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">2</span>
 </pre></div>
 </div>
 <p>The result of the build, if parameters were used, will be in a folder named
-by the configuration used:</p>
-<p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">AD40XX_ADAQ400X_N=0</span></code></p>
+by the used configuration. If the following command was run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">0</span>
+</pre></div>
+</div>
 <p>then the folder name will be:</p>
-<p><code class="docutils literal notranslate"><span class="pre">AD40XX_ADAQ400X_N0</span></code></p>
-<p>For projects that have coraz7s as a carrier, the build is done without parameters.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD1_SPI_OP_MODE0</span></code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the CoraZ7S-based projects, the build is donw without parameters!</p>
+</div>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
-<p>PulSAR with PMOD connector:</p>
+<p>Datasheets for PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p>Product datasheets:</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
@@ -695,7 +743,7 @@ by the configuration used:</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf">UG-682, Evaluation Board User Guide</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-340.pdf">UG-340, Evaluation Board User Guide</a></p></li>
 </ul>
-<p>PulSAR with FMC connector:</p>
+<p>Datasheets PulSAR with FMC connector:</p>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
@@ -718,8 +766,8 @@ by the configuration used:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 30.0%" />
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>IP name</p></th>
@@ -785,9 +833,7 @@ by the configuration used:</p>
 </div>
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for AD40xx/ADAQ40xx</p></li>
-</ul>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for AD40xx/ADAQ40xx</p>
 </div>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>

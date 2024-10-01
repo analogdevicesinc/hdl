@@ -9,17 +9,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="100%"
-   height="100%"
+   width="425"
+   height="350"
+   viewBox="0 0 425 350"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="adc_jesd.svg"
+   sodipodi:docname="adc_lvds.svg"
    inkscape:export-filename="D:\Git\ghdl\docs\block_diagrams\axi_ad9265\axi_ad9265.png"
    inkscape:export-xdpi="400"
-   inkscape:export-ydpi="400"
-   viewBox="0 0 425 350"
-   preserveAspectRatio="xMidYMid slice">
+   inkscape:export-ydpi="400">
   <defs
      id="defs4">
     <inkscape:path-effect
@@ -51,7 +50,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.8325"
-     inkscape:cx="57.656767"
+     inkscape:cx="239.92143"
      inkscape:cy="228.73587"
      inkscape:document-units="px"
      inkscape:current-layer="g4357"
@@ -61,9 +60,9 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1047"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:window-height="1058"
+     inkscape:window-x="3832"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-grids="true"
      units="px"
@@ -89,7 +88,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -181,35 +180,20 @@
       <text
          sodipodi:linespacing="125%"
          id="text4206-2"
-         y="842.50775"
-         x="189.01248"
+         y="856.15033"
+         x="188.46678"
          style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            id="tspan4251-9"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="842.50775"
-           x="190.72147"
-           sodipodi:role="line">JESD LINK </tspan><tspan
+           y="856.15033"
+           x="190.17577"
+           sodipodi:role="line">LVDS </tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="855.00775"
-           x="189.01248"
+           y="868.65033"
+           x="188.46678"
            sodipodi:role="line"
-           id="tspan4171">TO DMA</tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="867.50775"
-           x="190.72147"
-           sodipodi:role="line"
-           id="tspan4173">DATA </tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="880.00775"
-           x="190.72147"
-           sodipodi:role="line"
-           id="tspan4175">ORDERING </tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="892.50775"
-           x="189.01248"
-           sodipodi:role="line"
-           id="tspan4369" /></text>
+           id="tspan4369">INTERFACE</tspan></text>
     </g>
     <flowRoot
        xml:space="preserve"
@@ -245,40 +229,25 @@
       <text
          sodipodi:linespacing="125%"
          id="text4206-0"
-         y="479.70892"
-         x="344.77353"
+         y="494.98859"
+         x="344.22781"
          style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            id="tspan4251-95"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="479.70892"
-           x="346.48251"
+           y="494.98859"
+           x="345.9368"
            sodipodi:role="line">ADC </tspan><tspan
            id="tspan4322"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="492.20892"
-           x="344.77353"
+           y="507.48859"
+           x="344.22781"
            sodipodi:role="line">DATA</tspan><tspan
            id="tspan4324"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="504.70892"
-           x="344.77353"
-           sodipodi:role="line">PROCESSING</tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="517.20892"
-           x="344.77353"
-           sodipodi:role="line"
-           id="tspan4177">&amp;</tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="529.70892"
-           x="346.48251"
-           sodipodi:role="line"
-           id="tspan4179">PRBS </tspan><tspan
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle"
-           y="542.20892"
-           x="344.77353"
-           sodipodi:role="line"
-           id="tspan4181">MONITORING</tspan></text>
+           y="519.98859"
+           x="344.22781"
+           sodipodi:role="line">PROCESSING</tspan></text>
     </g>
     <path
        style="opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000096;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -297,7 +266,7 @@
          id="tspan4198-0"
          x="42.579056"
          y="784.05139"
-         style="font-size:10px">JESD FIFO</tspan></text>
+         style="font-size:10px">LVDS</tspan></text>
     <path
        style="opacity:0.98999999;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000096;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 407.61789,720.28356 0,-9.62039 -70.47663,0 -0.1366,-12.79628 0.13472,-12.79627 70.47851,0 0,-9.6204 24.06778,22.41667 z"

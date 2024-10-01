@@ -15,6 +15,7 @@
     <script src="https://wavedrom.com/skins/default.js"></script>
     <script src="https://wavedrom.com/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -224,6 +225,7 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/index.html">AXI AD408x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/index.html">AXI AD485x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
@@ -273,6 +275,7 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad3552r_evb/index.html">AD3552R-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
@@ -280,6 +283,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
@@ -369,6 +373,10 @@ stations.</p>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
 <td><p>FMC HPC0</p></td>
 </tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
+<td><p>FMCP1</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -415,9 +423,9 @@ for each project.</p>
 <strong>system_project.tcl</strong> file, located in
 hdl/projects/adrv904x/$CARRIER/system_project.tcl</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">Lane</span> <span class="pre">Rate</span> <span class="pre">=</span> <span class="pre">I/Q</span> <span class="pre">Sample</span> <span class="pre">Rate</span> <span class="pre">x</span> <span class="pre">M</span> <span class="pre">x</span> <span class="pre">N'</span> <span class="pre">x</span> <span class="pre">(66</span> <span class="pre">\</span> <span class="pre">64)</span> <span class="pre">\</span> <span class="pre">L</span></code></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{66}{64}\]</div>
 </div>
 <p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
@@ -449,32 +457,41 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
 <th class="head"><p>ZynqMP</p></th>
+<th class="head"><p>Versal</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>axi_adrv904x_tx_jesd</p></td>
 <td><p>0x84A90000</p></td>
+<td><p>0xA4A90000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv904x_rx_jesd</p></td>
 <td><p>0x84AA0000</p></td>
+<td><p>0xA4AA0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv904x_tx_dma</p></td>
-<td><p>0x9c420000</p></td>
+<td><p>0x9C420000</p></td>
+<td><p>0xBC420000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv904x_rx_dma</p></td>
-<td><p>0x9c400000</p></td>
+<td><p>0x9C400000</p></td>
+<td><p>0xBC400000</p></td>
 </tr>
 <tr class="row-even"><td><p>tx_adrv904x_tpl_core</p></td>
 <td><p>0x84A04000</p></td>
+<td><p>0xA4A04000</p></td>
 </tr>
 <tr class="row-odd"><td><p>rx_adrv904x_tpl_core</p></td>
 <td><p>0x84A00000</p></td>
+<td><p>0xA4A00000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv904x_tx_xcvr</p></td>
 <td><p>0x84A80000</p></td>
+<td><p>0xA4A80000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv904x_rx_xcvr</p></td>
 <td><p>0x84A60000</p></td>
+<td><p>0xA4A60000</p></td>
 </tr>
 </tbody>
 </table>
@@ -673,7 +690,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a — (dash) it means that the parameter doesn’t exist
 for that project (adrv904x/carrier or adrv904x/carrier).</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="7dcb0f8ff5b29ae675688de275a77e04b8b10a86" name="7dcb0f8ff5b29ae675688de275a77e04b8b10a86" type="checkbox"></input><label for="7dcb0f8ff5b29ae675688de275a77e04b8b10a86"><p>Default values of the ``make`` parameters for ADRV904x</p>
+<input class="collapsible_input" id="c19448d24bd11682e48841068ae7481dbf13ace0" name="c19448d24bd11682e48841068ae7481dbf13ace0" type="checkbox"></input><label for="c19448d24bd11682e48841068ae7481dbf13ace0"><p>Default values of the ``make`` parameters for ADRV904x</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -682,7 +699,7 @@ for that project (adrv904x/carrier or adrv904x/carrier).</p>
 <th class="head" colspan="2"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
-<th class="head" colspan="2"><p>ZCU102</p></th>
+<th class="head" colspan="2"><p>ZCU102/VCK190</p></th>
 </tr>
 </thead>
 <tbody>
@@ -833,7 +850,7 @@ following table.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/media/radioverse-adrv9026/adrv9040.pdf">ADRV9040</a></p></li>
+<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/adrv9040.pdf">ADRV9040</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
