@@ -184,8 +184,7 @@ the HDL repository.
    user@analog:~$ cd hdl/projects/ad9656_fmc/zcu102
    user@analog:~/hdl/projects/ad9656_fmc/zcu102$ make
 
-The following dropdown contains a table with the parameters that are used to
-configure this project, on :xilinx:`ZCU102`.
+Below are the parameters that are used to configure this project, on :xilinx:`ZCU102`.
 
 -  JESD_MODE :red:`8B10B`
 -  RX_NUM_OF_LANES 4
