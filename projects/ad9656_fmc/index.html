@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CN0585 HDL project &#8212; HDL  documentation</title>
+    <title>AD9656-FMC HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=23512426" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="MAX96724 HDL project" href="../max96724/index.html" />
-    <link rel="prev" title="CN0579 HDL project" href="../cn0579/index.html" />
+    <link rel="next" title="AD9739A-FMC HDL project" href="../ad9739a_fmc/index.html" />
+    <link rel="prev" title="AD9467-FMC HDL project" href="../ad9467_fmc/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -101,23 +101,22 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">CN0585 HDL project</a><ul>
+<li><a class="reference internal" href="#">AD9656-FMC HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#zcu102-block-diagram">ZCU102 block diagram</a></li>
+<li><a class="reference internal" href="#ad9656-fmc-card-block-diagram">AD9656 FMC Card block diagram</a></li>
+<li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
-<li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
@@ -290,7 +289,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9213_evb/index.html">AD9213-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9467_fmc/index.html">AD9467-FMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad9656_fmc/index.html">AD9656-FMC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD9656-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9739a_fmc/index.html">AD9739A-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
@@ -304,7 +303,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds/index.html">PULSAR-LVDS</a></li>
@@ -323,34 +322,38 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="cn0585-hdl-project">
-<span id="cn0585"></span><h1>CN0585 HDL project<a class="headerlink" href="#cn0585-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="ad9656-fmc-hdl-project">
+<span id="ad9656-fmc"></span><h1>AD9656-FMC HDL project<a class="headerlink" href="#ad9656-fmc-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/CN0585">EVAL-CN0585-FMCZ</a> Low Latency Development Kit (LLDK) board
-is a development board consisting of 4 x 16-bit ADC channels and 4 x 16-bit
-DAC channels that are interfaced with an FPGA through the FMC Low Pin Count
-(LPC) Connector.
-Current revision of <a class="icon adi reference external" href="https://www.analog.com/CN0585">EVAL-CN0585-FMCZ</a> is Rev B.
-<a class="icon adi reference external" href="https://www.analog.com/CN0585">EVAL-CN0585-FMCZ</a>, <a class="icon adi reference external" href="https://www.analog.com/CN0584">EVAL-CN0585-FMCZ</a> and
-- <a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> are connected
-together to build a development system setup.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> is a quad 16-bit, 125 MSPS analog-to-digital converter (ADC)
+featuring an on-chip sample and hold circuit. It is designed to be low cost, low
+power and compact, making it easy to use.</p>
+<p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> operates at a conversion rate of up to 125 MSPS, optimized for
+excellent dynamic performance and low power consumption, which is crucial for
+applications requiring a small package size. It requires a single 1.8 V power
+supply and supports LVPECL, CMOS, and LVDS-compatible sample rate clocks for
+full performance. The ADC does not need external reference or driver components
+for many applications. It also includes features to enhance flexibility and
+reduce system costs, such as a programmable output clock, data alignment
+and digital test pattern generation.</p>
+<p>An on-chip phase-locked loop (PLL) allows users to provide a single ADC sampling
+clock. The PLL multiplies the ADC sampling clock to produce the corresponding
+JESD204B data rate clock. The configurable JESD204B output block supports up to
+8.0 Gbps per lane. JESD204B output block supports one, two, and four lane
+configurations. The SPI control offers a wide range of flexible features to meet
+specific system requirements</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/CN0585">CN0585</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/CN0584">CN0584</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23876">ADAQ23876</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7291">AD7291</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADG5421F">ADG5421F</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/MAX7301">MAX7301</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -369,9 +372,9 @@ together to build a development system setup.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/CN0585">CN0585</a> + <a class="icon adi reference external" href="https://www.analog.com/CN0584">CN0584</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC-LPC</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<td><p>FMC HPC0</p></td>
 </tr>
 </tbody>
 </table>
@@ -379,98 +382,73 @@ together to build a development system setup.</p>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<p>The architecture is composed of two <a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a> digital-to-analog converter
-interface IPs and four <a class="icon adi reference external" href="https://www.analog.com/LTC2387-16">LTC2387-16</a> analog-to-digital converter interface
-IPs. All these IPs utilize an 120MHz reference clock, which is produced by
-an axi_clkgen IP.</p>
-<section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
-<p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/cn0585_zed_block_diagram.svg"><img alt="CN0585/ZedBoard block diagram" class="align-center" src="../../_images/cn0585_zed_block_diagram.svg" width="800" /></a>
+<section id="zcu102-block-diagram">
+<h3>ZCU102 block diagram<a class="headerlink" href="#zcu102-block-diagram" title="Permalink to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../../_images/ad9656_fmc_xilinx_block_diagram.svg"><img alt="AD9656-FMC/ZCU102 block diagram" class="align-center" src="../../_images/ad9656_fmc_xilinx_block_diagram.svg" width="800" /></a>
+<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=4, M=4, S=1, NP=16, N=16</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 62.5 MHz</p></li>
+<li><p>REF_CLK: 125MHz</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+</section>
+<section id="ad9656-fmc-card-block-diagram">
+<h3>AD9656 FMC Card block diagram<a class="headerlink" href="#ad9656-fmc-card-block-diagram" title="Permalink to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../../_images/ad9656_fmc_connector_diagram.svg"><img alt="AD9656-FMC card block diagram" class="align-center" src="../../_images/ad9656_fmc_connector_diagram.svg" width="800" /></a>
+</section>
+<section id="clock-scheme">
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> ADC’s default clock input is from an on-board 125MHz crystal
+oscillator, which goes through a transformer-coupled circuit to minimize jitter.
+The <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a> has an internal clock divider (ratios 1-8) for higher
+frequency clocks.</p>
+<p>There are two ways to configure the clock source for <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a>:</p>
+<ol class="arabic simple">
+<li><p>Default Configuration (On-board Oscillator):</p>
+<ul class="simple">
+<li><p>The board uses a 125MHz crystal oscillator (Y801) through a
+transformer-coupled input network.</p></li>
+</ul>
+</li>
+<li><p>Using an External Clock Source:</p>
+<ul class="simple">
+<li><p>Remove C302 (optional) and Jumper J304: This disables the on-board
+oscillator.</p></li>
+<li><p>Attach the external clock source to the SMA connector labeled
+CLOCK+ (J302). The external clock should be a clean signal generator,
+typically ~2.8V p-p or 13 dBm sine wave input.</p></li>
+</ul>
+</li>
+</ol>
+<p>For more details, check <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9656">EVAL-AD9656</a> schematic.</p>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+<p>Check-out the table below to find out the conditions.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Address Zynq/Microblaze</p></th>
+<th class="head"><p>Zynq/Microblaze</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ltc2387_0</p></td>
-<td><p>0X44A0_0000</p></td>
+<tr class="row-even"><td><p>rx_ad9656_tpl_core</p></td>
+<td><p>0x44A00000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ltc2387_1</p></td>
-<td><p>0X44A1_0000</p></td>
+<tr class="row-odd"><td><p>axi_ad9656_rx_xcvr</p></td>
+<td><p>0x44A60000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_ltc2387_2</p></td>
-<td><p>0X44A2_0000</p></td>
+<tr class="row-even"><td><p>axi_ad9656_rx_jesd</p></td>
+<td><p>0x44AA0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_ltc2387_3</p></td>
-<td><p>0X44A3_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_ltc2387_dma</p></td>
-<td><p>0X44A4_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_clkgen</p></td>
-<td><p>0X44B0_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_pwm_gen</p></td>
-<td><p>0X44B1_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>max_spi</p></td>
-<td><p>0X44B2_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_ad3552r_0</p></td>
-<td><p>0X44D0_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_dac_0_dma</p></td>
-<td><p>0X44D3_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_ad3552r_1</p></td>
-<td><p>0X44E0_0000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_dac_1_dma</p></td>
-<td><p>0X44E3_0000</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>I2C type</p></th>
-<th class="head"><p>I2C manager instance</p></th>
-<th class="head"><p>Alias</p></th>
-<th class="head"><p>Address</p></th>
-<th class="head"><p>I2C subordinate</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>PL</p></td>
-<td><p>iic_fmc</p></td>
-<td><p>axi_iic_fmc</p></td>
-<td><p>0x4162_0000</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>PL</p></td>
-<td><p>iic_main</p></td>
-<td><p>axi_iic_main</p></td>
-<td><p>0x4160_0000</p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>axi_ad9656_rx_dma</p></td>
+<td><p>0x7C400000</p></td>
 </tr>
 </tbody>
 </table>
@@ -494,70 +472,20 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>PL</p></td>
-<td><p>max_spi</p></td>
-<td><p>MAX7301</p></td>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>SPI 0</p></td>
+<td><p>AD9656</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>PS</p></td>
+<td><p>SPI 0</p></td>
+<td><p>AD9508</p></td>
 <td><p>0</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 15.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-<th class="head"><p>Zynq MP</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-odd"><td><p>reset</p></td>
-<td><p>INOUT</p></td>
-<td><p>36</p></td>
-<td><p>90</p></td>
-<td><p>114</p></td>
-</tr>
-<tr class="row-even"><td><p>dac_0_ldac</p></td>
-<td><p>INOUT</p></td>
-<td><p>35</p></td>
-<td><p>89</p></td>
-<td><p>113</p></td>
-</tr>
-<tr class="row-odd"><td><p>dac_1_ldac</p></td>
-<td><p>INOUT</p></td>
-<td><p>34</p></td>
-<td><p>88</p></td>
-<td><p>112</p></td>
-</tr>
-<tr class="row-even"><td><p>dac_1_alert</p></td>
-<td><p>IN</p></td>
-<td><p>33</p></td>
-<td><p>87</p></td>
-<td><p>111</p></td>
-</tr>
-<tr class="row-odd"><td><p>dac_0_alert</p></td>
-<td><p>IN</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
-<td><p>110</p></td>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>SPI 0</p></td>
+<td><p>AD9953</p></td>
+<td><p>1</p></td>
 </tr>
 </tbody>
 </table>
@@ -566,35 +494,31 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
-<div class="table-wrapper docutils container">
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 42.9%" />
+<col style="width: 14.3%" />
+<col style="width: 21.4%" />
+<col style="width: 21.4%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
 <th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ltc2387_dma</p></td>
+<tr class="row-even"><td><p>axi_ad9656_rx_jesd</p></td>
+<td><p>12</p></td>
+<td><p>108</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_ad9656_rx_dma</p></td>
 <td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
-</tr>
-<tr class="row-odd"><td><p>max_spi</p></td>
-<td><p>8</p></td>
-<td><p>52</p></td>
-<td><p>84</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_dac_0_dma</p></td>
-<td><p>5</p></td>
-<td><p>34</p></td>
-<td><p>66</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_dac_1_dma</p></td>
-<td><p>4</p></td>
-<td><p>33</p></td>
-<td><p>65</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
 </tr>
 </tbody>
 </table>
@@ -610,41 +534,37 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/cn0585/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0585/zed$ make
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@analog:~$ cd hdl/projects/ad9656_fmc/zcu102
+user@analog:~/hdl/projects/ad9656_fmc/zcu102$ make
 </pre></div>
 </div>
+<p>Below are the parameters that are used to configure this project, on <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a>.</p>
+<ul class="simple">
+<li><p>JESD_MODE <span class="red">8B10B</span></p></li>
+<li><p>RX_NUM_OF_LANES 4</p></li>
+<li><p>RX_NUM_OF_CONVERTERS 4</p></li>
+<li><p>RX_SAMPLES_PER_FRAME 1</p></li>
+<li><p>RX_SAMPLE_WIDTH 16</p></li>
+<li><p>RX_SAMPLES_PER_CHANNEL 2</p></li>
+</ul>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
 guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
-<section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0585">[Wiki] EVAL-CN0585-FMCZ User Guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0584">[Wiki] CN0584 User Guide</a></p></li>
-</ul>
-</section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p>
-<ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23876">ADAQ23876</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7291">AD7291</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/MAX7301">MAX7301</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0585.pdf">Circuit Note CN-0585</a></p></li>
-<li><p><a class="reference external" href="https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0584.pdf">Circuit Note CN-0584</a></p></li>
+<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad9656-125ebz">[Wiki] Evaluating the AD9656 ADC converter</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0585">CN0585 HDL project source code</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9656/reference_hdl">[Wiki] AD9656 HDL Reference Design</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9656_fmc">AD9656-FMC HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -660,14 +580,6 @@ guide.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_AD3552R</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad3552r">library/axi_ad3552r</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_ad3552r/index.html#axi-ad3552r"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_LTC2387</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387">library/axi_ltc2387</a></p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ltc2387">[Wiki]</a></p></td>
-</tr>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
@@ -676,37 +588,33 @@ guide.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-even"><td><p>AD_IP_JESD204_TPL_ADC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>UTIL_PACK/UTIL_CPACK2</p></td>
+<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -715,13 +623,8 @@ guide.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dac/axi-ad3552r">[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ltc2387">[Wiki] LTC2387 SAR ADC IIO Linux driver page</a></p></li>
-<li><p>Python support:</p>
-<ul>
-<li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/">PyADI-IIO documentation</a></p></li>
-</ul>
-</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656">No-OS project</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad9656/ad9656.c">No-OS driver ad9467.c</a></p></li>
 </ul>
 </section>
 </section>
@@ -757,8 +660,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../cn0579/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">CN0579 HDL project</a>
-    <a href="../max96724/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">MAX96724 HDL project</a>
+    <a href="../ad9467_fmc/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9467-FMC HDL project</a>
+    <a href="../ad9739a_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9739A-FMC HDL project</a>
               </div>
           
         </div>
