@@ -21,9 +21,7 @@ set SAMPLE_WIDTH [expr $ADC_RESOLUTION > 8 ? 16 : 8]
 
 # add RTL sources which will be instantiated in system_bd directly
 adi_project_files ad_fmclidar1_ebz_zcu102 [list \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "../common/util_tia_chsel.v" \
-  "../common/util_axis_syncgen.v" ]
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v"]
 
 # source all the block designs
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl

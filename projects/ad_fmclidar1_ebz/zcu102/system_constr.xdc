@@ -106,4 +106,3 @@ create_clock -period 4.000 -name rx_ref_clk [get_ports rx_ref_clk_p]
 
 set_input_delay -clock [get_clocks rx_device_clk] [get_property PERIOD [get_clocks rx_device_clk]] \
                 [get_ports -regexp -filter { NAME =~  ".*sysref.*" && DIRECTION == "IN" }]
-

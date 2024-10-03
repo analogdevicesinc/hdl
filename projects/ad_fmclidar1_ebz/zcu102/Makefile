@@ -6,8 +6,6 @@
 
 PROJECT_NAME := ad_fmclidar1_ebz_zcu102
 
-M_DEPS += ../common/util_tia_chsel.v
-M_DEPS += ../common/util_axis_syncgen.v
 M_DEPS += ../common/ad_fmclidar1_ebz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
@@ -17,7 +15,6 @@ M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_dmac
-LIB_DEPS += axi_laser_driver
 LIB_DEPS += axi_sysid
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/axi_jesd204_rx
