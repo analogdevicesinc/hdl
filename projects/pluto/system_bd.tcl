@@ -399,14 +399,6 @@ ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
 # debug
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0
-set_property -dict [list \
-  CONFIG.DIN_FROM {15} \
-  CONFIG.DIN_WIDTH {64} \
-] [get_bd_cells xlslice_0]
-
-ad_connect xlslice_0/Din  axi_ad9361_dac_dma/m_axis_data
-
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_1
 set_property -dict [list \
   CONFIG.DIN_FROM {15} \
@@ -420,24 +412,31 @@ set_property -dict [list \
   CONFIG.C_DATA_DEPTH {1024} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
-  CONFIG.C_NUM_OF_PROBES {9} \
+  CONFIG.C_NUM_OF_PROBES {12} \
   CONFIG.C_PROBE1_TYPE {1} \
   CONFIG.C_PROBE2_TYPE {1} \
+  CONFIG.C_PROBE3_TYPE {1} \
   CONFIG.C_PROBE4_TYPE {1} \
   CONFIG.C_PROBE5_TYPE {1} \
   CONFIG.C_PROBE6_TYPE {1} \
+  CONFIG.C_PROBE7_TYPE {1} \
   CONFIG.C_PROBE8_TYPE {1} \
-  CONFIG.C_PROBE4_WIDTH {16} \
-  CONFIG.C_PROBE8_WIDTH {16} \
+  CONFIG.C_PROBE9_TYPE {1} \
+  CONFIG.C_PROBE11_TYPE {1} \
+  CONFIG.C_PROBE7_WIDTH {16} \
+  CONFIG.C_PROBE11_WIDTH {16} \
 ] [get_bd_cells ila_0]
 
 ad_connect ila_0/clk     axi_ad9361/l_clk
 ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_1
-ad_connect ila_0/probe1  axi_ad9361_dac_dma/m_axis_ready
-ad_connect ila_0/probe2  axi_ad9361_dac_dma/m_axis_valid
-ad_connect ila_0/probe3  axi_ad9361_dac_dma/m_axis_xfer_req
-ad_connect ila_0/probe4  xlslice_0/Dout
-ad_connect ila_0/probe5  axi_ad9361_adc_dma/fifo_wr_en
-ad_connect ila_0/probe6  axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect ila_0/probe7  axi_ad9361_adc_dma/fifo_wr_xfer_req
-ad_connect ila_0/probe8  xlslice_1/Dout
+ad_connect ila_0/probe1  cpack/reset
+ad_connect ila_0/probe2  cpack/enable_0
+ad_connect ila_0/probe3  cpack/enable_1
+ad_connect ila_0/probe4  cpack/enable_2
+ad_connect ila_0/probe5  cpack/enable_3
+ad_connect ila_0/probe6  cpack/fifo_wr_en
+ad_connect ila_0/probe7  cpack/fifo_wr_data_0
+ad_connect ila_0/probe8  axi_ad9361_adc_dma/fifo_wr_en
+ad_connect ila_0/probe9  axi_ad9361_adc_dma/fifo_wr_overflow
+ad_connect ila_0/probe10 axi_ad9361_adc_dma/fifo_wr_xfer_req
+ad_connect ila_0/probe11 xlslice_1/Dout
