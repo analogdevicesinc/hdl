@@ -72,6 +72,10 @@ Contents
 
 Obsolete projects
 -------------------------------------------------------------------------------
+.. toctree::
+   :maxdepth: 1
+
+   IMAGEON <imageon/index>
 
 .. toctree::
    :maxdepth: 1
@@ -80,5 +84,5 @@ The following projects are obsolete and **not maintained anymore**.
 Support is limited. The latest available sources for these projects can be
 found in the same archive.
 
-   imageon -
-   ad_fmclidar1_ebz -
+   imageon - hdl_2019_r1
+   ad_fmclidar1_ebz 
