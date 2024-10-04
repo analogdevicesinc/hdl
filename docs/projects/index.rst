@@ -59,6 +59,7 @@ Contents
    CN0577 <cn0577/index>
    CN0579 <cn0579/index>
    CN0585 <cn0585/index>
+   IMAGEON <imageon/index>
    MAX96724 <max96724/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS <pulsar_lvds/index>
