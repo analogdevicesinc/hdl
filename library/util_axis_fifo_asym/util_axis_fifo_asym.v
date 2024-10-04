@@ -79,6 +79,7 @@ module util_axis_fifo_asym #(
   localparam A_ADDRESS = (RATIO_TYPE) ? S_ADDRESS_WIDTH : (S_ADDRESS_WIDTH-$clog2(RATIO));
   localparam A_ALMOST_FULL_THRESHOLD = (RATIO_TYPE) ? ALMOST_FULL_THRESHOLD : (ALMOST_FULL_THRESHOLD/RATIO);
   localparam A_ALMOST_EMPTY_THRESHOLD = (RATIO_TYPE) ? (ALMOST_EMPTY_THRESHOLD/RATIO) : ALMOST_EMPTY_THRESHOLD;
+  localparam A_KEEP_WIDTH = ((A_WIDTH/8)>1) ? (A_WIDTH/8) : 1; // avoids errors for A_WIDTH<8
 
   // slave and master sequencers
   reg [$clog2(RATIO)-1:0] s_axis_counter;
@@ -87,7 +88,7 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] m_axis_ready_int_s;
   wire [RATIO-1:0] m_axis_valid_int_s;
   wire [RATIO*A_WIDTH-1:0] m_axis_data_int_s;
-  wire [RATIO*A_WIDTH/8-1:0] m_axis_tkeep_int_s;
+  wire [RATIO*A_KEEP_WIDTH-1:0] m_axis_tkeep_int_s;
   wire [RATIO-1:0] m_axis_tlast_int_s;
   wire [RATIO-1:0] m_axis_empty_int_s;
   wire [RATIO-1:0] m_axis_almost_empty_int_s;
@@ -96,7 +97,7 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0] s_axis_ready_int_s;
   wire [RATIO-1:0] s_axis_valid_int_s;
   wire [RATIO*A_WIDTH-1:0] s_axis_data_int_s;
-  wire [RATIO*A_WIDTH/8-1:0] s_axis_tkeep_int_s;
+  wire [RATIO*A_KEEP_WIDTH-1:0] s_axis_tkeep_int_s;
   wire [RATIO-1:0] s_axis_tlast_int_s;
   wire [RATIO-1:0] s_axis_full_int_s;
   wire [RATIO-1:0] s_axis_almost_full_int_s;
@@ -122,7 +123,7 @@ module util_axis_fifo_asym #(
         .m_axis_valid   (m_axis_valid_int_s[i]),
         .m_axis_data    (m_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
         .m_axis_tlast   (m_axis_tlast_int_s[i]),
-        .m_axis_tkeep   (m_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+        .m_axis_tkeep   (m_axis_tkeep_int_s[A_KEEP_WIDTH*i+:A_KEEP_WIDTH]),
         .m_axis_level   (m_axis_level_int_s[A_ADDRESS*i+:A_ADDRESS]),
         .m_axis_empty   (m_axis_empty_int_s[i]),
         .m_axis_almost_empty (m_axis_almost_empty_int_s[i]),
@@ -131,7 +132,7 @@ module util_axis_fifo_asym #(
         .s_axis_ready   (s_axis_ready_int_s[i]),
         .s_axis_valid   (s_axis_valid_int_s[i]),
         .s_axis_data    (s_axis_data_int_s[A_WIDTH*i+:A_WIDTH]),
-        .s_axis_tkeep   (s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8]),
+        .s_axis_tkeep   (s_axis_tkeep_int_s[A_KEEP_WIDTH*i+:A_KEEP_WIDTH]),
         .s_axis_tlast   (s_axis_tlast_int_s[i]),
         .s_axis_room    (s_axis_room_int_s[A_ADDRESS*i+:A_ADDRESS]),
         .s_axis_full    (s_axis_full_int_s[i]),
@@ -165,7 +166,7 @@ module util_axis_fifo_asym #(
 
       for (i=0; i<RATIO; i=i+1) begin
         assign s_axis_data_int_s[A_WIDTH*i+:A_WIDTH] = s_axis_data;
-        assign s_axis_tkeep_int_s[A_WIDTH/8*i+:A_WIDTH/8] = (s_axis_counter == i) ? s_axis_tkeep : {A_WIDTH/8{1'b0}};
+        assign s_axis_tkeep_int_s[A_KEEP_WIDTH*i+:A_KEEP_WIDTH] = (s_axis_counter == i) ? s_axis_tkeep : {A_KEEP_WIDTH{1'b0}};
         assign s_axis_tlast_int_s[i] = (s_axis_counter == i) ? s_axis_tlast : 1'b0;
       end
 
@@ -204,7 +205,7 @@ module util_axis_fifo_asym #(
       end
 
       assign m_axis_data = m_axis_data_int_s >> (m_axis_counter*A_WIDTH) ;
-      assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_WIDTH/8) ;
+      assign m_axis_tkeep = m_axis_tkeep_int_s >> (m_axis_counter*A_KEEP_WIDTH) ;
 
       // VALID/EMPTY/ALMOST_EMPTY is driven by the current atomic instance
       assign m_axis_valid = m_axis_valid_int_s >> m_axis_counter;
@@ -222,11 +223,15 @@ module util_axis_fifo_asym #(
         assign m_axis_ready_int_s[i] = m_axis_ready;
       end
 
-      for (i=0; i<RATIO; i=i+1) begin
-        assign m_axis_tkeep[i*A_WIDTH/8+:A_WIDTH/8] = (m_axis_tlast_int_s[i:0] == 0) ||
-                                                      (m_axis_tlast_int_s[i]) ?
-                                                    m_axis_tkeep_int_s[i*A_WIDTH/8+:A_WIDTH/8] :
-                                                    {(A_WIDTH/8){1'b0}};
+      if (TKEEP_EN) begin
+        for (i=0; i<RATIO; i=i+1) begin
+          assign m_axis_tkeep[i*A_KEEP_WIDTH+:A_KEEP_WIDTH] = (m_axis_tlast_int_s[i:0] == 0) ||
+                                                        (m_axis_tlast_int_s[i]) ?
+                                                      m_axis_tkeep_int_s[i*A_KEEP_WIDTH+:A_KEEP_WIDTH] :
+                                                      {(A_KEEP_WIDTH){1'b0}};
+        end
+      end else begin
+        assign m_axis_tkeep = {(A_WIDTH/8){1'b1}};
       end
 
       assign m_axis_data = m_axis_data_int_s;
