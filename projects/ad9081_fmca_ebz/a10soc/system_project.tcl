@@ -22,6 +22,8 @@ source ../../scripts/adi_project_intel.tcl
 #
 #   RX_LANE_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
+#   REF_CLK_RATE : Frequency of reference clock in MHz used in 8B10B mode (LANE_RATE/40)
+#   DEVICE_CLK_RATE: Frequency of the device clock in MHz, usually equal to REF_CLK_RATE
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_S : Number of samples per frame
