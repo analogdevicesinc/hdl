@@ -139,7 +139,7 @@ module system_top (
 
   // adc control gpio assign
 
-  assign gpio_i[63:33] = gpio_o[63:33];
+  assign gpio_i[63:34] = gpio_o[63:34];
   assign gpio_i[31:15] = gpio_o[31:15];
 
   // bd gpio
@@ -148,6 +148,7 @@ module system_top (
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
   assign gpio_i[32] = sync_err;
+  assign gpio_i[33] = spi_miso;
 
   // IO Buffers for I2C
 
