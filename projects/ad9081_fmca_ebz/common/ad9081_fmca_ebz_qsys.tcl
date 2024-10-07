@@ -3,6 +3,10 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set JESD_MODE [ expr { [info exists ad_project_params(JESD_MODE)] \
+                          ? $ad_project_params(JESD_MODE) : "8B10B" } ]
+set LINK_MODE [expr {$JESD_MODE == "8B10B"} ? 1 : 2]
+
 # RX parameters
 set RX_NUM_OF_LINKS $ad_project_params(RX_NUM_LINKS)
 
@@ -12,9 +16,18 @@ set RX_JESD_L     $ad_project_params(RX_JESD_L)
 set RX_JESD_S     $ad_project_params(RX_JESD_S)
 set RX_JESD_NP    $ad_project_params(RX_JESD_NP)
 
-set RX_TPL_DATA_PATH_WIDTH 4
-if {$RX_JESD_NP==12} {
-  set RX_TPL_DATA_PATH_WIDTH 6
+if {$JESD_MODE == "8B10B"} {
+  set RX_DATA_PATH_WIDTH 4
+  set RX_TPL_DATA_PATH_WIDTH 4
+  if {$RX_JESD_NP==12} {
+    set RX_TPL_DATA_PATH_WIDTH 6
+  }
+} else {
+  set RX_DATA_PATH_WIDTH 8
+  set RX_TPL_DATA_PATH_WIDTH 8
+  if {$RX_JESD_NP==12} {
+    set RX_TPL_DATA_PATH_WIDTH 12
+  }
 }
 
 set RX_NUM_OF_LANES      [expr $RX_JESD_L * $RX_NUM_OF_LINKS]
@@ -35,10 +48,20 @@ set TX_JESD_L     $ad_project_params(TX_JESD_L)
 set TX_JESD_S     $ad_project_params(TX_JESD_S)
 set TX_JESD_NP    $ad_project_params(TX_JESD_NP)
 
-set TX_TPL_DATA_PATH_WIDTH 4
-if {$TX_JESD_NP==12} {
-  set TX_TPL_DATA_PATH_WIDTH 6
+if {$JESD_MODE == "8B10B"} {
+  set TX_DATA_PATH_WIDTH 4
+  set TX_TPL_DATA_PATH_WIDTH 4
+  if {$TX_JESD_NP==12} {
+    set TX_TPL_DATA_PATH_WIDTH 6
+  }
+} else {
+  set TX_DATA_PATH_WIDTH 8
+  set TX_TPL_DATA_PATH_WIDTH 8
+  if {$TX_JESD_NP==12} {
+    set TX_TPL_DATA_PATH_WIDTH 12
+  }
 }
+
 
 set TX_NUM_OF_LANES      [expr $TX_JESD_L * $TX_NUM_OF_LINKS]
 set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_OF_LINKS]
@@ -69,7 +92,7 @@ set dac_data_width [expr 8*$TX_TPL_DATA_PATH_WIDTH*$TX_NUM_OF_LANES*$TX_DMA_SAMP
 set dac_dma_data_width $dac_data_width
 set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
 
-# JESD204B clock bridges
+# JESD204 clock bridges
 
 add_instance tx_device_clk altera_clock_bridge
 set_instance_parameter_value tx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RATE
@@ -85,6 +108,7 @@ set_instance_parameter_value rx_device_clk {EXPLICIT_CLOCK_RATE} $DEVICE_CLK_RAT
 
 add_instance mxfe_rx_jesd204 adi_jesd204
 set_instance_parameter_value mxfe_rx_jesd204 {ID} {0}
+set_instance_parameter_value mxfe_rx_jesd204 {LINK_MODE} $LINK_MODE
 set_instance_parameter_value mxfe_rx_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value mxfe_rx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value mxfe_rx_jesd204 {LANE_RATE} $RX_LANE_RATE
@@ -94,6 +118,7 @@ set_instance_parameter_value mxfe_rx_jesd204 {INPUT_PIPELINE_STAGES} {2}
 set_instance_parameter_value mxfe_rx_jesd204 {NUM_OF_LANES} $RX_NUM_OF_LANES
 set_instance_parameter_value mxfe_rx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value mxfe_rx_jesd204 {TPL_DATA_PATH_WIDTH} $RX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_rx_jesd204 {DATA_PATH_WIDTH} $RX_DATA_PATH_WIDTH
 # set_instance_parameter_value mxfe_rx_jesd204 {LANE_MAP} {5 7 0 1 2 3 4 6}
 
 
@@ -111,6 +136,7 @@ set_instance_parameter_value mxfe_rx_tpl {DMA_BITS_PER_SAMPLE} $RX_DMA_SAMPLE_WI
 
 add_instance mxfe_tx_jesd204 adi_jesd204
 set_instance_parameter_value mxfe_tx_jesd204 {ID} {0}
+set_instance_parameter_value mxfe_tx_jesd204 {LINK_MODE} $LINK_MODE
 set_instance_parameter_value mxfe_tx_jesd204 {TX_OR_RX_N} {1}
 set_instance_parameter_value mxfe_tx_jesd204 {SOFT_PCS} {true}
 set_instance_parameter_value mxfe_tx_jesd204 {LANE_RATE} $TX_LANE_RATE
@@ -119,6 +145,7 @@ set_instance_parameter_value mxfe_tx_jesd204 {REFCLK_FREQUENCY} $REF_CLK_RATE
 set_instance_parameter_value mxfe_tx_jesd204 {NUM_OF_LANES} $TX_NUM_OF_LANES
 set_instance_parameter_value mxfe_tx_jesd204 {EXT_DEVICE_CLK_EN} {1}
 set_instance_parameter_value mxfe_tx_jesd204 {TPL_DATA_PATH_WIDTH} $TX_TPL_DATA_PATH_WIDTH
+set_instance_parameter_value mxfe_tx_jesd204 {DATA_PATH_WIDTH} $TX_DATA_PATH_WIDTH
 # set_instance_parameter_value mxfe_tx_jesd204 {LANE_MAP} {5 7 0 1 2 3 4 6}
 
 
@@ -130,6 +157,8 @@ set_instance_parameter_value mxfe_tx_tpl {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {OCTETS_PER_BEAT} $TX_TPL_DATA_PATH_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {DMA_BITS_PER_SAMPLE} $TX_DMA_SAMPLE_WIDTH
+# Disable DDS for now to make implementation faster
+# set_instance_parameter_value mxfe_tx_tpl {DATAPATH_DISABLE} {true}
 
 # pack(s) & unpack(s)
 
@@ -153,7 +182,7 @@ ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_a
 
 add_instance mxfe_tx_dma axi_dmac
 set_instance_parameter_value mxfe_tx_dma {ID} {0}
-set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_SRC} {128}
+set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_SRC} $dac_dma_data_width
 set_instance_parameter_value mxfe_tx_dma {DMA_DATA_WIDTH_DEST} $dac_dma_data_width
 set_instance_parameter_value mxfe_tx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value mxfe_tx_dma {DMA_2D_TRANSFER} {0}
@@ -166,12 +195,12 @@ set_instance_parameter_value mxfe_tx_dma {DMA_TYPE_SRC} {0}
 set_instance_parameter_value mxfe_tx_dma {FIFO_SIZE} {16}
 set_instance_parameter_value mxfe_tx_dma {HAS_AXIS_TLAST} {1}
 set_instance_parameter_value mxfe_tx_dma {DMA_AXI_PROTOCOL_SRC} {0}
-set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {4096}
+set_instance_parameter_value mxfe_tx_dma {MAX_BYTES_PER_BURST} {2048}
 
 add_instance mxfe_rx_dma axi_dmac
 set_instance_parameter_value mxfe_rx_dma {ID} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_SRC} $adc_dma_data_width
-set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_DEST} {128}
+set_instance_parameter_value mxfe_rx_dma {DMA_DATA_WIDTH_DEST} $adc_dma_data_width
 set_instance_parameter_value mxfe_rx_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value mxfe_rx_dma {DMA_2D_TRANSFER} {0}
 set_instance_parameter_value mxfe_rx_dma {AXI_SLICE_DEST} {0}
@@ -182,7 +211,7 @@ set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_DEST} {0}
 set_instance_parameter_value mxfe_rx_dma {DMA_TYPE_SRC} {1}
 set_instance_parameter_value mxfe_rx_dma {FIFO_SIZE} {16}
 set_instance_parameter_value mxfe_rx_dma {DMA_AXI_PROTOCOL_DEST} {0}
-set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {4096}
+set_instance_parameter_value mxfe_rx_dma {MAX_BYTES_PER_BURST} {2048}
 
 # mxfe gpio
 
@@ -253,10 +282,12 @@ add_connection sys_dma_clk.clk_reset $dac_fifo_name.if_dma_rst
 #
 
 add_interface rx_ref_clk      clock   sink
+# add_interface rx_pll_clk      clock   sink
 add_interface rx_sysref       conduit end
 add_interface rx_sync         conduit end
 add_interface rx_serial_data  conduit end
 add_interface tx_ref_clk      clock   sink
+# add_interface tx_pll_clk      clock   sink
 add_interface rx_device_clk   clock   sink
 add_interface tx_serial_data  conduit end
 add_interface tx_sysref       conduit end
@@ -264,12 +295,14 @@ add_interface tx_sync         conduit end
 add_interface tx_device_clk   clock   sink
 
 set_interface_property rx_ref_clk       EXPORT_OF mxfe_rx_jesd204.ref_clk
+# set_interface_property rx_pll_clk       EXPORT_OF mxfe_rx_jesd204.pll_clk
 set_interface_property rx_sysref        EXPORT_OF mxfe_rx_jesd204.sysref
 set_interface_property rx_sync          EXPORT_OF mxfe_rx_jesd204.sync
 set_interface_property rx_serial_data   EXPORT_OF mxfe_rx_jesd204.serial_data
 set_interface_property rx_device_clk    EXPORT_OF rx_device_clk.in_clk
 
 set_interface_property tx_ref_clk       EXPORT_OF mxfe_tx_jesd204.ref_clk
+# set_interface_property tx_pll_clk       EXPORT_OF mxfe_tx_jesd204.pll_clk
 set_interface_property tx_sysref        EXPORT_OF mxfe_tx_jesd204.sysref
 set_interface_property tx_sync          EXPORT_OF mxfe_tx_jesd204.sync
 set_interface_property tx_serial_data   EXPORT_OF mxfe_tx_jesd204.serial_data
