@@ -399,21 +399,12 @@ ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 
 # debug
 
-create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_1
-set_property -dict [list \
-  CONFIG.DIN_FROM {15} \
-  CONFIG.DIN_WIDTH {64} \
-] [get_bd_cells xlslice_1]
-
-ad_connect xlslice_1/Din  axi_ad9361_adc_dma/fifo_wr_din
-
 create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0
 set_property -dict [list \
   CONFIG.C_DATA_DEPTH {1024} \
   CONFIG.C_EN_STRG_QUAL {1} \
   CONFIG.C_MONITOR_TYPE {Native} \
-  CONFIG.C_NUM_OF_PROBES {12} \
-  CONFIG.C_PROBE1_TYPE {1} \
+  CONFIG.C_NUM_OF_PROBES {22} \
   CONFIG.C_PROBE2_TYPE {1} \
   CONFIG.C_PROBE3_TYPE {1} \
   CONFIG.C_PROBE4_TYPE {1} \
@@ -422,21 +413,42 @@ set_property -dict [list \
   CONFIG.C_PROBE7_TYPE {1} \
   CONFIG.C_PROBE8_TYPE {1} \
   CONFIG.C_PROBE9_TYPE {1} \
+  CONFIG.C_PROBE10_TYPE {1} \
   CONFIG.C_PROBE11_TYPE {1} \
-  CONFIG.C_PROBE7_WIDTH {16} \
-  CONFIG.C_PROBE11_WIDTH {16} \
+  CONFIG.C_PROBE12_TYPE {1} \
+  CONFIG.C_PROBE13_TYPE {1} \
+  CONFIG.C_PROBE14_TYPE {1} \
+  CONFIG.C_PROBE15_TYPE {1} \
+  CONFIG.C_PROBE16_TYPE {1} \
+  CONFIG.C_PROBE17_TYPE {1} \
+  CONFIG.C_PROBE18_TYPE {1} \
+  CONFIG.C_PROBE19_TYPE {1} \
+  CONFIG.C_PROBE20_TYPE {1} \
+  CONFIG.C_PROBE21_TYPE {1} \
+  CONFIG.C_PROBE10_WIDTH {16} \
+  CONFIG.C_PROBE20_WIDTH {16} \
 ] [get_bd_cells ila_0]
 
 ad_connect ila_0/clk     axi_ad9361/l_clk
 ad_connect ila_0/probe0  axi_tdd_0/tdd_channel_1
-ad_connect ila_0/probe1  cpack/reset
-ad_connect ila_0/probe2  cpack/enable_0
-ad_connect ila_0/probe3  cpack/enable_1
-ad_connect ila_0/probe4  cpack/enable_2
-ad_connect ila_0/probe5  cpack/enable_3
-ad_connect ila_0/probe6  cpack/fifo_wr_en
-ad_connect ila_0/probe7  cpack/fifo_wr_data_0
-ad_connect ila_0/probe8  axi_ad9361_adc_dma/fifo_wr_en
-ad_connect ila_0/probe9  axi_ad9361_adc_dma/fifo_wr_overflow
-ad_connect ila_0/probe10 axi_ad9361_adc_dma/fifo_wr_xfer_req
-ad_connect ila_0/probe11 xlslice_1/Dout
+ad_connect ila_0/probe1  axi_ad9361_dac_dma/m_axis_xfer_req
+ad_connect ila_0/probe2  axi_ad9361/dac_enable_i0
+ad_connect ila_0/probe3  axi_ad9361/dac_enable_q0
+ad_connect ila_0/probe4  axi_ad9361/dac_enable_i1
+ad_connect ila_0/probe5  axi_ad9361/dac_enable_q1
+ad_connect ila_0/probe6  axi_ad9361/dac_valid_i0
+ad_connect ila_0/probe7  axi_ad9361/dac_valid_q0
+ad_connect ila_0/probe8  axi_ad9361/dac_valid_i1
+ad_connect ila_0/probe9  axi_ad9361/dac_valid_q1
+ad_connect ila_0/probe10 axi_ad9361/dac_data_i0
+ad_connect ila_0/probe11 axi_ad9361/dac_dunf
+ad_connect ila_0/probe12 axi_ad9361/adc_enable_i0
+ad_connect ila_0/probe13 axi_ad9361/adc_enable_q0
+ad_connect ila_0/probe14 axi_ad9361/adc_enable_i1
+ad_connect ila_0/probe15 axi_ad9361/adc_enable_q1
+ad_connect ila_0/probe16 axi_ad9361/adc_valid_i0
+ad_connect ila_0/probe17 axi_ad9361/adc_valid_q0
+ad_connect ila_0/probe18 axi_ad9361/adc_valid_i1
+ad_connect ila_0/probe19 axi_ad9361/adc_valid_q1
+ad_connect ila_0/probe20 axi_ad9361/adc_data_i0
+ad_connect ila_0/probe21 axi_ad9361/adc_dovf
