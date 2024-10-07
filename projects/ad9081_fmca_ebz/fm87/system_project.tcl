@@ -201,7 +201,7 @@ for {set j 0} {$j < $tx_num_lanes} {incr j} {
 # Enable AC coupling, set termination to 100 ohms and enable VSR mode at high lane rates
 set rx_num_lanes [get_env_param RX_JESD_L 8]
 set lane_rate [expr [get_env_param RX_LANE_RATE 24.75] * 1000]
-for {set j 0} {$j < 8} {incr j} {
+for {set j 0} {$j < $rx_num_lanes} {incr j} {
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data[$j]
   set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[$j]
 
