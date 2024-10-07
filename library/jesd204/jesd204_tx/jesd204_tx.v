@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2024 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -417,7 +417,8 @@ module jesd204_tx #(
       localparam D_STOP = D_START + DATA_PATH_WIDTH*8-1;
       localparam H_START = i * 2;
       localparam H_STOP = H_START + 2 -1;
-      jesd204_tx_lane_64b i_lane(
+
+      jesd204_tx_lane_64b i_lane (
         .clk(clk),
         .reset(reset),
 

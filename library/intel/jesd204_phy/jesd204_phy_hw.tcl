@@ -24,6 +24,7 @@ set_module_property INTERNAL false
 
 ad_ip_parameter DEVICE STRING "Stratix 10" false
 ad_ip_parameter ID NATURAL 0 false
+ad_ip_parameter LINK_MODE INTEGER 1 false
 ad_ip_parameter SOFT_PCS BOOLEAN false false
 ad_ip_parameter TX_OR_RX_N BOOLEAN false false
 ad_ip_parameter LANE_RATE FLOAT 10000 false
@@ -45,6 +46,7 @@ proc jesd204_phy_composition_callback {} {
 
   set device [get_parameter_value "DEVICE"]
   set soft_pcs [get_parameter_value "SOFT_PCS"]
+  set link_mode [get_parameter_value "LINK_MODE"]
   set tx [get_parameter_value "TX_OR_RX_N"]
   set lane_rate [get_parameter_value "LANE_RATE"]
   set refclk_frequency [get_parameter_value "REFCLK_FREQUENCY"]
@@ -54,7 +56,23 @@ proc jesd204_phy_composition_callback {} {
   set lane_invert [get_parameter_value "LANE_INVERT"]
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
 
-  set link_clk_frequency [expr $lane_rate / 40]
+  if {$link_mode == 1} {
+    set link_clk_frequency [expr $lane_rate / 40]
+    set phy_clk_frequency [expr $lane_rate / 20]
+    set pma_width 20
+    set datapath_width 4
+    set usr_pll_div 40
+  } else {
+    set link_clk_frequency [expr $lane_rate / 66]
+    set phy_clk_frequency [expr $lane_rate / 32]
+    set pma_width 32
+    set datapath_width 8
+    if {$lane_rate >= 16300} {
+      set usr_pll_div 33
+    } else {
+      set usr_pll_div 66
+    }
+  }
 
   if {[string equal $device "Arria 10"]} {
     set device_type 1
@@ -93,7 +111,7 @@ proc jesd204_phy_composition_callback {} {
     set_instance_parameter_value native_phy clocking_mode "xcvr"
     set_instance_parameter_value native_phy pma_modulation "NRZ"
     set_instance_parameter_value native_phy pma_data_rate $lane_rate
-    set_instance_parameter_value native_phy pma_width 20
+    set_instance_parameter_value native_phy pma_width $pma_width
     set_instance_parameter_value native_phy rx_deskew_en 0
 
   ## Unsupported device
@@ -171,20 +189,26 @@ proc jesd204_phy_composition_callback {} {
       set_instance_parameter_value native_phy pldif_tx_fifo_mode "phase_comp"
       set_instance_parameter_value native_phy pldif_tile_tx_fifo_mode "phase_comp"
       set_instance_parameter_value native_phy pldif_tx_fifo_pfull_thld 10
+      set_instance_parameter_value native_phy fgt_tx_pll_txuserclk1_enable 1
+      set_instance_parameter_value native_phy fgt_tx_pll_txuserclk_div $usr_pll_div
       set_instance_parameter_value native_phy enable_port_tx_clkout2 1
+      set_instance_parameter_value native_phy pldif_tx_clkout_sel "TX_USER_CLK1"
       set_instance_parameter_value native_phy pldif_tx_clkout2_sel "TX_WORD_CLK"
       set_instance_parameter_value native_phy pldif_tx_clkout2_div 2
       set_instance_parameter_value native_phy avmm2_enable 1
-      #set_instance_parameter_value native_phy avmm2_split [expr $num_of_lanes > 1]
-      #set_instance_parameter_value native_phy avmm2_split 1
     } else {
       set_instance_parameter_value native_phy fgt_rx_pll_refclk_freq_mhz [format {%.6f} $refclk_frequency]
       set_instance_parameter_value native_phy pmaif_rx_fifo_mode_s "register"
       set_instance_parameter_value native_phy pldif_rx_double_width_transfer_enable 1
+      set_instance_parameter_value native_phy fgt_rx_cdr_rxuserclk_enable 1
+      set_instance_parameter_value native_phy fgt_rx_cdr_rxuserclk_div $usr_pll_div
+      set_instance_parameter_value native_phy pldif_rx_fifo_pfull_thld 10
       set_instance_parameter_value native_phy enable_port_rx_clkout2 1
+      set_instance_parameter_value native_phy pldif_rx_clkout_sel "RX_USER_CLK1"
       set_instance_parameter_value native_phy pldif_rx_clkout2_sel "RX_WORD_CLK"
       set_instance_parameter_value native_phy pldif_rx_clkout2_div 2
       set_instance_parameter_value native_phy avmm2_enable 1
+      set_instance_parameter_value native_phy fgt_rx_serdes_adapt_mode {auto}
     }
   }
 
@@ -195,6 +219,7 @@ proc jesd204_phy_composition_callback {} {
   set_instance_parameter_value phy_glue NUM_OF_LANES $num_of_lanes
   set_instance_parameter_value phy_glue LANE_INVERT $lane_invert
   set_instance_parameter_value phy_glue BONDING_CLOCKS_EN $bonding_clocks_en
+  set_instance_parameter_value phy_glue LINK_MODE $link_mode
 
   add_interface reconfig_clk clock sink
   set_interface_property reconfig_clk EXPORT_OF phy_glue.reconfig_clk
@@ -323,6 +348,13 @@ proc jesd204_phy_composition_callback {} {
   # Agilex
   } elseif {$device_type == 3} {
 
+    add_instance phy_clk clock_source
+    set_instance_parameter_value phy_clk {clockFrequency} [expr $phy_clk_frequency*1000000]
+    add_interface phy_clk clock sink
+    set_interface_property phy_clk EXPORT_OF phy_clk.clk_in
+    add_interface phy_reset reset sink
+    set_interface_property phy_reset EXPORT_OF phy_clk.clk_in_reset
+
     add_interface ref_clk ftile_hssi_reference_clock end
     set_interface_property ref_clk EXPORT_OF phy_glue.ref_clk
 
@@ -347,9 +379,13 @@ proc jesd204_phy_composition_callback {} {
       set_interface_property ${x} EXPORT_OF native_phy.${tx_rx}_${x}
     }
 
-    # connect link clock and output clock from - to GLUE
-
-    add_connection link_clock.clk phy_glue.${tx_rx}_coreclkin
+    if {$link_mode == 2} {
+      # this is lane rate / 64
+      add_connection phy_clk.clk phy_glue.${tx_rx}_coreclkin
+    } else {
+      # this is lane rate / 40
+      add_connection link_clock.clk phy_glue.${tx_rx}_coreclkin
+    }
     add_connection phy_glue.phy_${tx_rx}_coreclkin native_phy.${tx_rx}_coreclkin
 
     # Reconfig interface
@@ -369,42 +405,122 @@ proc jesd204_phy_composition_callback {} {
     }
     add_connection phy_glue.phy_ref_clk native_phy.${tx_rx}_${tx_rx_ref_name}_refclk_link
 
-    foreach x [list ${tx_rx}_parallel_data ${tx_rx}_clkout2] {
+    foreach x [list ${tx_rx}_parallel_data ${tx_rx}_clkout2 ${tx_rx}_clkout] {
       add_connection phy_glue.phy_${x} native_phy.${x}
     }
 
-    # This is lane rate / 40
+    # This is lane rate / 40 (jesd204b) or lane rate / 64 (jesd204c)
+    add_interface clkout2 clock source
+    set_interface_property clkout2 EXPORT_OF phy_glue.${tx_rx}_clkout2_0
+
+    # This is lane rate / 40 (jesd204b) or lane rate / 66 (jesd204c)
     add_interface clkout clock source
-    set_interface_property clkout EXPORT_OF phy_glue.${tx_rx}_clkout2_0
+    set_interface_property clkout EXPORT_OF phy_glue.${tx_rx}_clkout_0
 
     # Connect GLUE with PCS
     for {set i 0} {$i < $num_of_lanes} {incr i} {
-
-      add_interface phy_${i} conduit start
+      add_interface phy_${i} conduit end
 
       if {$tx} {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_tx
-        set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
-        set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
-          [expr ($lane_invert >> $i) & 1]
-        add_connection link_clock.clk soft_pcs_${i}.clock
-        add_connection link_clock.clk_reset soft_pcs_${i}.reset
-        add_connection phy_glue.tx_raw_data_${i} soft_pcs_${i}.tx_raw_data
+        if {$link_mode == 1} {
+          # JESD204B
+          add_instance soft_pcs_${i} jesd204_soft_pcs_tx
+          set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
+          set_instance_parameter_value soft_pcs_${i} INVERT_OUTPUTS \
+            [expr ($lane_invert >> $i) & 1]
+          add_connection link_clock.clk soft_pcs_${i}.clock
+          add_connection link_clock.clk_reset soft_pcs_${i}.reset
+          add_connection phy_glue.tx_raw_data_${i} soft_pcs_${i}.tx_raw_data
 
-        set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.tx_phy
+          set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.tx_phy
+        } else {
+          # JESD204C
+          add_instance tx_adapter_${i} jesd204_f_tile_adapter_tx
+          add_connection phy_clk.clk               tx_adapter_${i}.phy_tx_clock
+          add_connection link_clock.clk            tx_adapter_${i}.link_clock
+          add_connection link_clock.clk_reset      tx_adapter_${i}.reset
+          add_connection phy_glue.tx_raw_data_${i} tx_adapter_${i}.phy_tx_parallel_data
+
+          set_interface_property phy_${i} EXPORT_OF tx_adapter_${i}.link_tx
+
+          # instantiate the CDC fifo
+          add_instance tx_fifo_${i} fifo
+          set_instance_parameter_value tx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
+          set_instance_parameter_value tx_fifo_${i} GUI_Clock {4}
+          set_instance_parameter_value tx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_Depth {32}
+          set_instance_parameter_value tx_fifo_${i} GUI_Empty {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_Full {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_LegacyRREQ {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_MAX_DEPTH {Auto}
+          set_instance_parameter_value tx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
+          set_instance_parameter_value tx_fifo_${i} GUI_UsedW {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_Width {66}
+          set_instance_parameter_value tx_fifo_${i} GUI_dc_aclr {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_delaypipe {5}
+          set_instance_parameter_value tx_fifo_${i} GUI_diff_widths {0}
+          set_instance_parameter_value tx_fifo_${i} GUI_output_width {8}
+          set_instance_parameter_value tx_fifo_${i} GUI_read_aclr_synch {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_rsEmpty {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_synStage {3}
+          set_instance_parameter_value tx_fifo_${i} GUI_write_aclr_synch {1}
+          set_instance_parameter_value tx_fifo_${i} GUI_wsEmpty {0}
+          set_instance_parameter_value tx_fifo_${i} GUI_wsFull {1}
+
+          add_connection tx_fifo_${i}.fifo_input  tx_adapter_${i}.fifo_input
+          add_connection tx_fifo_${i}.fifo_output tx_adapter_${i}.fifo_output
+        }
       } else {
-        add_instance soft_pcs_${i} jesd204_soft_pcs_rx
-        set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
-        set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
-        set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
-          [expr ($lane_invert >> $i) & 1]
-        add_connection link_clock.clk soft_pcs_${i}.clock
-        add_connection link_clock.clk_reset soft_pcs_${i}.reset
-        add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
+        # JESD204B
+        if {$link_mode == 1} {
+          add_instance soft_pcs_${i} jesd204_soft_pcs_rx
+          set_instance_parameter_value soft_pcs_${i} IFC_TYPE 1
+          set_instance_parameter_value soft_pcs_${i} REGISTER_INPUTS $register_inputs
+          set_instance_parameter_value soft_pcs_${i} INVERT_INPUTS \
+            [expr ($lane_invert >> $i) & 1]
+          add_connection link_clock.clk soft_pcs_${i}.clock
+          add_connection link_clock.clk_reset soft_pcs_${i}.reset
+          add_connection phy_glue.rx_raw_data_${i} soft_pcs_${i}.rx_raw_data
 
-        set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.rx_phy
+          set_interface_property phy_${i} EXPORT_OF soft_pcs_${i}.rx_phy
+        } else {
+          # JESD204C
+          add_instance rx_adapter_${i} jesd204_f_tile_adapter_rx
+          add_connection phy_clk.clk                rx_adapter_${i}.phy_rx_clock
+          add_connection link_clock.clk             rx_adapter_${i}.link_clock
+          add_connection link_clock.clk_reset       rx_adapter_${i}.reset
+          add_connection phy_glue.rx_raw_data_${i}  rx_adapter_${i}.phy_rx_parallel_data
+
+          set_interface_property phy_${i} EXPORT_OF rx_adapter_${i}.link_rx
+
+          # instantiate the CDC fifo
+          add_instance rx_fifo_${i} fifo
+          set_instance_parameter_value rx_fifo_${i} GUI_CLOCKS_ARE_SYNCHRONIZED {0}
+          set_instance_parameter_value rx_fifo_${i} GUI_Clock {4}
+          set_instance_parameter_value rx_fifo_${i} GUI_DISABLE_DCFIFO_EMBEDDED_TIMING_CONSTRAINT {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_Depth {32}
+          set_instance_parameter_value rx_fifo_${i} GUI_Empty {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_Full {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_LegacyRREQ {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_MAX_DEPTH {Auto}
+          set_instance_parameter_value rx_fifo_${i} GUI_RAM_BLOCK_TYPE {Auto}
+          set_instance_parameter_value rx_fifo_${i} GUI_UsedW {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_Width {66}
+          set_instance_parameter_value rx_fifo_${i} GUI_dc_aclr {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_delaypipe {5}
+          set_instance_parameter_value rx_fifo_${i} GUI_diff_widths {0}
+          set_instance_parameter_value rx_fifo_${i} GUI_output_width {8}
+          set_instance_parameter_value rx_fifo_${i} GUI_read_aclr_synch {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_rsEmpty {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_synStage {3}
+          set_instance_parameter_value rx_fifo_${i} GUI_write_aclr_synch {1}
+          set_instance_parameter_value rx_fifo_${i} GUI_wsEmpty {0}
+          set_instance_parameter_value rx_fifo_${i} GUI_wsFull {1}
+
+          add_connection rx_fifo_${i}.fifo_input  rx_adapter_${i}.fifo_input
+          add_connection rx_fifo_${i}.fifo_output rx_adapter_${i}.fifo_output
+        }
       }
     }
   }
-
 }

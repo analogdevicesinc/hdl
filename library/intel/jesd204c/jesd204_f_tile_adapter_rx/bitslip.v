@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,22 +35,58 @@
 
 `timescale 1ns/100ps
 
-module jesd204_phy_glue #(
-  parameter WIDTH = 20,
-  parameter CONST_WIDTH = 1,
-  parameter NUM_OF_LANES = 1,
-  parameter LANE_INVERT = 0
-) (
-  input  [WIDTH-1:0] in,
-  output [WIDTH-1:0] out,
-  output [CONST_WIDTH-1:0] const_out,
-  output [NUM_OF_LANES-1:0] polinv
+module bitslip (
+  input             clk,
+  input             reset,
+
+  input             bitslip,
+  input      [65:0] data_in,
+
+  output            bitslip_done,
+  output reg [65:0] data_out
 );
 
-/* There really should be a standard component in Qsys that allows to do this */
+  reg  [65:0] buff_r;
+  reg  [ 6:0] shift_cnt;
+  reg  [ 3:0] bitslip_sleep;
+  wire [65:0] ignore;
+  wire [65:0] data_shifted;
+  wire        bitslip_s;
 
-  assign out = in;
-  assign const_out = {CONST_WIDTH{1'b0}};
-  assign polinv = LANE_INVERT[NUM_OF_LANES-1:0];
+  always @(posedge clk) begin
+    buff_r <= data_in;
+  end
+
+  always @(posedge clk) begin
+    if (reset) begin
+      bitslip_sleep <= 'd0;
+    end else if (~bitslip_sleep[3]) begin
+      bitslip_sleep <= bitslip_sleep + 1'b1;
+    end else if (bitslip && bitslip_sleep[3]) begin
+      bitslip_sleep <= 'd0;
+    end
+  end
+
+  assign bitslip_s = bitslip & bitslip_sleep[3];
+
+  always @(posedge clk) begin
+    if (reset) begin
+      shift_cnt <= 'd0;
+    end else if (bitslip_s) begin
+      if (shift_cnt >= 65) begin
+        shift_cnt <= 'd0;
+      end else begin
+        shift_cnt <= shift_cnt + 1'b1;
+      end
+    end
+  end
+
+  assign {ignore, data_shifted} = {data_in, buff_r} >> shift_cnt;
+
+  always @(posedge clk) begin
+    data_out <= data_shifted;
+  end
+
+  assign bitslip_done = ~bitslip_sleep[3];
 
 endmodule
