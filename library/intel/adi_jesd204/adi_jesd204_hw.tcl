@@ -43,6 +43,11 @@ ad_ip_parameter TX_OR_RX_N BOOLEAN 0 false { \
   ALLOWED_RANGES { "0:Receive" "1:Transmit" }
 }
 
+ad_ip_parameter LINK_MODE POSITIVE 1 false { \
+  DISPLAY_NAME "Link Mode" \
+  ALLOWED_RANGES { "1:JESD204B" "2:JESD204C" }
+}
+
 ad_ip_parameter ID NATURAL 0 false { \
   DISPLAY_NAME "Core ID" \
 }
@@ -99,6 +104,12 @@ ad_ip_parameter TPL_DATA_PATH_WIDTH INTEGER 4 false { \
   DISPLAY_NAME "Transport layer datapath width" \
   DISPLAY_UNITS "octets" \
   ALLOWED_RANGES {4 6 8 12} \
+}
+
+ad_ip_parameter DATA_PATH_WIDTH INTEGER 4 false { \
+  DISPLAY_NAME "Data path width" \
+  DISPLAY_UNITS "octets" \
+  ALLOWED_RANGES {4 8} \
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
@@ -276,6 +287,7 @@ proc jesd204_validate {{quiet false}} {
   set lane_rate [get_parameter_value "LANE_RATE"]
   set num_of_lanes [get_parameter_value "NUM_OF_LANES"]
   set tx_or_rx_n [get_parameter_value "TX_OR_RX_N"]
+  set link_mode [get_parameter_value "LINK_MODE"]
 
   if {$device_family != "Arria 10" && $device_family != "Stratix 10" && $device_family != "Agilex 7"} {
     if {!$quiet} {
@@ -284,19 +296,28 @@ proc jesd204_validate {{quiet false}} {
     return false
   }
 
-  set max_lane_rate [jesd204_get_max_lane_rate $device $soft_pcs]
+  if {$link_mode == 1} {
+    set max_lane_rate [jesd204_get_max_lane_rate $device $soft_pcs]
 
-  if {$lane_rate < 2000 || $lane_rate > $max_lane_rate} {
-    if {!$quiet} {
-      send_message error "Lane rate must be in the range 2000-${max_lane_rate} Mbps."
-      if {!$soft_pcs} {
-        send_message error "Consider enabling soft PCS for a higher maximum lane rate."
-        if {$input_pipeline} {
-          send_message error "Input pipeline can be active just when soft PCS is used."
+    if {$lane_rate < 2000 || $lane_rate > $max_lane_rate} {
+      if {!$quiet} {
+        send_message error "Lane rate must be in the range 2000-${max_lane_rate} Mbps."
+        if {!$soft_pcs} {
+          send_message error "Consider enabling soft PCS for a higher maximum lane rate."
+          if {$input_pipeline} {
+            send_message error "Input pipeline can be active just when soft PCS is used."
+          }
         }
       }
+      return false
     }
-    return false
+  } else {
+    if {$device_family != "Agilex 7"} {
+      if {!$quiet} {
+        send_message error "JESD204C is only supported on Agilex 7 devices."
+        return false
+      }
+    }
   }
 
   set_parameter_property BONDING_CLOCKS_EN VISIBLE [expr ($num_of_lanes > 6) && ($tx_or_rx_n)]
@@ -321,14 +342,24 @@ proc jesd204_compose {} {
   set bonding_clocks_en [get_parameter_value "BONDING_CLOCKS_EN"]
   set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
   set tpl_data_path_width [get_parameter_value "TPL_DATA_PATH_WIDTH"]
+  set data_path_width [get_parameter_value "DATA_PATH_WIDTH"]
+  set link_mode [get_parameter_value "LINK_MODE"]
 
   set sip_tile [quartus::device::get_part_info -sip_tile $device]
 
-  set pllclk_frequency [expr $lane_rate / 2]
-  set linkclk_frequency [expr $lane_rate / 40]
-  set deviceclk_frequency [expr $linkclk_frequency * 4 / $tpl_data_path_width]
 
-  set dual_clk_mode [expr $tpl_data_path_width > 4]
+  if {$link_mode == 1} {
+    # jesd204b
+    set link_clk_div 40
+  } else {
+    set link_clk_div 66
+  }
+
+  set pllclk_frequency [expr $lane_rate / 2]
+  set linkclk_frequency [expr $lane_rate / $link_clk_div]
+  set deviceclk_frequency [expr $linkclk_frequency * $data_path_width / $tpl_data_path_width]
+
+  set dual_clk_mode [expr $tpl_data_path_width > 4 || $link_mode == 2]
 
   if {![jesd204_validate true]} {
     return
@@ -485,6 +516,7 @@ proc jesd204_compose {} {
 
   add_instance phy jesd204_phy
   set_instance_parameter_value phy ID $id
+  set_instance_parameter_value phy LINK_MODE $link_mode
   set_instance_parameter_value phy DEVICE $device_family
   set_instance_parameter_value phy SOFT_PCS $soft_pcs
   set_instance_parameter_value phy TX_OR_RX_N $tx_or_rx_n
@@ -508,6 +540,7 @@ proc jesd204_compose {} {
     add_interface device_clk clock sink
     set_interface_property device_clk EXPORT_OF ext_device_clock.in_clk
   }
+
   add_connection $link_clock phy.link_clk
   set_interface_property link_clk EXPORT_OF $device_clock_export
 
@@ -533,6 +566,9 @@ proc jesd204_compose {} {
   } elseif {$device_family == "Agilex 7"} {
     add_connection phy.clkout link_clock.in_clk
 
+    add_connection phy.clkout2 phy.phy_clk
+    add_connection link_reset.out_reset phy.phy_reset
+
     # PHY <-> AXI_XCVR
     if {$tx_or_rx_n} {
       add_connection axi_xcvr.core_pll_locked phy.pll_locked
@@ -548,7 +584,6 @@ proc jesd204_compose {} {
     ## Export ref clocks
     add_interface ref_clk ftile_hssi_reference_clock sink
     set_interface_property ref_clk EXPORT_OF phy.ref_clk
-
   } else {
     ## Unsupported device
     send_message error "Only Arria 10/Stratix 10/Agilex 7 are supported."
@@ -569,6 +604,7 @@ proc jesd204_compose {} {
 
   add_instance axi_jesd204_${tx_rx} axi_jesd204_${tx_rx}
   set_instance_parameter_value axi_jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
+  set_instance_parameter_value axi_jesd204_${tx_rx} {LINK_MODE} $link_mode
 
   add_connection sys_clock.clk axi_jesd204_${tx_rx}.s_axi_clock
   add_connection sys_clock.clk_reset axi_jesd204_${tx_rx}.s_axi_reset
@@ -577,8 +613,8 @@ proc jesd204_compose {} {
   set_instance_parameter_value jesd204_${tx_rx} {NUM_LANES} $num_of_lanes
   set_instance_parameter_value jesd204_${tx_rx} {ASYNC_CLK} $dual_clk_mode
   set_instance_parameter_value jesd204_${tx_rx} {TPL_DATA_PATH_WIDTH} $tpl_data_path_width
-  set_instance_parameter_value jesd204_${tx_rx} {LINK_MODE} 1; # 8B10B
-
+  set_instance_parameter_value jesd204_${tx_rx} {DATA_PATH_WIDTH} $data_path_width
+  set_instance_parameter_value jesd204_${tx_rx} {LINK_MODE} $link_mode
 
   add_connection $link_clock axi_jesd204_${tx_rx}.core_clock
   add_connection $device_clock axi_jesd204_${tx_rx}.device_clock
@@ -623,7 +659,6 @@ proc jesd204_compose {} {
     } else {
       set j $i
     }
-
     add_connection jesd204_${tx_rx}.${tx_rx}_phy${j} phy.phy_${i}
   }
 

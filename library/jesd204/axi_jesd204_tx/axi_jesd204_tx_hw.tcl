@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2019, 2021-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2019, 2021-2022, 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -44,6 +44,11 @@ add_parameter NUM_LINKS INTEGER 1
 set_parameter_property NUM_LINKS DISPLAY_NAME "Number of Links"
 set_parameter_property NUM_LINKS ALLOWED_RANGES 1:8
 set_parameter_property NUM_LINKS HDL_PARAMETER true
+
+add_parameter LINK_MODE INTEGER 1
+set_parameter_property LINK_MODE DISPLAY_NAME "Link mode"
+set_parameter_property LINK_MODE ALLOWED_RANGES 1:2
+set_parameter_property LINK_MODE HDL_PARAMETER true
 
 # axi4 slave interface
 

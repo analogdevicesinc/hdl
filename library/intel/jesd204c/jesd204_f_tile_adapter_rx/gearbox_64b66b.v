@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,22 +35,51 @@
 
 `timescale 1ns/100ps
 
-module jesd204_phy_glue #(
-  parameter WIDTH = 20,
-  parameter CONST_WIDTH = 1,
-  parameter NUM_OF_LANES = 1,
-  parameter LANE_INVERT = 0
-) (
-  input  [WIDTH-1:0] in,
-  output [WIDTH-1:0] out,
-  output [CONST_WIDTH-1:0] const_out,
-  output [NUM_OF_LANES-1:0] polinv
+module gearbox_64b66b (
+  input             clk,
+  input             reset,
+
+  input      [63:0] i_data,
+
+  output reg [65:0] o_data,
+  output reg        o_valid
 );
 
-/* There really should be a standard component in Qsys that allows to do this */
+  reg  [63:0] buff_r;
+  reg  [ 5:0] gear_cnt;
+  wire        invalid;
+  wire [65:0] gears [0:32];
 
-  assign out = in;
-  assign const_out = {CONST_WIDTH{1'b0}};
-  assign polinv = LANE_INVERT[NUM_OF_LANES-1:0];
+  always @(posedge clk) begin
+    buff_r <= i_data;
+  end
+
+  always @(posedge clk) begin
+    if (reset) begin
+      gear_cnt <= 6'd0;
+    end else if (gear_cnt[5]) begin
+      gear_cnt <= 6'd0;
+    end else begin
+      gear_cnt <= gear_cnt + 1'b1;
+    end
+  end
+
+  assign invalid = gear_cnt == 0;
+
+  generate
+    genvar i;
+    for (i=0; i < 33; i=i+1) begin
+      if (i == 0) begin
+        assign gears[0] = 66'hx; // Invalid, don't care
+      end else begin
+        assign gears[i] = {i_data[2*i-1:0], buff_r[63:2*(i-1)]};
+      end
+    end
+  endgenerate
+
+  always @(posedge clk) begin
+    o_data <= gears[gear_cnt];
+    o_valid <= ~invalid;
+  end
 
 endmodule

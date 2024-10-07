@@ -30,6 +30,7 @@ ad_ip_parameter TX_OR_RX_N BOOLEAN false false
 ad_ip_parameter SOFT_PCS BOOLEAN false false
 ad_ip_parameter BONDING_CLOCKS_EN BOOLEAN false false
 ad_ip_parameter NUM_OF_LANES POSITIVE 4 true
+ad_ip_parameter LINK_MODE POSITIVE 1 false
 ad_ip_parameter LANE_INVERT INTEGER 0 true
 ad_ip_parameter WIDTH NATURAL 20 true { \
   DERIVED true \
@@ -200,6 +201,7 @@ proc jesd204_phy_glue_elab {} {
   set soft_pcs [get_parameter SOFT_PCS]
   set num_of_lanes [get_parameter NUM_OF_LANES]
   set bonding_clocks_en [get_parameter BONDING_CLOCKS_EN]
+  set link_mode [get_parameter LINK_MODE]
 
   set sig_offset 0
   set const_offset 0
@@ -267,7 +269,6 @@ proc jesd204_phy_glue_elab {} {
 
   if {[get_parameter TX_OR_RX_N]} {
 
-
     glue_add_if $num_of_lanes tx_coreclkin clock sink true
     glue_add_if_port $num_of_lanes tx_coreclkin tx_coreclkin clk Input 1 true
 
@@ -277,6 +278,9 @@ proc jesd204_phy_glue_elab {} {
 
       glue_add_if $num_of_lanes tx_clkout2 clock source
       glue_add_if_port $num_of_lanes tx_clkout2 tx_clkout2 clk Output 1
+
+      glue_add_if $num_of_lanes tx_clkout clock source
+      glue_add_if_port $num_of_lanes tx_clkout tx_clkout clk Output 1
     } else {
       glue_add_if $num_of_lanes tx_clkout clock source
       glue_add_if_port $num_of_lanes tx_clkout tx_clkout clk Output 1
@@ -324,6 +328,9 @@ proc jesd204_phy_glue_elab {} {
 
       glue_add_if $num_of_lanes rx_clkout2 clock source
       glue_add_if_port $num_of_lanes rx_clkout2 rx_clkout2 clk Output 1
+
+      glue_add_if $num_of_lanes rx_clkout clock source
+      glue_add_if_port $num_of_lanes rx_clkout rx_clkout clk Output 1
     } else {
       glue_add_if 1 rx_cdr_refclk0 clock sink true
       glue_add_if_port 1 rx_cdr_refclk0 rx_cdr_refclk0 clk Input 1 true

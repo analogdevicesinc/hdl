@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2022 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2022, 2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -166,7 +166,7 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
 
 add_interface link_clk clock end
 add_interface_port link_clk link_clk clk Input 1
-ad_interface signal link_sof input 4 export
+ad_interface signal link_sof input OCTETS_PER_BEAT export
 
 # We don't expect too large values for a and b, trivial implementation will do
 proc gcd {a b} {
