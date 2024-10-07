@@ -35,6 +35,7 @@ Contents
    AD7134-FMC <ad7134_fmc/index>
    AD719X-ASDZ <ad719x_asdz/index>
    AD738X-FMC <ad738x_fmc/index>
+   AD7405-FMC <ad7405_fmc/index>
    AD7606X-FMC <ad7606x_fmc/index>
    AD7616-SDZ <ad7616_sdz/index>
    AD7768-EVB <ad7768evb/index>
