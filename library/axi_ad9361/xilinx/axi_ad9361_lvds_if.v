@@ -166,6 +166,7 @@ module axi_ad9361_lvds_if #(
   wire    [ 5:0]      rx_data_0_s;
   wire    [ 1:0]      rx_frame_s;
   wire                locked_s;
+  wire                rx_error;
 
   // drp interface signals
 
@@ -214,16 +215,9 @@ module axi_ad9361_lvds_if #(
   end
 
   // frame check
+  assign rx_error = ^rx_frame;
 
   // delineation
-  reg             rx_error_r1 = 'd0;
-  reg             rx_error_r2 = 'd0;
-
-  always @(posedge l_clk) begin
-    rx_error_r1 <= ~((rx_frame_s == 4'b1100) || (rx_frame_s == 4'b0011));
-    rx_error_r2 <= ~((rx_frame_s == 4'b1111) || (rx_frame_s == 4'b1100) ||
-                     (rx_frame_s == 4'b0000) || (rx_frame_s == 4'b0011));
-  end
 
   always @(posedge l_clk) begin
       case ({rx_r1_mode, rx_frame_s, rx_frame})
@@ -252,11 +246,7 @@ module axi_ad9361_lvds_if #(
   // adc-status
 
   always @(posedge l_clk) begin
-    if (adc_r1_mode == 1'b1) begin
-      adc_status_p <= ~rx_error_r1 & rx_locked;
-    end else begin
-      adc_status_p <= ~rx_error_r2 & rx_locked;
-    end
+    adc_status_p <= ~rx_error & rx_locked;
   end
 
   // transfer to common clock
