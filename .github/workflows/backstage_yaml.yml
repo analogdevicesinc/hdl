@@ -1,0 +1,124 @@
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '2[0-9][0-9][0-9]_[rR][1-2]'
+  pull_request:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get tag
+      run: |
+        if [ ${{ github.ref == 'refs/heads/main' }} == true ] ; then
+          echo "tag=main" >> "$GITHUB_ENV"
+        else
+          echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
+        fi
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+
+    - uses: actions/checkout@v4
+    - name: Install pip packages
+      working-directory: docs
+      run: |
+        pip install pip --upgrade
+        pip install pyyaml $(head -n 1 requirements.txt)
+
+    - name: Generate backstage YAML files
+      run: >-
+        python3 .github/scripts/gen_backstage_yaml.py $tag
+        --org ${{ github.repository_owner }}
+        --repo ${{ github.event.repository.name }}
+
+    - name: Store the generated artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: backstage_yaml
+        path: .backstage_yaml/${{ env.tag }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag' || github.ref == 'refs/heads/main'
+    needs: [generate]
+    permissions:
+      contents: write
+
+    steps:
+    - name: Get tag
+      run: |
+        if [ ${{ github.ref == 'refs/heads/main' }} == true ] ; then
+          echo "tag=main" >> "$GITHUB_ENV"
+        else
+          echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
+        fi
+
+    - run: |
+        git config --global user.name "${{ github.event.head_commit.committer.name }}"
+        git config --global user.email "${{ github.event.head_commit.committer.email }}"
+
+    - uses: actions/checkout@v4
+
+    - name: Store gen_backstage_yaml.py
+      run: |
+        cp .github/scripts/gen_backstage_yaml.py /tmp/gen_backstage_yaml.py
+
+    - name: Create backstage_yaml branch
+      run: >
+        git ls-remote --exit-code --heads origin refs/heads/backstage_yaml ||
+        (
+          git reset --hard ;
+          git clean -fdx ;
+          git checkout --orphan backstage_yaml ;
+          git reset --hard;
+          git commit -m "empty" --allow-empty ;
+          git push origin backstage_yaml:backstage_yaml
+        )
+
+    - uses: actions/checkout@v4
+      with:
+        ref: 'backstage_yaml'
+
+    - name: Reset backstage_yaml solution
+      run: |
+        git rm *.yaml --quiet || true
+        git rm yaml/*.yaml --quiet || true
+
+    - uses: actions/download-artifact@v4
+      with:
+        name: backstage_yaml
+        path: .backstage_yaml
+
+    - name: Append YAML files
+      run: |
+        mkdir -p $tag
+        cp .backstage_yaml/*.yaml $tag
+        rm -r .backstage_yaml
+
+    - name: Resolve YAML
+      run: >-
+        python3 /tmp/gen_backstage_yaml.py
+        --org ${{ github.repository_owner }}
+        --repo ${{ github.event.repository.name }}
+        --resolve ;
+        rm /tmp/gen_backstage_yaml.py
+
+    - name: Amend backstage_yaml and push
+      run: |
+        author=$(git log -1 --pretty=format:'%an')
+        email=$(git log -1 --pretty=format:'%ae')
+        commit=$(git rev-parse --short HEAD)
+
+        git add . >> /dev/null
+        if [[ $(git status -s) ]]; then
+          git commit --amend -m "deploy: ${GITHUB_SHA}"
+          git push origin backstage_yaml:backstage_yaml -f
+        else
+          echo "Nothing to amend"
+        fi
