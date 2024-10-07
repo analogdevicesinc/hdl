@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -116,7 +116,7 @@ module data_mover #(
 
   assign last = eot ? last_eot : last_non_eot;
 
-  assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
+  assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s & has_sync;
   assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
   assign m_axi_data = s_axi_data;
   assign m_axi_last = last || early_tlast;
