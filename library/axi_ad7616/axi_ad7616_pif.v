@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -51,9 +51,24 @@ module axi_ad7616_pif #(
 
   // FIFO interface
 
-  output      [15:0]      adc_data,
+  output  reg [15:0]      adc_data_0 = 16'b0,
+  output  reg [15:0]      adc_data_1 = 16'b0,
+  output  reg [15:0]      adc_data_2 = 16'b0,
+  output  reg [15:0]      adc_data_3 = 16'b0,
+  output  reg [15:0]      adc_data_4 = 16'b0,
+  output  reg [15:0]      adc_data_5 = 16'b0,
+  output  reg [15:0]      adc_data_6 = 16'b0,
+  output  reg [15:0]      adc_data_7 = 16'b0,
+  output  reg [15:0]      adc_data_8 = 16'b0,
+  output  reg [15:0]      adc_data_9 = 16'b0,
+  output  reg [15:0]      adc_data_10 = 16'b0,
+  output  reg [15:0]      adc_data_11 = 16'b0,
+  output  reg [15:0]      adc_data_12 = 16'b0,
+  output  reg [15:0]      adc_data_13 = 16'b0,
+  output  reg [15:0]      adc_data_14 = 16'b0,
+  output  reg [15:0]      adc_data_15 = 16'b0,
+
   output                  adc_valid,
-  output  reg             adc_sync,
 
   // end of convertion
 
@@ -67,7 +82,7 @@ module axi_ad7616_pif #(
   input                   rd_req,
   input                   wr_req,
   input       [15:0]      wr_data,
-  output  reg [15:0]      rd_data,
+  output  reg [15:0]      rd_data = 'ha1b2,
   output  reg             rd_valid
 );
 
@@ -96,10 +111,20 @@ module axi_ad7616_pif #(
 
   reg                             rd_valid_d = 1'h0;
 
+  reg     [ 4:0]                  channel_counter = 5'h0;
+  reg     [ 4:0]                  nr_rd_burst = 5'd16;
+  reg                             wr_req_edge = 1'h0;
+  reg                             wr_req_edge_d = 1'h0;
+  reg                             rd_req_edge = 1'h0;
+  reg                             rd_req_edge_d = 1'h0;
+
   // internal wires
 
+  wire                            rd_new_data_s;
   wire                            start_transfer_s;
   wire                            rd_valid_s;
+  wire                            adc_valid_d;
+  reg                             adc_valid_s = 1'h0;
 
   // FSM state register
 
@@ -138,11 +163,89 @@ module axi_ad7616_pif #(
     end
   end
 
-  always @(negedge clk) begin
-    if (transfer_state == IDLE) begin
+  always @(posedge clk) begin
       wr_req_d <= wr_req;
+      wr_req_edge <= (wr_req && !wr_req_d);
       rd_req_d <= rd_req;
+      rd_req_edge <= (rd_req && !rd_req_d);
+    if (transfer_state == IDLE) begin
       rd_conv_d <= end_of_conv;
+    end
+  end
+
+  //delay with 1 clk
+
+  always @(posedge clk) begin
+    wr_req_edge_d <= wr_req_edge;
+    rd_req_edge_d <= rd_req_edge;
+  end
+
+  //channel_counter
+
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      channel_counter <= 5'h0;
+    end else begin
+      if (rd_new_data_s == 1'b1 && rd_conv_d == 1'b1) begin
+        channel_counter <= channel_counter + 1;
+      end else if (channel_counter == nr_rd_burst) begin
+        channel_counter <= 5'h0;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
+    if (rd_conv_d == 1'b1 && rd_new_data_s == 1'b1) begin
+      case (channel_counter)
+        5'd0 : begin
+          adc_data_0 <= rd_data;
+        end
+        5'd1 : begin
+          adc_data_1 <= rd_data;
+        end
+        5'd2 : begin
+          adc_data_2 <= rd_data;
+        end
+        5'd3 : begin
+          adc_data_3 <= rd_data;
+        end
+        5'd4 : begin
+          adc_data_4 <= rd_data;
+        end
+        5'd5 : begin
+          adc_data_5 <= rd_data;
+        end
+        5'd6 : begin
+          adc_data_6 <= rd_data;
+        end
+        5'd7 : begin
+          adc_data_7 <= rd_data;
+        end
+        5'd8 : begin
+          adc_data_8 <= rd_data;
+        end
+        5'd9 : begin
+          adc_data_9 <= rd_data;
+        end
+        5'd10 : begin
+          adc_data_10 <= rd_data;
+        end
+        5'd11 : begin
+          adc_data_11 <= rd_data;
+        end
+        5'd12 : begin
+          adc_data_12 <= rd_data;
+        end
+        5'd13 : begin
+          adc_data_13 <= rd_data;
+        end
+        5'd14 : begin
+          adc_data_14 <= rd_data;
+        end
+        5'd15 : begin
+          adc_data_15 <= rd_data;
+        end
+      endcase
     end
   end
 
@@ -161,7 +264,7 @@ module axi_ad7616_pif #(
       end
       CNTRL0_HIGH : begin
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_HIGH :
-                               ((wr_req_d == 1'b1) || (rd_req_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
+                               ((wr_req_edge_d == 1'b1) || (rd_req_edge_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
       end
       CNTRL1_LOW : begin
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
@@ -170,7 +273,7 @@ module axi_ad7616_pif #(
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
       end
       CS_HIGH : begin
-        transfer_state_next <= (burst_length == burst_counter) ? IDLE : CNTRL0_LOW;
+        transfer_state_next <= (burst_length == burst_counter || channel_counter == nr_rd_burst) ? IDLE : CNTRL0_LOW;
       end
       default : begin
         transfer_state_next <= IDLE;
@@ -181,11 +284,13 @@ module axi_ad7616_pif #(
   // data valid for the register access and m_axis interface
 
   assign rd_valid_s = (((transfer_state == CNTRL0_HIGH) || (transfer_state == CNTRL1_HIGH)) &&
-                       ((rd_req_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
+                       ((rd_req_edge_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
 
   // FSM output logic
 
   assign db_o = wr_data;
+
+  assign rd_new_data_s = rd_valid_s & ~rd_valid_d;
 
   always @(posedge clk) begin
     rd_data <= (rd_valid_s & ~rd_valid_d) ? db_i : rd_data;
@@ -193,23 +298,19 @@ module axi_ad7616_pif #(
     rd_valid <= rd_valid_s & ~rd_valid_d;
   end
 
-  assign adc_valid = rd_valid;
-  assign adc_data = rd_data;
+  assign adc_valid_d = (channel_counter == 5'd16) ? rd_valid : 1'b0;
 
-  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
-  assign db_t = ~wr_req_d;
-  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
-                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
-  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
-
-  // sync will be asserted at the first valid data right after the convertion start
+  //delay with 1 clk
 
   always @(posedge clk) begin
-    if (end_of_conv == 1'b1) begin
-      adc_sync <= 1'b1;
-    end else if (rd_valid == 1'b1) begin
-      adc_sync <= 1'b0;
-    end
+    adc_valid_s <= adc_valid_d;
   end
+
+  assign adc_valid = adc_valid_s;
+  assign cs_n = (transfer_state == IDLE) || (rd_n == 1'b1) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_edge_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_edge_d == 1'b1)) ||
+                  (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_edge_d == 1'b1)) ? 1'b0 : 1'b1;
 
 endmodule
