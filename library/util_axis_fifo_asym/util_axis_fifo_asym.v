@@ -152,7 +152,7 @@ module util_axis_fifo_asym #(
 
       for (i=0; i<RATIO; i=i+1) begin
         assign s_axis_valid_int_s[i] = s_axis_valid & s_axis_ready;
-                
+
         if (TKEEP_EN) begin
 
           assign s_axis_tlast_int_s[i] = (i==RATIO-1) ? ((|s_axis_tkeep[M_DATA_WIDTH/8*i+:M_DATA_WIDTH/8]) ? s_axis_tlast : 1'b0) :
