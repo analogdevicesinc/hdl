@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,9 +37,9 @@
 
 module axi_ltc2387_channel #(
 
-  parameter ADC_RES = 16,
-  parameter OUT_RES = 16,
-  parameter TWOLANES = 1,
+  parameter ADC_RES = 18, // 18-bit or 16-bit resolution
+  parameter OUT_RES = 32, // 32-bit for ADC_RES=18 or 16-bit for ADC_RES=16
+  parameter TWOLANES = 1, // 0 for one lane, 1 for two lanes
   parameter USERPORTS_DISABLE = 0,
   parameter DATAFORMAT_DISABLE = 0
 ) (
