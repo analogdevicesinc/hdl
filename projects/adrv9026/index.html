@@ -115,7 +115,10 @@
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#zcu102">ZCU102</a></li>
+<li><a class="reference internal" href="#vcu118">VCU118</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#microblaze">Microblaze</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
@@ -375,6 +378,10 @@ in/multiple out (MIMO) base stations.</p>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
 <td><p>FMCP1</p></td>
 </tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
+<td><p>FMCP</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -455,40 +462,49 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
 <th class="head"><p>ZynqMP</p></th>
 <th class="head"><p>Versal</p></th>
+<th class="head"><p>Microblaze</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
 <td><p>0x84A90000</p></td>
 <td><p>0xA4A90000</p></td>
+<td><p>0x44A90000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
 <td><p>0x84AA0000</p></td>
 <td><p>0xA4AA0000</p></td>
+<td><p>0x44AA0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
 <td><p>0x9c420000</p></td>
 <td><p>0xBC420000</p></td>
+<td><p>0x7c420000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
 <td><p>0x9c400000</p></td>
 <td><p>0xBC400000</p></td>
+<td><p>0x7c400000</p></td>
 </tr>
 <tr class="row-even"><td><p>tx_adrv9026_tpl_core</p></td>
 <td><p>0x84A04000</p></td>
 <td><p>0xA4A04000</p></td>
+<td><p>0x44A04000</p></td>
 </tr>
 <tr class="row-odd"><td><p>rx_adrv9026_tpl_core</p></td>
 <td><p>0x84A00000</p></td>
 <td><p>0xA4A00000</p></td>
+<td><p>0x44A00000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_tx_xcvr</p></td>
 <td><p>0x84A80000</p></td>
 <td><p>0xA4A80000</p></td>
+<td><p>0x44A80000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_xcvr</p></td>
 <td><p>0x84A60000</p></td>
 <td><p>0xA4A60000</p></td>
+<td><p>0x44A60000</p></td>
 </tr>
 </tbody>
 </table>
@@ -528,6 +544,9 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="zcu102">
+<h3>ZCU102<a class="headerlink" href="#zcu102" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -648,6 +667,128 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </table>
 </div>
 </section>
+<section id="vcu118">
+<h3>VCU118<a class="headerlink" href="#vcu118" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.2%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 18.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Microblaze</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>ad9528_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>62</p></td>
+<td><p>62</p></td>
+</tr>
+<tr class="row-even"><td><p>ad9528_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>61</p></td>
+<td><p>61</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_tx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>60</p></td>
+<td><p>60</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_tx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>59</p></td>
+<td><p>59</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_tx3_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>58</p></td>
+<td><p>58</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_tx4_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>57</p></td>
+<td><p>57</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_rx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>56</p></td>
+<td><p>56</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_rx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>55</p></td>
+<td><p>55</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_rx3_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>54</p></td>
+<td><p>54</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_rx4_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>53</p></td>
+<td><p>53</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_test</p></td>
+<td><p>INOUT</p></td>
+<td><p>52</p></td>
+<td><p>52</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>51</p></td>
+<td><p>51</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_gpint1</p></td>
+<td><p>INOUT</p></td>
+<td><p>50</p></td>
+<td><p>50</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_gpint2</p></td>
+<td><p>INOUT</p></td>
+<td><p>49</p></td>
+<td><p>49</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_a</p></td>
+<td><p>INOUT</p></td>
+<td><p>48</p></td>
+<td><p>48</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>47</p></td>
+<td><p>47</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_c</p></td>
+<td><p>INOUT</p></td>
+<td><p>46</p></td>
+<td><p>46</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_d</p></td>
+<td><p>INOUT</p></td>
+<td><p>45</p></td>
+<td><p>45</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_gpio[0:18]</p></td>
+<td><p>INOUT</p></td>
+<td><p>44:26</p></td>
+<td><p>44:26</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
@@ -685,6 +826,37 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </table>
 </div>
 </section>
+<section id="microblaze">
+<h3>Microblaze<a class="headerlink" href="#microblaze" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Microblaze</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
+<td><p>15</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
+<td><p>14</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
+<td><p>13</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
+<td><p>12</p></td>
+<td><p>12</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
@@ -708,65 +880,45 @@ location and run the make command by typing in your command prompt:</p>
 <p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="51fc36fe38629f6e7326e0c376f072a905002417" name="51fc36fe38629f6e7326e0c376f072a905002417" type="checkbox"></input><label for="51fc36fe38629f6e7326e0c376f072a905002417"><p>Default values of the make parameters for ADRV9026</p>
+<input class="collapsible_input" id="2363f3f0ff799727e1ad52cb932e4726a590850c" name="2363f3f0ff799727e1ad52cb932e4726a590850c" type="checkbox"></input><label for="2363f3f0ff799727e1ad52cb932e4726a590850c"><p>Default values of the make parameters for ADRV9026</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Parameter</p></th>
-<th class="head" colspan="3"><p>Default value of the parameters depending on carrier</p></th>
+<th class="head" colspan="2"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
-<th class="head"><p>A10SoC</p></th>
-<th class="head"><p>ZCU102</p></th>
-<th class="head"><p>VCK190</p></th>
+<th class="head" colspan="2"><p>ZCU102/A10SoC/VCK190/VCU118</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-odd"><td><p>JESD_MODE</p></td>
-<td><p>8B10B</p></td>
-<td><p>8B10B</p></td>
-<td><p>8B10B</p></td>
+<td colspan="2"><p>8B10B</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_LANE_RATE</p></td>
-<td><p>10</p></td>
-<td><p>10</p></td>
-<td><p>10</p></td>
+<td colspan="2"><p>10</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
-<td><p>10</p></td>
-<td><p>10</p></td>
-<td><p>10</p></td>
+<td colspan="2"><p>10</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_M</p></td>
-<td><p>8</p></td>
-<td><p>8</p></td>
-<td><p>8</p></td>
+<td colspan="2"><p>8</p></td>
 </tr>
 <tr class="row-odd"><td><p>RX_JESD_L</p></td>
-<td><p>4</p></td>
-<td><p>4</p></td>
-<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
 </tr>
 <tr class="row-even"><td><p>RX_JESD_S</p></td>
-<td><p>1</p></td>
-<td><p>1</p></td>
-<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_M</p></td>
-<td><p>8</p></td>
-<td><p>8</p></td>
-<td><p>8</p></td>
+<td colspan="2"><p>8</p></td>
 </tr>
 <tr class="row-even"><td><p>TX_JESD_L</p></td>
-<td><p>4</p></td>
-<td><p>4</p></td>
-<td><p>4</p></td>
+<td colspan="2"><p>4</p></td>
 </tr>
 <tr class="row-odd"><td><p>TX_JESD_S</p></td>
-<td><p>1</p></td>
-<td><p>1</p></td>
-<td><p>1</p></td>
+<td colspan="2"><p>1</p></td>
 </tr>
 </tbody>
 </table>

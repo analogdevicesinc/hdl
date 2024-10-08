@@ -779,7 +779,7 @@ can all be active at the same time.</p>
 <p>The external synchronization capability allows the alignment of frames between
 multiple devices in different locations, for example using a GPSDO 1 PPS output.
 The internal sync signal is generated based on a dedicated counter, when its
-value matches the one defined in <code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_LOW</span></code> / <code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_HIGH</span></code>.
+value matches the one defined in <code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_LOW</span></code> / <code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_HIGH</span></code>.
 The software generated sync pulse is triggered at an arbitrary point in time
 when writing a ‘1’ value in <code class="docutils literal notranslate"><span class="pre">SYNC_SOFT</span></code>.</p>
 <p>The next diagram shows the peripheral’s FSM, which transitions between 4 states:
@@ -800,8 +800,8 @@ always be associated with CH0 and the MSB with CH31.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">STARTUP_DELAY</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FRAME_LENGTH</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CHANNEL_POLARITY</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_LOW</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_HIGH</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_LOW</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_HIGH</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CHX_ON</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">CHX_OFF</span></code></p></li>
 </ul>
@@ -846,7 +846,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td class="description bold"><section>
-<p>Version of the peripheral. Follows semantic versioning. Current version 2.00.61.</p>
+<p>Version of the peripheral. Follows semantic versioning. Current version 2.00.62.</p>
 </section>
 </td>
 </tr>
@@ -868,7 +868,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x61</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x62</span></code></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1132,7 +1132,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>The initial delay value before the beginning of the first frame; defined in clock cycles.</p>
+<p>The initial delay value before the beginning of the first frame; defined in clock cycles-1.</p>
 </section>
 </td>
 </tr>
@@ -1150,13 +1150,13 @@ is highly flexible and can substantially reduce resource utilization.</p>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>The length of the transmission frame; defined in clock cycles.</p>
+<p>The length of the transmission frame; defined in clock cycles-1.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x16</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x58</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_LOW</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_LOW</span></code></td>
 <td class="description bold"><section>
 <p>TDD Sync counter</p>
 </section>
@@ -1164,17 +1164,17 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_LOW</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_LOW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>The LSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;0.</p>
+<p>The LSB slice of the internal sync pulse period defined in clock cycles-1. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;0.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x17</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5c</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_HIGH</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_HIGH</span></code></td>
 <td class="description bold"><section>
 <p>TDD Sync counter</p>
 </section>
@@ -1182,11 +1182,11 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SYNC_COUNTER_HIGH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC_PERIOD_HIGH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>The MSB slice of the offset (from sync counter equal zero) when an internal sync pulse is generated. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;32.</p>
+<p>The MSB slice of the internal sync pulse period defined in clock cycles-1. This register is implemented if <code class="docutils literal notranslate"><span class="pre">SYNC_COUNT_WIDTH</span></code>&gt;32.</p>
 </section>
 </td>
 </tr>
