@@ -40,6 +40,7 @@ Contents
    AD7768-EVB <ad7768evb/index>
    AD777X-ARDZ <ad777x_ardz/index>
    AD9081/AD9082/AD9986/AD9988 <ad9081_fmca_ebz/index>
+   AD9081-FMCA-EBZ-X-BAND <ad9081_fmca_ebz_x_band/index>
    AD9265-FMC <ad9265_fmc/index>
    AD9213-EVB <ad9213_evb/index>
    AD9434-FMC <ad9434_fmc/index>
