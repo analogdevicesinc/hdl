@@ -178,9 +178,6 @@ set adc_dma_s_axis_clk_pin [get_bd_pins axi_mxfe_rx_dma/s_axis_aclk]
 set adc_do_m_axis_rst_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins $adc_data_offload_name/m_axis_aresetn]]]
 set adc_do_m_axis_rst_pin [get_bd_pins $adc_data_offload_name/m_axis_aresetn]
 
-set adc_dma_m_dest_rst_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_mxfe_rx_dma/m_dest_axi_aresetn]]]
-set adc_dma_m_dest_rst_pin [get_bd_pins axi_mxfe_rx_dma/m_dest_axi_aresetn]
-
 set hp1_fdp_aclk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins sys_ps8/saxihp1_fpd_aclk]]]
 set hp1_fdp_aclk_pin [get_bd_pins sys_ps8/saxihp1_fpd_aclk]
 
@@ -192,7 +189,6 @@ ad_disconnect $tdd_sync_in_net               $tdd_sync_in_pin
 ad_disconnect $adc_do_m_axis_clk_net         $adc_do_m_axis_clk_pin
 ad_disconnect $adc_dma_s_axis_clk_net        $adc_dma_s_axis_clk_pin
 ad_disconnect $adc_do_m_axis_rst_net         $adc_do_m_axis_rst_pin
-ad_disconnect $adc_dma_m_dest_rst_net        $adc_dma_m_dest_rst_pin
 ad_disconnect $axi_hp1_interconnect_aclk_net $axi_hp1_interconnect_aclk_pin
 
 ad_ip_parameter axi_hp1_interconnect CONFIG.NUM_CLKS 1
@@ -203,7 +199,6 @@ ad_connect  $sys_dma_clk   sys_ps8/saxihp1_fpd_aclk
 ad_connect  $sys_dma_clk   axi_hp1_interconnect/aclk
 
 ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/m_axis_aresetn
-ad_connect  rx_device_clk_rstgen/peripheral_aresetn axi_mxfe_rx_dma/m_dest_axi_aresetn
 
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
