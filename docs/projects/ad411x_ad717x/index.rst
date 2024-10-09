@@ -155,6 +155,10 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - DE10-Nano
+   * - spi_miso
+     - INPUT
+     - 34
+     - 2
    * - error
      - INPUT
      - 33
@@ -259,6 +263,9 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom <library/sysid_rom>`
      - :ref:`here <axi_sysid>`
+   * - UTIL_SIGMA_DELTA_SPI
+     - :git-hdl:`library/util_sigma_delta_spi <library/util_sigma_delta_spi>`
+     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/util_sigma_delta_spi>`
 
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
