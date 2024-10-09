@@ -95,7 +95,12 @@ module spi_engine_offload #(
   localparam SDO_SOURCE_MEM    = 1'b0;
 
   reg spi_active = 1'b0;
-  reg sdo_source_select = SDO_SOURCE_MEM;
+  reg sdo_source_select;
+  reg sdo_mem_valid;
+  reg [7:0] sdo_data_counter;
+  reg [7:0] sdo_transfer_size;
+  reg got_transfer;
+  reg wait_for_transfer;
 
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
@@ -112,9 +117,14 @@ module spi_engine_offload #(
   wire spi_enable;
   wire trigger_posedge;
 
+  wire sdo_data_last;
+  wire sdo_transfer;
+
+  assign sdo_transfer = cmd_valid && cmd_ready && (cmd[15:10] == 0 && cmd[8] == 1'b1);
+  assign sdo_data_last = (sdo_data_counter == sdo_transfer_size) && got_transfer;
   assign cmd_valid = spi_active;
   assign sdo_data_valid = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                           s_axis_sdo_valid : spi_active;
+                           s_axis_sdo_valid : spi_active && sdo_mem_valid;
   assign s_axis_sdo_ready = (sdo_source_select == SDO_SOURCE_STREAM) ?
                              sdo_data_ready : 1'b0;
   assign offload_sdi_valid = sdi_data_valid;
@@ -278,7 +288,7 @@ module spi_engine_offload #(
       if (!spi_active) begin
         // start offload when we have a valid trigger, offload is enabled and
         // the DMA is enabled
-        if (trigger_posedge && spi_enable && (offload_sdi_ready || (SDO_STREAMING && s_axis_sdo_valid)))
+        if (trigger_posedge && spi_enable)
           spi_active <= 1'b1;
       end else if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
         spi_active <= 1'b0;
@@ -286,21 +296,58 @@ module spi_engine_offload #(
     end
   end
 
-  always @(posedge spi_clk ) begin
+  always @(posedge spi_clk) begin
+    if (!spi_resetn || (trigger_posedge && spi_enable && !spi_active)) begin
+      sdo_data_counter <= 0;
+      sdo_transfer_size <= 0;
+      got_transfer <= 1'b0;
+    end else begin
+      // execution module guarantees to only accept new transfer after a previous one is completed
+      // (no transfer cmd pipelining allowed)
+      if (sdo_transfer) begin
+        got_transfer <= 1'b1;
+        sdo_transfer_size <= cmd[7:0];
+      end
+      if (sdo_data_valid && sdo_data_ready) begin
+        sdo_data_counter <= sdo_data_counter+1;
+      end
+      if (got_transfer && sdo_data_ready && sdo_data_valid && sdo_data_last) begin
+        sdo_data_counter <= 0;
+      end
+    end
+  end
+
+  always @(posedge spi_clk) begin // TODO: all of this is written a bit confusingly :/
     if (!spi_resetn) begin
       sdo_source_select <= SDO_SOURCE_MEM;
+      wait_for_transfer <= 1'b0;
     end else begin
       if (SDO_STREAMING) begin
         if (sdo_source_select == SDO_SOURCE_MEM) begin
-          // switch to streaming sdo after we're done with reading the sdo memory
-          if (sdo_data_valid && sdo_data_ready && (spi_sdo_rd_addr+1 == ctrl_sdo_wr_addr)|| (ctrl_sdo_wr_addr==0 && spi_active) ) begin
+          // switch to streaming sdo after we're done with reading the sdo memory, if there's still data to be transfered
+          if (sdo_data_valid && sdo_data_ready && ((spi_sdo_rd_addr+1 == ctrl_sdo_wr_addr) || (ctrl_sdo_wr_addr == 0))) begin
+            if (got_transfer || sdo_transfer) begin
+              sdo_source_select <= SDO_SOURCE_STREAM;
+            end else begin
+              wait_for_transfer <= 1'b1;
+            end
+          end
+          // switch to streaming sdo if we are waiting for an sdo transfer instruction and we get one
+          if (sdo_transfer && wait_for_transfer) begin
             sdo_source_select <= SDO_SOURCE_STREAM;
+            wait_for_transfer <= 1'b0;
           end
         end else begin
-          // switch back to sdo memory after last command accepted
-          if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
+          // switch back to sdo memory after last data accepted or if new trigger
+          if ((sdo_data_ready && sdo_data_valid && sdo_data_last) || (trigger_posedge && spi_enable && !spi_active)) begin
             sdo_source_select <= SDO_SOURCE_MEM;
+            // in case we get another transfer instruction before the next trigger
+            wait_for_transfer <= 1'b1;
           end
+        end
+        // if we get a new trigger, clear wait_for_transfer so we don't switch to streaming too soon
+        if (trigger_posedge) begin
+          wait_for_transfer <= 1'b0;
         end
       end
     end
@@ -315,10 +362,22 @@ module spi_engine_offload #(
   end
 
   always @(posedge spi_clk) begin
-    if (!spi_active) begin
+    if (!spi_active && trigger_posedge && spi_enable) begin
       spi_sdo_rd_addr <= 'h00;
     end else if (sdo_data_ready && (sdo_source_select == SDO_SOURCE_MEM)) begin
       spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+    end
+  end
+
+  always @(posedge spi_clk ) begin
+    if (!spi_resetn) begin
+      sdo_mem_valid <= 1'b0;
+    end else begin
+      if (!spi_active && trigger_posedge && spi_enable) begin
+        sdo_mem_valid <= (ctrl_sdo_wr_addr != 'h00); // if ctrl_sdo_wr_addr is 0, mem is empty
+      end else if (sdo_data_ready && spi_active && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
+        sdo_mem_valid <= 1'b0;
+      end
     end
   end
 
