@@ -12,5 +12,7 @@ INTEL_DEPS += jesd204_phy_hw.tcl
 
 INTEL_LIB_DEPS += jesd204/jesd204_soft_pcs_rx
 INTEL_LIB_DEPS += jesd204/jesd204_soft_pcs_tx
+INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_rx
+INTEL_LIB_DEPS += intel/jesd204c/jesd204_f_tile_adapter_tx
 
 include ../../scripts/library.mk

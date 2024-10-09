@@ -20,8 +20,14 @@ source ../../scripts/adi_project_intel.tcl
 
 # Parameter description:
 #
-#   RX_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
-#   TX_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
+#   JESD_MODE : Used link layer encoder mode
+#      64B66B - 64b66b link layer defined in JESD 204C, uses Intel IP with a custom gearbox as Physical layer
+#      8B10B  - 8b10b link layer defined in JESD 204B, uses Intel IP as Physical layer
+#
+#   RX_LANE_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
+#   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
+#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode (LANE_RATE/66) or 8B10B mode (LANE_RATE/40)
+#   DEVICE_CLK_RATE: Frequency of the device clock in MHz, usually equal to REF_CLK_RATE
 #   [RX/TX]_JESD_M : Number of converters per link
 #   [RX/TX]_JESD_L : Number of lanes per link
 #   [RX/TX]_JESD_S : Number of samples per frame
@@ -31,22 +37,23 @@ source ../../scripts/adi_project_intel.tcl
 #
 
 adi_project ad9081_fmca_ebz_fm87 [list \
-  RX_LANE_RATE       [get_env_param RX_LANE_RATE      15 ] \
-  TX_LANE_RATE       [get_env_param TX_LANE_RATE      15 ] \
-  REF_CLK_RATE       [get_env_param REF_CLK_RATE     375 ] \
-  DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  375 ] \
-  RX_JESD_M          [get_env_param RX_JESD_M          8 ] \
-  RX_JESD_L          [get_env_param RX_JESD_L          8 ] \
-  RX_JESD_S          [get_env_param RX_JESD_S          1 ] \
-  RX_JESD_NP         [get_env_param RX_JESD_NP        16 ] \
-  RX_NUM_LINKS       [get_env_param RX_NUM_LINKS       1 ] \
-  TX_JESD_M          [get_env_param TX_JESD_M          8 ] \
-  TX_JESD_L          [get_env_param TX_JESD_L          8 ] \
-  TX_JESD_S          [get_env_param TX_JESD_S          1 ] \
-  TX_JESD_NP         [get_env_param TX_JESD_NP        16 ] \
-  TX_NUM_LINKS       [get_env_param TX_NUM_LINKS       1 ] \
-  RX_KS_PER_CHANNEL  [get_env_param RX_KS_PER_CHANNEL 32 ] \
-  TX_KS_PER_CHANNEL  [get_env_param TX_KS_PER_CHANNEL 32 ] \
+  JESD_MODE         [get_env_param JESD_MODE      64B66B ] \
+  RX_LANE_RATE      [get_env_param RX_LANE_RATE    24.75 ] \
+  TX_LANE_RATE      [get_env_param TX_LANE_RATE    24.75 ] \
+  REF_CLK_RATE      [get_env_param REF_CLK_RATE      375 ] \
+  DEVICE_CLK_RATE   [get_env_param DEVICE_CLK_RATE   375 ] \
+  RX_JESD_M         [get_env_param RX_JESD_M           8 ] \
+  RX_JESD_L         [get_env_param RX_JESD_L           8 ] \
+  RX_JESD_S         [get_env_param RX_JESD_S           1 ] \
+  RX_JESD_NP        [get_env_param RX_JESD_NP         16 ] \
+  RX_NUM_LINKS      [get_env_param RX_NUM_LINKS        1 ] \
+  TX_JESD_M         [get_env_param TX_JESD_M           8 ] \
+  TX_JESD_L         [get_env_param TX_JESD_L           8 ] \
+  TX_JESD_S         [get_env_param TX_JESD_S           1 ] \
+  TX_JESD_NP        [get_env_param TX_JESD_NP         16 ] \
+  TX_NUM_LINKS      [get_env_param TX_NUM_LINKS        1 ] \
+  RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL  16 ] \
+  TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL  16 ] \
 ]
 
 source $ad_hdl_dir/projects/common/fm87/fm87_system_assign.tcl
@@ -164,22 +171,53 @@ set_location_assignment PIN_E54    -to "sysref2"             ; ## H04  CLK0_M2C_
 set_location_assignment PIN_J54    -to "txen[0]"             ; ## D14  LA09_P
 set_location_assignment PIN_K55    -to "txen[1]"             ; ## D15  LA09_N
 
-set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data[*]
-set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data[*]
-set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data_n[*]
-set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[*]
+set common_lanes [get_env_param RX_JESD_L 4]
+if {$common_lanes > [get_env_param TX_JESD_L 4]} {
+  set common_lanes [get_env_param TX_JESD_L 4]
+}
 
-set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35" -to tx_data[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35" -to tx_data_n[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5" -to tx_data[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5" -to tx_data_n[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0" -to tx_data[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0" -to tx_data_n[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data[*]
-set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data_n[*]
+# Merge RX and TX into single transceiver
+for {set i 0} {$i < $common_lanes} {incr i} {
+  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to rx_data[${i}]
+  set_instance_assignment -name XCVR_RECONFIG_GROUP xcvr_${i} -to tx_data[${i}]
+}
 
-set_instance_assignment -name HSSI_PARAMETER "rx_ac_couple_enable=ENABLE" -to rx_data[*]
-set_instance_assignment -name HSSI_PARAMETER "rx_onchip_termination=RX_ONCHIP_TERMINATION_R_2" -to rx_data[*]
+# Apply default main-tap and pre-tap values
+set tx_num_lanes [get_env_param TX_JESD_L 8]
+for {set j 0} {$j < $tx_num_lanes} {incr j} {
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data[$j]
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to tx_data_n[$j]
+
+  set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35"  -to tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5"  -to tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0"  -to tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_main_tap=35"  -to tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_1=5"  -to tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_pre_tap_2=0"  -to tx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "txeq_post_tap_1=0" -to tx_data_n[$j]
+}
+
+# Enable AC coupling, set termination to 100 ohms and enable VSR mode at high lane rates
+set rx_num_lanes [get_env_param RX_JESD_L 8]
+set lane_rate [expr [get_env_param RX_LANE_RATE 24.75] * 1000]
+for {set j 0} {$j < 8} {incr j} {
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data[$j]
+  set_instance_assignment -name IO_STANDARD "HSSI DIFFERENTIAL I/O" -to rx_data_n[$j]
+
+  set_instance_assignment -name HSSI_PARAMETER "rx_ac_couple_enable=ENABLE"                      -to rx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_onchip_termination=RX_ONCHIP_TERMINATION_R_2" -to rx_data[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_ac_couple_enable=ENABLE"                      -to rx_data_n[$j]
+  set_instance_assignment -name HSSI_PARAMETER "rx_onchip_termination=RX_ONCHIP_TERMINATION_R_2" -to rx_data_n[$j]
+
+  if {$lane_rate > 23000} {
+    set_instance_assignment -name HSSI_PARAMETER "vsr_mode=VSR_MODE_LOW_LOSS" -to rx_data[$j]
+    set_instance_assignment -name HSSI_PARAMETER "vsr_mode=VSR_MODE_LOW_LOSS" -to rx_data_n[$j]
+  } else {
+    set_instance_assignment -name HSSI_PARAMETER "vsr_mode=VSR_MODE_DISABLE" -to rx_data[$j]
+    set_instance_assignment -name HSSI_PARAMETER "vsr_mode=VSR_MODE_DISABLE" -to rx_data_n[$j]
+  }
+}
 
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to agc0[1]
@@ -218,6 +256,6 @@ set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[0]
 set_instance_assignment -name IO_STANDARD "1.2 V" -to txen[1]
 
 # set optimization to get a better timing closure
-set_global_assignment -name OPTIMIZATION_MODE "HIGH PERFORMANCE EFFORT"
+set_global_assignment -name OPTIMIZATION_MODE "Superior Performance"
 
 execute_flow -compile
