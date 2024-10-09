@@ -131,7 +131,7 @@ module system_top #(
 
   // spi_en is active ...
   //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
-  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ, AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
@@ -253,7 +253,7 @@ module system_top #(
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref));
+    .tx_sysref_0 (tx_sysref_loc));
 
   // AD9161/2/4-FMC-EBZ works only in single link,
   // The FMC connector instead of SYNC1 has SYSREF connected to it
