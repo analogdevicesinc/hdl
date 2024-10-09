@@ -146,7 +146,7 @@ base address to the registers relative address.
    * - 0x0000
      - 0x0800
      - IO_DELAY_CNTRL
-     - See the `I/O Delay Control <#hdl-regmap-DELAY_CNTRL>`__ table for more details.
+     - See the `I/O Delay Control <#hdl-regmap-IO_DELAY_CNTRL>`__ table for more details.
 
 .. hdl-regmap::
    :name: COMMON
