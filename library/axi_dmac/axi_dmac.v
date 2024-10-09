@@ -735,37 +735,37 @@ module axi_dmac #(
   assign m_axis_dest = 'h0;
   assign m_axis_user = 'h0;
 
-  if (DMA_SG_TRANSFER == 1 && SG_DELAYED_INPUT == 1) begin
+  generate if ((DMA_SG_TRANSFER == 1) && (SG_DELAYED_INPUT == 1)) begin
 
-    sync_bits #(
-      .NUM_OF_BITS (1),
-      .ASYNC_CLK (1)
-    ) i_dest_sync_id (
-      .in_bits (irq),
-      .out_clk (s_axis_aclk),
-      .out_resetn (1'b1),
-      .out_bits (irq_cdc));
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) sync_bits_irq (
+    .in_bits (irq),
+    .out_clk (s_axis_aclk),
+    .out_resetn (1'b1),
+    .out_bits (irq_cdc));
 
-    always @(posedge s_axis_aclk) begin
-      irq_d <= irq_cdc;
-    end
+  always @(posedge s_axis_aclk) begin
+    irq_d <= irq_cdc;
+  end
 
-    always @(posedge s_axis_aclk) begin
-      if (s_axis_last && s_axis_valid && s_axis_ready)
-        packet_received <= 1'b1;
-      else
-        if (!irq_cdc && irq_d)
-          packet_received <= 1'b0;
-    end
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_last && s_axis_valid && s_axis_ready)
+      packet_received <= 1'b1;
+    else
+      if (!irq_cdc && irq_d)
+        packet_received <= 1'b0;
+  end
 
-    assign s_axis_ready = (packet_received) ? 1'b0 : s_axis_ready_t;
-    assign s_axis_valid_t = (packet_received) ? 1'b0 : s_axis_valid;
+  assign s_axis_ready = (packet_received) ? 1'b0 : s_axis_ready_t;
+  assign s_axis_valid_t = (packet_received) ? 1'b0 : s_axis_valid;
 
   end else begin
 
-    assign s_axis_ready = s_axis_ready_t;
-    assign s_axis_valid_t = s_axis_valid;
+  assign s_axis_ready = s_axis_ready_t;
+  assign s_axis_valid_t = s_axis_valid;
 
-  end
+  end endgenerate
   
 endmodule
