@@ -11,8 +11,9 @@ set_instance_parameter_value sys_gpio_in {edgeType} {FALLING}
 set_instance_parameter_value sys_gpio_in {generateIRQ} {true}
 set_instance_parameter_value sys_gpio_in {irqType} {EDGE}
 
-set_instance_parameter_value sys_spi {clockPolarity} {0}
-set_instance_parameter_value sys_spi {targetClockRate} {20000000.0}
+set_instance_parameter_value sys_spi {targetClockRate} {5000000.0}
+set_instance_parameter_value sys_spi {clockPhase} {1}
+set_instance_parameter_value sys_spi {clockPolarity} {1}
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
