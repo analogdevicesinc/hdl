@@ -140,6 +140,8 @@ Configuration Parameters
    * - ENABLE_DIAGNOSTICS_IF
      - Add insight into internal operation of the core, for debug purposes
        only.
+   * - SG_DELAYED_INPUT
+     - Read one set of data at a time to prevent IRQ overlap for partial transfers.
 
 Interface
 --------------------------------------------------------------------------------
@@ -770,6 +772,16 @@ Scatter-Gather Datapath Width
 
 The scatter-gather dedicated interface ``m_sg_axi`` currently supports only
 64-bit transfers. ``DMA_DATA_WIDTH_SG`` can only be set to 64.
+
+Scatter-Gather Delayed Input
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If the ``SG_DELAYED_INPUT`` HDL synthesis configuration parameter is set, the
+DMA is set to accept one packet on the input interface and wait for the
+interrupt to be acknowledged. This feature was specifically created for cases
+where ``PARTIAL_REPORTING_EN`` is enabled. In these cases multiple interrupts
+are not overlapping if multiple packets arrive before the previous IRQ is
+acknowledged. This enables the user to process each interrupt request seprately.
 
 Software Support
 --------------------------------------------------------------------------------
