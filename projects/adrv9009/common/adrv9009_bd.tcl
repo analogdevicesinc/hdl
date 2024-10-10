@@ -110,13 +110,13 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
 
-set data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
 ad_data_offload_create $dac_data_offload_name \
                        1 \
-                       0 \
-                       $data_offload_size \
+                       $dac_data_offload_type \
+                       $dac_data_offload_size \
                        $dac_data_width \
-                       $dac_data_width
+                       $dac_data_width \
+                       $dac_axi_data_width
 
 ad_connect $dac_data_offload_name/sync_ext GND
 
