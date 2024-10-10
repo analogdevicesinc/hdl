@@ -767,5 +767,5 @@ module axi_dmac #(
   assign s_axis_valid_t = s_axis_valid;
 
   end endgenerate
-  
+
 endmodule
