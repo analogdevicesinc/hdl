@@ -92,7 +92,7 @@ The Software GPIO number is calculated as follows:
 
 .. list-table::
    :widths: 25 25 25 25
-   :header-rows: 2
+   :header-rows: 3
 
    * - GPIO signal
      - Direction
@@ -106,6 +106,10 @@ The Software GPIO number is calculated as follows:
      - INPUT
      - 32
      - 0
+   * - spi_miso
+     - INPUT
+     - 33
+     - 1
 
 Building the HDL project
 -------------------------------------------------------------------------------
