@@ -490,7 +490,7 @@ if {$INTF_CFG != "TX"} {
   if {$ADI_PHY_SEL == 1} {
     ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
   }
-  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+  ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
   ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
 
   # Interrupts
