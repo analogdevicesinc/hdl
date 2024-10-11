@@ -49,6 +49,7 @@ current_bd_instance /spi_adc
   ad_connect offload/spi_engine_ctrl interconnect/s0_ctrl
   ad_connect axi_regmap/spi_engine_ctrl interconnect/s1_ctrl
   ad_connect interconnect/m_ctrl execution/ctrl
+  ad_connect axi_regmap/m_interconnect_ctrl interconnect/s_interconnect_ctrl
   ad_connect offload/offload_sdi M_AXIS_SAMPLE
 
   ad_connect execution/spi m_spi

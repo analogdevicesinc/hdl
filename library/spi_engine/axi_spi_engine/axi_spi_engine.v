@@ -131,7 +131,11 @@ module axi_spi_engine #(
 
   output offload_sync_ready,
   input offload_sync_valid,
-  input [7:0] offload_sync_data
+  input [7:0] offload_sync_data,
+
+  // interconnect ctrl signals
+
+  output interconnect_dir
 );
 
   localparam PCORE_VERSION = 'h010300;
@@ -644,6 +648,15 @@ module axi_spi_engine #(
     .out_resetn (up_sw_resetn),
     .out_clk (clk),
     .out_bits (offload0_enabled_s));
+
+    sync_bits #(
+      .NUM_OF_BITS (1),
+      .ASYNC_CLK (ASYNC_SPI_CLK)
+    ) i_interconnect_dir_sync (
+      .in_bits (offload0_enabled),
+      .out_resetn (spi_resetn),
+      .out_clk (spi_clk),
+      .out_bits (interconnect_dir));
 
   sync_bits #(
     .NUM_OF_BITS (1),

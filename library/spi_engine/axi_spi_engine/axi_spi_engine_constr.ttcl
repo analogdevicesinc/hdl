@@ -27,6 +27,9 @@ set_false_path -quiet \
   -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_offload_enabled_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
 
 set_false_path -quiet \
+  -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_interconnect_dir_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
   -to [get_cells -quiet -hierarchical -filter {NAME =~ *i_offload_sdo_src_sel_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
 
 set_false_path -quiet \

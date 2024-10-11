@@ -67,6 +67,14 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 	}
 adi_add_bus_clock "s_axi_aclk" "spi_engine_offload_ctrl0:s_axi" "s_axi_aresetn"
 
+adi_add_bus "m_interconnect_ctrl" "master" \
+	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
+	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
+	{ \
+		{"interconnect_dir" "interconnect_dir"} \
+	}
+adi_add_bus_clock "spi_clk" "s_interconnect_ctrl" "resetn"
+
 foreach port {"up_clk" "up_rstn" "up_wreq" "up_waddr" "up_wdata" "up_rreq" "up_raddr"} {
   set_property DRIVER_VALUE "0" [ipx::get_ports $port]
 }
