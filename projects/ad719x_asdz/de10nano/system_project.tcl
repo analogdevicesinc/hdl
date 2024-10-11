@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,9 +13,9 @@ adi_project ad719x_asdz_de10nano
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
 #
-## down-rade Critical Warning reated to a asynchronous RAM in DMAC
+## downgrade Critical Warning related to an asynchronous RAM in DMAC
 #
-## "mixed_port_feed_through_mode" parameter of RAM can not have value "old"
+## "mixed_port_feed_through_mode" parameter of RAM cannot have value "old"
 set_global_assignment -name MESSAGE_DISABLE 15003
 
 # files

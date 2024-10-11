@@ -1,6 +1,6 @@
 # EVAL-AD719X-ASDZ HDL Project
 
-This project supports EVAL-AD7190,EVAL-AD7192, EVAL-AD7193, EVAL-AD7194 and EVAL-AD7195.
+This project supports EVAL-AD7190, EVAL-AD7192, EVAL-AD7193, EVAL-AD7194 and EVAL-AD7195.
 
 Here are some pointers to help you:
   * [EVAL-AD7190 Board Product Page](https://www.analog.com/eval-ad7190)
