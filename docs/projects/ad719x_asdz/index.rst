@@ -15,15 +15,19 @@ complete rate of output data ranges.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7190 <EVAL-AD7190>`
-- :adi:`EVAL-AD7193 <EVAL-AD7193>`
-- :adi:`EVAL-AD7195 <EVAL-AD7195>`
+- :adi:`EVAL-AD7190`
+- :adi:`EVAL-AD7192`
+- :adi:`EVAL-AD7193`
+- :adi:`EVAL-AD7194`
+- :adi:`EVAL-AD7195`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD7190`
+- :adi:`AD7192`
 - :adi:`AD7193`
+- :adi:`AD7194`
 - :adi:`AD7195`
 
 Supported carriers
@@ -39,12 +43,33 @@ Supported carriers
    * - :adi:`EVAL-AD7190 <EVAL-AD7190>`
      - Cora-Z7S_ 
      - PMOD JA
+   * -
+     - De10-Nano_ 
+     - Arduino shield
+   * - :adi:`EVAL-AD7192 <EVAL-AD7192>`
+     - Cora-Z7S_ 
+     - PMOD JA
+   * -
+     - De10-Nano_ 
+     - Arduino shield        
    * - :adi:`EVAL-AD7193 <EVAL-AD7193>`
      - Cora-Z7S_
      - PMOD JA
+   * -
+     - De10-Nano_ 
+     - Arduino shield     
+   * - :adi:`EVAL-AD7194 <EVAL-AD7194>`
+     - Cora-Z7S_ 
+     - PMOD JA
+   * -
+     - De10-Nano_ 
+     - Arduino shield    
    * - :adi:`EVAL-AD7195 <EVAL-AD7195>`
      - Cora-Z7S_
      - PMOD JA
+   * -
+     - De10-Nano_ 
+     - Arduino shield     
 
 Block design
 -------------------------------------------------------------------------------
@@ -160,3 +185,4 @@ Software related
 .. include:: ../common/support.rst
 
 .. _Cora-Z7S: https://digilent.com/reference/programmable-logic/cora-z7/start
+.. _De10-Nano: https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html
