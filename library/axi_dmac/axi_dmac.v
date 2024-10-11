@@ -421,12 +421,6 @@ module axi_dmac #(
   wire up_dma_req_sync_transfer_start;
   wire up_dma_req_last;
 
-  wire s_axis_ready_t;
-  wire s_axis_valid_t;
-  wire irq_cdc;
-  reg  irq_d = 1'b0;
-  reg  packet_received = 1'b0;
-
   assign dbg_ids0 = {
     {DBG_ID_PADDING{1'b0}}, dest_response_id,
     {DBG_ID_PADDING{1'b0}}, dest_data_id,
@@ -553,7 +547,8 @@ module axi_dmac #(
     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
     .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
     .AXI_AXCACHE(AXI_AXCACHE),
-    .AXI_AXPROT(AXI_AXPROT)
+    .AXI_AXPROT(AXI_AXPROT),
+    .SG_DELAYED_INPUT(SG_DELAYED_INPUT)
   ) i_transfer (
     .ctrl_clk(s_axi_aclk),
     .ctrl_resetn(s_axi_aresetn),
@@ -561,6 +556,8 @@ module axi_dmac #(
     .ctrl_enable(ctrl_enable),
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
+
+    .irq(irq),
 
     .req_valid(up_dma_req_valid),
     .req_ready(up_dma_req_ready),
@@ -639,8 +636,8 @@ module axi_dmac #(
     .m_sg_axi_rresp(m_sg_axi_rresp),
 
     .s_axis_aclk(s_axis_aclk),
-    .s_axis_ready(s_axis_ready_t),
-    .s_axis_valid(s_axis_valid_t),
+    .s_axis_ready(s_axis_ready),
+    .s_axis_valid(s_axis_valid),
     .s_axis_data(s_axis_data),
     .s_axis_user(s_axis_user),
     .s_axis_last(s_axis_last),
@@ -734,38 +731,5 @@ module axi_dmac #(
   assign m_axis_id = 'h0;
   assign m_axis_dest = 'h0;
   assign m_axis_user = 'h0;
-
-  generate if ((DMA_SG_TRANSFER == 1) && (SG_DELAYED_INPUT == 1)) begin
-
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK (1)
-  ) sync_bits_irq (
-    .in_bits (irq),
-    .out_clk (s_axis_aclk),
-    .out_resetn (1'b1),
-    .out_bits (irq_cdc));
-
-  always @(posedge s_axis_aclk) begin
-    irq_d <= irq_cdc;
-  end
-
-  always @(posedge s_axis_aclk) begin
-    if (s_axis_last && s_axis_valid && s_axis_ready)
-      packet_received <= 1'b1;
-    else
-      if (!irq_cdc && irq_d)
-        packet_received <= 1'b0;
-  end
-
-  assign s_axis_ready = (packet_received) ? 1'b0 : s_axis_ready_t;
-  assign s_axis_valid_t = (packet_received) ? 1'b0 : s_axis_valid;
-
-  end else begin
-
-  assign s_axis_ready = s_axis_ready_t;
-  assign s_axis_valid_t = s_axis_valid;
-
-  end endgenerate
 
 endmodule
