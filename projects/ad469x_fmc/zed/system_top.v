@@ -220,7 +220,7 @@ module system_top #(
     .ad469x_spi_sclk (ad469x_spi_sclk),
     .ad469x_spi_busy(ad469x_busy_alt_gp0),
     .ad469x_spi_cnv(ad469x_spi_cnv_s),
+    .gpio_cnv(gpio_o[34]),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
-
 endmodule

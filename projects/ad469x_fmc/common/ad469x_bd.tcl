@@ -11,6 +11,7 @@ puts "build parameter: SPI_4WIRE: $SPI_4WIRE"
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad469x_spi
 create_bd_port -dir O ad469x_spi_cnv
 create_bd_port -dir I ad469x_spi_busy
+create_bd_port -dir I gpio_cnv
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
@@ -90,9 +91,16 @@ ad_ip_instance util_vector_logic cnv_gate
 ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
 ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
 
+ad_ip_instance util_vector_logic cnv_gate_gpio
+ad_ip_parameter cnv_gate_gpio CONFIG.C_SIZE 1
+ad_ip_parameter cnv_gate_gpio CONFIG.C_OPERATION {or}
+
 ad_connect cnv_gate/Op1 axi_ad469x_dma/s_axis_xfer_req
 ad_connect cnv_gate/Op2 ad469x_trigger_gen/pwm_0
-ad_connect cnv_gate/Res ad469x_spi_cnv
+
+ad_connect cnv_gate_gpio/Op1 cnv_gate/Res
+ad_connect cnv_gate_gpio/Op2 gpio_cnv
+ad_connect cnv_gate_gpio/Res ad469x_spi_cnv
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_ad469x_dma
