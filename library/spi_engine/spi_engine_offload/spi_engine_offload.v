@@ -89,7 +89,9 @@ module spi_engine_offload #(
 
   output offload_sdi_valid,
   input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
+
+  output interconnect_dir
 );
 
   localparam SDO_SOURCE_STREAM = 1'b1;
@@ -215,6 +217,8 @@ module spi_engine_offload #(
   wire ctrl_is_enabled;
   reg spi_enabled = 1'b0;
 
+  assign interconnect_dir = spi_enabled;
+
   always @(posedge ctrl_clk) begin
     if (ctrl_enable) begin
       ctrl_do_enable <= 1'b1;
@@ -250,6 +254,7 @@ module spi_engine_offload #(
   end else begin
   assign spi_enable = ctrl_enable;
   assign ctrl_enabled = spi_enable | spi_active;
+  assign interconnect_dir = ctrl_enabled;
   end endgenerate
 
   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;

@@ -15,6 +15,8 @@ XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl_rtl.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl.xml
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_offload_ctrl_rtl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_interconnect_ctrl.xml
+XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_interconnect_ctrl_rtl.xml
 
 XILINX_LIB_DEPS += util_cdc
 

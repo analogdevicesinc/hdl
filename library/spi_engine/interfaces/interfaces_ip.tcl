@@ -46,3 +46,8 @@ adi_if_ports input 1 enabled
 adi_if_ports output 1 sync_ready
 adi_if_ports input 1 sync_valid
 adi_if_ports input 8 sync_data
+
+# Interconnect control interface
+
+adi_if_define "spi_engine_interconnect_ctrl"
+adi_if_ports  output 1 interconnect_dir
