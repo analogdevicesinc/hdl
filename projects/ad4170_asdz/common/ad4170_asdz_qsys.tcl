@@ -117,6 +117,7 @@ add_connection spi_engine_offload_0.cmd spi_engine_interconnect_0.s1_cmd
 add_connection spi_engine_interconnect_0.s1_sdi  spi_engine_offload_0.sdi_data
 add_connection spi_engine_offload_0.sdo_data spi_engine_interconnect_0.s1_sdo
 add_connection spi_engine_interconnect_0.s1_sync spi_engine_offload_0.sync
+add_connection spi_engine_offload_0.m_interconnect_ctrl spi_engine_interconnect_0.s_interconnect_ctrl
 
 add_connection spi_engine_offload_0.ctrl_cmd_wr       axi_spi_engine_0.offload0_cmd
 add_connection spi_engine_offload_0.ctrl_sdo_wr       axi_spi_engine_0.offload0_sdo
