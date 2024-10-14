@@ -215,6 +215,7 @@ module system_top (
   output              ddr4_rtl_1_reset_n,
   output              ddr4_rtl_1_par,
   input               ddr4_rtl_1_alert_n,
+  
   output              spi_clk,
   inout               spi_sdio,
   input               spi_miso
@@ -531,7 +532,6 @@ module system_top (
     .tx_data_7_p (tx_data_b_p[3]),
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (sysref_a),
-    .dac_fifo_bypass(gpio_o[90]),
     .i2s_bclk(i2s_bclk),
     .i2s_lrclk(i2s_lrclk),
     .i2s_mclk(i2s_mclk),
