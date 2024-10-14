@@ -185,6 +185,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_boot_bin.html">Build the BOOT.BIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -247,8 +248,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI ADXCVR</a></li>
@@ -316,8 +317,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0506/index.html">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
@@ -494,8 +495,10 @@ can be an alternative to <a class="icon adi reference external" href="https://ww
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>For <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a> setups, the following reworks are required on the evaluation
-board:</p>
+<p>When using
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a>
+in your setup, the following reworks are required <strong>on the evaluation
+board</strong>:</p>
 <ul class="simple">
 <li><p>To avoid using an external clock source and fully rely on the HMC7044
 clock chip, rotate the C6D/C4D caps in C5D/C3D position
@@ -505,17 +508,22 @@ be needed anymore</strong>).</p></li>
 <li><p>If LEDS V1P0_LED and VINT_LED are not on, please <strong>depopulate R22M
 and populate R2M</strong></p></li>
 </ul>
-<p>For the carrier, <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a>, the following reworks are mandatory:
+<p>For the carrier,
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a>,
+the following reworks are mandatory:
 <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081/quickstart/a10soc#fmc_pin_connection_configuration_change">[Wiki] FMC Pin Connection Configuration</a></p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>For <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a> setups, the following reworks are required on the evaluation
-board:</p>
+<p>For
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a>
+setups, the following reworks are required on the evaluation board:</p>
 <ul class="simple">
 <li><p>C39B, C40B: 50 ohm</p></li>
 </ul>
-<p>For the carrier, <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a>, the following reworks are required:</p>
+<p>For the carrier
+<a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html">FM87</a>,
+the following reworks are required:</p>
 <ul class="simple">
 <li><p>R1433, R1434: 50 ohm</p></li>
 <li><p>R1777, R1778: 50 ohm</p></li>

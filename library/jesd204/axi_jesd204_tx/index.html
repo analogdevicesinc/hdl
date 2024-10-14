@@ -202,6 +202,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guide/build_boot_bin.html">Build the BOOT.BIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -264,8 +265,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_dmac/index.html">AXI DMAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../axi_adxcvr/index.html">AXI ADXCVR</a></li>
@@ -333,8 +334,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0363/index.html">CN0363</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0506/index.html">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/cn0579/index.html">CN0579</a></li>
@@ -420,7 +421,8 @@ peripheral.</p></td>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="../../../_images/axi_jesd204_tx_204c.svg" class="align-center" src="../../../_images/axi_jesd204_tx_204c.svg" /></section>
+<a class="reference internal image-reference" href="../../../_images/axi_jesd204_tx_204c.svg"><img alt="JESD204B/C Tx Link Layer" class="align-center" src="../../../_images/axi_jesd204_tx_204c.svg" width="800" /></a>
+</section>
 <section id="axi-jesd204-tx-synthesis-configuration-parameters">
 <h2>AXI JESD204 TX Synthesis Configuration Parameters<a class="headerlink" href="#axi-jesd204-tx-synthesis-configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -2534,7 +2536,7 @@ tx_data.</p>
    ],
    foot:
    {text:
-      ['tspan',{dx:'-45'}, 'Link Inicialization', ['tspan', {dx:'60'},
+      ['tspan',{dx:'-45'}, 'Link Initialization', ['tspan', {dx:'60'},
       'User Data Phase'],],
    }
 }
@@ -2545,7 +2547,8 @@ de-asserted. As soon as the <a class="reference internal" href="#axi-jesd204-tx-
 entered the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> will be asserted to indicate that the peripheral is now
 accepting and processing the data from the <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code>
 signal stays asserted until the link is either deactivated or re-initialized.</p>
-<img alt="../../../_images/octets_mapping1.svg" class="align-right" src="../../../_images/octets_mapping1.svg" /><p>Typically the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> interface is connected to a JESD204B transport layer
+<a class="reference internal image-reference" href="../../../_images/tx_octets_mapping.svg"><img alt="JESD204B/C Tx link layer octets mapping" class="align-right" src="../../../_images/tx_octets_mapping.svg" width="300" /></a>
+<p>Typically the <code class="docutils literal notranslate"><span class="pre">TX_DATA</span></code> interface is connected to a JESD204B transport layer
 peripheral that provides framed and lane mapped data. The internal data path
 width of the peripheral is four, this means that four octets per lane are
 processed in parallel. When in the user data phase the peripheral expects to

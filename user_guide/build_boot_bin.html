@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>HDL Git repository &#8212; HDL  documentation</title>
+    <title>Build the boot image BOOT.BIN &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=765fa3cc" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Releases" href="releases.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" />
+    <link rel="next" title="HDL Architecture" href="architecture.html" />
+    <link rel="prev" title="Build an HDL project" href="build_hdl.html" />
    
   
   <meta name="global_root" content="../../">
@@ -101,13 +101,9 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">HDL Git repository</a><ul>
-<li><a class="reference internal" href="#folder-structure">Folder structure</a><ul>
-<li><a class="reference internal" href="#the-projects-are-structured-as-follows">The projects are structured as follows</a></li>
-<li><a class="reference internal" href="#the-library-are-structured-as-follows">The library are structured as follows</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#repository-releases-and-branches">Repository releases and branches</a></li>
+<li><a class="reference internal" href="#">Build the boot image BOOT.BIN</a><ul>
+<li><a class="reference internal" href="#for-zynq-carriers">For Zynq carriers</a></li>
+<li><a class="reference internal" href="#for-zynqmp-carriers">For ZynqMP carriers</a></li>
 </ul>
 </li>
 </ul>
@@ -149,10 +145,10 @@ Content on this topic
   <body><ul class="current">
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build an HDL project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build_boot_bin.html">Build the BOOT.BIN</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Build the BOOT.BIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -308,176 +304,108 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="hdl-git-repository">
-<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Permalink to this heading">#</a></h1>
-<p>All the HDL sources can be found in the following git repository:</p>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">ADI HDL repository</a></p>
-<p>We assume that the user is familiar with <a class="reference external" href="https://git-scm.com/">git</a>.
-Knows how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
-the repository, how to check its
-<a class="reference external" href="https://git-scm.com/docs/git-status">status</a> or how to
-<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">switch</a>
-between branches.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>A basic git knowledge is required in order to work with these source files,
-if you do not have any, don’t worry!</p>
-<p>There are a lot of great resources and tutorials about git all over the
-<a class="reference external" href="http://lmgtfy.com/?q=git+tutorial">web</a>.</p>
-</div>
-<p>If you want to pull down the sources as soon as possible, just do the
-following few steps:</p>
-<ol class="arabic simple">
-<li><p>Install Git from <a class="reference external" href="https://git-scm.com/">here</a></p></li>
-<li><p>Open up Git bash, change your current directory to a place where you
-want to keep the hdl source</p></li>
-<li><p>Clone the repository using
-<a class="reference external" href="https://help.github.com/articles/cloning-a-repository/">these</a>
-instructions</p></li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you want to contribute to our repository, check out this guide
-<a class="reference internal" href="contributing.html#contributing"><span class="std std-ref">Contributing to HDL repository</span></a>.</p>
-</div>
-<section id="folder-structure">
-<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Permalink to this heading">#</a></h2>
-<p>The root of the HDL repository has the following structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>
-<span class="o">+--</span> <span class="o">.</span><span class="n">github</span>
-<span class="o">+--</span> <span class="n">docs</span>
-<span class="o">+--</span> <span class="n">library</span>
-<span class="o">+--</span> <span class="n">projects</span>
-<span class="o">+--</span> <span class="n">scripts</span>
-<span class="o">+--</span> <span class="n">Makefile</span>
-<span class="o">+--</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
-<span class="o">+--</span> <span class="n">LICENSE</span>
-</pre></div>
-</div>
-<p>The repository is divided into 5 separate sections:</p>
+  <section id="build-the-boot-image-boot-bin">
+<span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Permalink to this heading">#</a></h1>
+<p>The boot image <code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code> is built using the
+<a class="reference external" href="https://www.xilinx.com/support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf">AMD Xilinx Bootgen tool</a>
+which requires several input files.</p>
+<p>All further steps are lengthy explained on the
+<a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/A">AMD Xilinx wiki</a> pages:</p>
 <ul class="simple">
-<li><p><strong>.github</strong> with all our automations regarding coding checks, GitHub actions</p></li>
-<li><p><strong>docs</strong> with our GitHubIO documentation and regmap source files</p></li>
-<li><p><strong>library</strong> with all the Analog Devices Inc. proprietary IP cores and
-hdl modules, which are required to build the projects</p></li>
-<li><p><strong>projects</strong> with all the currently supported projects</p></li>
-<li><p><strong>scripts</strong> with our environment scripts that set tools versions, etc.</p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841973/Build+U-Boot">How to build the u-boot</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL">How to build the FSBL</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image">How to build the BOOT image</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware">How to build the PMU firmware (for ZynqMP)</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF">How to build the Arm Trusted Firmware (for ZynqMP)</a></p></li>
 </ul>
-<p>The file <strong>.gitattributes</strong> is used to properly <a class="reference external" href="https://help.github.com/articles/dealing-with-line-endings/">handle
-different</a>
-line endings. And the <strong>.gitignore</strong> specifies intentionally untracked
-files that Git should ignore. The root <strong>Makefile</strong> can be used to build
-all the project of the repository. To learn more about hdl <strong>Makefiles</strong>
-visit the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
-<section id="the-projects-are-structured-as-follows">
-<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
-+-- docs
-+-- library
-+-- projects
-¦   +-- ad40xx_fmc
-¦   +-- ad4110
-¦   .
-¦   +-- common
-¦   +-- dac_fmc_ebz
-¦   ¦   +-- common
-¦   ¦   +-- a10soc
-¦   ¦   +-- vcu118
-¦   ¦   .
-¦   ¦   +-- zcu102
-¦   ¦   +-- Makefile
-¦   ¦   +-- Readme.md
-¦   .
-¦   +-- scripts
-¦   .
-¦   +-- Readme.md
-¦   +-- Makefile
-¦   +-- wiki_summary.sh
-+-- README.md
-</pre></div>
+<p>For ease of use, we provide a bash shell script which allows building BOOT.BIN
+from system_top.xsa and u-boot.elf.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You need to have the AMD Xilinx Vivado, Vitis and Bootgen tool paths in
+the <code class="docutils literal notranslate"><span class="pre">$PATH</span></code> environment variable.</p>
+<p>Check the <a class="reference internal" href="build_hdl.html#build-hdl-environment"><span class="std std-ref">Enviroment</span></a> section of <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>.</p>
 </div>
-<p>Besides the project folders, there are two special folders inside the
-<strong>/hdl/projects</strong>:</p>
+<section id="for-zynq-carriers">
+<span id="build-boot-bin-zynq"></span><h2>For Zynq carriers<a class="headerlink" href="#for-zynq-carriers" title="Permalink to this heading">#</a></h2>
+<p>This section applies to the Zynq-based carriers from
+<a class="reference internal" href="architecture.html#architecture-amd-platforms"><span class="std std-ref">our list</span></a>, but not limited to them only.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">build_boot_bin.sh</span></code> script can be downloaded from
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh">here</a>.</p>
+<p>The script can take 3 parameters:</p>
 <ul class="simple">
-<li><p><strong>common</strong>: This folder contains all the base designs, for all
-currently supported FPGA development boards. Be aware if you see your
-board on this list, it does not necessarily mean that you can use it
-with your FMC board.</p></li>
-<li><p><strong>scripts</strong>: In all cases, we are interacting with the development
-tools (Vivado/Quartus) using Tcl scripts. In this folder are defined
-all the custom Tcl processes, which are used to create a project,
-define the system and generate programming files for the FPGA.</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> file (<strong>mandatory</strong>).</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code> file (<strong>mandatory</strong>);
+see the note below.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>);
+see the note below.</p></li>
 </ul>
-<p>Inside a project folder, you can find folders with an FPGA carrier name
-(e.g. ZC706) which in general contains all the carrier board specific
-files, and a folder called <strong>common</strong> which contains the project
-specific files. If you can not find your FPGA board name in a project
-folder, that means your FPGA board with that particular FMC board is not
-supported.</p>
-</section>
-<section id="the-library-are-structured-as-follows">
-<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Permalink to this heading">#</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
-+-- library
-¦   +-- ad463x_data_capture
-¦   +-- axi_ad3552r
-¦   +-- axi_ad4858
-¦   +-- axi_ad5766
-¦   +-- axi_ad7606x
-¦   +-- axi_ad7616
-¦   +-- axi_ad7768
-¦   +-- axi_ad777x
-¦   +-- axi_ad9122
-¦   .
-¦   +-- common
-¦   .
-¦   +-- interfaces
-¦   +-- jesd204
-¦   +-- scripts
-¦   .
-¦   +-- Makefile
-+-- projects
-+-- README.md
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>The library folder contains all the IP cores and common modules. An IP,
-in general, contains Verilog files, which describe the hardware logic,
-constraint files, to ease timing closure, and Tcl scripts, which
-generate all the other files required for IP integration (*_ip.tcl for
-Vivado and *_hw.tcl for Quartus) .</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Regarding Vivado, all the IPs must be ‘packed’ before being used in a
-design.</p>
-<p>To find more information about how to build the libraries, please visit
-the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>build_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+</pre></div>
 </div>
-</section>
-</section>
-<section id="repository-releases-and-branches">
-<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Permalink to this heading">#</a></h2>
-<p>The repository may contain multiple branches and tags. The
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">main</a> branch
-is the development branch (latest sources, but not stable). If you check
-out this branch, some builds may fail. If you are not into any kind of
-experimentation, you should only check out one of the release branch.</p>
-<p>All our release branches have the following naming convention:
-<strong>hdl_</strong>[year_of_release]<strong>_r</strong>[1 or 2]. (e.g.
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r2/">hdl_2014_r2</a>)</p>
-<p>ADI does two releases each year when all the projects get an update to
-support the latest tools and get additional new features. ** The
-main branch is always synchronized with the latest release.** If you
-are in doubt, ask us on <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+<div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
+where you ran the command. The folder follows the pattern:
+<em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can find the release notes on the GitHub page of the
-repository:</p>
-<p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">https://github.com/analogdevicesinc/hdl/releases</a></p>
-<p>The latest version of tools used on main can be found at:
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a> (<em>required_vivado_version</em> and
-<em>required_quartus_version</em> variables). For Intel Quartus Standard, the version
-is specified in each project that uses it, depending on the carrier.</p>
+<p>For those who don’t want to build the u-boot themselves or want to provide
+the <em>.tar.gz</em> output archive, both can be extracted from
+the <em>bootgen_sysfiles.tgz</em> located in the project folder of the Kuiper Linux
+image.</p>
+<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+instructions on how to obtain the image.</p>
+</div>
+<p>There is also a version of script that works in Windows Powershell:
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.ps1">build_boot_bin.ps1</a>.</p>
+</section>
+<section id="for-zynqmp-carriers">
+<span id="build-boot-bin-zynqmp"></span><h2>For ZynqMP carriers<a class="headerlink" href="#for-zynqmp-carriers" title="Permalink to this heading">#</a></h2>
+<p>This section applies to the ZynqMP-based carriers, usually <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a>
+but not limited to this one only.</p>
+<p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
+cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm64</span></code> exists before running the script.
+For more information about cross compilers, see
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">build_zynqmp_boot_bin.sh</span></code> script can be downloaded from
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh">here</a></p>
+<p>The script can take 4 parameters:</p>
+<ul class="simple">
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> file (<strong>mandatory</strong>)</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code> file (<strong>mandatory</strong>);
+see the note below</p></li>
+<li><p>the third parameter is either (<strong>mandatory</strong>):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">download</span></code> (will git clone the ATF repository)</p></li>
+<li><p>or <code class="docutils literal notranslate"><span class="pre">bl31.elf</span></code></p></li>
+<li><p>or <code class="docutils literal notranslate"><span class="pre">&lt;path-to-arm-trusted-firmware-source&gt;</span></code> (the file system path to the
+ATF source code repository); see note below</p></li>
+</ul>
+</li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>);
+see the note below.</p></li>
+</ul>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>build_zynqmp_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
+where you ran the command. The folder follows the pattern:
+<em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For those who don’t want to build the u-boot or bl31.elf themselves
+or want to provide the <em>.tar.gz</em> output archive, they can be extracted from
+the <em>bootgen_sysfiles.tgz</em> located in the project folder of the Kuiper Linux
+image.</p>
+<p>u-boot.elf may have a different name, rename that .elf file to u-boot.elf
+before using.</p>
+<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+instructions on how to obtain the image.</p>
 </div>
 </section>
 </section>
@@ -492,8 +420,8 @@ is specified in each project that uses it, depending on the carrier.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="introduction.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Introduction</a>
-    <a href="releases.html" title="Next document (Alt+Shift+RightArrow)" class="next">Releases</a>
+    <a href="build_hdl.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Build an HDL project</a>
+    <a href="architecture.html" title="Next document (Alt+Shift+RightArrow)" class="next">HDL Architecture</a>
               </div>
           
         </div>

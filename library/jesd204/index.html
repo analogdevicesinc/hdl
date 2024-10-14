@@ -116,12 +116,12 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#tutorial">Tutorial</a></li>
-<li><a class="reference internal" href="#example-projects">Example Projects</a></li>
+<li><a class="reference internal" href="#hdl-example-projects">HDL Example Projects</a></li>
 <li><a class="reference internal" href="#additional-information">Additional Information</a><ul>
 <li><a class="reference internal" href="#technical-articles">Technical Articles</a></li>
 <li><a class="reference internal" href="#jesd204b-rapid-prototyping-platforms">JESD204B Rapid Prototyping Platforms</a></li>
-<li><a class="reference internal" href="#jesd204b-analog-to-digital-converters">JESD204B Analog-to-Digital Converters</a></li>
-<li><a class="reference internal" href="#jesd204b-digital-to-analog-converters">JESD204B Digital-to-Analog Converters</a></li>
+<li><a class="reference internal" href="#jesd204b-adcs">JESD204B ADCs</a></li>
+<li><a class="reference internal" href="#jesd204b-dacs">JESD204B DACs</a></li>
 <li><a class="reference internal" href="#jesd204b-rf-transceivers">JESD204B RF Transceivers</a></li>
 <li><a class="reference internal" href="#jesd204b-c-mixed-signal-front-ends">JESD204B/C Mixed-Signal Front Ends</a></li>
 <li><a class="reference internal" href="#jesd204b-clocking-solutions">JESD204B Clocking Solutions</a></li>
@@ -173,6 +173,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build an HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_boot_bin.html">Build the BOOT.BIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
@@ -235,8 +236,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI ADXCVR</a></li>
@@ -304,8 +305,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0506/index.html">CN0506</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0577/index.html">CN0577</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0579/index.html">CN0579</a></li>
@@ -382,7 +383,7 @@ If you have a question about the license, you can email
 </section>
 <section id="fpga-hdl-support">
 <span id="fpga-hdl-support-label"></span><h2>FPGA HDL Support<a class="headerlink" href="#fpga-hdl-support" title="Permalink to this heading">#</a></h2>
-<img alt="../../_images/jesd204_layers2.svg" class="align-right" src="../../_images/jesd204_layers2.svg" /><p>The JESD204B/C standard defines multiple layers, each layer being responsible
+<img alt="JESD204B/C Layers" class="align-center" src="../../_images/jesd204_layers.svg" /><p>The JESD204B/C standard defines multiple layers, each layer being responsible
 for a particular function. The Analog Devices JESD204B/C HDL solution follows
 the current standard and defines 4 layers. Physical layer, link layer, transport
 layer and application layer. For the first three layers, <a class="icon adi reference external" href="https://www.analog.com/">ADI</a> provides
@@ -396,7 +397,8 @@ interfaced converter defines which <strong>transport</strong> layer component sh
 JESD204B/C link.</p>
 <p>The <strong>application</strong> layer is user-defined and can be used to implement
 application-specific signal processing.</p>
-<img alt="../../_images/jesd204_chain.svg" class="align-center" src="../../_images/jesd204_chain.svg" /><section id="physical-layer">
+<a class="reference internal image-reference" href="../../_images/jesd204_chain.svg"><img alt="JESD204B/C chain" class="align-center" src="../../_images/jesd204_chain.svg" width="600" /></a>
+<section id="physical-layer">
 <span id="jesd204-physical-layer"></span><h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Permalink to this heading">#</a></h3>
 <p>Physical layer peripherals are responsible for interfacing and configuring the
 high-speed serial transceivers. Currently, we have support for GTXE2, GTHE3,
@@ -454,7 +456,7 @@ Linux driver for the JESD204B receive core.</p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl">AXI DAC HDL Linux Driver</a></p>
 <ul>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/ad9172">AD9172 DAC Linux Driver</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE™ Linux Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9009">ADRV9009, ADRV9008 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371">AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
 </ul>
@@ -462,7 +464,7 @@ Linux driver for the JESD204B receive core.</p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl">AXI ADC HDL Linux Driver</a></p>
 <ul>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad9208">AD9208 ADC Linux Driver</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE™ Linux Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9009">ADRV9009, ADRV9008 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371">AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
 </ul>
@@ -496,8 +498,8 @@ This will help you understand the generic blocks for the next steps.</p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/linux">Linux</a></p></li>
 </ol>
 </section>
-<section id="example-projects">
-<h2>Example Projects<a class="headerlink" href="#example-projects" title="Permalink to this heading">#</a></h2>
+<section id="hdl-example-projects">
+<h2>HDL Example Projects<a class="headerlink" href="#hdl-example-projects" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc2-ebz">AD-FMCADC2-EBZ Reference Design</a></p>
 <ul>
@@ -516,6 +518,11 @@ This will help you understand the generic blocks for the next steps.</p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2018_r2/projects/fmcadc4/zc706">AMD Xilinx ZC706</a></p></li>
 </ul>
 </li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc5-ebz">AD-FMCADC5-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc5/vc707">AMD Xilinx VC707</a></p></li>
+</ul>
+</li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz">AD-FMCJESDADC1-EBZ Reference Design</a></p>
 <ul>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcjesdadc1/kc705">AMD Xilinx KC705</a></p></li>
@@ -525,7 +532,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quick-start-guide">AD-FMCOMMS8-EBZ Reference Design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/zcu102">AMD Xilinx ZCU102</a></p></li>
 </ul>
 </li>
@@ -536,7 +543,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">AD-FMCDAQ2-EBZ Reference Design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/daq2/a10gx">Intel A10Gx (RETIRED)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/kc705">AMD Xilinx KC705</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/kcu105">AMD Xilinx KCU105</a></p></li>
@@ -556,7 +563,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">ADRV9371 Reference Design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/adrv9371x/a10gx">Intel A10Gx (RETIRED)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/kcu105">AMD Xilinx KCU105</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/zc706">AMD Xilinx ZC706</a></p></li>
@@ -570,37 +577,34 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG-SOM Reference Design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/adrv9009/a10gx">Intel A10Gx (RETIRED)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/zc706">AMD Xilinx ZC706</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009zu11eg">ADRV9009-ZU11EG-SOM</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-dac-fmc-ebz">AD913x/AD917x/AD9144/AD915x/AD916X Reference Design</a></p>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-dac-fmc-ebz">AD913x/AD917x/AD9144/AD915x/AD916X Reference Design (dac_fmc_ebz)</a></p>
 <ul>
 <li><p>See the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz#readme">list of supported parts</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/zc706">AMD Xilinx ZC706</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9081-FMCA-EBZ Reference Design</span></a></p>
+<li><p><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9081/AD9082/AD9986/AD9988 HDL project</span></a> on:</p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/a10soc">Intel A10SOC</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu128">AMD Xilinx VCU128</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
-</ul>
-</li>
-<li><p><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9082-FMCA-EBZ Reference Design</span></a></p>
-<ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/a10soc">Intel Arria 10 SoC</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/fm87">Intel FM87</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu128">AMD Xilinx VCU128</a></p></li>
+<li><p>(AD9081) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
+<li><p>(AD9082) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
+<li><p>(AD9082) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p>(AD9082) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p>(AD9082) <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
 </ul>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/x-band-platform">AD9081-FMCA-EBZ X-Band Phased Array Reference Design</a></p>
@@ -610,10 +614,10 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9213_dual_ebz/ad9213_dual_ebz_hdl">AD9213-DUAL-EBZ Reference Design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_dual_ebz/s10soc">Intel S10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_dual_ebz/s10soc">Intel Stratix 10 SoC</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9213_evb/ad9213_evb_hdl">AD9213-EBZ Reference Design</a></p>
+<li><p><a class="reference internal" href="../../projects/ad9213_evb/index.html#ad9213-evb"><span class="std std-ref">AD9213-EVB HDL project</span></a> on:</p>
 <ul>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_evb/vcu118">AMD Xilinx VCU118</a></p></li>
 </ul>
@@ -626,7 +630,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9083/ad9083_evb_reference_hdl">AD9083-FMC</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb/a10soc">Intel Arria 10 SoC</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb/zcu102">AMD Xilinx ZCU102</a></p></li>
 </ul>
 </li>
@@ -657,14 +661,23 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz">AD-FMCLIDAR1-EBZ reference design</a></p>
 <ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/a10soc">Intel A10SOC (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/a10soc">Intel Arria 10 SoC (RETIRED)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/zc706">AMD Xilinx ZC706 (RETIRED)</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/zcu102">AMD Xilinx ZCU102 (RETIRED)</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9026/ad9026_hdl">ADRV9026 reference design</a></p>
+<li><p><a class="reference internal" href="../../projects/adrv9026/index.html#adrv9026"><span class="std std-ref">ADRV9026 HDL reference design</span></a> on:</p>
 <ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026/a10soc">Intel Arria 10 SoC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026/vck190">AMD Xilinx VCK190</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026/vcu118">AMD Xilinx VCU118</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../projects/adrv904x/index.html#adrv904x"><span class="std std-ref">ADRV904x HDL reference design</span></a> on:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x/vck190">AMD Xilinx VCK190</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv904x/zcu102">AMD Xilinx ZCU102</a></p></li>
 </ul>
 </li>
 </ul>
@@ -684,142 +697,93 @@ This will help you understand the generic blocks for the next steps.</p></li>
 <section id="jesd204b-rapid-prototyping-platforms">
 <span id="rapid-prototyping-label"></span><h3>JESD204B Rapid Prototyping Platforms<a class="headerlink" href="#jesd204b-rapid-prototyping-platforms" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADRV9371">EVAL-ADRV9371</a>
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">(User Guide)</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADRV9008-9009">EVAL-ADRV9008-9009</a>
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009">(User Guide)</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG (User Guide)</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcjesdadc1-ebz">AD-FMCJESDADC1-EBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCOMMS11-EBZ">AD-FMCOMMS11-EBZ</a>
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz">(User Guide)</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCADC2-EBZ">AD-FMCADC2-EBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCADC3-EBZ">AD-FMCADC3-EBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCADC4-EBZ">AD-FMCADC4-EBZ</a>(RETIRED)</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCDAQ2-EBZ">AD-FMCDAQ2-EBZ</a>
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">(User Guide)</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-FMCDAQ3-EBZ">EVAL-FMCDAQ3-EBZ</a>
-<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz">(User Guide)</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172">EVAL-AD917X</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS11-EBZ">AD-FMCOMMS11-EBZ</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009-ZU11EG">ADRV9009-ZU11EG</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG (User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCADC2-EBZ">EVAL-AD-FMCADC2-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCADC3-EBZ">EVAL-AD-FMCADC3-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCADC4-EBZ">EVAL-AD-FMCADC4-EBZ</a> (RETIRED)</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCDAQ2-EBZ">EVAL-AD-FMCDAQ2-EBZ</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD-FMCJESDADC1-EBZ">EVAL-AD-FMCJESDADC1-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9172">EVAL-AD917x</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9008-9009">EVAL-ADRV9008-9009</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9371">EVAL-ADRV9371</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-FMCDAQ3-EBZ">EVAL-FMCDAQ3-EBZ</a></p></li>
 </ul>
 </section>
-<section id="jesd204b-analog-to-digital-converters">
-<h3>JESD204B Analog-to-Digital Converters<a class="headerlink" href="#jesd204b-analog-to-digital-converters" title="Permalink to this heading">#</a></h3>
+<section id="jesd204b-adcs">
+<h3>JESD204B ADCs<a class="headerlink" href="#jesd204b-adcs" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6676">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6677">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6684">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6688">AD6688</a>: RF Diversity and 1.2GHz BW Observation
-Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9207">AD9207</a>: 12-Bit, 6 GSPS, JESD204B/JESD204C
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9208">AD9208</a>: 14-Bit, 3GSPS, JESD204B,
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9209">AD9209</a>: 12-Bit, 4GSPS, JESD204B/C, Quad
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9213">AD9213</a>: 12-Bit, 10.25 GSPS, JESD204B, RF
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9234">AD9234</a>: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9250">AD9250</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9625">AD9625</a>: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
-1.3 V/2.5 V Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9656">AD9656</a>: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9680">AD9680</a>: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
-MSPS JESD204B, Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9683">AD9683</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9690">AD9690</a>: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9691">AD9691</a>: 14-Bit, 1.25 GSPS JESD204B,
-Dual Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9694">AD9694</a>: 14-Bit, 500 MSPS JESD204B, Quad
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9695">AD9695</a>: 14-Bit, 1300 MSPS/625 MSPS,
-JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9083">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B
-Analog-to-Digital Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9094">AD9094</a>: 8-Bit, 1 GSPS, JESD204B, Quad
-Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6676">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6677">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6684">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD6688">AD6688</a>: RF Diversity and 1.2GHz BW Observation Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9207">AD9207</a>: 12-bit, 6 GSPS, JESD204B/C Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9208">AD9208</a>: 14-bit, 3 GSPS, JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a>: 12-bit, 4 GSPS, JESD204B/C, Quad ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a>: 12-bit, 10.25 GSPS, JESD204B, RF ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9234">AD9234</a>: 12-bit, 1 GSPS/500 MSPS JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9250">AD9250</a>: 14-bit, 170 MSPS/250 MSPS, JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a>: 12-bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS, 1.3V/2.5V ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9656">AD9656</a>: Quad, 16-bit, 125 MSPS JESD204B 1.8V ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9680">AD9680</a>: 14-bit, 1.25 GSPS/1 GSPS/820 MSPS/500MSPS JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9683">AD9683</a>: 14-bit, 170 MSPS/250 MSPS, JESD204B, ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9690">AD9690</a>: 14-bit, 500 MSPS / 1 GSPS JESD204B, ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9691">AD9691</a>: 14-bit, 1.25 GSPS JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9694">AD9694</a>: 14-bit, 500 MSPS JESD204B, Quad ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9695">AD9695</a>: 14-bit, 1300 MSPS/625 MSPS,JESD204B, Dual ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9083">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9094">AD9094</a>: 8-bit, 1 GSPS, JESD204B, Quad ADC</p></li>
 </ul>
 </section>
-<section id="jesd204b-digital-to-analog-converters">
-<h3>JESD204B Digital-to-Analog Converters<a class="headerlink" href="#jesd204b-digital-to-analog-converters" title="Permalink to this heading">#</a></h3>
+<section id="jesd204b-dacs">
+<h3>JESD204B DACs<a class="headerlink" href="#jesd204b-dacs" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9135">AD9135</a>: Dual, 11-Bit, high dynamic, 2.8 GSPS,
-TxDAC+® Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9136">AD9136</a>: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9144">AD9144</a>: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9152">AD9152</a>: Dual, 16-Bit, 2.25 GSPS, TxDAC+
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9154">AD9154</a>: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9161">AD9161</a>: 11-Bit, 12 GSPS, RF Digital-to-Analog
-Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9162">AD9162</a>: 16-Bit, 12 GSPS, RF Digital-to-Analog
-Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9163">AD9163</a>: 16-Bit, 12 GSPS, RF DAC and Digital
-Upconverter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-Bit, 12 GSPS, RF DAC and Direct Digital
-Synthesizer</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9172">AD9172</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9173">AD9173</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9174">AD9174</a>: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
-Digital Synthesizer</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9175">AD9175</a>: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
-Wideband Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9176">AD9176</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Wideband Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9177">AD9177</a>: Quad, 16-Bit, 12 GSPS RF DAC with
-Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9135">AD9135</a>: Dual, 11-bit, high dynamic, 2.8 GSPS, TxDAC+ DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9136">AD9136</a>: Dual, 16-bit, 2.8 GSPS, TxDAC+ DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9144">AD9144</a>: Quad, 16-bit, 2.8 GSPS, TxDAC+ DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9152">AD9152</a>: Dual, 16-bit, 2.25 GSPS, TxDAC+ DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9154">AD9154</a>: Quad, 16-bit, 2.4 GSPS, TxDAC+ DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9161">AD9161</a>: 11-bit, 12 GSPS, RF DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9162">AD9162</a>: 16-bit, 12 GSPS, RF DAC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9163">AD9163</a>: 16-bit, 12 GSPS, RF DAC and Digital Upconverter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-bit, 12 GSPS, RF DAC and Direct Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9172">AD9172</a>: Dual, 16-bit, 12.6 GSPS RF DAC with Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9173">AD9173</a>: Dual, 16-bit, 12.6 GSPS RF DAC with Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9174">AD9174</a>: Dual, 16-bit, 12.6 GSPS RF DAC and Direct Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9175">AD9175</a>: Dual, 11-bit/16-bit, 12.6 GSPS RF DAC with Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9176">AD9176</a>: Dual, 16-bit, 12.6 GSPS RF DAC with Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9177">AD9177</a>: Quad, 16-bit, 12 GSPS RF DAC with Wideband Channelizers</p></li>
 </ul>
 </section>
 <section id="jesd204b-rf-transceivers">
 <h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path and DPD</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
-with Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
-Transmitter with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with Observation Path and DPD</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF Transmitter with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver with Observation Path</p></li>
 </ul>
 </section>
 <section id="jesd204b-c-mixed-signal-front-ends">
 <h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
-Quad, 12-Bit, 4GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
-DUAL, 12-Bit, 6GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
-Observation Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a>: MxFE™ Quad, 16-bit, 12 GSPS RF DAC and Quad, 12-bit, 4 GSPS RF ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a>: MxFE™ QUAD, 16-bit, 12 GSPS RF DAC and DUAL, 12-bit, 6 GSPS RF ADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and Observation Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
 </ul>
 </section>
 <section id="jesd204b-clocking-solutions">
 <h3>JESD204B Clocking Solutions<a class="headerlink" href="#jesd204b-clocking-solutions" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9528">AD9528</a>: JESD204B Clock Generator with 14
-LVDS/HSTL Outputs</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/HMC7043">HMC7043</a>: High Performance, 3.2 GHz, 14-Output
-Fanout Buffer</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/HMC7044">HMC7044</a>: High Performance, 3.2 GHz, 14-Output
-Jitter Attenuator with JESD204B</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/LTC6952">LTC6952</a>: Ultralow Jitter, 4.5GHz PLL,
-JESD204B/JESD204C</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADF4371">ADF 4371</a>: Microwave Wideband Synthesizer
-with Integrated VCO</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9528">AD9528</a>: JESD204B Clock Generator with 14 LVDS/HSTL Outputs</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4371">ADF4371</a>: Microwave Wideband Synthesizer with Integrated VCO</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC7043">HMC7043</a>: High Performance, 3.2 GHz, 14-Output Fanout Buffer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC7044">HMC7044</a>: High Performance, 3.2 GHz, 14-Output Jitter Attenuator with JESD204B</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC6952">LTC6952</a>: Ultralow Jitter, 4.5GHz PLL, JESD204B/C</p></li>
 </ul>
 </section>
 </section>
@@ -835,7 +799,9 @@ with Integrated VCO</p></li>
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204">library/jesd204</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204">JESD204 Interface Framework on wiki</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204">[Wiki] JESD204 Interface Framework</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary">[Wiki] JESD204 Glossary</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_troubleshooting">[Wiki] JESD204 Troubleshooting Tx links</a></p></li>
 </ul>
 </section>
 </section>

@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="507.53445"
+   height="337.82883"
+   id="svg2"
+   version="1.1"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="jesd_layers.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs4">
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect279"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4750"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4743"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4720"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4615"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4585"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4519"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4460"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect4411"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3619"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3884"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3828"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3904"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3900"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3870"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3048"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3044"
+       is_visible="true"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3042"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       is_visible="true"
+       id="path-effect3036"
+       effect="spiro"
+       lpeversion="0" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect3032"
+       is_visible="true"
+       lpeversion="0" />
+    <linearGradient
+       id="linearGradient297913"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,8.0914218,-1.1137622)"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop297911" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4808"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4806"
+         offset="0"
+         style="stop-color:#8a558c;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4802"
+       xlink:href="#linearGradient4802"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4800"
+         offset="0"
+         style="stop-color:#ff7200;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4796"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4794"
+         offset="0"
+         style="stop-color:#27b34f;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4790"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4788"
+         offset="0"
+         style="stop-color:#a91d45;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4784"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4782"
+         offset="0"
+         style="stop-color:#009fbd;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4778"
+       gradientTransform="translate(48.451491,-1.1428554)"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4776"
+         offset="0"
+         style="stop-color:#003d61;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient297907"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop297905" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429412"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#808080;stop-opacity:1;"
+         offset="0"
+         id="stop429410" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4951"
+       gradientTransform="translate(93.927125,149.48959)"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4949"
+         offset="0"
+         style="stop-color:#c4aac5;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4945"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4943"
+         offset="0"
+         style="stop-color:#ffb980;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4939"
+       gradientTransform="translate(0,-0.4840853)"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4937"
+         offset="0"
+         style="stop-color:#93d9a7;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4933"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4931"
+         offset="0"
+         style="stop-color:#d48ea2;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4927"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4925"
+         offset="0"
+         style="stop-color:#80cfde;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4921"
+       gradientTransform="translate(482.16935,484.6575)"
+       inkscape:swatch="solid">
+      <stop
+         id="stop4919"
+         offset="0"
+         style="stop-color:#809eb0;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429458"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,-7.3801475,-1.7240233)"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#a780a9;stop-opacity:1;"
+         offset="0"
+         id="stop429456" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429450"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#ff9540;stop-opacity:1;"
+         offset="0"
+         id="stop429448" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429436"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,-13.995833,9.5593532)"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#5dc67b;stop-opacity:1;"
+         offset="0"
+         id="stop429434" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429424"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#40b7ce;stop-opacity:1;"
+         offset="0"
+         id="stop429422" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient429418"
+       gradientTransform="matrix(0.26458333,0,0,0.26458333,134.10864,-125.17185)"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#406e89;stop-opacity:1;"
+         offset="0"
+         id="stop429416" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="178.89801"
+     inkscape:cy="245.36605"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="0"
+     showguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4417"
+       originx="-283.02309"
+       originy="-302.16182"
+       spacingx="1.0666667"
+       spacingy="1.0666667" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-283.02309,-302.16182)">
+    <g
+       id="g4113"
+       transform="translate(330.86155,229.12232)"
+       inkscape:export-filename="/home/lars/jesd204_layers.png"
+       inkscape:export-xdpi="279.61734"
+       inkscape:export-ydpi="279.61734">
+      <g
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         transform="translate(0,3.6707682)"
+         id="g3776">
+        <rect
+           style="fill:url(#linearGradient429436);fill-opacity:1;fill-rule:evenodd;stroke:#040000;stroke-width:4.26667;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect2985"
+           width="121.29599"
+           height="48.661545"
+           x="88.80513"
+           y="272.71884" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+           x="128.97917"
+           y="304.77878"
+           id="text2987"><tspan
+             style="font-size:21.3333px;line-height:1.25;stroke-width:1.06667"
+             sodipodi:role="line"
+             id="tspan2989"
+             x="128.97917"
+             y="304.77878">Link</tspan></text>
+      </g>
+      <text
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         id="text3813"
+         y="284.85709"
+         x="222.83656"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+         xml:space="preserve"><tspan
+           y="284.85709"
+           x="222.83656"
+           id="tspan3815"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Scrambling</tspan><tspan
+           id="tspan4101"
+           y="304.85709"
+           x="222.83656"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Character replacement</tspan><tspan
+           id="tspan4097"
+           y="324.85709"
+           x="222.83656"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">8b/10b encoding</tspan></text>
+    </g>
+    <g
+       id="g4123"
+       transform="translate(330.86155,223.91444)"
+       inkscape:export-filename="/home/lars/jesd204_layers.png"
+       inkscape:export-xdpi="279.61734"
+       inkscape:export-ydpi="279.61734">
+      <g
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         transform="translate(-18.804688,4.3784506)"
+         id="g3771">
+        <rect
+           y="213.72592"
+           x="107.60982"
+           height="48.661545"
+           width="121.29599"
+           id="rect3759"
+           style="fill:url(#linearGradient429424);fill-opacity:1;fill-rule:evenodd;stroke:#040000;stroke-width:4.26667;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           id="text3761"
+           y="243.1817"
+           x="122.79948"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+           xml:space="preserve"><tspan
+             style="font-size:21.3333px;line-height:1.25;stroke-width:1.06667"
+             y="243.1817"
+             x="122.79948"
+             id="tspan3763"
+             sodipodi:role="line">Transport</tspan></text>
+      </g>
+      <text
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         id="text3817"
+         y="236.57187"
+         x="222.76625"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+         xml:space="preserve"><tspan
+           y="236.57187"
+           x="222.76625"
+           id="tspan3819"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Sample framing</tspan><tspan
+           id="tspan3821"
+           y="256.57187"
+           x="222.76625"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Lane mapping</tspan></text>
+    </g>
+    <g
+       id="g4135"
+       inkscape:export-filename="/home/lars/jesd204_layers.png"
+       inkscape:export-xdpi="279.61734"
+       inkscape:export-ydpi="279.61734"
+       transform="translate(330.86155,218.70657)">
+      <rect
+         y="159.81909"
+         x="88.80513"
+         height="48.661545"
+         width="121.29599"
+         id="rect3788"
+         style="fill:url(#linearGradient429450);fill-opacity:1;fill-rule:evenodd;stroke:#040000;stroke-width:4.26667;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         id="text3790"
+         y="189.6655"
+         x="97.901039"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+         xml:space="preserve"><tspan
+           y="189.6655"
+           x="97.901039"
+           id="tspan3792"
+           sodipodi:role="line"
+           style="font-size:21.3333px;line-height:1.25;stroke-width:1.06667">Application</tspan></text>
+      <text
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+         x="223.50824"
+         y="188.28658"
+         id="text3823"><tspan
+           sodipodi:role="line"
+           x="223.50824"
+           y="188.28658"
+           id="tspan3827"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Application-specific processing</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+       x="305.72662"
+       y="524.30536"
+       id="text3833"><tspan
+         sodipodi:role="line"
+         id="tspan3835"
+         x="305.72662"
+         y="524.30536"
+         style="font-size:16px;line-height:1.25;stroke-width:1.06667">Link and PHY</tspan><tspan
+         sodipodi:role="line"
+         x="305.72662"
+         y="544.30536"
+         style="font-size:16px;line-height:1.25;stroke-width:1.06667"
+         id="tspan7747">layer per octet</tspan></text>
+    <g
+       id="g4103"
+       inkscape:export-filename="/home/lars/jesd204_layers.png"
+       inkscape:export-xdpi="279.61734"
+       inkscape:export-ydpi="279.61734"
+       transform="translate(330.86155,218.70657)">
+      <g
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         transform="translate(-15.125001,15.623693)"
+         id="g3781">
+        <rect
+           style="fill:url(#linearGradient429458);fill-opacity:1;fill-rule:evenodd;stroke:#040000;stroke-width:4.26667;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect3765"
+           width="121.29599"
+           height="48.661545"
+           x="103.93013"
+           y="334.67487" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+           x="124.67188"
+           y="364.52127"
+           id="text3767"><tspan
+             style="font-size:21.3333px;line-height:1.25;stroke-width:1.06667"
+             sodipodi:role="line"
+             id="tspan3769"
+             x="124.67188"
+             y="364.52127">Physical</tspan></text>
+      </g>
+      <text
+         inkscape:export-ydpi="279.61734"
+         inkscape:export-xdpi="279.61734"
+         inkscape:export-filename="/home/lars/jesd204_layers.png"
+         id="text3837"
+         y="358.76605"
+         x="222.76625"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.8px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+         xml:space="preserve"><tspan
+           y="358.76605"
+           x="222.76625"
+           id="tspan3839"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">High-speed SerDes</tspan><tspan
+           id="tspan3841"
+           y="378.76605"
+           x="222.76625"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Clock recovery</tspan><tspan
+           id="tspan3843"
+           y="398.76605"
+           x="222.76625"
+           sodipodi:role="line"
+           style="font-size:16px;line-height:1.25;stroke-width:1.06667">Signal shaping</tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:0%;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06667"
+       x="367.29489"
+       y="341.2067"
+       id="text3859"><tspan
+         sodipodi:role="line"
+         id="tspan3861"
+         x="367.29489"
+         y="341.2067"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26.6667px;line-height:1.25;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.06667">JESD204B/C Layers</tspan></text>
+  </g>
+</svg>
