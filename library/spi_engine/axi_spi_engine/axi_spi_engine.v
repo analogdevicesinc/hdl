@@ -468,7 +468,8 @@ module axi_spi_engine #(
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
-  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
+  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && (up_raddr_s == 8'h3a || up_raddr_s == 8'h3b || up_raddr_s == 8'h3c || up_raddr_s == 8'h3d ||
+                                                    up_raddr_s == 8'h3e || up_raddr_s == 8'h3f || up_raddr_s == 8'h40 || up_raddr_s == 8'h41);
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(ASYNC_SPI_CLK),
