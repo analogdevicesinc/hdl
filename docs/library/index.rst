@@ -75,6 +75,7 @@ Utilities
    axi_adc_trigger/index
    axi_adxcvr/index
    axi_clkgen/index
+   axi_clock_monitor/index
    axi_dac_interpolate/index
    axi_fan_control/index
    axi_laser_driver/index
