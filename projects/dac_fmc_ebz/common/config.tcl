@@ -9,8 +9,8 @@
 # make ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04
 
 # Default:
-set device AD9172
-set mode   04
+set device AD9164
+set mode   08
 
 if [info exists ::env(ADI_DAC_DEVICE)] {
   set device $::env(ADI_DAC_DEVICE)
@@ -115,7 +115,7 @@ set params(AD9164,02) {2 2 2 2 1 16 16}
 set params(AD9164,03) {2 3 3 4 1 16 16}
 set params(AD9164,04) {2 4 1 1 1 16 16}
 set params(AD9164,06) {2 6 3 2 1 16 16}
-set params(AD9164,08) {2 8 2 1 1 16 16}
+set params(AD9164,08) {1 8 4 1 1 16 16}
 set params(AD9164,device_code) 3
 
 # AD9171
