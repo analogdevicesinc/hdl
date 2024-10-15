@@ -47,6 +47,11 @@ set_parameter_property NUM_LINKS DISPLAY_NAME "Number of Links"
 set_parameter_property NUM_LINKS ALLOWED_RANGES 1:8
 set_parameter_property NUM_LINKS HDL_PARAMETER true
 
+add_parameter LINK_MODE INTEGER 1
+set_parameter_property LINK_MODE DISPLAY_NAME "Link mode"
+set_parameter_property LINK_MODE ALLOWED_RANGES 1:2
+set_parameter_property LINK_MODE HDL_PARAMETER true
+
 # axi4 slave interface
 
 ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 14
@@ -103,7 +108,7 @@ add_interface_port config core_cfg_disable_scrambler disable_scrambler Output 1
 add_interface_port config core_cfg_disable_char_replacement disable_char_replacement Output 1
 add_interface_port config core_cfg_frame_align_err_threshold frame_align_err_threshold Output 8
 add_interface_port config core_ctrl_err_statistics_reset err_statistics_reset Output 1
-add_interface_port config core_ctrl_err_statistics_mask err_statistics_mask Output 3
+add_interface_port config core_ctrl_err_statistics_mask err_statistics_mask Output 7
 
 # device clock domain config interface
 
@@ -128,6 +133,7 @@ set_interface_property status associatedReset core_reset
 
 add_interface_port status core_status_ctrl_state ctrl_state Input 2
 add_interface_port status core_status_lane_cgs_state lane_cgs_state Input 2*NUM_LANES
+add_interface_port status core_status_lane_emb_state lane_emb_state Input 3*NUM_LANES
 add_interface_port status core_status_lane_ifs_ready lane_ifs_ready Input NUM_LANES
 add_interface_port status core_status_lane_latency lane_latency Input 14*NUM_LANES
 add_interface_port status core_status_lane_frame_align_err_cnt lane_frame_align_err_cnt Input 8*NUM_LANES

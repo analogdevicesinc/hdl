@@ -17,6 +17,8 @@ GENERIC_DEPS += jesd204_rx_cgs.v
 GENERIC_DEPS += jesd204_rx_ctrl.v
 GENERIC_DEPS += jesd204_rx_frame_align.v
 GENERIC_DEPS += jesd204_rx_lane.v
+GENERIC_DEPS += ../jesd204_common/jesd204_crc12.v
+GENERIC_DEPS += error_monitor.v
 
 XILINX_DEPS += bd/bd.tcl
 XILINX_DEPS += error_monitor.v
@@ -50,6 +52,8 @@ INTEL_DEPS += ../jesd204_common/jesd204_frame_mark.v
 INTEL_DEPS += ../jesd204_common/jesd204_lmfc.v
 INTEL_DEPS += ../jesd204_common/jesd204_scrambler.v
 INTEL_DEPS += ../jesd204_common/pipeline_stage.v
+INTEL_DEPS += ../jesd204_common/jesd204_crc12.v
+INTEL_DEPS += error_monitor.v
 INTEL_DEPS += jesd204_rx_constr.sdc
 INTEL_DEPS += jesd204_rx_hw.tcl
 

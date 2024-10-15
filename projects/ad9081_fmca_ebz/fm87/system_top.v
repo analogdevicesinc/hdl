@@ -37,6 +37,7 @@
 
 module system_top #(
   // Dummy parameters to workaround critical warning
+  parameter JESD_MODE          = "8B10B",
   parameter RX_LANE_RATE       = 10,
   parameter TX_LANE_RATE       = 10,
   parameter REF_CLK_RATE       = 375,
@@ -176,14 +177,15 @@ module system_top #(
   wire  [ 7:0]  fpga_dipsw;
   wire  [ 7:0]  fpga_led;
 
-  wire          ninit_done;
   wire          sys_reset_n;
-  wire  [43:0]  stm_hw_events;
+  wire          ninit_done;
   wire          h2f_reset;
+  wire  [43:0]  stm_hw_events;
 
   wire  [ 7:0]  spi_csn_s;
   wire          spi_clk;
   wire          spi_mosi;
+
   wire          refclk_fgt_2;
 
   // Board GPIOs
@@ -349,28 +351,28 @@ module system_top #(
     .sys_hps_f2h_stm_hwevents (stm_hw_events),
 
     // FMC HPC
-    .sys_spi_MISO                      (spi_miso),
-    .sys_spi_MOSI                      (spi_mosi),
-    .sys_spi_SCLK                      (spi_clk),
-    .sys_spi_SS_n                      (spi_csn_s),
-    .ref_clk_in_in_refclk_fgt_2        (fpga_refclk_in),
-    .ref_clk_fgt_2_clk                 (refclk_fgt_2),
-    .tx_serial_data_tx_serial_data     (tx_data[TX_JESD_L-1:0]),
-    .tx_serial_data_n_tx_serial_data_n (tx_data_n[TX_JESD_L-1:0]),
-    .tx_ref_clk_clk                    (refclk_fgt_2),
-    .tx_sync_export                    (fpga_syncin_0),
-    .tx_sysref_export                  (sysref2),
-    .tx_device_clk_clk                 (clkin6),
-    .rx_serial_data_rx_serial_data     (rx_data[RX_JESD_L-1:0]),
-    .rx_serial_data_n_rx_serial_data_n (rx_data_n[RX_JESD_L-1:0]),
-    .rx_ref_clk_clk                    (refclk_fgt_2),
-    .rx_sync_export                    (fpga_syncout_0),
-    .rx_sysref_export                  (sysref2),
-    .rx_device_clk_clk                 (clkin10),
-    .mxfe_gpio_export                  ({fpga_syncout_1_n,  // 14
-                                         fpga_syncout_1_p,  // 13
-                                         fpga_syncin_1_n,   // 12
-                                         fpga_syncin_1_p,   // 11
-                                         gpio}));           // 10:0
+    .sys_spi_MISO                              (spi_miso),
+    .sys_spi_MOSI                              (spi_mosi),
+    .sys_spi_SCLK                              (spi_clk),
+    .sys_spi_SS_n                              (spi_csn_s),
+    .ref_clk_in_in_refclk_fgt_2                (fpga_refclk_in),
+    .ref_clk_fgt_2_clk                         (refclk_fgt_2),
+    .tx_serial_data_tx_serial_data             (tx_data[TX_JESD_L-1:0]),
+    .tx_serial_data_n_tx_serial_data_n         (tx_data_n[TX_JESD_L-1:0]),
+    .tx_ref_clk_clk                            (refclk_fgt_2),
+    .tx_sync_export                            (fpga_syncin_0),
+    .tx_sysref_export                          (sysref2),
+    .tx_device_clk_clk                         (clkin6),
+    .rx_serial_data_rx_serial_data             (rx_data[RX_JESD_L-1:0]),
+    .rx_serial_data_n_rx_serial_data_n         (rx_data_n[RX_JESD_L-1:0]),
+    .rx_ref_clk_clk                            (refclk_fgt_2),
+    .rx_sync_export                            (fpga_syncout_0),
+    .rx_sysref_export                          (sysref2),
+    .rx_device_clk_clk                         (clkin10),
+    .mxfe_gpio_export                          ({fpga_syncout_1_n,  // 14
+                                                 fpga_syncout_1_p,  // 13
+                                                 fpga_syncin_1_n,   // 12
+                                                 fpga_syncin_1_p,   // 11
+                                                 gpio}));           // 10:0
 
 endmodule
