@@ -161,6 +161,10 @@ module axi_spi_engine #(
   wire up_sdi_fifo_almost_full;
 
   wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
+
+  wire [255:0] sdi_fifo_out_data_int;
+  assign sdi_fifo_out_data_int = sdi_fifo_out_data;
+
   wire sdi_fifo_out_ready;
   wire sdi_fifo_out_valid;
 
@@ -349,25 +353,25 @@ module axi_spi_engine #(
       8'h35: up_rdata_ff <= sdo_fifo_room;
       8'h36: up_rdata_ff <= (sdi_fifo_out_valid == 1) ? sdi_fifo_level + 1 : sdi_fifo_level; /* beacuse of first-word-fall-through */
 
-      8'h3a: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
-      8'h3b: up_rdata_ff <= sdi_fifo_out_data[(2*DATA_WIDTH)-1:DATA_WIDTH];
-      8'h3c: up_rdata_ff <= sdi_fifo_out_data[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
-      8'h3d: up_rdata_ff <= sdi_fifo_out_data[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
-      8'h3e: up_rdata_ff <= sdi_fifo_out_data[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
-      8'h3f: up_rdata_ff <= sdi_fifo_out_data[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
-      8'h40: up_rdata_ff <= sdi_fifo_out_data[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
-      8'h41: up_rdata_ff <= sdi_fifo_out_data[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
+      8'h3a: up_rdata_ff <= sdi_fifo_out_data_int[DATA_WIDTH-1:0];
+      8'h3b: up_rdata_ff <= sdi_fifo_out_data_int[(2*DATA_WIDTH)-1:DATA_WIDTH];
+      8'h3c: up_rdata_ff <= sdi_fifo_out_data_int[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
+      8'h3d: up_rdata_ff <= sdi_fifo_out_data_int[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
+      8'h3e: up_rdata_ff <= sdi_fifo_out_data_int[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
+      8'h3f: up_rdata_ff <= sdi_fifo_out_data_int[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
+      8'h40: up_rdata_ff <= sdi_fifo_out_data_int[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
+      8'h41: up_rdata_ff <= sdi_fifo_out_data_int[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
 
       /* PEEK registers */
 
-      8'h48: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
-      8'h49: up_rdata_ff <= sdi_fifo_out_data[(2*DATA_WIDTH)-1:DATA_WIDTH];
-      8'h4A: up_rdata_ff <= sdi_fifo_out_data[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
-      8'h4B: up_rdata_ff <= sdi_fifo_out_data[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
-      8'h4C: up_rdata_ff <= sdi_fifo_out_data[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
-      8'h4D: up_rdata_ff <= sdi_fifo_out_data[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
-      8'h4E: up_rdata_ff <= sdi_fifo_out_data[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
-      8'h4F: up_rdata_ff <= sdi_fifo_out_data[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
+      8'h48: up_rdata_ff <= sdi_fifo_out_data_int[DATA_WIDTH-1:0];
+      8'h49: up_rdata_ff <= sdi_fifo_out_data_int[(2*DATA_WIDTH)-1:DATA_WIDTH];
+      8'h4A: up_rdata_ff <= sdi_fifo_out_data_int[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
+      8'h4B: up_rdata_ff <= sdi_fifo_out_data_int[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
+      8'h4C: up_rdata_ff <= sdi_fifo_out_data_int[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
+      8'h4D: up_rdata_ff <= sdi_fifo_out_data_int[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
+      8'h4E: up_rdata_ff <= sdi_fifo_out_data_int[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
+      8'h4F: up_rdata_ff <= sdi_fifo_out_data_int[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
 
       8'h46: up_rdata_ff <= {offload0_enable_reg};
       8'h47: up_rdata_ff <= {offload0_enabled_s};
