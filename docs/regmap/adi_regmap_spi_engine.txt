@@ -354,16 +354,14 @@ ENDFIELD
 
 REG
 0x3a
-SDI_FIFO
+SDI_FIFO_0
 ENDREG
 
 FIELD
 [31:0] 0xXXXXXXXX
-SDI_FIFO
+SDI_FIFO_0
 RO
-SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
-Reading this register when the SDI FIFO is empty will return undefined data.
-Writing to it has no effect.
+Store SDI's 32 bits MSB, if exists.
 ENDFIELD
 
 ############################################################################################
@@ -371,12 +369,12 @@ ENDFIELD
 
 REG
 0x3b
-SDI_FIFO_MSB
+SDI_FIFO_1
 ENDREG
 
 FIELD
 [31:0] 0xXXXXXXXX
-SDI_FIFO_MSB
+SDI_FIFO_1
 RO
 Store SDI's 32 bits MSB, if exists.
 ENDFIELD
@@ -386,17 +384,59 @@ ENDFIELD
 
 REG
 0x3c
-SDI_FIFO_PEEK
+SDI_FIFO_2
 ENDREG
 
 FIELD
 [31:0] 0xXXXXXXXX
-SDI_FIFO_PEEK
+SDI_FIFO_2
 RO
-SDI FIFO peek register.
-Reading from this register returns the first entry from the SDI FIFO, but without removing
-it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
-data. Writing to it has no effect.
+Store SDI's 32 bits MSB, if exists.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3d
+SDI_FIFO_3
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_3
+RO
+Store SDI's 32 bits MSB, if exists.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3e
+SDI_FIFO_4
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_4
+RO
+Store SDI's 32 bits MSB, if exists.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x3f
+SDI_FIFO_5
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_5
+RO
+Store SDI's 32 bits MSB, if exists.
 ENDFIELD
 
 ############################################################################################
@@ -404,14 +444,14 @@ ENDFIELD
 
 REG
 0x40
-OFFLOAD0_EN
+SDI_FIFO_6
 ENDREG
 
 FIELD
-[31:0] 0x00000000
-OFFLOAD0_EN
-RW
-Set this bit to enable the offload module.
+[31:0] 0xXXXXXXXX
+SDI_FIFO_6
+RO
+Store SDI's 32 bits MSB, if exists.
 ENDFIELD
 
 ############################################################################################
@@ -419,14 +459,14 @@ ENDFIELD
 
 REG
 0x41
-OFFLOAD0_STATUS
+SDI_FIFO_7
 ENDREG
 
 FIELD
-[31:0] 0x00000000
-OFFLOAD0_STATUS
+[31:0] 0xXXXXXXXX
+SDI_FIFO_7
 RO
-Offload status register.
+Store SDI's 32 bits MSB, if exists.
 ENDFIELD
 
 ############################################################################################
@@ -476,6 +516,180 @@ WO
 Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
 Writing to this register when the SDO FIFO is full has no effect and the written entry is
 discarded. Reading from this register always returns 0x0.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x46
+OFFLOAD0_EN
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+OFFLOAD0_EN
+RW
+Set this bit to enable the offload module.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x47
+OFFLOAD0_STATUS
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+OFFLOAD0_STATUS
+RO
+Offload status register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x48
+SDI_FIFO_PEEK_0
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_0
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x49
+SDI_FIFO_PEEK_1
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_1
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4A
+SDI_FIFO_PEEK_2
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_2
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4B
+SDI_FIFO_PEEK_3
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_3
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4C
+SDI_FIFO_PEEK_4
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_4
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4D
+SDI_FIFO_PEEK_5
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_5
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4E
+SDI_FIFO_PEEK_6
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_6
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x4F
+SDI_FIFO_PEEK_7
+ENDREG
+
+FIELD
+[31:0] 0xXXXXXXXX
+SDI_FIFO_PEEK_7
+RO
+SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.
 ENDFIELD
 
 ############################################################################################
