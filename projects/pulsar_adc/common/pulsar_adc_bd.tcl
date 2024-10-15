@@ -15,6 +15,8 @@ set num_sdo       1
 set sdi_delay     1
 set echo_sclk     0
 
+set SPLIT_TRANSFER_SIZE [get_env_param SPLIT_TRANSFER_SIZE 0]
+
 set hier_spi_engine spi_pulsar_adc
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
@@ -40,6 +42,24 @@ ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_DATA_WIDTH_SRC $data_width
 ad_ip_parameter axi_pulsar_adc_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
+if {$SPLIT_TRANSFER_SIZE != 0} {
+    ad_ip_instance util_axis_fifo_asym rx_asym_fifo
+    ad_ip_parameter rx_asym_fifo CONFIG.ASYNC_CLK 0
+    ad_ip_parameter rx_asym_fifo CONFIG.S_DATA_WIDTH $SPLIT_TRANSFER_SIZE
+    ad_ip_parameter rx_asym_fifo CONFIG.S_ADDRESS_WIDTH 3
+    ad_ip_parameter rx_asym_fifo CONFIG.M_DATA_WIDTH [expr {2*$SPLIT_TRANSFER_SIZE}]
+    ad_ip_parameter rx_asym_fifo CONFIG.M_AXIS_REGISTERED 1
+    ad_ip_parameter rx_asym_fifo CONFIG.ALMOST_EMPTY_THRESHOLD 2
+    ad_ip_parameter rx_asym_fifo CONFIG.ALMOST_FULL_THRESHOLD 6
+    ad_ip_parameter rx_asym_fifo CONFIG.TLAST_EN 0
+    ad_ip_parameter rx_asym_fifo CONFIG.TKEEP_EN 0
+
+    ad_connect spi_clk rx_asym_fifo/s_axis_aclk
+    ad_connect $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn rx_asym_fifo/s_axis_aresetn
+    ad_connect spi_clk rx_asym_fifo/m_axis_aclk
+    ad_connect $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn rx_asym_fifo/m_axis_aresetn
+}
+
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
@@ -48,7 +68,12 @@ ad_connect $sys_cpu_clk pulsar_adc_trigger_gen/s_axi_aclk
 ad_connect sys_cpu_resetn pulsar_adc_trigger_gen/s_axi_aresetn
 ad_connect pulsar_adc_trigger_gen/pwm_0 $hier_spi_engine/trigger
 
-ad_connect axi_pulsar_adc_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
+if {$SPLIT_TRANSFER_SIZE != 0} {
+    ad_connect rx_asym_fifo/s_axis $hier_spi_engine/M_AXIS_SAMPLE
+    ad_connect axi_pulsar_adc_dma/s_axis rx_asym_fifo/m_axis
+} else {
+    ad_connect axi_pulsar_adc_dma/s_axis $hier_spi_engine/M_AXIS_SAMPLE
+}
 ad_connect $hier_spi_engine/m_spi pulsar_adc_spi
 
 ad_connect $sys_cpu_clk $hier_spi_engine/clk

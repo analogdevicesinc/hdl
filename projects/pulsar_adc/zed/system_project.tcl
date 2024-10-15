@@ -25,6 +25,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##
 set FMC_N_PMOD [get_env_param FMC_N_PMOD 1]
 set SPI_OP_MODE [get_env_param SPI_OP_MODE 0]
+set SPLIT_TRANSFER_SIZE [get_env_param SPLIT_TRANSFER_SIZE 0]
 
 adi_project pulsar_adc_pmdz_zed 0 [list \
   FMC_N_PMOD    [get_env_param FMC_N_PMOD  1] \
@@ -54,6 +55,10 @@ if {$FMC_N_PMOD == 0} {
     }
 } else {
   return -code error [format "ERROR: Invalid eval board type! ..."]
+}
+
+if {$SPLIT_TRANSFER_SIZE < 0 || ![string is integer $SPLIT_TRANSFER_SIZE]} {
+  return -code error [format "ERROR: Illegal value for SPLIT_TRANSFER_SIZE ..."]
 }
 
 adi_project_run pulsar_adc_pmdz_zed
