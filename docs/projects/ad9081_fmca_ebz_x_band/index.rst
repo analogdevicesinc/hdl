@@ -137,7 +137,7 @@ The following are the parameters of this project that can be configured:
 -  [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
    kilosamples per converter (M)
 -  Check out this guide on more details regarding these parameters:
-   :dokuwiki:`resources/fpga/docs/axi_tdd`
+   :ref:`axi_tdd`
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,38 +148,40 @@ added to the base address from HDL (see more at :ref:`architecture`).
 ==================== ===========
 Instance             ZynqMP
 ==================== ===========
-axi_mxfe_rx_xcvr     0x84A6_0000
 rx_mxfe_tpl_core     0x84A1_0000
+axi_mxfe_rx_xcvr     0x84A6_0000
 axi_mxfe_rx_jesd     0x84A9_0000
-axi_mxfe_rx_dma      0x9C42_0000
-mxfe_rx_data_offload 0x9C45_0000
-axi_mxfe_tx_xcvr     0x84B6_0000
 tx_mxfe_tpl_core     0x84B1_0000
+axi_mxfe_tx_xcvr     0x84B6_0000
 axi_mxfe_tx_jesd     0x84B9_0000
+axi_iic_pmod         0x8510_0000
+axi_spi_pmod         0x8520_0000
+axi_spi_fmc          0x8530_0000
+axi_mxfe_rx_dma      0x9C42_0000
 axi_mxfe_tx_dma      0x9C43_0000
 mxfe_tx_data_offload 0x9C44_0000
+mxfe_rx_data_offload 0x9C45_0000
 axi_tdd_0            0x9C46_0000
-axi_iic_pmod         0x9510_0000
-axi_spi_pmod         0x9520_0000
-axi_spi_fmc          0x9530_0000
 ==================== ===========
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 20 20 20 20 20
+   :widths: 20 20 20 20 20 20
    :header-rows: 1
 
    * - I2C type
      - I2C manager instance
      - Alias
      - Address
+     - Device Address
      - I2C subordinate
    * - PL
      - axi_iic
      - axi_i2c_pmod
-     - 0x6A
+     - 0x8510_0000
+     - 0x6A ``ADDR1=NC,ADDR0=NC``
      - LTC2992
 
 SPI connections
