@@ -51,28 +51,26 @@ set dac_dma_data_width $DAC_DATA_WIDTH
 ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_SRC 0 \
   DMA_TYPE_DEST 1 \
-  DMA_DATA_WIDTH_SRC 64 \
+  DMA_DATA_WIDTH_SRC 128 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 300
 
 set dac_data_offload_name  tx_data_offload
-set dac_data_width         256
-set do_axi_data_width      $dac_data_width
-set dac_dma_data_width     $dac_data_width
-set dac_fifo_address_width 13
-set SHARED_DEVCLK          1
+set dac_do_mem_type        0
+set do_axi_data_width      $dac_dma_data_width
+set dac_fifo_address_width 10
 
-set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+set dac_data_offload_size [expr $dac_dma_data_width / 8 * 2**$dac_fifo_address_width]
 
   ad_data_offload_create $dac_data_offload_name \
                         1 \
                         $dac_do_mem_type \
                         $dac_data_offload_size \
-                        $dac_data_width \
-                        $dac_data_width \
-                        $do_axi_data_width \
-                        $SHARED_DEVCLK
+                        $dac_dma_data_width \
+                        $dac_dma_data_width \
+                        $do_axi_data_width
 
 # shared transceiver core
 
@@ -121,23 +119,24 @@ for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect util_dac_jesd204_xcvr/tx_out_clk_0             $dac_data_offload_name/m_axis_aclk
-ad_connect dac_jesd204_link_rstgen/peripheral_reset        $dac_data_offload_name/m_axis_aresetn
+ad_connect dac_jesd204_link_rstgen/peripheral_aresetn     $dac_data_offload_name/m_axis_aresetn
 
 
 ad_connect dac_jesd204_transport/dac_dunf GND
 
 ad_connect sys_250m_clk     $dac_data_offload_name/s_axis_aclk
-ad_connect  sys_250m_reset   $dac_data_offload_name/s_axis_aresetn
+ad_connect  sys_250m_resetn   $dac_data_offload_name/s_axis_aresetn
 
 ad_connect $sys_cpu_resetn   $dac_data_offload_name/s_axi_aresetn
 
 
-ad_connect $dac_data_offload_name/s_axis  axi_mxfe_tx_dma/m_axis
-ad_connect  dac_upack/s_axis              $dac_data_offload_name/m_axis
+ad_connect $dac_data_offload_name/s_axis    dac_dma/m_axis
+ad_connect $dac_data_offload_name/init_req  dac_dma/m_axis_xfer_req
+ad_connect $dac_data_offload_name/m_axis    dac_upack/s_axis
+ad_connect $dac_data_offload_name/sync_ext  GND
 
-
-ad_connect sys_250m_clk                    dac_dma/m_axis_aclk
-ad_connect sys_250m_resetn                 dac_dma/m_src_axi_aresetn
+ad_connect sys_250m_clk      dac_dma/m_axis_aclk
+ad_connect sys_250m_resetn   dac_dma/m_src_axi_aresetn
 
 # interconnect (cpu)
 
