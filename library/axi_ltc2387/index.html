@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AXI AD7768 &#8212; HDL  documentation</title>
+    <title>AXI LTC2387 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=3e3e1b4d" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AXI AD777x" href="../axi_ad777x/index.html" />
-    <link rel="prev" title="AXI AD7616" href="../axi_ad7616/index.html" />
+    <link rel="next" title="Data Offload" href="../data_offload/index.html" />
+    <link rel="prev" title="AXI ADAQ8092" href="../axi_adaq8092/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -101,14 +101,18 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AXI AD7768</a><ul>
+<li><a class="reference internal" href="#">AXI LTC2387</a><ul>
 <li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#files">Files</a></li>
 <li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
 <li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
 <li><a class="reference internal" href="#interface">Interface</a></li>
 <li><a class="reference internal" href="#detailed-architecture">Detailed Architecture</a></li>
-<li><a class="reference internal" href="#detailed-description">Detailed Description</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed Description</a><ul>
+<li><a class="reference internal" href="#interface-module-description">Interface module description</a></li>
+<li><a class="reference internal" href="#channel-module-description">Channel module description</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#register-map">Register Map</a></li>
 <li><a class="reference internal" href="#design-guidelines">Design Guidelines</a></li>
 <li><a class="reference internal" href="#software-support">Software Support</a></li>
@@ -209,7 +213,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad485x/index.html">AXI AD485x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
@@ -218,7 +222,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ltc2387/index.html">AXI LTC2387</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
@@ -314,27 +318,31 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="axi-ad7768">
-<span id="id1"></span><h1>AXI AD7768<a class="headerlink" href="#axi-ad7768" title="Permalink to this heading">#</a></h1>
+  <section id="axi-ltc2387">
+<span id="id1"></span><h1>AXI LTC2387<a class="headerlink" href="#axi-ltc2387" title="Permalink to this heading">#</a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 397.2 306" width="397.2" height="306"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 301.2 402" width="301.2" height="402"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="361.2" height="252" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-clk_in"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">clk_in</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">adc_dovf</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">ready_in</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">data_in</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">adc_sshot</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-adc_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="54">adc_clk</text></a><g transform="translate(379.2,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_reset"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="78">adc_reset</text></a><g transform="translate(379.2,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="102">adc_data</text></a><g transform="translate(379.2,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="126">adc_sync</text></a><g transform="translate(379.2,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="150">adc_valid</text></a><g transform="translate(379.2,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="174">adc_crc_ch_mismatch</text></a><g transform="translate(379.2,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="198">adc_enable_*</text></a><g transform="translate(379.2,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="222">adc_valid_*</text></a><g transform="translate(379.2,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="361.2" y="246">adc_data_*</text></a><g transform="translate(379.2,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="361.2" height="252" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="198.6" y="290">axi_ad7768</text></svg></section>
-</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768">AXI AD7768</a> IP core
-can be used to interface the <a class="icon adi reference external" href="https://www.analog.com/AD7768">AD7768</a> and
-<a class="icon adi reference external" href="https://www.analog.com/AD7768-4">AD7768-4</a> ADC, in 1, 2, 4 or 8 data lines active.
-More about the generic framework interfacing ADCs, that contains the
-<code class="docutils literal notranslate"><span class="pre">up_adc_channel</span></code> and <code class="docutils literal notranslate"><span class="pre">up_adc_common</span> <span class="pre">modules</span></code>, can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="265.2" height="348" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-ref_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">ref_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dco_p"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">dco_p</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dco_n"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">dco_n</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">delay_clk</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">clk_gate</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">da_p</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">da_n</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">db_p</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="318">db_n</text></a><g transform="translate(18,310.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="342">adc_dovf</text></a><g transform="translate(18,334.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="265.2" y="54">adc_valid</text></a><g transform="translate(283.2,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="265.2" y="78">adc_data</text></a><g transform="translate(283.2,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="265.2" height="348" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="150.6" y="386">axi_ltc2387</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387">AXI LTC2387</a> IP core can be used to
+interface <a class="icon adi reference external" href="https://www.analog.com/LTC2387-18">LTC2387-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2386-18">LTC2386-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2385-18">LTC2385-18</a> and
+<a class="icon adi reference external" href="https://www.analog.com/ADAQ23878">ADAQ23878</a> devices.</p>
+<p>This documentation only covers the IP core and requires that one must be
+familiar with the device for a complete and better understanding.</p>
+<p>More about the generic framework interfacing ADCs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html#axi-adc"><span class="std std-ref">Generic AXI ADC</span></a>.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>AXI based configuration</p></li>
-<li><p>CRC validation flag</p></li>
-<li><p>Configurable number of active data lines</p></li>
-<li><p>Real-time data header access</p></li>
-<li><p>Vivado and Quartus compatible</p></li>
+<li><p>AXI-based configuration</p></li>
+<li><p>Vivado compatible</p></li>
+<li><p>High-speed data acquisition</p></li>
+<li><p>Imaging</p></li>
+<li><p>Communications</p></li>
+<li><p>Control loops</p></li>
+<li><p>Instrumentation</p></li>
+<li><p>ATE</p></li>
 </ul>
 </section>
 <section id="files">
@@ -347,17 +355,20 @@ More about the generic framework interfacing ADCs, that contains the
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768/axi_ad7768.v">library/axi_ad7768/axi_ad7768.v</a></p></td>
-<td><p>Verilog source for the AXI AD7768.</p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387.v">library/axi_ltc2387/axi_ltc2387.v</a></p></td>
+<td><p>Verilog source for the module</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768/axi_ad7768_if.v">library/axi_ad7768/axi_ad7768_if.v</a></p></td>
-<td><p>Verilog source for the AXI AD7768 interface module.</p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387_channel.v">library/axi_ltc2387/axi_ltc2387_channel.v</a></p></td>
+<td><p>Verilog source for AXI LTC2387 channel</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768/axi_ad7768_ip.tcl">library/axi_ad7768/axi_ad7768_ip.tcl</a></p></td>
-<td><p>TCL script to generate the Vivado IP-integrator project.</p></td>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387_if.v">library/axi_ltc2387/axi_ltc2387_if.v</a></p></td>
+<td><p>Verilog source for the AXI LTC2387 interface module</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768/axi_ad7768_hw.tcl">library/axi_ad7768/axi_ad7768_hw.tcl</a></p></td>
-<td><p>TCL script to generate the Quartus IP-integrator project.</p></td>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">library/common/up_adc_common.v</a></p></td>
+<td><p>Verilog source for the ADC Common regmap</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">library/common/up_adc_channel.v</a></p></td>
+<td><p>Verilog source for the ADC Channel regmap</p></td>
 </tr>
 </tbody>
 </table>
@@ -365,7 +376,8 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI AD7768 block diagram" src="../../_images/block_diagram4.svg" /></section>
+<a class="reference internal image-reference" href="../../_images/axi_ltc2387_block_diagram.svg"><img alt="AXI LTC2387 IP block diagram" class="align-center" src="../../_images/axi_ltc2387_block_diagram.svg" width="800" /></a>
+</section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -380,20 +392,74 @@ More about the generic framework interfacing ADCs, that contains the
 </thead>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
-<td class="description"><section>
-<p>Core ID should be unique for each IP in the system</p>
-</section>
-</td>
+<td class="description"><p>Id.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_CHANNELS</span></code></td>
-<td class="description"><section>
-<p>Select number of ADC channels. 8 for AD7768 and 4 for AD7768-4</p>
-</section>
-</td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
-<td class="range"><p>4, 8</p></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
+<td class="description"><p>Fpga Technology.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
+<td class="description"><p>Fpga Family.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
+<td class="description"><p>Speed Grade.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
+<td class="description"><p>Dev Package.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">IO_DELAY_GROUP</span></code></td>
+<td class="description"><p>Io Delay Group.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">adc_if_delay_group</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">IODELAY_CTRL</span></code></td>
+<td class="description"><p>Iodelay Ctrl.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DELAY_REFCLK_FREQUENCY</span></code></td>
+<td class="description"><p>Delay Refclk Frequency.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">200</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
+<td class="description"><p>Userports Disable.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
+<td class="description"><p>Dataformat Disable.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ADC_INIT_DELAY</span></code></td>
+<td class="description"><p>Adc Init Delay.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">22</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ADC_RES</span></code></td>
+<td class="description"><p>ADC_RES.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">18</span></code></td>
+<td class="range"><p>18, 16</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">OUT_RES</span></code></td>
+<td class="description"><p>OUT_RES.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">32</span></code></td>
+<td class="range"><p>32, 16</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">TWOLANES</span></code></td>
+<td class="description"><p>Twolanes.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>1, 0</p></td>
 </tr>
 </tbody>
 </table>
@@ -401,13 +467,10 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<span id="axi-ltc2387-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="17afadbdd7a60322445254ff9719325f74fce6b2" name="17afadbdd7a60322445254ff9719325f74fce6b2" type="checkbox"></input><label for="17afadbdd7a60322445254ff9719325f74fce6b2"><div><p>s_axi</p>
-<section>
-<p>Standard AXI Slave Memory Map interface.</p>
-</section>
+<input class="collapsible_input" id="ccb9ffc7f6b4e435b91eae2e7c9eae570a4c9bc7" name="ccb9ffc7f6b4e435b91eae2e7c9eae570a4c9bc7" type="checkbox"></input><label for="ccb9ffc7f6b4e435b91eae2e7c9eae570a4c9bc7"><div><p>s_axi</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -522,7 +585,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 <section id="bus-interface-s_axi_aclk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="0e95107183cc43b14afa660588d81fb6a4451365" name="0e95107183cc43b14afa660588d81fb6a4451365" type="checkbox"></input><label for="0e95107183cc43b14afa660588d81fb6a4451365"><div><p>s_axi_aclk</p>
+<input class="collapsible_input" id="a70c09e325d362354af720f10f6208e822be6c43" name="a70c09e325d362354af720f10f6208e822be6c43" type="checkbox"></input><label for="a70c09e325d362354af720f10f6208e822be6c43"><div><p>s_axi_aclk</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -547,7 +610,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 <section id="bus-interface-s_axi_aresetn">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="424f630499ecbfacfd52704e5a80b93ba7506d71" name="424f630499ecbfacfd52704e5a80b93ba7506d71" type="checkbox"></input><label for="424f630499ecbfacfd52704e5a80b93ba7506d71"><div><p>s_axi_aresetn</p>
+<input class="collapsible_input" id="ed5dd83ae35a5794e736cfc9e0d587cdb6b8d22b" name="ed5dd83ae35a5794e736cfc9e0d587cdb6b8d22b" type="checkbox"></input><label for="ed5dd83ae35a5794e736cfc9e0d587cdb6b8d22b"><div><p>s_axi_aresetn</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -570,12 +633,9 @@ More about the generic framework interfacing ADCs, that contains the
 </div>
 </div>
 </section>
-<section id="bus-interface-adc_clk">
+<section id="bus-interface-ref_clk">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="ebd6112cb70c478318e8407c42a51452397fd787" name="ebd6112cb70c478318e8407c42a51452397fd787" type="checkbox"></input><label for="ebd6112cb70c478318e8407c42a51452397fd787"><div><p>adc_clk</p>
-<section>
-<p>This is the clock domain that most of the modules of the core run on.</p>
-</section>
+<input class="collapsible_input" id="ca3df6d0910a9733dbac3d51f7c87322f1e3f83a" name="ca3df6d0910a9733dbac3d51f7c87322f1e3f83a" type="checkbox"></input><label for="ca3df6d0910a9733dbac3d51f7c87322f1e3f83a"><div><p>ref_clk</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -587,35 +647,7 @@ More about the generic framework interfacing ADCs, that contains the
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_clk</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-<section id="bus-interface-clk_in">
-<div class="collapsible docutils container">
-<input class="collapsible_input" id="0dbed91e5df32bb2016292dd3e347cce037d0932" name="0dbed91e5df32bb2016292dd3e347cce037d0932" type="checkbox"></input><label for="0dbed91e5df32bb2016292dd3e347cce037d0932"><div><p>clk_in</p>
-<section>
-<p>Input clock.</p>
-</section>
-</div><div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
-<th class="head"><p>Logical Port</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>Dependency</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">clk_in</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ref_clk</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
@@ -626,12 +658,9 @@ More about the generic framework interfacing ADCs, that contains the
 </div>
 </div>
 </section>
-<section id="bus-interface-adc_reset">
+<section id="bus-interface-dco_p">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="b8869e60966d6b4caf0a9af95e5a4d23b5d7bf8a" name="b8869e60966d6b4caf0a9af95e5a4d23b5d7bf8a" type="checkbox"></input><label for="b8869e60966d6b4caf0a9af95e5a4d23b5d7bf8a"><div><p>adc_reset</p>
-<section>
-<p>Output reset, on the adc_clk domain.</p>
-</section>
+<input class="collapsible_input" id="e42f28d1063ac5af9cf7dde362041e08accb2975" name="e42f28d1063ac5af9cf7dde362041e08accb2975" type="checkbox"></input><label for="e42f28d1063ac5af9cf7dde362041e08accb2975"><div><p>dco_p</p>
 </div><div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -643,9 +672,34 @@ More about the generic framework interfacing ADCs, that contains the
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_reset</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
-<td><p>out</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dco_p</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-dco_n">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="c290f0d1f729b3e7dfd08cb20f84cd0b4875ed4b" name="c290f0d1f729b3e7dfd08cb20f84cd0b4875ed4b" type="checkbox"></input><label for="c290f0d1f729b3e7dfd08cb20f84cd0b4875ed4b"><div><p>dco_n</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dco_n</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -656,7 +710,7 @@ More about the generic framework interfacing ADCs, that contains the
 </section>
 <section id="ports">
 <div class="collapsible docutils container">
-<input class="collapsible_input" id="2150ae0f6f11fe773a45c12294092259abffaa55" name="2150ae0f6f11fe773a45c12294092259abffaa55" type="checkbox"></input><label for="2150ae0f6f11fe773a45c12294092259abffaa55"><p>Ports</p>
+<input class="collapsible_input" id="7e45e925f44f653a1e2a40fd99edf063c20d6f78" name="7e45e925f44f653a1e2a40fd99edf063c20d6f78" type="checkbox"></input><label for="7e45e925f44f653a1e2a40fd99edf063c20d6f78"><p>Ports</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -668,93 +722,50 @@ More about the generic framework interfacing ADCs, that contains the
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_dovf</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">delay_clk</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Data overflow input, from the DMA.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ready_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">clk_gate</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Input ready signal.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">data_in</span></code></td>
-<td><p>in [7:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Serial input data.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_sshot</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">da_p</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Single shot conversion.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_data</span></code></td>
-<td><p>out [31:0]</p></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">da_n</span></code></td>
+<td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Serial output data.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_sync</span></code></td>
-<td><p>out</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">db_p</span></code></td>
+<td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Start of transfer flag for serial data.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">db_n</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_valid</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Set when valid data is available in the serial output.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_crc_ch_mismatch</span></code></td>
-<td><p>out [7:0]</p></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_data</span></code></td>
+<td><p>out [15:0]</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Channels CRC mismatch flags register.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_enable_*</span></code></td>
-<td><p>out</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_dovf</span></code></td>
+<td><p>in</p></td>
 <td><p></p></td>
-<td class="description"><section>
-<p>Set when the channel is enabled, activated by software.</p>
-</section>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_valid_*</span></code></td>
-<td><p>out</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Set when valid channel data is available on the bus.</p>
-</section>
-</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_data_*</span></code></td>
-<td><p>out [31:0]</p></td>
-<td><p></p></td>
-<td class="description"><section>
-<p>Channel parallel output data.</p>
-</section>
-</td>
+<td class="description"><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -765,25 +776,54 @@ More about the generic framework interfacing ADCs, that contains the
 </div></section>
 <section id="detailed-architecture">
 <h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Permalink to this heading">#</a></h2>
-<img alt="AXI AD7768 detailed architecture" src="../../_images/detailed_architecture1.svg" /></section>
+<p>From the HDL perspective, the selection between the 16-bit and the 18-bit
+version of the chip, is done by the <cite>ADC_RES</cite> and <cite>OUT_RES</cite> parameters of
+the modules.</p>
+<ul class="simple">
+<li><p>For the 18-bit, ADC_RES=18 (=&gt; OUT_RES=32; addresses should be on a nb. of
+bits power of 2)</p></li>
+<li><p>For the 16-bit, ADC_RES=16 (=&gt; OUT_RES=16)</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using the ONE LANE configuration (TWOLANES=0), the only resolution
+supported is 18 bits!</p>
+</div>
+</section>
 <section id="detailed-description">
 <h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
-<p>The top module, axi_ad7768, instantiates:</p>
+<p>The top module <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387.v"></a> instantiates:</p>
 <ul class="simple">
-<li><p>The ad7768 interface module</p></li>
-<li><p>The ADC channel register map</p></li>
-<li><p>The ADC common register map</p></li>
-<li><p>The AXI handling interface</p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387_if.v">(LVDS) interface module</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387/axi_ltc2387_channel.v">channel processing module</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_delay_cntrl.v">delay control module</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">ADC common register map</a></p></li>
+<li><p>the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v">AXI handling interface</a></p></li>
 </ul>
-<p>The AD7768 interface module has as input the serial data lines, the ready_in
-signal and the interface clock. Data is deserialized according to the number
-of active lanes. The interface module also implements a parallel CRC check
-algorithm.
-The data from the interface module is processed by the adc channel module.
-<code class="docutils literal notranslate"><span class="pre">up_adc_common</span></code> module implements the ADC COMMON register map, allowing for
-basic monitoring and control of the ADC.
-<code class="docutils literal notranslate"><span class="pre">up_adc_channel</span></code> module implements the ADC CHANNEL register map, allowing for
-basic monitoring and control of the ADC’s channel.</p>
+<section id="interface-module-description">
+<h3>Interface module description<a class="headerlink" href="#interface-module-description" title="Permalink to this heading">#</a></h3>
+<p>The LVDS interface module has as inputs the LVDS signals for clock and data:</p>
+<ul class="simple">
+<li><p><strong>dco_p/dco_n</strong>: LVDS clock input; it is an echoed version of the CLK+/CLK-
+signal, and it’s used to latch the data outputs from the chip.</p></li>
+<li><p><strong>da_p/da_n</strong> and <strong>db_p/db_n</strong>: serial LVDS data inputs; DB+/- is used only
+when TWOLANES=1</p></li>
+<li><p><strong>clk_gate</strong>: this signal clk_gate is enabling the CLK+/CLK- which is driven
+by the reference clock. It is generated by AXI_PWM_GEN.</p></li>
+<li><p><strong>adc_valid</strong>: it is 1 for the current sample that is sent. This is generated
+depending on clk_gate.</p></li>
+<li><p><strong>adc_data</strong>: depending on TWOLANES parameter, whether it is set or not,
+the output adc_data is either taken from the da_p/_n port interleaved with
+bits from db_p/_n, or it is taken only from da_p/_n port.</p></li>
+</ul>
+</section>
+<section id="channel-module-description">
+<h3>Channel module description<a class="headerlink" href="#channel-module-description" title="Permalink to this heading">#</a></h3>
+<p>The expected pattern is created and checked if the data received from the DMA
+is the correct one (this is used for quick validation of the design).</p>
+<p>In the case of the device with 16-bit resolution, a sign extension is done
+additionally.</p>
+</section>
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
@@ -2335,39 +2375,39 @@ Where n is from 0 to 15.</p>
 </div></section>
 <section id="design-guidelines">
 <h2>Design Guidelines<a class="headerlink" href="#design-guidelines" title="Permalink to this heading">#</a></h2>
-<p>The control of the AD7768 chip is done through a SPI interface, which is needed
-at system level.</p>
-<p>The <em>ADC interface signals</em> must be connected directly to the top file of the
-design, as IO primitives are part of the IP.</p>
-<p>The example design uses a DMA to move the data from the output of the IP to
-memory.</p>
-<p>If the data needs to be processed in HDL before moved to the memory, it can be
-done at the output of the IP (at system level) or inside of the adc interface
-module (at IP level).</p>
-<p>The example design uses a processor to program all the registers. If no
-processor is available in your system, you can create your own IP starting from
-the interface module.</p>
+<p>The control of the chip is done through an SPI interface, which is needed at the
+system level.
+The <a class="reference internal" href="#axi-ltc2387-interface"><span class="std std-ref">Interface</span></a> must be connected directly to the top file of
+the design, as I/O primitives are part of the IP.</p>
+<p>The example design uses a DMA to move the data from the output of the IP to memory.</p>
+<p>If the data needs to be processed in HDL before moving to the memory, it can be
+done at the output of the IP (at the system level) or inside the ADC interface
+module (at the IP level).</p>
+<p>The example design uses a processor to program all the registers.</p>
+<p>If no processor is available in your system, you can create your IP starting
+from the interface module.</p>
 </section>
 <section id="software-support">
 <h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Linux documentation <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7768">on wiki</a></p></li>
-<li><p>Linux documentation for AD7768-1 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7768-1">on wiki</a></p></li>
-<li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad7768">drivers/adc/ad7768</a>, <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad7768-1">drivers/adc/ad7768-1</a></p></li>
-<li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7768-evb">projects/ad7768-evb</a>, <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7768-1fmcz">projects/ad7768-1fmcz</a></p></li>
-<li><p>IIO documentation support for AD7768-1 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/product-support-software/ad77681_mbed_iio_application">on wiki</a></p></li>
+<li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ltc2387.c">drivers/iio/adc/ltc2387.c</a></p></li>
+<li><p>LTC2387 Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-ltc2387.dts">arch/arm/boot/dts/zynq-zed-adv7511-ltc2387.dts</a></p></li>
+<li><p>CN0577 Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts">arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts</a></p></li>
+<li><p>Linux documentation at <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ltc2387">[Wiki]</a></p></li>
 </ul>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768">library/axi_ad7768</a></p></li>
-<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad7768evb">projects/ad7768evb</a>, <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad77681evb">projects/ad77681evb</a></p></li>
-<li><p>HDL project documentation at <a class="reference internal" href="../../projects/ad7768evb/index.html#ad7768evb"><span class="std std-ref">AD7768-EVB HDL project</span></a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768">AD7768</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-4">AD7768-4</a></p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a></p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a></p></li>
+<li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc2387">library/axi_ltc2387</a></p></li>
+<li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0577">projects/cn0577</a></p></li>
+<li><p>HDL project documentation at <a class="reference internal" href="../../projects/cn0577/index.html#cn0577"><span class="std std-ref">CN0577 HDL project</span></a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2387-18">LTC2387-18</a> 18-bit 15 MSPS</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2386-18">LTC2386-18</a> 18-bit 10 MSPS</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2385-18">LTC2385-18</a> 18-bit 5 MSPS</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ23878">ADAQ23878</a> 18-bit 15 MSPS</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf">Zynq-7000 SoC Overview</a>.</p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf">Zynq-7000 SoC Packaging and Pinout</a>.</p></li>
 </ul>
 </section>
 </section>
@@ -2382,8 +2422,8 @@ the interface module.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../axi_ad7616/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI AD7616</a>
-    <a href="../axi_ad777x/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI AD777x</a>
+    <a href="../axi_adaq8092/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI ADAQ8092</a>
+    <a href="../data_offload/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">Data Offload</a>
               </div>
           
         </div>
