@@ -66,7 +66,8 @@ module axi_dmac_transfer #(
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
   parameter [3:0] AXI_AXCACHE = 4'b0011,
-  parameter [2:0] AXI_AXPROT = 3'b000
+  parameter [2:0] AXI_AXPROT = 3'b000,
+  parameter SG_DELAYED_INPUT = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -74,6 +75,8 @@ module axi_dmac_transfer #(
   input ctrl_enable,
   input ctrl_pause,
   input ctrl_hwdesc,
+
+  input irq,
 
   input req_valid,
   output req_ready,
@@ -261,6 +264,9 @@ module axi_dmac_transfer #(
   wire abort_req;
   wire dma_eot;
 
+  wire s_axis_ready_t;
+  wire s_axis_valid_t;
+
   axi_dmac_reset_manager #(
     .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),
     .ASYNC_CLK_SRC_DEST (ASYNC_CLK_SRC_DEST),
@@ -311,6 +317,43 @@ module axi_dmac_transfer #(
   assign req_eot = ctrl_hwdesc ? (dma_eot & dma_sg_hwdesc_eot) : dma_eot;
   assign req_sg_desc_id = ctrl_hwdesc ? dma_sg_hwdesc_id : 'h00;
   assign dma_sg_in_req_valid = ctrl_hwdesc ? req_valid_gated : 1'b0;
+
+  generate if ((DMA_SG_TRANSFER == 1) && (SG_DELAYED_INPUT == 1)) begin
+
+  wire irq_cdc;
+  reg  irq_d = 1'b0;
+  reg  packet_received = 1'b0;
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) sync_bits_irq (
+    .in_bits (irq),
+    .out_clk (s_axis_aclk),
+    .out_resetn (1'b1),
+    .out_bits (irq_cdc));
+
+  always @(posedge s_axis_aclk) begin
+    irq_d <= irq_cdc;
+  end
+
+  always @(posedge s_axis_aclk) begin
+    if (s_axis_last && s_axis_valid && s_axis_ready)
+      packet_received <= 1'b1;
+    else
+      if (!irq_cdc && irq_d)
+        packet_received <= 1'b0;
+  end
+
+  assign s_axis_ready = (packet_received) ? 1'b0 : s_axis_ready_t;
+  assign s_axis_valid_t = (packet_received) ? 1'b0 : s_axis_valid;
+
+  end else begin
+
+  assign s_axis_ready = s_axis_ready_t;
+  assign s_axis_valid_t = s_axis_valid;
+
+  end endgenerate
 
   /* SG Interface */
   generate if (DMA_SG_TRANSFER == 1) begin
@@ -582,8 +625,8 @@ module axi_dmac_transfer #(
     .m_axi_rresp (m_axi_rresp),
 
     .s_axis_aclk (s_axis_aclk),
-    .s_axis_ready (s_axis_ready),
-    .s_axis_valid (s_axis_valid),
+    .s_axis_ready (s_axis_ready_t),
+    .s_axis_valid (s_axis_valid_t),
     .s_axis_data (s_axis_data),
     .s_axis_user (s_axis_user),
     .s_axis_last (s_axis_last),

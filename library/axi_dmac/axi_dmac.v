@@ -73,7 +73,8 @@ module axi_dmac #(
   parameter ALLOW_ASYM_MEM = 0,
   parameter CACHE_COHERENT = 0,
   parameter [3:0] AXI_AXCACHE = 4'b0011,
-  parameter [2:0] AXI_AXPROT = 3'b000
+  parameter [2:0] AXI_AXPROT = 3'b000,
+  parameter SG_DELAYED_INPUT = 0
 ) (
 
   // Slave AXI interface
@@ -546,7 +547,8 @@ module axi_dmac #(
     .ENABLE_DIAGNOSTICS_IF(ENABLE_DIAGNOSTICS_IF),
     .ALLOW_ASYM_MEM(ALLOW_ASYM_MEM),
     .AXI_AXCACHE(AXI_AXCACHE),
-    .AXI_AXPROT(AXI_AXPROT)
+    .AXI_AXPROT(AXI_AXPROT),
+    .SG_DELAYED_INPUT(SG_DELAYED_INPUT)
   ) i_transfer (
     .ctrl_clk(s_axi_aclk),
     .ctrl_resetn(s_axi_aresetn),
@@ -554,6 +556,8 @@ module axi_dmac #(
     .ctrl_enable(ctrl_enable),
     .ctrl_pause(ctrl_pause),
     .ctrl_hwdesc(ctrl_hwdesc),
+
+    .irq(irq),
 
     .req_valid(up_dma_req_valid),
     .req_ready(up_dma_req_ready),
