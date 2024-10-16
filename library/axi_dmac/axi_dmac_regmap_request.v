@@ -105,7 +105,7 @@ module axi_dmac_regmap_request #(
   // DMA response interface
   input response_eot,
   input [31:0] response_sg_desc_id,
-  input [BYTES_PER_BURST_WIDTH:0] response_measured_burst_length,
+  input [BYTES_PER_BURST_WIDTH-1:0] response_measured_burst_length,
   input response_partial,
   input response_valid,
   output reg response_ready = 1'b1
@@ -153,7 +153,7 @@ module axi_dmac_regmap_request #(
   reg up_clear_tl = 1'b0;
   reg [1:0] up_transfer_id_eot_d = 'h0;
   wire up_bl_partial;
-  wire [BYTES_PER_BURST_WIDTH:0] response_mbl_p1;
+  wire [BYTES_PER_BURST_WIDTH-1:0] response_mbl_p1;
 
   assign request_dest_address = up_dma_dest_address;
   assign request_src_address = up_dma_src_address;
@@ -167,7 +167,7 @@ module axi_dmac_regmap_request #(
       up_dma_src_address <= DMAC_DEF_SRC_ADDR_DEFAULT;
       up_dma_dest_address <= DMAC_DEF_DEST_ADDR_DEFAULT;
       up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= DMAC_DEF_X_LENGTH_DEFAULT;
-      up_dma_req_valid <= AUTORUN[0];
+      up_dma_req_valid <= AUTORUN;
       up_dma_cyclic <= AUTORUN_FLAGS_CYCLIC;
       up_dma_last <= AUTORUN_FLAGS_LAST;
       up_dma_enable_tlen_reporting <= AUTORUN_FLAGS_TLEN;
@@ -401,7 +401,7 @@ module axi_dmac_regmap_request #(
     if (ctrl_enable == 1'b0) begin
       up_measured_transfer_length <= 'h0;
     end else if (response_valid == 1'b1 && response_ready == 1'b1) begin
-      up_measured_transfer_length <= up_measured_transfer_length + {16'h0, response_mbl_p1};
+      up_measured_transfer_length <= up_measured_transfer_length + {17'h0, response_mbl_p1};
     end else if (up_clear_tl == 1'b1) begin
       up_measured_transfer_length <= 'h0;
     end

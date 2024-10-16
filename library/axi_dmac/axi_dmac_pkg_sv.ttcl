@@ -44,7 +44,7 @@
 <: set framelock                [get_property MODELPARAM_VALUE.FRAMELOCK] :>
 <: set max_num_frames           [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
 <: set use_ext_sync             [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
-<: set has_autorun              [get_property MODELPARAM_VALUE.AUTORUN] :>
+<: set autorun                  [get_property MODELPARAM_VALUE.AUTORUN] :>
 <: set autorun_flags            [get_property MODELPARAM_VALUE.AUTORUN_FLAGS] :>
 <: set autorun_src_addr         [get_property MODELPARAM_VALUE.AUTORUN_SRC_ADDR] :>
 <: set autorun_dest_addr        [get_property MODELPARAM_VALUE.AUTORUN_DEST_ADDR] :>
@@ -104,7 +104,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_FRAMELOCK                  = <=: b2i $framelock :>;
   parameter <=: ComponentName :>_MAX_NUM_FRAMES             = <=: $max_num_frames :>;
   parameter <=: ComponentName :>_USE_EXT_SYNC               = <=: b2i $use_ext_sync :>;
-  parameter <=: ComponentName :>_AUTORUN                    = <=: b2i $has_autorun :>;
+  parameter <=: ComponentName :>_AUTORUN                    = <=: b2i $autorun :>;
   parameter <=: ComponentName :>_AUTORUN_FLAGS              = <=: h2i $autorun_flags :>;
   parameter <=: ComponentName :>_AUTORUN_SRC_ADDR           = <=: h2i $autorun_src_addr :>;
   parameter <=: ComponentName :>_AUTORUN_DEST_ADDR          = <=: h2i $autorun_dest_addr :>;
