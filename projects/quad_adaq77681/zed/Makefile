@@ -4,10 +4,10 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := quad_iso_adc_fmc_zed
+PROJECT_NAME := quad_adaq77681_zed
 
 M_DEPS += system_constr.xdc
-M_DEPS += ../common/quad_iso_adc_fmc_bd.tcl
+M_DEPS += ../common/quad_adaq77681_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
