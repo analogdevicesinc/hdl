@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -8,7 +8,7 @@
 // terms.
 //
 // The user should read each of these license terms, and understand the
-// freedoms and responsabilities that he or she has by using this source/core.
+// freedoms and responsibilities that he or she has by using this source/core.
 //
 // This core is distributed in the hope that it will be useful, but WITHOUT ANY
 // WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -76,7 +76,6 @@ module system_top (
   output          i2s_sdata_out,
   input           i2s_sdata_in,
 
-
   inout           iic_scl,
   inout           iic_sda,
   inout   [ 1:0]  iic_mux_scl,
@@ -103,8 +102,7 @@ module system_top (
   inout   [ 1:0]  qadc_muxb,
   inout   [ 1:0]  qadc_muxc,
   inout   [ 1:0]  qadc_muxd
-
-  );
+);
 
   // internal signals
 
@@ -239,6 +237,3 @@ module system_top (
     .spdif (spdif));
 
 endmodule
-
-// ***************************************************************************
-// ***************************************************************************
