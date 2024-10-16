@@ -29,7 +29,7 @@ specific system requirements
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD9656 <EVAL-AD9656>`
+-  :adi:`EVAL-AD9656`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -114,10 +114,10 @@ Check-out the table below to find out the conditions.
 ================== ===============
 Instance           Zynq/Microblaze
 ================== ===============
-rx_ad9656_tpl_core 0x44A00000
-axi_ad9656_rx_xcvr 0x44A60000
-axi_ad9656_rx_jesd 0x44AA0000
-axi_ad9656_rx_dma  0x7C400000
+rx_ad9656_tpl_core 0x84A0_0000
+axi_ad9656_rx_xcvr 0x84A6_0000
+axi_ad9656_rx_jesd 0x84AA_0000
+axi_ad9656_rx_dma  0x9C40_0000
 ================== ===============
 
 SPI connections

@@ -123,10 +123,10 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ================== ===========
 Instance           ZynqMP
 ================== ===========
-rx_ad9695_tpl_core 0x44A0_0000
-axi_ad9695_rx_xcvr 0x44A6_0000
-axi_ad9695_rx_jesd 0x44AA_0000
-axi_ad9695_rx_dma  0x7C40_0000
+rx_ad9695_tpl_core 0x84A0_0000
+axi_ad9695_rx_xcvr 0x84A6_0000
+axi_ad9695_rx_jesd 0x84AA_0000
+axi_ad9695_rx_dma  0x9C40_0000
 ================== ===========
 
 SPI connections

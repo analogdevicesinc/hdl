@@ -3,13 +3,13 @@
 ADRV9026 HDL reference design
 ===============================================================================
 
-The ADRV9026 is a highly integrated, radio frequency (RF) agile transceiver 
-offering four independently controlled transmitters, dedicated observation 
-receiver inputs for monitoring each transmitter channel, four independently 
-controlled receivers, integrated synthesizers, and digital signal processing 
-functions providing a complete transceiver solution. The device provides the 
-performance demanded by cellular infrastructure applications, such as small 
-cell base station radios, macro 3G/4G/5G systems, and massive multiple 
+The ADRV9026 is a highly integrated, radio frequency (RF) agile transceiver
+offering four independently controlled transmitters, dedicated observation
+receiver inputs for monitoring each transmitter channel, four independently
+controlled receivers, integrated synthesizers, and digital signal processing
+functions providing a complete transceiver solution. The device provides the
+performance demanded by cellular infrastructure applications, such as small
+cell base station radios, macro 3G/4G/5G systems, and massive multiple
 in/multiple out (MIMO) base stations.
 
 Supported boards
@@ -58,7 +58,7 @@ Example block design for Single link; M=8; L=4
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 
+-  Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
 -  Sample Rate: 250 MSPS
 -  Dual link: No
 -  RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
@@ -68,7 +68,7 @@ The Rx links (ADC Path) operate with the following parameters:
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 
+-  Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
 -  Sample Rate: 250 MSPS
 -  Dual link: No
 -  TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
@@ -101,8 +101,8 @@ The following are the parameters of this project that can be configured:
    -  64B66B - 64b66b link layer defined in JESD204C
    -  8B10B  - 8b10b link layer defined in JESD204B
 
--  RX_LANE_RATE: lane rate of the Rx link 
--  TX_LANE_RATE: lane rate of the Tx link 
+-  RX_LANE_RATE: lane rate of the Rx link
+-  TX_LANE_RATE: lane rate of the Tx link
 -  [RX/TX]_JESD_M: number of converters per link
 -  [RX/TX]_JESD_L: number of lanes per link
 -  [RX/TX]_JESD_S: number of samples per frame
@@ -122,18 +122,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== =========== =========== ===========
-Instance             ZynqMP      Versal      Microblaze
-==================== =========== =========== ===========
-axi_adrv9026_tx_jesd 0x84A90000  0xA4A90000  0x44A90000
-axi_adrv9026_rx_jesd 0x84AA0000  0xA4AA0000  0x44AA0000
-axi_adrv9026_tx_dma  0x9c420000  0xBC420000  0x7c420000
-axi_adrv9026_rx_dma  0x9c400000  0xBC400000  0x7c400000
-tx_adrv9026_tpl_core 0x84A04000  0xA4A04000  0x44A04000
-rx_adrv9026_tpl_core 0x84A00000  0xA4A00000  0x44A00000
-axi_adrv9026_tx_xcvr 0x84A80000  0xA4A80000  0x44A80000
-axi_adrv9026_rx_xcvr 0x84A60000  0xA4A60000  0x44A60000
-==================== =========== =========== ===========
+==================== ==================== =========== =========== ===========
+Instance             Depends on parameter Microblaze  ZynqMP      Versal
+==================== ==================== =========== =========== ===========
+rx_adrv9026_tpl_core                      0x44A0_0000 0x84A0_0000 0xA4A0_0000
+tx_adrv9026_tpl_core                      0x44A0_4000 0x84A0_4000 0xA4A0_4000
+axi_adrv9026_rx_xcvr $ADI_PHY_SEL==1      0x44A6_0000 0x84A6_0000 0xA4A6_0000
+axi_adrv9026_tx_xcvr $ADI_PHY_SEL==1      0x44A8_0000 0x84A8_0000 0xA4A8_0000
+axi_adrv9026_tx_jesd                      0x44A9_0000 0x84A9_0000 0xA4A9_0000
+axi_adrv9026_rx_jesd                      0x44AA_0000 0x84AA_0000 0xA4AA_0000
+axi_adrv9026_rx_dma                       0x7C40_0000 0x9C40_0000 0xBC40_0000
+axi_adrv9026_tx_dma                       0x7C42_0000 0x9C42_0000 0xBC42_0000
+==================== ==================== =========== =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,8 +150,8 @@ SPI connections
      - spi0
      - ADRV9026
      - 0
-   * - 
-     - 
+   * -
+     -
      - AD9528
      - 1
 
@@ -359,10 +359,10 @@ Microblaze
 ==================== === ============
 Instance name        HDL Microblaze
 ==================== === ============
-axi_adrv9026_tx_jesd 15  15         
-axi_adrv9026_rx_jesd 14  14         
-axi_adrv9026_tx_dma  13  13         
-axi_adrv9026_rx_dma  12  12         
+axi_adrv9026_tx_jesd 15  15
+axi_adrv9026_rx_jesd 14  14
+axi_adrv9026_tx_dma  13  13
+axi_adrv9026_rx_dma  12  12
 ==================== === ============
 
 Building the HDL project
