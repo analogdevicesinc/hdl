@@ -71,7 +71,9 @@ module axi_dmac_regmap #(
   parameter AUTORUN_DEST_STRIDE = 0,
   parameter AUTORUN_SG_ADDRESS = 0,
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
-  parameter AUTORUN_FRAMELOCK_STRIDE = 0
+  parameter AUTORUN_FRAMELOCK_STRIDE = 0,
+  parameter AUTORUN_CONTROL_HWDESC = AUTORUN ? AUTORUN_FLAGS[3] : 0,
+  parameter AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0
 ) (
 
   // Slave AXI interface
@@ -149,9 +151,6 @@ module axi_dmac_regmap #(
   localparam PCORE_VERSION = 'h00040564;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
-
-  localparam AUTORUN_CONTROL_HWDESC = AUTORUN ? AUTORUN_FLAGS[3] : 0;
-  localparam AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0;
 
   // Register interface signals
   reg [31:0] up_rdata = 32'h00;
