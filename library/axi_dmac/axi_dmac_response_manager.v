@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -176,7 +176,7 @@ module axi_dmac_response_manager #(
     if (state == STATE_ZERO_COMPL) begin
       measured_burst_length <= {BYTES_PER_BURST_WIDTH{1'b1}};
     end else if (state == STATE_ACC) begin
-      measured_burst_length <= req_response_dest_data_burst_length;
+      measured_burst_length <= {req_response_dest_data_burst_length};
     end
   end
 
