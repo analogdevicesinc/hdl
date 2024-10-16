@@ -328,7 +328,6 @@ module axi_spi_engine #(
     end
   end
 
-
   reg [7:0] offload_sdo_mem_address_width = OFFLOAD0_SDO_MEM_ADDRESS_WIDTH;
   reg [7:0] offload_cmd_mem_address_width = OFFLOAD0_CMD_MEM_ADDRESS_WIDTH;
   reg [7:0] sdi_fifo_address_width = SDI_FIFO_ADDRESS_WIDTH;
