@@ -33,7 +33,6 @@ ADC/DAC
    axi_ad9265/index
    axi_ad9361/index
    axi_ad9467/index
-   axi_ad9671/index
    axi_ad9783/index
    axi_ad9963/index
    axi_adaq8092/index
@@ -46,7 +45,6 @@ Data Offload
    :maxdepth: 1
 
    data_offload/index
-
 
 DMA
 -------------------------------------------------------------------------------
@@ -95,3 +93,17 @@ Utilities
    util_var_fifo/index
    util_wfifo/index
    xilinx/index
+
+Obsolete IPs
+-------------------------------------------------------------------------------
+
+The following IPs are obsolete and **not maintained anymore**. The latest
+available sources can be found in the same archive.
+
+.. toctree::
+   :maxdepth: 1
+
+   axi_ad9144/index
+   axi_ad9371/index
+   axi_ad9643/index
+   axi_ad9671/index
