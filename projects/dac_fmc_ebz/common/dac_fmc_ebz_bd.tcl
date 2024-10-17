@@ -64,7 +64,7 @@ ad_dacfifo_create axi_dac_fifo \
 ad_ip_instance util_adxcvr util_dac_jesd204_xcvr [list \
   RX_NUM_OF_LANES 0 \
   TX_NUM_OF_LANES $MAX_NUM_OF_LANES \
-  TX_LANE_INVERT [expr 0x0F] \
+  TX_LANE_INVERT [expr 0x77] \
   QPLL_REFCLK_DIV 1 \
   QPLL_FBDIV_RATIO 1 \
   QPLL_FBDIV 0x80 \
@@ -139,4 +139,3 @@ ad_cpu_interrupt ps-10 mb-15 dac_jesd204_link/irq
 ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
 
 ad_connect axi_dac_fifo/bypass dac_fifo_bypass
-

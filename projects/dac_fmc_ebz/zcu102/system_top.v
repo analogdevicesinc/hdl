@@ -96,10 +96,10 @@ module system_top #(
   output  [ 7:0]  tx_data_n,
 
   output          spi_csn_dac,
-  output          spi_csn_clk,
-  output          spi_csn_clk2,
+  output          fmc_cs2,
+  output          fmc_cs3,
   input           spi_miso,
-  output          spi_mosi,
+  inout           spi_mosi,
   output          spi_clk,
   output          spi_en,
 
@@ -123,21 +123,36 @@ module system_top #(
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
   wire            tx_sysref_loc;
+  wire            spi_mosi_s;
+  wire            spi_miso_s;
+  wire            spi_miso_proc;
 
   // spi
 
   // spi_en is active ...
   //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
-  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ, AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  //                                        9135/9144/9172    916(1,2,3,4)
+  //                                      AD9135/9144/9172   AD916(1,2,3,4)
   assign spi_csn_dac  = spi0_csn[1];
-  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044          AD9508
-  assign spi_csn_clk2 = spi0_csn[2];    //   NC               ADF4355
+  assign fmc_cs2 = spi0_csn[0];         //   HMC7044          AD9508
+  assign fmc_cs3 = spi0_csn[2];         //   NC               ADF4355
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES (1)
+  ) i_spi ( //  AD9508
+    .spi_csn (fmc_cs2),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_sdio (spi_mosi),
+    .spi_dir ());
+
+  assign spi_miso_proc = (fmc_cs2 == 1'b0) ? spi_miso_s : spi_miso;
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -212,33 +227,42 @@ module system_top #(
     .gpio_o (gpio_o),
     .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
-    .spi0_miso (spi_miso),
-    .spi0_mosi (spi_mosi),
+    .spi0_miso (spi_miso_proc),
+    .spi0_mosi (spi_mosi_s),
     .spi0_sclk (spi_clk),
     .spi1_csn (spi1_csn),
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
     .spi1_sclk (pmod_spi_clk),
+
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
+
     .tx_data_1_n (tx_data_n[1]),
     .tx_data_1_p (tx_data_p[1]),
+
     .tx_data_2_n (tx_data_n[2]),
     .tx_data_2_p (tx_data_p[2]),
+
     .tx_data_3_n (tx_data_n[3]),
     .tx_data_3_p (tx_data_p[3]),
+
     .tx_data_4_n (tx_data_n[4]),
     .tx_data_4_p (tx_data_p[4]),
+
     .tx_data_5_n (tx_data_n[5]),
     .tx_data_5_p (tx_data_p[5]),
+
     .tx_data_6_n (tx_data_n[6]),
     .tx_data_6_p (tx_data_p[6]),
+
     .tx_data_7_n (tx_data_n[7]),
     .tx_data_7_p (tx_data_p[7]),
+
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref));
+    .tx_sysref_0 (tx_sysref_loc));
 
   // AD9161/2/4-FMC-EBZ works only in single link,
   // The FMC connector instead of SYNC1 has SYSREF connected to it
