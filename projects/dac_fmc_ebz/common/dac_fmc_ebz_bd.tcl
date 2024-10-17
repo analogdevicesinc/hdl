@@ -55,7 +55,7 @@ ad_ip_instance axi_dmac dac_dma [list \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 300
+ad_ip_parameter dac_dma CONFIG.CYCLIC 1
 
 set dac_data_offload_name  tx_data_offload
 set dac_do_mem_type        0
