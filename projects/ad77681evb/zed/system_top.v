@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -83,42 +83,43 @@ module system_top (
 
   input           otg_vbusoc,
 
-  inout           ad7768_reset,
-  inout           ad7768_sync_out,
-  inout           ad7768_sync_in,
-  inout   [ 3:0]  ad7768_gpio,
+  inout           ad77681_reset,
+  inout           ad77681_sync_out,
+  inout           ad77681_sync_in,
+  inout   [ 3:0]  ad77681_gpio,
 
-  input           ad7768_spi_miso,
-  output          ad7768_spi_mosi,
-  output          ad7768_spi_sclk,
-  output          ad7768_spi_cs,
-  input           ad7768_drdy
+  input           ad77681_spi_miso,
+  output          ad77681_spi_mosi,
+  output          ad77681_spi_sclk,
+  output          ad77681_spi_cs,
+
+  input           ad77681_drdy
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
+  wire [ 1:0] iic_mux_scl_i_s;
+  wire [ 1:0] iic_mux_scl_o_s;
+  wire        iic_mux_scl_t_s;
+  wire [ 1:0] iic_mux_sda_i_s;
+  wire [ 1:0] iic_mux_sda_o_s;
+  wire        iic_mux_sda_t_s;
 
   // instantiations
 
   ad_iobuf #(
     .DATA_WIDTH(7)
-  ) i_iobuf_ad7768_gpio (
+  ) i_iobuf_ad77681_gpio (
     .dio_t(gpio_t[38:32]),
     .dio_i(gpio_o[38:32]),
     .dio_o(gpio_i[38:32]),
-    .dio_p({ad7768_gpio,
-            ad7768_sync_in,
-            ad7768_sync_out,
-            ad7768_reset}));
+    .dio_p({ad77681_sync_in,
+            ad77681_gpio,
+            ad77681_sync_out,
+            ad77681_reset}));
 
   assign gpio_i[63:39] = gpio_o[63:39];
 
@@ -129,8 +130,6 @@ module system_top (
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
-
-  assign gpio_i[63:39] = gpio_o[63:39];
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -211,11 +210,11 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .adc_spi_sdo (ad7768_spi_mosi),
+    .adc_spi_sdo (ad77681_spi_mosi),
     .adc_spi_sdo_t (),
-    .adc_spi_sdi (ad7768_spi_miso),
-    .adc_spi_cs (ad7768_spi_cs),
-    .adc_spi_sclk (ad7768_spi_sclk),
-    .adc_data_ready (ad7768_drdy));
+    .adc_spi_sdi (ad77681_spi_miso),
+    .adc_spi_cs (ad77681_spi_cs),
+    .adc_spi_sclk (ad77681_spi_sclk),
+    .adc_data_ready (ad77681_drdy));
 
 endmodule
