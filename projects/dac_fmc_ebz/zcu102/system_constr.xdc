@@ -38,22 +38,26 @@ set_property -dict {PACKAGE_PIN W1 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[4]] 
 set_property -dict {PACKAGE_PIN G8} [get_ports tx_ref_clk_p]                    ; ## D4   FMC0_GBTCLK0_M2C_C_P  MGTREFCLK0P_229
 set_property -dict {PACKAGE_PIN G7} [get_ports tx_ref_clk_n]                    ; ## D5   FMC0_GBTCLK0_M2C_C_N  MGTREFCLK0N_229
 
-set_property -dict {PACKAGE_PIN P6} [get_ports tx_data_p[7]]                    ; ## A38  FMC0_DP5_C2M_P        MGTHTXP1_228
-set_property -dict {PACKAGE_PIN P5} [get_ports tx_data_n[7]]                    ; ## A39  FMC0_DP5_C2M_N        MGTHTXN1_228
-set_property -dict {PACKAGE_PIN R4} [get_ports tx_data_p[6]]                    ; ## B36  FMC0_DP6_C2M_P        MGTHTXP0_228
-set_property -dict {PACKAGE_PIN R3} [get_ports tx_data_n[6]]                    ; ## B37  FMC0_DP6_C2M_N        MGTHTXN0_228
-set_property -dict {PACKAGE_PIN M6} [get_ports tx_data_p[5]]                    ; ## A34  FMC0_DP4_C2M_P        MGTHTXP3_228
-set_property -dict {PACKAGE_PIN M5} [get_ports tx_data_n[5]]                    ; ## A35  FMC0_DP4_C2M_N        MGTHTXN3_228
-set_property -dict {PACKAGE_PIN N4} [get_ports tx_data_p[4]]                    ; ## B32  FMC0_DP7_C2M_P        MGTHTXP2_228
-set_property -dict {PACKAGE_PIN N3} [get_ports tx_data_n[4]]                    ; ## B33  FMC0_DP7_C2M_N        MGTHTXN2_228
-set_property -dict {PACKAGE_PIN F6} [get_ports tx_data_p[2]]                    ; ## A26  FMC0_DP2_C2M_P        MGTHTXP3_229
-set_property -dict {PACKAGE_PIN F5} [get_ports tx_data_n[2]]                    ; ## A27  FMC0_DP2_C2M_N        MGTHTXN3_229
-set_property -dict {PACKAGE_PIN G4} [get_ports tx_data_p[0]]                    ; ## C2   FMC0_DP0_C2M_P        MGTHTXP2_229
-set_property -dict {PACKAGE_PIN G3} [get_ports tx_data_n[0]]                    ; ## C3   FMC0_DP0_C2M_N        MGTHTXN2_229
-set_property -dict {PACKAGE_PIN H6} [get_ports tx_data_p[1]]                    ; ## A22  FMC0_DP1_C2M_P        MGTHTXP1_229
-set_property -dict {PACKAGE_PIN H5} [get_ports tx_data_n[1]]                    ; ## A23  FMC0_DP1_C2M_N        MGTHTXN1_229
-set_property -dict {PACKAGE_PIN K6} [get_ports tx_data_p[3]]                    ; ## A30  FMC0_DP3_C2M_P        MGTHTXP0_229
-set_property -dict {PACKAGE_PIN K5} [get_ports tx_data_n[3]]                    ; ## A31  FMC0_DP3_C2M_N        MGTHTXN0_229
+
+
+set_property -dict {PACKAGE_PIN G4} [get_ports tx_data_p[0]] ; ## C2      FMC0_DP0_C2M_P        G4             MGTHTXP2_229
+set_property -dict {PACKAGE_PIN G3} [get_ports tx_data_n[0]] ; ## C3      FMC0_DP0_C2M_N        G3             MGTHTXN2_229
+set_property -dict {PACKAGE_PIN H6} [get_ports tx_data_p[1]] ; ## A22     FMC0_DP1_C2M_P        H6             MGTHTXP1_229
+set_property -dict {PACKAGE_PIN H5} [get_ports tx_data_n[1]] ; ## A23     FMC0_DP1_C2M_N        H5             MGTHTXN1_229
+set_property -dict {PACKAGE_PIN F6} [get_ports tx_data_p[2]] ; ## A26     FMC0_DP2_C2M_P        F6             MGTHTXP3_229
+set_property -dict {PACKAGE_PIN F5} [get_ports tx_data_n[2]] ; ## A27     FMC0_DP2_C2M_N        F5             MGTHTXN3_229
+set_property -dict {PACKAGE_PIN K6} [get_ports tx_data_p[3]] ; ## A30     FMC0_DP3_C2M_P        K6             MGTHTXP0_229
+set_property -dict {PACKAGE_PIN K5} [get_ports tx_data_n[3]] ; ## A31     FMC0_DP3_C2M_N        K5             MGTHTXN0_229
+set_property -dict {PACKAGE_PIN M6} [get_ports tx_data_p[4]] ; ## A34     FMC0_DP4_C2M_P        M6             MGTHTXP3_228
+set_property -dict {PACKAGE_PIN M5} [get_ports tx_data_n[4]] ; ## A35     FMC0_DP4_C2M_N        M5             MGTHTXN3_228
+set_property -dict {PACKAGE_PIN P6} [get_ports tx_data_p[5]] ; ## A38     FMC0_DP5_C2M_P        P6             MGTHTXP1_228
+set_property -dict {PACKAGE_PIN P5} [get_ports tx_data_n[5]] ; ## A39     FMC0_DP5_C2M_N        P5             MGTHTXN1_228
+set_property -dict {PACKAGE_PIN R4} [get_ports tx_data_p[6]] ; ## B36     FMC0_DP6_C2M_P        R4             MGTHTXP0_228
+set_property -dict {PACKAGE_PIN R3} [get_ports tx_data_n[6]] ; ## B37     FMC0_DP6_C2M_N        R3             MGTHTXN0_228
+set_property -dict {PACKAGE_PIN N4} [get_ports tx_data_p[7]] ; ## B32     FMC0_DP7_C2M_P        N4             MGTHTXP2_228
+set_property -dict {PACKAGE_PIN N3} [get_ports tx_data_n[7]] ; ## B33     FMC0_DP7_C2M_N        N3             MGTHTXN2_228
+
+
 
 # PL PMOD 1 header
 set_property  -dict {PACKAGE_PIN  D20 IOSTANDARD LVCMOS33} [get_ports pmod_spi_clk]           ; ## PMOD1_0   IO_L8N_HDGC_AD4N_47_D20

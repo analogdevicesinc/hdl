@@ -234,22 +234,31 @@ module system_top #(
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
     .spi1_sclk (pmod_spi_clk),
+
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
+
     .tx_data_1_n (tx_data_n[1]),
     .tx_data_1_p (tx_data_p[1]),
+
     .tx_data_2_n (tx_data_n[2]),
     .tx_data_2_p (tx_data_p[2]),
+
     .tx_data_3_n (tx_data_n[3]),
     .tx_data_3_p (tx_data_p[3]),
-    .tx_data_4_n (tx_data_n[4]),
-    .tx_data_4_p (tx_data_p[4]),
-    .tx_data_5_n (tx_data_n[5]),
-    .tx_data_5_p (tx_data_p[5]),
+
+    .tx_data_4_n (tx_data_n[7]),
+    .tx_data_4_p (tx_data_p[7]),
+
+    .tx_data_5_n (tx_data_n[4]),
+    .tx_data_5_p (tx_data_p[4]),
+
     .tx_data_6_n (tx_data_n[6]),
     .tx_data_6_p (tx_data_p[6]),
-    .tx_data_7_n (tx_data_n[7]),
-    .tx_data_7_p (tx_data_p[7]),
+
+    .tx_data_7_n (tx_data_n[5]),
+    .tx_data_7_p (tx_data_p[5]),
+
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),

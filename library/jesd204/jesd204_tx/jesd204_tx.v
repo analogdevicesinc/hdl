@@ -19,31 +19,31 @@ module jesd204_tx #(
   parameter ASYNC_CLK = 1
 ) (
   input clk,
-  input reset,
+  (* MARK_DEBUG = "TRUE" *) input reset,
 
   input device_clk,
-  input device_reset,
+  (* MARK_DEBUG = "TRUE" *) input device_reset,
 
-  output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] phy_data,
+  (* MARK_DEBUG = "TRUE" *) output [DATA_PATH_WIDTH*8*NUM_LANES-1:0] phy_data,
   output [DATA_PATH_WIDTH*NUM_LANES-1:0] phy_charisk,
   output [2*NUM_LANES-1:0] phy_header,
 
-  input sysref,
+  (* MARK_DEBUG = "TRUE" *) input sysref,
   output lmfc_edge,
   output lmfc_clk,
 
-  input [NUM_LINKS-1:0] sync,
+  (* MARK_DEBUG = "TRUE" *) input [NUM_LINKS-1:0] sync,
 
-  input [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
-  output tx_ready,
+  (* MARK_DEBUG = "TRUE" *) input [TPL_DATA_PATH_WIDTH*8*NUM_LANES-1:0] tx_data,
+  (* MARK_DEBUG = "TRUE" *)  output tx_ready,
   output [TPL_DATA_PATH_WIDTH-1:0] tx_eof,
   output [TPL_DATA_PATH_WIDTH-1:0] tx_sof,
   output [TPL_DATA_PATH_WIDTH-1:0] tx_somf,
   output [TPL_DATA_PATH_WIDTH-1:0] tx_eomf,
-  input tx_valid,
+  (* MARK_DEBUG = "TRUE" *) input tx_valid,
 
-  input [NUM_LANES-1:0] cfg_lanes_disable,
-  input [NUM_LINKS-1:0] cfg_links_disable,
+  (* MARK_DEBUG = "TRUE" *) input [NUM_LANES-1:0] cfg_lanes_disable,
+  (* MARK_DEBUG = "TRUE" *) input [NUM_LINKS-1:0] cfg_links_disable,
   input [9:0] cfg_octets_per_multiframe,
   input [7:0] cfg_octets_per_frame,
   input cfg_continuous_cgs,
@@ -53,12 +53,12 @@ module jesd204_tx #(
   input cfg_disable_char_replacement,
   input cfg_disable_scrambler,
 
-  input [9:0] device_cfg_octets_per_multiframe,
-  input [7:0] device_cfg_octets_per_frame,
-  input [7:0] device_cfg_beats_per_multiframe,
-  input [7:0] device_cfg_lmfc_offset,
-  input device_cfg_sysref_oneshot,
-  input device_cfg_sysref_disable,
+  (* MARK_DEBUG = "TRUE" *) input [9:0] device_cfg_octets_per_multiframe,
+  (* MARK_DEBUG = "TRUE" *) input [7:0] device_cfg_octets_per_frame,
+  (* MARK_DEBUG = "TRUE" *) input [7:0] device_cfg_beats_per_multiframe,
+  (* MARK_DEBUG = "TRUE" *) input [7:0] device_cfg_lmfc_offset,
+  (* MARK_DEBUG = "TRUE" *) input device_cfg_sysref_oneshot,
+  (* MARK_DEBUG = "TRUE" *) input device_cfg_sysref_disable,
 
   output ilas_config_rd,
   output [1:0] ilas_config_addr,
@@ -69,12 +69,12 @@ module jesd204_tx #(
   output device_event_sysref_edge,
   output device_event_sysref_alignment_error,
 
-  output [NUM_LINKS-1:0] status_sync,
-  output [1:0] status_state,
+  (* MARK_DEBUG = "TRUE" *) output [NUM_LINKS-1:0] status_sync,
+  (* MARK_DEBUG = "TRUE" *) output [1:0] status_state,
 
-  output [31:0] status_synth_params0,
-  output [31:0] status_synth_params1,
-  output [31:0] status_synth_params2
+  (* MARK_DEBUG = "TRUE" *) output [31:0] status_synth_params0,
+  (* MARK_DEBUG = "TRUE" *) output [31:0] status_synth_params1,
+  (* MARK_DEBUG = "TRUE" *) output [31:0] status_synth_params2
 );
 
   localparam MAX_OCTETS_PER_FRAME = 32;
