@@ -68,7 +68,7 @@ module rtp_engine #(
 
   input   logic                         dropped_pkt,
   input   logic [95:0]                  ptp_ts_96,
-
+  input   logic [95:0]                  ptp_ts_pwm_gen, 
   // axi interface
 
   input   logic                        s_axi_aclk,
@@ -152,6 +152,7 @@ module rtp_engine #(
   wire [11:0]                num_lines;
   wire [11:0]                num_px_p_line;
   wire                       posedge_dropped_pkt;
+  wire                       timestamp_network_pwm_genval;
 
   // line and frame-related regs
   reg  [15:0]                counter_lines = 'h0;
@@ -188,6 +189,7 @@ module rtp_engine #(
   wire                       end_of_payload_tr;
   wire                       int_tready_post_header;
 
+
   state_rtp_transm           rtp_transm_state;
   state_rtp_transm           rtp_transm_state_next;
 
@@ -212,7 +214,6 @@ module rtp_engine #(
   assign rtp_pd_header.continuation_l1 = 'h0; // continuation is 0, no other header extension for another line will follow the first one - one line/packet
   assign rtp_pd_header.line_num_l1 = counter_lines;//{counter_lines[7:0],counter_lines[15:8]};
 
-
   always @(posedge aclk) begin
     if (!aresetn) begin
       rtp_header_timestamp_r <= 'h0;
@@ -235,19 +236,19 @@ module rtp_engine #(
     end else begin
       if (timestamp_s_eof) begin
         if (m_axis_cam_tuser[0] && m_axis_cam_tvalid) begin
-          rtp_header_c_timestamp_r <= ptp_ts_96[95:64];
-          rtp_header_ssrc_r <= ptp_ts_96[63:32];
-          rtp_header.csrc_field1 <= ptp_ts_96[31:0];
+          rtp_header_c_timestamp_r <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[95:64] : ptp_ts_96[95:64];
+          rtp_header_ssrc_r <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[63:32] : ptp_ts_96[63:32];
+          rtp_header.csrc_field1 <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[31:0] : ptp_ts_96[31:0];
         end else begin
           rtp_header_c_timestamp_r <= rtp_header_c_timestamp_r;
           rtp_header_ssrc_r <= rtp_header_ssrc_r;
           rtp_header.csrc_field1 <= rtp_header.csrc_field1;
         end
       end else begin
-        if (m_axis_cam_tlast && m_axis_cam_tvalid) begin
-          rtp_header_c_timestamp_r <= ptp_ts_96[95:64];
-          rtp_header_ssrc_r <= ptp_ts_96[63:32];
-          rtp_header.csrc_field1 <= ptp_ts_96[31:0];
+        if (counter_lines == (num_lines-2)) begin
+          rtp_header_c_timestamp_r <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[95:64] : ptp_ts_96[95:64];
+          rtp_header_ssrc_r <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[63:32] : ptp_ts_96[63:32];
+          rtp_header.csrc_field1 <= (timestamp_network_pwm_genval) ? ptp_ts_pwm_gen[31:0] : ptp_ts_96[31:0];
         end else begin
           rtp_header_c_timestamp_r <= rtp_header_c_timestamp_r;
           rtp_header_ssrc_r <= rtp_header_ssrc_r;
@@ -462,6 +463,7 @@ module rtp_engine #(
     .custom_timestamp (custom_timestamp),
     .custom_timestamp_96b (custom_timestamp_96b),
     .timestamp_s_eof (timestamp_s_eof),
+    .timestamp_network_pwm_genval (timestamp_network_pwm_genval),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -505,7 +507,7 @@ module rtp_engine #(
     .up_rack (up_rack_s));
 
   axis_fifo #(
-    .DEPTH (16384),
+    .DEPTH (32768),
     .DATA_WIDTH (S_TDATA_WIDTH),
     .DEST_ENABLE (1),
     .DEST_WIDTH (1),

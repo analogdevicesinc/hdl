@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -41,6 +41,8 @@ module axi_pwm_gen #(
   parameter  N_PWMS = 1,
   parameter  PWM_EXT_SYNC = 0,
   parameter  EXT_ASYNC_SYNC = 0,
+  parameter  EXT_SYNC_NO_LOAD_CONFIG = 0,
+  parameter  EXT_SYNC_FASTER_CLK = 0,
   parameter  PULSE_0_WIDTH = 7,
   parameter  PULSE_1_WIDTH = 7,
   parameter  PULSE_2_WIDTH = 7,
@@ -116,6 +118,26 @@ module axi_pwm_gen #(
   input                   s_axi_rready,
   input                   ext_clk,
   input                   ext_sync,
+
+  input                   ext_sync_faster_clk,
+  input                   clk_ext_sync,
+ /* output                  pwm_out_rtp0,
+  output                  pwm_out_rtp1,
+  output                  pwm_out_rtp2,
+  output                  pwm_out_rtp3,
+  output                  pwm_out_rtp4,
+  output                  pwm_out_rtp5,
+  output                  pwm_out_rtp6,
+  output                  pwm_out_rtp7,*/
+  input       [95:0]      ptp_ts_96,
+  output      [95:0]      ptp_ts_c0,
+  output      [95:0]      ptp_ts_c1,
+  output      [95:0]      ptp_ts_c2,
+  output      [95:0]      ptp_ts_c3,
+  output      [95:0]      ptp_ts_c4,
+  output      [95:0]      ptp_ts_c5,
+  output      [95:0]      ptp_ts_c6,
+  output      [95:0]      ptp_ts_c7,
 
   output                  pwm_0,
   output                  pwm_1,
@@ -199,6 +221,15 @@ module axi_pwm_gen #(
   reg   [31:0]    offset_cnt = 32'd0;
   reg             offset_alignment = 1'b0;
   reg             pause_cnt_d = 1'b0;
+  reg  [95:0]     ptp_ts_c0_r = 'h0;
+  reg  [95:0]     ptp_ts_c1_r = 'h0;
+  reg  [95:0]     ptp_ts_c2_r = 'h0;
+  reg  [95:0]     ptp_ts_c3_r = 'h0;
+  reg  [95:0]     ptp_ts_c4_r = 'h0;
+  reg  [95:0]     ptp_ts_c5_r = 'h0;
+  reg  [95:0]     ptp_ts_c6_r = 'h0;
+  reg  [95:0]     ptp_ts_c7_r = 'h0;
+  reg  [15:0]     pwm_r = 'h0;
 
   // internal signals
 
@@ -222,6 +253,8 @@ module axi_pwm_gen #(
   wire            pwm_gen_resetn;
   wire            ext_sync_s;
   wire            pause_cnt;
+  wire            sync_event_o;
+  wire   [95:0]   ptp_ts_96_sync;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -281,25 +314,39 @@ module axi_pwm_gen #(
   // offset counter
 
   always @(posedge clk) begin
-    if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0) begin
-      offset_cnt <= 32'd0;
+    if (EXT_SYNC_NO_LOAD_CONFIG) begin
+      if (offset_alignment ==  1'b1 || pwm_gen_resetn == 1'b0 || sync_event_o == 1'b1) begin
+        offset_cnt <= 32'd0;
+      end else begin
+        offset_cnt <= offset_cnt + 1'b1;
+      end
     end else begin
-      offset_cnt <= offset_cnt + 1'b1;
+      if (offset_alignment  == 1'b1 || pwm_gen_resetn == 1'b0) begin
+        offset_cnt <= 32'd0;
+      end else begin
+        offset_cnt <= offset_cnt + 1'b1;
+      end
     end
 
     if (pwm_gen_resetn == 1'b0) begin
       offset_alignment <= 1'b0;
     end else begin
+      // case with no required load_config for the offset_alignment using the
+      // captured ext_sync
+      if (EXT_SYNC_NO_LOAD_CONFIG) begin
+        offset_alignment <= (load_config_s == 1'b1) ? 1'b1 : (offset_alignment & !pause_cnt);
       // when using external sync an offset alignment can be done only
       // after all pwm counters are paused(load_config)/reseated
-      offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
-                          offset_alignment &
-                          (ext_sync_s ? 1'b1 : !pause_cnt);
+      end else begin	
+	offset_alignment <= (load_config_s == 1'b1) ? 1'b1 :
+                            offset_alignment &
+                            (ext_sync_s ? 1'b1 : !pause_cnt);
+      end
     end
   end
 
   assign pause_cnt = ((pwm_armed[0]  |
-                       pwm_armed[1]  |
+	  	       pwm_armed[1]  |
                        pwm_armed[2]  |
                        pwm_armed[3]  |
                        pwm_armed[4]  |
@@ -319,6 +366,7 @@ module axi_pwm_gen #(
     for (i = 0; i <= 15; i = i + 1) begin: pwm_cnt
       if (i <= PWMS) begin
         axi_pwm_gen_1  #(
+          .EXT_SYNC_NO_LOAD_CONFIG (EXT_SYNC_NO_LOAD_CONFIG),
           .PULSE_WIDTH (PULSE_WIDTH_G[i]),
           .PULSE_PERIOD (PULSE_PERIOD_G[i])
         ) i_axi_pwm_gen_1 (
@@ -327,6 +375,7 @@ module axi_pwm_gen #(
           .pulse_width (pwm_width_s[i]),
           .pulse_period (pwm_period_s[i]),
           .load_config (load_config_s),
+	  .ext_sync_edge (sync_event_o),
           .sync (sync[i]),
           .pulse (pwm[i]),
           .pulse_armed (pwm_armed[i]));
@@ -360,6 +409,102 @@ module axi_pwm_gen #(
   assign pwm_13 = pwm[13];
   assign pwm_14 = pwm[14];
   assign pwm_15 = pwm[15];
+
+  generate
+    if (EXT_SYNC_FASTER_CLK) begin 
+      sync_event sync_ext_sync_faster_clk (
+        .in_clk (clk_ext_sync),
+        .out_clk (ext_clk),
+        .in_event (ext_sync_faster_clk),
+        .out_event (sync_event_o));
+    end
+  endgenerate
+  sync_data #
+  (.NUM_OF_BITS (96)) ptp_ts_96_sync (
+        .in_clk (up_clk),
+        .out_clk (clk),
+        .in_data (ptp_ts_96),
+        .out_data (ptp_ts_96_sync));
+
+  always @(posedge clk) begin
+    if (!pwm_gen_resetn) begin
+      pwm_r <= 'h0;
+    end else begin
+      pwm_r <= pwm;
+    end
+  end
+
+  assign posedge_pwm0 = (pwm[0] && ~pwm_r[0]) ? 1'b1 : 1'b0;
+  assign posedge_pwm1 = (pwm[1] && ~pwm_r[1]) ? 1'b1 : 1'b0;
+  assign posedge_pwm2 = (pwm[2] && ~pwm_r[2]) ? 1'b1 : 1'b0;
+  assign posedge_pwm3 = (pwm[3] && ~pwm_r[3]) ? 1'b1 : 1'b0;
+  assign posedge_pwm4 = (pwm[4] && ~pwm_r[4]) ? 1'b1 : 1'b0;
+  assign posedge_pwm5 = (pwm[5] && ~pwm_r[5]) ? 1'b1 : 1'b0;
+  assign posedge_pwm6 = (pwm[6] && ~pwm_r[6]) ? 1'b1 : 1'b0;
+  assign posedge_pwm7 = (pwm[7] && ~pwm_r[7]) ? 1'b1 : 1'b0;
+
+  always @(posedge clk) begin
+    if (!pwm_gen_resetn) begin
+      ptp_ts_c0_r <= 'h0;
+      ptp_ts_c1_r <= 'h0;
+      ptp_ts_c2_r <= 'h0;
+      ptp_ts_c3_r <= 'h0;
+      ptp_ts_c4_r <= 'h0;
+      ptp_ts_c5_r <= 'h0;
+      ptp_ts_c6_r <= 'h0;
+      ptp_ts_c7_r <= 'h0;
+    end else begin
+      if (posedge_pwm0 == 1'b1) begin
+        ptp_ts_c0_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c0_r <= ptp_ts_c0_r;
+      end
+      if (posedge_pwm1 == 1'b1) begin
+        ptp_ts_c1_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c1_r <= ptp_ts_c1_r;
+      end
+      if (posedge_pwm2 == 1'b1) begin
+        ptp_ts_c2_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c2_r <= ptp_ts_c2_r;
+      end
+      if (posedge_pwm3 == 1'b1) begin
+        ptp_ts_c3_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c3_r <= ptp_ts_c3_r;
+      end
+      if (posedge_pwm4 == 1'b1) begin
+        ptp_ts_c4_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c4_r <= ptp_ts_c4_r;
+      end
+      if (posedge_pwm5 == 1'b1) begin
+        ptp_ts_c5_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c5_r <= ptp_ts_c5_r;
+      end
+      if (posedge_pwm6 == 1'b1) begin
+        ptp_ts_c6_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c6_r <= ptp_ts_c6_r;
+      end
+      if (posedge_pwm7 == 1'b1) begin
+        ptp_ts_c7_r <= ptp_ts_96_sync;
+      end else begin
+        ptp_ts_c7_r <= ptp_ts_c7_r;
+      end
+    end
+  end
+
+  assign ptp_ts_c0 = ptp_ts_c0_r;
+  assign ptp_ts_c1 = ptp_ts_c1_r;
+  assign ptp_ts_c2 = ptp_ts_c2_r;
+  assign ptp_ts_c3 = ptp_ts_c3_r;
+  assign ptp_ts_c4 = ptp_ts_c4_r;
+  assign ptp_ts_c5 = ptp_ts_c5_r;
+  assign ptp_ts_c6 = ptp_ts_c6_r;
+  assign ptp_ts_c7 = ptp_ts_c7_r;
 
   up_axi #(
     .AXI_ADDRESS_WIDTH(16)

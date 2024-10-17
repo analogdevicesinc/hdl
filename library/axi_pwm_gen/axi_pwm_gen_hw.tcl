@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -30,6 +30,8 @@ ad_ip_parameter ASYNC_CLK_EN INTEGER 1
 ad_ip_parameter N_PWMS INTEGER 1
 ad_ip_parameter PWM_EXT_SYNC INTEGER 0
 ad_ip_parameter EXT_ASYNC_SYNC INTEGER 0
+ad_ip_parameter EXT_SYNC_FASTER_CLK 0
+ad_ip_parameter EXT_SYNC_NO_LOAD_CONFIG 0
 ad_ip_parameter PULSE_0_WIDTH INTEGER 7
 ad_ip_parameter PULSE_1_WIDTH INTEGER 7
 ad_ip_parameter PULSE_2_WIDTH INTEGER 7
@@ -87,6 +89,8 @@ ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 16
 # external clock and external sync
 ad_interface clock ext_clk input 1
 ad_interface signal ext_sync input 1
+ad_interface clock clk_ext_sync input 1
+ad_interface signal ext_sync_faster_clk input 1
 
 # output signals
 for {set i 0} {$i < 16} {incr i} {
