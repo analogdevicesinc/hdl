@@ -214,7 +214,7 @@ ENDREG
 
 FIELD
 [20]
-Auto rearm trigger
+AUTO_REARM_TRIGGER
 RW
 Rearms the trigger on the last(sample) signal of the DMA(per DAC channel)
 ENDFIELD

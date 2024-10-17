@@ -8,7 +8,7 @@ ENDTITLE
 
 REG
 0x0010
-RSTN
+RSTN_TX
 HDMI Interface Control & Status
 ENDREG
 
@@ -90,7 +90,7 @@ ENDFIELD
 
 REG
 0x0015
-CLK_FREQ
+CLK_FREQ_TX
 HDMI Interface Control & Status
 ENDREG
 
@@ -111,7 +111,7 @@ ENDFIELD
 
 REG
 0x0016
-CLK_RATIO
+CLK_RATIO_TX
 HDMI Interface Control & Status
 ENDREG
 
@@ -145,7 +145,7 @@ ENDFIELD
 
 REG
 0x0018
-VDMA_STATUS
+VDMA_STATUS_TX
 HDMI Interface Control & Status
 ENDREG
 
@@ -395,7 +395,7 @@ ENDTITLE
 
 REG
 0x0010
-RSTN
+RSTN_RX
 HDMI Interface Control & Status
 ENDREG
 
@@ -450,7 +450,7 @@ ENDFIELD
 
 REG
 0x0015
-CLK_FREQ
+CLK_FREQ_RX
 HDMI Interface Control & Status
 ENDREG
 
@@ -471,7 +471,7 @@ ENDFIELD
 
 REG
 0x0016
-CLK_RATIO
+CLK_RATIO_RX
 HDMI Interface Control & Status
 ENDREG
 
@@ -488,7 +488,7 @@ ENDFIELD
 
 REG
 0x0018
-VDMA_STATUS
+VDMA_STATUS_RX
 HDMI Interface Control & Status
 ENDREG
 

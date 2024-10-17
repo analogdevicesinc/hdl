@@ -183,7 +183,7 @@ CMD_FIFO_ROOM
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 CMD_FIFO_ROOM
 RO
 Number of free entries in the CMD FIFO.
@@ -213,7 +213,7 @@ SDO_FIFO_ROOM
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SDO_FIFO_ROOM
 RO
 Number of free entries in the SDO FIFO.
@@ -265,42 +265,42 @@ See :ref:`i3c_controller instruction-format` for the structure of the command.
 ENDREG
 
 FIELD
-[22] 0xX
+[22]
 CMD_IS_CCC
 WO
 Indicate if it is a CCC transfer (1) or not (0).
 ENDFIELD
 
 FIELD
-[21] 0xX
+[21]
 CMD_BCAST_HEADER
 WO
 Include broadcast header in private transfer (1) or not (0).
 ENDFIELD
 
 FIELD
-[20] 0xX
+[20]
 CMD_SR
 WO
 Repeated start flag, yield a Sr (1) or P (0) at the end of the transfer.
 ENDFIELD
 
 FIELD
-[19:8] 0xXXX
+[19:8]
 CMD_BUFFER_LENGHT
 WO
 Unsigned 12-bits payload length, direction depends on RNW value.
 ENDFIELD
 
 FIELD
-[7:1] 0xXX
+[7:1]
 CMD_DA
 WO
 7-bit device address (don’t care in broadcast mode).
 ENDFIELD
 
 FIELD
-[0] 0xX
+[0]
 CMD_RNW
 WO
 If should retrieve data from device (1) or not (0).
@@ -318,21 +318,21 @@ Writing to it has no effect.
 ENDREG
 
 FIELD
-[23:0] 0x??
+[23:0] 
 CMDR_FIFO_ERROR
 RO
 If an error occurred during the transfer.
 ENDFIELD
 
 FIELD
-[19:8] 0x??
+[19:8] 
 CMDR_FIFO_BUFFER_LENGTH
 RO
 Unsigned 12-bits transferred payload length.
 ENDFIELD
 
 FIELD
-[7:0] 0x??
+[7:0] 
 CMDR_FIFO_SYNC
 RO
 Command synchronization.
@@ -350,25 +350,25 @@ is discarded. Reading from this register always returns 0x00000000.
 ENDREG
 
 FIELD
-[31:24] 0xXX
+[31:24]
 SDO_FIFO_BYTE_3
 RO
 ENDFIELD
 
 FIELD
-[23:16] 0xXX
+[23:16]
 SDO_FIFO_BYTE_2
 RO
 ENDFIELD
 
 FIELD
-[15:8] 0xXX
+[15:8]
 SDO_FIFO_BYTE_1
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0xXX
+[7:0]
 SDO_FIFO_BYTE_0
 RO
 ENDFIELD
@@ -385,7 +385,7 @@ Writing to it has no effect.
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SDI_FIFO
 RO
 ENDFIELD
@@ -402,21 +402,21 @@ Writing to it has no effect.
 ENDREG
 
 FIELD
-[23:17] 0xXX
+[23:17]
 IBI_FIFO_DA
 RO
 IBI Dynamic address.
 ENDFIELD
 
 FIELD
-[15:8] 0xXX
+[15:8]
 IBI_FIFO_MDB
 RO
 IBI MDB, if the peripheral's BCR[2] is Low, the field is ignored.
 ENDFIELD
 
 FIELD
-[7:0] 0xXX
+[7:0]
 IBI_FIFO_SYNC
 RO
 Synchronization number.
@@ -546,7 +546,7 @@ Device address to apply DEV_CHAR[3:0].
 ENDFIELD
 
 FIELD
-[8] 0xX
+[8]
 DEV_CHAR_WEN
 W
 Enable write of the fields.
