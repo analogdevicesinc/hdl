@@ -259,14 +259,14 @@ FSM_BDG
 ENDREG
 
 FIELD
-[11:8] 0xXXXXXXXX
+[11:8]
 FSM_STATE_READ
 RO
 It force the Rx side offload state machine into the required state.
 ENDFIELD
 
 FIELD
-[4:0] 0xXXXXXXXX
+[4:0]
 FSM_STATE_WRITE
 RO
 The current state of the offload state machine.

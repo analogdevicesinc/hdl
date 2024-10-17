@@ -247,7 +247,7 @@ SYNC_ID
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SYNC_ID
 RO
 Last synchronization event ID received from the SPI engine control interface.
@@ -324,7 +324,7 @@ CMD_FIFO
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 CMD_FIFO
 WO
 Command FIFO register. Writing to this register inserts an entry into the command FIFO.
@@ -341,7 +341,7 @@ SDO_FIFO
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SDO_FIFO
 WO
 SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
@@ -358,7 +358,7 @@ SDI_FIFO
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SDI_FIFO
 RO
 SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
@@ -375,7 +375,7 @@ SDI_FIFO_MSB
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0] 
 SDI_FIFO_MSB
 RO
 Store SDI's 32 bits MSB, if exists.
@@ -390,7 +390,7 @@ SDI_FIFO_PEEK
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 SDI_FIFO_PEEK
 RO
 SDI FIFO peek register.
@@ -453,7 +453,7 @@ OFFLOAD0_CDM_FIFO
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 OFFLOAD0_CDM_FIFO
 WO
 Offload command FIFO register. Writing to this register inserts an entry into the command FIFO
@@ -470,7 +470,7 @@ OFFLOAD0_SDO_FIFO
 ENDREG
 
 FIELD
-[31:0] 0xXXXXXXXX
+[31:0]
 OFFLOAD0_SDO_FIFO
 WO
 Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
