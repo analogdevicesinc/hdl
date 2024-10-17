@@ -77,7 +77,7 @@ set dac_data_offload_size [expr $dac_dma_data_width / 8 * 2**$dac_fifo_address_w
 ad_ip_instance util_adxcvr util_dac_jesd204_xcvr [list \
   RX_NUM_OF_LANES 0 \
   TX_NUM_OF_LANES $MAX_NUM_OF_LANES \
-  TX_LANE_INVERT [expr 0x1F] \
+  TX_LANE_INVERT [expr 0x77] \
   QPLL_REFCLK_DIV 1 \
   QPLL_FBDIV_RATIO 1 \
   QPLL_FBDIV 0x80 \

@@ -247,17 +247,17 @@ module system_top #(
     .tx_data_3_n (tx_data_n[3]),
     .tx_data_3_p (tx_data_p[3]),
 
-    .tx_data_4_n (tx_data_n[7]),
-    .tx_data_4_p (tx_data_p[7]),
+    .tx_data_4_n (tx_data_n[4]),
+    .tx_data_4_p (tx_data_p[4]),
 
-    .tx_data_5_n (tx_data_n[4]),
-    .tx_data_5_p (tx_data_p[4]),
+    .tx_data_5_n (tx_data_n[5]),
+    .tx_data_5_p (tx_data_p[5]),
 
     .tx_data_6_n (tx_data_n[6]),
     .tx_data_6_p (tx_data_p[6]),
 
-    .tx_data_7_n (tx_data_n[5]),
-    .tx_data_7_p (tx_data_p[5]),
+    .tx_data_7_n (tx_data_n[7]),
+    .tx_data_7_p (tx_data_p[7]),
 
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
