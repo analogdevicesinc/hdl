@@ -41,6 +41,24 @@ The :ref:`SPI Engine Offload module <spi_engine offload>`, which can be used to
 capture continuous data stream at maximum data rate, is triggered by the BUSY
 signal of the device.
 
+CNV signal gating
+-------------------------------------------------------------------------------
+
+The AXI PWM GEN IP core is used to drive CNV when the SPI Engine is operating in
+Offload mode along with logic gates and a few extra signals to ensure proper
+control of the signal.
+
+The AND gate has the DMA s_axis_xfer_req signal and the PWM signal as inputs.
+Since the PWM is free running, this gate is necessary to prevent the sequencer
+on the ADC from getting out of sync. When the DMA is unable to receive more
+data, the s_axis_xfer_req signal is driven low, blocking the PWM signal.
+
+Also, to exit conversion mode on the device, one extra pulse on the CNV pin is
+needed before sending the exit command, otherwise this command is ignored by the
+ADC. This feature also allows the system to read single samples using the SPI
+Engine FIFO mode. To achieve this, an OR gate is used to allow the software to
+generate CNV pulses using a GPIO signal.
+
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -152,6 +170,10 @@ The Software GPIO number is calculated as follows:
      - IN
      - 33
      - 87
+   * - gpio[34]
+     - OUT
+     - 34
+     - 88
 
 BSY_ALT_GP0 pin can be configured to function as a general-purpose input/output
 (GPIO), the threshold detection alert indicator, the busy indicator, or the
@@ -206,7 +228,7 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: 
+-  Product datasheet:
 
    -  :adi:`AD4695`/:adi:`AD4696`
    -  :adi:`AD4697`/:adi:`AD4698`
