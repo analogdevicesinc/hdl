@@ -6,11 +6,11 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set mod_data [ipl::getmod ./axi_spi_engine.v]
+set mod_data [ipl::parse_module ./axi_spi_engine.v]
 set ip $::ipl::ip
 
-set ip [ipl::addports -ip $ip -mod_data $mod_data]
-# set ip [ipl::addpars -ip $ip -mod_data $mod_data]
+set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
+# set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
 set ip [ipl::general -ip $ip -display_name "AXI SPI Engine ADI"]
@@ -25,25 +25,24 @@ set ip [ipl::general  -vendor "analog.com" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
 
-# set ip [ipl::generator -name blabla -generator eval/blabla.py -ip $ip]
+# set ip [ipl::add_component_generator -name blabla -generator eval/blabla.py -ip $ip]
 
-set ip [ipl::mmap -ip $ip \
+set ip [ipl::add_memory_map -ip $ip \
     -name "axi_spi_engine_mem_map" \
     -description "axi_spi_engine_mem_map" \
     -baseAddress 0 \
     -range 65536 \
     -width 32]
 
-
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
-    -exept_pl [list s_axi_aclk s_axi_aresetn] \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name s_axi -v_prefix s_axi \
+    -xptn_portlist [list s_axi_aclk s_axi_aresetn] \
     -display_name s_axi \
     -description s_axi \
     -master_slave slave \
-    -mmap_ref axi_spi_engine_mem_map \
+    -mem_map_ref axi_spi_engine_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_engine_ctrl \
     -version 1.0 \
@@ -64,9 +63,9 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_engine_offload_ctrl \
     -version 1.0 \
@@ -85,10 +84,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set ip [ipl::addif -ip $ip \
-    -iname spi_engine_ctrl \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name spi_engine_ctrl \
     -display_name spi_engine_ctrl \
     -description spi_engine_ctrl \
     -master_slave master \
@@ -107,8 +106,8 @@ set ip [ipl::addif -ip $ip \
 		{"sync_data" "SYNC_DATA"} \
     } \
     -vendor analog.com -library ADI -name spi_engine_ctrl -version 1.0]
-set ip [ipl::addif -ip $ip \
-    -iname spi_engine_offload_ctrl0 \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name spi_engine_offload_ctrl0 \
     -display_name spi_engine_offload_ctrl0 \
     -description spi_engine_offload_ctrl0 \
     -master_slave master \
@@ -126,23 +125,23 @@ set ip [ipl::addif -ip $ip \
     } \
     -vendor analog.com -library ADI -name spi_engine_offload_ctrl -version 1.0]
 
-set ip [ipl::addif -ip $ip \
-    -iname IRQ \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name IRQ \
     -display_name IRQ \
     -description IRQ \
     -master_slave master \
     -portmap [list {"irq" "IRQ"}] \
     -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
 
-set ip [ipl::addfiles -spath ./ -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::addfiles -spath ../../util_cdc -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::addfiles -spath ../../util_axis_fifo -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::addfiles -spath ../../common -dpath rtl -ip $ip \
+set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../../util_axis_fifo -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../../common -dpath rtl -ip $ip \
     -extl {up_axi.v
            ad_rst.v
            ad_mem.v}]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ID \
     -type param \
     -value_type int \
@@ -153,7 +152,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(0, 255)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \
     -type param \
     -value_type int \
@@ -164,7 +163,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(8, 256)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id NUM_OF_SDI \
     -type param \
     -value_type int \
@@ -175,7 +174,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 8)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id MM_IF_TYPE \
     -type param \
     -value_type int \
@@ -186,7 +185,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_SPI_CLK \
     -type param \
     -value_type int \
@@ -198,7 +197,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {General Configuration} \
     -group2 Config]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id CMD_FIFO_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -209,7 +208,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 16)} \
     -group1 {Command stream FIFO configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SYNC_FIFO_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -220,7 +219,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 16)} \
     -group1 {Command stream FIFO configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SDO_FIFO_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -231,7 +230,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 16)} \
     -group1 {Command stream FIFO configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SDI_FIFO_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -243,7 +242,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Command stream FIFO configuration} \
     -group2 Config]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id NUM_OFFLOAD \
     -type param \
     -value_type int \
@@ -254,7 +253,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(0, 8)} \
     -group1 {Offload module configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id OFFLOAD0_CMD_MEM_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -266,7 +265,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 16)} \
     -group1 {Offload module configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id OFFLOAD0_SDO_MEM_ADDRESS_WIDTH \
     -type param \
     -value_type int \
@@ -279,11 +278,11 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Offload module configuration} \
     -group2 Config]
 
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name s_axi \
+    -v_prefix s_axi \
     -expression {(MM_IF_TYPE != 0)}]
-set ip [ipl::igports -ip $ip \
+set ip [ipl::ignore_ports -ip $ip \
     -portlist {
         up_clk
         up_rstn
@@ -298,5 +297,5 @@ set ip [ipl::igports -ip $ip \
     } \
     -expression {(MM_IF_TYPE != 1)}]
 
-ipl::genip $ip
-ipl::genip $ip ./
+ipl::generate_ip $ip
+ipl::generate_ip $ip ./

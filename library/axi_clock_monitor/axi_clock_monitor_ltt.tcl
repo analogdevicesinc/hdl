@@ -6,10 +6,10 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set mod_data [ipl::getmod ./axi_clock_monitor.v]
+set mod_data [ipl::parse_module ./axi_clock_monitor.v]
 set ip $::ipl::ip
 
-set ip [ipl::addports -ip $ip -mod_data $mod_data]
+set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general \
     -name [dict get $mod_data mod_name] \
@@ -25,22 +25,22 @@ set ip [ipl::general \
     -min_radiant_version "2023.1" \
     -min_esi_version "2023.1" -ip $ip]
 
-set ip [ipl::mmap -ip $ip \
+set ip [ipl::add_memory_map -ip $ip \
     -name "axi_clock_monitor_mem_map" \
     -description "axi_clock_monitor_mem_map" \
     -baseAddress 0 \
     -range 4096 \
     -width 32]
 
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
-    -exept_pl [list s_axi_aclk s_axi_aresetn] \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name s_axi -v_prefix s_axi \
+    -xptn_portlist [list s_axi_aclk s_axi_aresetn] \
     -display_name s_axi \
     -description s_axi \
     -master_slave slave \
-    -mmap_ref axi_clock_monitor_mem_map \
+    -mem_map_ref axi_clock_monitor_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ID \
     -type param \
     -value_type int \
@@ -50,7 +50,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General configurations} \
     -group2 Global]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id NUM_OF_CLOCKS \
     -type param \
     -value_type int \
@@ -63,13 +63,13 @@ set ip [ipl::settpar -ip $ip \
     -group2 Global]
 
 for {set i 0} {$i < 16} {incr i} {
-    set ip [ipl::igports -ip $ip -portlist clock_$i \
+    set ip [ipl::ignore_ports -ip $ip -portlist clock_$i \
         -expression "not(NUM_OF_CLOCKS > $i)"]
 }
 
-set ip [ipl::addfiles -spath ./ -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
-set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
+set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
     -extl {up_clock_mon.v up_axi.v}]
 
-ipl::genip $ip
-ipl::genip $ip ./
+ipl::generate_ip $ip
+ipl::generate_ip $ip ./

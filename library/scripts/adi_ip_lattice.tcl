@@ -5,7 +5,7 @@
 
 namespace eval ipl {
     set interfaces_paths_list [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
-    puts $interfaces_paths_list
+    # puts $interfaces_paths_list
 
     foreach file $interfaces_paths_list {
         if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
@@ -15,6 +15,7 @@ namespace eval ipl {
     }
 
     #node: {name attributes content childs}
+    #attributes {{id0} {att0} {id1} {att1}}
     set ip_desc {{lsccip:ip} {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip" xmlns:xi="http://www.w3.org/2001/XInclude" version="1.0" platform="radiant" platform_version="2023.2"}} {} {
             {lsccip:general} {{lsccip:general} {} {} {
                     {lsccip:vendor} {{lsccip:vendor} {} {analog.com} {}}
@@ -168,7 +169,7 @@ namespace eval ipl {
         }
     }
 
-    proc createcif {args} {
+    proc create_interface {args} {
         array set opt [list -if "$::ipl::if" \
             -vendor "" \
             -library "" \
@@ -236,10 +237,11 @@ namespace eval ipl {
                 }
             }
         }
-        set if [ipl::addcifports $if $ports]
+        set if [ipl::add_interface_ports $if $ports]
         return $if
     }
-    proc addcifport {args} {
+
+    proc add_interface_port {args} {
         array set opt [list -if "$::ipl::if" \
             -logicalName "" \
             -description "" \
@@ -329,7 +331,8 @@ namespace eval ipl {
         set if [ipl::setnode abstractionDefinition_desc/ipxact:ports $logicalName $port $if]
         return $if
     }
-    proc addcifports {if ports} {
+
+    proc add_interface_ports {if ports} {
         foreach port $ports {
             set opts {}
             if {[dict keys $port -n] != ""} {
@@ -347,11 +350,12 @@ namespace eval ipl {
             if {[dict keys $port -p] != ""} {
                 dict set opts -presence [dict get $port -p]
             }
-            set if [ipl::addcifport -if $if {*}$opts]
+            set if [ipl::add_interface_port -if $if {*}$opts]
         }
         return $if
     }
-    proc genif {if {dpath ""}} {
+
+    proc generate_interface {if {dpath ""}} {
         if {$dpath == ""} {
             set dpath $ipl::PropelIPLocal_path/interfaces
         }
@@ -370,11 +374,11 @@ namespace eval ipl {
 
         set busdef [open "$dpath/$vendor/$library/$name/$version/${name}.xml" w]
         puts $busdef {<?xml version="1.0" encoding="UTF-8"?>}
-        puts $busdef [ipl::xmlgen $busDefinition]
+        puts $busdef [ipl::generate_xml $busDefinition]
         close $busdef
         set abstdef [open "$dpath/$vendor/$library/$name/$version/${name}_rtl.xml" w]
         puts $abstdef {<?xml version="1.0" encoding="UTF-8"?>}
-        puts $abstdef [ipl::xmlgen $abstractionDefinition]
+        puts $abstdef [ipl::generate_xml $abstractionDefinition]
         close $abstdef
     }
 
@@ -391,17 +395,7 @@ namespace eval ipl {
         busInterfaces_desc {} \
         memoryMaps_desc {}]]
 
-    set cc {}
-
-    proc setcc {ip} {
-        set ipl::cc $ip
-    }
-    
-    proc current_core {} {
-        return $cc
-    }
-
-    proc xmlgen {node {nid "0"} {index 0}} {
+    proc generate_xml {node {nid "0"} {index 0}} {
         set name [lindex $node 0]
         set attr [lindex $node 1]
         set content [lindex $node 2]
@@ -410,7 +404,7 @@ namespace eval ipl {
         if {$name == ""} {
             set xmlstring ""
             foreach {id child} $childs {
-                set xmlstring "$xmlstring[xmlgen $child $id $index]"
+                set xmlstring "$xmlstring[generate_xml $child $id $index]"
             }
         } else {
             set xmlstring "[string repeat "    " $index]<$name"
@@ -431,7 +425,7 @@ namespace eval ipl {
             } else {
                 set xmlstring "$xmlstring>$content\n"
                 foreach {id child} $childs {
-                    set xmlstring "$xmlstring[xmlgen $child $id [expr $index + 1]]"
+                    set xmlstring "$xmlstring[generate_xml $child $id [expr $index + 1]]"
                 }
                 set xmlstring "$xmlstring[string repeat "    " $index]</$name>\n"
             }
@@ -701,7 +695,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc setwrtype {args} {
+    proc set_wrapper_type {args} {
         array set opt [list -ip "$::ipl::ip" \
             -file_ext "v" \
         {*}$args]
@@ -724,7 +718,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc settpar {args} {
+    proc set_parameter {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -id "" \
@@ -813,7 +807,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc setport {args} {
+    proc set_port {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
@@ -888,7 +882,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc igports {args} {
+    proc ignore_ports {args} {
         array set opt [list -ip "$::ipl::ip" \
             -portlist "" \
             -expression "" \
@@ -899,38 +893,38 @@ namespace eval ipl {
         set expression $opt(-expression)
 
         foreach port $portlist {
-            set ip [ipl::setport -ip $ip -name $port -dangling $expression]
+            set ip [ipl::set_port -ip $ip -name $port -dangling $expression]
         }
         return $ip
     }
 
-    proc getiports {args} {
+    proc get_ports_by_prefix {args} {
         array set opt [list -mod_data "" \
-            -v_name "" \
-            -exept_pl "" \
+            -v_prefix "" \
+            -xptn_portlist "" \
         {*}$args]
 
         set mod_data $opt(-mod_data)
-        set v_name $opt(-v_name)
-        set exept_pl $opt(-exept_pl)
+        set v_prefix $opt(-v_prefix)
+        set xptn_portlist $opt(-xptn_portlist)
         set ports [dict get $mod_data portlist]
 
         set portlist {}
-        set regx [list ${v_name}_.+]
+        set regx [list ${v_prefix}_.+]
         foreach line $ports {
             set pname [dict get $line name]
-            if {[lsearch $exept_pl $pname] == -1 && [regexp $regx $pname]} {
+            if {[lsearch $xptn_portlist $pname] == -1 && [regexp $regx $pname]} {
                 set portlist [list {*}$portlist $pname]
             }
         }
         return $portlist
     }
 
-    proc igiports {args} {
+    proc ignore_ports_by_prefix {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
-            -v_name "" \
-            -exept_pl "" \
+            -v_prefix "" \
+            -xptn_portlist "" \
             -expression "" \
         {*}$args]
 
@@ -938,16 +932,16 @@ namespace eval ipl {
         set mod_data $opt(-mod_data)
         set expression $opt(-expression)
 
-        set v_name $opt(-v_name)
-        set exept_pl $opt(-exept_pl)
+        set v_prefix $opt(-v_prefix)
+        set xptn_portlist $opt(-xptn_portlist)
 
-        set portlist [ipl::getiports -mod_data $mod_data -v_name $v_name -exept_pl $exept_pl]
+        set portlist [ipl::get_ports_by_prefix -mod_data $mod_data -v_prefix $v_prefix -xptn_portlist $xptn_portlist]
 
-        set ip [ipl::igports -ip $ip -expression $expression -portlist $portlist]
+        set ip [ipl::ignore_ports -ip $ip -expression $expression -portlist $portlist]
         return $ip
     }
 
-    proc generator {args} {
+    proc add_component_generator {args} {
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
             -generator "" \
@@ -969,7 +963,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc addressp {args} {
+    proc add_address_space {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
@@ -1010,7 +1004,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc mmap {args} {
+    proc add_memory_map {args} {
         set debug 0
         array set opt [list -ip "$::ipl::ip" \
             -name "" \
@@ -1091,7 +1085,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc genip {ip {dpath ""} {ip_name ""}} {
+    proc generate_ip {ip {dpath ""} {ip_name ""}} {
         if {$ip_name == ""} {
             set ip_name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
         }
@@ -1123,8 +1117,8 @@ namespace eval ipl {
         if {$busInterfaces_desc != ""} {
             set ip [ipl::include -ip $ip -include bus_interface.xml]
             set file [open "$dpath/$ip_name/bus_interface.xml" w]
-            puts [xmlgen $busInterfaces_desc]
-            puts $file [xmlgen $busInterfaces_desc]
+            puts [generate_xml $busInterfaces_desc]
+            puts $file [generate_xml $busInterfaces_desc]
             close $file
         } else {
             puts "WARNING, No busInterfaces_desc defined!"
@@ -1133,8 +1127,8 @@ namespace eval ipl {
         if {$addressSpaces_desc != ""} {
             set ip [ipl::include -ip $ip -include address_space.xml]
             set file [open "$dpath/$ip_name/address_space.xml" w]
-            puts [xmlgen $addressSpaces_desc]
-            puts $file [xmlgen $addressSpaces_desc]
+            puts [generate_xml $addressSpaces_desc]
+            puts $file [generate_xml $addressSpaces_desc]
             close $file
         } else {
             puts "WARNING, No addressSpaces_desc defined!"
@@ -1143,8 +1137,8 @@ namespace eval ipl {
         if {$memoryMaps_desc != ""} {
             set ip [ipl::include -ip $ip -include memory_map.xml]
             set file [open "$dpath/$ip_name/memory_map.xml" w]
-            puts [xmlgen $memoryMaps_desc]
-            puts $file [xmlgen $memoryMaps_desc]
+            puts [generate_xml $memoryMaps_desc]
+            puts $file [generate_xml $memoryMaps_desc]
             close $file
         } else {
             puts "WARNING, No memoryMaps_desc defined!"
@@ -1152,15 +1146,15 @@ namespace eval ipl {
         set ip_desc [ipl::getnode {} ip_desc $ip]
         if {$ip_desc != ""} {
             set file [open "$dpath/$ip_name/metadata.xml" w]
-            puts [xmlgen $ip_desc]
-            puts $file [xmlgen $ip_desc]
+            puts [generate_xml $ip_desc]
+            puts $file [generate_xml $ip_desc]
             close $file
         } else {
             puts "ERROR, No ip_desc defined!"
         }
     }
 
-    proc getmod {path} {
+    proc parse_module {path} {
         set debug 0
         set file [open $path]
         set data [read $file]
@@ -1249,45 +1243,29 @@ namespace eval ipl {
                 }
             }
         }
-        set module_data [list portlist $portlist parlist $parlist mod_name $mod_name]
-        return $module_data
+        set mod_data [list portlist $portlist parlist $parlist mod_name $mod_name]
+        return $mod_data
     }
 
-    proc addifsa {args} {
-        array set opt [list -ip "$::ipl::ip" \
-            -name "" \
-            -display_name "" \
-            -description "" \
-            -bus_type "" \
-            -abstraction_ref "" \
-            -portmap "" \
-        {*}$args]
-
-        set ip $opt(-ip)
-        set port $opt(-port)
-        # do some tasks
-        return $ip
-    }
-    proc addif {args} {
+    proc add_interface {args} {
         array set opt [list -ip "$::ipl::ip" \
             -vendor "" \
             -library "" \
             -name "" \
             -version "" \
-            -iname "" \
+            -inst_name "" \
             -display_name "" \
             -description "" \
-            -bus_type "" \
             -abstraction_ref "" \
             -master_slave "" \
-            -mmap_ref "" \
-            -aspace_ref "" \
+            -mem_map_ref "" \
+            -addr_space_ref "" \
             -portmap "" \
         {*}$args]
 
         set c {"}
         set ip $opt(-ip)
-        set iname $opt(-iname)
+        set inst_name $opt(-inst_name)
         set display_name $opt(-display_name)
         set description $opt(-description)
         set vendor $opt(-vendor)
@@ -1295,8 +1273,8 @@ namespace eval ipl {
         set name $opt(-name)
         set version $opt(-version)
         set master_slave $opt(-master_slave)
-        set mmap_ref $opt(-mmap_ref)
-        set aspace_ref $opt(-aspace_ref)
+        set mem_map_ref $opt(-mem_map_ref)
+        set addr_space_ref $opt(-addr_space_ref)
         set portmap $opt(-portmap)
 
         set atts [list library "library=\"$library\"" \
@@ -1305,7 +1283,7 @@ namespace eval ipl {
             version "version=\"$version\""]
 
         set bif $::ipl::busInterface_desc
-        set bif [ipl::setncont {} lsccip:name $iname $bif]
+        set bif [ipl::setncont {} lsccip:name $inst_name $bif]
         set bif [ipl::setncont {} lsccip:displayName $display_name $bif]
         set bif [ipl::setncont {} lsccip:description $description $bif]
         set bif [ipl::setatts {} lsccip:busType $atts $bif]
@@ -1313,12 +1291,12 @@ namespace eval ipl {
         set bif [ipl::setatts lsccip:abstractionTypes/lsccip:abstractionType lsccip:abstractionRef $atts $bif]
         set bif [ipl::setnname {} lsccip:master_slave lsccip:$master_slave $bif]
 
-        if {$master_slave == "slave" && $mmap_ref != ""} {
-            set mmap_ref_node [list lsccip:memoryMapRef [list memoryMapRef "memoryMapRef=\"$mmap_ref\""] {} {}]
+        if {$master_slave == "slave" && $mem_map_ref != ""} {
+            set mmap_ref_node [list lsccip:memoryMapRef [list memoryMapRef "memoryMapRef=\"$mem_map_ref\""] {} {}]
             set bif [ipl::setnode lsccip:master_slave lsccip:memoryMapRef $mmap_ref_node $bif]
         }
-        if {$master_slave == "master" && $aspace_ref != ""} {
-            set aspace_ref_node [list lsccip:addressSpaceRef [list addressSpaceRef "addressSpaceRef=\"$aspace_ref\""] {} {}]
+        if {$master_slave == "master" && $addr_space_ref != ""} {
+            set aspace_ref_node [list lsccip:addressSpaceRef [list addressSpaceRef "addressSpaceRef=\"$addr_space_ref\""] {} {}]
             set bif [ipl::setnode lsccip:master_slave lsccip:addressSpaceRef $aspace_ref_node $bif]
         }
 
@@ -1328,42 +1306,41 @@ namespace eval ipl {
             set pmap [ipl::setncont lsccip:logicalPort lsccip:name $logic $::ipl::portMap_desc]
             set pmap [ipl::setncont lsccip:physicalPort lsccip:name $pname $pmap]
             set bif [ipl::setnode lsccip:abstractionTypes/lsccip:abstractionType/lsccip:portMaps $pname $pmap $bif]
-            set ip [ipl::setport -ip $ip -name $pname -bus_interface $iname]
+            set ip [ipl::set_port -ip $ip -name $pname -bus_interface $inst_name]
         }
         set bifs [ipl::getnode {} busInterfaces_desc $ip]
         if {$bifs == ""} {
             set bifs $::ipl::busInterfaces_desc
         }
         set bifsl [lindex $bifs 3]
-        dict set bifsl $iname $bif
+        dict set bifsl $inst_name $bif
         lset bifs 3 $bifsl
         set ip [ipl::setnode {} busInterfaces_desc $bifs $ip]
 
-        # to do: 
-        # - manual portlist/portmap
-        # - update ports attributes with the interface attribute
         return $ip
     }
-    proc addifa {args} {
+
+    proc add_interface_by_prefix {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -iname "" \
-            -display_name "" \
-            -description "" \
             -vendor "" \
             -library "" \
             -name "" \
             -version "" \
+            -inst_name "" \
+            -display_name "" \
+            -description "" \
             -master_slave "" \
-            -mmap_ref "" \
-            -aspace_ref "" \
+            -mem_map_ref "" \
+            -addr_space_ref "" \
             -mod_data "" \
-            -v_name "" \
-            -exept_pl "" \
+            -v_prefix "" \
+            -xptn_portlist "" \
+            -t "" \
         {*}$args]
 
         set optl {
             -ip
-            -iname
+            -inst_name
             -display_name
             -description
             -vendor
@@ -1371,8 +1348,8 @@ namespace eval ipl {
             -name
             -version
             -master_slave
-            -mmap_ref
-            -aspace_ref
+            -mem_map_ref
+            -addr_space_ref
         }
         set argl {}
         foreach op $optl {
@@ -1380,21 +1357,21 @@ namespace eval ipl {
         }
  
         set mod_data $opt(-mod_data)
-        set v_name $opt(-v_name)
-        set exept_pl $opt(-exept_pl)
+        set v_prefix $opt(-v_prefix)
+        set xptn_portlist $opt(-xptn_portlist)
+        set t $opt(-t)
 
         set portmap {}
-        set portlist [ipl::getiports -mod_data $mod_data -v_name $v_name -exept_pl $exept_pl]
+        set portlist [ipl::get_ports_by_prefix -mod_data $mod_data -v_prefix $v_prefix -xptn_portlist $xptn_portlist]
 
         foreach pname $portlist {
-            set logic [string toupper [string map [list ${v_name}_ ""] $pname]]
+            set logic [string toupper "$t[string map [list ${v_prefix}_ ""] $pname]" ]
             set portmap [list {*}$portmap [list $pname $logic]]
         }
-        # puts $portmap
-        return [ipl::addif {*}$argl -portmap $portmap]
+        return [ipl::add_interface {*}$argl -portmap $portmap]
     }
 
-    proc addports {args} {
+    proc add_ports_from_module {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
         {*}$args]
@@ -1422,12 +1399,12 @@ namespace eval ipl {
             if {[llength $data] > 4} {
                 set from [dict get $data from]
                 set to [dict get $data to]
-                set ip [ipl::setport -ip $ip -name $name \
+                set ip [ipl::set_port -ip $ip -name $name \
                     -dir $dir -range "${op}int$op$from$cl,$to$cl" \
                     -conn_port $name \
                     -conn_mod $mod_name]
             } else {
-                set ip [ipl::setport -ip $ip -name $name \
+                set ip [ipl::set_port -ip $ip -name $name \
                     -dir $dir \
                     -conn_port $name \
                     -conn_mod $mod_name]
@@ -1436,7 +1413,7 @@ namespace eval ipl {
         return $ip
     }
 
-    proc addpars {args} {
+    proc add_parameters_from_module {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
         {*}$args]
@@ -1461,14 +1438,14 @@ namespace eval ipl {
                     set value_type string
                 }
                 
-                set ip [ipl::settpar -ip $ip -id $name \
+                set ip [ipl::set_parameter -ip $ip -id $name \
                     -type param -value_type $value_type \
                     -conn_mod $mod_name -title $name \
                     -default $defval \
                     -output_formatter nostr \
                     -group1 PARAMS -group2 GLOB]
             } else {
-                set ip [ipl::settpar -ip $ip -id $name \
+                set ip [ipl::set_parameter -ip $ip -id $name \
                     -type param -value_type int \
                     -conn_mod $mod_name -title $name \
                     -output_formatter nostr \
@@ -1517,7 +1494,7 @@ namespace eval ipl {
         return $doc
     }
 
-    proc addfiles {args} {
+    proc add_ip_files_auto {args} {
         array set opt [list -ip "$::ipl::ip" \
             -spath "" \
             -sdepth 0 \
@@ -1540,7 +1517,7 @@ namespace eval ipl {
         set checkext {^.+\.sv$}
         foreach file $flist {
             if {[regexp $checkext $file]} {
-                set ip [ipl::setwrtype -ip $ip -file_ext sv]
+                set ip [ipl::set_wrapper_type -ip $ip -file_ext sv]
             }
         }
 
@@ -1569,7 +1546,7 @@ namespace eval ipl {
         return $file_list
     }
 
-    proc adi_ip_files {args} {
+    proc add_ip_files {args} {
         array set opt [list -ip "$::ipl::ip" \
             -flist "" \
             -dpath "rtl" \
@@ -1582,7 +1559,7 @@ namespace eval ipl {
         set checkext {^.+\.sv$}
         foreach file $flist {
             if {[regexp $checkext $file]} {
-                set ip [ipl::setwrtype -ip $ip -file_ext sv]
+                set ip [ipl::set_wrapper_type -ip $ip -file_ext sv]
             }
         }
 
@@ -1593,23 +1570,35 @@ namespace eval ipl {
         return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
-    # to do check the ports to select the interface type
-    # set up a structure with the ports and the interface type included
-    proc getaxi {module_data} {
-        set ports [dict get $module_data portlist]
-        set aclk_list {}
+    # set axis_ports {
+    #     valid
+    #     ready
+    #     data
+    #     strb
+    #     keep
+    #     last
+    #     id
+    #     dest
+    #     user
+    #     wakeup
+    # }
+
+    proc list_interfaces_by_clock {mod_data {clock "aclk"}} {
+        set ports [dict get $mod_data portlist]
+        set clk_list {}
         puts "--------------------------clocks------------------------------"
         foreach line $ports {
             set name [dict get $line name]
-            if {[regexp {.+_aclk.*} $name]} {
-                set aclk_list [list {*}$aclk_list $name]
+            set regexp ".+_${clock}$"
+            if {[regexp $regexp $name]} {
+                set clk_list [list {*}$clk_list $name]
                 puts $name
             }
         }
         puts "-------------------------------------------------------------"
 
-        foreach pname $aclk_list {
-            set interface_name [string map {"_aclk" ""} $pname]
+        foreach pname $clk_list {
+            set interface_name [string map [list _${clock} ""] $pname]
             foreach line $ports {
                 set reg [list ${interface_name}_.+]
                 set name [dict get $line name]
@@ -1621,5 +1610,234 @@ namespace eval ipl {
         }
     }
 
+    # to do check the ports to select the interface type
+    # set up a structure with the ports and the interface type included
+    proc add_axi_interfaces {args} {
+        array set opt [list -ip "$::ipl::ip" \
+            -mod_data "" \
+            -clock "aclk" \
+            -reset "aresetn" \
+            -xptn_portlist {m_axis_xfer_req s_axis_xfer_req} \
+        {*}$args]
+
+        set ip $opt(-ip)
+        set mod_data $opt(-mod_data)
+        set clock $opt(-clock)
+        set reset $opt(-reset)
+        set xptn_portlist $opt(-xptn_portlist)
+
+        set ports [dict get $mod_data portlist]
+        set clk_list {}
+        puts "--------------------------clocks------------------------------"
+        foreach line $ports {
+            set name [dict get $line name]
+            set regexp ".+_${clock}$"
+            if {[regexp $regexp $name]} {
+                set clk_list [list {*}$clk_list $name]
+                puts $name
+            }
+        }
+        puts "-------------------------------------------------------------"
+
+        foreach pname $clk_list {
+            set interface_name [string map [list _${clock} ""] $pname]
+            set counter 0
+            foreach line $ports {
+                set reg [list ${interface_name}_.+]
+                set name [dict get $line name]
+                if {[regexp $reg $name]} {
+                    incr counter
+                }
+            }
+            dict set ports_num $pname $counter
+        }
+
+        puts "Ports number by clocks: $ports_num\n"
+
+        foreach pname $clk_list {
+            set interface_name [string map [list _${clock} ""] $pname]
+
+            set arid ${interface_name}_arid
+            set awid ${interface_name}_awid
+            set araddr ${interface_name}_araddr
+            set awaddr ${interface_name}_awaddr
+            set tvalid ${interface_name}_tvalid
+            set tready ${interface_name}_tready
+            set valid ${interface_name}_valid
+            set ready ${interface_name}_ready
+
+            set brk ""
+            foreach line $ports {
+                set name [dict get $line name]
+                set type [dict get $line type]
+                if {[regexp $arid $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                } elseif {[regexp $awid $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                }
+            }
+            if {$brk != ""} {
+                if {$brk == "slave"} {
+                    set ip [ipl::add_memory_map -ip $ip \
+                        -name ${interface_name}_mem_map \
+                        -description ${interface_name}_mem_map \
+                        -baseAddress 0 \
+                        -range 65536 \
+                        -width 32]
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave slave \
+                        -mem_map_ref ${interface_name}_mem_map \
+                        -vendor amba.com -library AMBA4 -name AXI4 -version r0p0 ]
+                } elseif {$brk == "master"} {
+                    set ip [ipl::add_address_space -ip $ip \
+                        -name ${interface_name}_aspace \
+                        -range 0x100000000 \
+                        -width 32]
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave master \
+                        -addr_space_ref ${interface_name}_aspace \
+                        -vendor amba.com -library AMBA4 -name AXI4 -version r0p0 ]
+                }
+                continue
+            }
+
+            foreach line $ports {
+                set name [dict get $line name]
+                set type [dict get $line type]
+                if {[regexp $araddr $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                } elseif {[regexp $awaddr $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                }
+            }
+            if {$brk != ""} {
+                if {$brk == "slave"} {
+                    set ip [ipl::add_memory_map -ip $ip \
+                        -name ${interface_name}_mem_map \
+                        -description ${interface_name}_mem_map \
+                        -baseAddress 0 \
+                        -range 65536 \
+                        -width 32]
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave slave \
+                        -mem_map_ref ${interface_name}_mem_map \
+                        -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+                } elseif {$brk == "master"} {
+                    set ip [ipl::add_address_space -ip $ip \
+                        -name ${interface_name}_aspace \
+                        -range 0x100000000 \
+                        -width 32]
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave master \
+                        -addr_space_ref ${interface_name}_aspace \
+                        -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+                }
+                continue
+            }
+
+            foreach line $ports {
+                set name [dict get $line name]
+                set type [dict get $line type]
+                if {[regexp $tvalid $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                } elseif {[regexp $tready $name]} {
+                    if {$type == "input"} {set brk master}
+                    if {$type == "output"} {set brk slave}
+                    break
+                }
+            }
+            if {$brk != ""} {
+                if {$brk == "slave"} {
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave slave \
+                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                } elseif {$brk == "master"} {
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave master \
+                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                }
+                continue
+            }
+
+            foreach line $ports {
+                set name [dict get $line name]
+                set type [dict get $line type]
+                if {[regexp $valid $name]} {
+                    if {$type == "input"} {set brk slave}
+                    if {$type == "output"} {set brk master}
+                    break
+                } elseif {[regexp $ready $name]} {
+                    if {$type == "input"} {set brk master}
+                    if {$type == "output"} {set brk slave}
+                    break
+                }
+            }
+            if {$brk != ""} {
+                if {$brk == "slave"} {
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave slave \
+                        -t t \
+                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                } elseif {$brk == "master"} {
+                    set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
+                        -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
+                        -display_name $interface_name \
+                        -description $interface_name \
+                        -master_slave master \
+                        -t t \
+                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                }
+                continue
+            }
+
+            # puts " "
+        }
+
+        return $ip
+    }
+
     # -create make script.
 }
+# TODO:
+# add lists for axi and other interfaces standard ports to be able to check them and read them automatically
+# comment the code
+# I should add something like this to be able to read the path and clear the
+# library IPs from the output library directory of propel builder:
+# output := $(shell propelbld readpath.tcl)
+# all:
+#     @echo "Captured output: $(output)"
+#     @for item in $(output); do \
+#         echo $$item; \
+#     done
+# then write a rule for clearing these IPs or edit the clear targets and add the specified file paths dinamically

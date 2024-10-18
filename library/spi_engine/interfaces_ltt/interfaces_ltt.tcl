@@ -6,7 +6,7 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_engine_ctrl \
     -version 1.0 \
@@ -27,10 +27,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if
-ipl::genif $if ./
+ipl::generate_interface $if
+ipl::generate_interface $if ./
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_engine_offload_ctrl \
     -version 1.0 \
@@ -49,10 +49,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if
-ipl::genif $if ./
+ipl::generate_interface $if
+ipl::generate_interface $if ./
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_master \
     -version 1.0 \
@@ -67,5 +67,5 @@ set if [ipl::createcif -vendor analog.com \
         {-n THREE_WIRE -p optional -w 1 -d out}
         {-n CS -p required -d out}
     }]
-ipl::genif $if
-ipl::genif $if ./
+ipl::generate_interface $if
+ipl::generate_interface $if ./
