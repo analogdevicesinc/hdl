@@ -25,4 +25,3 @@ adi_project_files dac_fmc_ebz_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run dac_fmc_ebz_zcu102
-
