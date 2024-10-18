@@ -6,10 +6,10 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set mod_data [ipl::getmod ./axi_dmac.v]
+set mod_data [ipl::parse_module ./axi_dmac.v]
 set ip $::ipl::ip
 
-set ip [ipl::addports -ip $ip -mod_data $mod_data]
+set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
 set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
@@ -25,58 +25,58 @@ set ip [ipl::general  -vendor "analog.com" \
     -max_radiant_version "2023.2" \
     -min_esi_version "2022.1" -ip $ip]
 
-set ip [ipl::mmap -ip $ip \
+set ip [ipl::add_memory_map -ip $ip \
     -name "axi_dmac_mem_map" \
     -description "axi_dmac_mem_map" \
     -baseAddress 0 \
     -range 65536 \
     -width 32]
-set ip [ipl::addressp -ip $ip \
+set ip [ipl::add_address_space -ip $ip \
     -name "m_dest_axi_aspace" \
     -range 0x100000000 \
     -width 32]
-set ip [ipl::addressp -ip $ip \
+set ip [ipl::add_address_space -ip $ip \
     -name "m_src_axi_aspace" \
     -range 0x100000000 \
     -width 32]
-set ip [ipl::addressp -ip $ip \
+set ip [ipl::add_address_space -ip $ip \
     -name "m_sg_axi_aspace" \
     -range 0x100000000 \
     -width 32]
 
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -iname s_axi -v_name s_axi \
-    -exept_pl [list s_axi_aclk s_axi_aresetn] \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name s_axi -v_prefix s_axi \
+    -xptn_portlist [list s_axi_aclk s_axi_aresetn] \
     -display_name s_axi \
     -description s_axi \
     -master_slave slave \
-    -mmap_ref axi_dmac_mem_map \
+    -mem_map_ref axi_dmac_mem_map \
     -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_dest_axi \
-    -exept_pl [list m_dest_axi_aclk m_dest_axi_aresetn] \
-    -iname m_dest_axi \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_dest_axi \
+    -xptn_portlist [list m_dest_axi_aclk m_dest_axi_aresetn] \
+    -inst_name m_dest_axi \
     -display_name m_dest_axi \
     -description m_dest_axi \
     -master_slave master \
-    -aspace_ref m_dest_axi_aspace \
+    -addr_space_ref m_dest_axi_aspace \
     -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_src_axi \
-    -exept_pl [list m_src_axi_aclk m_src_axi_aresetn] \
-    -iname m_src_axi \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_src_axi \
+    -xptn_portlist [list m_src_axi_aclk m_src_axi_aresetn] \
+    -inst_name m_src_axi \
     -display_name m_src_axi \
     -description m_src_axi \
     -master_slave master \
-    -aspace_ref m_src_axi_aspace \
+    -addr_space_ref m_src_axi_aspace \
     -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
-set ip [ipl::addifa -ip $ip -mod_data $mod_data -v_name m_sg_axi \
-    -exept_pl [list m_sg_axi_aclk m_sg_axi_aresetn] \
-    -iname m_sg_axi \
+set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_sg_axi \
+    -xptn_portlist [list m_sg_axi_aclk m_sg_axi_aresetn] \
+    -inst_name m_sg_axi \
     -display_name m_sg_axi \
     -description m_sg_axi \
     -master_slave master \
-    -aspace_ref m_sg_axi_aspace \
+    -addr_space_ref m_sg_axi_aspace \
     -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name fifo_wr \
     -version 1.0 \
@@ -90,10 +90,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC -p optional -w 1 -d out}
         {-n XFER_REQ -p optional -w 1 -d in}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set ip [ipl::addif -ip $ip \
-    -iname fifo_wr \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name fifo_wr \
     -display_name fifo_wr \
     -description fifo_wr \
     -master_slave slave \
@@ -105,7 +105,7 @@ set ip [ipl::addif -ip $ip \
     } \
     -vendor analog.com -library ADI -name fifo_wr -version 1.0]
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name fifo_rd \
     -version 1.0 \
@@ -119,10 +119,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n VALID -d in -p optional -w 1}
         {-n XFER_REQ -d in -p optional -w 1}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set ip [ipl::addif -ip $ip \
-    -iname fifo_rd \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name fifo_rd \
     -display_name fifo_rd \
     -description fifo_rd \
     -master_slave slave \
@@ -134,8 +134,8 @@ set ip [ipl::addif -ip $ip \
     } \
     -vendor analog.com -library ADI -name fifo_rd -version 1.0]
 
-set ip [ipl::addif -ip $ip \
-    -iname s_axis \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name s_axis \
     -display_name s_axis \
     -description s_axis \
     -master_slave slave \
@@ -149,8 +149,8 @@ set ip [ipl::addif -ip $ip \
                     {"s_axis_dest" "TDEST"} \
                     {"s_axis_last" "TLAST"}] \
     -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
-set ip [ipl::addif -ip $ip \
-    -iname m_axis \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name m_axis \
     -display_name m_axis \
     -description m_axis \
     -master_slave master \
@@ -166,27 +166,27 @@ set ip [ipl::addif -ip $ip \
     -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
 # Do not use a port name as interface name except if you use case differences.
-set ip [ipl::addif -ip $ip \
-    -iname IRQ \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name IRQ \
     -display_name IRQ \
     -description IRQ \
     -master_slave master \
     -portmap [list {"irq" "IRQ"}] \
     -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
 
-set ip [ipl::addfiles -spath ./ -dpath rtl -extl {*.v *.vh} -ip $ip]
-set ip [ipl::addfiles -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::addfiles -spath ../common -dpath rtl -ip $ip \
+set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v *.vh} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
     -extl {ad_rst.v
            up_axi.v
            ad_mem.v
            ad_mem_asym.v}]
-set ip [ipl::addfiles -spath ../util_axis_fifo -dpath rtl -ip $ip \
+set ip [ipl::add_ip_files_auto -spath ../util_axis_fifo -dpath rtl -ip $ip \
     -extl {util_axis_fifo.v
             util_axis_fifo_address_generator.v}]
 
 # source
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_TYPE_SRC \
     -type param \
     -value_type int \
@@ -197,7 +197,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_AXI_PROTOCOL_SRC \
     -type param \
     -value_type int \
@@ -209,7 +209,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_DATA_WIDTH_SRC \
     -type param \
     -value_type int \
@@ -220,7 +220,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id AXI_SLICE_SRC \
     -type param \
     -value_type int \
@@ -231,7 +231,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id AXIS_TUSER_SYNC \
     -type param \
     -value_type int \
@@ -243,21 +243,21 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Source} \
     -group2 Config]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name m_src_axi \
+    -v_prefix m_src_axi \
     -expression {not(DMA_TYPE_SRC == 0)}]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name s_axis \
+    -v_prefix s_axis \
     -expression {not(DMA_TYPE_SRC == 1)}]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name fifo_rd \
+    -v_prefix fifo_rd \
     -expression {not(DMA_TYPE_SRC == 2)}]
 
 # destination
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_TYPE_DEST \
     -type param \
     -value_type int \
@@ -268,7 +268,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Destination} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_AXI_PROTOCOL_DEST \
     -type param \
     -value_type int \
@@ -280,7 +280,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Destination} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_DATA_WIDTH_DEST \
     -type param \
     -value_type int \
@@ -291,7 +291,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Destination} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id AXI_SLICE_DEST \
     -type param \
     -value_type int \
@@ -302,24 +302,24 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Destination} \
     -group2 Config]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name m_dest_axi \
+    -v_prefix m_dest_axi \
     -expression {not(DMA_TYPE_DEST == 0)}]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name m_axis \
+    -v_prefix m_axis \
     -expression {not(DMA_TYPE_DEST == 1)}]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name fifo_wr \
+    -v_prefix fifo_wr \
     -expression {not(DMA_TYPE_DEST == 2)}]
-set ip [ipl::igports -ip $ip \
+set ip [ipl::ignore_ports -ip $ip \
     -portlist {sync} \
     -expression {not((SYNC_TRANSFER_START == 1) and  (DMA_TYPE_SRC != 1 or AXIS_TUSER_SYNC != 1))}]
 
 # scatter gather
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_AXI_PROTOCOL_SG \
     -type param \
     -value_type int \
@@ -331,7 +331,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Scatter-Gather} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_DATA_WIDTH_SG \
     -type param \
     -value_type int \
@@ -343,13 +343,13 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Scatter-Gather} \
     -group2 Config]
-set ip [ipl::igiports -ip $ip \
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
     -mod_data $mod_data \
-    -v_name m_sg_axi \
+    -v_prefix m_sg_axi \
     -expression {(DMA_SG_TRANSFER == 0)}]
 
 # general
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ID \
     -type param \
     -value_type int \
@@ -359,7 +359,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_LENGTH_WIDTH \
     -type param \
     -value_type int \
@@ -369,7 +369,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id FIFO_SIZE \
     -type param \
     -value_type int \
@@ -380,7 +380,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id MAX_BYTES_PER_BURST \
     -type param \
     -value_type int \
@@ -390,7 +390,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_AXI_ADDR_WIDTH \
     -type param \
     -value_type int \
@@ -400,7 +400,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id AXI_AXCACHE \
     -type param \
     -value_type string \
@@ -411,7 +411,7 @@ set ip [ipl::settpar -ip $ip \
     -editable {(CACHE_COHERENT == 1)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id AXI_AXPROT \
     -type param \
     -value_type string \
@@ -424,7 +424,7 @@ set ip [ipl::settpar -ip $ip \
     -group2 Config]
 
 # features
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id CYCLIC \
     -type param \
     -value_type int \
@@ -435,7 +435,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Features} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_SG_TRANSFER \
     -type param \
     -value_type int \
@@ -446,7 +446,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Features} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DMA_2D_TRANSFER \
     -type param \
     -value_type int \
@@ -457,7 +457,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Features} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SYNC_TRANSFER_START \
     -type param \
     -value_type int \
@@ -468,7 +468,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Features} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id CACHE_COHERENT \
     -type param \
     -value_type int \
@@ -482,7 +482,7 @@ set ip [ipl::settpar -ip $ip \
     -group2 Config]
 
 # clock domain configuration
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_REQ_SRC \
     -type param \
     -value_type int \
@@ -493,7 +493,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Clock Domain Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_SRC_DEST \
     -type param \
     -value_type int \
@@ -504,7 +504,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Clock Domain Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_DEST_REQ \
     -type param \
     -value_type int \
@@ -515,7 +515,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Clock Domain Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_REQ_SG \
     -type param \
     -value_type int \
@@ -526,7 +526,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Clock Domain Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_SRC_SG \
     -type param \
     -value_type int \
@@ -537,7 +537,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Clock Domain Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_DEST_SG \
     -type param \
     -value_type int \
@@ -550,7 +550,7 @@ set ip [ipl::settpar -ip $ip \
     -group2 Config]
 
 # debug
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DISABLE_DEBUG_REGISTERS \
     -type param \
     -value_type int \
@@ -561,7 +561,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Debug} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ENABLE_DIAGNOSTICS_IF \
     -type param \
     -value_type int \
@@ -572,12 +572,12 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Debug} \
     -group2 Config]
-set ip [ipl::igports -ip $ip \
+set ip [ipl::ignore_ports -ip $ip \
     -portlist {dest_diag_level_bursts} \
     -expression {(ENABLE_DIAGNOSTICS_IF == 0)}]
 
 # hidden
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id AXI_ID_WIDTH_SRC \
     -type param \
@@ -588,7 +588,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Hidden} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id AXI_ID_WIDTH_DEST \
     -type param \
@@ -599,7 +599,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Hidden} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id AXI_ID_WIDTH_SG \
     -type param \
@@ -610,7 +610,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Hidden} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id DMA_AXIS_ID_W \
     -type param \
@@ -621,7 +621,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Hidden} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id DMA_AXIS_DEST_W \
     -type param \
@@ -632,7 +632,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {Hidden} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -hidden True \
     -id ALLOW_ASYM_MEM \
     -type param \
@@ -644,5 +644,5 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Hidden} \
     -group2 Config]
 
-ipl::genip $ip
-ipl::genip $ip ./
+ipl::generate_ip $ip
+ipl::generate_ip $ip ./

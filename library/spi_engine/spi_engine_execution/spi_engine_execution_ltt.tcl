@@ -6,10 +6,10 @@
 source ../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set mod_data [ipl::getmod ./spi_engine_execution.v]
+set mod_data [ipl::parse_module ./spi_engine_execution.v]
 set ip $::ipl::ip
 
-set ip [ipl::addports -ip $ip -mod_data $mod_data]
+set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
 set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
 set ip [ipl::general -ip $ip -display_name "AXI SPI Engine execution ADI"]
@@ -24,7 +24,7 @@ set ip [ipl::general  -vendor "analog.com" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_engine_ctrl \
     -version 1.0 \
@@ -45,9 +45,9 @@ set if [ipl::createcif -vendor analog.com \
         {-n SYNC_VALID -p required -w 1 -d in}
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set if [ipl::createcif -vendor analog.com \
+set if [ipl::create_interface -vendor analog.com \
     -library ADI \
     -name spi_master \
     -version 1.0 \
@@ -62,10 +62,10 @@ set if [ipl::createcif -vendor analog.com \
         {-n THREE_WIRE -p optional -w 1 -d out}
         {-n CS -p required -d out}
     }]
-ipl::genif $if
+ipl::generate_interface $if
 
-set ip [ipl::addif -ip $ip \
-    -iname spi_engine_ctrl \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name spi_engine_ctrl \
     -display_name spi_engine_ctrl \
     -description spi_engine_ctrl \
     -master_slave slave \
@@ -84,8 +84,8 @@ set ip [ipl::addif -ip $ip \
         {"sync" "SYNC_DATA"} \
     } \
     -vendor analog.com -library ADI -name spi_engine_ctrl -version 1.0]
-set ip [ipl::addif -ip $ip \
-    -iname spi_master \
+set ip [ipl::add_interface -ip $ip \
+    -inst_name spi_master \
     -display_name spi_master \
     -description spi_master \
     -master_slave master \
@@ -99,9 +99,9 @@ set ip [ipl::addif -ip $ip \
     } \
     -vendor analog.com -library ADI -name spi_master -version 1.0]
 
-set ip [ipl::addfiles -spath ./ -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \
     -type param \
     -value_type int \
@@ -112,7 +112,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(8, 32)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id NUM_OF_CS \
     -type param \
     -value_type int \
@@ -123,7 +123,7 @@ set ip [ipl::settpar -ip $ip \
     -value_range {(1, 8)} \
     -group1 {General Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id NUM_OF_SDI \
     -type param \
     -value_type int \
@@ -135,7 +135,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {General Configuration} \
     -group2 Config]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DEFAULT_SPI_CFG \
     -type param \
     -value_type int \
@@ -146,7 +146,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {SPI Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id DEFAULT_CLK_DIV \
     -type param \
     -value_type int \
@@ -158,7 +158,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {SPI Configuration} \
     -group2 Config]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SDI_DELAY \
     -type param \
     -value_type int \
@@ -169,7 +169,7 @@ set ip [ipl::settpar -ip $ip \
     -output_formatter nostr \
     -group1 {MOSI/MISO Configuration} \
     -group2 Config]
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id SDO_DEFAULT \
     -type param \
     -value_type int \
@@ -181,7 +181,7 @@ set ip [ipl::settpar -ip $ip \
     -group1 {MOSI/MISO Configuration} \
     -group2 Config]
 
-set ip [ipl::settpar -ip $ip \
+set ip [ipl::set_parameter -ip $ip \
     -id ECHO_SCLK \
     -type param \
     -value_type int \
@@ -193,9 +193,9 @@ set ip [ipl::settpar -ip $ip \
     -group1 {Custom clocking options} \
     -group2 Config]
 
-set ip [ipl::igports -ip $ip \
+set ip [ipl::ignore_ports -ip $ip \
     -portlist {echo_sclk} \
     -expression {(ECHO_SCLK != 1)}]
 
-ipl::genip $ip
-ipl::genip $ip ./
+ipl::generate_ip $ip
+ipl::generate_ip $ip ./
