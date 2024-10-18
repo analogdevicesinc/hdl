@@ -98,6 +98,7 @@ Contents
    M2K <m2k/index>
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
+   QUAD_ADAQ7768-1 <quad_adaq77681/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
 
