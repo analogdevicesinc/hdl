@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 PERIPHERAL_ID
 RO
 Value of the ID configuration parameter.
@@ -84,14 +84,14 @@ SYNTHESIS_CONFIG_1
 ENDREG
 
 FIELD
-[2] ''HAS_BYPASS''
+[2] HAS_BYPASS
 HAS_BYPASS
 RO
 If set the bypass logic is implemented.
 ENDFIELD
 
 FIELD
-[1] ''TX_OR_RXN_PATH''
+[1] TX_OR_RXN_PATH
 TX_OR_RXN_PATH
 RO
 If this device was configured for the TX path, this bit will be set to 1.
@@ -99,7 +99,7 @@ Conversely, the bit will be 0 for the RX path.
 ENDFIELD
 
 FIELD
-[0] ''MEM_TYPE''
+[0] MEM_TYPE
 MEMORY_TYPE
 RO
 This bit identifies the type of memory that was chosen during synthesis. A value of 1
@@ -115,7 +115,7 @@ SYNTHESIS_CONFIG_2
 ENDREG
 
 FIELD
-[31:0] 1<<''MEM_SIZE_LOG2''
+[31:0] MEM_SIZE_LSB = 1<<MEM_SIZE_LOG2
 MEM_SIZE_LSB
 RO
 32 bits (LSB) of the storage unit size. 
@@ -130,7 +130,7 @@ SYNTHESIS_CONFIG_3
 ENDREG
 
 FIELD
-[1:0] (1<<''MEM_SIZE_LOG2'')>>32
+[1:0] MEM_SIZE_MSB = (1<<MEM_SIZE_LOG2)>>32
 MEM_SIZE_MSB
 RO
 2 bits (MSB) of the storage unit size. 
@@ -145,7 +145,7 @@ TRANSFER_LENGTH
 ENDREG
 
 FIELD
-[31:0] (2^''MEM_SIZE_LOG2''-1)>>6
+[31:0] TRANSFER_LENGTH = (2**MEM_SIZE_LOG2-1)>>6
 TRANSFER_LENGTH
 RW
 The transfer length register can be used to override the transfer length in RX mode in increments of 64 bytes.
@@ -189,7 +189,7 @@ RESET_OFFLOAD
 ENDREG
 
 FIELD
-[0] ''AUTO_BRINGUP''
+[0] AUTO_BRINGUP
 RESETN
 RW
 "Software Reset": Resets all the internal address registers and state machines.
@@ -204,7 +204,7 @@ CONTROL
 ENDREG
 
 FIELD
-[1] ~''TX_OR_RXN_PATH''
+[1] ONESHOT_EN = ~TX_OR_RXN_PATH
 ONESHOT_EN
 RW
 Enables oneshot mode. This means that the data offload will only play a received buffer once,

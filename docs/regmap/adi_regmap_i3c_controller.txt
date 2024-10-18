@@ -39,7 +39,7 @@ DEVICE_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 DEVICE_ID
 RO
 Value of the ID configuration parameter.

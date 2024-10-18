@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 PERIPHERAL_ID
 R
 Value of the ID configuration parameter.
@@ -84,49 +84,49 @@ INTERFACE_DESCRIPTION
 ENDREG
 
 FIELD
-[30:24] ''SYNC_COUNT_WIDTH''
+[30:24] SYNC_COUNT_WIDTH
 SYNC_COUNT_WIDTH
 R
 Width of internal synchronization counter.
 ENDFIELD
 
 FIELD
-[21:16] ''BURST_COUNT_WIDTH''
+[21:16] BURST_COUNT_WIDTH
 BURST_COUNT_WIDTH
 R
 Width of burst counter.
 ENDFIELD
 
 FIELD
-[13:8] ''REGISTER_WIDTH''
+[13:8] REGISTER_WIDTH
 REGISTER_WIDTH
 R
 Width of internal reference counter and timing registers.
 ENDFIELD
 
 FIELD
-[7] ''SYNC_EXTERNAL_CDC''
+[7] SYNC_EXTERNAL_CDC
 SYNC_EXTERNAL_CDC
 R
 Enable CDC for external synchronization pulse.
 ENDFIELD
 
 FIELD
-[6] ''SYNC_EXTERNAL''
+[6] SYNC_EXTERNAL
 SYNC_EXTERNAL
 R
 Enable external synchronization support.
 ENDFIELD
 
 FIELD
-[5] ''SYNC_INTERNAL''
+[5] SYNC_INTERNAL
 SYNC_INTERNAL
 R
 Enable internal synchronization support.
 ENDFIELD
 
 FIELD
-[4:0] ''CHANNEL_COUNT''-1
+[4:0] CHANNEL_COUNT_EXTRA = CHANNEL_COUNT-1
 CHANNEL_COUNT_EXTRA
 R
 Number of channels starting from CH1, excluding CH0.
@@ -141,7 +141,7 @@ DEFAULT_POLARITY
 ENDREG
 
 FIELD
-[31:0] ''DEFAULT_POLARITY''
+[31:0] DEFAULT_POLARITY
 DEFAULT_POLARITY
 R
 Default polarity per every channel - LSB corresponds to CH0, MSB to CH31.

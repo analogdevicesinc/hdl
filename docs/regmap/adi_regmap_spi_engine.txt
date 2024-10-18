@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 PERIPHERAL_ID
 RO
 Value of the ID configuration parameter.
@@ -70,7 +70,7 @@ DATA_WIDTH
 ENDREG
 
 FIELD
-[7:4] ''NUM_OF_SDI''
+[7:4] NUM_OF_SDI
 NUM_OF_SDI
 RO
 Number of SDI.
@@ -78,7 +78,7 @@ It is equal with the maximum supported SDI lines in bits.
 ENDFIELD
 
 FIELD
-[3:0] ''DATA_WITH''
+[3:0] DATA_WIDTH
 DATA_WIDTH
 RO
 Data width of the SDI/SDO parallel interface.
@@ -277,7 +277,7 @@ CMD_FIFO_ROOM
 ENDREG
 
 FIELD
-[31:0] log2((2^''CMD_FIFO_ADDRESS_WIDTH'')-1)
+[31:0] CMD_FIFO_ROOM = $clog2((2**CMD_FIFO_ADDRESS_WIDTH)-1)
 CMD_FIFO_ROOM
 RO
 Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register
@@ -293,7 +293,7 @@ SDO_FIFO_ROOM
 ENDREG
 
 FIELD
-[31:0] log2((2^''SDO_FIFO_ADDRESS_WIDTH'')-1)
+[31:0] SDO_FIFO_ROOM = $clog2((2**SDO_FIFO_ADDRESS_WIDTH)-1)
 SDO_FIFO_ROOM
 RO
 Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM
@@ -487,7 +487,7 @@ CFG_INFO_0
 ENDREG
 
 FIELD
-[31:0] ''CFG_INFO_0''
+[31:0] CFG_INFO_0
 CFG_INFO_0
 RO
 Configuration Info.
@@ -501,7 +501,7 @@ CFG_INFO_1
 ENDREG
 
 FIELD
-[31:0] ''CFG_INFO_1''
+[31:0] CFG_INFO_1
 CFG_INFO_1
 RO
 Configuration Info.
@@ -515,7 +515,7 @@ CFG_INFO_2
 ENDREG
 
 FIELD
-[31:0] ''CFG_INFO_2''
+[31:0] CFG_INFO_2
 CFG_INFO_2
 RO
 Configuration Info.
@@ -529,7 +529,7 @@ CFG_INFO_3
 ENDREG
 
 FIELD
-[31:0] ''CFG_INFO_3''
+[31:0] CFG_INFO_3
 CFG_INFO_4
 RO
 Configuration Info.
