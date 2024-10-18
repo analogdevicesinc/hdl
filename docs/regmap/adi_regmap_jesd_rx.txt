@@ -160,7 +160,7 @@ Available starting from version 1.07.a;
 ENDFIELD
 
 FIELD
-[12] ''ASYNC_CLK''
+[12] ASYNC_CLK
 ASYNC_CLK
 RO
 This bit is set if link clock and device clock are connected to different sources.

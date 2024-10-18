@@ -39,7 +39,7 @@ ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 ID
 RO
 Value of the ID configuration parameter.
@@ -93,7 +93,7 @@ Configuration Registers
 ENDREG
 
 FIELD
-[31:0] ''PULSE_PERIOD''
+[31:0] PULSE_PERIOD
 PWM_PERIOD
 RW
 The period of the generated signal. The resolution is the core clock's time period.
@@ -110,7 +110,7 @@ Configuration Registers
 ENDREG
 
 FIELD
-[31:0] ''PULSE_WIDTH''
+[31:0] PULSE_WIDTH
 PWM_WIDTH
 RW
 The pulse width of the generated signal. The resolution is the core clock's time period.

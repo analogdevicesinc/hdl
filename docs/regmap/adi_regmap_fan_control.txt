@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 PERIPHERAL_ID
 RO
 Value of the ID configuration parameter.
@@ -221,7 +221,7 @@ PWM_WIDTH
 ENDREG
 
 FIELD
-[31:0] ''PWM_PERIOD''
+[31:0] PWM_PERIOD
 PWM_WIDTH
 RW
 This register contains the width of the PWM output signal. By default its
@@ -278,7 +278,7 @@ TEMP_DATA_SOURCE
 ENDREG
 
 FIELD
-[31:0] ''INTERNAL_SYSMONE''
+[31:0] INTERNAL_SYSMONE
 TEMP_DATA_SOURCE
 RO
 This register copies the value from the INTERNAL_SYSMONE register and is used to inform
@@ -342,7 +342,7 @@ TEMP_00_H
 ENDREG
 
 FIELD
-[31:0] ''TEMP_00_H''
+[31:0] TEMP_00_H
 TEMP_00_H
 RW
 Temperature threshold below which PWM should be 0%
@@ -357,7 +357,7 @@ TEMP_25_L
 ENDREG
 
 FIELD
-[31:0] ''TEMP_25_L''
+[31:0] TEMP_25_L
 TEMP_25_L
 RW
 Temperature threshold above which PWM should be 25%
@@ -372,7 +372,7 @@ TEMP_25_H
 ENDREG
 
 FIELD
-[31:0] ''TEMP_25_H''
+[31:0] TEMP_25_H
 TEMP_25_H
 RW
 Temperature threshold below which PWM should be 25%
@@ -387,7 +387,7 @@ TEMP_50_L
 ENDREG
 
 FIELD
-[31:0] ''TEMP_50_L''
+[31:0] TEMP_50_L
 TEMP_50_L
 RW
 Temperature threshold above which PWM should be 50%
@@ -402,7 +402,7 @@ TEMP_50_H
 ENDREG
 
 FIELD
-[31:0] ''TEMP_50_H''
+[31:0] TEMP_50_H
 TEMP_50_H
 RW
 Temperature threshold below which PWM should be 50%
@@ -417,7 +417,7 @@ TEMP_75_L
 ENDREG
 
 FIELD
-[31:0] ''TEMP_75_L''
+[31:0] TEMP_75_L
 TEMP_75_L
 RW
 Temperature threshold above which PWM should be 75%
@@ -432,7 +432,7 @@ TEMP_75_H
 ENDREG
 
 FIELD
-[31:0] ''TEMP_75_H''
+[31:0] TEMP_75_H
 TEMP_75_H
 RW
 Temperature threshold below which PWM should be 75%
@@ -447,7 +447,7 @@ TEMP_100_L
 ENDREG
 
 FIELD
-[31:0] ''TEMP_100_L''
+[31:0] TEMP_100_L
 TEMP_100_L
 RW
 Temperature threshold above which PWM should be 100%
@@ -462,7 +462,7 @@ TACHO_25
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T25''
+[31:0] TACHO_T25
 TACHO_25
 RW
 Nominal tacho period at 25% PWM
@@ -477,7 +477,7 @@ TACHO_50
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T50''
+[31:0] TACHO_T50
 TACHO_50
 RW
 Nominal tacho period at 50% PWM
@@ -492,7 +492,7 @@ TACHO_75
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T75''
+[31:0] TACHO_T75
 TACHO_75
 RW
 Nominal tacho period at 75% PWM
@@ -507,7 +507,7 @@ TACHO_100
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T100''
+[31:0] TACHO_T100
 TACHO_100
 RW
 Nominal tacho period at 100% PWM
@@ -522,7 +522,7 @@ TACHO_25_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T25''*''TACHO_TOL_PERCENT''/100
+[31:0] TACHO_25_TOL = TACHO_T25*TACHO_TOL_PERCENT/100
 TACHO_25_TOL
 RW
 Tolerance for the 25% PWM tacho period
@@ -537,7 +537,7 @@ TACHO_50_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T50''*''TACHO_TOL_PERCENT''/100
+[31:0] TACHO_50_TOL = TACHO_T50*TACHO_TOL_PERCENT/100
 TACHO_50_TOL
 RW
 Tolerance for the 50% PWM tacho period
@@ -552,7 +552,7 @@ TACHO_75_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T75''*''TACHO_TOL_PERCENT''/100
+[31:0] TACHO_75_TOL = TACHO_T75*TACHO_TOL_PERCENT/100
 TACHO_75_TOL
 RW
 Tolerance for the 75% PWM tacho period
@@ -567,7 +567,7 @@ TACHO_100_TOL
 ENDREG
 
 FIELD
-[31:0] ''TACHO_T100''*''TACHO_TOL_PERCENT''/100
+[31:0] TACHO_100_TOL = TACHO_T100*TACHO_TOL_PERCENT/100
 TACHO_100_TOL
 RW
 Tolerance for the 100% PWM tacho period

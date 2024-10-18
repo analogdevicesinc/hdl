@@ -96,7 +96,7 @@ Status Reporting Register
 ENDREG
 
 FIELD
-[31:NUM_OF_LANES]
+[31:NUM_OF_LANES+1]
 RESERVED
 RO
 0
