@@ -50,14 +50,14 @@ set dac_dma_data_width $DAC_DATA_WIDTH
 ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_SRC 0 \
   DMA_TYPE_DEST 1 \
-  DMA_DATA_WIDTH_SRC 64 \
+  DMA_DATA_WIDTH_SRC 128 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
-ad_dacfifo_create axi_dac_fifo \
-                  $DAC_DATA_WIDTH \
-                  $dac_dma_data_width \
-                  $dac_fifo_address_width
+# ad_dacfifo_create axi_dac_fifo \
+#                   $DAC_DATA_WIDTH \
+#                   $dac_dma_data_width \
+#                   $dac_fifo_address_width
 
 # shared transceiver core
 
@@ -105,21 +105,28 @@ for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
   ad_connect dac_jesd204_transport/dac_enable_$i  dac_upack/enable_$i
 }
 
-ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 axi_dac_fifo/dac_clk
-ad_connect dac_jesd204_link_rstgen/peripheral_reset axi_dac_fifo/dac_rst
-ad_connect dac_upack/s_axis_valid VCC
-ad_connect dac_upack/s_axis_ready axi_dac_fifo/dac_valid
-ad_connect dac_upack/s_axis_data axi_dac_fifo/dac_data
-ad_connect dac_jesd204_transport/dac_dunf axi_dac_fifo/dac_dunf
-ad_connect sys_cpu_clk axi_dac_fifo/dma_clk
-ad_connect sys_cpu_reset axi_dac_fifo/dma_rst
-ad_connect sys_cpu_clk dac_dma/m_axis_aclk
-ad_connect sys_cpu_resetn dac_dma/m_src_axi_aresetn
-ad_connect axi_dac_fifo/dma_xfer_req dac_dma/m_axis_xfer_req
-ad_connect axi_dac_fifo/dma_ready dac_dma/m_axis_ready
-ad_connect axi_dac_fifo/dma_data dac_dma/m_axis_data
-ad_connect axi_dac_fifo/dma_valid dac_dma/m_axis_valid
-ad_connect axi_dac_fifo/dma_xfer_last dac_dma/m_axis_last
+
+
+ad_connect util_dac_jesd204_xcvr/tx_out_clk_0    dac_dma/m_axis_aclk
+ad_connect sys_250m_resetn                       dac_dma/m_src_axi_aresetn
+ad_connect dac_dma/m_axis dac_upack/s_axis
+
+
+# ad_connect util_dac_jesd204_xcvr/tx_out_clk_0       axi_dac_fifo/dac_clk
+# ad_connect dac_jesd204_link_rstgen/peripheral_reset axi_dac_fifo/dac_rst
+# ad_connect dac_upack/s_axis_valid VCC
+# ad_connect dac_upack/s_axis_ready                               axi_dac_fifo/dac_valid
+# ad_connect dac_upack/s_axis_data                                axi_dac_fifo/dac_data
+# ad_connect dac_jesd204_transport/dac_dunf                       axi_dac_fifo/dac_dunf
+# ad_connect util_dac_jesd204_xcvr/tx_out_clk_0                   axi_dac_fifo/dma_clk
+# ad_connect dac_jesd204_link_rstgen/peripheral_reset             axi_dac_fifo/dma_rst
+
+
+# ad_connect axi_dac_fifo/dma_xfer_req      dac_dma/m_axis_xfer_req
+# ad_connect axi_dac_fifo/dma_ready         dac_dma/m_axis_ready
+# ad_connect axi_dac_fifo/dma_data          dac_dma/m_axis_data
+# ad_connect axi_dac_fifo/dma_valid         dac_dma/m_axis_valid
+# ad_connect axi_dac_fifo/dma_xfer_last     dac_dma/m_axis_last
 
 # interconnect (cpu)
 
@@ -130,12 +137,12 @@ ad_cpu_interconnect 0x7c420000 dac_dma
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk dac_dma/m_src_axi
+ad_mem_hp1_interconnect sys_250m_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_250m_clk dac_dma/m_src_axi
 
 # interrupts
 
 ad_cpu_interrupt ps-10 mb-15 dac_jesd204_link/irq
 ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
 
-ad_connect axi_dac_fifo/bypass dac_fifo_bypass
+# ad_connect axi_dac_fifo/bypass dac_fifo_bypass
