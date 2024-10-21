@@ -1606,18 +1606,50 @@ namespace eval ipl {
         return [ipl::setnode fdeps $dpath $flist $ip]
     }
 
-    # set axis_ports {
-    #     valid
-    #     ready
-    #     data
-    #     strb
-    #     keep
-    #     last
-    #     id
-    #     dest
-    #     user
-    #     wakeup
-    # }
+    set axi4_ports {
+        awid awaddr awlen awsize awburst awlock awcache
+        awprot awqos awvalid awready wid wdata wstrb wlast wvalid wready bid
+        bresp bvalid bready arid araddr arlen arsize arburst arlock arcache
+        arprot arqos arvalid arready rid rdata rresp rlast rvalid rready
+    }
+
+    set axi4_lite_ports {
+        awaddr awprot awvalid awready wdata wstrb wvalid wready bresp bvalid
+        bready araddr arprot arvalid arready rdata rresp rvalid rready
+    }
+
+    set axi4_stream_ports {
+        tvalid tready tdata tstrb tkeep tlast tid tdest tuser
+    }
+
+    set axi4_sream_pors {
+        valid ready data strb keep last id dest user
+    }
+
+    proc filter_ports {args} {
+        array set opt [list -mod_data "" \
+            -portlist [concat $ipl::axi4_ports $ipl::axi4_lite_ports $ipl::axi4_stream_ports $ipl::axi4_sream_pors] \
+        {*}$args]
+
+        set mod_data $opt(-mod_data)
+        set portlist $opt(-portlist)
+        set portlist_out {}
+
+        set ports [dict get $mod_data portlist]
+
+        foreach line $ports {
+            set name [dict get $line name]
+            set regx {.+_([a-zA-Z0-9]+)$}
+            if {[regexp $regx $name match capt]} {
+                set regx $capt
+                if {[regexp $regx $portlist match]} {
+                    set portlist_out [list {*}$portlist_out $line]
+                }
+            }
+        }
+        dict set mod_data portlist $portlist_out
+        return $mod_data
+    }
 
     proc list_interfaces_by_clock {mod_data {clock "aclk"}} {
         set ports [dict get $mod_data portlist]
@@ -1653,7 +1685,7 @@ namespace eval ipl {
             -mod_data "" \
             -clock "aclk" \
             -reset "aresetn" \
-            -xptn_portlist {m_axis_xfer_req s_axis_xfer_req} \
+            -xptn_portlist {} \
         {*}$args]
 
         set ip $opt(-ip)
@@ -1687,6 +1719,8 @@ namespace eval ipl {
             }
             dict set ports_num $pname $counter
         }
+
+        set $mod_data [filter_ports -mod_data $mod_data]
 
         puts "Ports number by clocks: $ports_num\n"
 
