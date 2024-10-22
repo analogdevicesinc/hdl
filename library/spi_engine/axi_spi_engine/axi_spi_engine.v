@@ -156,12 +156,15 @@ module axi_spi_engine #(
   wire sdo_fifo_in_ready;
   wire sdo_fifo_in_valid;
 
-  wire sdi_fifo_out_data_msb_s;
   wire [SDI_FIFO_ADDRESS_WIDTH-1:0] sdi_fifo_level;
   wire sdi_fifo_almost_full;
   wire up_sdi_fifo_almost_full;
 
   wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
+
+  wire [255:0] sdi_fifo_out_data_int;
+  assign sdi_fifo_out_data_int = sdi_fifo_out_data;
+
   wire sdi_fifo_out_ready;
   wire sdi_fifo_out_valid;
 
@@ -325,15 +328,6 @@ module axi_spi_engine #(
     end
   end
 
-  generate
-  if (NUM_OF_SDI > 1) begin
-    // Only the first two SDI data can be recovered through AXI regmap
-    assign sdi_fifo_out_data_msb_s = sdi_fifo_out_data[DATA_WIDTH+:DATA_WIDTH];
-  end else begin
-    assign sdi_fifo_out_data_msb_s = sdi_fifo_out_data;
-  end
-  endgenerate
-
   reg [7:0] offload_sdo_mem_address_width = OFFLOAD0_SDO_MEM_ADDRESS_WIDTH;
   reg [7:0] offload_cmd_mem_address_width = OFFLOAD0_CMD_MEM_ADDRESS_WIDTH;
   reg [7:0] sdi_fifo_address_width = SDI_FIFO_ADDRESS_WIDTH;
@@ -357,11 +351,29 @@ module axi_spi_engine #(
       8'h34: up_rdata_ff <= cmd_fifo_room;
       8'h35: up_rdata_ff <= sdo_fifo_room;
       8'h36: up_rdata_ff <= (sdi_fifo_out_valid == 1) ? sdi_fifo_level + 1 : sdi_fifo_level; /* beacuse of first-word-fall-through */
-      8'h3a: up_rdata_ff <= sdi_fifo_out_data[DATA_WIDTH-1:0];
-      8'h3b: up_rdata_ff <= sdi_fifo_out_data_msb_s; /* store SDI's 32 bits MSB, if exists */
-      8'h3c: up_rdata_ff <= sdi_fifo_out_data; /* PEEK register */
-      8'h40: up_rdata_ff <= {offload0_enable_reg};
-      8'h41: up_rdata_ff <= {offload0_enabled_s};
+
+      8'h3a: up_rdata_ff <= sdi_fifo_out_data_int[DATA_WIDTH-1:0];
+      8'h3b: up_rdata_ff <= sdi_fifo_out_data_int[(2*DATA_WIDTH)-1:DATA_WIDTH];
+      8'h3c: up_rdata_ff <= sdi_fifo_out_data_int[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
+      8'h3d: up_rdata_ff <= sdi_fifo_out_data_int[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
+      8'h3e: up_rdata_ff <= sdi_fifo_out_data_int[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
+      8'h3f: up_rdata_ff <= sdi_fifo_out_data_int[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
+      8'h40: up_rdata_ff <= sdi_fifo_out_data_int[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
+      8'h41: up_rdata_ff <= sdi_fifo_out_data_int[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
+
+      /* PEEK registers */
+
+      8'h48: up_rdata_ff <= sdi_fifo_out_data_int[DATA_WIDTH-1:0];
+      8'h49: up_rdata_ff <= sdi_fifo_out_data_int[(2*DATA_WIDTH)-1:DATA_WIDTH];
+      8'h4A: up_rdata_ff <= sdi_fifo_out_data_int[(3*DATA_WIDTH)-1:2*DATA_WIDTH];
+      8'h4B: up_rdata_ff <= sdi_fifo_out_data_int[(4*DATA_WIDTH)-1:3*DATA_WIDTH];
+      8'h4C: up_rdata_ff <= sdi_fifo_out_data_int[(5*DATA_WIDTH)-1:4*DATA_WIDTH];
+      8'h4D: up_rdata_ff <= sdi_fifo_out_data_int[(6*DATA_WIDTH)-1:5*DATA_WIDTH];
+      8'h4E: up_rdata_ff <= sdi_fifo_out_data_int[(7*DATA_WIDTH)-1:6*DATA_WIDTH];
+      8'h4F: up_rdata_ff <= sdi_fifo_out_data_int[(8*DATA_WIDTH)-1:7*DATA_WIDTH];
+
+      8'h46: up_rdata_ff <= {offload0_enable_reg};
+      8'h47: up_rdata_ff <= {offload0_enabled_s};
       8'h80: up_rdata_ff <= CFG_INFO_0;
       8'h81: up_rdata_ff <= CFG_INFO_1;
       8'h82: up_rdata_ff <= CFG_INFO_2;
@@ -472,7 +484,8 @@ module axi_spi_engine #(
     .m_axis_empty(),
     .m_axis_almost_empty(sdo_fifo_almost_empty));
 
-  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && up_raddr_s == 8'h3a;
+  assign sdi_fifo_out_ready = up_rreq_s == 1'b1 && (up_raddr_s == 8'h3a || up_raddr_s == 8'h3b || up_raddr_s == 8'h3c || up_raddr_s == 8'h3d ||
+                                                    up_raddr_s == 8'h3e || up_raddr_s == 8'h3f || up_raddr_s == 8'h40 || up_raddr_s == 8'h41);
 
   util_axis_fifo #(
     .DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
