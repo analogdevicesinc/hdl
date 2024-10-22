@@ -3,8 +3,6 @@
 AXI AD9144
 ================================================================================
 
-.. hdl-component-diagram::
-
 .. warning::
    This IP is was discontinued, limited support available. Last release for this
    IP is ``hdl_2019_r2`` and can be found on our HDL repository, on the branch
@@ -53,7 +51,8 @@ Block Diagram
 Configuration Parameters
 --------------------------------------------------------------------------------
 
-.. hdl-parameters::
+.. list-table::
+   :header-rows: 1
 
    * - ID
      - Core ID should be unique for each IP in the system
@@ -65,7 +64,8 @@ Configuration Parameters
 Interface
 --------------------------------------------------------------------------------
 
-.. hdl-interfaces::
+.. list-table::
+   :header-rows: 1
 
    * - jesd_interface
      - Data to be connected to the JESD core
@@ -91,9 +91,9 @@ Interface
 Detailed Architecture
 --------------------------------------------------------------------------------
 
-   .. image:: detailed_architecture.svg
-      :alt: AXI AD9144 detailed architecture
-      :align: center
+.. image:: detailed_architecture.svg
+   :alt: AXI AD9144 detailed architecture
+   :align: center
 
 Detailed Description
 --------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ high-speed communication.
 
 The DAC core module includes:
 
-* Data path for digital-to-analog conversionPRBS (Pseudo-Random Binary
+* Data path for digital-to-analog conversion PRBS (Pseudo-Random Binary
   Sequence) generation for testing
 * DDS (Direct Digital Synthesis) for generating sine waves and other waveforms
 * Fixed pattern generators for consistent test signals
@@ -141,7 +141,7 @@ Design Guidelines
 --------------------------------------------------------------------------------
 
 The IP was developed part of the
-:dokuwiki:`AD9144 Evaluation Boards <resources/eval/dpg/eval-ad9144>`.
+:dokuwiki+deprecated:`[Wiki] AD9144 Evaluation Boards <resources/eval/dpg/eval-ad9144>`.
 
 The control of the :git-hdl:`AXI AD9144 <hdl_2019_r2:library/axi_ad9144>` chip
 is done through a SPI interface, using ACE software. The ACE
@@ -173,9 +173,9 @@ References
 
 * HDL IP core at :git-hdl:`hdl_2019_r2:library/axi_ad9144`
 * :adi:`AD9144`
-* :dokuwiki:`Evaluating the AD9144 DIGITAL-TO-ANALOG converter <resources/eval/dpg/ace_ad9144-fmc-ebz>`
-* :dokuwiki:`AD9144-ADRF6720-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-adrf6720-ebz>`
-* :dokuwiki:`AD9144-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-ebz>`
-* :dokuwiki:`AD9144-FMC-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-fmc-ebz>`
-* :dokuwiki:`AD9144-EBZ Evaluation Board Quick Start Guide Using ACE (Analysis | Control | Evaluate) Software <resources/eval/dpg/ace_ad9144-ebz>`
+* :dokuwiki+deprecated:`[Wiki] Evaluating the AD9144 DIGITAL-TO-ANALOG converter <resources/eval/dpg/ace_ad9144-fmc-ebz>`
+* :dokuwiki+deprecated:`[Wiki] AD9144-ADRF6720-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-adrf6720-ebz>`
+* :dokuwiki+deprecated:`[Wiki] AD9144-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-ebz>`
+* :dokuwiki+deprecated:`[Wiki] AD9144-FMC-EBZ Evaluation Board Quick Start Guide <resources/eval/dpg/ad9144-fmc-ebz>`
+* :dokuwiki+deprecated:`[Wiki] AD9144-EBZ Evaluation Board Quick Start Guide Using ACE (Analysis | Control | Evaluate) Software <resources/eval/dpg/ace_ad9144-ebz>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`

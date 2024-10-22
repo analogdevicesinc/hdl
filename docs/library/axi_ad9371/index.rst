@@ -3,8 +3,6 @@
 AXI AD9371
 ================================================================================
 
-.. hdl-component-diagram::
-
 .. warning::
    This IP is was discontinued, limited support available. Last release for this
    IP is ``hdl_2019_r2`` and can be found on our HDL repository, on the branch
@@ -76,7 +74,8 @@ Block Diagram
 Configuration Parameters
 --------------------------------------------------------------------------------
 
-.. hdl-parameters::
+.. list-table::
+   :header-rows: 1
 
    * - ID
      - Core ID should be unique for each IP in the system.
@@ -94,7 +93,8 @@ Interface
 The interface module of the core is connected to the JESD204B IP core and does
 a simple realignment of the data stream. Below it's a list of I/O signals:
 
-.. hdl-interfaces::
+.. list-table::
+   :header-rows: 1
 
    * - adc_clk
      - Rx core clock from the GTs, in general clock rate is (Lane Rate)/40.
@@ -193,7 +193,7 @@ The axi_ad9371 cores architecture contains:
 
   * Delay Control and DAC Common register map
 
-* AXI to uP interface wrapper modules (more details :dokuwiki:`[Wiki] here <resources/fpga/docs/up_if>`)
+* AXI to uP interface wrapper modules (more details :dokuwiki:`here <resources/fpga/docs/up_if>`)
 
 Register Map
 --------------------------------------------------------------------------------
@@ -266,17 +266,17 @@ References
 * HDL IP core at :git-hdl:`hdl_2019_r2:library/axi_ad9371`
 * :adi:`AD9371`
 * :adi:`EVAL-ADRV9371`
-* :dokuwiki:`[Wiki] Prerequisites for AD9371 based boards <resources/eval/user-guides/mykonos/prerequisites>`
-* :dokuwiki:`[Wiki] AXI_AD9371 (Obsolete) <resources/fpga/docs/axi_ad9371>`
-* :dokuwiki:`[Wiki] AD9371 & AD9375 Prototyping Platform User Guide <resources/eval/user-guides/mykonos>`
-* :dokuwiki:`[Wiki] AD9371 Plugin Description <resources/tools-software/linux-software/ad9371_plugin>`
-* :dokuwiki:`[Wiki] AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
-* :dokuwiki:`[Wiki] AD9371/AD9375 Advanced Plugin <resources/tools-software/linux-software/ad9371_advanced_plugin>`
-* :dokuwiki:`[Wiki] AD9371 detailed Block Diagram <resources/eval/user-guides/mykonos/ad9371>`
-* :dokuwiki:`[Wiki] AD9371/AD9375 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/ad9371-customization>`
-* :dokuwiki:`[Wiki] IIO OSC AD9371 Capture Window <resources/tools-software/linux-software/ad9371_osc_main>`
-* :dokuwiki:`[Wiki] AD9371/AD9375 No-OS Setup <resources/eval/user-guides/mykonos/no-os-setup>`
-* :dokuwiki:`[Wiki] AD9371 Basic IQ Datafiles <resources/eval/user-guides/mykonos/software/basic_iq_datafiles>`
+* :dokuwiki+deprecated:`[Wiki] Prerequisites for AD9371 based boards <resources/eval/user-guides/mykonos/prerequisites>`
+* :dokuwiki+deprecated:`[Wiki] AXI_AD9371 (Obsolete) <resources/fpga/docs/axi_ad9371>`
+* :dokuwiki+deprecated:`[Wiki] AD9371 & AD9375 Prototyping Platform User Guide <resources/eval/user-guides/mykonos>`
+* :dokuwiki+deprecated:`[Wiki] AD9371 Plugin Description <resources/tools-software/linux-software/ad9371_plugin>`
+* :dokuwiki+deprecated:`[Wiki] AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/ad9371>`
+* :dokuwiki+deprecated:`[Wiki] AD9371/AD9375 Advanced Plugin <resources/tools-software/linux-software/ad9371_advanced_plugin>`
+* :dokuwiki+deprecated:`[Wiki] AD9371 detailed Block Diagram <resources/eval/user-guides/mykonos/ad9371>`
+* :dokuwiki+deprecated:`[Wiki] AD9371/AD9375 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/ad9371-customization>`
+* :dokuwiki+deprecated:`[Wiki] IIO OSC AD9371 Capture Window <resources/tools-software/linux-software/ad9371_osc_main>`
+* :dokuwiki+deprecated:`[Wiki] AD9371/AD9375 No-OS Setup <resources/eval/user-guides/mykonos/no-os-setup>`
+* :dokuwiki+deprecated:`[Wiki] AD9371 Basic IQ Datafiles <resources/eval/user-guides/mykonos/software/basic_iq_datafiles>`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
 * :xilinx:`7 Series libraries <support/documentation/sw_manuals/xilinx2016_2/ug953-vivado-7series-libraries.pdf>`
