@@ -25,7 +25,7 @@ newer than 23 version. If not, update it by running the following command:
 
    pip install pip --upgrade
 
-Than install the necessary documentation tools by running (assuming the :git-hdl:`HDL <>`
+Then install the necessary documentation tools by running (:git-hdl:`HDL <>`
 repository is the working directory):
 
 .. code-block::
@@ -33,13 +33,8 @@ repository is the working directory):
    cd docs/
    pip install -r requirements.txt --upgrade
 
-It's recommended to regularly update the documentation tools. This is done by
-running the following command:
-
-.. code-block::
-   
-   cd docs/
-   pip install -r requirements.txt --upgrade
+Use the same command to regularly update the documentation tools.
+Specially if something looks broken.
 
 Before building a page, it's recommended to build all the projects from
 ``/library``. Some references (files used in specific parts of the page) are
@@ -61,9 +56,11 @@ command:
 
 The generated documentation will be available at ``/docs/_build/html``.
 
-It's recommended to clean the cached data when rebuilding a page and major
-changes have been made. This is done by running the below commands (inside
-``/docs`` folder):
+It's recommended to clean the cached data when changing the document structure,
+like adding a new page or if other major changes have been made.
+This is because Sphinx rebuilds only "touched" pages and, for example,
+adding a page changes the sidebar navigation for all pages.
+This is done by running the below commands (inside ``/docs`` folder):
 
 .. code-block::
    
