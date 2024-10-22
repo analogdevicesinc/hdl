@@ -63,3 +63,16 @@ Contents
    MAX96724 <max96724/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS <pulsar_lvds/index>
+
+Obsolete projects
+-------------------------------------------------------------------------------
+
+.. toctree::
+   :maxdepth: 1
+
+The following projects are obsolete and **not maintained anymore**.
+Support is limited. The latest available sources for these projects can be
+found in the same archive.
+
+   imageon -
+   ad_fmclidar1_ebz -
