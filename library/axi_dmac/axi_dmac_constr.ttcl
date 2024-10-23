@@ -15,6 +15,7 @@
 <: set async_src_sg [getBooleanValue "ASYNC_CLK_SRC_SG"] :>
 <: set async_dest_sg [getBooleanValue "ASYNC_CLK_DEST_SG"] :>
 <: set sg_enabled [getBooleanValue "DMA_SG_TRANSFER"] :>
+<: set sg_delayed_input [getBooleanValue "SG_DELAYED_INPUT"] :>
 <: set disable_debug_registers [getBooleanValue "DISABLE_DEBUG_REGISTERS"] :>
 
 set req_clk_ports_base {s_axi_aclk}
@@ -287,6 +288,12 @@ set_false_path \
 set_false_path \
   -to [get_pins -hierarchical * -filter {NAME=~*i_raddr_sync_gray/cdc_sync_stage1_reg[*]/D}]
 
+<: if {$async_req_sg && $sg_delayed_input} { :>
+set_max_delay -datapath_only \
+  -from [get_clocks -of_objects [get_ports $req_clk_ports_base]] \
+  -to [get_cells -hier -filter {NAME =~ *sync_bits_irq/cdc_sync_stage1_reg* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD [get_clocks -of_objects [get_ports $req_clk_ports_base]]]
+<: } :>
 <: } :>
 # Reset signals
 set_false_path -quiet \
