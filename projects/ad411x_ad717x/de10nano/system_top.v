@@ -146,7 +146,7 @@ module system_top (
 
   // adc control gpio assign
 
-  assign gpio_i[63:34] = gpio_o[63:34];
+  assign gpio_i[63:35] = gpio_o[63:35];
   assign gpio_i[31:15] = gpio_o[31:15];
 
   // bd gpio
@@ -156,6 +156,7 @@ module system_top (
 
   assign gpio_i[32] = sync_error;
   assign gpio_i[33] = error;
+  assign gpio_i[34] = spi_miso;
 
   // IO Buffers for I2C
 
@@ -254,10 +255,10 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .ad411x_spi_cs_cs(spi_csn),
+    .ad411x_spi_cs_m_cs(spi_csn),
     .ad411x_spi_sclk_clk(spi_clk),
-    .ad411x_spi_sdi_sdi(spi_miso),
-    .ad411x_spi_sdo_sdo(spi_mosi),
+    .ad411x_spi_sdi_m_sdi(spi_miso),
+    .ad411x_spi_sdo_m_sdo(spi_mosi),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
