@@ -185,6 +185,15 @@ These modes are selected using the ``SPI_OP_MODE`` parameter:
 
    The SPI_OP_MODE parameter must only be used for the FMC variant.
 
+Some ADCs like the AD7944 allow for split transfers, which require samples to be
+assembled out of two SPI Engine transfer reads from the ADC. This is enabled by
+the ``SPLIT_TRANSFER_SIZE`` parameter. If 0, split transfers are disabled. For
+values greater than 0, it determines the size of each of the two transfers that
+make up the split transfer.
+
+*  0 - for no split transfers (default)
+*  N - for N>0, selects the size of each transfer that make up the sample
+
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
