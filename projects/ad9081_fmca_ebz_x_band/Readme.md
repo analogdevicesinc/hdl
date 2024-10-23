@@ -6,5 +6,5 @@ Here are some pointers to help you:
   * Parts : [ADAR1000 : 8 GHz to 16 GHz, 4-Channel, X Band and Ku Band Beamformer](https://www.analog.com/en/products/adar1000.html)
   * Parts : [ADTR1107 : 6 GHz to 18 GHz, Front-End IC](https://www.analog.com/en/products/adtr1107.html)
   * Project Doc: https://wiki.analog.com/resources/eval/developer-kits/x-band-dev-kit
-  * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/ad9081_fmca_ebz_hdl
+  * HDL Doc: https://analogdevicesinc.github.io/hdl/projects/ad9081_fmca_ebz_x_band/index.html
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081
