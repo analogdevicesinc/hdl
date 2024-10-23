@@ -39,7 +39,7 @@ PERIPHERAL_ID
 ENDREG
 
 FIELD
-[31:0] ''ID''
+[31:0] ID
 PERIPHERAL_ID
 RO
 Value of the ID configuration parameter.
@@ -84,35 +84,35 @@ INTERFACE_DESCRIPTION_1
 ENDREG
 
 FIELD
-[3:0] log2(''DMA_DATA_WIDTH_DEST''/8)
+[3:0] BYTES_PER_BEAT_DEST_LOG2 = $clog2(DMA_DATA_WIDTH_DEST/8)
 BYTES_PER_BEAT_DEST_LOG2
 R
 Width of data bus on destination interface. Log2 of interface data widths in bytes.
 ENDFIELD
 
 FIELD
-[5:4] ''DMA_TYPE_DEST''
+[5:4] DMA_TYPE_DEST
 DMA_TYPE_DEST
 R
 Value of ''DMA_TYPE_DEST'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
 ENDFIELD
 
 FIELD
-[11:8] log2(''DMA_DATA_WIDTH_SRC''/8)
+[11:8] BYTES_PER_BEAT_SRC_LOG2 = $clog2(DMA_DATA_WIDTH_SRC/8)
 BYTES_PER_BEAT_SRC_LOG2
 R
 Width of data bus on source interface. Log2 of interface data widths in bytes.
 ENDFIELD
 
 FIELD
-[13:12] ''DMA_TYPE_SRC''
+[13:12] DMA_TYPE_SRC
 DMA_TYPE_SRC
 R
 Value of ''DMA_TYPE_SRC'' parameter.(0 - AXI MemoryMap, 1 -  AXI Stream, 2 - FIFO )
 ENDFIELD
 
 FIELD
-[19:16] ''BYTES_PER_BURST_WIDTH''
+[19:16] BYTES_PER_BURST_WIDTH
 BYTES_PER_BURST_WIDTH
 R
 Value of ''BYTES_PER_BURST_WIDTH'' interface parameter. Log2 of the real ''MAX_BYTES_PER_BURST''.
@@ -129,21 +129,21 @@ INTERFACE_DESCRIPTION_2
 ENDREG
 
 FIELD
-[0] ''CACHE_COHERENT''
+[0] CACHE_COHERENT
 CACHE_COHERENT
 R
 Value of ''CACHE_COHERENT'' parameter.(0 - Disabled, 1 -  Enabled )
 ENDFIELD
 
 FIELD
-[7:4] ''AXI_AXCACHE''
+[7:4] AXI_AXCACHE
 AXI_AXCACHE
 R
 Value of ''AXI_AXCACHE'' parameter.
 ENDFIELD
 
 FIELD
-[10:8] ''AXI_AXPROT''
+[10:8] AXI_AXPROT
 AXI_AXPROT
 R
 Value of ''AXI_AXPROT'' parameter.
@@ -298,7 +298,7 @@ FLAGS
 ENDREG
 
 FIELD
-[0] ''CYCLIC''
+[0] CYCLIC
 CYCLIC
 RW
 Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
@@ -368,7 +368,7 @@ X_LENGTH
 ENDREG
 
 FIELD
-[31:0] 2^log2(max(''DMA_DATA_WIDTH_SRC'', ''DMA_DATA_WIDTH_DEST'')/8)-1
+[31:0] X_LENGTH = 2**$clog2(`MAX(DMA_DATA_WIDTH_SRC, DMA_DATA_WIDTH_DEST)/8)-1
 X_LENGTH
 RW
 Number of bytes to transfer - 1.
