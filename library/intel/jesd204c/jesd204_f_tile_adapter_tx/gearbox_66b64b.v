@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,22 +35,57 @@
 
 `timescale 1ns/100ps
 
-module jesd204_phy_glue #(
-  parameter WIDTH = 20,
-  parameter CONST_WIDTH = 1,
-  parameter NUM_OF_LANES = 1,
-  parameter LANE_INVERT = 0
-) (
-  input  [WIDTH-1:0] in,
-  output [WIDTH-1:0] out,
-  output [CONST_WIDTH-1:0] const_out,
-  output [NUM_OF_LANES-1:0] polinv
+module gearbox_66b64b (
+  input             clk,
+  input             reset,
+
+  input      [65:0] i_data,
+  input             i_valid,
+
+  output reg [63:0] o_data,
+  output            o_rd_en
 );
 
-/* There really should be a standard component in Qsys that allows to do this */
+  reg  [65:0] buff_r;
+  reg  [ 5:0] gear_cnt;
+  wire        pause;
+  wire [63:0] gears [0:32];
 
-  assign out = in;
-  assign const_out = {CONST_WIDTH{1'b0}};
-  assign polinv = LANE_INVERT[NUM_OF_LANES-1:0];
+  always @(posedge clk) begin
+    if (i_valid) begin
+      buff_r <= i_data;
+    end
+  end
+
+  always @(posedge clk) begin
+    if (reset) begin
+      gear_cnt <= 6'd0;
+    end else if (gear_cnt[5]) begin
+      gear_cnt <= 6'd0;
+    end else begin
+      gear_cnt <= gear_cnt + 1'b1;
+    end
+  end
+
+  assign pause = gear_cnt[5];
+
+  generate
+    genvar i;
+    for (i=0; i < 33; i=i+1) begin
+      if (i == 0) begin
+        assign gears[0] = i_data[63:0];
+      end else if (i == 32) begin
+        assign gears[32] = buff_r[65:2];
+      end else begin
+        assign gears[i] = {i_data[63-2*i:0], buff_r[65:66-2*i]};
+      end
+    end
+  endgenerate
+
+  always @(posedge clk) begin
+    o_data <= gears[gear_cnt];
+  end
+
+  assign o_rd_en = ~pause;
 
 endmodule
