@@ -21,6 +21,7 @@ Contents
    Releases <releases>
    Build an HDL project <build_hdl>
    Build the BOOT.BIN <build_boot_bin>
+   Build the Intel Boot Image <build_intel_boot_bin>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
    Porting reference designs <porting_project>
