@@ -265,7 +265,7 @@ RW
 Setting this field to 1 puts the DMA transfer into framelock mode.
 In framelock mode the data is hold to compensate frames rates mismatch between source and
 sink channels.
-Parameter ``FRAMELOCK`` must 1 to writing to this register to have an effect.
+This field is only valid if the DMA channel has been configured with framelock support.
 
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FLAGS[4]``.
 ENDFIELD
@@ -671,8 +671,8 @@ FIELD
 [23:16] 0x00
 DISTANCE
 RW
-Applicable only in output delay mode. Set the output delay in frames.
-Should be set in interval 0 to flock, FRAMENUM - 2.
+Used mainly in output delay mode. Set the output delay in frames.
+Should be set in interval 0 to flock, FRAMENUM - 1.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[23:16]``.
 ENDFIELD
 
@@ -722,8 +722,7 @@ The number of bytes between the start of one row and the next row for the
 framelock.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_STRIDE``.
 
-Note, this field is only valid if the DMA channel has been configured with 2D
-transfer support, framelock support, and write to memory support.
+Note, this field is only valid if the DMA channel has been configured with framelock support.
 ENDFIELD
 
 ############################################################################################

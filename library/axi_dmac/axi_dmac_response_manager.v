@@ -176,7 +176,7 @@ module axi_dmac_response_manager #(
     if (state == STATE_ZERO_COMPL) begin
       measured_burst_length <= {BYTES_PER_BURST_WIDTH{1'b1}};
     end else if (state == STATE_ACC) begin
-      measured_burst_length <= {req_response_dest_data_burst_length};
+      measured_burst_length <= req_response_dest_data_burst_length;
     end
   end
 

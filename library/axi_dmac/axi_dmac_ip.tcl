@@ -322,11 +322,6 @@ foreach {k v} { \
   ] [ipx::get_hdl_parameters $k -of_objects $cc]
 }
 
-set_property -dict [list \
-  "enablement_tcl_expr" "\$DMA_TYPE_SRC != 0" \
-] \
-[ipx::get_user_parameters SYNC_TRANSFER_START -of_objects $cc]
-
 foreach dir {"SRC" "DEST"} {
   set_property -dict [list \
     "value_validation_type" "list" \

@@ -61,7 +61,6 @@ module axi_dmac_ext_sync #(
 
     reg src_ext_sync_d = 1'b0;
     reg dest_ext_sync_d = 1'b0;
-
     reg ext_sync_ready_s = 1'b0;
 
     wire req_ext_sync;

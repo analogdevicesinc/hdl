@@ -331,7 +331,7 @@ set_parameter_property CLK_DOMAIN_SG GROUP $group
 
 # axi4 slave
 
-ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 12
+ad_ip_intf_s_axi s_axi_aclk s_axi_aresetn 11
 
 add_interface interrupt_sender interrupt end
 set_interface_property interrupt_sender associatedAddressablePoint s_axi

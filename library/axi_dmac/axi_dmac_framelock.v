@@ -38,8 +38,8 @@ module axi_dmac_framelock #(
   parameter BYTES_PER_BEAT_WIDTH_DEST = 3,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
   parameter FRAMELOCK_MODE =  0, // 0 - MM writer ; 1 - MM reader
-  parameter MAX_NUM_FRAMES = 16,
-  parameter MAX_NUM_FRAMES_WIDTH = 4
+  parameter MAX_NUM_FRAMES = 8,
+  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
 ) (
   input req_aclk,
   input req_aresetn,
@@ -59,8 +59,8 @@ module axi_dmac_framelock #(
   input req_cyclic,
 
   // Interface to 2D
-  output reg out_req_valid,
-  input out_req_ready,
+  output out_req_valid,
+  input  out_req_ready,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
 
@@ -150,10 +150,6 @@ module axi_dmac_framelock #(
     end
   end
 
-  always @(*) begin
-    out_req_valid = calc_enable & (calc_done | ~req_flock_en);
-  end
-
   generate if (FRAMELOCK_MODE == 0) begin
 
     // Writer mode logic
@@ -217,7 +213,7 @@ module axi_dmac_framelock #(
       if (req_aresetn == 1'b0) begin
         wait_distance <= 1'b1;
       end else if (req_valid && req_ready) begin
-        wait_distance <= req_cyclic && req_flock_en;
+        wait_distance <= req_cyclic & req_flock_en;
       end else if (~req_ready) begin
         if (({1'b0, m_frame_id} == req_flock_distance) && m_frame_id_vld) begin
           wait_distance <= 1'b0;
@@ -230,7 +226,7 @@ module axi_dmac_framelock #(
     // This may be an better approach for Xilinx where SRL16E blocks are
     // inferred
     wire [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum_m1;
-    assign  req_flock_framenum_m1 = req_flock_framenum - 1;
+    assign req_flock_framenum_m1 = req_flock_framenum - 1;
 
     genvar k;
     for (k = 0; k < MAX_NUM_FRAMES_WIDTH; k = k + 1) begin : frame_id_log
@@ -263,9 +259,9 @@ module axi_dmac_framelock #(
     assign s_frame_id_log_qualified = s_frame_id_log_vld ? {1'b0, s_frame_id_log} : req_flock_framenum-1;
 
     assign id_at_distance = s_frame_id_log_qualified - req_flock_distance;
+    assign sum_distance_framenum = id_at_distance + req_flock_framenum;
     assign target_id = id_at_distance[MAX_NUM_FRAMES_WIDTH] ? sum_distance_framenum[MAX_NUM_FRAMES_WIDTH-1:0]
                                                             : id_at_distance[MAX_NUM_FRAMES_WIDTH-1:0];
-    assign sum_distance_framenum = id_at_distance + req_flock_framenum;
 `endif
 
     always @(posedge req_aclk) begin
@@ -292,5 +288,6 @@ module axi_dmac_framelock #(
   assign resp_eot = out_response_valid & out_response_ready & out_eot;
   assign out_req_src_address = ~FRAMELOCK_MODE ? 'h0 : req_address;
   assign out_req_dest_address = FRAMELOCK_MODE ? 'h0 : req_address;
+  assign out_req_valid = calc_enable & (calc_done | ~req_flock_en);
 
 endmodule

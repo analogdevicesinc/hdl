@@ -155,7 +155,7 @@ module dest_axi_stream #(
     if (s_axis_aresetn == 1'b0) begin
       m_axis_user <= 1'b1;
     end else if (m_axis_valid && m_axis_ready) begin
-      m_axis_user <= m_axis_last && req_islast_d;
+      m_axis_user <= m_axis_last & req_islast_d;
     end
   end
 

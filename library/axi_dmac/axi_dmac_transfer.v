@@ -70,9 +70,9 @@ module axi_dmac_transfer #(
   parameter [2:0] AXI_AXPROT = 3'b000,
   parameter FRAMELOCK = 0,
   parameter FRAMELOCK_MODE = 0,
-  parameter MAX_NUM_FRAMES = 4,
-  parameter MAX_NUM_FRAMES_WIDTH = 2,
-  parameter USE_EXT_SYNC = 0
+  parameter MAX_NUM_FRAMES = 8,
+  parameter USE_EXT_SYNC = 0,
+  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -441,7 +441,7 @@ module axi_dmac_transfer #(
   wire dma_2d_req_ready;
   wire dma_2d_req_ready_s;
 
-  assign dma_2d_req_ready_s = dma_2d_req_ready && ext_sync_ready;
+  assign dma_2d_req_ready_s = dma_2d_req_ready & ext_sync_ready;
   assign ext_sync_valid = dma_2d_req_valid;
 
   assign flock_dest_address = ctrl_hwdesc ? dma_sg_out_dest_address : req_dest_address;
@@ -463,8 +463,7 @@ module axi_dmac_transfer #(
     .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
     .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC),
     .FRAMELOCK_MODE (FRAMELOCK_MODE),
-    .MAX_NUM_FRAMES (MAX_NUM_FRAMES),
-    .MAX_NUM_FRAMES_WIDTH (MAX_NUM_FRAMES_WIDTH)
+    .MAX_NUM_FRAMES (MAX_NUM_FRAMES)
   ) i_dmac_flock (
     .req_aclk (req_clk),
     .req_aresetn (req_resetn),
@@ -554,14 +553,14 @@ module axi_dmac_transfer #(
 
   end else begin
   /* External Sync */
-  assign dma_req_ready_w = dma_req_ready && ext_sync_ready;
+  assign dma_req_ready_s = dma_req_ready & ext_sync_ready;
   assign ext_sync_valid = dma_req_valid;
 
   /* Request */
   assign dma_req_valid = ctrl_hwdesc ? dma_sg_out_req_valid : req_valid_gated;
   assign req_ready_gated = ctrl_hwdesc ? dma_sg_in_req_ready : dma_req_ready;
   assign dma_eot = dma_req_eot;
-  assign dma_sg_out_req_ready = dma_req_ready_w;
+  assign dma_sg_out_req_ready = dma_req_ready_s;
 
   assign dma_req_dest_address = ctrl_hwdesc ? dma_sg_out_dest_address : req_dest_address;
   assign dma_req_src_address = ctrl_hwdesc ? dma_sg_out_src_address : req_src_address;

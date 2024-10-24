@@ -97,7 +97,7 @@ module axi_dmac #(
   input s_axi_aresetn,
 
   input         s_axi_awvalid,
-  input  [11:0] s_axi_awaddr,
+  input  [10:0] s_axi_awaddr,
   output        s_axi_awready,
   input   [2:0] s_axi_awprot,
   input         s_axi_wvalid,
@@ -108,7 +108,7 @@ module axi_dmac #(
   output [ 1:0] s_axi_bresp,
   input         s_axi_bready,
   input         s_axi_arvalid,
-  input  [11:0] s_axi_araddr,
+  input  [10:0] s_axi_araddr,
   output        s_axi_arready,
   input   [2:0] s_axi_arprot,
   output        s_axi_rvalid,
@@ -413,7 +413,8 @@ module axi_dmac #(
     REAL_MAX_BYTES_PER_BURST > 2 ? 2 : 1;
 
   // 0 - MM writer , 1 - MM reader
-  localparam FRAMELOCK_MODE = DMA_TYPE_SRC == 0 && DMA_TYPE_DEST != 0;
+  localparam FRAMELOCK_MODE = DMA_TYPE_SRC == DMA_TYPE_AXI_MM &&
+                              DMA_TYPE_DEST != DMA_TYPE_AXI_MM;
 
   // ID signals from the DMAC, just for debugging
   wire [ID_WIDTH-1:0] dest_request_id;
@@ -497,7 +498,6 @@ module axi_dmac #(
     .DMA_2D_TLAST_MODE(DMA_2D_TLAST_MODE),
     .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
     .USE_EXT_SYNC(USE_EXT_SYNC),
-    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .AUTORUN(AUTORUN),
     .AUTORUN_FLAGS(AUTORUN_FLAGS),
     .AUTORUN_SRC_ADDR(AUTORUN_SRC_ADDR),
@@ -612,7 +612,6 @@ module axi_dmac #(
     .FRAMELOCK(FRAMELOCK),
     .FRAMELOCK_MODE(FRAMELOCK_MODE),
     .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
-    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .USE_EXT_SYNC(USE_EXT_SYNC)
   ) i_transfer (
     .ctrl_clk(s_axi_aclk),

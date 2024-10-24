@@ -61,7 +61,6 @@ module axi_dmac_regmap #(
   parameter MAX_NUM_FRAMES = 8,
   parameter USE_EXT_SYNC = 0,
   parameter AUTORUN = 0,
-  parameter MAX_NUM_FRAMES_WIDTH = 2,
   parameter AUTORUN_FLAGS = 0,
   parameter AUTORUN_SRC_ADDR = 0,
   parameter AUTORUN_DEST_ADDR = 0,
@@ -73,7 +72,8 @@ module axi_dmac_regmap #(
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
   parameter AUTORUN_FRAMELOCK_STRIDE = 0,
   parameter AUTORUN_CONTROL_HWDESC = AUTORUN ? AUTORUN_FLAGS[3] : 0,
-  parameter AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0
+  parameter AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0,
+  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
 ) (
 
   // Slave AXI interface
@@ -82,7 +82,7 @@ module axi_dmac_regmap #(
 
   input s_axi_awvalid,
   output s_axi_awready,
-  input [11:0] s_axi_awaddr,
+  input [10:0] s_axi_awaddr,
   input [2:0] s_axi_awprot,
 
   input s_axi_wvalid,
@@ -96,7 +96,7 @@ module axi_dmac_regmap #(
 
   input s_axi_arvalid,
   output s_axi_arready,
-  input [11:0] s_axi_araddr,
+  input [10:0] s_axi_araddr,
   input [2:0] s_axi_arprot,
 
   output s_axi_rvalid,
@@ -248,7 +248,7 @@ module axi_dmac_regmap #(
       9'h001: up_rdata <= ID;
       9'h002: up_rdata <= up_scratch;
       9'h003: up_rdata <= 32'h444d4143; // "DMAC"
-      9'h004: up_rdata <= {MAX_NUM_FRAMES[4:0], DMA_2D_TLAST_MODE[0], USE_EXT_SYNC[0], AUTORUN[0],
+      9'h004: up_rdata <= {MAX_NUM_FRAMES[4:0]-1, DMA_2D_TLAST_MODE[0], USE_EXT_SYNC[0], AUTORUN[0],
                            4'b0,BYTES_PER_BURST_WIDTH[3:0],
                            2'b0,DMA_TYPE_SRC[1:0],BYTES_PER_BEAT_WIDTH_SRC[3:0],
                            2'b0,DMA_TYPE_DEST[1:0],BYTES_PER_BEAT_WIDTH_DEST[3:0]};
@@ -288,7 +288,7 @@ module axi_dmac_regmap #(
     .DMA_SG_TRANSFER(DMA_SG_TRANSFER),
     .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
     .FRAMELOCK(FRAMELOCK),
-    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
+    .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
     .AUTORUN(AUTORUN),
     .AUTORUN_FLAGS(AUTORUN_FLAGS),
     .AUTORUN_SRC_ADDR(AUTORUN_SRC_ADDR),
@@ -343,7 +343,7 @@ module axi_dmac_regmap #(
     .response_ready(response_ready));
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (12)
+    .AXI_ADDRESS_WIDTH (11)
   ) i_up_axi (
     .up_rstn(s_axi_aresetn),
     .up_clk(s_axi_aclk),
