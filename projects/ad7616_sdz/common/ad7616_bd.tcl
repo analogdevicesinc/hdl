@@ -50,7 +50,7 @@ ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_instance axi_pwm_gen ad7616_pwm_gen
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_PERIOD 100
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_WIDTH 5
-ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 1
+ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 0
 
 # axi_clkgen
 
@@ -103,6 +103,9 @@ if {$SER_PAR_N == 1} {
 
   ad_connect  busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
   ad_connect  busy_capture/signal_out $hier_spi_engine/${hier_spi_engine}_offload/trigger
+
+  ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 1
+  ad_connect spi_clk ad7616_pwm_gen/ext_clk
 
   # interconnect
 
@@ -168,13 +171,13 @@ if {$SER_PAR_N == 1} {
 }
 
 # interface connections
+
 ad_connect  $sys_cpu_clk spi_clkgen/clk
 ad_connect  spi_clk spi_clkgen/clk_0
-  
+
 ad_connect  ad7616_pwm_gen/pwm_0 rx_cnvst
 ad_connect  $sys_cpu_clk ad7616_pwm_gen/s_axi_aclk
 ad_connect  sys_cpu_resetn ad7616_pwm_gen/s_axi_aresetn
-ad_connect  spi_clk ad7616_pwm_gen/ext_clk
 ad_connect  $sys_cpu_clk axi_ad7616_dma/s_axi_aclk
 ad_connect  sys_cpu_resetn axi_ad7616_dma/m_dest_axi_aresetn
 
