@@ -677,7 +677,16 @@ If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CON
 ENDFIELD
 
 FIELD
-[9] 0x0
+[15:8] 0x00
+FRAMENUM
+RW
+The total number of video frame buffers.
+Related to MAX_NUM_FRAMES synthesis parameter.
+If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[7:0]``.
+ENDFIELD
+
+FIELD
+[1] 0x0
 WAIT_WRITER
 RW
 If WAIT_WRITER is unset, enable the generation of new request right away.
@@ -688,21 +697,12 @@ If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CON
 ENDFIELD
 
 FIELD
-[8] 0x0
+[0] 0x0
 MODE
 RW
 Select operating mode of the framebuffer.
 (0 - Frame rate conversion mode (dynamic), 1 - Output delay mode (simple))
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[8]``.
-ENDFIELD
-
-FIELD
-[7:0] 0x00
-FRAMENUM
-RW
-The total number of video frame buffers.
-Related to MAX_NUM_FRAMES synthesis parameter.
-If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[7:0]``.
 ENDFIELD
 
 ############################################################################################

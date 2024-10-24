@@ -225,10 +225,10 @@ module axi_dmac_regmap_request #(
     9'h115: up_rdata <= response_sg_desc_id;
     9'h116: begin
               up_rdata <= 'h0;
-              up_rdata[MAX_NUM_FRAMES_WIDTH:0] <= request_flock_framenum;
-              up_rdata[8] <= request_flock_mode;
-              up_rdata[9] <= request_flock_wait_writer;
               up_rdata[16 +:(MAX_NUM_FRAMES_WIDTH+1)] <= request_flock_distance;
+              up_rdata[8 +:(MAX_NUM_FRAMES_WIDTH+1)] <= request_flock_framenum;
+              up_rdata[1] <= request_flock_wait_writer;
+              up_rdata[0] <= request_flock_mode;
             end
     9'h117: up_rdata <= request_flock_stride;
     9'h11f: up_rdata <= {request_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG],{BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
@@ -304,10 +304,10 @@ module axi_dmac_regmap_request #(
       end else if (up_wreq == 1'b1) begin
         case (up_waddr)
           9'h116: begin
-            up_dma_flock_framenum <= up_wdata[MAX_NUM_FRAMES_WIDTH:0];
-            up_dma_flock_mode <= up_wdata[8];
-            up_dma_flock_wait_writer <= up_wdata[9];
-            up_dma_flock_distance <= up_wdata[16 +: (MAX_NUM_FRAMES_WIDTH+1)];
+            up_dma_flock_distance <= up_wdata[16 +:(MAX_NUM_FRAMES_WIDTH+1)];
+            up_dma_flock_framenum <= up_wdata[8 +:(MAX_NUM_FRAMES_WIDTH+1)];
+            up_dma_flock_wait_writer <= up_wdata[1];
+            up_dma_flock_mode <= up_wdata[0];
           end
           9'h117: up_dma_flock_stride <= up_wdata[DMA_AXI_ADDR_WIDTH-1:0];
         endcase
