@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,6 +37,7 @@
 
 module dmac_2d_transfer #(
 
+  parameter DMA_2D_TLAST_MODE = 0, // 0 - End of Frame; 1 - End of Line
   parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter BYTES_PER_BURST_WIDTH = 7,
@@ -71,8 +72,9 @@ module dmac_2d_transfer #(
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] out_req_dest_address,
   output [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] out_req_src_address,
   output [DMA_LENGTH_WIDTH-1:0] out_req_length,
-  output reg out_req_sync_transfer_start,
+  output out_req_sync_transfer_start,
   output out_req_last,
+  output out_req_islast,
 
   input out_eot,
   input [BYTES_PER_BURST_WIDTH-1:0] out_measured_burst_length,
@@ -89,6 +91,7 @@ module dmac_2d_transfer #(
   reg [DMA_LENGTH_WIDTH-1:0] y_length = 'h00;
   reg [DMA_LENGTH_WIDTH-1:0] dest_stride = 'h0;
   reg [DMA_LENGTH_WIDTH-1:0] src_stride = 'h00;
+  reg sync_transfer_start = 1'b0;
 
   reg gen_last = 'h0;
 
@@ -106,6 +109,7 @@ module dmac_2d_transfer #(
   assign out_req_src_address = src_address;
   assign out_req_length = x_length;
   assign out_last = y_length == 'h00;
+  assign out_req_sync_transfer_start = sync_transfer_start;
 
   always @(posedge req_aclk) begin
     if (req_aresetn == 1'b0) begin
@@ -165,15 +169,15 @@ module dmac_2d_transfer #(
       y_length <= req_y_length;
       dest_stride <= req_dest_stride;
       src_stride <= req_src_stride;
-      out_req_sync_transfer_start <= req_sync_transfer_start;
+      sync_transfer_start <= req_sync_transfer_start;
       gen_last <= req_last;
-    end else if (out_abort_req == 1'b1) begin
+    end else if (out_abort_req == 1'b1 && DMA_2D_TLAST_MODE == 0) begin
       y_length <= 0;
     end else if (out_req_valid == 1'b1 && out_req_ready == 1'b1) begin
       dest_address <= dest_address + dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
       src_address <= src_address + src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
       y_length <= y_length - 1'b1;
-      out_req_sync_transfer_start <= 1'b0;
+      sync_transfer_start <= 1'b0;
     end
   end
 
@@ -193,6 +197,7 @@ module dmac_2d_transfer #(
     end
   end
 
-  assign out_req_last = out_last & gen_last;
+  assign out_req_last = (out_last | (DMA_2D_TLAST_MODE == 1)) & gen_last;
+  assign out_req_islast = out_last;
 
 endmodule
