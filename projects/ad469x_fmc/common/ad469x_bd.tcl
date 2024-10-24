@@ -9,6 +9,7 @@ set SPI_4WIRE $ad_project_params(SPI_4WIRE)
 puts "build parameter: SPI_4WIRE: $SPI_4WIRE"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad469x_spi
+
 create_bd_port -dir O ad469x_spi_cnv
 create_bd_port -dir I ad469x_spi_busy
 
