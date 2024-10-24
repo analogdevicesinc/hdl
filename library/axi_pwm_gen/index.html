@@ -218,7 +218,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -254,6 +253,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -376,7 +378,7 @@ there is one counter for each pulse.</p>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI PWM Generator block diagram" src="../../_images/block_diagram21.svg" /></section>
+<img alt="AXI PWM Generator block diagram" src="../../_images/block_diagram23.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div class="admonition note">
@@ -1155,7 +1157,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 <tbody>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_VERSION</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td class="description bold"><section>
 <p>Version and Scratch Registers</p>
 </section>
@@ -1163,7 +1165,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">VERSION[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00020101</span></code></td>
 <td class="description"><section>
@@ -1173,7 +1175,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_ID</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description bold"><section>
 <p>Core ID</p>
 </section>
@@ -1181,7 +1183,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">ID[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
@@ -1191,7 +1193,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_SCRATCH</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td class="description bold"><section>
 <p>Version and Scratch Registers</p>
 </section>
@@ -1199,7 +1201,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">SCRATCH[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
@@ -1209,7 +1211,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CORE_MAGIC</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC</span></code></td>
 <td class="description bold"><section>
 <p>Identification number</p>
 </section>
@@ -1217,7 +1219,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CORE_MAGIC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x504c5347</span></code></td>
 <td class="description"><section>
@@ -1227,7 +1229,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_RSTN</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td class="description bold"><section>
 <p>Reset and load values</p>
 </section>
@@ -1255,7 +1257,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x6</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_CONFIG</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CONFIG</span></code></td>
 <td class="description bold"><section>
 <p>Features enable register</p>
 </section>
@@ -1297,7 +1299,7 @@ Default valew can be overwritten at build time through parameters.</p>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_NB_PULSES</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">NB_PULSES</span></code></td>
 <td class="description bold"><section>
 <p>Number of pulses</p>
 </section>
@@ -1313,57 +1315,60 @@ Default valew can be overwritten at build time through parameters.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_PERIOD</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PULSE_n_PERIOD</span></code></td>
 <td class="description bold"><section>
-<p>Pulse x period</p>
+<p>Pulse n period
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_PERIOD[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">period</span> <span class="pre">-</span> <span class="pre">'h4C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Pulse x duration, defined in number of clock cycles.</p>
+<p>Pulse duration, defined in number of clock cycles.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_WIDTH</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PULSE_n_WIDTH</span></code></td>
 <td class="description bold"><section>
-<p>Pulse x width</p>
+<p>Pulse n width
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_WIDTH[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">width</span> <span class="pre">-</span> <span class="pre">'h8C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Pulse x width (high time), defined in number of clock cycles.</p>
+<p>Pulse width (high time), defined in number of clock cycles.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
-<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">REG_PULSE_X_OFFSET</span></code></td>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PULSE_n_OFFSET</span></code></td>
 <td class="description bold"><section>
-<p>Pulse x offset</p>
+<p>Pulse n offset
+Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">PULSE_X_OFFSET[31:0]</span> <span class="pre">-</span> <span class="pre">base</span> <span class="pre">+</span> <span class="pre">'h4</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">channel</span> <span class="pre">-&gt;</span> <span class="pre">e.g.</span> <span class="pre">CH3</span> <span class="pre">offset</span> <span class="pre">-</span> <span class="pre">'hCC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PULSE_OFFSET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
-<p>Pulse x offset, defined in number of clock cycles.</p>
+<p>Pulse offset, defined in number of clock cycles.</p>
 </section>
 </td>
 </tr>

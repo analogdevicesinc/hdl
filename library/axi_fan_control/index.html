@@ -217,7 +217,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -253,6 +252,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -364,7 +366,7 @@ compensation FIR filter.</p></li>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI Fan Control block diagram" class="align-center" src="../../_images/block_diagram18.svg" /></section>
+<img alt="AXI Fan Control block diagram" class="align-center" src="../../_images/block_diagram20.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -1455,9 +1457,10 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_25_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T25*TACHO_​TOL_​PERCENT/100</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​25_​TOL</span></code></td>
 <td class="description"><section>
-<p>Tolerance for the 25% PWM tacho period</p>
+<p>Tolerance for the 25% PWM tacho period
+<code class="docutils literal notranslate"><span class="pre">TACHO_25_TOL</span> <span class="pre">=</span> <span class="pre">TACHO_T25*TACHO_TOL_PERCENT/100</span></code></p>
 </section>
 </td>
 </tr>
@@ -1470,9 +1473,10 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_50_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T50*TACHO_​TOL_​PERCENT/100</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​50_​TOL</span></code></td>
 <td class="description"><section>
-<p>Tolerance for the 50% PWM tacho period</p>
+<p>Tolerance for the 50% PWM tacho period
+<code class="docutils literal notranslate"><span class="pre">TACHO_50_TOL</span> <span class="pre">=</span> <span class="pre">TACHO_T50*TACHO_TOL_PERCENT/100</span></code></p>
 </section>
 </td>
 </tr>
@@ -1485,9 +1489,10 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_75_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T75*TACHO_​TOL_​PERCENT/100</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​75_​TOL</span></code></td>
 <td class="description"><section>
-<p>Tolerance for the 75% PWM tacho period</p>
+<p>Tolerance for the 75% PWM tacho period
+<code class="docutils literal notranslate"><span class="pre">TACHO_75_TOL</span> <span class="pre">=</span> <span class="pre">TACHO_T75*TACHO_TOL_PERCENT/100</span></code></p>
 </section>
 </td>
 </tr>
@@ -1500,9 +1505,10 @@ primitive.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_100_TOL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​T100*TACHO_​TOL_​PERCENT/100</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">TACHO_​100_​TOL</span></code></td>
 <td class="description"><section>
-<p>Tolerance for the 100% PWM tacho period</p>
+<p>Tolerance for the 100% PWM tacho period
+<code class="docutils literal notranslate"><span class="pre">TACHO_100_TOL</span> <span class="pre">=</span> <span class="pre">TACHO_T100*TACHO_TOL_PERCENT/100</span></code></p>
 </section>
 </td>
 </tr>

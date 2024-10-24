@@ -214,7 +214,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -250,6 +249,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -357,7 +359,7 @@ the <a class="icon adi reference external" href="https://www.analog.com/ADV7511"
 </section>
 <section id="block-diagram">
 <span id="axi-hdmi-tx-block-diagram"></span><h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram20.svg" /></section>
+<img alt="AXI HDMI TX block diagram" class="align-center" src="../../_images/block_diagram22.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -961,7 +963,7 @@ required resolution.</p>
 <tbody>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RSTN_TX</span></code></td>
 <td class="description bold"><section>
 <p>HDMI Interface Control &amp; Status</p>
 </section>
@@ -1057,7 +1059,7 @@ input (0x1) or disabled (0x0).</p>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x15</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x54</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_FREQ_TX</span></code></td>
 <td class="description bold"><section>
 <p>HDMI Interface Control &amp; Status</p>
 </section>
@@ -1080,7 +1082,7 @@ parameters to calculate the final sampling clock.</p>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x16</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x58</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CLK_RATIO_TX</span></code></td>
 <td class="description bold"><section>
 <p>HDMI Interface Control &amp; Status</p>
 </section>
@@ -1118,7 +1120,7 @@ are errors, software may try resetting the cores.</p>
 </tr>
 <tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
-<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VDMA_STATUS</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VDMA_STATUS_TX</span></code></td>
 <td class="description bold"><section>
 <p>HDMI Interface Control &amp; Status</p>
 </section>

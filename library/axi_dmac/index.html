@@ -260,7 +260,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -296,6 +295,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -442,7 +444,7 @@ data between system memory and other peripherals like high-speed converters.</p>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
-<img alt="AXI DMAC block diagram" class="align-center" src="../../_images/block_diagram17.svg" /></section>
+<img alt="AXI DMAC block diagram" class="align-center" src="../../_images/block_diagram19.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
 <div><section id="hdl-parameters">
@@ -2203,9 +2205,10 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">log2(DMA_​DATA_​WIDTH_​DEST/8)</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">BYTES_​PER_​BEAT_​DEST_​LOG2</span></code></td>
 <td class="description"><section>
-<p>Width of data bus on destination interface. Log2 of interface data widths in bytes.</p>
+<p>Width of data bus on destination interface. Log2 of interface data widths in bytes.
+<code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_DEST_LOG2</span> <span class="pre">=</span> <span class="pre">$clog2(DMA_DATA_WIDTH_DEST/8)</span></code></p>
 </section>
 </td>
 </tr>
@@ -2223,9 +2226,10 @@ data between system memory and other peripherals like high-speed converters.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[11:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">log2(DMA_​DATA_​WIDTH_​SRC/8)</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">BYTES_​PER_​BEAT_​SRC_​LOG2</span></code></td>
 <td class="description"><section>
-<p>Width of data bus on source interface. Log2 of interface data widths in bytes.</p>
+<p>Width of data bus on source interface. Log2 of interface data widths in bytes.
+<code class="docutils literal notranslate"><span class="pre">BYTES_PER_BEAT_SRC_LOG2</span> <span class="pre">=</span> <span class="pre">$clog2(DMA_DATA_WIDTH_SRC/8)</span></code></p>
 </section>
 </td>
 </tr>
@@ -2522,9 +2526,10 @@ to the bus width.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">X_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">2^log2(max(DMA_​DATA_​WIDTH_​SRC,</span> <span class="pre">DMA_​DATA_​WIDTH_​DEST)/8)-1</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">X_​LENGTH</span></code></td>
 <td class="description"><section>
-<p>Number of bytes to transfer - 1.</p>
+<p>Number of bytes to transfer - 1.
+<code class="docutils literal notranslate"><span class="pre">X_LENGTH</span> <span class="pre">=</span> <span class="pre">2**$clog2(`MAX(DMA_DATA_WIDTH_SRC,</span> <span class="pre">DMA_DATA_WIDTH_DEST)/8)-1</span></code></p>
 </section>
 </td>
 </tr>

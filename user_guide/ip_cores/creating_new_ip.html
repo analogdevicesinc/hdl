@@ -219,7 +219,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -255,6 +254,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -359,14 +361,14 @@ follows a special syntax.</p>
 maps <a class="reference internal" href="#hdl-regmap-using"><span class="std std-ref">for look-up</span></a>.</p>
 <p>The register and fields are defined with the following syntax:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
-<span class="mh">0x00000000</span>
+<span class="o">&lt;</span><span class="n">address</span><span class="o">&gt;</span>
 <span class="p">[</span><span class="n">WHERE</span> <span class="n">n</span> <span class="n">IS</span> <span class="o">...</span><span class="p">]</span>
 <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">description</span><span class="o">&gt;</span>
 <span class="n">ENDREG</span>
 
 <span class="n">FIELD</span>
-<span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="mh">0x00000000</span>
+<span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">default</span><span class="o">&gt;</span>
 <span class="p">[</span><span class="n">WHERE</span> <span class="n">n</span> <span class="n">IS</span> <span class="o">...</span><span class="p">]</span>
 <span class="o">&lt;</span><span class="n">description</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">access</span><span class="o">&gt;</span>
@@ -402,17 +404,68 @@ maps <a class="reference internal" href="#hdl-regmap-using"><span class="std std
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> line is only present if using ranged <a class="reference internal" href="#hdl-regmap-ranged"><span class="std std-ref">register/fields</span></a>.</p>
 <p>Noticed that the description can be multi-line and can also include Sphinx
-syntax, parsed during build
+syntax, parsed during build.
 The file content is always 90-columns wide.
-A field default value shall be a parameter, by escaping it with “double” single
-quotes <code class="docutils literal notranslate"><span class="pre">''</span></code>, e.g.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FIELD</span>
-<span class="p">[</span><span class="mi">31</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="s1">&#39;&#39;</span><span class="n">ID</span><span class="s1">&#39;&#39;</span>
-<span class="n">PERIPHERAL_ID</span>
-<span class="n">RO</span>
-<span class="n">Value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ID</span> <span class="n">configuration</span> <span class="n">parameter</span><span class="o">.</span>
-<span class="n">In</span> <span class="n">case</span> <span class="n">of</span> <span class="n">multiple</span> <span class="n">instances</span><span class="p">,</span> <span class="n">each</span> <span class="n">instance</span> <span class="n">will</span> <span class="n">have</span> <span class="n">a</span> <span class="n">unique</span> <span class="n">ID</span><span class="o">.</span>
-<span class="n">ENDFIELD</span>
+There are multiple ways to define the default value for a field.
+All parameter values used for defining or calculating the default
+value of a field must be a configuration parameter.
+In cases where expressions are used to calculate the field values, these
+must be compatible SystemVerilog, as the expressions are used in the
+simulation environment as well.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>FIELD
+[31:0]
+SCRATCH
+RO
+Value of the Scratch field is undefined.
+In a simulation environment this value appears as X for all bits.
+ENDFIELD
+
+FIELD
+[31:0] 0x12345678
+VERSION
+RO
+Value of the Version is hardcoded in the IP.
+ENDFIELD
+
+FIELD
+[31:0] ID
+PERIPHERAL_ID
+RO
+Value of the ID configuration parameter.
+In case of multiple instances, each instance will have a unique ID.
+ENDFIELD
+
+FIELD
+[31:0] SPECIAL = (VALUE1+(VALUE2-VALUE3)*VALUE4)/VALUE5
+SPECIAL
+RO
+Value of the SPECIAL field is calculated using an expression.
+Example of simple operations
+ENDFIELD
+
+FIELD
+[31:0] SPECIAL = (VALUE1&gt;VALUE2)?VALUE3:VALUE4
+SPECIAL
+RO
+Value of the SPECIAL field is calculated using an expression.
+Example of conditional calculation
+ENDFIELD
+
+FIELD
+[31:0] SPECIAL = `MAX(VALUE1,`MIN(VALUE2,VALUE3))
+SPECIAL
+RO
+Value of the SPECIAL field is calculated using an expression.
+Example of min and max value calculation
+ENDFIELD
+
+FIELD
+[31:0] SPECIAL = $clog2(VALUE1**VALUE2)
+SPECIAL
+RO
+Value of the SPECIAL field is calculated using an expression.
+Example of log2 and exponentiation calculation
+ENDFIELD
 </pre></div>
 </div>
 <p>Examples:</p>
@@ -483,9 +536,18 @@ method.</p></li>
 <section id="ranged-registers-and-fields">
 <span id="hdl-regmap-ranged"></span><h3>Ranged Registers and Fields<a class="headerlink" href="#ranged-registers-and-fields" title="Permalink to this heading">#</a></h3>
 <p>Registers and fields can use a special <code class="docutils literal notranslate"><span class="pre">n</span></code> variable and the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> method
-to define an incrementing/repeating register/field.
+to define an incrementing/repeating register/field. There is an option increase
+the address increment value by an additional parameter. This parameter must be
+in hexadecimal format as well.
 The syntax is <code class="docutils literal notranslate"><span class="pre">WHERE</span> <span class="pre">n</span> <span class="pre">IS</span> <span class="pre">FROM</span> <span class="pre">&lt;lower&gt;</span> <span class="pre">TO</span> <span class="pre">&lt;UPPER&gt;</span></code>, for example, for registers:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REG</span>
+<span class="mh">0x0102</span> <span class="o">+</span> <span class="n">n</span>
+<span class="n">WHERE</span> <span class="n">n</span> <span class="n">IS</span> <span class="n">FROM</span> <span class="mi">0</span> <span class="n">TO</span> <span class="mi">15</span>
+<span class="n">CHAN_CNTRLn_3</span>
+<span class="n">DAC</span> <span class="n">Channel</span> <span class="n">Control</span> <span class="o">&amp;</span> <span class="n">Status</span> <span class="p">(</span><span class="n">channel</span> <span class="o">-</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">ENDREG</span>
+
+<span class="n">REG</span>
 <span class="mh">0x0102</span> <span class="o">+</span> <span class="mh">0x16</span><span class="o">*</span><span class="n">n</span>
 <span class="n">WHERE</span> <span class="n">n</span> <span class="n">IS</span> <span class="n">FROM</span> <span class="mi">0</span> <span class="n">TO</span> <span class="mi">15</span>
 <span class="n">CHAN_CNTRLn_3</span>

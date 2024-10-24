@@ -217,7 +217,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -253,6 +252,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -1000,7 +1002,7 @@ It is equal with the maximum supported SDI lines in bits.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">DATA_​WITH</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DATA_​WIDTH</span></code></td>
 <td class="description"><section>
 <p>Data width of the SDI/SDO parallel interface.
 It is equal with the maximum supported transfer length in bits.</p>
@@ -1193,7 +1195,7 @@ For proper operation, the bit needs to be set to 0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_ID</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Last synchronization event ID received from the SPI engine control interface.</p>
 </section>
@@ -1223,10 +1225,11 @@ For proper operation, the bit needs to be set to 0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^CMD_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CMD_​FIFO_​ROOM</span></code></td>
 <td class="description"><section>
 <p>Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register
-depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.</p>
+depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.
+<code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span> <span class="pre">=</span> <span class="pre">$clog2((2**CMD_FIFO_ADDRESS_WIDTH)-1)</span></code></p>
 </section>
 </td>
 </tr>
@@ -1239,10 +1242,11 @@ depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^SDO_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">SDO_​FIFO_​ROOM</span></code></td>
 <td class="description"><section>
 <p>Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM
-register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.</p>
+register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.
+<code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span> <span class="pre">=</span> <span class="pre">$clog2((2**SDO_FIFO_ADDRESS_WIDTH)-1)</span></code></p>
 </section>
 </td>
 </tr>
@@ -1270,7 +1274,7 @@ register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Command FIFO register. Writing to this register inserts an entry into the command FIFO.
 Writing to this register when the command FIFO is full has no effect and the written entry
@@ -1287,7 +1291,7 @@ is discarded. Reading from this register always returns 0x0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
 Writing to this register when the SDO FIFO is full has no effect and the written entry is
@@ -1304,7 +1308,7 @@ discarded. Reading from this register always returns 0x0.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
 Reading this register when the SDI FIFO is empty will return undefined data.
@@ -1321,7 +1325,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_MSB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Store SDI’s 32 bits MSB, if exists.</p>
 </section>
@@ -1336,7 +1340,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_PEEK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>SDI FIFO peek register.
 Reading from this register returns the first entry from the SDI FIFO, but without removing
@@ -1399,7 +1403,7 @@ data. Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_CDM_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Offload command FIFO register. Writing to this register inserts an entry into the command FIFO
 of the offload module. Writing to this register when the command FIFO is full has no effect
@@ -1416,7 +1420,7 @@ and the written entry is discarded. Reading from this register always returns 0x
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_SDO_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
 Writing to this register when the SDO FIFO is full has no effect and the written entry is

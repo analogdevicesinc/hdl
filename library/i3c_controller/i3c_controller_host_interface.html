@@ -212,7 +212,6 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
@@ -248,6 +247,9 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9144/index.html">AXI AD9144</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9371/index.html">AXI AD9371</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
 </ul>
 </li>
 </ul>
@@ -1053,7 +1055,7 @@ address in the pipeline.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Number of free entries in the CMD FIFO.</p>
 </section>
@@ -1083,7 +1085,7 @@ address in the pipeline.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Number of free entries in the SDO FIFO.</p>
 </section>
@@ -1137,7 +1139,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[22:22]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_IS_CCC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Indicate if it is a CCC transfer (1) or not (0).</p>
 </section>
@@ -1147,7 +1149,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[21:21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BCAST_HEADER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Include broadcast header in private transfer (1) or not (0).</p>
 </section>
@@ -1157,7 +1159,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[20:20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_SR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Repeated start flag, yield a Sr (1) or P (0) at the end of the transfer.</p>
 </section>
@@ -1167,7 +1169,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[19:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BUFFER_LENGHT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Unsigned 12-bits payload length, direction depends on RNW value.</p>
 </section>
@@ -1177,7 +1179,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[7:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_DA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>7-bit device address (don’t care in broadcast mode).</p>
 </section>
@@ -1187,7 +1189,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_RNW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>If should retrieve data from device (1) or not (0).</p>
 </section>
@@ -1207,7 +1209,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_ERROR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>If an error occurred during the transfer.</p>
 </section>
@@ -1217,7 +1219,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[19:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_BUFFER_LENGTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Unsigned 12-bits transferred payload length.</p>
 </section>
@@ -1227,7 +1229,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_FIFO_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x??</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Command synchronization.</p>
 </section>
@@ -1247,28 +1249,28 @@ is discarded. Reading from this register always returns 0x00000000.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_BYTE_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x38</span></code></td>
@@ -1285,7 +1287,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x39</span></code></td>
@@ -1302,7 +1304,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[23:17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_DA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>IBI Dynamic address.</p>
 </section>
@@ -1312,7 +1314,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_MDB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>IBI MDB, if the peripheral’s BCR[2] is Low, the field is ignored.</p>
 </section>
@@ -1322,7 +1324,7 @@ Writing to it has no effect.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_FIFO_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Synchronization number.</p>
 </section>
@@ -1479,7 +1481,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_WEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0xX</span></code></td>
+<td class="default"><p></p></td>
 <td class="description"><section>
 <p>Enable write of the fields.</p>
 </section>
