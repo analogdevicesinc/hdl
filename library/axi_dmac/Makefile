@@ -58,5 +58,6 @@ INTEL_DEPS += axi_dmac_constr.sdc
 INTEL_DEPS += axi_dmac_hw.tcl
 
 LATTICE_DEPS += axi_dmac_ltt.tcl
+LATTICE_INTERFACE_DEPS += interfaces_ltt
 
 include ../scripts/library.mk

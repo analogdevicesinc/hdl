@@ -44,53 +44,7 @@ set ip [ipl::add_address_space -ip $ip \
     -range 0x100000000 \
     -width 32]
 
-set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name s_axi -v_prefix s_axi \
-    -xptn_portlist [list s_axi_aclk s_axi_aresetn] \
-    -display_name s_axi \
-    -description s_axi \
-    -master_slave slave \
-    -mem_map_ref axi_dmac_mem_map \
-    -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
-set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_dest_axi \
-    -xptn_portlist [list m_dest_axi_aclk m_dest_axi_aresetn] \
-    -inst_name m_dest_axi \
-    -display_name m_dest_axi \
-    -description m_dest_axi \
-    -master_slave master \
-    -addr_space_ref m_dest_axi_aspace \
-    -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
-set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_src_axi \
-    -xptn_portlist [list m_src_axi_aclk m_src_axi_aresetn] \
-    -inst_name m_src_axi \
-    -display_name m_src_axi \
-    -description m_src_axi \
-    -master_slave master \
-    -addr_space_ref m_src_axi_aspace \
-    -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
-set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -v_prefix m_sg_axi \
-    -xptn_portlist [list m_sg_axi_aclk m_sg_axi_aresetn] \
-    -inst_name m_sg_axi \
-    -display_name m_sg_axi \
-    -description m_sg_axi \
-    -master_slave master \
-    -addr_space_ref m_sg_axi_aspace \
-    -vendor amba.com -library AMBA4 -name AXI4 -version r0p0]
-
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name fifo_wr \
-    -version 1.0 \
-    -directConnection true \
-    -isAddressable false \
-    -description "ADI fifo wr interface" \
-    -ports {
-        {-n DATA -d out -p required}
-        {-n EN -d out -p required -w 1}
-        {-n OVERFLOW -w 1 -p optional -d in}
-        {-n SYNC -p optional -w 1 -d out}
-        {-n XFER_REQ -p optional -w 1 -d in}
-    }]
-ipl::generate_interface $if
+set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]
 
 set ip [ipl::add_interface -ip $ip \
     -inst_name fifo_wr \
@@ -105,22 +59,6 @@ set ip [ipl::add_interface -ip $ip \
     } \
     -vendor analog.com -library ADI -name fifo_wr -version 1.0]
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name fifo_rd \
-    -version 1.0 \
-    -directConnection true \
-    -isAddressable false \
-    -description "ADI fifo rd interface" \
-    -ports {
-        {-n DATA -d in -p required}
-        {-n EN -d out -p required -w 1}
-        {-n UNDERFLOW -d in -p optional -w 1}
-        {-n VALID -d in -p optional -w 1}
-        {-n XFER_REQ -d in -p optional -w 1}
-    }]
-ipl::generate_interface $if
-
 set ip [ipl::add_interface -ip $ip \
     -inst_name fifo_rd \
     -display_name fifo_rd \
@@ -133,37 +71,6 @@ set ip [ipl::add_interface -ip $ip \
         {"fifo_rd_underflow" "UNDERFLOW"} \
     } \
     -vendor analog.com -library ADI -name fifo_rd -version 1.0]
-
-set ip [ipl::add_interface -ip $ip \
-    -inst_name s_axis \
-    -display_name s_axis \
-    -description s_axis \
-    -master_slave slave \
-    -portmap [list {"s_axis_ready" "TREADY"} \
-                    {"s_axis_valid" "TVALID"} \
-                    {"s_axis_data" "TDATA"} \
-                    {"s_axis_strb" "TSTRB"} \
-                    {"s_axis_keep" "TKEEP"} \
-                    {"s_axis_user" "TUSER"} \
-                    {"s_axis_id" "TID"} \
-                    {"s_axis_dest" "TDEST"} \
-                    {"s_axis_last" "TLAST"}] \
-    -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
-set ip [ipl::add_interface -ip $ip \
-    -inst_name m_axis \
-    -display_name m_axis \
-    -description m_axis \
-    -master_slave master \
-    -portmap [list {"m_axis_ready" "TREADY"} \
-                    {"m_axis_valid" "TVALID"} \
-                    {"m_axis_data" "TDATA"} \
-                    {"m_axis_strb" "TSTRB"} \
-                    {"m_axis_keep" "TKEEP"} \
-                    {"m_axis_user" "TUSER"} \
-                    {"m_axis_id" "TID"} \
-                    {"m_axis_dest" "TDEST"} \
-                    {"m_axis_last" "TLAST"}] \
-    -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
 # Do not use a port name as interface name except if you use case differences.
 set ip [ipl::add_interface -ip $ip \

@@ -32,13 +32,7 @@ set ip [ipl::add_memory_map -ip $ip \
     -range 65536 \
     -width 32]
 
-set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name s_axi -v_prefix s_axi \
-    -xptn_portlist [list s_axi_aclk s_axi_aresetn] \
-    -display_name s_axi \
-    -description s_axi \
-    -master_slave slave \
-    -mem_map_ref axi_pulse_gen_mem_map \
-    -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]
 
 set ip [ipl::set_parameter -ip $ip \
     -id ASYNC_CLK_EN \

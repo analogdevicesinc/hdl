@@ -7,6 +7,7 @@
 HDL_LIBRARY_PATH := $(subst scripts/library.mk,,$(lastword $(MAKEFILE_LIST)))
 
 include $(HDL_LIBRARY_PATH)../quiet.mk
+include $(HDL_LIBRARY_PATH)scripts/lattice_tool_set.mk
 
 CASE_INCLUDE := $(wildcard temporary_case_dependencies.mk)
 ifneq ($(CASE_INCLUDE),)
@@ -14,12 +15,6 @@ ifneq ($(CASE_INCLUDE),)
 endif
 
 VIVADO := vivado -mode batch -source
-
-ifeq ($(OS), Windows_NT)
-	PROPEL_BUILDER := propelbld
-else
-	PROPEL_BUILDER := propelbldwrap
-endif
 
 CLEAN_TARGET += *.cache
 CLEAN_TARGET += *.data
@@ -54,15 +49,21 @@ CLEAN_TARGET += tb/libraries
 CLEAN_TARGET += tb/.Xil
 CLEAN_TARGET += tb/xsim_gui_cmd.tcl
 CLEAN_TARGET += tb/libraries
-CLEAN_TARGET += ${LIBRARY_NAME}
+
+ifneq ($(LATTICE_DEPS),)
+	CLEAN_TARGET += ${LIBRARY_NAME}
+	ifneq ($(LATTICE_IP_PATH),)
+		CLEAN_TARGET += ${LATTICE_IP_PATH}/${LIBRARY_NAME}
+	endif
+endif
 
 GENERIC_DEPS += $(HDL_LIBRARY_PATH)../scripts/adi_env.tcl
 
-.PHONY: all intel xilinx lattice clean clean-all interfaces_ltt interfaces_ltt_clean
+.PHONY: all intel xilinx lattice clean clean-all ltt-interfaces clean-ltt-interfaces
 
 all: intel xilinx lattice
 
-clean: clean-all interfaces_ltt_clean
+clean: clean-all clean-ltt-interfaces
 
 clean-all:
 	$(call clean, \
@@ -138,21 +139,25 @@ LATTICE_DEPS += $(GENERIC_DEPS)
 LATTICE_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_lattice.tcl
 _LATTICE_INTF_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
 
-lattice: interfaces_ltt ${LIBRARY_NAME}/metadata.xml
+lattice: ltt-interfaces ${LIBRARY_NAME}/metadata.xml
 
 .DELETE_ON_ERROR:
 
 $(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
-	-rm -rf $(CLEAN_TARGET)
+	$(call skip_if_missing, \
+		Library, \
+		$(LIBRARY_NAME), \
+		true, \
+	rm -rf $(CLEAN_TARGET) ; \
 	$(call build, \
 		$(PROPEL_BUILDER) $(LIBRARY_NAME)_ltt.tcl, \
 		$(LIBRARY_NAME)_ltt.log, \
-		$(HL)$(LIBRARY_NAME)$(NC) library)
+		$(HL)$(LIBRARY_NAME)$(NC) library))
 
-interfaces_ltt:
+ltt-interfaces:
 	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep);)
 
-interfaces_ltt_clean:
+clean-ltt-interfaces:
 	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep) clean-all;)
 
 endif

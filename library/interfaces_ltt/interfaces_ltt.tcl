@@ -3,8 +3,42 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../../scripts/adi_env.tcl
+source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
+
+set if [ipl::create_interface -vendor analog.com \
+    -library ADI \
+    -name fifo_wr \
+    -version 1.0 \
+    -directConnection true \
+    -isAddressable false \
+    -description "ADI fifo wr interface" \
+    -ports {
+        {-n DATA -d out -p required}
+        {-n EN -d out -p required -w 1}
+        {-n OVERFLOW -w 1 -p optional -d in}
+        {-n SYNC -p optional -w 1 -d out}
+        {-n XFER_REQ -p optional -w 1 -d in}
+    }]
+ipl::generate_interface $if
+ipl::generate_interface $if ./
+
+set if [ipl::create_interface -vendor analog.com \
+    -library ADI \
+    -name fifo_rd \
+    -version 1.0 \
+    -directConnection true \
+    -isAddressable false \
+    -description "ADI fifo rd interface" \
+    -ports {
+        {-n DATA -d in -p required}
+        {-n EN -d out -p required -w 1}
+        {-n UNDERFLOW -d in -p optional -w 1}
+        {-n VALID -d in -p optional -w 1}
+        {-n XFER_REQ -d in -p optional -w 1}
+    }]
+ipl::generate_interface $if
+ipl::generate_interface $if ./
 
 set if [ipl::create_interface -vendor analog.com \
     -library ADI \

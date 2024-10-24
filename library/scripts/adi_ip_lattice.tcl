@@ -1720,7 +1720,7 @@ namespace eval ipl {
             dict set ports_num $pname $counter
         }
 
-        set $mod_data [filter_ports -mod_data $mod_data]
+        set mod_data [filter_ports -mod_data $mod_data]
 
         puts "Ports number by clocks: $ports_num\n"
 
@@ -1900,14 +1900,4 @@ namespace eval ipl {
     # -create make script.
 }
 # TODO:
-# add lists for axi and other interfaces standard ports to be able to check them and read them automatically
 # comment the code
-# I should add something like this to be able to read the path and clear the
-# library IPs from the output library directory of propel builder:
-# output := $(shell propelbld readpath.tcl)
-# all:
-#     @echo "Captured output: $(output)"
-#     @for item in $(output); do \
-#         echo $$item; \
-#     done
-# then write a rule for clearing these IPs or edit the clear targets and add the specified file paths dinamically

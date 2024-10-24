@@ -34,6 +34,6 @@ INTEL_DEPS += axi_spi_engine_constr.sdc
 INTEL_DEPS += axi_spi_engine_hw.tcl
 
 LATTICE_DEPS += axi_spi_engine_ltt.tcl
-LATTICE_INTERFACE_DEPS += spi_engine/interfaces_ltt
+LATTICE_INTERFACE_DEPS += interfaces_ltt
 
 include ../../scripts/library.mk
