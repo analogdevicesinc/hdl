@@ -49,9 +49,11 @@ Block design
 
 The data path of the HDL design is simple as follows:
 
--  the parallel interface is controlled by the axi_ad7616 IP core
--  the serial interface is controlled by the SPI Engine Framework
--  data is written into memory by a DMA (axi_dmac core)
+-  the parallel interface is controlled by the
+   :dokuwiki:`axi_ad7616 <resources/fpga/docs/axi_ad7616>` IP core
+-  the serial interface is controlled by the :ref:`SPI_Engine <spi_engine>`
+   Framework
+-  data is written into memory by a DMA (:ref:`axi_dmac core <axi_dmac>`)
 -  all the control pins of the device are driven by GPIOs
 
 Block diagram
@@ -367,6 +369,9 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`here <axi_sysid>`
+   * - UTIL_CPACK2
+     - :git-hdl:`library/util_pack/util_cpack2 <library/util_pack/util_cpack2>` *
+     - :ref:`here <util_cpack2>`
 
 .. admonition:: Legend
    :class: note
