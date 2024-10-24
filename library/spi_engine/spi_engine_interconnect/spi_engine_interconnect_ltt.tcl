@@ -24,29 +24,6 @@ set ip [ipl::general  -vendor "analog.com" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name spi_engine_ctrl \
-    -version 1.0 \
-    -directConnection true \
-    -isAddressable false \
-    -description "ADI SPI Engine Control Interface" \
-    -ports {
-        {-n CMD_READY -p required -w 1 -d in}
-        {-n CMD_VALID -p required -w 1 -d out}
-        {-n CMD_DATA -p required -w 16 -d out}
-        {-n SDO_READY -p required -w 1 -d in}
-        {-n SDO_VALID -p required -w 1 -d out}
-        {-n SDO_DATA -p required -d out}
-        {-n SDI_READY -p required -w 1 -d out}
-        {-n SDI_VALID -p required -w 1 -d in}
-        {-n SDI_DATA -p required -d in}
-        {-n SYNC_READY -p required -w 1 -d out}
-        {-n SYNC_VALID -p required -w 1 -d in}
-        {-n SYNC_DATA -p required -w 8 -d in}
-    }]
-ipl::generate_interface $if
-
 set ip [ipl::add_interface -ip $ip \
     -inst_name m_ctrl \
     -display_name m_ctrl \
