@@ -689,13 +689,32 @@ cyclic way. On the same set of buffers, a second DMAC core can operate.
 The "Framelock" mechanism ensures no buffer is accessed by two DMACs at the same
 time.
 
-The core can operate in two modes:
+The core can operate in two roles:
 
-* Writer mode - available in s2mm configuration, the writer DMAC will always
-  skip the current in-use reader's buffer.
-* Reader mode - available in mm2s configuration, the reader DMAC will stay
-  behind the writer's buffer by either repeating or skipping buffers according to
-  the speed relationship of the two cores.
+* Writer mode - available in s2mm configuration.
+* Reader mode - available in mm2s configuration.
+
+And two modes:
+
+* Dynamic mode:
+
+  - Writer mode - the writer will always skip the current in-use reader's buffer.
+  - Reader mode - the reader will stay behind the writer's buffer by either
+    repeating or skipping buffers according to the speed relationship of the two cores.
+
+* Simple mode:
+
+  - Writer mode - the writer will cycle through the buffers regardless of the reader.
+  - Reader mode - the reader will always read a buffer at a predefined distance
+    from the one currently accessed by the writer.
+
+Also, in simple mode:
+
+* If 'wait for master' is enabled the reader will output a frame only after
+  the master wrote one to the memory
+* If the 'wait for master' is not enabled the slave will start reading a
+  buffer whenever it completed a previous buffer and receives an external sync
+  signal if the external synchronization support is enabled.
 
 The writer and reader DMAC cores must be connected through the dedicated
 "framelock" interface. They must be programmed with similar settings regarding
