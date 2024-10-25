@@ -68,7 +68,8 @@ foreach prefix [list "s0" "s1"] {
         -vendor analog.com -library ADI -name spi_engine_ctrl -version 1.0]
 }
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "spi_engine_interconnect.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \

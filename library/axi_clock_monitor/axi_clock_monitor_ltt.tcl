@@ -61,9 +61,10 @@ for {set i 0} {$i < 16} {incr i} {
         -expression "not(NUM_OF_CLOCKS > $i)"]
 }
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {axi_clock_monitor.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
-    -extl {up_clock_mon.v up_axi.v}]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/common/up_axi.v" \
+    "$ad_hdl_dir/library/common/up_clock_mon.v" \
+    "axi_clock_monitor.v" ]]
 
 ipl::generate_ip $ip
 ipl::generate_ip $ip ./

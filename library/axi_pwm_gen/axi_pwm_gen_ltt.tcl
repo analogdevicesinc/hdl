@@ -169,11 +169,14 @@ for {set i 0} {$i < 16} {incr i} {
 set ip [ipl::ignore_ports -ip $ip -portlist ext_clk -expression {(ASYNC_CLK_EN == 0)}]
 set ip [ipl::ignore_ports -ip $ip -portlist ext_sync -expression {(PWM_EXT_SYNC == 0)}]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -ip $ip \
-    -extl {*.v *.sv}]
-set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
-    -extl {ad_rst.v up_axi.v}]
-set ip [ipl::add_ip_files_auto -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/common/ad_rst.v" \
+    "$ad_hdl_dir/library/common/up_axi.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+    "axi_pwm_gen.sv" \
+    "axi_pwm_gen_1.v" \
+    "axi_pwm_gen_regmap.sv" ]]
 
 ipl::generate_ip $ip
 ipl::generate_ip $ip ./

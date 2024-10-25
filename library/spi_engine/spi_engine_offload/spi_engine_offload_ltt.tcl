@@ -76,8 +76,10 @@ set ip [ipl::add_interface -ip $ip \
     } \
     -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+    "spi_engine_offload.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id DATA_WIDTH \

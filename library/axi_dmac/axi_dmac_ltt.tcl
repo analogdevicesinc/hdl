@@ -81,16 +81,41 @@ set ip [ipl::add_interface -ip $ip \
     -portmap [list {"irq" "IRQ"}] \
     -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v *.vh} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
-    -extl {ad_rst.v
-           up_axi.v
-           ad_mem.v
-           ad_mem_asym.v}]
-set ip [ipl::add_ip_files_auto -spath ../util_axis_fifo -dpath rtl -ip $ip \
-    -extl {util_axis_fifo.v
-            util_axis_fifo_address_generator.v}]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/common/ad_mem_asym.v" \
+    "$ad_hdl_dir/library/common/up_axi.v" \
+    "inc_id.vh" \
+    "resp.vh" \
+    "axi_dmac_burst_memory.v" \
+    "axi_dmac_regmap.v" \
+    "axi_dmac_regmap_request.v" \
+    "axi_dmac_reset_manager.v" \
+    "axi_dmac_resize_dest.v" \
+    "axi_dmac_resize_src.v" \
+    "axi_dmac_response_manager.v" \
+    "axi_dmac_transfer.v" \
+    "address_generator.v" \
+    "data_mover.v" \
+    "request_arb.v" \
+    "request_generator.v" \
+    "response_handler.v" \
+    "axi_register_slice.v" \
+    "dmac_2d_transfer.v" \
+    "dmac_sg.v" \
+    "dest_axi_mm.v" \
+    "dest_axi_stream.v" \
+    "dest_fifo_inf.v" \
+    "src_axi_mm.v" \
+    "src_axi_stream.v" \
+    "src_fifo_inf.v" \
+    "splitter.v" \
+    "response_generator.v" \
+    "axi_dmac.v" \
+    "../util_axis_fifo/util_axis_fifo.v" \
+    "../util_axis_fifo/util_axis_fifo_address_generator.v" \
+    "../util_cdc/sync_bits.v" \
+    "../util_cdc/sync_event.v" \
+    "../util_cdc/sync_gray.v" ]]
 
 # source
 set ip [ipl::set_parameter -ip $ip \

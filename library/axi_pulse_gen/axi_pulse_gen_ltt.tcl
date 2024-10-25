@@ -70,11 +70,16 @@ set ip [ipl::set_parameter -ip $ip \
 
 set ip [ipl::ignore_ports -ip $ip -portlist ext_clk -expression {(ASYNC_CLK_EN == 0)}]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -ip $ip \
-    -extl {*.v *.sv}]
-set ip [ipl::add_ip_files_auto -spath ../common -dpath rtl -ip $ip \
-    -extl {ad_rst.v up_axi.v util_pulse_gen.v}]
-set ip [ipl::add_ip_files_auto -spath ../util_cdc -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/common/ad_rst.v" \
+    "$ad_hdl_dir/library/common/up_axi.v" \
+    "$ad_hdl_dir/library/common/util_pulse_gen.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_gray.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+    "axi_pulse_gen_regmap.v" \
+    "axi_pulse_gen.v" ]]
 
 ipl::generate_ip $ip
 ipl::generate_ip $ip ./

@@ -48,7 +48,8 @@ set ip [ipl::add_interface -ip $ip \
     } \
     -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "spi_axis_reorder.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id NUM_OF_LANES \

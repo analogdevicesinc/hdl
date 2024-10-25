@@ -83,13 +83,15 @@ set ip [ipl::add_interface -ip $ip \
     -portmap [list {"irq" "IRQ"}] \
     -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
 
-set ip [ipl::add_ip_files_auto -spath ./ -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../../util_cdc -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../../util_axis_fifo -dpath rtl -extl {*.v} -ip $ip]
-set ip [ipl::add_ip_files_auto -spath ../../common -dpath rtl -ip $ip \
-    -extl {up_axi.v
-           ad_rst.v
-           ad_mem.v}]
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+    "$ad_hdl_dir/library/common/up_axi.v" \
+    "$ad_hdl_dir/library/common/ad_rst.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_gray.v" \
+    "$ad_hdl_dir/library/common/ad_mem.v" \
+    "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v" \
+    "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v" \
+    "axi_spi_engine.v" ]]
 
 set ip [ipl::set_parameter -ip $ip \
     -id ID \
