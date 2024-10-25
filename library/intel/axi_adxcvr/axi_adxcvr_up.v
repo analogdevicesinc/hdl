@@ -81,7 +81,6 @@ module axi_adxcvr_up #(
   reg                           up_wreq_d = 'd0;
   reg     [31:0]                up_scratch = 'd0;
   reg                           up_resetn = 'd0;
-  reg     [ 3:0]                up_rst_cnt = 'd8;
   reg                           up_status_int = 'd0;
   reg                           up_rreq_d = 'd0;
   reg     [31:0]                up_rdata_d = 'd0;
@@ -126,43 +125,50 @@ module axi_adxcvr_up #(
                                                                  up_pll_locked;
   assign up_status_32_s[(NUM_OF_LANES-1):0] = FPGA_TECHNOLOGY == 105 ? {NUM_OF_LANES{up_ready}} : up_ready;
 
-  always @(negedge up_rstn or posedge up_clk) begin
-    if (up_rstn == 0) begin
-      up_rst_cnt <= 4'h8;
-      up_status_int <= 1'b0;
-    end else begin
-      if (up_resetn == 1'b0) begin
-        up_rst_cnt <= 4'h8;
-      end else if (up_rst_cnt[3] == 1'b1) begin
-        up_rst_cnt <= up_rst_cnt + 1'b1;
-      end
-      if (up_resetn == 1'b0) begin
-        up_status_int <= 1'b0;
-      end else if (up_ready_s == 1'b1) begin
-        up_status_int <= 1'b1;
-      end
-    end
-  end
-
   generate if (FPGA_TECHNOLOGY == 105) begin
-    reg up_reset_ack_d = 'd0;
+    reg up_rst_d = 'd0;
+    reg up_reset_ack_d1;
+    reg up_reset_ack_d2;
+    reg up_reset_ack_d3;
+
+    always @(posedge up_clk) begin
+      up_reset_ack_d1 <= up_reset_ack[0];
+      up_reset_ack_d2 <= up_reset_ack_d1;
+      up_reset_ack_d3 <= up_reset_ack_d2;
+    end
 
     always @(negedge up_rstn or posedge up_clk) begin
       if (up_rstn == 0) begin
-        up_reset_ack_d <= 1'b0;
+        up_rst_d <= 1'b1;
+      end else if (up_resetn == 1'b0) begin
+        up_rst_d <= 1'b1;
+      end else begin
+        up_rst_d <= 1'b0;
+      end
+    end
+
+    assign up_rst = up_rst_d;
+  end else begin
+    reg [3:0] up_rst_cnt = 'd8;
+
+    always @(negedge up_rstn or posedge up_clk) begin
+      if (up_rstn == 0) begin
+        up_rst_cnt <= 4'h8;
+        up_status_int <= 1'b0;
       end else begin
         if (up_resetn == 1'b0) begin
-          up_reset_ack_d <= 1'b0;
-        end else begin
-          if (up_reset_ack_d == 1'b0) begin
-            up_reset_ack_d <= up_reset_ack;
-          end
+          up_rst_cnt <= 4'h8;
+        end else if (up_rst_cnt[3] == 1'b1) begin
+          up_rst_cnt <= up_rst_cnt + 1'b1;
+        end
+        if (up_resetn == 1'b0) begin
+          up_status_int <= 1'b0;
+        end else if (up_ready_s == 1'b1) begin
+          up_status_int <= 1'b1;
         end
       end
     end
 
-    assign up_rst = ~up_reset_ack_d;
-  end else begin
     assign up_rst = up_rst_cnt[3];
   end
   endgenerate
