@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>PULSAR-ADC HDL project &#8212; HDL  documentation</title>
+    <title>X-Band Platform HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="PULSAR-LVDS HDL project" href="../pulsar_lvds/index.html" />
-    <link rel="prev" title="MAX96724 HDL project" href="../max96724/index.html" />
+    <link rel="next" title="AD9265-FMC HDL project" href="../ad9265_fmc/index.html" />
+    <link rel="prev" title="AD9081/AD9082/AD9986/AD9988 HDL project" href="../ad9081_fmca_ebz/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -101,20 +101,14 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">PULSAR-ADC HDL project</a><ul>
-<li><a class="reference internal" href="#overview">Overview</a><ul>
-<li><a class="reference internal" href="#with-pmod">With PMOD</a></li>
-<li><a class="reference internal" href="#with-fmc">With FMC</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">X-Band Platform HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
-<li><a class="reference internal" href="#other-required-hardware">Other required hardware</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
-<li><a class="reference internal" href="#pulsar-adc-pmdz">PulSAR_ADC_PMDZ</a></li>
-<li><a class="reference internal" href="#pulsar-adc-fmc">PulSAR_ADC_FMC</a></li>
+<li><a class="reference internal" href="#example-block-design-for-single-link-m-8-l-4">Example block design for Single link; M=8; L=4</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
@@ -126,7 +120,9 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#software-considerations">Software considerations</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
@@ -300,7 +296,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9265_fmc/index.html">AD9265-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9213_evb/index.html">AD9213-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
@@ -322,7 +318,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds/index.html">PULSAR-LVDS</a></li>
 </ul>
 </li>
@@ -339,197 +335,203 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="pulsar-adc-hdl-project">
-<span id="pulsar-adc"></span><h1>PULSAR-ADC HDL project<a class="headerlink" href="#pulsar-adc-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="x-band-platform-hdl-project">
+<span id="ad9081-fmca-ebz-x-band"></span><h1>X-Band Platform HDL project<a class="headerlink" href="#x-band-platform-hdl-project" title="Permalink to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This project extends the AD9081-FMCA-EBZ project. This documentation focuses
+on the specific extensions made for this system.</p>
+<p>For a more detailed description of the configuration parameters and system
+capabilities, check the
+<a class="reference internal" href="../ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9081/AD9082/AD9986/AD9988 HDL project page</span></a>.</p>
+</div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>Depending on the type of connector it uses, the PulSAR family is divided into
-the products which have <strong>PMOD</strong> connectors and <strong>FMC</strong> connectors.</p>
-<p>PulSAR converters which have PMOD boards associated with them are low power ADCs
-which offer very high performance from 14-bits up to 18-bits with throughputs
-ranging from 100ksps to 1.3MSPS. The boards are designed to demonstrate the
-ADC’s performance and to provide an easy digital interface for a variety of
-system applications. The PulSAR family share the same interface and the same PCB,
-the differences being found in their performance.  A full description of these
-products are available in their respective data sheets and should be consulted
-when utilizing the boards.</p>
-<section id="with-pmod">
-<h3>With PMOD<a class="headerlink" href="#with-pmod" title="Permalink to this heading">#</a></h3>
-<p>ADAQ40xx families is also part of the family of PulSAR converters with PMOD
-connector.</p>
-<p>This type of boards come with the <a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a> PMOD to
-field programmable gate array (FPGA) mezzanine card (FMC) interposer board that
-interfaces with the system demonstration controller board.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a> is an 18-bit precision data acquisition sub-system SiP
-design on a laminate that includes the <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> ADC with a fully
-differential driver the <a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a>, a reference buffer
-(the <a class="icon adi reference external" href="https://www.analog.com/ADA4807-1">ADA4807-1</a>), a precision resistor iPassive network on a separate die
-along with discrete capacitors and resistors. The device solves many design
-challenges for a wide range of applications similar to AD400x, yet it still
-provides the flexibility. It offers over 75% area savings compared to discrete
-design and reduces TTM.</p>
-</section>
-<section id="with-fmc">
-<h3>With FMC<a class="headerlink" href="#with-fmc" title="Permalink to this heading">#</a></h3>
-<p>PulSAR converters which have FMC boards associated with them are AD40xx family.</p>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> / <a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a> are low noise,
-low power, high speed, 18-bit, precision successive approximation register (SAR)
-analog-to-digital converters (ADCs). The <a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a>, and
-<a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a> offer 2 MSPS, 1 MSPS, and 500 kSPS throughputs, respectively.
-They incorporate ease of use features that reduce signal chain power consumption,
-reduce signal chain complexity, and enable higher channel density. The high-Z
-mode, coupled with a long acquisition phase, eliminates the need for a dedicated
-high power, high speed ADC driver, thus broadening the range of low power
-precision amplifiers that can drive these ADCs directly while still achieving
-optimum performance. The input span compression feature enables the ADC driver
-amplifier and the ADC to operate off common supply rails without the need for a
-negative supply while preserving the full ADC code range. The low serial
-peripheral interface (SPI) clock rate requirement reduces the digital
-input/output power consumption, broadens processor options, and simplifies the
-task of sending data across digital isolation.</p>
-<p>Applications:</p>
-<ul class="simple">
-<li><p>Battery-powered equipment</p></li>
-<li><p>Data acquisition</p></li>
-<li><p>Instrumentation</p></li>
-<li><p>Medical instruments</p></li>
-<li><p>Process controls</p></li>
-<li><p>Machine automation</p></li>
-</ul>
-</section>
+<p>The  <a class="icon adi reference external" href="https://www.analog.com/x-band-development-platform">X-Band Development Platform</a> contains
+one MxFE® software defined, direct RF sampling transceivers,
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/stingray">X-Band to C-Band Up/Down Converter</a>
+, and a <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/xud1a">X/Ku Band analog phased array</a>
+proto-typing platform.
+The target application is phased array radars, electronic warfare, and
+ground-based SATCOM, specifically a X Band 32 transmit/32 receive channel hybrid
+beamforming phased array radar.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/x-band-development-platform">X-Band Development Platform</a> highlights
+a complete system solution. It is intended as a testbed for demonstrating hybrid
+beamforming phased array radar as well as the implementation of system level
+calibrations, beamforming algorithms, and other signal processing algorithms.
+The system is designed to mate with a <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> Evaluation Board from
+Xilinx®, which features the Zynq® UltraScale+™ MPSoC FPGA, with provided
+reference software, HDL code, and MATLAB system-level interfacing software.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
-<p>PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7685-PMDZ">EVAL-AD7685-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7686-PMDZ">EVAL-AD7686-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7687-PMDZ">EVAL-AD7687-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7688-PMDZ">EVAL-AD7688-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7690-PMDZ">EVAL-AD7690-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7691-PMDZ">EVAL-AD7691-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7693-PMDZ">EVAL-AD7693-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7942-PMDZ">EVAL-AD7942-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7946-PMDZ">EVAL-AD7946-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7980-PMDZ">EVAL-AD7980-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7982-PMDZ">EVAL-AD7982-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7983-PMDZ">EVAL-AD7983-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7984-PMDZ">EVAL-AD7984-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-1-PMDZ">EVAL-AD7988-1-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7988-5-PMDZ">EVAL-AD7988-5-PMDZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ40xx">EVAL-ADAQ40xx</a></p></li>
-</ul>
-<p>PulSAR with FMC connector:</p>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD400x-FMCZ">EVAL-AD400x-FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/x-band-development-platform">X-Band Phased Array Platform</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/stingray">ADAR1000EVAL1Z (Stingray)</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/xud1a">ADXUD1AEBZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
-<p>PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
-</ul>
-<p>PulSAR with FMC connector:</p>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAR1000">ADAR1000</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADTR1107">ADTR1107</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC652LP2E">HMC652LP2E</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC773ALC3B">HMC773ALC3B</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADL8111">ADL8111</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC8411">HMC8411</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC963">HMC963</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC383LC4">HMC383LC4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4371">ADF4371</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRF5020">ADRF5020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC903LP3E">HMC903LP3E</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LT8653S">LT8653S</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7-07S</a> PMOD connector</p></li>
-<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
-</ul>
-</section>
-<section id="other-required-hardware">
-<h2>Other required hardware<a class="headerlink" href="#other-required-hardware" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-PMD-IB1Z">EVAL-PMD-IB1Z</a></p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Only for ADAQ40xx</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Carrier</p></th>
+<th class="head"><p>FMC slot</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/x-band-development-platform">X-Band Phased Array Platform</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<td><p>FMC HPC0 + FMC HPC1 + PM0D0 + PMOD1</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
-<p>The data path and clock domains are depicted in the below diagrams:</p>
-<section id="pulsar-adc-pmdz">
-<h4>PulSAR_ADC_PMDZ<a class="headerlink" href="#pulsar-adc-pmdz" title="Permalink to this heading">#</a></h4>
-<a class="reference internal image-reference" href="../../_images/pulsar_adc_pmod_hdl.svg"><img alt="PulSAR_ADC_PMOD block diagram" class="align-center" src="../../_images/pulsar_adc_pmod_hdl.svg" width="800" /></a>
-</section>
-<section id="pulsar-adc-fmc">
-<h4>PulSAR_ADC_FMC<a class="headerlink" href="#pulsar-adc-fmc" title="Permalink to this heading">#</a></h4>
-<a class="reference internal image-reference" href="../../_images/pulsar_adc_fmc_hdl.svg"><img alt="PulSAR_ADC_FMC block diagram" class="align-center" src="../../_images/pulsar_adc_fmc_hdl.svg" width="800" /></a>
+<section id="example-block-design-for-single-link-m-8-l-4">
+<h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Permalink to this heading">#</a></h4>
+<a class="reference internal image-reference" href="../../_images/ad9081_x_band_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_x_band_M8L4.svg" width="800" /></a>
+<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
+Config 0x0A)</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+<p>The Tx links (DAC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
+0x09)</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
 </section>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
-<p>The Zedboard-based PulSAR ADC project can be built to use either the FMC
-connector or the Pmod JA connector.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD</span></code> parameter is used to select between the them:</p>
+<p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
-<li><p>0 - for PMOD</p></li>
-<li><p>1 - for FMC (default)</p></li>
+<li><p>JESD_MODE: used link layer encoder mode</p>
+<ul>
+<li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
+Layer</p></li>
+<li><p>8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+Layer</p></li>
 </ul>
-<p>The PulSAR project supports different configurations required for certain
-ADCs, like the AD7944.</p>
-<p>These modes are selected using the <code class="docutils literal notranslate"><span class="pre">SPI_OP_MODE</span></code> parameter:</p>
-<ul class="simple">
-<li><p>0 - for normal SPI Engine connections (default)</p></li>
-<li><p>1 - for 3-wire “single” mode where CS drives the SDO line while the CS line
-is driven by GPIO</p></li>
-<li><p>2 - SDO is driven by GPIO and the CS line is driven by CS.</p></li>
+</li>
+<li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)</p></li>
+<li><p>TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)</p></li>
+<li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
+<li><p>[RX/TX]_JESD_L: number of lanes per link</p></li>
+<li><p>[RX/TX]_JESD_S: number of samples per frame</p></li>
+<li><p>[RX/TX]_JESD_NP: number of bits per sample</p></li>
+<li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
+<li><p>TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through
+TDD. Must be set to 1 when SHARED_DEVCLK=1</p></li>
+<li><p>SHARED_DEVCLK</p></li>
+<li><p>TDD_CHANNEL_CNT</p></li>
+<li><p>TDD_SYNC_WIDTH</p></li>
+<li><p>TDD_SYNC_INT</p></li>
+<li><p>TDD_SYNC_EXT</p></li>
+<li><p>TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal
+is added</p></li>
+<li><p>[RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+kilosamples per converter (M)</p></li>
+<li><p>Check out this guide on more details regarding these parameters:
+<a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></li>
 </ul>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>The SPI_OP_MODE parameter must only be used for the FMC variant.</p>
-</div>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Address</p></th>
+<th class="head"><p>ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>spi_pulsar_adc_axi_regmap</p></td>
-<td><p>0x44A0_0000</p></td>
+<tr class="row-even"><td><p>rx_mxfe_tpl_core</p></td>
+<td><p>0x84A1_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_pulsar_adc_dma</p></td>
-<td><p>0x44A3_0000</p></td>
+<tr class="row-odd"><td><p>axi_mxfe_rx_xcvr</p></td>
+<td><p>0x84A6_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>spi_clkgen</p></td>
-<td><p>0x44A7_0000</p></td>
+<tr class="row-even"><td><p>axi_mxfe_rx_jesd</p></td>
+<td><p>0x84A9_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>pulsar_adc_trigger_gen</p></td>
-<td><p>0x44B0_0000</p></td>
+<tr class="row-odd"><td><p>tx_mxfe_tpl_core</p></td>
+<td><p>0x84B1_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_mxfe_tx_xcvr</p></td>
+<td><p>0x84B6_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_mxfe_tx_jesd</p></td>
+<td><p>0x84B9_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_iic_pmod</p></td>
+<td><p>0x8510_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_spi_pmod</p></td>
+<td><p>0x8520_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_spi_fmc</p></td>
+<td><p>0x8530_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_mxfe_rx_dma</p></td>
+<td><p>0x9C42_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_mxfe_tx_dma</p></td>
+<td><p>0x9C43_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>mxfe_tx_data_offload</p></td>
+<td><p>0x9C44_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>mxfe_rx_data_offload</p></td>
+<td><p>0x9C45_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_tdd_0</p></td>
+<td><p>0x9C46_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -540,39 +542,32 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
+<col style="width: 16.7%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>I2C type</p></th>
 <th class="head"><p>I2C manager instance</p></th>
 <th class="head"><p>Alias</p></th>
 <th class="head"><p>Address</p></th>
+<th class="head"><p>Device Address</p></th>
 <th class="head"><p>I2C subordinate</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>PL</p></td>
-<td><p>iic_fmc</p></td>
-<td><p>axi_iic_fmc</p></td>
-<td><p>0x4162_0000</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>PL</p></td>
-<td><p>iic_main</p></td>
-<td><p>axi_iic_main</p></td>
-<td><p>0x4160_0000</p></td>
-<td><p>—</p></td>
+<td><p>axi_iic</p></td>
+<td><p>axi_i2c_pmod</p></td>
+<td><p>0x8510_0000</p></td>
+<td><p>0x6A <code class="docutils literal notranslate"><span class="pre">ADDR1=NC,ADDR0=NC</span></code></p></td>
+<td><p>LTC2992</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Only for AD40xx/ADAQ40xx</p>
 </div>
 </section>
 <section id="spi-connections">
@@ -593,10 +588,45 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>PL</p></td>
-<td><p>axi_spi_engine</p></td>
-<td><p>PulSAR_ADC</p></td>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>spi0</p></td>
+<td><p>AD9081</p></td>
 <td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>PS</p></td>
+<td><p>spi1</p></td>
+<td><p>HMC7044</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_pmod</p></td>
+<td><p>ADAR1000_CSB_1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>axi_spi_pmod</p></td>
+<td><p>ADAR1000_CSB_2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_pmod</p></td>
+<td><p>ADAR1000_CSB_3</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>axi_spi_pmod</p></td>
+<td><p>ADAR1000_CSB_4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>axi_spi_pmod</p></td>
+<td><p>LTC2314</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>axi_spi_fmc</p></td>
+<td><p>ADF4371</p></td>
+<td><p>6</p></td>
 </tr>
 </tbody>
 </table>
@@ -604,55 +634,183 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
-<p>The Software GPIO number is calculated as follows:</p>
-<ul class="simple">
-<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
-</ul>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 34.8%" />
-<col style="width: 21.7%" />
-<col style="width: 21.7%" />
-<col style="width: 21.7%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
 <th class="head"><p>HDL GPIO EMIO</p></th>
 <th class="head"><p>Software GPIO</p></th>
 </tr>
-<tr class="row-even"><th class="head"></th>
+<tr class="row-even"><th class="head"><p>—</p></th>
 <th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-</tr>
-<tr class="row-odd"><th class="head"><p>pulsar_gpio[0] (PD)*</p></th>
-<th class="head"><p>INOUT</p></th>
-<th class="head"><p>32</p></th>
-<th class="head"><p>86</p></th>
+<th class="head"><p>—</p></th>
+<th class="head"><p>Zynq MP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>pulsar_gpio[1] (TURBO)**</p></td>
-<td><p>INOUT</p></td>
-<td><p>33</p></td>
-<td><p>87</p></td>
+<tr class="row-odd"><td><p>gpio_o_86_ms</p></td>
+<td><p>OUT</p></td>
+<td><p>86</p></td>
+<td><p>163</p></td>
 </tr>
-<tr class="row-odd"><td><p>pulsar_gpio[2] (SDO - SPI_OP_MODE=2)**</p></td>
+<tr class="row-even"><td><p>gpio_o_85_ms</p></td>
+<td><p>OUT</p></td>
+<td><p>85</p></td>
+<td><p>162</p></td>
+</tr>
+<tr class="row-odd"><td><p>pmod0_6_6_RX_LOAD</p></td>
+<td><p>OUT</p></td>
+<td><p>84</p></td>
+<td><p>161</p></td>
+</tr>
+<tr class="row-even"><td><p>pmod0_5_4_TX_LOAD</p></td>
+<td><p>OUT</p></td>
+<td><p>83</p></td>
+<td><p>160</p></td>
+</tr>
+<tr class="row-odd"><td><p>pmod0_0_1_PA_ON</p></td>
+<td><p>OUT</p></td>
+<td><p>81</p></td>
+<td><p>159</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_o_78_ms</p></td>
+<td><p>OUT</p></td>
+<td><p>78</p></td>
+<td><p>155</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_imu_rst</p></td>
+<td><p>OUT</p></td>
+<td><p>77</p></td>
+<td><p>154</p></td>
+</tr>
+<tr class="row-even"><td><p>tdd_sync</p></td>
+<td><p>IN</p></td>
+<td><p>76</p></td>
+<td><p>153</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_imu_gpio2</p></td>
 <td><p>INOUT</p></td>
-<td><p>34</p></td>
-<td><p>88</p></td>
+<td><p>75</p></td>
+<td><p>152</p></td>
+</tr>
+<tr class="row-even"><td><p>fmc_bob_xud1_imu_gpio1</p></td>
+<td><p>INOUT</p></td>
+<td><p>74</p></td>
+<td><p>151</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_imu_gpio0</p></td>
+<td><p>INOUT</p></td>
+<td><p>73</p></td>
+<td><p>150</p></td>
+</tr>
+<tr class="row-even"><td><p>fmc_bob_xud1_gpio5</p></td>
+<td><p>INOUT</p></td>
+<td><p>72</p></td>
+<td><p>149</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_gpio4</p></td>
+<td><p>INOUT</p></td>
+<td><p>71</p></td>
+<td><p>148</p></td>
+</tr>
+<tr class="row-even"><td><p>fmc_bob_xud1_gpio3</p></td>
+<td><p>INOUT</p></td>
+<td><p>70</p></td>
+<td><p>147</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_gpio2</p></td>
+<td><p>INOUT</p></td>
+<td><p>69</p></td>
+<td><p>146</p></td>
+</tr>
+<tr class="row-even"><td><p>fmc_bob_xud1_gpio1</p></td>
+<td><p>INOUT</p></td>
+<td><p>68</p></td>
+<td><p>145</p></td>
+</tr>
+<tr class="row-odd"><td><p>fmc_bob_xud1_gpio0</p></td>
+<td><p>INOUT</p></td>
+<td><p>67</p></td>
+<td><p>144</p></td>
+</tr>
+<tr class="row-even"><td><p>fpga_syncout_1_n</p></td>
+<td><p>INOUT</p></td>
+<td><p>63</p></td>
+<td><p>141</p></td>
+</tr>
+<tr class="row-odd"><td><p>fpga_syncout_1_p</p></td>
+<td><p>INOUT</p></td>
+<td><p>62</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-even"><td><p>fpga_syncin_1_n</p></td>
+<td><p>INOUT</p></td>
+<td><p>61</p></td>
+<td><p>139</p></td>
+</tr>
+<tr class="row-odd"><td><p>fpga_syncin_1_p</p></td>
+<td><p>INOUT</p></td>
+<td><p>60</p></td>
+<td><p>138</p></td>
+</tr>
+<tr class="row-even"><td><p>txen[1:0]</p></td>
+<td><p>OUT</p></td>
+<td><p>59:58</p></td>
+<td><p>137:136</p></td>
+</tr>
+<tr class="row-odd"><td><p>rxen[1:0]</p></td>
+<td><p>OUT</p></td>
+<td><p>57:56</p></td>
+<td><p>135:134</p></td>
+</tr>
+<tr class="row-even"><td><p>rstb</p></td>
+<td><p>OUT</p></td>
+<td><p>55</p></td>
+<td><p>133</p></td>
+</tr>
+<tr class="row-odd"><td><p>hmc_sync</p></td>
+<td><p>OUT</p></td>
+<td><p>54</p></td>
+<td><p>132</p></td>
+</tr>
+<tr class="row-even"><td><p>irqb[1:0]</p></td>
+<td><p>IN</p></td>
+<td><p>53:52</p></td>
+<td><p>131:130</p></td>
+</tr>
+<tr class="row-odd"><td><p>agc3[1:0]</p></td>
+<td><p>IN</p></td>
+<td><p>51:50</p></td>
+<td><p>129:128</p></td>
+</tr>
+<tr class="row-even"><td><p>agc2[1:0]</p></td>
+<td><p>IN</p></td>
+<td><p>49:48</p></td>
+<td><p>127:126</p></td>
+</tr>
+<tr class="row-odd"><td><p>agc1[1:0]</p></td>
+<td><p>IN</p></td>
+<td><p>47:46</p></td>
+<td><p>125:124</p></td>
+</tr>
+<tr class="row-even"><td><p>agc0[1:0]</p></td>
+<td><p>IN</p></td>
+<td><p>45:44</p></td>
+<td><p>123:122</p></td>
+</tr>
+<tr class="row-odd"><td><p>hmc_gpio1</p></td>
+<td><p>INOUT</p></td>
+<td><p>43</p></td>
+<td><p>121</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio[10:0]</p></td>
+<td><p>INOUT</p></td>
+<td><p>42:32</p></td>
+<td><p>120:110</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for PulSAR_ADC_PMDZ projects</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for FMC_N_PMOD=1 (AD40xx)</p></li>
-</ul>
 </div>
 </section>
 <section id="interrupts">
@@ -663,20 +821,45 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
 <th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_pulsar_adc_dma</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
+<tr class="row-even"><td><p>axi_spi_pmod</p></td>
+<td><p>15</p></td>
+<td><p>111</p></td>
+<td><p>143</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_pulsar_adc</p></td>
+<tr class="row-odd"><td><p>axi_iic_pmod</p></td>
+<td><p>14</p></td>
+<td><p>110</p></td>
+<td><p>142</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_mxfe_rx_dma</p></td>
+<td><p>13</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_mxfe_tx_dma</p></td>
 <td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
+<td><p>108</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_mxfe_rx_jesd</p></td>
+<td><p>11</p></td>
+<td><p>107</p></td>
+<td><p>139</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_mxfe_tx_jesd</p></td>
+<td><p>10</p></td>
+<td><p>106</p></td>
+<td><p>138</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_spi_fmc</p></td>
+<td><p>9</p></td>
+<td><p>105</p></td>
+<td><p>137</p></td>
 </tr>
 </tbody>
 </table>
@@ -691,91 +874,70 @@ ADI distributes the bit/elf files of these projects as part of the
 If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
-the HDL repository, and then build the project as follows:.</p>
+the HDL repository.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/pulsar_adc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/pulsar_adc/zed$ make FMC_N_PMOD=1 SPI_OP_MODE=0
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad9081_fmca_ebz_x_band/zcu102$ make
 </pre></div>
-</div>
-<p>Build examples:</p>
-<p>Zedboard Pmod support</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">0</span>
-</pre></div>
-</div>
-<p>Zedboard standard configuration FMC support (default)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">0</span> <span class="o">-</span> <span class="n">builds</span> <span class="n">standard</span> <span class="n">FMC</span> <span class="n">version</span>
-</pre></div>
-</div>
-<p>Zedboard FMC support for AD7944 4-wire mode (“multi”)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">1</span>
-</pre></div>
-</div>
-<p>Zedboard FMC support for AD7944 chain mode or 3-wire “single”</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">2</span>
-</pre></div>
-</div>
-<p>The result of the build, if parameters were used, will be in a folder named
-by the used configuration. If the following command was run</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">FMC_N_PMOD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SPI_OP_MODE</span><span class="o">=</span><span class="mi">0</span>
-</pre></div>
-</div>
-<p>then the folder name will be:</p>
-<p><code class="docutils literal notranslate"><span class="pre">FMC_N_PMOD1_SPI_OP_MODE0</span></code></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For the CoraZ7S-based projects, the build is donw without parameters!</p>
 </div>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All the details regarding the build parameters can be found on the
+<a class="reference internal" href="../ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9081/AD9082/AD9986/AD9988 HDL project page</span></a></p>
+</div>
+</section>
+<section id="software-considerations">
+<h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading">#</a></h2>
+<p>When trying to capture a large amount of data make sure to increase the
+max_block_size by using the steps described on the
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/libiio_tips_tricks">IIO System Considerations Tips &amp; Tricks page</a>.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<section id="systems-related">
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/stingray/userguide">[Wiki] ADAR1000EVAL1Z (STINGRAY) ANALOG BEAMFORMING FRONT-END</a></p></li>
+</ul>
+</section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
-<p>Datasheets for PulSAR with PMOD connector:</p>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7942">AD7942</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7946">AD7946</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-1">AD7988-1</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7685">AD7685</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7687">AD7687</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7691">AD7691</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7686">AD7686</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7688">AD7688</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7693">AD7693</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7988-5">AD7988-5</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7980">AD7980</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7983">AD7983</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7690">AD7690</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7982">AD7982</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7984">AD7984</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf">UG-682, Evaluation Board User Guide</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-340.pdf">UG-340, Evaluation Board User Guide</a></p></li>
+<li><p>Product datasheets:</p>
+<ul>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAR1000">ADAR1000</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADTR1107">ADTR1107</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC652LP2E">HMC652LP2E</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC773ALC3B">HMC773ALC3B</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADL8111">ADL8111</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC8411">HMC8411</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC963">HMC963</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC383LC4">HMC383LC4</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4371">ADF4371</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRF5020">ADRF5020</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/HMC903LP3E">HMC903LP3E</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LT8653S">LT8653S</a></p></li>
 </ul>
-<p>Datasheets PulSAR with FMC connector:</p>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4003">AD4003</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4007">AD4007</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4011">AD4011</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4020">AD4020</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4003">ADAQ4003</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/UG-1042.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf">UG-1042, Evaluation Board User Guide</a></p></li>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/x-band-platform/hardware">[Wiki] X-Band Platform Hardware</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/stingray">ADAR1000EVAL1Z (Stingray)</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/xud1a">ADXUD1AEBZ</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/pulsar_adc">pulsar_adc HDL project source code</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/pulsar_adc_pmods_hdl">[Wiki] PulSAR ADC PMOD HDL start guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">[Wiki] PulSAR ADC PMOD quick start guide</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods">[Wiki] AD40xx/ADAQ40xx quick start guide</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz_x_band">AD9081_FMCA_EBZ_X_BAND HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 30.0%" />
-<col style="width: 40.0%" />
-<col style="width: 30.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>IP name</p></th>
@@ -784,74 +946,121 @@ by the used configuration. If the following command was run</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a> *</p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a> *</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_PWM_GEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a> *</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_SYSID</p></td>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
+<tr class="row-even"><td><p>AXI_TDD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd">library/axi_tdd</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SPI_ENGINE_EXECUTION</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
+<tr class="row-odd"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload">library/data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
+<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SPI_ENGINE_OFFLOAD</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
+<tr class="row-odd"><td><p>JESD204_TPL_DACm</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SYSID_ROM</p></td>
+<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_rx">library/jesd204/jesd204_rx</a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>JESD204_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_rx">library/jesd204/jesd204_rx</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_VERSAL_GT_ADAPTER_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_rx">library/jesd204/jesd204_versal_gt_adapter_rx</a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>JESD204_VERSAL_GT_ADAPTER_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/jesd204_versal_gt_adapter_tx">library/jesd204/jesd204_versal_gt_adapter_tx</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a> *</p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>UTIL_ADCFIFO</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo">library/util_adcfifo</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_DACFIFO</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dacfifo">library/util_dacfifo</a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_DO_RAM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_do_ram">library/util_do_ram</a></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_HBM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_hbm">library/util_hbm</a></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for AD40xx/ADAQ40xx</p>
-</div>
 <ul class="simple">
-<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds">[Wiki] Generic JESD204B block designs</a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
 </ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad_pulsar.c">PulSAR ADC PMDZ Linux driver source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad400x.c">AD40xx/ADAQ40xx Linux driver source code</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/x-band-platform/software">[Wiki] X-Band Platform Software</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a></p></li>
+<li><p>Stingray devicetrees:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts">zynqmp-zcu102-rev10-stingray-vcxo100.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts">zynqmp-zcu102-rev10-stingray.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-direct-clk.dts">zynqmp-zcu102-rev10-stingray-direct-clk.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts">zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts</a></p></li>
+</ul>
+</li>
+<li><p>Python support:</p>
+<ul>
+<li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html">AD9081 class documentation</a></p></li>
+<li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/">PyADI-IIO documentation</a></p></li>
+</ul>
+</li>
 </ul>
 </section>
 </section>
@@ -887,8 +1096,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../max96724/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">MAX96724 HDL project</a>
-    <a href="../pulsar_lvds/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">PULSAR-LVDS HDL project</a>
+    <a href="../ad9081_fmca_ebz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD9081/AD9082/AD9986/AD9988 HDL project</a>
+    <a href="../ad9265_fmc/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD9265-FMC HDL project</a>
               </div>
           
         </div>

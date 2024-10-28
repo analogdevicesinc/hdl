@@ -7,7 +7,7 @@
 
     <title>JESD204B/C Link Receive Peripheral &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=3e3e1b4d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=95305861" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
@@ -345,6 +345,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9213_evb/index.html">AD9213-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
@@ -1820,7 +1821,7 @@ Available starting from version 1.07.a;</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1CV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pending and enabled interrupts.</p>
@@ -1835,7 +1836,7 @@ Available starting from version 1.07.a;</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1CV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>Pending interrupts.</p>
@@ -1910,7 +1911,7 @@ Available starting from version 1.07.a;</p>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[20:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LINK_CLK_FREQ</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
 <p>Ratio of the link_clk frequency relative to the s_axi_aclk. Format is 16.16.</p>
@@ -1925,7 +1926,7 @@ Available starting from version 1.07.a;</p>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[20:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEVICE_CLK_FREQ</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><p></p></td>
 <td class="description"><section>
 <p>Ratio of the device_clk frequency relative to the s_axi_aclk. Format is 16.16.
@@ -2011,7 +2012,7 @@ Available starting from version 1.07.a;</p>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_ALIGNMENT_ERROR</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1CV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that an external SYSREF event has been observed that was unaligned to a previously
@@ -2022,7 +2023,7 @@ observed event.</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYSREF_DETECTED</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RW1C-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1CV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Indicates that an external SYSREF event has been observed.</p>
@@ -2350,7 +2351,7 @@ Valid for 8B/10B encoder.</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS_STATE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <ul class="simple">
@@ -2417,7 +2418,7 @@ Valid for 8B/10B encoder.</p>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ILAS_READY</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>ILAS configuration data received.</p>
@@ -2427,7 +2428,7 @@ Valid for 8B/10B encoder.</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IFS_READY</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>Frame synchronization state.</p>
@@ -2444,7 +2445,7 @@ Valid for 8B/10B encoder.</p>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[1:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CGS_STATE</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
 <p>State of the lane code group synchronization. (0 = INIT, 1 = CHECK, 2 = DATA)</p>
@@ -2469,7 +2470,7 @@ Valid for 8B/10B encoder.</p>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[13:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LATENCY</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">RO-V</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ROV</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
 <td class="description"><section>
 <p>For 8b10b mode: represents the lane latency in octets;
