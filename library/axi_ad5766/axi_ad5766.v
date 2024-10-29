@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -112,7 +112,11 @@ module axi_ad5766 #(
 
   input                                 ctrl_enable,
   output                                ctrl_enabled,
-  input                                 ctrl_mem_reset
+  input                                 ctrl_mem_reset,
+
+  // SPI engine interconnect interface
+
+   output interconnect_dir
 );
 
   // internal wires
@@ -186,6 +190,8 @@ module axi_ad5766 #(
     wire ctrl_is_enabled;
     reg spi_enabled = 1'b0;
 
+    assign interconnect_dir = spi_enabled;
+
     always @(posedge ctrl_clk) begin
         if (ctrl_enable == 1'b1) begin
                 ctrl_do_enable <= 1'b1;
@@ -231,6 +237,7 @@ module axi_ad5766 #(
     assign spi_enable_s = ctrl_enable;
     assign ctrl_enabled = spi_enable_s | spi_active;
     assign spi_mem_reset_s = ctrl_mem_reset;
+    assign interconnect_dir = ctrl_enabled;
   end endgenerate
 
   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
