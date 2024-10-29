@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -35,6 +35,10 @@ ad_ip_parameter INTERFACE_TYPE INTEGER 0 false [list \
   ALLOWED_RANGES {"0:AXIS" "1:FIFO"} \
 ]
 
+ad_ip_parameter PARALLEL_OR_SERIAL_N INTEGER 0 true [list \
+  DISPLAY_NAME "Parallel prefix sum calculation" \
+  ALLOWED_RANGES {"0:Serial" "1:Parallel"} \
+]
 
 # defaults
 
@@ -91,4 +95,3 @@ proc util_upack_elab {} {
     set_interface_property dac_ch_${n} associatedReset ""
   }
 }
-
