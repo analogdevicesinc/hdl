@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,7 +38,8 @@
 module util_upack2_impl #(
   parameter NUM_OF_CHANNELS = 4,
   parameter SAMPLES_PER_CHANNEL = 1,
-  parameter SAMPLE_DATA_WIDTH = 16
+  parameter SAMPLE_DATA_WIDTH = 16,
+  parameter PARALLEL_OR_SERIAL_N = 0
 ) (
   input clk,
   input reset,
@@ -92,7 +93,8 @@ module util_upack2_impl #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
     .SAMPLES_PER_CHANNEL (SAMPLES_PER_CHANNEL),
     .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
-    .PACK (0)
+    .PACK (0),
+    .PARALLEL_OR_SERIAL_N (PARALLEL_OR_SERIAL_N)
   ) i_pack_shell (
     .clk (clk),
     .reset (reset),

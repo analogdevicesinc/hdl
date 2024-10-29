@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -39,6 +39,7 @@ foreach {k v} { \
   "NUM_OF_CHANNELS" "Number of Channels" \
   "SAMPLES_PER_CHANNEL" "Samples per Channel" \
   "SAMPLE_DATA_WIDTH" "Sample Width" \
+  "PARALLEL_OR_SERIAL_N" "Parallel prefix sum calculation" \
   } { \
   set p [ipgui::get_guiparamspec -name $k -component $cc]
 #  ipgui::move_param -component $cc -order $i $p -parent $
