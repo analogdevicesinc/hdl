@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Support &#8212; HDL  documentation</title>
+    <title>AD77681EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,6 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AD777X-ARDZ HDL project" href="../ad777x_ardz/index.html" />
+    <link rel="prev" title="AD7768-EVB HDL project" href="../ad7768evb/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -99,7 +101,32 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">Support</a></li>
+<li><a class="reference internal" href="#">AD77681EVB HDL project</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
+<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#systems-related">Systems related</a></li>
+<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
+<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
+<li><a class="reference internal" href="#software-related">Software related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
 </ul>
 
         </nav>
@@ -240,8 +267,8 @@ Content on this topic
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad3552r_evb/index.html">AD3552R-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
@@ -262,7 +289,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD7768-1-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
@@ -304,8 +331,352 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="support">
-<h1>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h1>
+  <section id="ad77681evb-hdl-project">
+<span id="ad77681evb"></span><h1>AD77681EVB HDL project<a class="headerlink" href="#ad77681evb-hdl-project" title="Permalink to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a>/<a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1">ADAQ7768-1</a> is a low power, high performance, Σ-Δ
+analog-to-digital converter (ADC), with a Σ-Δ modulator and digital filter for
+precision conversion of both AC and DC signals. The <a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a> is a single
+channel version of the AD7768, an 8-channel, simultaneously sampling, Σ-Δ ADC.
+The <a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a> provides a single configurable and reusable data acquisition
+footprint, which establishes a new industry standard in combined AC and DC
+performance and enables instrumentation and industrial system designers to design
+across multiple measurement variants for both isolated and nonisolated
+applications.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a> achieves a 108.5 dB dynamic range when using the low ripple,
+finite impulse response (FIR) digital filter at 256 kSPS, giving 110.8 kHz input
+bandwidth (BW), combined with ±1.1 ppm integral nonlinearity (INL), ±30 µV
+offset error, and ±30 ppm gain error. Wider bandwidth, up to 500 kHz Nyquist,
+204 kHz, −3 dB, is available using the sinc5 filter, enabling a view of signals
+over an extended range.</p>
+<p>A 1.024 MHz sinc5 filter path exists for users seeking an even higher output
+data rate. This path is quantization noise limited; therefore, it is best suited
+for customers requiring minimum latency for control loops or implementing custom
+digital filtering on an external field programmable gate array (FPGA) or digital
+signal processor (DSP).</p>
+</section>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7768-1">EVAL-AD7768-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ7768-1">EVAL-ADAQ7768-1</a></p></li>
+</ul>
+</section>
+<section id="supported-devices">
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1">ADAQ7768-1</a></p></li>
+</ul>
+</section>
+<section id="supported-carriers">
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on FMC slot</p></li>
+</ul>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
+<p>The data path and clock domains are depicted in the below diagram:</p>
+<a class="reference internal image-reference" href="../../_images/ad77681evb_hdl.svg"><img alt="AD77681EVB HDL block diagram" class="align-center" src="../../_images/ad77681evb_hdl.svg" width="800" /></a>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>spi_adc_axi_regmap</p></td>
+<td><p>0x44A0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_ad77681_dma</p></td>
+<td><p>0x44A3_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>spi_clkgen</p></td>
+<td><p>0x44A7_0000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_fmc</p></td>
+<td><p>axi_iic_fmc</p></td>
+<td><p>0x4162_0000</p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>iic_main</p></td>
+<td><p>axi_iic_main</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="spi-connections">
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>SPI type</p></th>
+<th class="head"><p>SPI manager instance</p></th>
+<th class="head"><p>SPI subordinate</p></th>
+<th class="head"><p>CS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>spi_ad77681</p></td>
+<td><p>ad77681</p></td>
+<td><p>0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<p>The Software GPIO number is calculated as follows:</p>
+<ul class="simple">
+<li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq-7000</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>ad77681_reset</p></td>
+<td><p>OUT</p></td>
+<td><p>32</p></td>
+<td><p>86</p></td>
+</tr>
+<tr class="row-even"><td><p>ad77681_sync_out</p></td>
+<td><p>INOUT</p></td>
+<td><p>33</p></td>
+<td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>ad77681_sync_in</p></td>
+<td><p>INOUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>ad77681_gpio</p></td>
+<td><p>INOUT</p></td>
+<td><p>35-38</p></td>
+<td><p>89-92</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux Zynq</p></th>
+<th class="head"><p>Actual Zynq</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_ad77681_dma</p></td>
+<td><p>13</p></td>
+<td><p>57</p></td>
+<td><p>89</p></td>
+</tr>
+<tr class="row-odd"><td><p>spi_ad77681/axi_regmap</p></td>
+<td><p>12</p></td>
+<td><p>56</p></td>
+<td><p>88</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="building-the-hdl-project">
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
+<p>The design is built upon ADI’s generic HDL reference design framework.
+ADI distributes the bit/elf files of these projects as part of the
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
+If you want to build the sources, ADI makes them available on the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the HDL repository, and then build the project as follows:</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad77681evb/zed
+<span class="linenos">2</span>user@analog:~/hdl/projects/ad77681evb/zed$ make
+</pre></div>
+</div>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<section id="systems-related">
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ev-ad7768-1fmcz-ug-1260.pdf">UG-1260, User Guide | EV-AD7768-1FMCZ</a></p></li>
+</ul>
+</section>
+<section id="hardware-related">
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Product datasheets:</p>
+<ul>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-1">AD7768-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ7768-1">ADAQ7768-1</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="hdl-related">
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad77681evb">ad77681evb HDL project source code</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad7768-1">[Wiki] AD7768-1 User Guide</a></p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Source code link</p></th>
+<th class="head"><p>Documentation link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_SPI_ENGINE</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_EXECUTION</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SPI_ENGINE_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine Framework documentation</span></a></p></li>
+</ul>
+</section>
+<section id="software-related">
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7768-1.c">AD7768-1 Linux driver source code</a></p></li>
+<li><p>AD7768-1 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-ad7768-1-evb.dts">zynq-zed-adv7511-ad7768-1-evb.dts</a></p></li>
+<li><p>ADAQ7768-1 Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-adaq7768-1-evb.dts">zynq-zed-adv7511-adaq7768-1-evb.dts</a></p></li>
+</ul>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
@@ -318,6 +689,7 @@ on the <a class="icon ez reference external" href="https://ez.analog.com/linux-s
 <p>It should be noted, that the older the tools’ versions and release branches
 are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
 </section>
+</section>
 
     <script type="text/javascript">
         function init() {
@@ -329,8 +701,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <div></div>
-    <div></div>
+    <a href="../ad7768evb/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD7768-EVB HDL project</a>
+    <a href="../ad777x_ardz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD777X-ARDZ HDL project</a>
               </div>
           
         </div>
