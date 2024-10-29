@@ -65,6 +65,7 @@ module pack_shell #(
 
   localparam TOTAL_DATA_WIDTH = CHANNEL_DATA_WIDTH * NUM_OF_CHANNELS;
   localparam NUM_OF_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
+  localparam LOG2_NUM_OF_SAMPLES = $clog2(NUM_OF_SAMPLES);
 
   /*
    * Reset and control signals for the state machine. Data and control have
@@ -193,7 +194,7 @@ module pack_shell #(
        * Samples are interleaved, so the sample mask is just the channel mask
        * concatenated with itself SAMPLES_PER_CHANNEL times.
        */
-      assign samples_enable = {SAMPLES_PER_CHANNEL{enable_int}};
+      assign samples_enable = {SAMPLES_PER_CHANNEL{~enable_int}};
 
       /*
        * Control pipeline is active and should compute the next state either
@@ -201,12 +202,45 @@ module pack_shell #(
        */
       assign ce_ctrl = startup_ctrl | ce;
 
+      /*
+       * Calculate the prefix sum using a vectorized approach.
+       * This way we should have at most log2(NUM_OF_SAMPLES)
+       * adders in series for the rightmost element and even less
+       * for the elements before it since we just propagate it to
+       * the last row from where it was calculated.
+       */
+      wire [SAMPLE_ADDRESS_WIDTH-1:0] prefix_count_tmp[0:LOG2_NUM_OF_SAMPLES+1][0:NUM_OF_SAMPLES-1];
+
+      /* Copy the samples_enable to the first row to make addressing it easier */
+      genvar j;
+      for (j = 0; j < NUM_OF_SAMPLES; j = j + 1) begin
+        assign prefix_count_tmp[0][j] = samples_enable[j];
+      end
+
+      /*
+      * E.g: for samples_enable = '1 1 1 1 1 1 1 1':
+      * prefix_count_tmp[0] = '1 1 1 1 1 1 1 1' (copy of samples_enable)
+      * prefix_count_tmp[1] = '1 2 2 2 2 2 2 2'
+      * prefix_count_tmp[2] = '1 2 3 4 4 4 4 4'
+      * prefix_count_tmp[3] = '1 2 3 4 5 6 7 8'
+      */
+      genvar k;
+      for (j = 1; j < LOG2_NUM_OF_SAMPLES + 1; j = j + 1) begin
+        for (k = 0; k < NUM_OF_SAMPLES; k = k + 1) begin
+          if (k < 2 ** (j-1)) begin
+            assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k];
+          end else begin
+            assign prefix_count_tmp[j][k] = prefix_count_tmp[j-1][k] + prefix_count_tmp[j-1][k - 2 ** (j-1)];
+          end
+        end
+      end
+
       /* First channel has no other channels before it */
       assign prefix_count_s[0] = 'h0;
 
       genvar i;
       for (i = 0; i < NUM_OF_SAMPLES; i = i + 1) begin: gen_prefix_count
-        assign prefix_count_s[i+1] = prefix_count_s[i] + (samples_enable[i] ? 1'b0 : 1'b1);
+        assign prefix_count_s[i+1] = prefix_count_tmp[LOG2_NUM_OF_SAMPLES][i];
 
         if (i < 2 || NUM_OF_CHANNELS <= 2) begin
           /* This will only be one bit, no need to register it */
