@@ -9,10 +9,10 @@
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # JESD204B interface configuration parameters
-set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)
-set RX_NUM_OF_CONVERTERS 2
-set RX_SAMPLES_PER_FRAME 1
-set RX_SAMPLE_WIDTH 16
+set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)  ; # L
+set RX_NUM_OF_CONVERTERS 2                         ; # M
+set RX_SAMPLES_PER_FRAME 1                         ; # S
+set RX_SAMPLE_WIDTH 16                             ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr ($RX_NUM_OF_LANES*32) / ($RX_NUM_OF_CONVERTERS*$RX_SAMPLE_WIDTH)] ; # (L * 32) / (M * N)
 
