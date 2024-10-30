@@ -31,6 +31,7 @@ Contents
    AD57XX-ARDZ <ad57xx_ardz/index>
    AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
+   AD6676EVB <ad6676evb/index>
    AD7124-4-ASDZ/AD7124-8-ASDZ <ad7124_asdz/index>
    AD7134-FMC <ad7134_fmc/index>
    AD719X-ASDZ <ad719x_asdz/index>
