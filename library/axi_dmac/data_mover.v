@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -96,13 +96,10 @@ module data_mover #(
   reg active = 1'b0;
   reg last_eot = 1'b0;
   reg last_non_eot = 1'b0;
-
   reg needs_sync = 1'b0;
-  wire has_sync = ~needs_sync | s_axi_sync;
 
-  wire s_axi_sync_valid = has_sync & s_axi_valid;
+  wire has_sync;
   wire transfer_abort_s;
-
   wire last_load;
   wire last;
   wire early_tlast;
@@ -110,14 +107,14 @@ module data_mover #(
   assign xfer_req = active;
 
   assign response_id = id;
-
   assign source_id = id;
   assign source_eot = eot || early_tlast;
-
   assign last = eot ? last_eot : last_non_eot;
 
-  assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s;
-  assign m_axi_valid = s_axi_sync_valid & s_axi_ready;
+  assign has_sync = ~needs_sync | s_axi_sync;
+
+  assign s_axi_ready = (pending_burst & active) & ~transfer_abort_s & has_sync;
+  assign m_axi_valid = s_axi_valid & s_axi_ready;
   assign m_axi_data = s_axi_data;
   assign m_axi_last = last || early_tlast;
   assign m_axi_partial_burst = early_tlast;
