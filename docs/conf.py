@@ -40,6 +40,10 @@ validate_links = False
 todo_include_todos = True
 todo_emit_warnings = True
 
+# -- WaveDrom configuration ---------------------------------------------------
+
+online_wavedrom_js_url = "https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0"
+
 # -- Options for HTML output --------------------------------------------------
 
 html_theme = 'cosmic'
