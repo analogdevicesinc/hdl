@@ -6,20 +6,24 @@ AD719X-ASDZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The AD719x family uses a low noise, higher speed, high precision ADC. They 
-can be used in a wide range of applications where the input signals can vary 
-from the milli-volt to volt level. The parts also operate with a wide range of 
-output data rates while still maintaining excellent noise performance over the 
-complete rate of output data ranges.
+The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
+:adi:`EVAL-AD7190ASDZ`, :adi:`EVAL-AD7193ASDZ` and :adi:`EVAL-AD7195ASDZ`, each
+evaluation kit featuring its own chip, the :adi:`AD7190`, :adi:`AD7193` and
+:adi:`AD7195` respectively - 4.8 kHz ultralow noise 24-bit sigma-delta ADC,
+each with its own particularities.
+
+The on-chip low noise gain stage means that signals of small amplitude can
+interface directly to the ADC. The internal clock option provides a compact
+solution for low BW requirements.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7190`
-- :adi:`EVAL-AD7192`
-- :adi:`EVAL-AD7193`
-- :adi:`EVAL-AD7194`
-- :adi:`EVAL-AD7195`
+- :adi:`EVAL-AD7190ASDZ`
+- :adi:`EVAL-AD7192ASDZ`
+- :adi:`EVAL-AD7193ASDZ`
+- :adi:`EVAL-AD7194ASDZ`
+- :adi:`EVAL-AD7195ASDZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -39,37 +43,37 @@ Supported carriers
 
    * - Evaluation board
      - Carrier
-     - Slot
-   * - :adi:`EVAL-AD7190 <EVAL-AD7190>`
-     - Cora-Z7S_ 
-     - PMOD JA
+     - Connector
+   * - :adi:`EVAL-AD7190ASDZ`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - PMOD JA/Arduino shield
    * -
-     - De10-Nano_ 
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
-   * - :adi:`EVAL-AD7192 <EVAL-AD7192>`
-     - Cora-Z7S_ 
-     - PMOD JA
+   * - :adi:`EVAL-AD7192ASDZ`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - PMOD JA/Arduino shield
    * -
-     - De10-Nano_ 
-     - Arduino shield        
-   * - :adi:`EVAL-AD7193 <EVAL-AD7193>`
-     - Cora-Z7S_
-     - PMOD JA
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - Arduino shield
+   * - :adi:`EVAL-AD7193ASDZ`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - PMOD JA/Arduino shield
    * -
-     - De10-Nano_ 
-     - Arduino shield     
-   * - :adi:`EVAL-AD7194 <EVAL-AD7194>`
-     - Cora-Z7S_ 
-     - PMOD JA
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - Arduino shield
+   * - :adi:`EVAL-AD7194ASDZ`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - PMOD JA/Arduino shield
    * -
-     - De10-Nano_ 
-     - Arduino shield    
-   * - :adi:`EVAL-AD7195 <EVAL-AD7195>`
-     - Cora-Z7S_
-     - PMOD JA
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - Arduino shield
+   * - :adi:`EVAL-AD7195ASDZ`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - PMOD JA/Arduino shield
    * -
-     - De10-Nano_ 
-     - Arduino shield     
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - Arduino shield
 
 Block design
 -------------------------------------------------------------------------------
@@ -80,9 +84,9 @@ Block diagram
 The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad719x_block_diagram.png
-   :width: 800
+   :width: 1000
    :align: center
-   :alt: AD719x/CORAZ7S block diagram
+   :alt: AD719x/CoraZ7S block diagram
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,6 +104,34 @@ SPI connections
      - AD719x
      - 0
 
+GPIOs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 25 25 25
+   :header-rows: 2
+
+   * - GPIO signal
+     - Direction (from FPGA view)
+     - HDL GPIO EMIO
+     - Software GPIO (for Zynq-7000)
+   * - adc_syncn *
+     - OUT
+     - 33
+     - 87
+   * - adc_spi_miso_rdyn
+     - OUT
+     - 32
+     - 86
+
+.. admonition:: Legend
+   :class: note
+
+   ``*`` - ``adc_syncn`` exists all the time on the DE10-Nano project, **but**
+   on the Cora Z7S project it exists only when the project was built with
+   ``ARDZ_PMOD_N=1`` parameter (used when connecting the eval. board through
+   the Arduino header)
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -111,31 +143,52 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the project location(**projects/ad719x/coraz7s**) and run the make 
-command by typing in your command prompt:
+Cora Z7S
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+The default build configuration (``ARDZ_PMOD_N=0``) features the eval. boards
+connected to Cora Z7S through PMOD JA:
 
-   user@analog:~$ cd hdl/projects/ad719x_asdz/coraz7s
-   user@analog:~/hdl/projects/ad719x_asdz/coraz7s$ make
+.. shell::
 
-Check `this guide <resources/tools-software/linux-software/kuiper-linux>`__ on
-how to prepare your SD card with the proper boot files.
-A more comprehensive build guide can be found in the :ref:`build_hdl` user 
-guide.
+   $ cd hdl/projects/ad719x_asdz/coraz7s
+   $ make
+   # or explicitly setting the variable to 0, which is the same
+   $ make ARDZ_PMOD_N=0
 
-Software considerations 
+The other possible way to connect the supported boards to CoraZ7S, is through
+the Arduino header, for which the project needs to be built with the parameter
+``ARDZ_PMOD_N=1``.
+
+The built project will be located at hdl/projects/ad719x_asdz/coraz7s/**ARDZPMODN1**.
+
+.. shell::
+
+   $ cd hdl/projects/ad719x_asdz/coraz7s
+   $ make ARDZ_PMOD_N=1
+
+DE10-Nano
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Linux/Cygwin/WSL**
+
+The only configuration available is through the Arduino header, so this project
+is not parameterizable:
+
+.. shell::
+
+   $ cd hdl/projects/ad719x_asdz/de10nano
+   $ make
+
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+
+Software considerations
 -------------------------------------------------------------------------------
 
-The SPI communication is changed because of hardware modifications, so the 
-connection looks like this:
-
-.. image:: ad7190_asdz_pmod_diagram.svg
-   :width: 800
-   :align: center
-   :alt: AD719x/CORAZ7S pmod diagram
+The reference design when using the Arduino header, has an extra GPIO, compared
+to the other one --- the SYNCN, which is used for synchronizing multiple devices.
 
 Resources
 -------------------------------------------------------------------------------
@@ -143,19 +196,23 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7190`
-   -  :adi:`AD7193`
-   -  :adi:`AD7195`
-   -  :adi:`EVAL-AD7190`
-   -  :adi:`EVAL-AD7193`
-   -  :adi:`EVAL-AD7195`
+  - :adi:`AD7190`
+  - :adi:`AD7192`
+  - :adi:`AD7193`
+  - :adi:`AD7194`
+  - :adi:`AD7195`
+  - :adi:`EVAL-AD7190ASDZ`
+  - :adi:`EVAL-AD7192ASDZ`
+  - :adi:`EVAL-AD7193ASDZ`
+  - :adi:`EVAL-AD7194ASDZ`
+  - :adi:`EVAL-AD7195ASDZ`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD719x-FMC HDL project source code <projects/ad719x_asdz>`
+- :git-hdl:`ad719x_asdz HDL project source code <projects/ad719x_asdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -165,24 +222,24 @@ HDL related
      - Source code link
      - Documentation link
    * - axi_sysid
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
+     - :ref:`axi_sysid`
    * - sysid_rom
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :ref:`here <axi_sysid>`
-
-- :dokuwiki:`AD7193 Pmod Xilinx FPGA Reference Design <resources/fpga/xilinx/pmod/ad7193>`
+     - :git-hdl:`library/sysid_rom`
+     - :ref:`axi_sysid`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`Driver <drivers/iio/adc/ad7192.c>`
+- :git-linux:`AD719x Linux driver <drivers/iio/adc/ad7192.c>`
+- :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7190.dts>`
+- :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7193.dts>`
+- :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7195.dts>`
+- :git-no-os:`AD719x no-OS project <projects/ad719x>`
+- :git-no-os:`AD719x no-OS driver <drivers/adc/ad719x>`
 - :dokuwiki:`AD7190 - Microcontroller No-OS Driver <resources/tools-software/uc-drivers/renesas/ad7190>`
 - :dokuwiki:`Supported devices <resources/tools-software/uc-drivers/ad7193>`
 
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _Cora-Z7S: https://digilent.com/reference/programmable-logic/cora-z7/start
-.. _De10-Nano: https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html
