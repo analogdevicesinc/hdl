@@ -29,23 +29,27 @@ proc p_elaboration {} {
   set num_of_sdi [get_parameter_value NUM_OF_SDI]
   set disabled_intfs {}
 
+  # clock and reset interfaces
+
+  ad_interface clock   spi_clk     input 1
+  ad_interface resetn  spi_resetn  input 1 if_spi_clk
+
   # control interface
 
-  ad_interface clock ctrl_clk input 1
   ad_interface reset spi_resetn  input 1 if_spi_clk
 
   add_interface ctrl_cmd_wr conduit end
   add_interface_port ctrl_cmd_wr ctrl_cmd_wr_en    wre   input  1
   add_interface_port ctrl_cmd_wr ctrl_cmd_wr_data  data  input 16
 
-  set_interface_property ctrl_cmd_wr associatedClock if_ctrl_clk
+  set_interface_property ctrl_cmd_wr associatedClock if_spi_clk
   set_interface_property ctrl_cmd_wr associatedReset none
 
   add_interface ctrl_sdo_wr conduit end
   add_interface_port ctrl_sdo_wr ctrl_sdo_wr_en    wre   input  1
   add_interface_port ctrl_sdo_wr ctrl_sdo_wr_data  data  input $data_width
 
-  set_interface_property ctrl_sdo_wr associatedClock if_ctrl_clk
+  set_interface_property ctrl_sdo_wr associatedClock if_spi_clk
   set_interface_property ctrl_sdo_wr associatedReset none
 
   ad_interface signal  ctrl_enable     input  1   enable
@@ -68,9 +72,6 @@ proc p_elaboration {} {
   set_interface_property m_interconnect_ctrl associatedReset if_spi_resetn
 
   # SPI Engine interfaces
-
-  ad_interface clock   spi_clk     input 1
-  ad_interface resetn  spi_resetn  input 1 if_spi_clk
 
   ad_interface signal  trigger     input 1 if_pwm
 

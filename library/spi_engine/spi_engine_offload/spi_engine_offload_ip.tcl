@@ -85,10 +85,7 @@ adi_add_bus "m_interconnect_ctrl" "master" \
 	{ \
 		{"interconnect_dir" "interconnect_dir"} \
 	}
-adi_add_bus_clock "spi_clk" "m_interconnect_ctrl" "resetn"
-
-adi_add_bus_clock "spi_clk" "spi_engine_ctrl:offload_sdi:s_axis_sdo" "spi_resetn"
-adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
+adi_add_bus_clock "spi_clk" "m_interconnect_ctrl:spi_engine_ctrl:offload_sdi:s_axis_sdo:spi_engine_offload_ctrl" "spi_resetn"
 
 adi_set_bus_dependency "s_axis_sdo" "s_axis_sdo" \
 	"(spirit:decode(id('MODELPARAM_VALUE.SDO_STREAMING')) = 1)"
@@ -96,18 +93,6 @@ adi_set_bus_dependency "s_axis_sdo" "s_axis_sdo" \
 ## Parameter validations
 
 set cc [ipx::current_core]
-
-## ASYNC_SPI_CLK
-set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
- ] \
- [ipx::get_user_parameters ASYNC_SPI_CLK -of_objects $cc]
-set_property -dict [list \
-  "value_format" "bool" \
-  "value" "false" \
- ] \
- [ipx::get_hdl_parameters ASYNC_SPI_CLK -of_objects $cc]
 
 ## ASYNC_TRIG
 set_property -dict [list \
@@ -189,12 +174,6 @@ set_property -dict [list \
   "display_name" "Number of MISO lines" \
   "tooltip" "\[NUM_OF_SDI\] Define the number of MISO lines" \
 ] [ipgui::get_guiparamspec -name "NUM_OF_SDI" -component $cc]
-
-ipgui::add_param -name "ASYNC_SPI_CLK" -component $cc -parent $general_group
-set_property -dict [list \
-  "display_name" "Asynchronous core clock" \
-  "tooltip" "\[ASYNC_SPI_CLK\] Define the relationship between the core clock and the memory mapped interface clock" \
-] [ipgui::get_guiparamspec -name "ASYNC_SPI_CLK" -component $cc]
 
 ipgui::add_param -name "ASYNC_TRIG" -component $cc -parent $general_group
 set_property -dict [list \

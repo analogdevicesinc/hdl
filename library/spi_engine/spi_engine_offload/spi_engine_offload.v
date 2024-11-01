@@ -36,7 +36,6 @@
 `timescale 1ns/100ps
 
 module spi_engine_offload #(
-
   parameter ASYNC_SPI_CLK = 0,
   parameter ASYNC_TRIG = 0,
   parameter CMD_MEM_ADDRESS_WIDTH = 4,
@@ -45,7 +44,8 @@ module spi_engine_offload #(
   parameter NUM_OF_SDI = 1,
   parameter SDO_STREAMING = 0
 ) (
-  input ctrl_clk,
+  input spi_clk,
+  input spi_resetn,
 
   input ctrl_cmd_wr_en,
   input [15:0] ctrl_cmd_wr_data,
@@ -61,9 +61,6 @@ module spi_engine_offload #(
   output status_sync_valid,
   input status_sync_ready,
   output [7:0] status_sync_data,
-
-  input spi_clk,
-  input spi_resetn,
 
   input trigger,
 
@@ -143,9 +140,7 @@ module spi_engine_offload #(
   reg        ctrl_sync_id_load = 1'b0;
   reg [ 7:0] spi_sync_id_counter = 8'b0;
 
-  wire [ 7:0] spi_sync_id_init_s;
-
-  always @(posedge ctrl_clk) begin
+  always @(posedge spi_clk) begin
     if (ctrl_mem_reset) begin
       ctrl_sync_id_init <= 8'b0;
       ctrl_sync_id_load <= 1'b0;
@@ -159,32 +154,12 @@ module spi_engine_offload #(
     end
   end
 
-  wire spi_sync_id_load_s;
-
-  sync_event #(
-    .NUM_OF_EVENTS(1),
-    .ASYNC_CLK(1)
-  ) i_sync_sync_id_load (
-    .in_clk (ctrl_clk),
-    .in_event(ctrl_sync_id_load),
-    .out_clk(spi_clk),
-    .out_event(spi_sync_id_load_s));
-
-  sync_bits #(
-    .NUM_OF_BITS(8),
-    .ASYNC_CLK(1)
-  ) i_sync_sync_id (
-    .in_bits(ctrl_sync_id_init),
-    .out_clk(spi_clk),
-    .out_resetn(1'b1),
-    .out_bits(spi_sync_id_init_s));
-
   always @(posedge spi_clk) begin
     if (!spi_resetn) begin
       spi_sync_id_counter <= 8'b0;
     end else begin
-      if (spi_sync_id_load_s) begin
-        spi_sync_id_counter <= spi_sync_id_init_s;
+      if (ctrl_sync_id_load) begin
+        spi_sync_id_counter <= ctrl_sync_id_init;
       end else if(cmd_valid && cmd_ready && (cmd[15:8] == 8'h30)) begin
         spi_sync_id_counter <= spi_sync_id_counter + 1'b1;
       end
@@ -202,60 +177,9 @@ module spi_engine_offload #(
   assign status_sync_valid = sync_valid;
   assign sync_ready = status_sync_ready;
 
-  generate if (ASYNC_SPI_CLK) begin
-
-  /*
-   * The synchronization circuit takes care that there are no glitches on the
-   * ctrl_enabled signal. ctrl_do_enable is asserted whenever ctrl_enable is
-   * asserted, but only deasserted once the signal has been synchronized back from
-   * the SPI domain. This makes sure that we can't end up in a state where the
-   * enable signal in the SPI domain is asserted, but neither enable nor enabled
-   * is asserted in the control domain.
-   */
-
-  reg ctrl_do_enable = 1'b0;
-  wire ctrl_is_enabled;
-  reg spi_enabled = 1'b0;
-
-  assign interconnect_dir = spi_enabled;
-
-  always @(posedge ctrl_clk) begin
-    if (ctrl_enable) begin
-      ctrl_do_enable <= 1'b1;
-    end else if (ctrl_is_enabled) begin
-      ctrl_do_enable <= 1'b0;
-    end
-  end
-
-  assign ctrl_enabled = ctrl_is_enabled | ctrl_do_enable;
-
-  always @(posedge spi_clk) begin
-    spi_enabled <= spi_enable | spi_active;
-  end
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(1)
-  ) i_sync_enable (
-    .in_bits(ctrl_do_enable),
-    .out_clk(spi_clk),
-    .out_resetn(1'b1),
-    .out_bits(spi_enable));
-
-  sync_bits #(
-    .NUM_OF_BITS(1),
-    .ASYNC_CLK(1)
-  ) i_sync_enabled (
-    .in_bits(spi_enabled),
-    .out_clk(ctrl_clk),
-    .out_resetn(1'b1),
-    .out_bits(ctrl_is_enabled));
-
-  end else begin
   assign spi_enable = ctrl_enable;
   assign ctrl_enabled = spi_enable | spi_active;
   assign interconnect_dir = ctrl_enabled;
-  end endgenerate
 
   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
 
@@ -322,26 +246,26 @@ module spi_engine_offload #(
     end
   end
 
-  always @(posedge ctrl_clk) begin
+  always @(posedge spi_clk) begin
     if (ctrl_mem_reset)
       ctrl_cmd_wr_addr <= 'h00;
     else if (ctrl_cmd_wr_en)
       ctrl_cmd_wr_addr <= ctrl_cmd_wr_addr + 1'b1;
   end
 
-  always @(posedge ctrl_clk) begin
+  always @(posedge spi_clk) begin
     if (ctrl_cmd_wr_en)
       cmd_mem[ctrl_cmd_wr_addr] <= ctrl_cmd_wr_data;
   end
 
-  always @(posedge ctrl_clk) begin
+  always @(posedge spi_clk) begin
     if (ctrl_mem_reset)
       ctrl_sdo_wr_addr <= 'h00;
     else if (ctrl_sdo_wr_en)
       ctrl_sdo_wr_addr <= ctrl_sdo_wr_addr + 1'b1;
   end
 
-  always @(posedge ctrl_clk) begin
+  always @(posedge spi_clk) begin
     if (ctrl_sdo_wr_en)
       sdo_mem[ctrl_sdo_wr_addr] <= ctrl_sdo_wr_data;
   end
