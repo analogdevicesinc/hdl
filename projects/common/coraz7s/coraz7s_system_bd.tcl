@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -8,6 +8,7 @@
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
 create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_ard
 
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
@@ -59,6 +60,10 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 ad_ip_instance proc_sys_reset sys_dma_rstgen
 ad_ip_parameter sys_dma_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
+# iic (arduino sda/scl)
+
+ad_ip_instance axi_iic axi_iic_ard
+
 # system reset/clock definitions
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
@@ -92,6 +97,7 @@ ad_connect  gpio_i        sys_ps7/GPIO_I
 ad_connect  gpio_o        sys_ps7/GPIO_O
 ad_connect  gpio_t        sys_ps7/GPIO_T
 ad_connect  fixed_io      sys_ps7/FIXED_IO
+ad_connect  iic_ard       axi_iic_ard/iic
 
 # spi connections
 
@@ -131,7 +137,7 @@ ad_connect  sys_concat_intc/In15  GND
 ad_connect  sys_concat_intc/In14  GND
 ad_connect  sys_concat_intc/In13  GND
 ad_connect  sys_concat_intc/In12  GND
-ad_connect  sys_concat_intc/In11  GND
+ad_connect  sys_concat_intc/In11  axi_iic_ard/iic2intc_irpt
 ad_connect  sys_concat_intc/In10  GND
 ad_connect  sys_concat_intc/In9   GND
 ad_connect  sys_concat_intc/In8   GND
@@ -146,4 +152,5 @@ ad_connect  sys_concat_intc/In0   GND
 
 # interconnects and address mapping
 
+ad_cpu_interconnect 0x41600000 axi_iic_ard
 ad_cpu_interconnect 0x45000000 axi_sysid_0
