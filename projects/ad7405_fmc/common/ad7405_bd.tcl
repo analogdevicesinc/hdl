@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -24,12 +24,12 @@ ad_ip_parameter axi_ad7405_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-# MCLK generation
+# MCLK generation 50 MHz
 
 ad_ip_instance axi_clkgen axi_adc_clkgen
-ad_ip_parameter axi_adc_clkgen CONFIG.VCO_DIV $clkgen_vco_div
-ad_ip_parameter axi_adc_clkgen CONFIG.VCO_MUL $clkgen_vco_mul
-ad_ip_parameter axi_adc_clkgen CONFIG.CLK0_DIV [expr ($sys_cpu_clk_freq * $clkgen_vco_mul) / ($clkgen_vco_div * $ext_clk_rate)]
+ad_ip_parameter axi_adc_clkgen CONFIG.VCO_DIV 1
+ad_ip_parameter axi_adc_clkgen CONFIG.VCO_MUL 10
+ad_ip_parameter axi_adc_clkgen CONFIG.CLK0_DIV 20
 
 ad_connect adc_clk axi_adc_clkgen/clk_0
 ad_connect sys_cpu_clk axi_adc_clkgen/clk
@@ -49,4 +49,3 @@ ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect sys_cpu_clk axi_ad7405_dma/m_dest_axi
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_ad7405_dma/irq
-
