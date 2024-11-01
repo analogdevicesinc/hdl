@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -83,16 +83,12 @@ module system_top (
 
   input           otg_vbusoc,
 
-  output          adc_clk_p,
-  output          adc_clk_n,
-  input           adc_data_p,
-  input           adc_data_n
+  output          adc_clk,
+  input           adc_data
 );
 
   // internal signals
 
-  wire            adc_clk_s;
-  wire            adc_data_s;
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
@@ -106,16 +102,6 @@ module system_top (
   wire            iic_mux_sda_t_s;
 
   // instantiations
-
-  OBUFDS i_adc_clk_obuf (
-    .O (adc_clk_p),
-    .OB (adc_clk_n),
-    .I (adc_clk_s));
-
-  IBUFDS i_adc_data_ibuf (
-    .I (adc_data_p),
-    .IB (adc_data_n),
-    .O (adc_data_s));
 
   assign gpio_i[63:49] = 15'b0;
 
@@ -220,8 +206,8 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .adc_clk (adc_clk_s),
-    .adc_data (adc_data_s),
+    .adc_clk (adc_clk),
+    .adc_data (adc_data),
     .filter_decimation_ratio (decimation_ratio),
     .filter_reset (filter_reset),
     .otg_vbusoc (otg_vbusoc),
