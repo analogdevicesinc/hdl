@@ -252,40 +252,40 @@ HDL related
      - Documentation link
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
-     - :ref:`here <axi_clkgen>`
+     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
-     - :ref:`here <axi_hdmi_tx>`
+     - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
      - ---
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :ref:`here <axi_pwm_gen>`
+     - :ref:`axi_pwm_gen`
    * - AXI_SDDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - AXI_SPI_ENGINE
      - :git-hdl:`library/spi_engine/axi_spi_engine`
-     - :ref:`here <spi_engine axi>`
+     - :ref:`spi_engine axi`
    * - SPI_ENGINE_EXECUTION
      - :git-hdl:`library/spi_engine/spi_engine_execution`
-     - :ref:`here <spi_engine execution>`
+     - :ref:`spi_engine execution`
    * - SPI_ENGINE_INTERCONNECT
      - :git-hdl:`library/spi_engine/spi_engine_interconnect`
-     - :ref:`here <spi_engine interconnect>`
+     - :ref:`spi_engine interconnect`
    * - SPI_ENGINE_OFFLOAD
      - :git-hdl:`library/spi_engine/spi_engine_offload`
-     - :ref:`here <spi_engine offload>`
+     - :ref:`spi_engine offload`
    * - AXI_SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - ---

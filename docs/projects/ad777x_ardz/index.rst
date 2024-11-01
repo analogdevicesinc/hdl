@@ -246,16 +246,16 @@ HDL related
      - Documentation link
    * - AXI_AD777x
      - :git-hdl:`library/axi_ad777x`
-     - :ref:`here <axi_ad777x>`
+     - :ref:`axi_ad777x`
    * - AXI_CLKGEN*
      - :git-hdl:`library/axi_clkgen`
-     - :ref:`here <axi_clkgen>`
+     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
-     - :ref:`here <axi_hdmi_tx>`
+     - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI*
      - :git-hdl:`library/axi_i2s_adi`
      - —
@@ -264,16 +264,16 @@ HDL related
      - 	—
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_I2C_MIXER*
      - :git-hdl:`library/util_i2c_mixer`
      - 	—
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
-     - :ref:`here <util_cpack2>`
+     - :ref:`util_cpack2`
 
 .. admonition:: Legend
    :class: note

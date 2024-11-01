@@ -148,17 +148,17 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
-     - :ref:`here <axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
+     - :ref:`axi_dmac`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
-     - :ref:`here <axi_hdmi_tx>`
+     - :ref:`axi_hdmi_tx`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/sysid_rom`
+     - :ref:`axi_sysid`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

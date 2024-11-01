@@ -306,7 +306,7 @@ HDL related
      - :ref:`util_adxcvr`
    * - AXI_ADXCVR for AMD
      - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :ref:`axi_adxcvr`
+     - :ref:`axi_adxcvr amd`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
      - :ref:`axi_jesd204_rx`

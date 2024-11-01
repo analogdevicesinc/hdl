@@ -209,22 +209,22 @@ HDL related
      - Documentation link
    * - AXI_LTC2387
      - :git-hdl:`library/axi_ltc2387`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ltc2387>`
+     - :ref:`axi_ltc2387`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
-     - :ref:`here <axi_clkgen>`
+     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :ref:`here <axi_pwm_gen>`
+     - :ref:`axi_pwm_gen`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
-     - :ref:`here <axi_hdmi_tx>`
+     - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
      - —
@@ -233,7 +233,7 @@ HDL related
      - 	—
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - 	—
