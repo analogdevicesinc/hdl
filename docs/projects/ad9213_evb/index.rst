@@ -196,25 +196,25 @@ HDL related
      - Documentation link
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_ADXCVR
      - :git-hdl:`library/xilinx/util_adxcvr`
-     - :ref:`here <util_adxcvr>`
+     - :ref:`util_adxcvr`
    * - AXI_ADXCVR
      - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :ref:`here <axi_adxcvr amd>`
+     - :ref:`axi_adxcvr amd`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :ref:`here <axi_jesd204_rx>`
+     - :ref:`axi_jesd204_rx`
    * - JESD204_TPL_ADC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :ref:`here <ad_ip_jesd204_tpl_adc>`
+     - :ref:`ad_ip_jesd204_tpl_adc`
 
 -  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
 -  :ref:`jesd204`

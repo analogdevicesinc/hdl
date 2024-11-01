@@ -324,19 +324,19 @@ HDL related
      - Documentation link
    * - AXI_CLKGEN *
      - :git-hdl:`library/axi_clkgen`
-     - :ref:`here <axi_clkgen>`
+     - :ref:`axi_clkgen`
    * - AXI_HDMI_TX *
      - :git-hdl:`library/axi_hdmi_tx`
-     - :ref:`here <axi_hdmi_tx>`
+     - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI **
      - :git-hdl:`library/axi_i2s_adi`
      - ---
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/sysid_rom`
+     - :ref:`axi_sysid`
    * - AXI_SDDIF_TX *
      - :git-hdl:`library/axi_spdif_tx`
      - ---
@@ -345,7 +345,7 @@ HDL related
      - ---
    * - UTIL_MII_TO_RMII \***
      - :git-hdl:`library/util_mii_to_rmii`
-     - :ref:`here <util_mii_to_rmii>`
+     - :ref:`util_mii_to_rmii`
 
 .. admonition:: Legend
    :class: note

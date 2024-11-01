@@ -175,19 +175,19 @@ HDL related
      - Documentation link
    * - AXI_AD9783
      - :git-hdl:`library/axi_ad9783`
-     - :ref:`here <axi_ad9783>`
+     - :ref:`axi_ad9783`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
-     - :ref:`here <util_cpack2>`
+     - :ref:`util_upack2`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
