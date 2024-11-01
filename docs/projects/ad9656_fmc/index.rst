@@ -218,31 +218,31 @@ HDL related
      - Documentation link
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
-     - :ref:`here <axi_dmac>`
+     - :ref:`axi_dmac`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - AD_IP_JESD204_TPL_ADC
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
-     - :ref:`here <ad_ip_jesd204_tpl_adc>`
+     - :ref:`ad_ip_jesd204_tpl_adc`
    * - AXI_JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :ref:`here <axi_jesd204_rx>`
+     - :ref:`axi_jesd204_rx`
    * - JESD204_RX
      - :git-hdl:`library/jesd204/axi_jesd204_rx`
-     - :ref:`here <axi_jesd204_rx>`
+     - :ref:`axi_jesd204_rx`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
-     - :ref:`here <util_cpack2>`
+     - :ref:`util_cpack2`
    * - AXI_ADXCVR
      - :git-hdl:`library/xilinx/axi_adxcvr`
-     - :ref:`here <axi_adxcvr>`
+     - :ref:`axi_adxcvr`
    * - UTIL_ADXCVR
      - :git-hdl:`library/xilinx/util_adxcvr`
-     - :ref:`here <util_adxcvr>`
+     - :ref:`util_adxcvr`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

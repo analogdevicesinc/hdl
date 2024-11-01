@@ -172,32 +172,32 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_AD9265
-     - :git-hdl:`library/axi_ad9265 <library/axi_ad9265>`
-     - :ref:`here <axi_ad9265>`
+     - :git-hdl:`library/axi_ad9265`
+     - :ref:`axi_ad9265`
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac <library/axi_dmac>`
-     - :ref:`here <axi_dmac>`
+     - :git-hdl:`library/axi_dmac`
+     - :ref:`axi_dmac`
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
-     - :ref:`here <axi_clkgen>`
+     - :git-hdl:`library/axi_clkgen`
+     - :ref:`axi_clkgen`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
-     - :ref:`here <axi_hdmi_tx>`
+     - :git-hdl:`library/axi_hdmi_tx`
+     - :ref:`axi_hdmi_tx`
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx <library/axi_spdif_tx>`
+     - :git-hdl:`library/axi_spdif_tx`
      - ---
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_sysid <library/axi_i2s_adi>`
+     - :git-hdl:`library/axi_i2s_adi`
      - ---
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
+     - :ref:`axi_sysid`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/sysid_rom`
+     - :ref:`axi_sysid`
    * - UTIL_I2C_MIXER
-     - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
-     - :ref:`here <spi_engine offload>`
+     - :git-hdl:`library/util_i2c_mixer`
+     - :ref:`spi_engine offload`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

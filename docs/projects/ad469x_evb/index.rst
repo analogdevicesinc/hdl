@@ -326,7 +326,7 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_dmac`
+     - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`

@@ -277,20 +277,20 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_clkgen <library/axi_clkgen>`
-     - :ref:`here <axi_clkgen>`
+     - :git-hdl:`library/axi_clkgen`
+     - :ref:`axi_clkgen`
    * - AXI_PWM_GEN
-     - :git-hdl:`library/axi_pwm_gen <library/axi_pwm_gen>`
-     - :ref:`here <axi_pwm_gen>`
+     - :git-hdl:`library/axi_pwm_gen`
+     - :ref:`axi_pwm_gen`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid <library/axi_sysid>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/axi_sysid`
+     - :ref:`axi_sysid`
    * - CORUNDUM
-     - :git-hdl:`library/corundum <library/corundum>`
-     - :ref:`here <corundum>`
+     - :git-hdl:`library/corundum`
+     - :ref:`corundum`
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom <library/sysid_rom>`
-     - :ref:`here <axi_sysid>`
+     - :git-hdl:`library/sysid_rom`
+     - :ref:`axi_sysid`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
