@@ -106,7 +106,8 @@
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
-<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-design">Block design</a></li>
+<li><a class="reference internal" href="#cnv-signal-gating">CNV signal gating</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
@@ -238,6 +239,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI ADXCVR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clock_monitor/index.html">AXI Clock Monitor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/index.html">AXI Fan Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/index.html">AXI Laser Driver</a></li>
@@ -370,6 +372,21 @@ to interface the <a class="icon adi reference external" href="https://www.analog
 The <a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload module</span></a>, which can be used to
 capture continuous data stream at maximum data rate, is triggered by the BUSY
 signal of the device.</p>
+</section>
+<section id="cnv-signal-gating">
+<h2>CNV signal gating<a class="headerlink" href="#cnv-signal-gating" title="Permalink to this heading">#</a></h2>
+<p>The AXI PWM GEN IP core is used to drive CNV when the SPI Engine is operating in
+Offload mode along with logic gates and a few extra signals to ensure proper
+control of the signal.</p>
+<p>The AND gate has the DMA s_axis_xfer_req signal and the PWM signal as inputs.
+Since the PWM is free running, this gate is necessary to prevent the sequencer
+on the ADC from getting out of sync. When the DMA is unable to receive more
+data, the s_axis_xfer_req signal is driven low, blocking the PWM signal.</p>
+<p>Also, to exit conversion mode on the device, one extra pulse on the CNV pin is
+needed before sending the exit command, otherwise this command is ignored by the
+ADC. This feature also allows the system to read single samples using the SPI
+Engine FIFO mode. To achieve this, an OR gate is used to allow the software to
+generate CNV pulses using a GPIO signal.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
@@ -517,6 +534,11 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>IN</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio[34]</p></td>
+<td><p>OUT</p></td>
+<td><p>34</p></td>
+<td><p>88</p></td>
 </tr>
 </tbody>
 </table>
