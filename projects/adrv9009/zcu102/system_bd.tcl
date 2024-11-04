@@ -5,7 +5,7 @@
 
 set dac_data_offload_type 0                   ; ## BRAM
 set dac_data_offload_size [expr 2*1024*1024]  ; ## 2 MB
-set dac_axi_data_width 256
+set dac_axi_data_width {}
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
