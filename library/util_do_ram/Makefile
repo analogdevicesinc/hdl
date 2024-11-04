@@ -19,4 +19,8 @@ XILINX_DEPS += ../interfaces/if_do_ctrl_rtl.xml
 
 XILINX_INTERFACE_DEPS += interfaces
 
+INTEL_DEPS += ../util_axis_fifo/util_axis_fifo.v
+INTEL_DEPS += util_do_ram_constr.sdc
+INTEL_DEPS += util_do_ram_hw.tcl
+
 include ../scripts/library.mk

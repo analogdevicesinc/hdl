@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,13 +10,14 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create data_offload
 adi_ip_files data_offload [list \
-  "data_offload_sv.ttcl" \
-  "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_mem_asym.v" \
-  "$ad_hdl_dir/library/common/ad_axis_inf_rx.v" \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
   "data_offload_regmap.v" \
   "data_offload_fsm.v" \
-  "data_offload.v" ]
+  "data_offload.v" \
+  "data_offload_constr.ttcl" \
+  "data_offload_sv.ttcl" ]
 
 ## NOTE: To solve the issue AR# 70646 we need to call the following command
 ##set_property source_mgmt_mode DisplayOnly [current_project]
@@ -45,7 +46,7 @@ adi_add_bus "m_axis" "master" \
     {"m_axis_valid" "TVALID"} \
     {"m_axis_data" "TDATA"} \
     {"m_axis_last" "TLAST"} \
-    {"m_axis_tkeep" "TKEEP"} ]
+    {"m_axis_keep" "TKEEP"} ]
 
 ## source interface (e.g. TX_DMA or ADC core)
 
@@ -57,7 +58,7 @@ adi_add_bus "s_axis" "slave" \
     {"s_axis_valid" "TVALID"} \
     {"s_axis_data" "TDATA"} \
     {"s_axis_last" "TLAST"} \
-    {"s_axis_tkeep" "TKEEP"} ]
+    {"s_axis_keep" "TKEEP"} ]
 
 adi_add_bus "wr_ctrl" "master" \
   "analog.com:interface:if_do_ctrl_rtl:1.0" \
@@ -88,7 +89,7 @@ adi_add_bus "s_storage_axis" "slave" \
   [list {"s_storage_axis_ready" "TREADY"} \
     {"s_storage_axis_valid" "TVALID"} \
     {"s_storage_axis_data" "TDATA"} \
-    {"s_storage_axis_tkeep" "TKEEP"} \
+    {"s_storage_axis_keep" "TKEEP"} \
     {"s_storage_axis_last" "TLAST"}]
 
 adi_add_bus "m_storage_axis" "master" \
@@ -97,7 +98,7 @@ adi_add_bus "m_storage_axis" "master" \
   [list {"m_storage_axis_ready" "TREADY"} \
     {"m_storage_axis_valid" "TVALID"} \
     {"m_storage_axis_data" "TDATA"} \
-    {"m_storage_axis_tkeep" "TKEEP"} \
+    {"m_storage_axis_keep" "TKEEP"} \
     {"m_storage_axis_last" "TLAST"}]
 
 adi_add_bus_clock "m_axis_aclk" "s_storage_axis:m_axis" "m_axis_aresetn"
@@ -124,7 +125,7 @@ set_property -dict [list \
 
 ## Parameter validations
 
-## MEM_TPYE
+## MEM_TYPE
 set_property -dict [list \
   "value_format" "long" \
   "value_validation_type" "pairs" \
@@ -185,6 +186,7 @@ set_property -dict [list \
 ## Boolean parameters
 foreach {k v} { \
     "HAS_BYPASS" "true" \
+    "AUTO_BRINGUP" "true" \
     "DST_CYCLIC_EN" "true" \
     "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
   } { \
@@ -235,8 +237,8 @@ set_property -dict [list \
 
 ipgui::add_param -name "MEM_SIZE_LOG2" -component $cc -parent $general_group
 set_property -dict [list \
+  "widget" "comboBox" \
   "display_name" "Storage Size" \
-  "tooltip" "Log2 value of Storage Size in bytes" \
 ] [ipgui::get_guiparamspec -name "MEM_SIZE_LOG2" -component $cc]
 
 ## Transmit and receive endpoints
@@ -265,6 +267,11 @@ ipgui::add_param -name "HAS_BYPASS" -component $cc -parent $features_group
 set_property -dict [list \
   "display_name" "Internal Bypass Data Path Enabled" \
 ] [ipgui::get_guiparamspec -name "HAS_BYPASS" -component $cc]
+
+ipgui::add_param -name "AUTO_BRINGUP" -component $cc -parent $features_group
+set_property -dict [list \
+  "display_name" "Run Automatically after Bootup" \
+] [ipgui::get_guiparamspec -name "AUTO_BRINGUP" -component $cc]
 
 ipgui::add_param -name "DST_CYCLIC_EN" -component $cc -parent $features_group
 set_property -dict [list \

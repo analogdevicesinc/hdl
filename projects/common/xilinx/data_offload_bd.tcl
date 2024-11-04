@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -72,7 +72,7 @@ proc ad_data_offload_create {instance_name
       # Bridge instance for the external DDR (1) / HBM(2) memory contreller
       # NOTE: The DDR/HBM instantiation should be in project's system_bd.tcl file
       ###########################################################################
-      source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
+      source $ad_hdl_dir/library/util_hbm/scripts/util_hbm_bd.tcl
 
       ad_create_util_hbm storage_unit \
         $datapath_type \
