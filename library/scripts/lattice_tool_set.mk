@@ -20,6 +20,9 @@ ifneq ($(PROPEL_BUILDER_PATH),)
 		PROPEL_IP_LOCAL_PATHS := $(shell ${PROPEL_BUILDER} $(HDL_LIBRARY_PATH)scripts/adi_ip_paths_lattice.tcl $(HDL_LIBRARY_PATH)scripts/propel_ip_paths.pth)
 	endif
 
-	LATTICE_INTERFACE_PATH := $(word 1, $(PROPEL_IP_LOCAL_PATHS))
-	LATTICE_IP_PATH := $(word 2, $(PROPEL_IP_LOCAL_PATHS))
+	ifneq ($(PROPEL_IP_LOCAL_PATHS),)
+		LATTICE_INTERFACE_PATH := $(word 1, $(PROPEL_IP_LOCAL_PATHS))
+		LATTICE_IP_PATH := $(word 2, $(PROPEL_IP_LOCAL_PATHS))
+		PROPEL_BUILDER := tclsh
+	endif
 endif

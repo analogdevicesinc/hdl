@@ -32,7 +32,7 @@ ifneq (${LATTICE_INTERFACE_PATH},)
 	CLEAN_TARGETS += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_engine_offload_ctrl
 endif
 
-CLEAN_TARGETS += $(wildcard */)
+CLEAN_TARGETS += $(wildcard ./*/)
 CLEAN_TARGETS += interfaces_ltt.log
 
 .PHONY: all lattice clean clean-all

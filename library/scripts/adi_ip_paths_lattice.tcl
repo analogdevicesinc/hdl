@@ -13,6 +13,8 @@ foreach path $interfaces_paths_list {
             set file [open "$fpath" "w"]
             puts $file $path
             puts $file $PropelIPLocal_path
+            puts $file $env(TOOLRTF)
+            close $file
         } else {
             puts "No filepath for PropelIPLocal_path save"
         }

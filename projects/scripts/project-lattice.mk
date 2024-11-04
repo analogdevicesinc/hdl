@@ -108,6 +108,7 @@ clean-all:
 	@for lib in $(LIB_DEPS); do \
 		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
 	done
+	-rm -fr $(HDL_LIBRARY_PATH)/scripts/propel_ip_paths.pth
 
 clean-pb:
 	-rm -Rf $(wildcard $(PROJECT_NAME)/$(PROJECT_NAME)/*)
