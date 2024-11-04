@@ -6,7 +6,6 @@
 
 LIBRARY_NAME := data_offload
 
-GENERIC_DEPS += ../common/ad_axis_inf_rx.v
 GENERIC_DEPS += ../common/ad_mem_asym.v
 GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += data_offload.v
@@ -23,5 +22,13 @@ XILINX_LIB_DEPS += util_axis_fifo_asym
 XILINX_LIB_DEPS += util_cdc
 
 XILINX_INTERFACE_DEPS += interfaces
+
+INTEL_DEPS += ../util_axis_fifo/util_axis_fifo.v
+INTEL_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
+INTEL_DEPS += ../util_cdc/sync_bits.v
+INTEL_DEPS += ../util_cdc/sync_event.v
+INTEL_DEPS += ../util_cdc/sync_gray.v
+INTEL_DEPS += data_offload_constr.sdc
+INTEL_DEPS += data_offload_hw.tcl
 
 include ../scripts/library.mk
