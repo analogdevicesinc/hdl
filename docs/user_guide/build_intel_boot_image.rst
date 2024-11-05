@@ -1,15 +1,14 @@
-.. _build_intel_boot_bin:
+.. _build_intel_boot_image:
 
 Generating HDL boot image for Intel projects
 ===============================================================================
 
 This page is dedicated to the building process of boot image for supported
-Intel/Altera projects. One of the key files that is specific to this
-projects is the ``bootloader``. It's role is to initialize the system after the
+Intel/Altera projects. One key file specific to these projects is
+the ``bootloader``. It's role is to initialize the system after the
 BootROM runs. It bridges the gap between the limited functionality of the
 BootROM and the end user application, configuring the system as needed before
 the larger application can run.
-
 
 In the following links you can find more details on the process and the
 necessary components:
@@ -18,7 +17,7 @@ necessary components:
 -  `SocBootFromFPGA <https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773>`__
 -  `Intel Bootloader <https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html>`__
 
-Necessary files for booting up a HDL project
+Necessary files for booting up an HDL project
 -------------------------------------------------------------------------------
 
 .. warning::
@@ -31,7 +30,7 @@ Necessary files for booting up a HDL project
 To boot a system with Linux + HDL on an Intel board, you need the following
 files:
 
-- For Arria 10 SoC projects (:ref:`build example <build_intel_boot_bin arria10>`):
+- For Arria 10 SoC projects (:ref:`build example <build_intel_boot_image arria10>`):
 
    - ``<boot_mountpoint>/u-boot.img``
    - ``<boot_mountpoint>/fit_spl_fpga.itb``
@@ -40,7 +39,7 @@ files:
    - ``<boot_mountpoint>/socfpga_arria10-common/zImage``
    - ``<boot_mountpoint>/u-boot-splx4.sfp`` (preloader image)
 
-- For Cyclone5 SoC project (build examples: :ref:`Terasic C5 <build_intel_boot_bin c5soc>`, :ref:`DE10Nano <build_intel_boot_bin de10nano>`):
+- For Cyclone5 SoC project (build examples: :ref:`Terasic C5 <build_intel_boot_image c5soc>`, :ref:`DE10Nano <build_intel_boot_image de10nano>`):
 
    - ``<boot_mountpoint>/u-boot.scr``
    - ``<boot_mountpoint>/soc_system.rbf``
@@ -57,7 +56,8 @@ files:
 Using Kuiper Linux pre-built images
 -------------------------------------------------------------------------------
 
-Built & tested files are embed on our ADI Kuiper Linux release obtained
+The built and tested files can be found in our ADI Kuiper Linux release, which
+can be obtained from
 :dokuwiki:`here <resources/tools-software/linux-software/adi-kuiper_images/release_notes>`.
 
 .. note::
@@ -66,7 +66,7 @@ Built & tested files are embed on our ADI Kuiper Linux release obtained
    project is not supported anymore, use the last version of Kuiper where it's
    present.
 
-The files need to be copied to the BOOT FAT32 partition with the exception of
+The files need to be copied on the BOOT FAT32 partition with the exception of
 the **preloader image**, which needs to be written to the third partition
 of the mounted device, and **extlinux.conf**, which should also be in BOOT FAT32
 partition, in a folder called 'extlinux'. That folder may not exist by default
@@ -74,8 +74,9 @@ partition, in a folder called 'extlinux'. That folder may not exist by default
 it is empty and unused). Pay attention that **extlinux.conf** for Arria10 and
 Cyclone5 is slightly different.
 
-So, suppose your host is a Linux system, your carrier is Arria10, project AD9081
-and you are using Kuiper built files, mounted on /mnt/BOOT, you would:
+Supposing your host is a Linux system, your carrier is an Arria10, the
+eval board/project is AD9081 and you are using the built files from the Kuiper
+image mounted at ``/mnt/BOOT``, then you would:
 
 .. shell::
 
@@ -131,23 +132,24 @@ Examples of building the boot image
 -------------------------------------------------------------------------------
 
 This is a list of projects supported by us for each carrier. The purpose is to
-illustrate how to build and showcase the different files that are involved in
-the process. Each project has its own characteristics (some files may differ
-from one project to the other).
+illustrate how to build the different files involved in the process. Each
+project has its own characteristics (some files may differ from one project to
+the other).
 
 .. note::
 
-   Each project has its own specific Linux Kernel Image & Devicetree to be
-   build. Follow these instructions to write the file to your SD card, depending
+   Each project has its own Linux Kernel Image & Devicetree which needs to be
+   built. Follow these instructions to write the file to your SD card, depending
    on the operating system that you use (Windows or Linux):
 
    -  :dokuwiki:`[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source <resources/tools-software/linux-build/generic/socfpga>`
    -  :dokuwiki:`[Wiki] Linux Download and setting up the image <resources/tools-software/linux-software/zynq_images/linux_hosts>`
    -  :dokuwiki:`[Wiki] Formatting and Flashing SD Cards using Windows <resources/tools-software/linux-software/zynq_images/windows_hosts>`
 
-Proceed by cloning the kernel tree, set the environment to an arm architecture
-cross compiler, build the configuration file, build the image, and lastly build
-the project and board specific device tree.
+Proceed by cloning the repository, setting the environment to an ARM architecture
+cross compiler, build the configuration file, build the Kernel image, and
+lastly build the device tree (specific to each combination of carrier and eval
+board).
 
 You may notice that in the ``export CROSS_COMPILE`` examples there is a
 "trailing" dash ``-``, and the reason for this is because an export:
@@ -156,35 +158,35 @@ You may notice that in the ``export CROSS_COMPILE`` examples there is a
 
    $export CROSS_COMPILE=/path/to/arm-linux-gnueabihf-
 
-Resolves inside the Makefiles as ``/path/to/arm-linux-gnueabihf-gcc``
-(added suffix ``gcc``).
+Within the Makefiles, this path becomes /path/to/arm-linux-gnueabihf-gcc
+(with ``gcc`` added at the end).
 
-If your environment already have the compiler on path
-(simple test if :code:`which arm-linux-gnueabihf-gcc` returns the expected path),
-you can set ``CROSS_COMPILE`` simply to:
+If your environment already has the compiler in the path
+(test if :code:`which arm-linux-gnueabihf-gcc` returns the expected path),
+you can set ``CROSS_COMPILE`` to:
 
 .. shell::
 
    $export CROSS_COMPILE=arm-linux-gnueabihf-
 
-Also, the difference between ``arm-linux-gnueabi-gcc`` and
-``arm-linux-gnueabihf-gcc`` is that the latter have hardware floating-point
-support and may not be available by your default package manager.
+The difference between ``arm-linux-gnueabi-gcc`` and
+``arm-linux-gnueabihf-gcc`` is that the latter has hardware floating-point
+support and may not be available in your default package manager.
 
 .. caution::
 
    Pay attention to the Quartus version. Based on these versions, different
-   u-boot branches should be checked out. In the below examples was used the
-   latest Quartus version available at that time so the proper u-boot branches
-   were checked-out.
+   u-boot branches should be checked out.  In the coming examples, we used the
+   latest Quartus version available **so the proper u-boot branches
+   were checked-out.**
 
-.. _build_intel_boot_bin arria10:
+.. _build_intel_boot_image arria10:
 
 ADRV9371/Arria 10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`here <projects/adrv9371x/a10soc>`
--  ADI's Linux kernel fork: :git-linux:`here <>`
+-  HDL Project: :git-hdl:`projects/adrv9371x/a10soc`
+-  ADI's Linux kernel: :git-linux:`here <>`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
@@ -208,8 +210,7 @@ Building the Linux Kernel image and the Devicetree
 Building the Hardware Design
 ```````````````````````````````````````````````````````````````````````````````
 
-Clone the HDL repository if it does not exist yet in local directory. Then build
-the project:
+Clone the HDL repository, then build the project:
 
 .. shell::
 
@@ -217,10 +218,10 @@ the project:
    $cd hdl/projects/adrv9371x/a10soc
    $make
 
-After the design was built, the resulted SRAM Object File (.sof) file shall be
+After the design is built, the resulting SRAM Object File (.sof) file shall be
 converted to a Raw Binary File (.rbf).
 
-If you skipped the last section, ensure to set the architecture and cross
+If you skipped the last section, make sure to set the architecture and cross
 compiler environment variables.
 
 .. caution::
@@ -239,12 +240,13 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release 2021_R1 / Quartus Pro version 20.1.
-For older versions of the flow see previous versions of this page on wiki
+This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+Quartus Pro version 20.1. For older versions of the flow see previous versions
+of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
 
-In HDL project directory, create the software/bootloader folder and clone the
-``u-boot-socfpga`` image:
+In the HDL project directory, create the ``software/bootloader`` folder and
+clone the ``u-boot-socfpga`` image:
 
 .. shell::
    :no-path:
@@ -282,8 +284,9 @@ Create the SPL image:
    $sed -i 's/ghrd_10as066n2/soc_system/g' board/altera/arria10-socdk/fit_spl_fpga.its
    $./tools/mkimage -E -f board/altera/arria10-socdk/fit_spl_fpga.its fit_spl_fpga.itb
 
-Last but not least, create the extlinux.conf linux configuration file. This
-extlinux folder shall be copied to /BOOT partition of the SD Card:
+Last but not least, create the **extlinux.conf** Linux configuration file,
+which will be copied to /BOOT partition of the SD Card, in a folder
+named ``extlinux``:
 
 .. shell::
    :no-path:
@@ -301,7 +304,7 @@ extlinux folder shall be copied to /BOOT partition of the SD Card:
 Configuring the SD Card
 ```````````````````````````````````````````````````````````````````````````````
 
-Below is the commands to create the preloader and bootloader partition using
+Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
 device mountpoints accordingly
@@ -387,13 +390,13 @@ Flash the preloader boot partition:
     1697+1 records out
     868996 bytes (869 kB, 849 KiB) copied, 0.21262 s, 4.1 MB/s
 
-.. _build_intel_boot_bin c5soc:
+.. _build_intel_boot_image c5soc:
 
 ARRADIO/Terasic C5 SoC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  HDL Project: :git-hdl:`here <projects/arradio/c5soc>`
--  ADI's Linux kernel fork: :git-linux:`here <>`
+-  ADI's Linux kernel: :git-linux:`here <>`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
@@ -417,8 +420,7 @@ Building the Linux Kernel image and the Devicetree
 Building the Hardware Design
 ```````````````````````````````````````````````````````````````````````````````
 
-Clone the HDL repository if it does not exist yet in local directory. Then build
-the project:
+Clone the HDL repository, then build the project:
 
 .. shell::
 
@@ -426,7 +428,7 @@ the project:
    $cd hdl/projects/arradio/c5soc
    $make
 
-After the design was built, the resulted SRAM Object File (.sof) file shall be
+After the design is built, the resulting SRAM Object File (.sof) file shall be
 converted to a Raw Binary File (.rbf).
 
 If you skipped the last section, ensure to set the architecture and cross
@@ -513,10 +515,11 @@ extlinux folder shall be copied to /BOOT partition of the SD Card:
 Jumper setup
 ```````````````````````````````````````````````````````````````````````````````
 
-Here is the jumper configuration to boot the image from the SD Card:
+Here is the jumper configuration for ARRADIO/C5SoCto to boot the image from the
+SD Card:
 
 .. list-table::
-   :widths: 45 45
+   :widths: 50 50
    :header-rows: 1
 
    * - Jumper
@@ -544,12 +547,12 @@ Here is the jumper configuration to boot the image from the SD Card:
    * - CODEC_SEL
      - 0
 
-And set JP2 to 2.5V or 1.8V
+And **set JP2 to 2.5V or 1.8V**.
 
 Configuring the SD Card
 ```````````````````````````````````````````````````````````````````````````````
 
-Below is the commands to create the preloader and bootloader partition using
+Below are the commands to create the preloader and bootloader partition using
 the Kuiper Linux image as a starting point.
 Please check every command before running, especially configuring target
 device mountpoints accordingly
@@ -635,13 +638,13 @@ Flash the preloader boot partition:
     1697+1 records out
     868996 bytes (869 kB, 849 KiB) copied, 0.21262 s, 4.1 MB/s
 
-.. _build_intel_boot_bin de10nano:
+.. _build_intel_boot_image de10nano:
 
 CN0540/DE10Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  HDL Project: :git-hdl:`here <projects/cn0540/de10nano>`
--  ADI's Linux kernel fork: :git-linux:`here <>`
+-  ADI's Linux kernel: :git-linux:`here <>`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
@@ -847,4 +850,3 @@ Flash the preloader boot partition:
     1697+1 records out
     868996 bytes (869 kB, 849 KiB) copied, 0.21262 s, 4.1 MB/s
    $sync
-
