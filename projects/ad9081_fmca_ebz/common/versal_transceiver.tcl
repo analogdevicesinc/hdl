@@ -215,8 +215,8 @@ proc create_versal_phy {
   puts "intf_cfg: ${intf_cfg}"
   puts "assymmetric_mode: ${asymmetric_mode}"
 
-  set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000 / ${clk_divider}]]
-  set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000 / ${clk_divider}]]
+  set rx_progdiv_clock [format %.3f [expr $rx_lane_rate * 1000.0 / ${clk_divider}]]
+  set tx_progdiv_clock [format %.3f [expr $tx_lane_rate * 1000.0 / ${clk_divider}]]
   set preset ${transceiver}-JESD204_64B66B
 
   if {$intf_cfg == "RX"} {
