@@ -51,7 +51,7 @@ module axi_dmac_regmap_request #(
   parameter DMA_SG_TRANSFER = 0,
   parameter SYNC_TRANSFER_START = 0,
   parameter FRAMELOCK = 0,
-  parameter MAX_NUM_FRAMES = 8,
+  parameter MAX_NUM_FRAMES_WIDTH = 3,
   parameter AUTORUN = 0,
   parameter AUTORUN_FLAGS = 0,
   parameter AUTORUN_SRC_ADDR = 0,
@@ -62,8 +62,7 @@ module axi_dmac_regmap_request #(
   parameter AUTORUN_DEST_STRIDE = 0,
   parameter AUTORUN_SG_ADDRESS = 0,
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
-  parameter AUTORUN_FRAMELOCK_STRIDE = 0,
-  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
+  parameter AUTORUN_FRAMELOCK_STRIDE = 0
 ) (
   input clk,
   input reset,

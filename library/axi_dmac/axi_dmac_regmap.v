@@ -58,7 +58,7 @@ module axi_dmac_regmap #(
   parameter [2:0] AXI_AXPROT = 3'b000,
   parameter FRAMELOCK = 0,
   parameter DMA_2D_TLAST_MODE = 0,
-  parameter MAX_NUM_FRAMES = 8,
+  parameter MAX_NUM_FRAMES_WIDTH = 3,
   parameter USE_EXT_SYNC = 0,
   parameter AUTORUN = 0,
   parameter AUTORUN_FLAGS = 0,
@@ -72,8 +72,7 @@ module axi_dmac_regmap #(
   parameter AUTORUN_FRAMELOCK_CONFIG = 0,
   parameter AUTORUN_FRAMELOCK_STRIDE = 0,
   parameter AUTORUN_CONTROL_HWDESC = AUTORUN ? AUTORUN_FLAGS[3] : 0,
-  parameter AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0,
-  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
+  parameter AUTORUN_CONTROL_FLOCK  = AUTORUN ? AUTORUN_FLAGS[4] : 0
 ) (
 
   // Slave AXI interface
@@ -124,8 +123,8 @@ module axi_dmac_regmap #(
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
   output [MAX_NUM_FRAMES_WIDTH:0] request_flock_framenum,
-  output                        request_flock_mode,
-  output                        request_flock_wait_writer,
+  output                          request_flock_mode,
+  output                          request_flock_wait_writer,
   output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
   output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
   output request_sync_transfer_start,
@@ -151,6 +150,8 @@ module axi_dmac_regmap #(
   localparam PCORE_VERSION = 'h00040564;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
+
+  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
 
   // Register interface signals
   reg [31:0] up_rdata = 32'h00;
@@ -288,7 +289,7 @@ module axi_dmac_regmap #(
     .DMA_SG_TRANSFER(DMA_SG_TRANSFER),
     .SYNC_TRANSFER_START(SYNC_TRANSFER_START),
     .FRAMELOCK(FRAMELOCK),
-    .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
+    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .AUTORUN(AUTORUN),
     .AUTORUN_FLAGS(AUTORUN_FLAGS),
     .AUTORUN_SRC_ADDR(AUTORUN_SRC_ADDR),

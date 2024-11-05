@@ -252,11 +252,11 @@ set_parameter_property ENABLE_FRAMELOCK DISPLAY_HINT boolean
 set_parameter_property ENABLE_FRAMELOCK HDL_PARAMETER true
 set_parameter_property ENABLE_FRAMELOCK GROUP $group_2d
 
-add_parameter MAX_NUM_FRAMES INTEGER 8
-set_parameter_property MAX_NUM_FRAMES DISPLAY_NAME "Max Number Of Frame Buffers"
-set_parameter_property MAX_NUM_FRAMES HDL_PARAMETER true
-set_parameter_property MAX_NUM_FRAMES ALLOWED_RANGES {4 8 16 32}
-set_parameter_property MAX_NUM_FRAMES GROUP $group_2d
+add_parameter MAX_NUM_FRAMES_WIDTH INTEGER 4
+set_parameter_property MAX_NUM_FRAMES_WIDTH DISPLAY_NAME "Max Number Of Frame Buffers"
+set_parameter_property MAX_NUM_FRAMES_WIDTH HDL_PARAMETER true
+set_parameter_property MAX_NUM_FRAMES_WIDTH ALLOWED_RANGES {"2:4" "3:8" "4:16" "5:32"}
+set_parameter_property MAX_NUM_FRAMES_WIDTH GROUP $group_2d
 
 add_parameter USE_EXT_SYNC INTEGER 0
 set_parameter_property USE_EXT_SYNC DISPLAY_NAME "External Synchronization Support"
@@ -729,10 +729,10 @@ proc axi_dmac_elaborate {} {
   }
 
   if {[get_parameter_value ENABLE_FRAMELOCK] == 1} {
-    set_parameter_property MAX_NUM_FRAMES VISIBLE true
+    set_parameter_property MAX_NUM_FRAMES_WIDTH VISIBLE true
 
-    set MAX_NUM_FRAMES [get_parameter_value MAX_NUM_FRAMES]
-    set flock_width [expr int(ceil(log($MAX_NUM_FRAMES)/log(2)))+1]
+    set flock_width [get_parameter_value MAX_NUM_FRAMES_WIDTH]
+    set flock_width [expr int($flock_width+1)]
     # MM writer is master
     if {[get_parameter_value DMA_TYPE_DEST] == 0 &&
         [get_parameter_value DMA_TYPE_SRC] != 0} {
@@ -749,7 +749,7 @@ proc axi_dmac_elaborate {} {
     }
 
   } else {
-    set_parameter_property MAX_NUM_FRAMES VISIBLE false
+    set_parameter_property MAX_NUM_FRAMES_WIDTH VISIBLE false
   }
 
 }

@@ -42,7 +42,7 @@
 <: set enable_diagnostics_if    [get_property MODELPARAM_VALUE.ENABLE_DIAGNOSTICS_IF] :>
 <: set cache_coherent           [get_property MODELPARAM_VALUE.CACHE_COHERENT] :>
 <: set framelock                [get_property MODELPARAM_VALUE.FRAMELOCK] :>
-<: set max_num_frames           [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES] :>
+<: set max_num_frames_width     [get_property MODELPARAM_VALUE.MAX_NUM_FRAMES_WIDTH] :>
 <: set use_ext_sync             [get_property MODELPARAM_VALUE.USE_EXT_SYNC] :>
 <: set autorun                  [get_property MODELPARAM_VALUE.AUTORUN] :>
 <: set autorun_flags            [get_property MODELPARAM_VALUE.AUTORUN_FLAGS] :>
@@ -102,7 +102,7 @@ package <=: ComponentName :>_pkg;
   parameter <=: ComponentName :>_ENABLE_DIAGNOSTICS_IF      = <=: b2i $enable_diagnostics_if :>;
   parameter <=: ComponentName :>_CACHE_COHERENT             = <=: b2i $cache_coherent :>;
   parameter <=: ComponentName :>_FRAMELOCK                  = <=: b2i $framelock :>;
-  parameter <=: ComponentName :>_MAX_NUM_FRAMES             = <=: $max_num_frames :>;
+  parameter <=: ComponentName :>_MAX_NUM_FRAMES_WIDTH       = <=: $max_num_frames_width :>;
   parameter <=: ComponentName :>_USE_EXT_SYNC               = <=: b2i $use_ext_sync :>;
   parameter <=: ComponentName :>_AUTORUN                    = <=: b2i $autorun :>;
   parameter <=: ComponentName :>_AUTORUN_FLAGS              = <=: h2i $autorun_flags :>;

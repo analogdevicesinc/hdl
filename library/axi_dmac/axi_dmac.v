@@ -67,7 +67,7 @@ module axi_dmac #(
   parameter AXI_ID_WIDTH_DEST = 1,
   parameter AXI_ID_WIDTH_SG = 1,
   parameter DMA_AXIS_ID_W = 8,
-  parameter DMA_AXIS_DEST_W = 4,
+  parameter DMA_AXIS_DEST_W = 3,
   parameter DISABLE_DEBUG_REGISTERS = 0,
   parameter ENABLE_DIAGNOSTICS_IF = 0,
   parameter ALLOW_ASYM_MEM = 0,
@@ -76,8 +76,7 @@ module axi_dmac #(
   parameter [2:0] AXI_AXPROT = 3'b000,
   parameter DMA_2D_TLAST_MODE = 0,
   parameter FRAMELOCK = 0,
-  parameter MAX_NUM_FRAMES = 8,
-  parameter MAX_NUM_FRAMES_WIDTH = 3,
+  parameter MAX_NUM_FRAMES_WIDTH = 4,
   parameter USE_EXT_SYNC = 0,
   parameter AUTORUN = 0,
   parameter AUTORUN_FLAGS = 0,
@@ -326,6 +325,8 @@ module axi_dmac #(
   localparam HAS_DEST_ADDR = DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
   localparam HAS_SRC_ADDR = DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
 
+  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
+
   // Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
   localparam BYTES_PER_BEAT_WIDTH_DEST = DMA_DATA_WIDTH_DEST > 1024 ? 8 :
     DMA_DATA_WIDTH_DEST > 512 ? 7 :
@@ -496,7 +497,7 @@ module axi_dmac #(
     .AXI_AXPROT(AXI_AXPROT),
     .FRAMELOCK(FRAMELOCK),
     .DMA_2D_TLAST_MODE(DMA_2D_TLAST_MODE),
-    .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
+    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .USE_EXT_SYNC(USE_EXT_SYNC),
     .AUTORUN(AUTORUN),
     .AUTORUN_FLAGS(AUTORUN_FLAGS),
@@ -611,7 +612,7 @@ module axi_dmac #(
     .AXI_AXPROT(AXI_AXPROT),
     .FRAMELOCK(FRAMELOCK),
     .FRAMELOCK_MODE(FRAMELOCK_MODE),
-    .MAX_NUM_FRAMES(MAX_NUM_FRAMES),
+    .MAX_NUM_FRAMES_WIDTH(MAX_NUM_FRAMES_WIDTH),
     .USE_EXT_SYNC(USE_EXT_SYNC)
   ) i_transfer (
     .ctrl_clk(s_axi_aclk),

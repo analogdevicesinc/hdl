@@ -357,11 +357,15 @@ set_property -dict [list \
 [ipx::get_user_parameters FRAMELOCK -of_objects $cc]
 
 set_property -dict [list \
-  "enablement_tcl_expr" "\$FRAMELOCK == true" \
-  "value_validation_type" "list" \
-  "value_validation_list" "4 8 16 32" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {\
+    "4 buffers"  "3" \
+    "8 buffers"  "4" \
+    "16 buffers" "5" \
+    "32 buffers" "6" \
+  } \
 ] \
-[ipx::get_user_parameters MAX_NUM_FRAMES -of_objects $cc]
+[ipx::get_user_parameters MAX_NUM_FRAMES_WIDTH -of_objects $cc]
 
 # Set up page layout
 set page0 [ipgui::get_pagespec -name "Page 0" -component $cc]
@@ -549,19 +553,12 @@ set_property -dict [list \
   "tooltip" "Requires Cyclic mode" \
 ] $p
 
-set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES" -component $cc]
+set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES_WIDTH" -component $cc]
 ipgui::move_param -component $cc -order 2 $p -parent $feature_group_2d
 set_property -dict [list \
   "widget" "comboBox" \
   "display_name" "Max Number Of Frame Buffers" \
 ] $p
-
-set_property -dict [list \
-  "enablement_value" "false" \
-  "value_tcl_expr" {log($MAX_NUM_FRAMES)/log(2)} \
-] [ipx::get_user_parameters MAX_NUM_FRAMES_WIDTH -of_objects $cc]
-set p [ipgui::get_guiparamspec -name "MAX_NUM_FRAMES_WIDTH" -component $cc]
-ipgui::remove_param -component [ipx::current_core] $p
 
 set p [ipgui::get_guiparamspec -name "USE_EXT_SYNC" -component $cc]
 ipgui::move_param -component $cc -order 3 $p -parent $feature_group

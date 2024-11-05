@@ -70,9 +70,8 @@ module axi_dmac_transfer #(
   parameter [2:0] AXI_AXPROT = 3'b000,
   parameter FRAMELOCK = 0,
   parameter FRAMELOCK_MODE = 0,
-  parameter MAX_NUM_FRAMES = 8,
-  parameter USE_EXT_SYNC = 0,
-  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
+  parameter MAX_NUM_FRAMES_WIDTH = 3,
+  parameter USE_EXT_SYNC = 0
 ) (
   input ctrl_clk,
   input ctrl_resetn,
@@ -463,7 +462,7 @@ module axi_dmac_transfer #(
     .BYTES_PER_BEAT_WIDTH_DEST (BYTES_PER_BEAT_WIDTH_DEST),
     .BYTES_PER_BEAT_WIDTH_SRC (BYTES_PER_BEAT_WIDTH_SRC),
     .FRAMELOCK_MODE (FRAMELOCK_MODE),
-    .MAX_NUM_FRAMES (MAX_NUM_FRAMES)
+    .MAX_NUM_FRAMES_WIDTH (MAX_NUM_FRAMES_WIDTH)
   ) i_dmac_flock (
     .req_aclk (req_clk),
     .req_aresetn (req_resetn),

@@ -38,8 +38,7 @@ module axi_dmac_framelock #(
   parameter BYTES_PER_BEAT_WIDTH_DEST = 3,
   parameter BYTES_PER_BEAT_WIDTH_SRC = 3,
   parameter FRAMELOCK_MODE =  0, // 0 - MM writer ; 1 - MM reader
-  parameter MAX_NUM_FRAMES = 8,
-  localparam MAX_NUM_FRAMES_WIDTH = $clog2(MAX_NUM_FRAMES)
+  parameter MAX_NUM_FRAMES_WIDTH = 3
 ) (
   input req_aclk,
   input req_aresetn,
@@ -80,6 +79,7 @@ module axi_dmac_framelock #(
   localparam BYTES_PER_BEAT_WIDTH = FRAMELOCK_MODE ?
                                     BYTES_PER_BEAT_WIDTH_SRC :
                                     BYTES_PER_BEAT_WIDTH_DEST;
+  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
 
   reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address = 'h0;
   reg [MAX_NUM_FRAMES_WIDTH-1:0] transfer_id = 'h0;

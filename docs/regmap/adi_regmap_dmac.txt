@@ -672,7 +672,9 @@ FIELD
 DISTANCE
 RW
 Used mainly in output delay mode. Set the output delay in frames.
-Should be set in interval 0 to flock, FRAMENUM - 1.
+With a DISTANCE of 0, the reader is one frame behind with WAIT_WRITER set.
+In frame conversion mode, it will repeat reading frame 0 until frame 1 is fully written to
+memory.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[23:16]``.
 ENDFIELD
 
@@ -701,7 +703,13 @@ FIELD
 MODE
 RW
 Select operating mode of the framebuffer.
-(0 - Frame rate conversion mode (dynamic), 1 - Output delay mode (simple))
+
+* 0 - Frame rate conversion mode (dynamic).
+* 1 - Output delay mode (simple).
+
+In dynamic mode, the writer skip the current in-use reader buffer and the reader stay
+behind the writer's buffer by repeating or skipping buffers.
+
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[8]``.
 ENDFIELD
 

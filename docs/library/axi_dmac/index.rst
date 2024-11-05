@@ -696,13 +696,13 @@ The core can operate in two roles:
 
 And two modes:
 
-* Dynamic mode:
+* Frame conversion (dynamic mode):
 
   - Writer mode - the writer will always skip the current in-use reader's buffer.
   - Reader mode - the reader will stay behind the writer's buffer by either
     repeating or skipping buffers according to the speed relationship of the two cores.
 
-* Simple mode:
+* Output delay (simple mode):
 
   - Writer mode - the writer will cycle through the buffers regardless of the reader.
   - Reader mode - the reader will always read a buffer at a predefined distance
@@ -710,11 +710,17 @@ And two modes:
 
 Also, in simple mode:
 
-* If 'wait for master' is enabled the reader will output a frame only after
+* If 'wait for writer' is enabled the reader will output a frame only after
   the master wrote one to the memory
-* If the 'wait for master' is not enabled the slave will start reading a
+* If the 'wait for writer' is not enabled the slave will start reading a
   buffer whenever it completed a previous buffer and receives an external sync
   signal if the external synchronization support is enabled.
+
+.. caution::
+
+   In dynamic mode, the reader can still read a buffer being currently accessed
+   by the writer if the number of frames and distance are close.
+   Still, the distance is mainly used in output delay mode.
 
 The writer and reader DMAC cores must be connected through the dedicated
 "framelock" interface. They must be programmed with similar settings regarding
