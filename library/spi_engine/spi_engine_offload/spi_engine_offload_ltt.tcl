@@ -125,6 +125,17 @@ set ip [ipl::set_parameter -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
+set ip [ipl::set_parameter -ip $ip \
+    -id SDO_STREAMING \
+    -type param \
+    -value_type int \
+    -conn_mod spi_engine_offload \
+    -title {SDO Streaming} \
+    -default 0 \
+    -options {[(True, 1), (False, 0)]} \
+    -output_formatter nostr \
+    -group1 {General Configuration} \
+    -group2 Config]
 
 set ip [ipl::set_parameter -ip $ip \
     -id CMD_MEM_ADDRESS_WIDTH \
