@@ -1,5 +1,5 @@
 ##############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: BSD-1-Clause
 ##############################################################################
 
@@ -19,7 +19,7 @@ case "$SIMULATOR" in
 
 	xsim)
 		# XSim flow
-		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
+		xvlog --sv -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
 		xelab -log ${NAME}_xelab.log -debug all ${NAME} || exit 1
 		if [[ "$MODE" == "-gui" ]]; then
 			echo "log_wave -r *" > xsim_gui_cmd.tcl
