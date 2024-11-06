@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -77,6 +77,7 @@ module ad_mmcm_drp #(
   localparam  SEVEN_SERIES = 1;
   localparam  ULTRASCALE = 2;
   localparam  ULTRASCALE_PLUS = 3;
+  localparam  VERSAL = 4;
 
   // internal registers
 
@@ -345,6 +346,112 @@ module ad_mmcm_drp #(
         .I (mmcm_clk_2_s),
         .O (mmcm_clk_2));
 
+  end else if (FPGA_TECHNOLOGY == VERSAL) begin
+    MMCME5 #(
+      .BANDWIDTH ("OPTIMIZED"),
+      .COMPENSATION ("AUTO"),
+      .DESKEW_DELAY_EN1 ("FALSE"),
+      .DESKEW_DELAY_EN2 ("FALSE"),
+      .DESKEW_DELAY_PATH1 ("FALSE"),
+      .DESKEW_DELAY_PATH2 ("FALSE"),
+      .LOCK_WAIT ("FALSE"),
+      .SS_EN ("FALSE"),
+      .SS_MODE ("CENTER_HIGH"),
+
+      .DIVCLK_DIVIDE (MMCM_VCO_DIV),
+      .CLKFBOUT_MULT (MMCM_VCO_MUL),
+      .CLKFBOUT_FRACT (0),
+      .CLKFBOUT_PHASE (0.0),
+
+      .CLKOUT0_DIVIDE (MMCM_CLK0_DIV),
+      .CLKOUT0_PHASE (MMCM_CLK0_PHASE),
+      .CLKOUT0_DUTY_CYCLE (0.500),
+      .CLKOUT0_PHASE_CTRL (2'b00),
+      .CLKOUT1_DIVIDE (MMCM_CLK1_DIV),
+      .CLKOUT1_DUTY_CYCLE (0.500),
+      .CLKOUT1_PHASE (MMCM_CLK1_PHASE),
+      .CLKOUT1_PHASE_CTRL (2'b00),
+      .CLKOUT2_DIVIDE (MMCM_CLK2_DIV),
+      .CLKOUT2_DUTY_CYCLE (0.500),
+      .CLKOUT2_PHASE (MMCM_CLK2_PHASE),
+      .CLKOUT2_PHASE_CTRL (2'b00),
+      .CLKIN1_PERIOD (MMCM_CLKIN_PERIOD),
+      .CLKIN2_PERIOD (MMCM_CLKIN2_PERIOD),
+      .CLKOUTFB_PHASE_CTRL (2'b00),
+
+      .DESKEW_DELAY1 (0),
+      .DESKEW_DELAY2 (0),
+
+      .IS_CLKFB1_DESKEW_INVERTED (1'b0),
+      .IS_CLKFB2_DESKEW_INVERTED (1'b0),
+      .IS_CLKFBIN_INVERTED (1'b0),
+      .IS_CLKIN1_DESKEW_INVERTED (1'b0),
+      .IS_CLKIN1_INVERTED (1'b0),
+      .IS_CLKIN2_DESKEW_INVERTED (1'b0),
+      .IS_CLKIN2_INVERTED (1'b0),
+      .IS_CLKINSEL_INVERTED (1'b0),
+      .IS_PSEN_INVERTED (1'b0),
+      .IS_PSINCDEC_INVERTED (1'b0),
+      .IS_PWRDWN_INVERTED (1'b0),
+      .IS_RST_INVERTED (1'b0),
+
+      .REF_JITTER1 (0.0),
+      .REF_JITTER2 (0.0),
+
+      .SS_MOD_PERIOD (10000)
+    ) i_mmcme5 (
+      .CLKIN1 (clk),
+      .CLKFBIN (bufg_fb_clk_s),
+      .CLKFBOUT (mmcm_fb_clk_s),
+      .CLKOUT0 (mmcm_clk_0_s),
+      .CLKOUT1 (mmcm_clk_1_s),
+      .CLKOUT2 (mmcm_clk_2_s),
+      .LOCKED (mmcm_locked_s),
+      .DCLK (up_clk),
+      .DEN (up_drp_sel),
+      .DADDR (up_drp_addr[6:0]),
+      .DWE (up_drp_wr),
+      .DI (up_drp_wdata),
+      .DO (up_drp_rdata_s),
+      .DRDY (up_drp_ready_s),
+
+      .CLKOUT3 (),
+      .CLKOUT4 (),
+      .CLKOUT5 (),
+      .CLKOUT6 (),
+      .CLKIN2 (clk2),
+      .CLKINSEL (clk_sel),
+      .PSCLK (1'b0),
+      .PSEN (1'b0),
+      .PSINCDEC (1'b0),
+      .PSDONE (),
+      .CLKFBSTOPPED (),
+      .CLKINSTOPPED (),
+      .PWRDWN (1'b0),
+      .LOCKED1_DESKEW (),
+      .LOCKED2_DESKEW (),
+      .LOCKED_FB (),
+      .CLKFB1_DESKEW (),
+      .CLKFB2_DESKEW (),
+      .CLKIN1_DESKEW (),
+      .CLKIN2_DESKEW (),
+      .RST (mmcm_rst));
+
+      BUFG i_fb_clk_bufg (
+        .I (mmcm_fb_clk_s),
+        .O (bufg_fb_clk_s));
+
+      BUFG i_clk_0_bufg (
+        .I (mmcm_clk_0_s),
+        .O (mmcm_clk_0));
+
+      BUFG i_clk_1_bufg (
+        .I (mmcm_clk_1_s),
+        .O (mmcm_clk_1));
+
+      BUFG i_clk_2_bufg (
+        .I (mmcm_clk_2_s),
+        .O (mmcm_clk_2));
   end
   endgenerate
 
