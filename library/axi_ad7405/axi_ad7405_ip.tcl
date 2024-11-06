@@ -30,7 +30,7 @@ adi_ip_files axi_ad7405 [list \
 	"axi_ad7405.v" ]
 
 adi_ip_properties axi_ad7405
-ipx::remove_all_bus_interface [ipx::current_core]
+#ipx::remove_all_bus_interface [ipx::current_core]
 
 set cc [ipx::current_core]
 

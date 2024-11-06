@@ -37,10 +37,10 @@
 
 module axi_ad7405 (
 
-input               adc_data_in,      /* input data to be filtered */
-output     [15:0]   adc_data_out,     /* filtered output */
-output reg          adc_data_en,
-input      [15:0]   adc_dec_rate,
+input         adc_data_in,      /* input data to be filtered */
+output [15:0] adc_data_out,     /* filtered output */
+output        adc_data_en,
+input  [15:0] adc_dec_rate,
 
 // AXI Slave Memory Map
 
@@ -67,7 +67,7 @@ output [31:0] s_axi_rdata,
 input         s_axi_rready,
 
 input         clk_in,
-//output        adc_reset,
+output        adc_reset,
 output        adc_clk,
 output        adc_enable,
 input         adc_dovf
@@ -96,34 +96,38 @@ wire [13:0] up_raddr_s;
 wire        up_wreq_s;
 wire [13:0] up_waddr_s;
 wire [31:0] up_wdata_s;
-wire [31:0] up_rdata_s;
-wire [16:0] up_rack_s;
-wire [16:0] up_wack_s;
+wire [31:0] up_rdata_s[0:1];
+wire [ 1:0] up_rack_s;
+wire [ 1:0] up_wack_s;
 
 wire [15:0] dma_data;
+wire        dma_dvalid;
+wire [15:0] adc_data_out_s;
 
 wire        adc_dfmt_enable_s;
 wire        adc_dfmt_type_s;
 wire        adc_dfmt_se_s;
 
-//assign adc_reset = adc_reset_s;
+assign adc_reset = adc_reset_s;
 assign adc_clk_s = clk_in;
-//assign adc_data_out = adc_data_out_s;
 assign up_clk = s_axi_aclk;
 assign up_rstn = s_axi_aresetn;
-assign adc_clk = clk_in; // ???? or up_clk
+assign adc_clk = adc_clk_s; // ???? or up_clk
 assign adc_enable = adc_enable_s;
 
  // processor read interface
+
+integer j;
 
 always @(*) begin
   up_rdata_r = 'h00;
   up_rack_r = 'h00;
   up_wack_r = 'h00;
-
-  up_rack_r = up_rack_r | up_rack_s;
-  up_wack_r = up_wack_r | up_wack_s;
-  up_rdata_r = up_rdata_r | up_rdata_s;
+  for (j = 0; j <= 1; j=j+1) begin
+    up_rack_r = up_rack_r | up_rack_s[j];
+    up_wack_r = up_wack_r | up_wack_s[j];
+    up_rdata_r = up_rdata_r | up_rdata_s[j];
+  end
 end
 
 always @(negedge up_rstn or posedge up_clk) begin // up_clk or adc_clk_s ???
@@ -183,11 +187,11 @@ end
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s),
+    .up_wack (up_wack_s[0]),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s),
-    .up_rack (up_rack_s));
+    .up_rdata (up_rdata_s[0]),
+    .up_rack (up_rack_s[0]));
 
  ad_datafmt #(
   .DATA_WIDTH (16),
@@ -195,7 +199,7 @@ end
  ) i_datafmt (
   .clk (adc_clk_s),
   .valid (1'b1),
-  .data (adc_data_out),
+  .data (adc_data_out_s[15:0]),
   .valid_out (dma_dvalid),
   .data_out (dma_data[15:0]),
   .dfmt_enable (adc_dfmt_enable_s),
@@ -203,12 +207,11 @@ end
   .dfmt_se (adc_dfmt_se_s));
 
  util_dec256sinc24b #(
-    .UP_ADDRESS_WIDTH(14)
  ) i_util_dec256sinc24b_interface (
     .clk (adc_clk_s),
     .reset (adc_reset_s),
     .data_in (adc_data_in),
-    .data_out (adc_data_out),
+    .data_out (adc_data_out_s),
     .data_en (adc_data_en),
     .dec_rate (adc_dec_rate));
 
@@ -265,11 +268,11 @@ end
   .up_wreq (up_wreq_s),
   .up_waddr (up_waddr_s),
   .up_wdata (up_wdata_s),
-  .up_wack (up_wack_s),
+  .up_wack (up_wack_s[1]),
   .up_rreq (up_rreq_s),
   .up_raddr (up_raddr_s),
-  .up_rdata (up_rdata_s),
-  .up_rack (up_rack_s));
+  .up_rdata (up_rdata_s[1]),
+  .up_rack (up_rack_s[1]));
 
 // up bus interface
 
