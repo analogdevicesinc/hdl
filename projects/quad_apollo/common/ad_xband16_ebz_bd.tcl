@@ -1,5 +1,5 @@
-source ../../../../hdl/projects/common/xilinx/data_offload_bd.tcl
-source ../../../../hdl/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
@@ -99,6 +99,24 @@ set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$
 
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
+
+##AXI_ADF4030 IP
+create_bd_port -dir IO adf4030_bsync_p
+create_bd_port -dir IO adf4030_bsync_n
+create_bd_port -dir I adf4030_clk
+create_bd_port -dir I adf4030_trigger
+create_bd_port -dir O adf4030_sysref
+create_bd_port -dir O -from 3 -to 0 adf4030_trig_channel
+
+ad_ip_instance axi_adf4030 axi_adf4030_0
+ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 4
+
+ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
+ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
+ad_connect axi_adf4030_0/device_clk adf4030_clk
+ad_connect axi_adf4030_0/trigger adf4030_trigger
+ad_connect axi_adf4030_0/sysref adf4030_sysref
+ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
 
 ##AXI_HSCI IP
 if {!$HSCI_BYPASS} {
@@ -356,8 +374,8 @@ ad_connect  $sys_cpu_clk $dac_data_offload_name/s_axi_aclk
 ad_connect  $sys_cpu_clk $adc_data_offload_name/s_axi_aclk
 
 # Resets
-create_bd_port -dir O rx_device_clk_rstn
-ad_connect rx_device_clk_rstn rx_device_clk_rstgen/peripheral_aresetn
+# create_bd_port -dir O rx_device_clk_rstn
+ad_connect axi_adf4030_0/rstn rx_device_clk_rstgen/peripheral_aresetn
 
 ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
@@ -442,6 +460,7 @@ if {!$HSCI_BYPASS} {
   ad_cpu_interconnect 0x7c700000 axi_hsci_2
   ad_cpu_interconnect 0x7c800000 axi_hsci_3
 }
+ad_cpu_interconnect 0x7c900000 axi_adf4030_0
 # Reserved for TDD! 0x7c460000
 
 # interconnect (gt/adc)

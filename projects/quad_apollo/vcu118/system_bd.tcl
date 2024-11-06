@@ -3,11 +3,11 @@ set adc_fifo_samples_per_converter [expr $ad_project_params(RX_KS_PER_CHANNEL)*1
 ## DAC FIFO depth in samples per converter
 set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1024]
 
-source ../../../../hdl/projects/common/vcu118/vcu118_system_bd.tcl
-source ../../../../hdl/projects/common/xilinx/adcfifo_bd.tcl
-source ../../../../hdl/projects/common/xilinx/dacfifo_bd.tcl
+source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
+source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../../quad_apollo/common/ad_xband16_ebz_bd.tcl
-source ../../../../hdl/projects/scripts/adi_pd.tcl
+source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 3
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1

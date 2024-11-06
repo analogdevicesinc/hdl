@@ -88,8 +88,8 @@ module system_top (
   input         ref_clk_replica_p,
   input         ref_clk_replica_n,
 
-  input         sysref_m2c_p,
-  input         sysref_m2c_n,
+  inout         sysref_m2c_p,
+  inout         sysref_m2c_n,
 
   output        apollo_sclk,
   input         apollo_sdo,
@@ -119,6 +119,8 @@ module system_top (
   input   [3:0] hsci_cko_n,
   input   [3:0] hsci_do_p,
   input   [3:0] hsci_do_n,
+
+  input         ext_trig,
 
   output  [3:0] trig0_a,
   output  [3:0] trig1_a,
@@ -204,8 +206,8 @@ module system_top (
   wire    [ 7:0]  hsci_data_in  [0:3];
   wire    [ 7:0]  hsci_data_out [0:3];
 
-  wire            trig_rstn;
-  wire            trig;
+  // wire            trig_rstn;
+  wire    [ 3:0]  trig_channel;
 
   assign iic_rstn = 1'b1;
 
@@ -225,10 +227,10 @@ module system_top (
     .O (ref_clk_replica),
     .ODIV2 ());
 
-  IBUFDS i_ibufds_sysref (
-    .I (sysref_m2c_p),
-    .IB (sysref_m2c_n),
-    .O (sysref));
+  // IBUFDS i_ibufds_sysref (
+  //   .I (sysref_m2c_p),
+  //   .IB (sysref_m2c_n),
+  //   .O (sysref));
 
   IBUFDS_GTE4 i_ibufds_tx_device_clk (
     .I (ref_clk_p[1]),
@@ -291,10 +293,10 @@ module system_top (
   assign gpio_i[43:40] = irqa;
   assign gpio_i[47:44] = irqb;
 
-  assign trig0_a       = {4{trig}};
-  assign trig1_a       = {4{trig}};
-  assign trig0_b       = {4{trig}};
-  assign trig1_b       = {4{trig}};
+  assign trig0_a       = {4{trig_channel[0]}};
+  assign trig1_a       = {4{trig_channel[1]}};
+  assign trig0_b       = {4{trig_channel[2]}};
+  assign trig1_b       = {4{trig_channel[3]}};
   assign resetb        = gpio_o[67:64];
   assign txen          = gpio_o[69:68];
   assign rxen          = gpio_o[71:70];
@@ -333,13 +335,13 @@ module system_top (
   assign gpio_i[127:109] = gpio_o[127:109];
   assign gpio_i[ 31:17] = gpio_o[ 31:17];
 
-  trigger_generator trig_i (
-    .sysref     (sysref),
-    .device_clk (rx_device_clk),
-    .gpio       (gp4[0]),
-    .rstn       (trig_rstn),
-    .trigger    (trig)
-  );
+  // trigger_generator trig_i (
+  //   .sysref     (sysref),
+  //   .device_clk (rx_device_clk),
+  //   .gpio       (gp4[0]),
+  //   .rstn       (trig_rstn),
+  //   .trigger    (trig)
+  // );
 
   hsci_phy_top hsci_phy_top(
     .pll_inclk        (selectio_clk_in),
@@ -525,7 +527,7 @@ module system_top (
     .tx_data_15_n (c2m_n[15]),
     .tx_data_15_p (c2m_p[15]),
 
-    .rx_device_clk_rstn(trig_rstn),
+    // .rx_device_clk_rstn(trig_rstn),
 
     .selectio_clk_in (selectio_clk_in),
 
@@ -565,6 +567,13 @@ module system_top (
     .hsci_dly_rdy_bsc_rx_1 (hsci_dly_rdy_bsc_rx[1]),
     .hsci_dly_rdy_bsc_rx_2 (hsci_dly_rdy_bsc_rx[2]),
     .hsci_dly_rdy_bsc_rx_3 (hsci_dly_rdy_bsc_rx[3]),
+
+    .adf4030_bsync_p      (sysref_m2c_p),
+    .adf4030_bsync_n      (sysref_m2c_n),
+    .adf4030_clk          (rx_device_clk),
+    .adf4030_trigger      (ext_trig),
+    .adf4030_sysref       (sysref),
+    .adf4030_trig_channel (trig_channel),
 
     .ref_clk_q0 (ref_clk_replica),
     .ref_clk_q1 (ref_clk_replica),

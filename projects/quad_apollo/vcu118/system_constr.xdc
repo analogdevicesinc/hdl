@@ -86,8 +86,8 @@ set_property  -dict {PACKAGE_PIN AN41                                           
 # set_property  -dict {PACKAGE_PIN AL32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports ref_clk_p[2]      ]; ## CLK0_M2C_P      H4   IO_L13P_T2L_N0_GC_QBC_43
 # set_property  -dict {PACKAGE_PIN AM32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports ref_clk_n[2]      ]; ## CLK0_M2C_N      H5   IO_L13N_T2L_N1_GC_QBC_43
 ## Sysref
-set_property  -dict {PACKAGE_PIN P35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports sysref_m2c_p     ]; ## CLK1_M2C_P      G2   IO_L14P_T2L_N2_GC_45
-set_property  -dict {PACKAGE_PIN P36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports sysref_m2c_n     ]; ## CLK1_M2C_N      G3   IO_L14N_T2L_N3_GC_45
+set_property  -dict {PACKAGE_PIN P35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 } [get_ports sysref_m2c_p     ]; ## CLK1_M2C_P      G2   IO_L14P_T2L_N2_GC_45
+set_property  -dict {PACKAGE_PIN P36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 } [get_ports sysref_m2c_n     ]; ## CLK1_M2C_N      G3   IO_L14N_T2L_N3_GC_45
 ## Apollo SPIs
 set_property  -dict {PACKAGE_PIN AL35 IOSTANDARD LVCMOS18                                     } [get_ports apollo_sclk      ]; ## LA00_P_CC       G6   IO_L7P_T1L_N0_QBC_AD13P_43
 set_property  -dict {PACKAGE_PIN AL36 IOSTANDARD LVCMOS18                                     } [get_ports pdn_12v_pg       ]; ## LA00_N_CC       G7   IO_L7N_T1L_N1_QBC_AD13N_43
@@ -257,3 +257,6 @@ set_property  -dict {PACKAGE_PIN P29  IOSTANDARD LVCMOS12                       
 set_property  -dict {PACKAGE_PIN L31  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_5045_v1              ]; ## PMOD1_5 J53.4
 set_property  -dict {PACKAGE_PIN M31  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_ctrl_ind             ]; ## PMOD1_6 J53.6
 set_property  -dict {PACKAGE_PIN R29  IOSTANDARD LVCMOS12                                     } [get_ports pmod1_ctrl_rx_combined     ]; ## PMOD1_7 J53.8
+
+set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/I.*]
+set_false_path -through [get_nets -hierarchical -regexp .*IOBUFDS_inst/T.*]
