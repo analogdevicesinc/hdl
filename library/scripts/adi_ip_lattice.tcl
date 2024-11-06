@@ -126,9 +126,11 @@ namespace eval ipl {
             set data [read $file]
             close $file
             set PropelIPLocal_path [lindex $data 1]
-            set check [catch {exec cygpath --version}]
-            if {$check == 0} {
-                set PropelIPLocal_path [exec cygpath -u $PropelIPLocal_path]
+            if {![info exists env(TOOLRTF)]} {
+                set check [catch {exec cygpath --version}]
+                if {$check == 0} {
+                    set PropelIPLocal_path [exec cygpath -u $PropelIPLocal_path]
+                }
             }
         } else {
             puts "Warning: No $ad_hdl_dir/library/scripts/propel_ip_paths.pth file was found."
@@ -147,7 +149,7 @@ namespace eval ipl {
     }
 
     #node: {name attributes content childs}
-    #attributes {{id0} {att0} {id1} {att1}}
+    #attributes: {{id0} {att0} {id1} {att1}}
     set ip_desc {{lsccip:ip} {{0} {xmlns:lsccip="http://www.latticesemi.com/XMLSchema/Radiant/ip" xmlns:xi="http://www.w3.org/2001/XInclude" version="1.0" platform="radiant" platform_version="2023.2"}} {} {
             {lsccip:general} {{lsccip:general} {} {} {
                     {lsccip:vendor} {{lsccip:vendor} {} {analog.com} {}}
