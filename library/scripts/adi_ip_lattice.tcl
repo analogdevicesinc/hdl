@@ -50,7 +50,7 @@ if {[info exists env(TOOLRTF)]} {
 }
 
 ################################################################################
-## Namespace for Lattice IP packageing:
+## Namespace for Lattice IP packaging:
 #  * These are mainly some xml tree manipulator procedures.
 #  * The base descriptors for Lattice IP xml's and interface xml's.
 #  * The Lattice IP specific procedures to configure these descriptors.
@@ -77,11 +77,11 @@ if {[info exists env(TOOLRTF)]} {
 #       - sets the IP structure with the specified general IP parameters.
 #     * ipl::parse_module
 #       - This module is used to parse the data of the IP top module, it's input
-#         parameter is the filepath of the top module and it returns a structure
-#         with the top module's data wich is parameter for other procedures.
+#         parameter is the file path of the top module and it returns a structure
+#         with the top module's data which is parameter for other procedures.
 #     * ipl::add_ports_from_module
-#       - it is used to set the ip structure with the port's data from the
-#         module data wich is set by 'ipl::parse_module'
+#       - it is used to set the IP structure with the port's data from the
+#         module data which is set by 'ipl::parse_module'
 #     * ipl::add_memory_map
 #       - sets the IP structure with a new memory map, the name of this memory
 #         map must be used for slave memory mapped interface configuration
@@ -89,27 +89,34 @@ if {[info exists env(TOOLRTF)]} {
 #       - sets the IP structure with an address space, the name of this address
 #         space must be used for master memory mapped interface configuration
 #     * ipl::add_axi_interfaces
-#       - automatically adds axi interfaces based on parsed module data from top
+#       - automatically adds AXI interfaces based on parsed module data from top
 #         module
 #     * ipl::add_interface
 #       - sets the IP structure with an interface instance.
+#     * ipl::add_interface_by_prefix
+#       - sets the IP structure with an interface by filtering ports by prefix
+#         from module data parsed with ipl::parse_module when a naming standard
+#         like <verilog_prefix>_<standard_port_name> is used.
 #     * ipl::add_ip_files
-#       - sets the ip structure with ip file dependencies
+#       - sets the IP structure with IP file dependencies
+#     * ipl::add_ip_files_auto
+#       - sets the IP structure with the specified file dependencies by
+#         searching them in the specyfied '-spath' folder '-sdepth' deep.
 #     * ipl::set_parameter
 #       - sets the IP structure with a configuration parameter which will appear
 #         in the IP GUI also.
 #     * ipl::ignore_ports
-#       - ignores/hides a list of ports by a verilog expression which depends on
+#       - ignores/hides a list of ports by a Verilog expression which depends on
 #         the value of a parameter.
 #     * ipl::ignore_ports_by_prefix
 #       - ignores/hides a some of the parsed ports from the top module by a
 #         verilog expression which depends on the value of a parameter and
 #         and match with a specified prefix from the ports names.
 #     * ipl::generate_ip
-#       - generates the IP on specified path, if no path parameter then in
+#       - generates the IP on specified path, if no path parameter, then in
 #         default IP download directory of Lattice Propel Builder.
 #
-#  2. IP interface related descriptors and procedures for users:
+#  2. Custom IP interface related descriptors and procedures for users:
 #     * $::ipl::if
 #       - This describes an IP interface structure, it is used to set a new
 #         interface instance like: 'set if $::ipl::if'
@@ -138,7 +145,6 @@ namespace eval ipl {
     }
     if {![info exists PropelIPLocal_path]} {
         set interfaces_paths_list [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
-        # puts $interfaces_paths_list
 
         foreach file $interfaces_paths_list {
             if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
@@ -271,8 +277,6 @@ namespace eval ipl {
         }
     }
 
-# <ipxact:requiresDriver driverType="singleShot">true</ipxact:requiresDriver>
-# <ipxact:requiresDriver driverType="clock">true</ipxact:requiresDriver>
     set port_desc {
         {ipxact:port} {} {} {
             {ipxact:logicalName} {{ipxact:logicalName} {} {} {}}
@@ -304,8 +308,8 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Sets an interface structure by the specified options
-## the returned structure can be used to generate the actual interface in the
+## Sets an interface structure by the specified options.
+## The returned structure can be used to generate the actual interface in the
 ## specified output folder with 'ipl::generate_interface' procedure.
 ## Quick usage: 'ipl::generate_interface [ipl::create_interface <options>] ./'
 #
@@ -801,8 +805,8 @@ namespace eval ipl {
 
 ###############################################################################
 ## Sets the IP structure with the specified general IP parameters.
-## You can check the Lattice Propel IP Packeger documentation for parameter
-## usecases at: https://www.latticesemi.com/view_document?document_id=54003
+## You can check the Lattice Propel IP Packager documentation for parameter
+## use cases at: https://www.latticesemi.com/view_document?document_id=54003
 #
 ## Quick usage: 'set ip [ipl::general -ip $ip <options>]'
 #
@@ -912,7 +916,7 @@ namespace eval ipl {
 ## Sets the IP structure with a configuration parameter which will appear
 ## in the IP GUI also.
 ## You can check the Lattice Propel IP Packager documentation for parameter
-## usecases as Setting Nodes at:
+## use cases as Setting Nodes at:
 ##                   https://www.latticesemi.com/view_document?document_id=54003
 ## Quick usage: 'set ip [ipl::create_interface -ip $ip <options>]'
 #
@@ -923,19 +927,19 @@ namespace eval ipl {
 # \opt[value_type] -value_type int
 # \opt[conn_mod] -conn_mod axi_dmac
 # \opt[default] -default 64
-# \opt[value_expr] -value_expr <check the IP Packeger manual>
+# \opt[value_expr] -value_expr <check the IP Packager manual>
 # \opt[options] -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} / {[(True, 1), (False, 0)]}
 # \opt[output_formatter] -output_formatter nostr
-# \opt[bool_value_mapping] -bool_value_mapping <check the IP Packeger manual>
+# \opt[bool_value_mapping] -bool_value_mapping <check the IP Packager manual>
 # \opt[editable] -editable (<python expression based on the top module parameters>)
 # \opt[hidden] -hidden (<python expression based on the top module parameters>)
-# \opt[drc] -drc <check the IP Packeger manual>
-# \opt[regex] -regex <check the IP Packeger manual>
+# \opt[drc] -drc <check the IP Packager manual>
+# \opt[regex] -regex <check the IP Packager manual>
 # \opt[value_range] -value_range {(0, 255)}
-# \opt[config_groups] -config_groups <check the IP Packeger manual>
+# \opt[config_groups] -config_groups <check the IP Packager manual>
 # \opt[group1] -group1 {Sub Group}
 # \opt[group2] -group2 {Main Group}
-# \opt[macro_name] -macro_name <check the IP Packeger manual>
+# \opt[macro_name] -macro_name <check the IP Packager manual>
 ###############################################################################
     proc set_parameter {args} {
         set debug 0
@@ -1102,7 +1106,7 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Ignores and hides ports from gui when a python expression based on module
+## Ignores and hides ports from GUI when a Python expression based on module
 ## parameters becomes true.
 #
 # \opt[ip] -ip $ip
@@ -1154,11 +1158,11 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Ignores and hides ports from gui when a python expression based on module
+## Ignores and hides ports from GUI when a Python expression based on module
 ## parameters becomes true. Uses the parsed module data from top module to
 ## find a list of ports with a specified -v_prefix like <some_prefix>_aclk.
 ## An other option is to use a tcl -regexp expression to filter the ports.
-## When the regexp option is used the -v_prefix option is ignored.
+## When the -regexp option is used the -v_prefix option is ignored.
 #
 # \opt[ip] -ip $ip
 # \opt[mod_data] -mod_data $mod_data
@@ -1267,9 +1271,9 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Sets a memory map in the IP structure
-## the name of this memory map must be used when adding a slave memory mapped
-## interface like :
+## Sets a memory map in the IP structure.
+## The name of this memory map must be used when adding a slave memory mapped
+## interface like:
 ## 'set ip [ipl::add_interface -ip $ip <other opts> -mem_map_ref <mem_map_name>]'
 ## Quick usage: 'set ip [ipl::add_memory_map -ip $ip <options>]'
 #
@@ -1530,12 +1534,7 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Adds the axi interfaces to the IP structure based on the parsed module
-## data from the top module.
-## Quick usage: 'set mod_data [ipl::parse_module ./axi_dmac.v]'
-#               'set ip $::ipl::ip'
-#               'set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]'
-#               'set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]'
+## Adds a predefined interface to the IP structure.
 #
 # \opt[ip] -ip $ip
 # \opt[inst_name] -inst_name fifo_wr
@@ -1543,6 +1542,8 @@ namespace eval ipl {
 # \opt[description] -description fifo_wr
 # \opt[master_slave] -master_slave slave
 # \opt[portmap] -portmap {{"fifo_rd_en" "EN"} {"fifo_rd_dout" "DATA"}}
+# \opt[mem_map_ref] -mem_map_ref s_axi_mem_map
+# \opt[addr_space_ref] -addr_space_ref m_axi_aspace_ref
 # \opt[vendor] -vendor analog.com
 # \opt[library] -library ADI
 # \opt[name] -name fifo_wr
@@ -1557,7 +1558,6 @@ namespace eval ipl {
             -inst_name "" \
             -display_name "" \
             -description "" \
-            -abstraction_ref "" \
             -master_slave "" \
             -mem_map_ref "" \
             -addr_space_ref "" \
@@ -1694,9 +1694,7 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Sets an interface structure by the specified options
-## the returned structure can be used to generate the actual interface in the
-## specified output folder with 'ipl::generate_interface' procedure.
+## Sets the IP structure with ports' data from top module.
 ## Quick usage: 'set mod_data [ipl::parse_module ./axi_dmac.v]'
 #               'set ip $::ipl::ip'
 #               'set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]'
@@ -1746,6 +1744,19 @@ namespace eval ipl {
         return $ip
     }
 
+###############################################################################
+## Sets the IP structure with parameters' data from top module.
+## This is only recomended if you have few parameters in top module but you
+## don't care the ordering and grouping of them. You can additionally edit the
+## GUI appearance of a parameter by using ipl_set_parameter but not the
+## ordering and grouping of them.
+## Quick usage: 'set mod_data [ipl::parse_module ./axi_dmac.v]'
+#               'set ip $::ipl::ip'
+#               'set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]'
+#
+# \opt[ip] -ip $ip
+# \opt[mod_data] -mod_data $mod_data
+###############################################################################
     proc add_parameters_from_module {args} {
         array set opt [list -ip "$::ipl::ip" \
             -mod_data "" \
@@ -1827,6 +1838,23 @@ namespace eval ipl {
         return $doc
     }
 
+###############################################################################
+## Sets the IP structure with the specified file dependencies by searching them
+## in the specyfied '-spath' folder '-sdepth' deep.
+## We need to specify the files destination folder which is relative to the
+## IP output directory. These directories are specific to some file types or
+## purpose and must be used corresponding to the Lattice IP Packager
+## documentation: https://www.latticesemi.com/view_document?document_id=54003.
+## Currently automatically selects the wrapper type from .v and .sv, but
+## the VHDL wrapper type is not currently supported by this script.
+#
+# \opt[ip] -ip $ip
+# \opt[spath] -spath ./
+# \opt[sdepth] -sdepth 7
+# \opt[regex] -regex <you can apply a tcl regexp here to filter the files>
+# \opt[extl] -extl {csacsi.v a_szamar.v *.sv}
+# \opt[dpath] -dpath rtl
+###############################################################################
     proc add_ip_files_auto {args} {
         array set opt [list -ip "$::ipl::ip" \
             -spath "" \
@@ -1880,11 +1908,11 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Sets the ip structure with the specified file dependencies.
+## Sets the IP structure with the specified file dependencies.
 ## We need to specify the files destination folder which is relative to the
-## ip output directory. These directories are specific to some file types or
-## purpose and must be used coresponding to the Lattice IP Packeger
-## documentation.
+## IP output directory. These directories are specific to some file types or
+## purpose and must be used corresponding to the Lattice IP Packager
+## documentation: https://www.latticesemi.com/view_document?document_id=54003.
 ## Currently automatically selects the wrapper type from .v and .sv, but
 ## the VHDL wrapper type is not currently supported by this script.
 #
@@ -1994,7 +2022,7 @@ namespace eval ipl {
     }
 
 ###############################################################################
-## Adds the axi interfaces to the IP structure based on the parsed module
+## Adds the AXI interfaces to the IP structure based on the parsed module
 ## data from the top module.
 ## Quick usage: 'set mod_data [ipl::parse_module ./axi_dmac.v]'
 #               'set ip $::ipl::ip'
@@ -2221,4 +2249,3 @@ namespace eval ipl {
         return $ip
     }
 }
-
