@@ -93,7 +93,7 @@ module system_top (
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
   wire    [15:0]  decimation_ratio;
-  wire            filter_reset;
+//  wire            filter_reset;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -103,7 +103,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:49] = 15'b0;
+  assign gpio_i[63:48] = 15'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -113,13 +113,14 @@ module system_top (
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
 
-  ad_iobuf #(
+  /*ad_iobuf #(
     .DATA_WIDTH(1)
   ) i_iobuf_filter_reset (
     .dio_t(gpio_t[48]),
     .dio_i(gpio_o[48]),
     .dio_o(gpio_i[48]),
     .dio_p(filter_reset));
+*/
 
   ad_iobuf #(
     .DATA_WIDTH(16)
@@ -209,7 +210,7 @@ module system_top (
     .adc_clk (adc_clk),
     .adc_data (adc_data),
     .filter_decimation_ratio (decimation_ratio),
-    .filter_reset (filter_reset),
+    //.filter_reset (filter_reset),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
