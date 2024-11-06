@@ -132,6 +132,35 @@ for {set i 0} {$i < 4} {incr i} {
   ad_connect util_ad9361_adc_fifo/dout_data_$i util_ad9361_adc_pack/fifo_wr_data_$i
 }
 
+# adc-path sha3 dma
+
+ad_ip_instance axi_dmac axi_sha3_dma
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_sha3_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_sha3_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_sha3_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter axi_sha3_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_SG_TRANSFER 1
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_DATA_WIDTH_SRC 512
+ad_ip_parameter axi_sha3_dma CONFIG.DMA_DATA_WIDTH_SG 64
+
+ad_connect util_ad9361_divclk/clk_out axi_sha3_dma/fifo_wr_clk
+ad_connect $sys_cpu_resetn axi_sha3_dma/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_sha3_dma/m_sg_axi_aresetn
+
+# sha3-path sha3_512
+set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3_512 ]
+ad_connect util_ad9361_divclk/clk_out sha3_512/ap_clk
+ad_connect util_ad9361_divclk_reset/peripheral_reset sha3_512/ap_rst
+ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
+ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
+ad_connect sha3_512/digestStreamOut_full_n VCC
+ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
+
+
 # adc-path dma
 
 ad_ip_instance axi_dmac axi_ad9361_adc_dma
@@ -148,6 +177,8 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_adc_dma/fifo_wr
+ad_connect util_ad9361_adc_pack/packed_fifo_wr_data axi_ad9361_adc_dma/fifo_wr_din
+ad_connect util_ad9361_adc_pack/packed_fifo_wr_en axi_ad9361_adc_dma/fifo_wr_en
 ad_connect util_ad9361_adc_pack/packed_sync axi_ad9361_adc_dma/sync
 ad_connect $sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
 ad_connect $sys_cpu_resetn axi_ad9361_adc_dma/m_sg_axi_aresetn
@@ -219,13 +250,17 @@ ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_cpu_interconnect 0x7C440000 axi_sha3_dma
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
+ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_dest_axi
 
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
+ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_sg_axi
 
 # interrupts
 
