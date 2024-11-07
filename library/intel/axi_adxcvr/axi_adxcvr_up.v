@@ -87,9 +87,13 @@ module axi_adxcvr_up #(
 
   // internal signals
 
-  wire                          up_ready_s;
+  wire                          up_all_ready_s;
   wire    [31:0]                up_status_32_s;
   wire    [31:0]                up_rparam_s;
+
+  wire                          up_pll_locked_s;
+  wire                          up_rx_lockedtodata_s;
+  wire                          up_ready_s;
 
   // defaults
 
@@ -119,34 +123,50 @@ module axi_adxcvr_up #(
     end
   end
 
-  assign up_ready_s = & up_status_32_s[(NUM_OF_LANES-1):0];
+  generate if (FPGA_TECHNOLOGY == 105) begin
+    sync_bits #(
+      .NUM_OF_BITS (3),
+      .ASYNC_CLK (1)
+    ) i_sync_input_ctrl (
+      .in_bits ({up_ready, up_pll_locked, up_rx_lockedtodata}),
+      .out_resetn (1'b1),
+      .out_clk (up_clk),
+      .out_bits({up_ready_s, up_pll_locked_s, up_rx_lockedtodata_s}));
+  end else begin
+    assign up_ready_s = up_ready;
+    assign up_pll_locked_s = up_pll_locked;
+    assign up_rx_lockedtodata_s = up_rx_lockedtodata;
+  end
+  endgenerate
+
+  assign up_all_ready_s = & up_status_32_s[(NUM_OF_LANES-1):0];
   assign up_status_32_s[31:(NUM_OF_LANES+1)] = 'd0;
-  assign up_status_32_s[NUM_OF_LANES] = FPGA_TECHNOLOGY == 105 ? TX_OR_RX_N ? up_pll_locked : up_rx_lockedtodata :
-                                                                 up_pll_locked;
-  assign up_status_32_s[(NUM_OF_LANES-1):0] = FPGA_TECHNOLOGY == 105 ? {NUM_OF_LANES{up_ready}} : up_ready;
+  assign up_status_32_s[NUM_OF_LANES] = FPGA_TECHNOLOGY == 105 ? TX_OR_RX_N ? up_pll_locked_s : up_rx_lockedtodata_s :
+                                                                 up_pll_locked_s;
+  assign up_status_32_s[(NUM_OF_LANES-1):0] = FPGA_TECHNOLOGY == 105 ? {NUM_OF_LANES{up_ready_s}} : up_ready_s;
 
   generate if (FPGA_TECHNOLOGY == 105) begin
-    reg up_rst_d = 'd0;
-    reg up_reset_ack_d1;
-    reg up_reset_ack_d2;
-    reg up_reset_ack_d3;
+    wire up_reset_ack_s;
+    reg  up_rst_d;
 
-    always @(posedge up_clk) begin
-      up_reset_ack_d1 <= up_reset_ack[0];
-      up_reset_ack_d2 <= up_reset_ack_d1;
-      up_reset_ack_d3 <= up_reset_ack_d2;
-    end
+    sync_bits #(
+      .NUM_OF_BITS (1),
+      .ASYNC_CLK (1)
+    ) i_sync_reset_ack (
+      .in_bits (up_reset_ack),
+      .out_resetn (1'b1),
+      .out_clk (up_clk),
+      .out_bits(up_reset_ack_s));
 
     always @(negedge up_rstn or posedge up_clk) begin
       if (up_rstn == 0) begin
         up_rst_d <= 1'b1;
       end else if (up_resetn == 1'b0) begin
         up_rst_d <= 1'b1;
-      end else begin
+      end else if (up_reset_ack_s) begin
         up_rst_d <= 1'b0;
       end
     end
-
     assign up_rst = up_rst_d;
   end else begin
     reg [3:0] up_rst_cnt = 'd8;
@@ -154,24 +174,29 @@ module axi_adxcvr_up #(
     always @(negedge up_rstn or posedge up_clk) begin
       if (up_rstn == 0) begin
         up_rst_cnt <= 4'h8;
-        up_status_int <= 1'b0;
       end else begin
         if (up_resetn == 1'b0) begin
           up_rst_cnt <= 4'h8;
         end else if (up_rst_cnt[3] == 1'b1) begin
           up_rst_cnt <= up_rst_cnt + 1'b1;
         end
-        if (up_resetn == 1'b0) begin
-          up_status_int <= 1'b0;
-        end else if (up_ready_s == 1'b1) begin
-          up_status_int <= 1'b1;
-        end
       end
     end
-
     assign up_rst = up_rst_cnt[3];
   end
   endgenerate
+
+  always @(negedge up_rstn or posedge up_clk) begin
+    if (up_rstn == 0) begin
+      up_status_int <= 1'b0;
+    end else begin
+      if (up_resetn == 1'b0) begin
+        up_status_int <= 1'b0;
+      end else if (up_all_ready_s) begin
+        up_status_int <= 1'b1;
+      end
+    end
+  end
 
   // Specific to Intel
 
