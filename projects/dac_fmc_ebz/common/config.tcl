@@ -116,6 +116,7 @@ set params(AD9164,03) {2 3 3 4 1 16 16}
 set params(AD9164,04) {2 4 1 1 1 16 16}
 set params(AD9164,06) {2 6 3 2 1 16 16}
 set params(AD9164,08) {2 8 2 1 1 16 16}
+set params(AD9164,09) {1 8 4 1 1 16 16}
 set params(AD9164,device_code) 3
 
 # AD9171
