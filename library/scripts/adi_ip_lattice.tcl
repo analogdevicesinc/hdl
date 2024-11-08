@@ -3,52 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-
-# Extracting the Propel Builder version from $env(TOOLRTF)/../../components.xml
-set regex "<Name>com\.latticesemi\.systembuilder.*<Version>$required_lattice_version"
-
-if {[info exists env(TOOLRTF)]} {
-    if {[file exists "$env(TOOLRTF)/../../components.xml"]} {
-        set file [open "$env(TOOLRTF)/../../components.xml"]
-        set data [read $file]
-        close $file
-
-        if {[regexp $regex $data match]} {
-            regexp <Version>$required_lattice_version $match data
-            set version [lindex [split $data ">"] 1]
-            set PROPEL_BUILDER_VERSION $version
-            puts "Propel Builder version: $PROPEL_BUILDER_VERSION\n"
-        } else {
-            set PROPEL_BUILDER_VERSION "UNKNOWN"
-            puts "Propel Builder version: $PROPEL_BUILDER_VERSION\n"
-        }
-
-        if {$IGNORE_VERSION_CHECK} {
-            if {[string compare $PROPEL_BUILDER_VERSION $required_lattice_version] != 0} {
-                puts -nonewline "CRITICAL WARNING: Propel Builder version mismatch; "
-                puts -nonewline "expected $required_lattice_version, "
-                puts -nonewline "got $PROPEL_BUILDER_VERSION.\n"
-            }
-        } else {
-            if {[string compare $PROPEL_BUILDER_VERSION $required_lattice_version] != 0} {
-                puts -nonewline "ERROR: Propel Builder version mismatch; "
-                puts -nonewline "expected $required_lattice_version, "
-                puts -nonewline "got $PROPEL_BUILDER_VERSION.\n"
-                puts -nonewline "This ERROR message can be down-graded to CRITICAL \
-                    WARNING by setting ADI_IGNORE_VERSION_CHECK environment variable to 1. \
-                    Be aware that ADI will not support you, if you are using a different \
-                    tool version.\n"
-                exit 2
-                error
-            }
-        }
-    } else {
-        puts {Warning: No $env(TOOLRTF)/../../components.xml file was found. No tool version found to check.}
-    }
-} else {
-    puts {Warning: No $env(TOOLRTF) is set. No tool version to check.}
-}
-
 ################################################################################
 ## Namespace for Lattice IP packaging:
 #  * These are mainly some xml tree manipulator procedures.
@@ -127,31 +81,12 @@ if {[info exists env(TOOLRTF)]} {
 #         ipl::create_interface
 ################################################################################
 namespace eval ipl {
-    if {[info exists ad_hdl_dir] && $ad_hdl_dir != ""} {
-        if {[file exists "$ad_hdl_dir/library/scripts/propel_ip_paths.pth"]} {
-            set file [open "$ad_hdl_dir/library/scripts/propel_ip_paths.pth"]
-            set data [read $file]
-            close $file
-            set PropelIPLocal_path [lindex $data 1]
-            if {![info exists env(TOOLRTF)]} {
-                set check [catch {exec cygpath --version}]
-                if {$check == 0} {
-                    set PropelIPLocal_path [exec cygpath -u $PropelIPLocal_path]
-                }
-            }
-        } else {
-            puts "Warning: No $ad_hdl_dir/library/scripts/propel_ip_paths.pth file was found."
-        }
-    }
-    if {![info exists PropelIPLocal_path]} {
-        set interfaces_paths_list [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
 
-        foreach file $interfaces_paths_list {
-            if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
-                puts $file
-                puts $PropelIPLocal_path
-            }
-        }
+    set check [catch {exec cygpath --version}]
+    if {$check == 0} {
+        set PropelIPLocal_path [exec cygpath -H]/[exec whoami]/PropelIPLocal
+    } else {
+        set PropelIPLocal_path $env(HOME)/PropelIPLocal
     }
 
     #node: {name attributes content childs}

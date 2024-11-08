@@ -50,6 +50,6 @@ clean-all:
 
 $(LTT_INTERFACES): $(L_DEPS)
 	$(call build, \
-		$(PROPEL_BUILDER) interfaces_ltt.tcl, \
+		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
 		$(HL)ADI$(NC) interfaces)

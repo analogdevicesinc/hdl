@@ -150,7 +150,7 @@ $(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
 		true, \
 	rm -rf $(CLEAN_TARGET) ; \
 	$(call build, \
-		$(PROPEL_BUILDER) $(LIBRARY_NAME)_ltt.tcl, \
+		$(LATTICE_IP_TOOL) $(LIBRARY_NAME)_ltt.tcl, \
 		$(LIBRARY_NAME)_ltt.log, \
 		$(HL)$(LIBRARY_NAME)$(NC) library))
 
