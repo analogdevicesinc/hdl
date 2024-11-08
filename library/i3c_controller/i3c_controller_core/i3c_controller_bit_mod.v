@@ -41,6 +41,10 @@
  * to achieve 12.5MHz at the maximum speed grade, set:
  * * CLK_MOD = 0, clk = 100MHz
  * * CLK_MOD = 1, clk = 50MHz
+ * I3C Open drain is 1.5625MHz,while I2C speed depends on I2C_MOD, e.g.:
+ * * I2C_MOD = 0 : 1.5626MHz
+ * * I2C_MOD = 2:    390.6kHz
+ * * I2C_MOD = 4:     97.6kHz
  */
 
 `timescale 1ns/100ps
@@ -48,7 +52,8 @@
 `include "i3c_controller_bit_mod.vh"
 
 module i3c_controller_bit_mod #(
-  parameter CLK_MOD = 0
+  parameter CLK_MOD = 0,
+  parameter I2C_MOD = 0
 ) (
   input reset_n,
   input clk,
@@ -87,38 +92,42 @@ module i3c_controller_bit_mod #(
   localparam [1:0] SM_SCL_HIGH = 3;
 
   localparam COUNT_INCR = CLK_MOD ? 2 : 1;
+  localparam PRESCL = I2C_MOD+5;
+  localparam PRESCALER_CLOG = $clog2(PRESCL);
 
   reg [`MOD_BIT_CMD_WIDTH:0] cmdb_r;
-  reg [1:0] pp_sg;
-  reg [5:0] count; // Worst-case: 1.56MHz, 32-bits per half-bit.
+  reg [1:0] pp_sg_reg;
+  reg [PRESCL:0] count;
   reg       sr;
   reg       i2c_mode_reg;
   reg       i2c_scl_reg;
-  reg [3:0] count_delay;
+  reg [PRESCL-2:0] count_delay;
   reg [1:0] sm;
 
   wire [`MOD_BIT_CMD_WIDTH:2] st;
   wire [1:CLK_MOD] count_high;
-  wire [3:0] scl_posedge_multi;
+  wire [PRESCL-2:0] scl_posedge_multi;
   wire       t_w;
   wire       t_w2;
   wire       sdo_w;
   wire       scl_posedge;
-  wire       sr_sda;
-  wire       sr_scl;
+  wire [1:0] sr_sda;
+  wire [1:0] p_sda;
+  wire [1:0] sr_scl;
   wire       i3c_scl_posedge;
   wire       i2c_scl;
   wire       i2c_scl_posedge;
   wire [1:0] ss;
+  wire [PRESCALER_CLOG-1:0] pp_sg;
 
   always @(posedge clk) begin
     count <= 4;
     i2c_scl_reg <= i2c_scl;
-    count_delay <= {count_delay[2:0], count[5]};
+    count_delay <= {count_delay[PRESCL-3:0], count[PRESCL]};
     if (!reset_n) begin
       sm <= SM_SETUP;
       cmdb_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
-      pp_sg <= 2'b00;
+      pp_sg_reg <= 2'b00;
       sr <= 1'b0;
       i2c_mode_reg <= 1'b0;
     end else begin
@@ -152,7 +161,7 @@ module i3c_controller_bit_mod #(
         if (cmdb_valid) begin
           cmdb_r <= cmdb[4:2] != `MOD_BIT_CMD_START_ ? cmdb : {cmdb[4:2], 1'b0, cmdb[0]};
           // CMDW_MSG_RX is push-pull, but the Sr to stop from the controller side is open drain.
-          pp_sg <= cmdb[1] & cmdb[4:2] != `MOD_BIT_CMD_START_ ? scl_pp_sg : 2'b00;
+          pp_sg_reg <= cmdb[1] & cmdb[4:2] != `MOD_BIT_CMD_START_ ? scl_pp_sg : 2'b00;
           sm <= SM_SCL_LOW;
         end else begin
           cmdb_r <= {`MOD_BIT_CMD_NOP_, 2'b01};
@@ -192,12 +201,12 @@ module i3c_controller_bit_mod #(
 
   genvar i;
   generate
-    for (i = 0; i < 4; i = i+1) begin: gen_scl
+    for (i = 0; i < PRESCL-1; i = i+1) begin: gen_scl
       assign scl_posedge_multi[i] = &count[i+2:CLK_MOD];
     end
   endgenerate
 
-  assign scl_posedge = scl_posedge_multi[3-pp_sg];
+  assign scl_posedge = scl_posedge_multi[pp_sg];
   assign count_high = count[1:CLK_MOD];
   assign cmdb_ready = (sm == SM_SETUP) ||
                       (sm == SM_STALL) ||
@@ -206,8 +215,12 @@ module i3c_controller_bit_mod #(
   assign st = cmdb_r[`MOD_BIT_CMD_WIDTH:2];
 
   // Used to generate Sr with generous timing (locked in open drain speed).
-  assign sr_sda = ((~count[4] & count[5]) | ~count[5]) & sm == SM_SCL_LOW;
-  assign sr_scl = count[5] | sm == SM_SCL_HIGH;
+  assign sr_sda[0] = ((~count[4] & count[5]) | ~count[5]) & sm == SM_SCL_LOW;
+  assign p_sda [0] = ~sr_sda[0];
+  assign sr_scl[0] = count[5] | sm == SM_SCL_HIGH;
+  assign sr_sda[1] = ~i2c_scl;
+  assign p_sda [1] = 1'b0;
+  assign sr_scl[1] = count[PRESCL] | sm == SM_SCL_HIGH;
   assign i2c_scl = count_delay[3];
 
   assign i2c_scl_posedge = i2c_scl & ~i2c_scl_reg;
@@ -219,8 +232,8 @@ module i3c_controller_bit_mod #(
   assign rx_valid = i2c_mode_reg ? i2c_scl_posedge :
                     CLK_MOD ? scl_posedge : i3c_scl_posedge;
 
-  assign sdo_w = st == `MOD_BIT_CMD_START_   ? sr_sda :
-                 st == `MOD_BIT_CMD_STOP_    ? ~sr_sda :
+  assign sdo_w = st == `MOD_BIT_CMD_START_   ? sr_sda[i2c_mode_reg] :
+                 st == `MOD_BIT_CMD_STOP_    ? p_sda[i2c_mode_reg]  :
                  st == `MOD_BIT_CMD_WRITE_   ? ss[0] :
                  st == `MOD_BIT_CMD_ACK_SDR_ ?
                    (i2c_mode_reg ? 1'b1 : (sm == SM_SCL_HIGH ? rx : 1'b1)) :
@@ -238,10 +251,14 @@ module i3c_controller_bit_mod #(
   assign t_w  = st[4] ? 1'b0 : ss[1];
   assign t_w2 = ~t_w & sdo_w ? 1'b1 : 1'b0;
 
-  assign scl = st == `MOD_BIT_CMD_START_ ? (sr ? sr_scl : 1'b1) :
+  assign scl = st == `MOD_BIT_CMD_START_ ? (sr ? sr_scl[i2c_mode_reg] : 1'b1) :
                i2c_mode_reg ? (i2c_scl || sm == SM_SETUP) :
                (~(sm == SM_SCL_LOW || sm == SM_STALL));
 
   assign nop = st == `MOD_BIT_CMD_NOP_ & sm == SM_SETUP;
+  assign pp_sg = i2c_mode_reg ? PRESCL-2 :
+                 pp_sg_reg == 2'b00 ? 3 :
+                 pp_sg_reg == 2'b01 ? 2 :
+                 pp_sg_reg == 2'b10 ? 1 : 0;
 
 endmodule
