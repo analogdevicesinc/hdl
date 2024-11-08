@@ -262,9 +262,13 @@ module i3c_controller_word (
                 // In I2C, the peripheral cannot stop the SM_TRANSFER.
                 cmd_r <= `MOD_BIT_CMD_WRITE_;
                 if (sdi_ready) begin
-                  cmd_wr <= 1'b0; // ACK
-                end else begin
-                  cmd_wr <= 1'b1; // NACK
+                  if (cmdw_header == `CMDW_STOP_OD) begin
+                    // Peek next command to see if the controller wishes to
+                    // end the SM_TRANSFER.
+                    cmd_wr <= 1'b1; // NACK
+                  end else begin
+                    cmd_wr <= 1'b0; // ACK
+                  end
                 end
               end else begin
                 // SDI
