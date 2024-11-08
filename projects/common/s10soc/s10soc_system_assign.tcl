@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -116,18 +116,18 @@ set_location_assignment PIN_K36 -to hps_ddr_a[13]
 set_location_assignment PIN_K37 -to hps_ddr_a[14]
 set_location_assignment PIN_N36 -to hps_ddr_a[15]
 set_location_assignment PIN_P36 -to hps_ddr_a[16]
-set_location_assignment PIN_H38 -to hps_ddr_act_n[0]
-set_location_assignment PIN_A38 -to hps_ddr_alert_n[0]
+set_location_assignment PIN_H38 -to hps_ddr_act_n
+set_location_assignment PIN_A38 -to hps_ddr_alert_n
 set_location_assignment PIN_L36 -to hps_ddr_ba[0]
 set_location_assignment PIN_T35 -to hps_ddr_ba[1]
-set_location_assignment PIN_R36 -to hps_ddr_bg[0]
-set_location_assignment PIN_F39 -to hps_ddr_ck[0]
-set_location_assignment PIN_G39 -to hps_ddr_ck_n[0]
-set_location_assignment PIN_L40 -to hps_ddr_cke[0]
-set_location_assignment PIN_G38 -to hps_ddr_cs_n[0]
-set_location_assignment PIN_G40 -to hps_ddr_odt[0]
-set_location_assignment PIN_H40 -to hps_ddr_par[0]
-set_location_assignment PIN_E40 -to hps_ddr_reset_n[0]
+set_location_assignment PIN_R36 -to hps_ddr_bg
+set_location_assignment PIN_F39 -to hps_ddr_ck
+set_location_assignment PIN_G39 -to hps_ddr_ck_n
+set_location_assignment PIN_L40 -to hps_ddr_cke
+set_location_assignment PIN_G38 -to hps_ddr_cs_n
+set_location_assignment PIN_G40 -to hps_ddr_odt
+set_location_assignment PIN_H40 -to hps_ddr_par
+set_location_assignment PIN_E40 -to hps_ddr_reset_n
 set_location_assignment PIN_A36 -to hps_ddr_dqs_p[0]
 set_location_assignment PIN_E36 -to hps_ddr_dqs_p[1]
 set_location_assignment PIN_G33 -to hps_ddr_dqs_p[2]
@@ -371,4 +371,3 @@ set_global_assignment -name PWRMGT_VOLTAGE_OUTPUT_FORMAT "AUTO DISCOVERY"
 set_global_assignment -name PWRMGT_TRANSLATED_VOLTAGE_VALUE_UNIT VOLTS
 
 set_global_assignment -name DEVICE_INITIALIZATION_CLOCK OSC_CLK_1_125MHz
-
