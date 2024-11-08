@@ -22,6 +22,7 @@ ad_ip_files i3c_controller_core [list \
 
 ad_ip_parameter MAX_DEVS STRING "MAX_DEVS"
 ad_ip_parameter CLK_MOD INTEGER 1
+ad_ip_parameter I2C_MOD INTEGER 0
 
 proc p_elaboration {} {
 
@@ -29,6 +30,7 @@ proc p_elaboration {} {
 
   set max_devs [get_parameter_value "MAX_DEVS"]
   set clk_mod [get_parameter_value "CLK_MOD"]
+  set i2c_mod [get_parameter_value "I2C_MOD"]
 
   # clock and reset interface
 

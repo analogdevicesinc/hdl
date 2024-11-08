@@ -40,7 +40,8 @@
 
 module i3c_controller_core #(
   parameter MAX_DEVS = 16,
-  parameter CLK_MOD = 0
+  parameter CLK_MOD = 0,
+  parameter I2C_MOD = 0
 ) (
   input         clk,
   input         reset_n,
@@ -170,7 +171,8 @@ module i3c_controller_core #(
     .rmap_ibi_config(rmap_ibi_config));
 
   i3c_controller_bit_mod #(
-    .CLK_MOD(CLK_MOD)
+    .CLK_MOD(CLK_MOD),
+    .I2C_MOD(I2C_MOD)
   ) i_i3c_controller_bit_mod (
     .reset_n(reset_n),
     .clk(clk),
