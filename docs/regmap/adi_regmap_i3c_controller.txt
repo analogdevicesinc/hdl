@@ -575,6 +575,7 @@ RW
 Indicate if the device is attached.
 ENDFIELD
 
+FIELD
 [0] 0x0
 DEV_CHAR_IS_I2C
 RW
