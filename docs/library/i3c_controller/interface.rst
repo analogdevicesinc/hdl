@@ -418,7 +418,7 @@ sampled:
 
 .. warning::
 
-   To not sample the ``bit_mod:sdo`` signal, it will alter the SDA I/O logic and
+   Do not sample the ``bit_mod:sdo`` signal, it will alter the SDA I/O logic and
    the core won't work properly.
 
 The trigger at ``cmd_parser:cmdp_ccc_id`` allows to start the capture at the start
