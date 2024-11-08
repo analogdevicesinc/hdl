@@ -163,7 +163,7 @@ module i3c_controller_bit_mod #(
         count <= count + COUNT_INCR;
       end
 
-      if (sm == SM_SETUP) begin
+      if (sm == SM_SETUP || st == `MOD_BIT_CMD_STOP_) begin
         sr <= 1'b0;
       end else if (cmdb_ready) begin
         sr <= 1'b1;
@@ -220,7 +220,7 @@ module i3c_controller_bit_mod #(
                     CLK_MOD ? scl_posedge : i3c_scl_posedge;
 
   assign sdo_w = st == `MOD_BIT_CMD_START_   ? sr_sda :
-                 st == `MOD_BIT_CMD_STOP_    ? 1'b0 :
+                 st == `MOD_BIT_CMD_STOP_    ? ~sr_sda :
                  st == `MOD_BIT_CMD_WRITE_   ? ss[0] :
                  st == `MOD_BIT_CMD_ACK_SDR_ ?
                    (i2c_mode_reg ? 1'b1 : (sm == SM_SCL_HIGH ? rx : 1'b1)) :
