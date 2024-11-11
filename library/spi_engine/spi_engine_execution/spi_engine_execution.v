@@ -96,7 +96,6 @@ module spi_engine_execution #(
   localparam BIT_COUNTER_CLEAR = {{8{1'b1}}, {BIT_COUNTER_WIDTH{1'b0}}, 1'b1};
 
   reg sclk_int = 1'b0;
-  wire sdo_int_s;
   reg sdo_t_int = 1'b0;
 
   reg idle;
@@ -106,7 +105,6 @@ module spi_engine_execution #(
   reg clk_div_last;
 
   reg [7:0] sleep_counter;
-  wire [1:0] cs_sleep_counter = sleep_counter[1:0];
   reg [(BIT_COUNTER_WIDTH-1):0] bit_counter;
   reg [7:0] transfer_counter;
   reg ntx_rx;
@@ -117,12 +115,9 @@ module spi_engine_execution #(
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
 
-  wire last_bit;
-  wire first_bit;
   reg last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
   reg [7:0] left_aligned = 8'b0;
-  wire end_of_word;
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
@@ -138,6 +133,12 @@ module spi_engine_execution #(
   reg sdo_enabled = 1'b0;
   reg sdi_enabled = 1'b0;
 
+  wire sdo_int_s;
+
+  wire last_bit;
+  wire first_bit;
+  wire end_of_word;
+
   wire [2:0] inst = cmd[14:12];
   wire [2:0] inst_d1 = cmd_d1[14:12];
 
@@ -152,6 +153,7 @@ module spi_engine_execution #(
   wire trigger_tx;
   wire trigger_rx;
 
+  wire [1:0] cs_sleep_counter = sleep_counter[1:0];
   wire sleep_counter_compare;
   wire cs_sleep_counter_compare;
   wire cs_sleep_early_exit;
@@ -169,7 +171,7 @@ module spi_engine_execution #(
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
-    .DATA_WIDTH(DATA_WIDTH),                   // Valid data widths values are 8/16/24/32
+    .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDI(NUM_OF_SDI),
     .SDI_DELAY(SDI_DELAY),
     .ECHO_SCLK(ECHO_SCLK),

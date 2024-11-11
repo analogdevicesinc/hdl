@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -38,54 +38,56 @@
 module spi_engine_execution_shiftreg #(
 
   parameter DEFAULT_SPI_CFG = 0,
-  parameter DATA_WIDTH = 8,                   // Valid data widths values are 8/16/24/32
+  parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDI = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
   parameter ECHO_SCLK = 0,
   parameter [2:0]CMD_TRANSFER = 3'b000
 ) (
-  input clk,
-  input resetn,
+  input   clk,
+  input   resetn,
 
   // spi io
-  input [NUM_OF_SDI-1:0] sdi,
-  output sdo_int,
-  input echo_sclk,
+  input   [NUM_OF_SDI-1:0]  sdi,
+  output                    sdo_int,
+  input                     echo_sclk,
 
   // spi data
-  input [(DATA_WIDTH-1):0] sdo_data,
-  input sdo_data_valid,
-  output reg sdo_data_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
-  output reg sdi_data_valid,
-  input sdi_data_ready,
+  input   [(DATA_WIDTH-1):0]  sdo_data,
+  input                       sdo_data_valid,
+  output reg                  sdo_data_ready,
+
+  output  [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  output reg                              sdi_data_valid,
+  input                                   sdi_data_ready,
 
   // cfg and status
-  input sdo_enabled,
-  input sdi_enabled,
-  input [15:0] current_cmd,
-  input sdo_idle_state,
-  input [7:0] left_aligned,
-  input [7:0] word_length,
+  input           sdo_enabled,
+  input           sdi_enabled,
+  input   [15:0]  current_cmd,
+  input           sdo_idle_state,
+  input   [ 7:0]  left_aligned,
+  input   [ 7:0]  word_length,
 
   // timing from main fsm
-  input sample_sdo,
-  output reg sdo_io_ready,
-  input transfer_active,
-  input trigger_tx,
-  input trigger_rx,
-  input first_bit,
-  input cs_activate,
-  output end_of_sdi_latch
+  input       sample_sdo,
+  output reg  sdo_io_ready,
+  input       transfer_active,
+  input       trigger_tx,
+  input       trigger_rx,
+  input       first_bit,
+  input       cs_activate,
+  output      end_of_sdi_latch
 );
 
-  reg [7:0] sdi_counter = 8'b0;
+  reg [             7:0] sdi_counter    = 8'b0;
   reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
+  reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
   reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_d;
-  wire last_sdi_bit;
-  reg [SDI_DELAY+1:0] trigger_rx_d = {(SDI_DELAY+2){1'b0}};
-  wire trigger_rx_s;
-  wire [2:0] current_instr = current_cmd[14:12];
+
+  wire        trigger_rx_s;
+  wire [2:0]  current_instr = current_cmd[14:12];
+  wire        last_sdi_bit;
 
   always @(posedge clk) begin
     if (resetn == 1'b0) begin
@@ -129,7 +131,6 @@ module spi_engine_execution_shiftreg #(
   end
   assign sdo_int = data_sdo_shift[DATA_WIDTH-1];
   assign sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
-
 
   // In case of an interface with high clock rate (SCLK > 50MHz), the latch of
   // the SDI line can be delayed with 1, 2 or 3 SPI core clock cycle.
@@ -228,7 +229,7 @@ module spi_engine_execution_shiftreg #(
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
 
-    reg [3:0] last_sdi_bit_m = 4'b0; //FIXME: why not just use sync_bits?
+    reg [3:0] last_sdi_bit_m = 4'b0;
     always @(posedge clk) begin
       if (cs_activate) begin
         last_sdi_bit_m <= 4'b0;
@@ -254,7 +255,8 @@ module spi_engine_execution_shiftreg #(
         num_of_transfers <= 8'b0;
       end else begin
         if (current_instr == CMD_TRANSFER) begin
-          num_of_transfers <= current_cmd[7:0] + 1'b1; // current_cmd contains the NUM_OF_TRANSFERS - 1
+          // current_cmd contains the NUM_OF_TRANSFERS - 1
+          num_of_transfers <= current_cmd[7:0] + 1'b1;
         end
       end
     end
