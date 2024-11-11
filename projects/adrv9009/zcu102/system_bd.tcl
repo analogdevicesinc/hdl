@@ -3,9 +3,9 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set dac_data_offload_type 0                   ; ## BRAM
-set dac_data_offload_size [expr 2*1024*1024]  ; ## 2 MB
-set dac_axi_data_width 256
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 2*1024*1024]  ; ## 2 MB
+set plddr_offload_axi_data_width 0
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
@@ -24,8 +24,8 @@ S=$ad_project_params(TX_JESD_S)\
 RX_OS:M=$ad_project_params(RX_OS_JESD_M)\
 L=$ad_project_params(RX_OS_JESD_L)\
 S=$ad_project_params(RX_OS_JESD_S)\
-DAC_OFFLOAD:TYPE=$dac_data_offload_type\
-SIZE=$dac_data_offload_size"
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
 
