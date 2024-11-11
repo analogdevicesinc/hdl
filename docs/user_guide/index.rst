@@ -21,6 +21,7 @@ Contents
    Releases <releases>
    Build an HDL project <build_hdl>
    Build the BOOT.BIN <build_boot_bin>
+   Build the Intel Boot Image <build_intel_boot_image>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
    Porting reference designs <porting_project>
@@ -34,6 +35,8 @@ Contents
 #. :ref:`git_repository`: Our HDL GitHub repository
 #. :ref:`releases`: Releases and supported tool versions
 #. :ref:`build_hdl`: Building and generating the programming files
+#. :ref:`build_intel_boot_image`: Building and generating the programming files
+   for Intel projects
 #. :ref:`architecture`: HDL project architecture explained
 #. :ref:`user_guide ip_cores`: List of IP cores and IP guides.
 #. :ref:`porting_project`: How to port a project to a non-supported carrier
