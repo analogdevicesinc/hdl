@@ -80,7 +80,7 @@ CLEAN_TARGET += ./ipcfg
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
 CLEAN_TARGET += ./sge
 
-.PHONY: all pb rd rd-force pb-force clean clean-all
+.PHONY: all pb rd force rd-force pb-force clean clean-all
 
 all: pb rd
 
