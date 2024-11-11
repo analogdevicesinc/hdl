@@ -54,7 +54,7 @@ set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
 set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
-set dac_data_offload_name adrv9009_data_offload
+set dac_offload_name adrv9009_data_offload
 set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
 
 # adrv9009
@@ -110,15 +110,15 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
 
-ad_data_offload_create $dac_data_offload_name \
+ad_data_offload_create $dac_offload_name \
                        1 \
-                       $dac_data_offload_type \
-                       $dac_data_offload_size \
+                       $dac_offload_type \
+                       $dac_offload_size \
                        $dac_data_width \
                        $dac_data_width \
-                       $dac_axi_data_width
+                       $plddr_offload_axi_data_width
 
-ad_connect $dac_data_offload_name/sync_ext GND
+ad_connect $dac_offload_name/sync_ext GND
 
 # adc peripherals
 
@@ -356,21 +356,21 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 
 ad_connect  tx_fir_interpolator/active dac_fir_filter_active
 
-ad_connect  axi_adrv9009_tx_clkgen/clk_0 $dac_data_offload_name/m_axis_aclk
-ad_connect  adrv9009_tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
-ad_connect  util_adrv9009_tx_upack/s_axis $dac_data_offload_name/m_axis
+ad_connect  axi_adrv9009_tx_clkgen/clk_0 $dac_offload_name/m_axis_aclk
+ad_connect  adrv9009_tx_device_clk_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
+ad_connect  util_adrv9009_tx_upack/s_axis $dac_offload_name/m_axis
 
-ad_connect  $sys_dma_clk $dac_data_offload_name/s_axis_aclk
-ad_connect  $sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
+ad_connect  $sys_dma_clk $dac_offload_name/s_axis_aclk
+ad_connect  $sys_dma_resetn $dac_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_clk axi_adrv9009_tx_dma/m_axis_aclk
 ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
 
-ad_connect  $dac_data_offload_name/s_axis axi_adrv9009_tx_dma/m_axis
-ad_connect  $dac_data_offload_name/init_req axi_adrv9009_tx_dma/m_axis_xfer_req
+ad_connect  $dac_offload_name/s_axis axi_adrv9009_tx_dma/m_axis
+ad_connect  $dac_offload_name/init_req axi_adrv9009_tx_dma/m_axis_xfer_req
 ad_connect  tx_adrv9009_tpl_core/dac_dunf GND
 
-ad_connect  $sys_cpu_clk $dac_data_offload_name/s_axi_aclk
-ad_connect  $sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
+ad_connect  $sys_cpu_clk $dac_offload_name/s_axi_aclk
+ad_connect  $sys_cpu_resetn $dac_offload_name/s_axi_aresetn
 
 # connections (adc)
 
@@ -441,7 +441,7 @@ ad_cpu_interconnect 0x44A80000 axi_adrv9009_tx_xcvr
 ad_cpu_interconnect 0x43C00000 axi_adrv9009_tx_clkgen
 ad_cpu_interconnect 0x44A90000 axi_adrv9009_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_tx_dma
-ad_cpu_interconnect 0x7c430000 $dac_data_offload_name
+ad_cpu_interconnect 0x7c430000 $dac_offload_name
 ad_cpu_interconnect 0x44A60000 axi_adrv9009_rx_xcvr
 ad_cpu_interconnect 0x43C10000 axi_adrv9009_rx_clkgen
 ad_cpu_interconnect 0x44AA0000 axi_adrv9009_rx_jesd
