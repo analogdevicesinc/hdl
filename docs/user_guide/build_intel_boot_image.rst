@@ -221,7 +221,7 @@ Clone the HDL repository, then build the project:
 After the design is built, the resulting SRAM Object File (.sof) file shall be
 converted to a Raw Binary File (.rbf).
 
-If you skipped the last section, make sure to set the architecture and cross
+If you skipped the last section, ensure to set the architecture and cross
 compiler environment variables.
 
 .. caution::
@@ -395,7 +395,7 @@ Flash the preloader boot partition:
 ARRADIO/Terasic C5 SoC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`here <projects/arradio/c5soc>`
+-  HDL Project: :git-hdl:`<projects/arradio/c5soc>`
 -  ADI's Linux kernel: :git-linux:`here <>`
 
 Building the Linux Kernel image and the Devicetree
@@ -497,8 +497,9 @@ Make u-boot.scr file - this file shall be copied to /BOOT partition of the SD Ca
    $echo "fpga load 0 \${loadaddr} \$filesize;" >> u-boot.txt
    $./tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "Cyclone V script" -d u-boot.txt u-boot.scr
 
-Last but not least, create the extlinux.conf linux configuration file. This
-extlinux folder shall be copied to /BOOT partition of the SD Card:
+Last but not least, create the **extlinux.conf** Linux configuration file,
+which will be copied to /BOOT partition of the SD Card, in a folder
+named ``extlinux``:
 
 .. shell::
    :no-path:
@@ -644,7 +645,7 @@ Flash the preloader boot partition:
 CN0540/DE10Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`here <projects/cn0540/de10nano>`
+-  HDL Project: :git-hdl:`<projects/cn0540/de10nano>`
 -  ADI's Linux kernel: :git-linux:`here <>`
 
 Building the Linux Kernel image and the Devicetree
