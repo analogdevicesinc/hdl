@@ -6,29 +6,18 @@
 ################################################################################
 ## Make script for building Lattice projects. ##################################
 #
-# * Make commands: all pb rd rd-force pb-force clean clean-all clean-pb clean-rd.
+# * Make commands: all pb rd rd-force pb-force clean clean-all.
 #
 # * pb: checks if dependencies exist and builds the Propel Builder project.
 #   (block design)
 # * rd: checks for dependencies and builds the Radiant Project
 #   based on Propel Builder Project.
+# * force: you can build the whole project without
+#   checking for dependencies.
 # * pb-force and rd-force: you can build the respective projects without
 #   checking for dependencies.
 # * clean: deletes the whole project and log files.
 # * clean-all: deletes all the generated files during build.
-# * clean-pb: deletes the Propel Builder project files and directories.
-#   After this you can rebuild the Propel Builder project separately by
-#   'make pb' but only if you created the project without using the '-sbc'
-#   template file option wich is used in official project creation command,
-#   because if you create with '-sbc' option the command will not create
-#   the project becouse the first <project_name> folder from
-#   <adi_project_folder>/<project_name>/<project_name> is not deleted,
-#   becouse that contains the Radiant project files. Also deletes the log
-#   file for Propel Builder project.
-# * clean-rd: cleans the content of <adi_project_folder>/<project_name>/
-#   folder ralated to Radiant project except the
-#   <adi_project_folder>/<project_name>/<project_name> folder.
-#   Also deletes the log file for Radiant project.
 #
 # * Note: The limitation for Propel Builder project is that it does not exit
 #   with error code no matter if the design was built or failed to,
@@ -85,7 +74,13 @@ PB_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
 R_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME).rdf
 R_TARGETS += $(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
-.PHONY: all pb rd rd-force pb-force clean clean-all clean-pb clean-rd
+CLEAN_TARGET := ${PROJECT_NAME}
+CLEAN_TARGET += $(wildcard *.log)
+CLEAN_TARGET += ./ipcfg
+CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
+CLEAN_TARGET += ./sge
+
+.PHONY: all pb rd rd-force pb-force clean clean-all
 
 all: pb rd
 
@@ -94,38 +89,17 @@ pb: $(PB_TARGETS)
 rd: $(R_TARGETS)
 
 clean:
-	-rm -Rf ${PROJECT_NAME}
-	-rm -f $(wildcard *.log)
-	-rm -Rf ./ipcfg
-	-rm -Rf ./sge
+	$(call clean, \
+		$(CLEAN_TARGET), \
+		$(HL)$(PROJECT_NAME)$(NC) project)
 
 clean-all:
-	-rm -Rf ${PROJECT_NAME}
-	-rm -f $(wildcard *.log)
-	-rm -Rf ./ipcfg
-	-rm -Rf $(filter-out . .. ./. ./.., $(wildcard .*))
-	-rm -Rf ./sge
+	$(call clean, \
+		$(CLEAN_TARGET), \
+		$(HL)$(PROJECT_NAME)$(NC) project)
 	@for lib in $(LIB_DEPS); do \
 		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
 	done
-	-rm -fr $(HDL_LIBRARY_PATH)/scripts/propel_ip_paths.pth
-
-clean-pb:
-	-rm -Rf $(wildcard $(PROJECT_NAME)/$(PROJECT_NAME)/*)
-	-rm -f $(PROJECT_NAME)/.socproject
-	-rm -Rf ./ipcfg
-	-rm -f $(PROJECT_NAME)_propel_builder.log
-	-rm -Rf ./sge
-
-clean-rd:
-	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
-		$(PROJECT_NAME)/.socproject, \
-		$(wildcard $(PROJECT_NAME)/*))
-	-rm -Rf $(filter-out $(PROJECT_NAME)/$(PROJECT_NAME) \
-		$(PROJECT_NAME)/.socproject \
-		$(PROJECT_NAME)/. \
-		$(PROJECT_NAME)/.., $(wildcard $(PROJECT_NAME)/.*))
-	-rm -f $(PROJECT_NAME)_radiant.log
 
 # The library name in .tcl script must be the same as the library folder name
 M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/$(lastword $(subst /, ,$(dep)))/metadata.xml)
@@ -133,19 +107,19 @@ M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/$(lastword $(subst
 $(HDL_LIBRARY_PATH)%/metadata.xml: TARGET:=lattice
 FORCE:
 $(HDL_LIBRARY_PATH)%/metadata.xml: FORCE
-	flock $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)).lock sh -c " \
-	if [ -n \"${REQUIRED_LATTICE_VERSION}\" ]; then \
-		$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET) REQUIRED_LATTICE_VERSION=${REQUIRED_LATTICE_VERSION}; \
-	else \
-		$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET); \
-	fi"; exit $$?
+	flock $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@))/.lock sh -c " \
+	$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET)"; exit $$?
 
 $(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
-	-rm -f $(PROJECT_NAME)_propel_builder.log
+	$(call skip_if_missing, \
+		Project, \
+		$(PROJECT_NAME), \
+		true, \
+	rm -Rf $(CLEAN_TARGET) ; \
 	$(call build, \
 		$(PROPEL_BUILDER) system_project_pb.tcl, \
 		$(PROJECT_NAME)_propel_builder.log, \
-		$(HL)$(PROJECT_NAME)$(NC) project)
+		$(HL)$(PROJECT_NAME)$(NC) project))
 	@for file in $(filter $(R_DEPS_FILTER), $(M_DEPS)); do \
 		if [ ! -f $$file ]; then \
 			echo "No [$(HL)$$file$(NC)] found. ... $(RED)FAILED$(NC)"; \
@@ -163,6 +137,8 @@ $(R_TARGETS): $(filter $(R_DEPS_FILTER), $(M_DEPS))
 		$(PROJECT_NAME)_radiant.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
 
+force: pb-force rd-force
+
 pb-force:
 	$(call build, \
 	$(PROPEL_BUILDER) system_project_pb.tcl, \
@@ -174,4 +150,3 @@ rd-force:
 	$(RADIANT) system_project.tcl, \
 	$(PROJECT_NAME)_radiant.log, \
 	$(HL)$(PROJECT_NAME)$(NC) project)
-

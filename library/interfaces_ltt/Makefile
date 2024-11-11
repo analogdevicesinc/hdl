@@ -37,9 +37,7 @@ CLEAN_TARGETS += interfaces_ltt.log
 
 .PHONY: all lattice clean clean-all
 
-all: lattice
-
-lattice: $(LTT_INTERFACES)
+all: $(LTT_INTERFACES)
 
 clean: clean-all
 

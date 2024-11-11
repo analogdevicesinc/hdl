@@ -155,7 +155,8 @@ $(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
 		$(HL)$(LIBRARY_NAME)$(NC) library))
 
 ltt-interfaces:
-	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep);)
+	$(foreach dep,$(_LATTICE_INTF_DEPS), \
+		flock $(dep)/.lock sh -c "$(MAKE) -C $(dep)"; exit $$?)
 
 clean-ltt-interfaces:
 	$(foreach dep,$(_LATTICE_INTF_DEPS),$(MAKE) -C $(dep) clean-all;)
