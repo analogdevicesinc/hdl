@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -117,6 +117,7 @@ proc adi_device_spec {cellpath param} {
           switch  -regexp -- $part {
              ^xc7          {set series_name 7series}
              ^xczu         {set series_name ultrascale+}
+             ^xcvu.?.p     {set series_name ultrascale+}
              ^x.zu..?p     {set series_name ultrascale+}
              ^xck26        {set series_name ultrascale+}
              ^xc.u         {set series_name ultrascale }
