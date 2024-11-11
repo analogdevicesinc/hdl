@@ -66,7 +66,7 @@ can be obtained from
    project is not supported anymore, use the last version of Kuiper where it's
    present.
 
-The files need to be copied on the BOOT FAT32 partition with the exception of
+The files need to be copied on the BOOT FAT32 partition, with the exception of
 the **preloader image**, which needs to be written to the third partition
 of the mounted device, and **extlinux.conf**, which should also be in BOOT FAT32
 partition, in a folder called 'extlinux'. That folder may not exist by default
@@ -177,8 +177,8 @@ support and may not be available in your default package manager.
 
    Pay attention to the Quartus version. Based on these versions, different
    u-boot branches should be checked out.  In the coming examples, we used the
-   latest Quartus version available **so the proper u-boot branches
-   were checked-out.**
+   latest Quartus version available so the corresponding u-boot branches
+   were checked-out.
 
 .. _build_intel_boot_image arria10:
 
@@ -450,8 +450,9 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release 2021_R1 / Quartus Pro version 20.1.
-For older versions of the flow see previous versions of this page on wiki
+This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+Quartus Pro version 20.1. For older versions of the flow see previous versions
+of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
 
 In HDL project directory, create the software/bootloader folder and clone the
@@ -515,7 +516,7 @@ extlinux folder shall be copied to /BOOT partition of the SD Card:
 Jumper setup
 ```````````````````````````````````````````````````````````````````````````````
 
-Here is the jumper configuration for ARRADIO/C5SoCto to boot the image from the
+Here is the jumper configuration for ARRADIO/C5SoC to boot the image from the
 SD Card:
 
 .. list-table::
@@ -668,8 +669,7 @@ Building the Linux Kernel image and the Devicetree
 Building the Hardware Design
 ```````````````````````````````````````````````````````````````````````````````
 
-Clone the HDL repository if it does not exist yet in local directory. Then build
-the project:
+Clone the HDL repository, then build the project:
 
 .. shell::
 
@@ -677,7 +677,7 @@ the project:
    $cd hdl/projects/cn0540/de10nano
    $make
 
-After the design was built, the resulted SRAM Object File (.sof) file shall be
+After the design is built, the resulting SRAM Object File (.sof) file shall be
 converted to a Raw Binary File (.rbf).
 
 If you skipped the last section, ensure to set the architecture and cross
@@ -699,8 +699,9 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release 2021_R1 / Quartus Pro version 20.1.
-For older versions of the flow see previous versions of this page on wiki
+This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+Quartus Pro version 20.1. For older versions of the flow see previous versions
+of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
 
 In HDL project directory, create the software/bootloader folder and clone the
@@ -745,8 +746,9 @@ Make u-boot.scr file - this file shall be copied to /BOOT partition of the SD Ca
    $echo "fpga load 0 \${loadaddr} \$filesize;" >> u-boot.txt
    $./tools/mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "Cyclone V script" -d u-boot.txt u-boot.scr
 
-Last but not least, create the extlinux.conf linux configuration file. This
-extlinux folder shall be copied to /BOOT partition of the SD Card:
+Last but not least, create the **extlinux.conf** Linux configuration file,
+which will be copied to /BOOT partition of the SD Card, in a folder
+named ``extlinux``:
 
 .. shell::
    :no-path:
