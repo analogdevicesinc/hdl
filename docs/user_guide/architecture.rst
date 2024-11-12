@@ -182,6 +182,14 @@ If the address is between 0x7000_0000 - 0x7FFF_FFFF then the
 AXI peripherics will be placed in 0xB000_0000 - 0xBFFF_FFFF range
 by adding 0x4000_0000 to the address.
 
+**Intel**
+
+Applying to DE10-Nano, C5SoC.
+
+The address usually (but not always) starts from 0x0002_0000, or the first
+available block of a bigger size. In Quartus block design you should be
+able to determine it.
+
 SPI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
