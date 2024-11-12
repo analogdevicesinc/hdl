@@ -682,7 +682,7 @@ FIELD
 [15:8] 0x00
 FRAMENUM
 RW
-The total number of video frame buffers.
+The total number of video frame buffers - 1.
 Related to MAX_NUM_FRAMES synthesis parameter.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FRAMELOCK_CONFIG[7:0]``.
 ENDFIELD

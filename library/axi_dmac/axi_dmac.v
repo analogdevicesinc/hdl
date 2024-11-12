@@ -325,8 +325,6 @@ module axi_dmac #(
   localparam HAS_DEST_ADDR = DMA_TYPE_DEST == DMA_TYPE_AXI_MM;
   localparam HAS_SRC_ADDR = DMA_TYPE_SRC == DMA_TYPE_AXI_MM;
 
-  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
-
   // Argh... "[Synth 8-2722] system function call clog2 is not allowed here"
   localparam BYTES_PER_BEAT_WIDTH_DEST = DMA_DATA_WIDTH_DEST > 1024 ? 8 :
     DMA_DATA_WIDTH_DEST > 512 ? 7 :
@@ -450,10 +448,10 @@ module axi_dmac #(
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_y_length;
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_dest_stride;
   wire [DMA_LENGTH_WIDTH-1:0] up_dma_req_src_stride;
-  wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_framenum;
+  wire [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_req_flock_framenum;
   wire                        up_dma_req_flock_mode;
   wire                        up_dma_req_flock_wait_writer;
-  wire [MAX_NUM_FRAMES_WIDTH:0] up_dma_req_flock_distance;
+  wire [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_req_flock_distance;
   wire [DMA_AXI_ADDR_WIDTH-1:0] up_dma_req_flock_stride;
   wire ctrl_flock;
   wire up_dma_req_sync_transfer_start;

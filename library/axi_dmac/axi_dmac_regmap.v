@@ -122,10 +122,10 @@ module axi_dmac_regmap #(
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
-  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_framenum,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_framenum,
   output                          request_flock_mode,
   output                          request_flock_wait_writer,
-  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_distance,
   output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
   output request_sync_transfer_start,
   output request_last,
@@ -151,7 +151,7 @@ module axi_dmac_regmap #(
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
-  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
+  localparam MAX_NUM_FRAMES = 2**MAX_NUM_FRAMES_WIDTH;
 
   // Register interface signals
   reg [31:0] up_rdata = 32'h00;

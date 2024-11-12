@@ -49,10 +49,10 @@ module axi_dmac_framelock #(
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] req_dest_address,
   input [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] req_src_address,
 
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum,
+  input [MAX_NUM_FRAMES_WIDTH-1:0] req_flock_framenum,
   input                          req_flock_mode,  // 0 - Dynamic. 1 - Simple
   input                          req_flock_wait_writer,
-  input [MAX_NUM_FRAMES_WIDTH:0] req_flock_distance,
+  input [MAX_NUM_FRAMES_WIDTH-1:0] req_flock_distance,
   input [DMA_AXI_ADDR_WIDTH-1:0] req_flock_stride,
   input req_flock_en,
   input req_cyclic,
@@ -79,7 +79,7 @@ module axi_dmac_framelock #(
   localparam BYTES_PER_BEAT_WIDTH = FRAMELOCK_MODE ?
                                     BYTES_PER_BEAT_WIDTH_SRC :
                                     BYTES_PER_BEAT_WIDTH_DEST;
-  localparam MAX_NUM_FRAMES = 2**(MAX_NUM_FRAMES_WIDTH-1);
+  localparam MAX_NUM_FRAMES = 2**MAX_NUM_FRAMES_WIDTH;
 
   reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH] req_address = 'h0;
   reg [MAX_NUM_FRAMES_WIDTH-1:0] transfer_id = 'h0;
@@ -87,6 +87,7 @@ module axi_dmac_framelock #(
   reg prev_buf_done;
 
   wire [MAX_NUM_FRAMES_WIDTH:0] transfer_id_p1;
+  wire [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum_p1;
 
   wire resp_eot;
   wire calc_enable;
@@ -112,6 +113,7 @@ module axi_dmac_framelock #(
   //  this is signalized by the end of transfer signal (resp_eot)
   assign calc_enable = ~req_ready & out_req_ready & enable_out_req &
                       (prev_buf_done | ~req_flock_en);
+  assign req_flock_framenum_p1 = req_flock_framenum + 1'b1;
   assign transfer_id_p1 = transfer_id + 1'b1;
 
   always @(posedge req_aclk) begin
@@ -122,7 +124,7 @@ module axi_dmac_framelock #(
       transfer_id <= 'h0;
       req_address <= FRAMELOCK_MODE ? req_src_address : req_dest_address;
     end else if (calc_enable) begin
-      if (transfer_id_p1 == req_flock_framenum) begin
+      if (transfer_id == req_flock_framenum) begin
         transfer_id <= 'h0;
         req_address <= FRAMELOCK_MODE ? req_src_address : req_dest_address;
       end else begin
@@ -225,8 +227,6 @@ module axi_dmac_framelock #(
     // Keep a log of frame ids the writer wrote
     // This may be an better approach for Xilinx where SRL16E blocks are
     // inferred
-    wire [MAX_NUM_FRAMES_WIDTH:0] req_flock_framenum_m1;
-    assign req_flock_framenum_m1 = req_flock_framenum - 1;
 
     genvar k;
     for (k = 0; k < MAX_NUM_FRAMES_WIDTH; k = k + 1) begin : frame_id_log
@@ -236,7 +236,7 @@ module axi_dmac_framelock #(
           s_frame_id_log <= {s_frame_id_log[MAX_NUM_FRAMES-2 : 0], m_frame_id[k]};
         end
       end
-      assign target_id[k] = wait_distance ? req_flock_framenum_m1[k] : s_frame_id_log[req_flock_distance];
+      assign target_id[k] = wait_distance ? req_flock_framenum[k] : s_frame_id_log[req_flock_distance];
     end
 `else
 
@@ -256,10 +256,10 @@ module axi_dmac_framelock #(
       end
     end
 
-    assign s_frame_id_log_qualified = s_frame_id_log_vld ? {1'b0, s_frame_id_log} : req_flock_framenum-1;
+    assign s_frame_id_log_qualified = s_frame_id_log_vld ? {1'b0, s_frame_id_log} : req_flock_framenum;
 
     assign id_at_distance = s_frame_id_log_qualified - req_flock_distance;
-    assign sum_distance_framenum = id_at_distance + req_flock_framenum;
+    assign sum_distance_framenum = id_at_distance + req_flock_framenum_p1;
     assign target_id = id_at_distance[MAX_NUM_FRAMES_WIDTH] ? sum_distance_framenum[MAX_NUM_FRAMES_WIDTH-1:0]
                                                             : id_at_distance[MAX_NUM_FRAMES_WIDTH-1:0];
 `endif

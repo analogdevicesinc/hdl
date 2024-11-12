@@ -359,10 +359,10 @@ set_property -dict [list \
 set_property -dict [list \
   "value_validation_type" "pairs" \
   "value_validation_pairs" {\
-    "4 buffers"  "3" \
-    "8 buffers"  "4" \
-    "16 buffers" "5" \
-    "32 buffers" "6" \
+    "4 buffers"  "2" \
+    "8 buffers"  "3" \
+    "16 buffers" "4" \
+    "32 buffers" "5" \
   } \
 ] \
 [ipx::get_user_parameters MAX_NUM_FRAMES_WIDTH -of_objects $cc]

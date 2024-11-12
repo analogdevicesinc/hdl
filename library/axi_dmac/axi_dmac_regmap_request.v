@@ -93,10 +93,10 @@ module axi_dmac_regmap_request #(
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
-  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_framenum,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_framenum,
   output                          request_flock_mode,
   output                          request_flock_wait_writer,
-  output [MAX_NUM_FRAMES_WIDTH:0] request_flock_distance,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_distance,
   output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
   output request_sync_transfer_start,
   output request_last,
@@ -224,8 +224,8 @@ module axi_dmac_regmap_request #(
     9'h115: up_rdata <= response_sg_desc_id;
     9'h116: begin
               up_rdata <= 'h0;
-              up_rdata[16 +:(MAX_NUM_FRAMES_WIDTH+1)] <= request_flock_distance;
-              up_rdata[8 +:(MAX_NUM_FRAMES_WIDTH+1)] <= request_flock_framenum;
+              up_rdata[16 +:MAX_NUM_FRAMES_WIDTH] <= request_flock_distance;
+              up_rdata[8 +:MAX_NUM_FRAMES_WIDTH] <= request_flock_framenum;
               up_rdata[1] <= request_flock_wait_writer;
               up_rdata[0] <= request_flock_mode;
             end
@@ -276,21 +276,21 @@ module axi_dmac_regmap_request #(
 
   generate
   if (FRAMELOCK == 1) begin
-    localparam FRAMELOCK_CONFIG_FNUM = !AUTORUN ? 'h00 :
-      AUTORUN_FRAMELOCK_CONFIG[MAX_NUM_FRAMES_WIDTH:0];
     localparam FRAMELOCK_CONFIG_MODE = !AUTORUN ? 'h0 :
-      AUTORUN_FRAMELOCK_CONFIG[8];
+      AUTORUN_FRAMELOCK_CONFIG[0];
     localparam FRAMELOCK_CONFIG_WAIT_WRITER = !AUTORUN ? 'h0 :
-      AUTORUN_FRAMELOCK_CONFIG[9];
+      AUTORUN_FRAMELOCK_CONFIG[1];
+    localparam FRAMELOCK_CONFIG_FNUM = !AUTORUN ? 'h00 :
+      AUTORUN_FRAMELOCK_CONFIG[8 +: MAX_NUM_FRAMES_WIDTH];
     localparam FRAMELOCK_CONFIG_DIST = !AUTORUN ? 'h00 :
-      AUTORUN_FRAMELOCK_CONFIG[16 +: (MAX_NUM_FRAMES_WIDTH+1)];
+      AUTORUN_FRAMELOCK_CONFIG[16 +: MAX_NUM_FRAMES_WIDTH];
     localparam FRAMELOCK_STRIDE = !AUTORUN ? 'h00 :
       AUTORUN_FRAMELOCK_STRIDE;
 
-    reg [MAX_NUM_FRAMES_WIDTH:0] up_dma_flock_framenum = FRAMELOCK_CONFIG_FNUM;
+    reg [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_flock_framenum = FRAMELOCK_CONFIG_FNUM;
     reg                          up_dma_flock_mode = FRAMELOCK_CONFIG_MODE;
     reg                          up_dma_flock_wait_writer = FRAMELOCK_CONFIG_WAIT_WRITER;
-    reg [MAX_NUM_FRAMES_WIDTH:0] up_dma_flock_distance = FRAMELOCK_CONFIG_DIST;
+    reg [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_flock_distance = FRAMELOCK_CONFIG_DIST;
     reg [DMA_AXI_ADDR_WIDTH-1:0] up_dma_flock_stride = FRAMELOCK_STRIDE;
 
     always @(posedge clk) begin
@@ -303,8 +303,8 @@ module axi_dmac_regmap_request #(
       end else if (up_wreq == 1'b1) begin
         case (up_waddr)
           9'h116: begin
-            up_dma_flock_distance <= up_wdata[16 +:(MAX_NUM_FRAMES_WIDTH+1)];
-            up_dma_flock_framenum <= up_wdata[8 +:(MAX_NUM_FRAMES_WIDTH+1)];
+            up_dma_flock_distance <= up_wdata[16 +:MAX_NUM_FRAMES_WIDTH];
+            up_dma_flock_framenum <= up_wdata[8 +:MAX_NUM_FRAMES_WIDTH];
             up_dma_flock_wait_writer <= up_wdata[1];
             up_dma_flock_mode <= up_wdata[0];
           end
