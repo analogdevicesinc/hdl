@@ -22,8 +22,8 @@
 # source ./spi_engine_execution_ltt.tcl
 # cd $dir
 
-adi_ip_update $project_name -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
-  -meta_vlnv {latticesemi.com:ip:system_memory:2.1.0} \
+adi_ip_update $project_name -vlnv {latticesemi.com:ip:sysmem0:2.2.0} \
+  -meta_vlnv {latticesemi.com:ip:system_memory:2.2.0} \
   -cfg_value {
     INTERFACE: AXI4,
     ADDR_DEPTH: 8192,
@@ -32,8 +32,8 @@ adi_ip_update $project_name -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
     MEMORY_TYPE:LRAM
   } \
   -ip_iname "sysmem0_inst"
-adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:1.2.2} \
-  -meta_vlnv {latticesemi.com:ip:axi_interconnect:1.2.2} \
+adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
+  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.0.1} \
   -cfg_value {
     EXT_MAS_AXI_ID_WIDTH:1,
     EXT_SLV_AXI_ID_WIDTH:8,
@@ -99,8 +99,8 @@ adi_ip_instance -vlnv {analog.com:ip:spi_exec0:1.0} \
     SDI_DELAY:1
   } \
   -ip_iname "spi_exec0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:sysmem_dmac0:2.1.0} \
-  -meta_vlnv {latticesemi.com:ip:system_memory:2.1.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:sysmem_dmac0:2.2.0} \
+  -meta_vlnv {latticesemi.com:ip:system_memory:2.2.0} \
   -cfg_value {
     ADDR_DEPTH:8192,
     INTERFACE:AXI4,
@@ -164,11 +164,11 @@ sbp_connect_interface_net $project_name/axi_interc0_inst/AXI_M07 \
 sbp_export_interfaces $project_name/spi_exec0_inst/spi_master
 sbp_rename -name  {spi_master0} $project_name/spi_exec0_inst_spi_master_interface
 
-sbp_assign_addr_seg -offset 'h10020000 $project_name/axi_interc0_inst/AXIL_M05 \
+sbp_assign_addr_seg -offset 'h40020000 $project_name/axi_interc0_inst/AXIL_M05 \
   $project_name/axi_spi0_inst/s_axi
 sbp_assign_addr_seg -offset 'h00300000 $project_name/axi_interc0_inst/AXI_M07 \
   $project_name/sysmem_dmac0_inst/AXI_S0
-sbp_assign_addr_seg -offset 'h10010000 $project_name/axi_interc0_inst/AXIL_M04 \
+sbp_assign_addr_seg -offset 'h40010000 $project_name/axi_interc0_inst/AXIL_M04 \
   $project_name/dmac0_inst/s_axi
-sbp_assign_addr_seg -offset 'h10030000 $project_name/axi_interc0_inst/AXIL_M06 \
+sbp_assign_addr_seg -offset 'h40030000 $project_name/axi_interc0_inst/AXIL_M06 \
   $project_name/pwm0_inst/s_axi
