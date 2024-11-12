@@ -18,9 +18,18 @@ set conf_dir $ad_hdl_dir/projects/common/lfcpnx/ipcfg
 # folder to configure an IP. For that you have to use the -ip_params option.
 # set ip_download_path ${env(USERPROFILE)}/PropelIPLocal # by default on windows
 
+ip_catalog_install -vlnv {latticesemi.com:ip:riscv_rtos:2.4.0}
+ip_catalog_install -vlnv {latticesemi.com:ip:axi_interconnect:2.0.1}
+ip_catalog_install -vlnv {latticesemi.com:ip:gpio:1.6.2}
+ip_catalog_install -vlnv {latticesemi.com:ip:spi_controller:2.1.0}
+ip_catalog_install -vlnv {latticesemi.com:ip:i2c_controller:2.0.1}
+ip_catalog_install -vlnv {latticesemi.com:ip:axi2apb_bridge:1.1.1}
+ip_catalog_install -vlnv {latticesemi.com:ip:axi2ahb_bridge:1.1.1}
+ip_catalog_install -vlnv {latticesemi.com:ip:gp_timer:1.3.1}
+
 ## configure ip components and add to design. #################################
-adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.3.0} \
-  -meta_vlnv {latticesemi.com:ip:riscv_rtos:2.3.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.4.0} \
+  -meta_vlnv {latticesemi.com:ip:riscv_rtos:2.4.0} \
   -cfg_value {
     TCM_ENABLE: true,
     IRQ_NUM: 16,
@@ -57,8 +66,8 @@ adi_ip_instance -vlnv {latticesemi.com:ip:i2c0:2.0.1} \
     SYS_CLOCK_FREQ: 100
   } \
   -ip_iname "i2c0_inst"
-adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.8.0} \
-  -meta_vlnv {latticesemi.com:module:pll:1.8.0} \
+adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.9.0} \
+  -meta_vlnv {latticesemi.com:module:pll:1.9.0} \
   -cfg_value {
     gui_refclk_freq: 125.0,
     gui_clk_os_en: true,
@@ -66,8 +75,8 @@ adi_ip_instance -vlnv {latticesemi.com:module:pll0:1.8.0} \
     gui_clk_os_freq: 10.0
   } \
   -ip_iname "pll0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:1.2.2} \
-  -meta_vlnv {latticesemi.com:ip:axi_interconnect:1.2.2} \
+adi_ip_instance -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
+  -meta_vlnv {latticesemi.com:ip:axi_interconnect:2.0.1} \
   -cfg_value {
     TOTAL_EXTMAS_CNT: 1,
     TOTAL_EXTSLV_CNT: 4,
@@ -91,8 +100,8 @@ adi_ip_instance -vlnv {latticesemi.com:ip:axi_apb2:1.1.1} \
   -meta_vlnv {latticesemi.com:ip:axi2apb_bridge:1.1.1} \
   -cfg_value {} \
   -ip_iname "axi_apb2_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
-  -meta_vlnv {latticesemi.com:ip:system_memory:2.1.0} \
+adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.2.0} \
+  -meta_vlnv latticesemi.com:ip:system_memory:2.2.0 \
   -cfg_value {
     INTERFACE: AXI4,
     ADDR_DEPTH: 8192,
@@ -100,8 +109,8 @@ adi_ip_instance -vlnv {latticesemi.com:ip:sysmem0:2.1.0} \
     REGMODE_S0: true
   } \
   -ip_iname "sysmem0_inst"
-adi_ip_instance -vlnv {latticesemi.com:ip:tcm0:1.3.9} \
-  -meta_vlnv {latticesemi.com:ip:localbus_tcm:1.3.9} \
+adi_ip_instance -vlnv {latticesemi.com:ip:tcm0:1.4.0} \
+  -meta_vlnv {latticesemi.com:ip:localbus_tcm:1.4.0} \
   -cfg_value {
     PORT_COUNT: 2,
     ADDR_DEPTH_A: 16384,
@@ -232,9 +241,9 @@ sbp_connect_interface_net "$project_name/axi_apb2_inst/APB3_M" \
 sbp_connect_interface_net "$project_name/cpu0_inst/AXI_M_DATA" \
   "$project_name/axi_interc0_inst/AXI_S00"
 sbp_connect_interface_net "$project_name/cpu0_inst/LOCAL_BUS_M_DATA" \
-  "$project_name/tcm0_inst/LOCAL_BUS_IF_S0"
+  "$project_name/tcm0_inst/LOCAL_BUS_DATA"
 sbp_connect_interface_net "$project_name/cpu0_inst/LOCAL_BUS_M_INSTR" \
-  "$project_name/tcm0_inst/LOCAL_BUS_IF_S1"
+  "$project_name/tcm0_inst/LOCAL_BUS_INSTR"
 sbp_connect_interface_net "$project_name/spi0_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S2"
 sbp_connect_interface_net "$project_name/i2c0_inst/INTR" \
@@ -244,24 +253,24 @@ sbp_connect_interface_net "$project_name/gpio0_inst/INTR" \
 sbp_connect_interface_net "$project_name/gpio1_inst/INTR" \
   "$project_name/cpu0_inst/IRQ_S5"
 
-sbp_assign_addr_seg -offset 'h10004000 "$project_name/axi_apb2_inst/APB3_M" \
+sbp_assign_addr_seg -offset 'h40004000 "$project_name/axi_apb2_inst/APB3_M" \
   "$project_name/gpio1_inst/APB_S0"
-sbp_assign_addr_seg -offset 'h10003000 "$project_name/axi_apb1_inst/APB3_M" \
+sbp_assign_addr_seg -offset 'h40003000 "$project_name/axi_apb1_inst/APB3_M" \
   "$project_name/gpio0_inst/APB_S0"
-sbp_assign_addr_seg -offset 'h10002000 "$project_name/axi_apb0_inst/APB3_M" \
+sbp_assign_addr_seg -offset 'h40002000 "$project_name/axi_apb0_inst/APB3_M" \
   "$project_name/i2c0_inst/APB_S0"
-sbp_assign_addr_seg -offset 'h10000000 "$project_name/axi_ahb0_inst/AHBL_M" \
+sbp_assign_addr_seg -offset 'h40000000 "$project_name/axi_ahb0_inst/AHBL_M" \
   "$project_name/spi0_inst/AHBL_S0"
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/cpu0_inst/LOCAL_BUS_M_DATA" \
-  "$project_name/tcm0_inst/LOCAL_BUS_IF_S0"
+  "$project_name/tcm0_inst/LOCAL_BUS_DATA"
 sbp_assign_addr_seg -offset 'h00200000 "$project_name/cpu0_inst/AXI_M_INSTR" \
   "$project_name/sysmem0_inst/AXI_S0"
 sbp_assign_addr_seg -offset 'h00000000 "$project_name/cpu0_inst/LOCAL_BUS_M_INSTR" \
-  "$project_name/tcm0_inst/LOCAL_BUS_IF_S1"
+  "$project_name/tcm0_inst/LOCAL_BUS_INSTR"
 
 if {$timer_en == 1} {
-  adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:1.2.2} \
-    -meta_vlnv {latticesemi.com:ip:axi_interconnect:1.2.2} \
+  adi_ip_update $project_name -vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
+    -meta_vlnv {latticesemi.com:ip:axi_interc0:2.0.1} \
     -cfg_value {
       TOTAL_EXTMAS_CNT: 1,
       TOTAL_EXTSLV_CNT: 5,
@@ -312,6 +321,6 @@ if {$timer_en == 1} {
   sbp_connect_interface_net "$project_name/timer0_inst/INTR" \
     "$project_name/cpu0_inst/IRQ_S6"
 
-  sbp_assign_addr_seg -offset 'h10005000 "$project_name/axi_apb3_inst/APB3_M" \
+  sbp_assign_addr_seg -offset 'h40005000 "$project_name/axi_apb3_inst/APB3_M" \
     "$project_name/timer0_inst/APB_S0"
 }
