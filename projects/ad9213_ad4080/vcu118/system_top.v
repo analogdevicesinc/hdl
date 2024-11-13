@@ -184,11 +184,12 @@ module system_top (
   wire            glbl_clk_buf;
   wire            filter_data_ready_n;
   wire  [1:0]     hmc7044_adf4371_csn;
-
+  wire            ad4080_sync_n;
 
   assign adf4371_csb    = hmc7044_adf4371_csn[1];
   assign hmc7044_csb    = hmc7044_adf4371_csn[0];
-  assign gpio_i[63:56]  = gpio_o[63:56];
+  assign ad4080_sync_n  = gpio_o[56];
+  assign gpio_i[63:57]  = gpio_o[63:57];
 
   ad_iobuf #(
     .DATA_WIDTH(11)
@@ -454,6 +455,7 @@ module system_top (
     .db_n (db_n),
     .cnv_in_p(cnv_in_p),
     .cnv_in_n(cnv_in_n),
+    .sync_n(ad4080_sync_n),
     .filter_data_ready_n(filter_data_ready_n));
 
 endmodule
