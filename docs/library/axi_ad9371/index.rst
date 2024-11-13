@@ -4,9 +4,10 @@ AXI AD9371 (OBSOLETE)
 ================================================================================
 
 .. warning::
-   This IP is was discontinued, limited support available. Last release for this
-   IP is ``hdl_2019_r2`` and can be found on our HDL repository, on the branch
-   with the same name.
+
+   The support for :git-hdl:`AXI AD9371 <hdl_2019_r2:library/axi_ad9371>`
+   has been discontinued, the latest tested release being ``hdl_2019_r2``.
+   This page is for legacy purposes only.
 
 .. note::
    This page has a great historical background. The same functionalities are
@@ -15,7 +16,9 @@ AXI AD9371 (OBSOLETE)
 The :git-hdl:`AXI AD9371 <hdl_2019_r2:library/axi_ad9371>` IP core can be used
 to interface the :adi:`AD9371` device. An AXI Memory Map interface is used for
 configuration. Data is sent in a format that can be transmitted by Xilinx's
-JESD IP. More about the generic framework interfacing ADCs, that contains the
+JESD IP.
+
+More about the generic framework interfacing ADCs and DACs, that contains the
 ``up_dac_channel``, ``up_adc_channel`` and ``up_dac_common modules``,
 ``up_adc_common modules`` can be read in :ref:`axi_dac` and :ref:`axi_adc`.
 
