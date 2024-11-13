@@ -58,6 +58,11 @@ proc adi_project_pb {project_name args} {
   set cmd_list $opt(-cmd_list)
   set psc $opt(-psc)
 
+  if {$psc == "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc"} {
+    update_template
+    set psc ./MachXO3D_Template01/MachXO3D_Template01.psc
+  }
+  
   global ad_hdl_dir
 
   if { [string match "auto" $dev_select] } {
@@ -320,5 +325,57 @@ proc adi_ip_update {project_name args} {
     sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
   } else {
     sbp_replace -vlnv $vlnv -name $ip_niname -component $project_name/$ip_iname
+  }
+}
+
+proc update_template {args} {
+  global env
+  array set opt [list -dpath "./" \
+    -template "${env(TOOLRTF)}/../../templates/MachXO3D_Template01" \
+  ]
+
+  set dpath $opt(-dpath)
+  set template $opt(-template)
+
+  if {[file exist $dpath] != 1} {
+      file mkdir $dpath
+  }
+  if {[file exist $dpath/MachXO3D_Template01] == 1} {
+      exec rm -r $dpath/MachXO3D_Template01
+  }
+  file copy -force "${env(TOOLRTF)}/../../templates/MachXO3D_Template01" $dpath
+
+  set regx {\s+file\s+copy\s+}
+
+  puts [pwd]
+  if {[file exist $dpath/MachXO3D_Template01/MachXO3D_Template01.tcl] == 1} {
+    set file [open $dpath/MachXO3D_Template01/MachXO3D_Template01.tcl r]
+    set fdata [read $file]
+    close $file
+    set file [open $dpath/MachXO3D_Template01/MachXO3D_Template01.tcl w]
+    foreach line [split $fdata "\n"] {
+      if {[regexp $regx $line]} {
+        puts $file {    if {[file exist $targetDir] != 1} {file mkdir $targetDir}}
+        puts {    if {[file exist $targetDir] != 1} {file mkdir $targetDir}}
+      }
+      puts $file $line
+      puts $line
+    }
+    close $file
+  }
+  if {[file exist $dpath/MachXO3D_Template01/verification/MachXO3D_Template01_v.tcl] == 1} {
+    set file [open $dpath/MachXO3D_Template01/verification/MachXO3D_Template01_v.tcl r]
+    set fdata [read $file]
+    close $file
+    set file [open $dpath/MachXO3D_Template01/verification/MachXO3D_Template01_v.tcl w]
+    foreach line [split $fdata "\n"] {
+      if {[regexp $regx $line]} {
+        puts $file {    if {[file exist $targetDir] != 1} {file mkdir $targetDir}}
+        puts {    if {[file exist $targetDir] != 1} {file mkdir $targetDir}}
+      }
+      puts $file $line
+      puts $line
+    }
+    close $file
   }
 }

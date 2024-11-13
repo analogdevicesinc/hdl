@@ -76,6 +76,7 @@ R_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME).rdf
 R_TARGETS += $(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
 CLEAN_TARGET := ${PROJECT_NAME}
+CLEAN_TARGET += $(wildcard ./*/)
 CLEAN_TARGET += $(wildcard *.log)
 CLEAN_TARGET += ./ipcfg
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
