@@ -5,11 +5,17 @@ AXI AD9671 (OBSOLETE)
 
 .. hdl-component-diagram::
 
-The :git-hdl:`AXI AD9671 <library/axi_ad9671>` IP core
+.. warning::
+
+   The support for :git-hdl:`AXI AD9671 <hdl_2022_r2:library/axi_ad9671>`
+   has been discontinued.
+   This page is kept for legacy purposes only.
+
+The :git-hdl:`AXI AD9671 <hdl_2022_r2:library/axi_ad9671>` IP core
 can be used to interface the :adi:`AD9671` Octal Ultrasound AFE with digital
 demodulator.
 An AXI Memory Map interface is used for configuration.
-Data is received from Xilinx JESD IP.
+Data is received from AMD Xilinx JESD IP.
 
 More about the generic framework interfacing ADCs can be read in :ref:`axi_adc`.
 

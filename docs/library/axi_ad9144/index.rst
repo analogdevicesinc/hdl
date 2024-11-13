@@ -4,15 +4,17 @@ AXI AD9144 (OBSOLETE)
 ================================================================================
 
 .. warning::
-   This IP is was discontinued, limited support available. Last release for this
-   IP is ``hdl_2019_r2`` and can be found on our HDL repository, on the branch
-   with the same name.
+
+   The support for :git-hdl:`AXI AD9144 <hdl_2019_r2:library/axi_ad9144>`
+   has been discontinued, the latest tested release being ``hdl_2019_r2``.
+   This page is for legacy purposes only.
 
 The :git-hdl:`AXI AD9144 <hdl_2019_r2:library/axi_ad9144>` IP core can be used
 to interface the :adi:`AD9144` DAC. An AXI Memory Map interface is used for
-configuration. Data is sent in a format that can be transmitted by Xilinx's
-JESD IP. More about the generic framework interfacing DACs, can be read
-in :ref:`axi_adc`.
+configuration. Data is sent in a format that can be transmitted by AMD Xilinx's
+JESD IP.
+
+More about the generic framework interfacing DACs, can be read in :ref:`axi_adc`.
 
 Features
 --------------------------------------------------------------------------------
@@ -39,7 +41,6 @@ Files
      - TCL script to generate the Quartus IP-integrator project.
    * - :git-hdl:`hdl_2019_r2:library/axi_ad9144/axi_ad9144_constr.xdc`
      - Constraint file of the IP.
-
 
 Block Diagram
 --------------------------------------------------------------------------------
