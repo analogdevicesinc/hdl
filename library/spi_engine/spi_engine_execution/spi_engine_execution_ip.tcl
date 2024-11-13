@@ -8,8 +8,9 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create spi_engine_execution
 adi_ip_files spi_engine_execution [list \
-	"spi_engine_execution_constr.ttcl" \
-	"spi_engine_execution.v" \
+  "spi_engine_execution_constr.ttcl" \
+  "spi_engine_execution.v" \
+  "spi_engine_execution_shiftreg.v" \
 ]
 
 adi_ip_properties_lite spi_engine_execution
@@ -23,35 +24,35 @@ ipx::remove_all_bus_interface [ipx::current_core]
 ## Interface definitions
 
 adi_add_bus "ctrl" "slave" \
-	"analog.com:interface:spi_engine_ctrl_rtl:1.0" \
-	"analog.com:interface:spi_engine_ctrl:1.0" \
-	{
-		{"cmd_ready" "cmd_ready"} \
-		{"cmd_valid" "cmd_valid"} \
-		{"cmd" "cmd_data"} \
-		{"sdo_data_ready" "sdo_ready"} \
-		{"sdo_data_valid" "sdo_valid"} \
-		{"sdo_data" "sdo_data"} \
-		{"sdi_data_ready" "sdi_ready"} \
-		{"sdi_data_valid" "sdi_valid"} \
-		{"sdi_data" "sdi_data"} \
-		{"sync_ready" "sync_ready"} \
-		{"sync_valid" "sync_valid"} \
-		{"sync" "sync_data"} \
-	}
+  "analog.com:interface:spi_engine_ctrl_rtl:1.0" \
+  "analog.com:interface:spi_engine_ctrl:1.0" \
+  {
+    {"cmd_ready" "cmd_ready"} \
+    {"cmd_valid" "cmd_valid"} \
+    {"cmd" "cmd_data"} \
+    {"sdo_data_ready" "sdo_ready"} \
+    {"sdo_data_valid" "sdo_valid"} \
+    {"sdo_data" "sdo_data"} \
+    {"sdi_data_ready" "sdi_ready"} \
+    {"sdi_data_valid" "sdi_valid"} \
+    {"sdi_data" "sdi_data"} \
+    {"sync_ready" "sync_ready"} \
+    {"sync_valid" "sync_valid"} \
+    {"sync" "sync_data"} \
+  }
 adi_add_bus_clock "clk" "ctrl" "resetn"
 
 adi_add_bus "spi" "master" \
-	"analog.com:interface:spi_engine_rtl:1.0" \
-	"analog.com:interface:spi_engine:1.0" \
-	{
-		{"sclk" "sclk"} \
-		{"sdi" "sdi"} \
-		{"sdo" "sdo"} \
-		{"sdo_t" "sdo_t"} \
-		{"three_wire" "three_wire"} \
-		{"cs" "cs"} \
-	}
+  "analog.com:interface:spi_engine_rtl:1.0" \
+  "analog.com:interface:spi_engine:1.0" \
+  {
+    {"sclk" "sclk"} \
+    {"sdi" "sdi"} \
+    {"sdo" "sdo"} \
+    {"sdo_t" "sdo_t"} \
+    {"three_wire" "three_wire"} \
+    {"cs" "cs"} \
+  }
 adi_add_bus_clock "clk" "spi" "resetn"
 
 ## Parameter validations

@@ -39,9 +39,15 @@ adi_if_ports output 1 cmd_wr_en
 adi_if_ports output 16 cmd_wr_data
 adi_if_ports output 1 sdo_wr_en
 adi_if_ports output -1 sdo_wr_data
+adi_if_ports output 1 sdo_src_sel
 adi_if_ports output 1 mem_reset
 adi_if_ports output 1 enable
 adi_if_ports input 1 enabled
 adi_if_ports output 1 sync_ready
 adi_if_ports input 1 sync_valid
 adi_if_ports input 8 sync_data
+
+# Interconnect control interface
+
+adi_if_define "spi_engine_interconnect_ctrl"
+adi_if_ports  output 1 interconnect_dir
