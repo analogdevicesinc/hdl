@@ -6,7 +6,7 @@ AXI AD9643 (OBSOLETE)
 .. warning::
 
    The support for :git-hdl:`AXI AD9643 <hdl_2016_r1:library/axi_ad9643>` IP
-   has been discontinued, the latest tested release being hdl_2016_r1.
+   has been discontinued, the latest tested release being ``hdl_2016_r1``.
    This page is for legacy purposes only.
 
 The :git-hdl:`AXI AD9643 <hdl_2016_r1:library/axi_ad9643>` IP core was used
@@ -158,7 +158,7 @@ delayed independently through the delay controller register map.
 For more information regarding the 7 Series primitives you can take a look at
 AMD Xilinx's user guides UG472, UG471 and UG953.
 
-The output of the interface module is fed to the channel modules. 
+The output of the interface module is fed to the channel modules.
 The channel module implements:
 
 * a PRBS monitor
