@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2018-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -49,7 +49,20 @@ module axi_dmac_regmap_request #(
   parameter HAS_SRC_ADDR = 1,
   parameter DMA_2D_TRANSFER = 0,
   parameter DMA_SG_TRANSFER = 0,
-  parameter SYNC_TRANSFER_START = 0
+  parameter SYNC_TRANSFER_START = 0,
+  parameter FRAMELOCK = 0,
+  parameter MAX_NUM_FRAMES_WIDTH = 3,
+  parameter AUTORUN = 0,
+  parameter AUTORUN_FLAGS = 0,
+  parameter AUTORUN_SRC_ADDR = 0,
+  parameter AUTORUN_DEST_ADDR = 0,
+  parameter AUTORUN_X_LENGTH = 0,
+  parameter AUTORUN_Y_LENGTH = 0,
+  parameter AUTORUN_SRC_STRIDE = 0,
+  parameter AUTORUN_DEST_STRIDE = 0,
+  parameter AUTORUN_SG_ADDRESS = 0,
+  parameter AUTORUN_FRAMELOCK_CONFIG = 0,
+  parameter AUTORUN_FRAMELOCK_STRIDE = 0
 ) (
   input clk,
   input reset,
@@ -80,8 +93,14 @@ module axi_dmac_regmap_request #(
   output [DMA_LENGTH_WIDTH-1:0] request_y_length,
   output [DMA_LENGTH_WIDTH-1:0] request_dest_stride,
   output [DMA_LENGTH_WIDTH-1:0] request_src_stride,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_framenum,
+  output                            request_flock_mode,
+  output                            request_flock_wait_writer,
+  output [MAX_NUM_FRAMES_WIDTH-1:0] request_flock_distance,
+  output [DMA_AXI_ADDR_WIDTH-1:0] request_flock_stride,
   output request_sync_transfer_start,
   output request_last,
+  output request_cyclic,
 
   // DMA response interface
   input response_eot,
@@ -96,21 +115,31 @@ module axi_dmac_regmap_request #(
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
   localparam ADDR_HIGH_MSB = HAS_ADDR_HIGH ? DMA_AXI_ADDR_WIDTH-32-1 : 0;
+  localparam DMAC_DEF_SRC_ADDR_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_SRC_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+  localparam DMAC_DEF_DEST_ADDR_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_DEST_ADDR[DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+  localparam DMAC_DEF_X_LENGTH_DEFAULT = !AUTORUN ? 'h00 :
+    AUTORUN_X_LENGTH[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN];
+
+  localparam AUTORUN_FLAGS_CYCLIC = AUTORUN ? AUTORUN_FLAGS[0] : DMA_CYCLIC;
+  localparam AUTORUN_FLAGS_LAST   = AUTORUN ? AUTORUN_FLAGS[1] : 1;
+  localparam AUTORUN_FLAGS_TLEN   = AUTORUN ? AUTORUN_FLAGS[2] : 0;
 
   // DMA transfer signals
-  reg up_dma_req_valid = 1'b0;
+  reg up_dma_req_valid = AUTORUN == 1;
   wire up_dma_req_ready;
 
   reg [1:0] up_transfer_id = 2'b0;
   reg [1:0] up_transfer_id_eot = 2'b0;
   reg [3:0] up_transfer_done_bitmap = 4'b0;
 
-  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = 'h00;
-  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = 'h00;
-  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMA_LENGTH_ALIGN{1'b1}};
-  reg up_dma_cyclic = DMA_CYCLIC ? 1'b1 : 1'b0;
-  reg up_dma_last = 1'b1;
-  reg up_dma_enable_tlen_reporting = 1'b0;
+  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = DMAC_DEF_DEST_ADDR_DEFAULT;
+  reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = DMAC_DEF_SRC_ADDR_DEFAULT;
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMAC_DEF_X_LENGTH_DEFAULT,{DMA_LENGTH_ALIGN{1'b1}}};
+  reg up_dma_cyclic = AUTORUN_FLAGS_CYCLIC;
+  reg up_dma_last = AUTORUN_FLAGS_LAST;
+  reg up_dma_enable_tlen_reporting = AUTORUN_FLAGS_TLEN;
 
   wire up_tlf_s_ready;
   reg up_tlf_s_valid = 1'b0;
@@ -130,16 +159,17 @@ module axi_dmac_regmap_request #(
   assign request_x_length = up_dma_x_length;
   assign request_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
   assign request_last = up_dma_last;
+  assign request_cyclic = up_dma_cyclic;
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
-      up_dma_dest_address <= 'h00;
-      up_dma_src_address <= 'h00;
-      up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= 'h00;
-      up_dma_req_valid <= 1'b0;
-      up_dma_cyclic <= DMA_CYCLIC ? 1'b1 : 1'b0;
-      up_dma_last <= 1'b1;
-      up_dma_enable_tlen_reporting <= 1'b0;
+      up_dma_src_address <= DMAC_DEF_SRC_ADDR_DEFAULT;
+      up_dma_dest_address <= DMAC_DEF_DEST_ADDR_DEFAULT;
+      up_dma_x_length[DMA_LENGTH_WIDTH-1:DMA_LENGTH_ALIGN] <= DMAC_DEF_X_LENGTH_DEFAULT;
+      up_dma_req_valid <= AUTORUN;
+      up_dma_cyclic <= AUTORUN_FLAGS_CYCLIC;
+      up_dma_last <= AUTORUN_FLAGS_LAST;
+      up_dma_enable_tlen_reporting <= AUTORUN_FLAGS_TLEN;
     end else begin
       if (ctrl_enable == 1'b1) begin
         if (up_wreq == 1'b1 && up_waddr == 9'h102) begin
@@ -154,7 +184,7 @@ module axi_dmac_regmap_request #(
       if (up_wreq == 1'b1) begin
         case (up_waddr)
         9'h103: begin
-          if (DMA_CYCLIC) up_dma_cyclic <= up_wdata[0];
+          up_dma_cyclic <= up_wdata[0] & DMA_CYCLIC;
           up_dma_last <= up_wdata[1];
           up_dma_enable_tlen_reporting <= up_wdata[2];
         end
@@ -192,6 +222,14 @@ module axi_dmac_regmap_request #(
     9'h113: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH-1 : 0];   // Length
     9'h114: up_rdata <= up_tlf_data[MEASURED_LENGTH_WIDTH+: 2];  // ID
     9'h115: up_rdata <= response_sg_desc_id;
+    9'h116: begin
+              up_rdata <= 'h0;
+              up_rdata[16 +:MAX_NUM_FRAMES_WIDTH] <= request_flock_distance;
+              up_rdata[8 +:MAX_NUM_FRAMES_WIDTH] <= request_flock_framenum;
+              up_rdata[1] <= request_flock_wait_writer;
+              up_rdata[0] <= request_flock_mode;
+            end
+    9'h117: up_rdata <= request_flock_stride;
     9'h11f: up_rdata <= {request_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG],{BYTES_PER_BEAT_WIDTH_SG{1'b0}}};
     9'h124: up_rdata <= (HAS_ADDR_HIGH && HAS_DEST_ADDR) ? up_dma_dest_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
     9'h125: up_rdata <= (HAS_ADDR_HIGH && HAS_SRC_ADDR) ? up_dma_src_address[DMA_AXI_ADDR_WIDTH-1:32] : 32'h00;
@@ -202,15 +240,22 @@ module axi_dmac_regmap_request #(
 
   generate
   if (DMA_2D_TRANSFER == 1) begin
-    reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = 'h00;
-    reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = 'h00;
-    reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = 'h00;
+    localparam Y_LENGTH = !AUTORUN ? 'h00 :
+      AUTORUN_Y_LENGTH;
+    localparam SRC_STRIDE = !AUTORUN ? 'h00 :
+      AUTORUN_SRC_STRIDE[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC];
+    localparam DEST_STRIDE = !AUTORUN ? 'h00 :
+      AUTORUN_DEST_STRIDE[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST];
+
+    reg [DMA_LENGTH_WIDTH-1:0] up_dma_y_length = Y_LENGTH;
+    reg [DMA_LENGTH_WIDTH-1:0] up_dma_src_stride = SRC_STRIDE;
+    reg [DMA_LENGTH_WIDTH-1:0] up_dma_dest_stride = DEST_STRIDE;
 
     always @(posedge clk) begin
       if (reset == 1'b1) begin
-        up_dma_y_length <= 'h00;
-        up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= 'h00;
-        up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= 'h00;
+        up_dma_y_length <= Y_LENGTH;
+        up_dma_dest_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] <= DEST_STRIDE;
+        up_dma_src_stride[DMA_LENGTH_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC] <= SRC_STRIDE;
       end else if (up_wreq == 1'b1) begin
         case (up_waddr)
         9'h107: up_dma_y_length <= up_wdata[DMA_LENGTH_WIDTH-1:0];
@@ -230,12 +275,67 @@ module axi_dmac_regmap_request #(
   endgenerate
 
   generate
-  if (DMA_SG_TRANSFER == 1) begin
-    reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG]  up_dma_sg_address = 'h00;
+  if (FRAMELOCK == 1) begin
+    localparam FRAMELOCK_CONFIG_MODE = !AUTORUN ? 'h0 :
+      AUTORUN_FRAMELOCK_CONFIG[0];
+    localparam FRAMELOCK_CONFIG_WAIT_WRITER = !AUTORUN ? 'h0 :
+      AUTORUN_FRAMELOCK_CONFIG[1];
+    localparam FRAMELOCK_CONFIG_FNUM = !AUTORUN ? 'h00 :
+      AUTORUN_FRAMELOCK_CONFIG[8 +: MAX_NUM_FRAMES_WIDTH];
+    localparam FRAMELOCK_CONFIG_DIST = !AUTORUN ? 'h00 :
+      AUTORUN_FRAMELOCK_CONFIG[16 +: MAX_NUM_FRAMES_WIDTH];
+    localparam FRAMELOCK_STRIDE = !AUTORUN ? 'h00 :
+      AUTORUN_FRAMELOCK_STRIDE;
+
+    reg [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_flock_framenum = FRAMELOCK_CONFIG_FNUM;
+    reg                            up_dma_flock_mode = FRAMELOCK_CONFIG_MODE;
+    reg                            up_dma_flock_wait_writer = FRAMELOCK_CONFIG_WAIT_WRITER;
+    reg [MAX_NUM_FRAMES_WIDTH-1:0] up_dma_flock_distance = FRAMELOCK_CONFIG_DIST;
+    reg [DMA_AXI_ADDR_WIDTH-1:0]   up_dma_flock_stride = FRAMELOCK_STRIDE;
 
     always @(posedge clk) begin
       if (reset == 1'b1) begin
-        up_dma_sg_address <= 'h00;
+        up_dma_flock_framenum <= FRAMELOCK_CONFIG_FNUM;
+        up_dma_flock_mode <= FRAMELOCK_CONFIG_MODE;
+        up_dma_flock_wait_writer <= FRAMELOCK_CONFIG_WAIT_WRITER;
+        up_dma_flock_distance <= FRAMELOCK_CONFIG_DIST;
+        up_dma_flock_stride <= FRAMELOCK_STRIDE;
+      end else if (up_wreq == 1'b1) begin
+        case (up_waddr)
+          9'h116: begin
+            up_dma_flock_distance <= up_wdata[16 +:MAX_NUM_FRAMES_WIDTH];
+            up_dma_flock_framenum <= up_wdata[8 +:MAX_NUM_FRAMES_WIDTH];
+            up_dma_flock_wait_writer <= up_wdata[1];
+            up_dma_flock_mode <= up_wdata[0];
+          end
+          9'h117: up_dma_flock_stride <= up_wdata[DMA_AXI_ADDR_WIDTH-1:0];
+        endcase
+      end
+    end
+
+    assign request_flock_framenum = up_dma_flock_framenum;
+    assign request_flock_mode = up_dma_flock_mode;
+    assign request_flock_wait_writer = up_dma_flock_wait_writer;
+    assign request_flock_distance = up_dma_flock_distance;
+    assign request_flock_stride = up_dma_flock_stride;
+
+  end else begin
+    assign request_flock_framenum = 'h0;
+    assign request_flock_mode = 'h0;
+    assign request_flock_wait_writer = 'h0;
+    assign request_flock_distance = 'h0;
+    assign request_flock_stride = 'h0;
+  end
+
+  endgenerate
+
+  generate
+  if (DMA_SG_TRANSFER == 1) begin
+    reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SG]  up_dma_sg_address = AUTORUN ? AUTORUN_SG_ADDRESS: 'h00;
+
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        up_dma_sg_address <= AUTORUN ? AUTORUN_SG_ADDRESS : 'h00;
       end else if (up_wreq == 1'b1) begin
         case (up_waddr)
         9'h11f: up_dma_sg_address[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG] <= up_wdata[ADDR_LOW_MSB:BYTES_PER_BEAT_WIDTH_SG];
@@ -351,6 +451,6 @@ module axi_dmac_regmap_request #(
     .m_axis_ready(up_tlf_rd & up_tlf_valid),
     .m_axis_data(up_tlf_data),
     .m_axis_level(),
-    .m_axis_empty ());
+    .m_axis_empty());
 
 endmodule

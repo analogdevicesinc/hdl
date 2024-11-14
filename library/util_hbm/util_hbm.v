@@ -309,6 +309,7 @@ module util_hbm #(
       .ctrl_enable(wr_request_enable),
       .ctrl_pause(1'b0),
       .ctrl_hwdesc(1'b0),
+      .ctrl_flock('d0),
 
       .req_valid(wr_request_valid),
       .req_ready(wr_request_ready_loc[i]),
@@ -319,9 +320,15 @@ module util_hbm #(
       .req_y_length(0),
       .req_dest_stride(0),
       .req_src_stride(0),
+      .req_flock_framenum('d0),
+      .req_flock_mode('d0),
+      .req_flock_wait_writer('d0),
+      .req_flock_distance('d0),
+      .req_flock_stride('d0),
       .req_sync_transfer_start(1'b0),
       .req_sync(),
       .req_last(1'b1),
+      .req_cyclic('d0),
 
       .req_eot(wr_request_eot_loc[i]),
       .req_sg_desc_id(),
@@ -398,6 +405,7 @@ module util_hbm #(
       .m_axis_ready(1'b1),
       .m_axis_valid(),
       .m_axis_data(),
+      .m_axis_user(),
       .m_axis_last(),
       .m_axis_xfer_req(),
 
@@ -424,6 +432,16 @@ module util_hbm #(
       .dbg_src_data_id(),
       .dbg_src_response_id(),
       .dbg_status(),
+      .m_frame_in('d0),
+      .m_frame_in_valid('d0),
+      .m_frame_out(),
+      .m_frame_out_valid(),
+      .s_frame_in('d0),
+      .s_frame_in_valid('d0),
+      .s_frame_out(),
+      .s_frame_out_valid(),
+      .src_ext_sync('d0),
+      .dest_ext_sync('d0),
 
       .dest_diag_level_bursts());
 
@@ -479,6 +497,7 @@ module util_hbm #(
       .ctrl_enable(rd_request_enable),
       .ctrl_pause(1'b0),
       .ctrl_hwdesc(1'b0),
+      .ctrl_flock('d0),
 
       .req_valid(rd_request_valid),
       .req_ready(rd_request_ready_loc[i]),
@@ -489,9 +508,15 @@ module util_hbm #(
       .req_y_length(0),
       .req_dest_stride(0),
       .req_src_stride(0),
+      .req_flock_framenum('d0),
+      .req_flock_mode('d0),
+      .req_flock_wait_writer('d0),
+      .req_flock_distance('d0),
+      .req_flock_stride('d0),
       .req_sync_transfer_start(1'b0),
       .req_sync(),
       .req_last(1'b1),
+      .req_cyclic('d0),
 
       .req_eot(rd_request_eot_loc[i]),
       .req_sg_desc_id(),
@@ -568,6 +593,7 @@ module util_hbm #(
       .m_axis_ready((m_axis_ready & m_axis_valid) | rd_needs_reset),
       .m_axis_valid(m_axis_valid_loc[i]),
       .m_axis_data(m_axis_data[DST_DATA_WIDTH_PER_M*i+:DST_DATA_WIDTH_PER_M]),
+      .m_axis_user(),
       .m_axis_last(m_axis_last_loc[i]),
       .m_axis_xfer_req(m_axis_xfer_req),
 
@@ -594,6 +620,16 @@ module util_hbm #(
       .dbg_src_data_id(),
       .dbg_src_response_id(),
       .dbg_status(rd_dbg_status),
+      .m_frame_in('d0),
+      .m_frame_in_valid('d0),
+      .m_frame_out(),
+      .m_frame_out_valid(),
+      .s_frame_in('d0),
+      .s_frame_in_valid('d0),
+      .s_frame_out(),
+      .s_frame_out_valid(),
+      .src_ext_sync('d0),
+      .dest_ext_sync('d0),
 
       .dest_diag_level_bursts());
 
