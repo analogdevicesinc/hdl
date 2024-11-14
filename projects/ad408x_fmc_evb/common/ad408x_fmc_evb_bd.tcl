@@ -3,6 +3,14 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set ADC_N_BITS $ad_project_params(ADC_N_BITS)
+set DDR_OR_SDR_N $ad_project_params(DDR_OR_SDR_N)
+if {$ADC_N_BITS <= 16} {
+    set DMA_DATA_WIDTH_SRC 16
+} else {
+    set DMA_DATA_WIDTH_SRC 32
+}
+
 # ad4080 interface
 
 create_bd_port -dir I dco_p
@@ -30,6 +38,8 @@ ad_connect fpga_100_clk  ad408x_clock_monitor/clock_1
 # axi_ad408x
 
 ad_ip_instance axi_ad408x axi_ad4080_adc
+ad_ip_parameter axi_ad4080_adc CONFIG.ADC_N_BITS $ADC_N_BITS
+ad_ip_parameter axi_ad4080_adc CONFIG.DDR_OR_SDR_N $DDR_OR_SDR_N
 
 # dma for rx data
 
@@ -41,7 +51,7 @@ ad_ip_parameter axi_ad4080_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_SRC $DMA_DATA_WIDTH_SRC
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4080_adc
