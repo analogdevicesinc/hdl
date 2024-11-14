@@ -130,12 +130,48 @@ are:
   - **04 (default)**
   - can vary from 00 to 21 depending on the selected device (ADI_DAC_DEVICE)
 
-Before building the reference design,
-the :git-hdl:`projects/dac_fmc_ebz/common/config.tcl` file should be updated
-with the desired DAC device and JESD operation mode, or these parameters can be
-given at build time, when running ``make``.
+- **ADI_LANE_RATE**: specifies the lane rate (**supported only on the ZCU102 carrier**)
 
-The block design will scale according to the selected mode.
+  - **15.4 GHz(default)**
+  - 12.5 GHz
+
+If the desired parameters are not listed in any of the supported modes the user can
+configure them trough ``make`` parameters:
+
+- **M**:  number of converters per link
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **L**:  number of lanes per link
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **S**:  number of samples per frame
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **F**:  number of octets per frame
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **HD**: high-density
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **N**:  converter resolution
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
+
+- **NP**: number of bits per sample
+
+  - **the value set by the ADI_DAC_MODE (default)**
+  - according to the datasheet
 
 .. collapsible:: AD9135/AD9136 supported modes
 
@@ -458,19 +494,37 @@ The **default configuration**, regardless of the carrier, is
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
    user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make
 
-Example: if the AD9164 device is needed and the mode should be 09, the following
+Example: if the AD9164 device is needed and the mode should be 08, the following
 command should be run:
 
 .. code-block::
 
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
-   user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=09
+   user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=08
+
+Example: if the AD9164 device is needed and there is a need for a custom mode
+, the following commands should be run:
+
+.. code-block::
+
+   make ADI_DAC_DEVICE=AD9164 ADI_LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16
+
+or:
+
+.. code-block::
+
+   make ADI_DAC_DEVICE=AD9164  ADI_LANE_RATE=12.5 ADI_DAC_MODE= 08 M=1 S=4
+
+With either of these two options, the design will be built in the same
+configuration:
+
+**ADI_DAC_DEVICE=AD9164 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16**
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
-if the following command was run ``make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=09``
-then the folder name will be: ``ADIDACDEVICEAD9164_ADIDACMODE09``
+if the following command was run ``make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=08``
+then the folder name will be: ``ADIDACDEVICEAD9164_ADIDACMODE08``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
