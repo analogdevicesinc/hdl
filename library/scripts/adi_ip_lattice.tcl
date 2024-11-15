@@ -1470,6 +1470,16 @@ namespace eval ipl {
 
 ###############################################################################
 ## Adds a predefined interface to the IP structure.
+## Creates memory map or address space by default if there is no memory map
+## or address space added to the IP if the address space or memory map
+## refference is specified. The address space is created for the full range of
+## 32 bit address. The default memory map range is 64k. If you want to specify
+## separately you can add them manually then use the memory map or address space
+## name at -mem_map_ref -addr_space_ref. you can even update later using the
+## reference name specified here by using: ipl::add_memory_map or
+## ipl::add_address_space. As summary you must specify -mem_map_ref or
+## -addr_space_ref depending on slave or master whenever you add a memory mapped
+## interface to the IP.
 #
 # \opt[ip] -ip $ip
 # \opt[inst_name] -inst_name fifo_wr
@@ -1512,6 +1522,25 @@ namespace eval ipl {
         set mem_map_ref $opt(-mem_map_ref)
         set addr_space_ref $opt(-addr_space_ref)
         set portmap $opt(-portmap)
+
+        if {$master_slave == "slave" && $mem_map_ref != ""} {
+            if {[ipl::getnode memoryMaps_desc $mem_map_ref $ip] == ""} {
+                set ip [ipl::add_memory_map -ip $ip \
+                    -name $mem_map_ref \
+                    -description $mem_map_ref \
+                    -baseAddress 0 \
+                    -range 65536 \
+                    -width 32]
+            }
+        }
+        if {$master_slave == "master" && $addr_space_ref != ""} {
+            if {[ipl::getnode addressSpaces_desc $addr_space_ref $ip] == ""} {
+                set ip [ipl::add_address_space -ip $ip \
+                    -name $addr_space_ref \
+                    -range 0x100000000 \
+                    -width 32]
+            }
+        }
 
         set atts [list library "library=\"$library\"" \
             name "name=\"$name\"" \
@@ -1558,7 +1587,17 @@ namespace eval ipl {
 
 ###############################################################################
 ## Adds an interface by filtering ports by prefix when a naming standard
-# like <verilog_prefix>_<standard_port_name> is used.
+## like <verilog_prefix>_<standard_port_name> is used.
+## Creates memory map or address space by default if there is no memory map
+## or address space added to the IP if the address space or memory map
+## refference is specified. The address space is created for the full range of
+## 32 bit address. The default memory map range is 64k. If you want to specify
+## separately you can add them manually then use the memory map or address space
+## name at -mem_map_ref -addr_space_ref. you can even update later using the
+## reference name specified here by using: ipl::add_memory_map or
+## ipl::add_address_space. As summary you must specify -mem_map_ref or
+## -addr_space_ref depending on slave or master whenever you add a memory mapped
+## interface to the IP.
 #
 # \opt[ip] -ip $ip
 # \opt[inst_name] -inst_name fifo_wr
@@ -2042,12 +2081,6 @@ namespace eval ipl {
             }
             if {$brk != ""} {
                 if {$brk == "slave"} {
-                    set ip [ipl::add_memory_map -ip $ip \
-                        -name ${interface_name}_mem_map \
-                        -description ${interface_name}_mem_map \
-                        -baseAddress 0 \
-                        -range 65536 \
-                        -width 32]
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
                         -display_name $interface_name \
@@ -2056,10 +2089,6 @@ namespace eval ipl {
                         -mem_map_ref ${interface_name}_mem_map \
                         -vendor amba.com -library AMBA4 -name AXI4 -version r0p0 ]
                 } elseif {$brk == "master"} {
-                    set ip [ipl::add_address_space -ip $ip \
-                        -name ${interface_name}_aspace \
-                        -range 0x100000000 \
-                        -width 32]
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
                         -display_name $interface_name \
@@ -2086,12 +2115,6 @@ namespace eval ipl {
             }
             if {$brk != ""} {
                 if {$brk == "slave"} {
-                    set ip [ipl::add_memory_map -ip $ip \
-                        -name ${interface_name}_mem_map \
-                        -description ${interface_name}_mem_map \
-                        -baseAddress 0 \
-                        -range 65536 \
-                        -width 32]
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
                         -display_name $interface_name \
@@ -2100,10 +2123,6 @@ namespace eval ipl {
                         -mem_map_ref ${interface_name}_mem_map \
                         -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
                 } elseif {$brk == "master"} {
-                    set ip [ipl::add_address_space -ip $ip \
-                        -name ${interface_name}_aspace \
-                        -range 0x100000000 \
-                        -width 32]
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
                         -display_name $interface_name \
