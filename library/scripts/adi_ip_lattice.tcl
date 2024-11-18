@@ -1303,6 +1303,10 @@ namespace eval ipl {
         if {$ip_name == ""} {
             set ip_name [ipl::getncont ip_desc/lsccip:general lsccip:name $ip]
         }
+        if {$ip_name == ""} {
+            puts "ERROR: You must define ip_name or '-name' at ipl::general!"
+            exit 2
+        }
         if {$dpath == ""} {
             set dpath $ipl::PropelIPLocal_path
         }
