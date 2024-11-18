@@ -248,7 +248,7 @@ Software Support
 --------------------------------------------------------------------------------
 
 The software for this part can be found as part of the :adi:`ADALM2000`
-(or shortly, M2K) reference design. 
+(or shortly, M2K) reference design.
 
 * Linux device driver at :git-linux:`drivers/iio/adc/ad9963.c`
 

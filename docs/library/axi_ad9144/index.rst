@@ -161,9 +161,9 @@ Software Support
 
   * :git-linux:`2019_R2:arch/arm64/boot/dts/xilinx/adi-ad9144-fmc-ebz.dtsi`
   * :git-linux:`2019_R2:arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9144-fmc-ebz.dts`
-  
+
 * No-OS device driver at:
-  
+
   * :git-no-os:`2019_r2:drivers/dac/ad9144/ad9144.c`
   * :git-no-os:`2019_r2:drivers/dac/ad9144/iio_ad9144.c`
 

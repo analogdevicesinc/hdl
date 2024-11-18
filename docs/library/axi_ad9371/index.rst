@@ -177,7 +177,7 @@ The axi_ad9371 cores architecture contains:
 
   * ADC channel processing modules, one for each channel
     (receive path supports 4 channels)
-    
+
     * data processing modules ( DC filter, IQ Correction and Data format
       control)
     * ADC Channel register map

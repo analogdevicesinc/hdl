@@ -329,5 +329,5 @@ References
 --------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/common/ad_dds.v` and :git-hdl:`library/common/ad_dds_1.v`
-  and :git-hdl:`library/common/ad_dds_2.v` 
+  and :git-hdl:`library/common/ad_dds_2.v`
 * :dokuwiki:`Direct digital synthesis on wiki <resources/fpga/docs/dds>`
