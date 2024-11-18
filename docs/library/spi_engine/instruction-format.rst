@@ -201,7 +201,7 @@ The CS Invert Mask Instructions allows the user to select on a per-pin basis
 whether the Chip Select will be active-low (default) or active-high (inverted).
 Note that the Chip-Select instructions should remain the same because the value
 of CS is inverted at the output register, and additional logic (e.g. reset
-counters) occurs when the CS active state is asserted. 
+counters) occurs when the CS active state is asserted.
 
 Since the physical values on the pins are inverted at the output, the current
 Invert Mask does not affect the use of the :ref:`spi_engine cs-instruction`. As
@@ -226,9 +226,9 @@ version 1.02.00 of the core.
      - reserved
      - Reserved for future use. Must always be set to 0.
    * - m
-     - Mask 
+     - Mask
      - Mask for selecting inverted CS channels. For the bits set to 1, the
-       corresponding channel will be inverted at the output. 
+       corresponding channel will be inverted at the output.
 
 .. _spi_engine configuration-registers:
 

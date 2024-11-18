@@ -71,14 +71,14 @@ Interface
        signal can be used for preconditioning various IPs of the data path.
    * - tia_chsel
      - Control lines for the TIA channel multiplexer.
-   * - irq 
+   * - irq
      - Interrupt signal.
 
 Register Map
 --------------------------------------------------------------------------------
 
 .. hdl-regmap::
-   :name: AXI_LASER_DRIVER 
+   :name: AXI_LASER_DRIVER
 
 References
 -------------------------------------------------------------------------------

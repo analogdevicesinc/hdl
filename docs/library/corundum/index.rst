@@ -58,7 +58,7 @@ and it needs to be cloned alongside this repository.
    -  J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (`Thesis`_)
 
 .. _FCCM Paper: https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf
-.. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/ 
+.. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/
 .. _Thesis: https://escholarship.org/uc/item/3mc9070t
 
 References
