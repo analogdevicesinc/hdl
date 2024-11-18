@@ -6,7 +6,7 @@ SPI Engine Tutorial - PulSAR-ADC
 The goal of this tutorial is to present the process of adding
 :ref:`spi_engine` support for an ADI precision converter or family of converters
 using a few simple steps.
-The target carrier is the Digilent Cora-z7s board using a PMOD connector.
+The target carrier is the Digilent Cora Z7S board using a PMOD connector.
 
 Evaluating the target device
 --------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ They all share the same interface and the same PCB, the differences being found
 in their performance. The table below offers a comparison between the timing
 parameters of the SPI interface for these devices. Using this table we can see
 how much they have in common and where the key differences are. All the values
-are for 3.3V VIO since the Cora-z7s is only 3.3V capable.
+are for 3.3V VIO since the Cora Z7S is only 3.3V capable.
 
 +----------+----------+------+----------+----------+----------+----------+
 | Device   | Re       | KSPS | T\_      | T_CONV   | T_CYC    | T_ACQ    |
@@ -165,7 +165,7 @@ Key timing characteristics:
    750 ns T_CYC
    500 ns T_CONV
    250 ns T_ACQ
-   12 ns T_SCLK @ >3V VIO (cora pmod is 3V3)
+   12 ns T_SCLK @ >3V VIO (Cora PMOD is 3V3)
 
 Sample rate control
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
