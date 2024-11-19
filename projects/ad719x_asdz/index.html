@@ -109,9 +109,14 @@
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a><ul>
+<li><a class="reference internal" href="#cora-z7s">Cora Z7S</a></li>
+<li><a class="reference internal" href="#de10-nano">DE10-Nano</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#software-considerations">Software considerations</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
@@ -276,7 +281,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
@@ -336,20 +341,23 @@ Content on this topic
 <span id="ad719x-asdz"></span><h1>AD719X-ASDZ HDL project<a class="headerlink" href="#ad719x-asdz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The AD719x family uses a low noise, higher speed, high precision ADC. They
-can be used in a wide range of applications where the input signals can vary
-from the milli-volt to volt level. The parts also operate with a wide range of
-output data rates while still maintaining excellent noise performance over the
-complete rate of output data ranges.</p>
+<p>The AD719x-ASDZ HDL project supports the EVAL-AD719xASDZ family, comprised of
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ">EVAL-AD7190ASDZ</a>, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ">EVAL-AD7193ASDZ</a> and <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ">EVAL-AD7195ASDZ</a>, each
+evaluation kit featuring its own chip, the <a class="icon adi reference external" href="https://www.analog.com/AD7190">AD7190</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7193">AD7193</a> and
+<a class="icon adi reference external" href="https://www.analog.com/AD7195">AD7195</a> respectively - 4.8 kHz ultralow noise 24-bit sigma-delta ADC,
+each with its own particularities.</p>
+<p>The on-chip low noise gain stage means that signals of small amplitude can
+interface directly to the ADC. The internal clock option provides a compact
+solution for low BW requirements.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192">EVAL-AD7192</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194">EVAL-AD7194</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ">EVAL-AD7190ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192ASDZ">EVAL-AD7192ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ">EVAL-AD7193ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194ASDZ">EVAL-AD7194ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ">EVAL-AD7195ASDZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -374,48 +382,48 @@ complete rate of output data ranges.</p>
 <thead>
 <tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
 <th class="head"><p>Carrier</p></th>
-<th class="head"><p>Slot</p></th>
+<th class="head"><p>Connector</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ">EVAL-AD7190ASDZ</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html">De10-Nano</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192">EVAL-AD7192</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192ASDZ">EVAL-AD7192ASDZ</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html">De10-Nano</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ">EVAL-AD7193ASDZ</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html">De10-Nano</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194">EVAL-AD7194</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194ASDZ">EVAL-AD7194ASDZ</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html">De10-Nano</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></td>
-<td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora-Z7S</a></p></td>
-<td><p>PMOD JA</p></td>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ">EVAL-AD7195ASDZ</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<td><p>PMOD JA/Arduino shield</p></td>
 </tr>
 <tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/articles/guide/terasic-de10-nano-get-started-guide.html">De10-Nano</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
 <td><p>Arduino shield</p></td>
 </tr>
 </tbody>
@@ -427,7 +435,7 @@ complete rate of output data ranges.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad719x_block_diagram.png"><img alt="AD719x/CORAZ7S block diagram" class="align-center" src="../../_images/ad719x_block_diagram.png" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="../../_images/ad719x_block_diagram.png"><img alt="AD719x/CoraZ7S block diagram" class="align-center" src="../../_images/ad719x_block_diagram.png" style="width: 1000px;" /></a>
 </section>
 <section id="spi-connections">
 <h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
@@ -456,6 +464,45 @@ complete rate of output data ranges.</p>
 </table>
 </div>
 </section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction (from FPGA view)</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO (for Zynq-7000)</p></th>
+</tr>
+<tr class="row-even"><th class="head"><p>adc_syncn *</p></th>
+<th class="head"><p>OUT</p></th>
+<th class="head"><p>33</p></th>
+<th class="head"><p>87</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>adc_spi_miso_rdyn</p></td>
+<td><p>OUT</p></td>
+<td><p>32</p></td>
+<td><p>86</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> - <code class="docutils literal notranslate"><span class="pre">adc_syncn</span></code> exists all the time on the DE10-Nano project, <strong>but</strong>
+on the Cora Z7S project it exists only when the project was built with
+<code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=1</span></code> parameter (used when connecting the eval. board through
+the Arduino header)</p>
+</div>
+</section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
@@ -466,23 +513,76 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<p>Then go to the project location(<strong>projects/ad719x/coraz7s</strong>) and run the make
-command by typing in your command prompt:</p>
+<section id="cora-z7s">
+<h3>Cora Z7S<a class="headerlink" href="#cora-z7s" title="Permalink to this heading">#</a></h3>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@analog:~$ cd hdl/projects/ad719x_asdz/coraz7s
-user@analog:~/hdl/projects/ad719x_asdz/coraz7s$ make
+<p>The default build configuration (<code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=0</span></code>) features the eval. boards
+connected to Cora Z7S through PMOD JA:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>Check <a class="reference external" href="resources/tools-software/linux-software/kuiper-linux">this guide</a> on
-how to prepare your SD card with the proper boot files.
-A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
-guide.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad719x_asdz/coraz7s
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad719x_asdz/coraz7s$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad719x_asdz/coraz7s$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># or explicitly setting the variable to 0, which is the same</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad719x_asdz/coraz7s$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>make<span class="w"> </span><span class="nv">ARDZ_PMOD_N</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The other possible way to connect the supported boards to CoraZ7S, is through
+the Arduino header, for which the project needs to be built with the parameter
+<code class="docutils literal notranslate"><span class="pre">ARDZ_PMOD_N=1</span></code>.</p>
+<p>The built project will be located at hdl/projects/ad719x_asdz/coraz7s/<strong>ARDZPMODN1</strong>.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad719x_asdz/coraz7s
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad719x_asdz/coraz7s$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>make<span class="w"> </span><span class="nv">ARDZ_PMOD_N</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="de10-nano">
+<h3>DE10-Nano<a class="headerlink" href="#de10-nano" title="Permalink to this heading">#</a></h3>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<p>The only configuration available is through the Arduino header, so this project
+is not parameterizable:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad719x_asdz/de10nano
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad719x_asdz/de10nano$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+</section>
 </section>
 <section id="software-considerations">
 <h2>Software considerations<a class="headerlink" href="#software-considerations" title="Permalink to this heading">#</a></h2>
-<p>The SPI communication is changed because of hardware modifications, so the
-connection looks like this:</p>
-<a class="reference internal image-reference" href="../../_images/ad7190_asdz_pmod_diagram.svg"><img alt="AD719x/CORAZ7S pmod diagram" class="align-center" src="../../_images/ad7190_asdz_pmod_diagram.svg" width="800" /></a>
+<p>The reference design when using the Arduino header, has an extra GPIO, compared
+to the other one — the SYNCN, which is used for synchronizing multiple devices.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
@@ -492,11 +592,15 @@ connection looks like this:</p>
 <li><p>Product datasheets:</p>
 <ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7190">AD7190</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7192">AD7192</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7193">AD7193</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7194">AD7194</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7195">AD7195</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190">EVAL-AD7190</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193">EVAL-AD7193</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195">EVAL-AD7195</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7190ASDZ">EVAL-AD7190ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7192ASDZ">EVAL-AD7192ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7193ASDZ">EVAL-AD7193ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7194ASDZ">EVAL-AD7194ASDZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7195ASDZ">EVAL-AD7195ASDZ</a></p></li>
 </ul>
 </li>
 </ul>
@@ -504,7 +608,7 @@ connection looks like this:</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad719x_asdz">AD719x-FMC HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad719x_asdz">ad719x_asdz HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -522,23 +626,25 @@ connection looks like this:</p>
 <tbody>
 <tr class="row-even"><td><p>axi_sysid</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>sysid_rom</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/pmod/ad7193">AD7193 Pmod Xilinx FPGA Reference Design</a></p></li>
-</ul>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7192.c">Driver</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7192.c">AD719x Linux driver</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-ad7190.dts">AD7190/CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-ad7193.dts">AD7193/CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-ad7195.dts">AD7195/CoraZ7S Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad719x">AD719x no-OS project</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/adc/ad719x">AD719x no-OS driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/renesas/ad7190">AD7190 - Microcontroller No-OS Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/ad7193">Supported devices</a></p></li>
 </ul>
