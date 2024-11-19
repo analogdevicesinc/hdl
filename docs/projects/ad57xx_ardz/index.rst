@@ -49,7 +49,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>`
+-  :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
    Arduino shield connector
 -  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
    Arduino shield connector
@@ -73,7 +73,7 @@ The data path and clock domains are depicted in the below diagrams:
    :width: 800
    :align: center
 
-   AD5780-ARDZ HDL design block diagram for the Cora Z7-07S
+   AD5780-ARDZ HDL design block diagram for the Cora Z7S
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
