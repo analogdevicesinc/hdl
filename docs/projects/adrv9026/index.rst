@@ -3,19 +3,19 @@
 ADRV9026 HDL reference design
 ===============================================================================
 
-The ADRV9026 is a highly integrated, radio frequency (RF) agile transceiver 
-offering four independently controlled transmitters, dedicated observation 
-receiver inputs for monitoring each transmitter channel, four independently 
-controlled receivers, integrated synthesizers, and digital signal processing 
-functions providing a complete transceiver solution. The device provides the 
-performance demanded by cellular infrastructure applications, such as small 
-cell base station radios, macro 3G/4G/5G systems, and massive multiple 
+The ADRV9026 is a highly integrated, radio frequency (RF) agile transceiver
+offering four independently controlled transmitters, dedicated observation
+receiver inputs for monitoring each transmitter channel, four independently
+controlled receivers, integrated synthesizers, and digital signal processing
+functions providing a complete transceiver solution. The device provides the
+performance demanded by cellular infrastructure applications, such as small
+cell base station radios, macro 3G/4G/5G systems, and massive multiple
 in/multiple out (MIMO) base stations.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`ADRV9026/ADRV9029 <EVAL-ADRV9026>`
+- :adi:`ADRV9026/ADRV9029 <EVAL-ADRV9026>`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`ADRV9026/ADRV9029 <EVAL-ADRV9026>`
-     - `A10SoC`_
+     - A10SoC`_
      - FMCA
    * -
      - :xilinx:`ZCU102`
@@ -58,23 +58,23 @@ Example block design for Single link; M=8; L=4
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 
--  Sample Rate: 250 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 250 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 
--  Sample Rate: 250 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 250 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,17 +96,17 @@ for each project.
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C
-   -  8B10B  - 8b10b link layer defined in JESD204B
+   - 64B66B - 64b66b link layer defined in JESD204C
+   - 8B10B - 8b10b link layer defined in JESD204B
 
--  RX_LANE_RATE: lane rate of the Rx link 
--  TX_LANE_RATE: lane rate of the Tx link 
--  [RX/TX]_JESD_M: number of converters per link
--  [RX/TX]_JESD_L: number of lanes per link
--  [RX/TX]_JESD_S: number of samples per frame
--  [RX/TX]_NUM_LINKS: number of links
+- RX_LANE_RATE: lane rate of the Rx link
+- TX_LANE_RATE: lane rate of the Tx link
+- [RX/TX]_JESD_M: number of converters per link
+- [RX/TX]_JESD_L: number of lanes per link
+- [RX/TX]_JESD_S: number of samples per frame
+- [RX/TX]_NUM_LINKS: number of links
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,8 +150,8 @@ SPI connections
      - spi0
      - ADRV9026
      - 0
-   * - 
-     - 
+   * -
+     -
      - AD9528
      - 1
 
@@ -159,7 +159,8 @@ GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ZCU102
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. list-table::
    :widths: 25 20 20 15
    :header-rows: 2
@@ -250,7 +251,8 @@ ZCU102
      - 128:110
 
 VCU118
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. list-table::
    :widths: 25 20 20 15
    :header-rows: 2
@@ -356,13 +358,14 @@ axi_adrv9026_rx_dma  14  109          141
 
 Microblaze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ==================== === ============
 Instance name        HDL Microblaze
 ==================== === ============
-axi_adrv9026_tx_jesd 15  15         
-axi_adrv9026_rx_jesd 14  14         
-axi_adrv9026_tx_dma  13  13         
-axi_adrv9026_rx_dma  12  12         
+axi_adrv9026_tx_jesd 15  15
+axi_adrv9026_rx_jesd 14  14
+axi_adrv9026_tx_dma  13  13
+axi_adrv9026_rx_dma  12  12
 ==================== === ============
 
 Building the HDL project
@@ -460,7 +463,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADRV9026 & ADRV9029 Prototyping Platform User Guide <resources/eval/user-guides/adrv9025>`
+- :dokuwiki:`[Wiki] ADRV9026 & ADRV9029 Prototyping Platform User Guide <resources/eval/user-guides/adrv9025>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -476,15 +479,13 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`ADRV9026`
--  `UG-1578, Device User Guide <https://www.analog.com/media/radioverse-adrv9026/adrv9026-system-development-user-guide-ug-1727.pdf>`__
+- Product datasheet: :adi:`ADRV9026`
+- `UG-1578, Device User Guide <https://www.analog.com/media/radioverse-adrv9026/adrv9026-system-development-user-guide-ug-1727.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ADRV9026 HDL project source code <projects/adrv9026>`
+- :git-hdl:`ADRV9026 HDL project source code <projects/adrv9026>`
 
 .. list-table::
    :widths: 30 40 35
@@ -530,13 +531,13 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`here <ad_ip_jesd204_tpl_dac>`
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADRV9026 Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv9025>`
+- :dokuwiki:`[Wiki] ADRV9026 Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv9025>`
 
 .. include:: ../common/more_information.rst
 

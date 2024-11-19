@@ -35,7 +35,7 @@ Supported carriers
    * - EVAL-ADRV904x
      - :xilinx:`ZCU102`
      - FMC HPC0
-   * - 
+   * -
      - :xilinx:`VCK190`
      - FMCP1
 

@@ -55,19 +55,19 @@ to +105°C. The device is housed in a 10 mm × 10 mm 64-lead LQFP package with a
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7768 <EVAL-AD7768>`
--  :adi:`EVAL-AD7768-4 <EVAL-AD7768-4>`
+- :adi:`EVAL-AD7768`
+- :adi:`EVAL-AD7768-4`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7768`
--  :adi:`AD7768-4`
+- :adi:`AD7768`
+- :adi:`AD7768-4`
 
 Supported carriers
 ---------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -76,9 +76,6 @@ Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The data path and clock domains are depicted in the below diagram:
-
-AD7768-EVB
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad7768evb_fmc_hdl.svg
    :width: 800
@@ -140,7 +137,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -214,19 +211,17 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
--  :adi:`AD7768`
--  :adi:`AD7768-4`
--  :adi:`UG-917, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7768FMCZ_UG-917.pdf>`
--  :adi:`UG-921, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7768-4FMCZ-UG-921.pdf>`
+- Product datasheets:
+  - :adi:`AD7768`
+  - :adi:`AD7768-4`
+- :adi:`UG-917, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7768FMCZ_UG-917.pdf>`
+- :adi:`UG-921, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7768-4FMCZ-UG-921.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD7768-EVB HDL project source code <projects/ad7768evb>`
--  :dokuwiki:`[Wiki] AD7768-EVB Bare Metal Quick Start Guide <resources/eval/user-guides/ad7768-ebz/software/baremetal>`
--  :dokuwiki:`[Wiki] AXI_AD7768 <resources/fpga/docs/ad7768>`
+- :git-hdl:`AD7768-EVB HDL project source code <projects/ad7768evb>`
+- :dokuwiki:`[Wiki] AD7768-EVB Bare Metal Quick Start Guide <resources/eval/user-guides/ad7768-ebz/software/baremetal>`
 
 .. list-table::
    :widths: 30 35 35
@@ -269,9 +264,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`AD7768 Linux driver source code <drivers/iio/adc/ad7768.c>`
--  :git-no-os:`AD7768 No-OS project source code <projects/ad7768-evb>`
--  :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
+- :git-linux:`AD7768 Linux driver source code <drivers/iio/adc/ad7768.c>`
+- :git-no-os:`AD7768 No-OS project source code <projects/ad7768-evb>`
+- :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
 
 .. include:: ../common/more_information.rst
 

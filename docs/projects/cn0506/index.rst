@@ -185,7 +185,7 @@ The Software GPIO number is calculated as follows:
    * - link_st_b
      - IN
      - 34
-     - 88 
+     - 88
    * - int_n_a
      - IN
      - 33
@@ -228,7 +228,7 @@ The Software GPIO number is calculated as follows:
      - 35
    * - link_st_b
      - IN
-     - 34 
+     - 34
    * - mii_crs_a
      - IN
      - 33
@@ -257,7 +257,7 @@ Below are the Programmable Logic interrupts used in this project.
 =========================== === ============ =============
 Instance name               HDL Linux Zynq   Actual Zynq
 =========================== === ============ =============
-axi_hdmi_dma/irq*           15  59           91 
+axi_hdmi_dma/irq*           15  59           91
 axi_iic_main/iic2intc_irpt* 14  58           90
 axi_iic_fmc/iic2intc_irpt*  11  55           87
 =========================== === ============ =============
@@ -298,7 +298,7 @@ then the folder name will be:
 
 ``INTF_CFGMII``
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` 
+A more comprehensive build guide can be found in the :ref:`build_hdl`
 user guide.
 
 Resources
@@ -308,7 +308,7 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  Product datasheet: :adi:`CN0506`
--  ADIN1300 datasheet: :adi:`ADIN1300` 
+-  ADIN1300 datasheet: :adi:`ADIN1300`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

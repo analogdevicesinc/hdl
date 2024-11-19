@@ -46,39 +46,39 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7380FMCZ <EVAL-AD7380FMCZ>`
--  :adi:`EVAL-AD7381FMCZ <EVAL-AD7381FMCZ>`
--  :adi:`EVAL-AD7386FMCZ <EVAL-AD7386FMCZ>`
--  :adi:`EVAL-AD7383FMCZ <EVAL-AD7383FMCZ>`
--  :adi:`EVAL-AD7380-4FMCZ <EVAL-AD7380-4FMCZ>`
+- :adi:`EVAL-AD7380FMCZ`
+- :adi:`EVAL-AD7381FMCZ`
+- :adi:`EVAL-AD7386FMCZ`
+- :adi:`EVAL-AD7383FMCZ`
+- :adi:`EVAL-AD7380-4FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7380`
--  :adi:`AD7380-4`
--  :adi:`AD7381`
--  :adi:`AD7381-4`
--  :adi:`AD7383`
--  :adi:`AD7383-4`
--  :adi:`AD7384`
--  :adi:`AD7384-4`
--  :adi:`AD7386`
--  :adi:`AD7387`
--  :adi:`AD7388`
--  :adi:`AD7388-4`
--  :adi:`AD7389-4`
--  :adi:`AD4680`
--  :adi:`AD4681`
--  :adi:`AD4682`
--  :adi:`AD4683`
--  :adi:`AD4684`
--  :adi:`AD4685`
+- :adi:`AD7380`
+- :adi:`AD7380-4`
+- :adi:`AD7381`
+- :adi:`AD7381-4`
+- :adi:`AD7383`
+- :adi:`AD7383-4`
+- :adi:`AD7384`
+- :adi:`AD7384-4`
+- :adi:`AD7386`
+- :adi:`AD7387`
+- :adi:`AD7388`
+- :adi:`AD7388-4`
+- :adi:`AD7389-4`
+- :adi:`AD4680`
+- :adi:`AD4681`
+- :adi:`AD4682`
+- :adi:`AD4683`
+- :adi:`AD4684`
+- :adi:`AD4685`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -113,13 +113,13 @@ In case of the **Alert Indication Output Pin** functionality:
 
    make ALERT_SPI_N=1
 
-The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
--  Options: 1, 2, 4.
-By default is set to 1.
+The **NUM_OF_SDI** configuration parameter defines the number of SDI lines used:
+**{1, 2, 4}**. By default is set to 1.
 
-For the ALERT functionality, the following parameters will be used in make
+For the **ALERT** functionality, the following parameters will be used in make
 command: ALERT_SPI_N.
-For the serial data output functionality, the following parameters will be
+
+For the **serial data output** functionality, the following parameters will be
 used in make command: ALERT_SPI_N, NUM_OF_SDI.
 
 Jumper setup
@@ -206,7 +206,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then the offset is 54
+- Zynq-7000: if PS7 is used, then the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25 25 25
@@ -287,33 +287,33 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7380`
-   -  :adi:`AD7380-4`
-   -  :adi:`AD7381`
-   -  :adi:`AD7381-4`
-   -  :adi:`AD7383`
-   -  :adi:`AD7383-4`
-   -  :adi:`AD7384`
-   -  :adi:`AD7384-4`
-   -  :adi:`AD7386`
-   -  :adi:`AD7387`
-   -  :adi:`AD7388`
-   -  :adi:`AD7388-4`
-   -  :adi:`AD7389-4`
-   -  :adi:`AD4680`
-   -  :adi:`AD4681`
-   -  :adi:`AD4682`
-   -  :adi:`AD4683`
-   -  :adi:`AD4684`
-   -  :adi:`AD4685`
--  `UG-1304, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad7380fmcz-7381fmcz-ug-1304.pdf>`__
+  - :adi:`AD7380`
+  - :adi:`AD7380-4`
+  - :adi:`AD7381`
+  - :adi:`AD7381-4`
+  - :adi:`AD7383`
+  - :adi:`AD7383-4`
+  - :adi:`AD7384`
+  - :adi:`AD7384-4`
+  - :adi:`AD7386`
+  - :adi:`AD7387`
+  - :adi:`AD7388`
+  - :adi:`AD7388-4`
+  - :adi:`AD7389-4`
+  - :adi:`AD4680`
+  - :adi:`AD4681`
+  - :adi:`AD4682`
+  - :adi:`AD4683`
+  - :adi:`AD4684`
+  - :adi:`AD4685`
+- `UG-1304, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad7380fmcz-7381fmcz-ug-1304.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD738x_FMC HDL project source code <projects/ad738x_fmc>`
+- :git-hdl:`AD738x_FMC HDL project source code <projects/ad738x_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -362,15 +362,13 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`AD738X_FMC No-OS project <projects/ad738x_fmcz>`
--  :dokuwiki:`AD738X_FMC - No-OS Driver [Wiki] <resources/eval/user-guides/ad738x>`
-
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`AD738X_FMC No-OS project <projects/ad738x_fmcz>`
+- :dokuwiki:`AD738X_FMC - No-OS Driver [Wiki] <resources/eval/user-guides/ad738x>`
 
 .. include:: ../common/more_information.rst
 

@@ -9,9 +9,9 @@ Overview
 The :adi:`AD7625`, :adi:`AD7626`, :adi:`AD7960`, :adi:`AD7961` devices are parts
 from ADC LVDS PulSAR family.
 The :adi:`AD7625` / :adi:`AD7626` is a 16-bit, 6 MSPS / 10 MSPS, charge
-redistribution successive approximation register (SAR) architecture, 
+redistribution successive approximation register (SAR) architecture,
 analog to-digital converter (ADC). SAR architecture allows unmatched performance
-both in noise (92dB SNR) and in linearity (±1 LSB INL / ±0.45 LSB INL). The 
+both in noise (92dB SNR) and in linearity (±1 LSB INL / ±0.45 LSB INL). The
 AD7626 contains a high speed 16-bit sampling ADC, an internal conversion clock,
 and an internal buffered reference. On the CNV edge, it samples the voltage
 difference between IN+ and IN- pins. The voltages on these pins swing in opposite
@@ -19,7 +19,7 @@ phase between 0 V and REF.
 
 The 4.096V reference voltage, REF, can be generated internally or applied
 externally. All converted results are available on a single LVDS self-clocked or
-echoed-clock serial interface reducing external hardware connections. The 
+echoed-clock serial interface reducing external hardware connections. The
 :adi:`AD7625` / :adi:`AD7626` is available in a 32-lead LFCSP (5mm by 5mm) with
 operation specified from -40°C to +85°C.
 
@@ -115,7 +115,7 @@ Jumper/Solder link Default Position  Description
 ================== ================= ===========================================
 LK2                Inserted          Connects REFIN to the 1.2V external
                                      reference.
-LK3                Inserted          Connects the 4.096 V output from the 
+LK3                Inserted          Connects the 4.096 V output from the
                                      :adi:`ADR4540` after buffer :adi:`AD8031`
                                      solution.
 LK6                B                 Connects the output of the VCM buffer to
@@ -142,11 +142,11 @@ Jumper/Solder link Default Position  Description
 LK2,LK3            Inserted          Option to use external amplifier supplies
                                      + VS and – VS.
 LK4                Inserted          Connects to +7 V coming from :adi:`ADP7102`.
-LK5                B                 Connects to −2.5 V coming from 
+LK5                B                 Connects to −2.5 V coming from
                                      :adi:`ADP2300`.
 LK6                B                 Connects the output of VCM buffer to VCM
                                      of amplifier.
-LK7                B                 Connects the +5 V output from 
+LK7                B                 Connects the +5 V output from
                                      :adi:`ADR4550` to REF buffer AD8031.
 JP1,JP2            B                 Connects analog inputs VIN+ and VIN− to
                                      the inputs of the ADC driver.

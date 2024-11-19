@@ -42,18 +42,18 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-ADAQ7980 <EVAL-ADAQ7980>`
+- :adi:`EVAL-ADAQ7980`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADAQ7980`
--  :adi:`ADAQ7988`
+- :adi:`ADAQ7980`
+- :adi:`ADAQ7988`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -192,14 +192,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`ADAQ7980`/:adi:`ADAQ7988`
-
--  `UG-1060, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/data-sheets/adaq7980-7988.pdf>`__
+- Product datasheet: :adi:`ADAQ7980`/:adi:`ADAQ7988`
+- `UG-1060, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/data-sheets/adaq7980-7988.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ADAQ7980_SDZ HDL project source code <projects/adaq7980_sdz>`
+- :git-hdl:`ADAQ7980_SDZ HDL project source code <projects/adaq7980_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -248,14 +247,12 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - :ref:`here <spi_engine offload>`
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`ADAQ7980_SDZ No-OS project <projects/adaq7980_sdz>`
-
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`ADAQ7980_SDZ No-OS project <projects/adaq7980_sdz>`
 
 .. include:: ../common/more_information.rst
 

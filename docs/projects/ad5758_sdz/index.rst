@@ -54,6 +54,9 @@ Other required hardware
 Block design
 -------------------------------------------------------------------------------
 
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad5758_block_diagram.svg
@@ -62,7 +65,7 @@ The data path and clock domains are depicted in the below diagram:
    :alt: AD5758_SDZ block diagram
 
 Jumper setup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ================== ================ ============================================
 Jumper/Solder link Default Position Description

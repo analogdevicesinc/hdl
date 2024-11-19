@@ -21,7 +21,7 @@ finite impulse response (FIR) digital filter at 256 kSPS, giving 110.8 kHz input
 bandwidth (BW), combined with ±1.1 ppm integral nonlinearity (INL), ±30 µV
 offset error, and ±30 ppm gain error. Wider bandwidth, up to 500 kHz Nyquist,
 204 kHz, −3 dB, is available using the sinc5 filter, enabling a view of signals
-over an extended range. 
+over an extended range.
 
 A 1.024 MHz sinc5 filter path exists for users seeking an even higher output
 data rate. This path is quantization noise limited; therefore, it is best suited
