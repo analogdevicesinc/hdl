@@ -10,7 +10,9 @@ that it would create a tremendous maintenance workload, that would require a lot
 of human resources, and would increase the required time for testing.
 
 The general rule of thumb is to support a given project with a fairly popular
-carrier (e.g. ZC706 or A10SoC), which is powerful enough to showcase the board
+carrier (e.g. :xilinx:`ZC706` or
+:intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`),
+which is powerful enough to showcase the board
 features and maximum performance.
 
 All the HDL projects were designed to maximize source code reuse, minimize
@@ -137,7 +139,8 @@ Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this section, we are presenting all the necessary steps to create a base
-design for the Intel Arria 10 SoC development board (abbreviated, `A10SoC`_).
+design for the Intel Arria 10 SoC development board (abbreviated,
+:intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`).
 
 First, you need to create a new directory in ``hdl/projects/common`` with the
 name of the carrier.
@@ -372,5 +375,4 @@ To create a carrier common FMC connections file:
      * Two parameters indicating both FMC ports in the desired order for projects
        that use both FMC connectors.
 
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
 .. _lfcpnx: https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard

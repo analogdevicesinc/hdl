@@ -5,7 +5,7 @@ Generating HDL boot image for Intel projects
 
 This page is dedicated to the building process of boot image for supported
 Intel/Altera projects. One key file specific to these projects is
-the ``bootloader``. It's role is to initialize the system after the
+the ``bootloader``. Its role is to initialize the system after the
 BootROM runs. It bridges the gap between the limited functionality of the
 BootROM and the end user application, configuring the system as needed before
 the larger application can run.
@@ -13,9 +13,9 @@ the larger application can run.
 In the following links you can find more details on the process and the
 necessary components:
 
--  `Booting and Configuration <https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf>`__
--  `SocBootFromFPGA <https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773>`__
--  `Intel Bootloader <https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html>`__
+- `Booting and Configuration <https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf>`__
+- `SocBootFromFPGA <https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773>`__
+- `Intel Bootloader <https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html>`__
 
 Necessary files for booting up an HDL project
 -------------------------------------------------------------------------------
@@ -32,24 +32,26 @@ files:
 
 - For Arria 10 SoC projects (:ref:`build example <build_intel_boot_image arria10>`):
 
-   - ``<boot_mountpoint>/u-boot.img``
-   - ``<boot_mountpoint>/fit_spl_fpga.itb``
-   - ``<boot_mountpoint>/extlinux/extlinux.conf`` (keep the directory)
-   - ``<boot_mountpoint>/socfpga_arria10_socdk_sdmmc.dtb``
-   - ``<boot_mountpoint>/socfpga_arria10-common/zImage``
-   - ``<boot_mountpoint>/u-boot-splx4.sfp`` (preloader image)
+  - ``<boot_mountpoint>/u-boot.img``
+  - ``<boot_mountpoint>/fit_spl_fpga.itb``
+  - ``<boot_mountpoint>/extlinux/extlinux.conf`` (keep the directory)
+  - ``<boot_mountpoint>/socfpga_arria10_socdk_sdmmc.dtb``
+  - ``<boot_mountpoint>/socfpga_arria10-common/zImage``
+  - ``<boot_mountpoint>/u-boot-splx4.sfp`` (preloader image)
 
-- For Cyclone5 SoC project (build examples: :ref:`Terasic C5 <build_intel_boot_image c5soc>`, :ref:`DE10Nano <build_intel_boot_image de10nano>`):
+- For Cyclone5 SoC project (build examples:
+  :ref:`Terasic C5 <build_intel_boot_image c5soc>`,
+  :ref:`DE10Nano <build_intel_boot_image de10nano>`):
 
-   - ``<boot_mountpoint>/u-boot.scr``
-   - ``<boot_mountpoint>/soc_system.rbf``
-   - ``<boot_mountpoint>/extlinux/extlinux.conf`` (keep the directory)
-   - ``<boot_mountpoint>/socfpga_arria10-common/socfpga.dtb``
-   - ``<boot_mountpoint>/zImage``
-   - ``<boot_mountpoint>/u-boot-with-spl.sfp`` (preloader image)
+  - ``<boot_mountpoint>/u-boot.scr``
+  - ``<boot_mountpoint>/soc_system.rbf``
+  - ``<boot_mountpoint>/extlinux/extlinux.conf`` (keep the directory)
+  - ``<boot_mountpoint>/socfpga_arria10-common/socfpga.dtb``
+  - ``<boot_mountpoint>/zImage``
+  - ``<boot_mountpoint>/u-boot-with-spl.sfp`` (preloader image)
 
 .. note::
-   
+
    Some files, like **fit_spl_fpga.itb** or **extlinux**, were introduced
    later in the Intel boot flow with the U-Boot image update.
 
@@ -61,7 +63,7 @@ can be obtained from
 :dokuwiki:`here <resources/tools-software/linux-software/adi-kuiper_images/release_notes>`.
 
 .. note::
-   
+
    Make sure to always use the latest version of Kuiper Linux. If the desired
    project is not supported anymore, use the last version of Kuiper where it's
    present.
@@ -78,7 +80,7 @@ Supposing your host is a Linux system, your carrier is an Arria10, the
 eval board/project is AD9081 and you are using the built files from the Kuiper
 image mounted at ``/mnt/BOOT``, then you would:
 
-.. shell::
+.. shell:: bash
 
    $cd /mnt/BOOT
    $cp socfpga_arria10_socdk_ad9081/u-boot.img .
@@ -92,14 +94,14 @@ Writing the boot preloader partition requires special attention,
 first look for the device with BOOT mountpoint and annotate the third partition
 from the same device:
 
-.. code-block:: bash
+.. shell:: bash
 
-   lsblk
+   $lsblk
 
 Then, clear the partition with zeros and write the preloader image
 (in this example, Arria10 SoC's *./u-boot-splx4.sfp*):
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $DEV=mmcblk0p3
@@ -119,7 +121,7 @@ Then, clear the partition with zeros and write the preloader image
    The snippet below can infer the device based on the *BOOT* partition
    mountpoint
 
-   .. shell::
+   .. shell:: bash
 
       $DEV=$(lsblk | sed -n 's/.*\(\b[s][d-z][a-z][0-9]\)\s*.*\/BOOT/\1/p' | sed 's/^\(...\).*/\1/')
       $if [ -z "$DEV" ] ; then \
@@ -142,9 +144,9 @@ the other).
    built. Follow these instructions to write the file to your SD card, depending
    on the operating system that you use (Windows or Linux):
 
-   -  :dokuwiki:`[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source <resources/tools-software/linux-build/generic/socfpga>`
-   -  :dokuwiki:`[Wiki] Linux Download and setting up the image <resources/tools-software/linux-software/zynq_images/linux_hosts>`
-   -  :dokuwiki:`[Wiki] Formatting and Flashing SD Cards using Windows <resources/tools-software/linux-software/zynq_images/windows_hosts>`
+   - :dokuwiki:`[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source <resources/tools-software/linux-build/generic/socfpga>`
+   - :dokuwiki:`[Wiki] Linux Download and setting up the image <resources/tools-software/linux-software/zynq_images/linux_hosts>`
+   - :dokuwiki:`[Wiki] Formatting and Flashing SD Cards using Windows <resources/tools-software/linux-software/zynq_images/windows_hosts>`
 
 Proceed by cloning the repository, setting the environment to an ARM architecture
 cross compiler, build the configuration file, build the Kernel image, and
@@ -152,20 +154,19 @@ lastly build the device tree (specific to each combination of carrier and eval
 board).
 
 You may notice that in the ``export CROSS_COMPILE`` examples there is a
-"trailing" dash ``-``, and the reason for this is because an export:
+"trailing" dash ``-``. That is because within the Makeiles, this path becomes
+/path/to/arm-linux-gnueabihf-gcc (with ``gcc`` appended).
 
-.. shell::
+.. shell:: bash
 
    $export CROSS_COMPILE=/path/to/arm-linux-gnueabihf-
 
-Within the Makefiles, this path becomes /path/to/arm-linux-gnueabihf-gcc
-(with ``gcc`` added at the end).
 
 If your environment already has the compiler in the path
 (test if :code:`which arm-linux-gnueabihf-gcc` returns the expected path),
 you can set ``CROSS_COMPILE`` to:
 
-.. shell::
+.. shell:: bash
 
    $export CROSS_COMPILE=arm-linux-gnueabihf-
 
@@ -185,15 +186,15 @@ support and may not be available in your default package manager.
 ADRV9371/Arria 10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`projects/adrv9371x/a10soc`
--  ADI's Linux kernel: :git-linux:`here <>`
+- HDL Project: :git-hdl:`projects/adrv9371x/a10soc`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
 
 **Linux/Cygwin/WSL**
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/linux.git
    $cd linux/
@@ -212,7 +213,7 @@ Building the Hardware Design
 
 Clone the HDL repository, then build the project:
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/hdl.git
    $cd hdl/projects/adrv9371x/a10soc
@@ -229,7 +230,7 @@ compiler environment variables.
    Pay attention to directoy changes to where the commands are run from,
    and always confirm with ``pwd`` to show the current path at you terminal.
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc ; pwd
@@ -240,7 +241,7 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
@@ -248,7 +249,7 @@ of this page on wiki
 In the HDL project directory, create the ``software/bootloader`` folder and
 clone the ``u-boot-socfpga`` image:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc ; pwd
@@ -259,7 +260,7 @@ clone the ``u-boot-socfpga`` image:
 
 Then run the qts filter and build the preloader and bootloader images:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc/software/bootloader ; pwd
@@ -274,7 +275,7 @@ Then run the qts filter and build the preloader and bootloader images:
 
 Create the SPL image:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc/software/bootloader/u-boot-socfpga ; pwd
@@ -288,7 +289,7 @@ Last but not least, create the **extlinux.conf** Linux configuration file,
 which will be copied to /BOOT partition of the SD Card, in a folder
 named ``extlinux``:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc/software/bootloader/u-boot-socfpga ; pwd
@@ -312,7 +313,7 @@ device mountpoints accordingly
 
 Flash the SD Card with the Kuiper Linux image:
 
-.. shell::
+.. shell:: bash
 
    $time sudo dd if=./2023-12-13-ADI-Kuiper-full.img of=/dev/sdz status=progress bs=4194304
     2952+0 records in
@@ -326,7 +327,7 @@ Flash the SD Card with the Kuiper Linux image:
 
 Mount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $lsblk
@@ -347,7 +348,7 @@ Mount the /BOOT partition:
 
 Copy the built files to the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc ; pwd
@@ -362,7 +363,7 @@ Copy the built files to the /BOOT partition:
 
 Unmount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $sudo umount /dev/sdz1
@@ -375,7 +376,7 @@ Unmount the /BOOT partition:
 
 Flash the preloader boot partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/adrv9371x/a10soc/software/bootloader/u-boot-socfpga ; pwd
@@ -395,15 +396,15 @@ Flash the preloader boot partition:
 ARRADIO/Terasic C5 SoC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`<projects/arradio/c5soc>`
--  ADI's Linux kernel: :git-linux:`here <>`
+- HDL Project: :git-hdl:`projects/arradio/c5soc`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
 
 **Linux/Cygwin/WSL**
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/linux.git
    $cd linux/
@@ -422,7 +423,7 @@ Building the Hardware Design
 
 Clone the HDL repository, then build the project:
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/hdl.git
    $cd hdl/projects/arradio/c5soc
@@ -439,7 +440,7 @@ compiler environment variables.
    Pay attention to directory changes to where the commands are run from,
    and always confirm with ``pwd`` to show the current path at you terminal.
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc ; pwd
@@ -450,15 +451,15 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
 
-In HDL project directory, create the software/bootloader folder and clone the
-``u-boot-socfpga`` image. Before that create a new BSP settings file:
+In the HDL project directory, create the ``software/bootloader`` folder and
+clone the ``u-boot-socfpga`` image. Before that, create a new BSP settings file:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc ; pwd
@@ -475,7 +476,7 @@ In HDL project directory, create the software/bootloader folder and clone the
 
 Then run the qts filter and build the preloader and bootloader images:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc/software/bootloader ; pwd
@@ -488,7 +489,7 @@ Then run the qts filter and build the preloader and bootloader images:
 
 Make u-boot.scr file - this file shall be copied to /BOOT partition of the SD Card:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc/software/bootloader/u-boot-socfpga ; pwd
@@ -501,7 +502,7 @@ Last but not least, create the **extlinux.conf** Linux configuration file,
 which will be copied to /BOOT partition of the SD Card, in a folder
 named ``extlinux``:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc/software/bootloader/u-boot-socfpga ; pwd
@@ -562,7 +563,7 @@ device mountpoints accordingly
 
 Flash the SD Card with the Kuiper Linux image:
 
-.. shell::
+.. shell:: bash
 
    $time sudo dd if=./2023-12-13-ADI-Kuiper-full.img of=/dev/sdz status=progress bs=4194304
     2952+0 records in
@@ -576,7 +577,7 @@ Flash the SD Card with the Kuiper Linux image:
 
 Mount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $lsblk
@@ -597,7 +598,7 @@ Mount the /BOOT partition:
 
 Copy the built files to the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc ; pwd
@@ -612,7 +613,7 @@ Copy the built files to the /BOOT partition:
 
 Unmount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $sudo umount /dev/sdz1
@@ -625,7 +626,7 @@ Unmount the /BOOT partition:
 
 Flash the preloader boot partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc/software/bootloader/u-boot-socfpga ; pwd
@@ -645,15 +646,15 @@ Flash the preloader boot partition:
 CN0540/DE10Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  HDL Project: :git-hdl:`<projects/cn0540/de10nano>`
--  ADI's Linux kernel: :git-linux:`here <>`
+- HDL Project: :git-hdl:`projects/cn0540/de10nano`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts`
 
 Building the Linux Kernel image and the Devicetree
 ```````````````````````````````````````````````````````````````````````````````
 
 **Linux/Cygwin/WSL**
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/linux.git
    $cd linux/
@@ -672,7 +673,7 @@ Building the Hardware Design
 
 Clone the HDL repository, then build the project:
 
-.. shell::
+.. shell:: bash
 
    $git clone https://github.com/analogdevicesinc/hdl.git
    $cd hdl/projects/cn0540/de10nano
@@ -689,7 +690,7 @@ compiler environment variables.
    Pay attention to directory changes to where the commands are run from,
    and always confirm with ``pwd`` to show the current path at you terminal.
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano ; pwd
@@ -700,15 +701,15 @@ compiler environment variables.
 Building the Preloader and Bootloader Image
 ```````````````````````````````````````````````````````````````````````````````
 
-This flow applies starting with release :git-hdl:`2021_R1<hdl_2021_r1:>` /
+This flow applies starting with release :git-hdl:`2021_R1 <hdl_2021_r1:>` /
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
 :dokuwiki:`Altera SOC Quick Start Guide <resources/tools-software/linux-software/altera_soc_images>`.
 
-In HDL project directory, create the software/bootloader folder and clone the
-``u-boot-socfpga`` image. Before that create a new BSP settings file:
+In the HDL project directory, create the ``software/bootloader`` folder and
+clone the ``u-boot-socfpga`` image. Before that, create a new BSP settings file:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano ; pwd
@@ -725,7 +726,7 @@ In HDL project directory, create the software/bootloader folder and clone the
 
 Then run the qts filter and build the preloader and bootloader images:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano/software/bootloader ; pwd
@@ -738,7 +739,7 @@ Then run the qts filter and build the preloader and bootloader images:
 
 Make u-boot.scr file - this file shall be copied to /BOOT partition of the SD Card:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/arradio/c5soc/software/bootloader/u-boot-socfpga ; pwd
@@ -751,7 +752,7 @@ Last but not least, create the **extlinux.conf** Linux configuration file,
 which will be copied to /BOOT partition of the SD Card, in a folder
 named ``extlinux``:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano/software/bootloader/u-boot-socfpga ; pwd
@@ -775,7 +776,7 @@ device mountpoints accordingly
 
 Flash the SD Card with the Kuiper Linux image:
 
-.. shell::
+.. shell:: bash
 
    $time sudo dd if=./2023-12-13-ADI-Kuiper-full.img of=/dev/sdz status=progress bs=4194304
     2952+0 records in
@@ -789,7 +790,7 @@ Flash the SD Card with the Kuiper Linux image:
 
 Mount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $lsblk
@@ -810,7 +811,7 @@ Mount the /BOOT partition:
 
 Copy the built files to the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano ; pwd
@@ -825,7 +826,7 @@ Copy the built files to the /BOOT partition:
 
 Unmount the /BOOT partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $sudo umount /dev/sdz1
@@ -838,7 +839,7 @@ Unmount the /BOOT partition:
 
 Flash the preloader boot partition:
 
-.. shell::
+.. shell:: bash
    :no-path:
 
    $cd ~/hdl/projects/cn0540/de10nano/software/bootloader/u-boot-socfpga ; pwd

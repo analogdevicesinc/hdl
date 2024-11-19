@@ -95,7 +95,7 @@ the repository. This is the best method to get the sources.
 Here, we are cloning the repository inside a directory called **adi**.
 Please refer to the :ref:`git_repository` section for more details.
 
-.. shell::
+.. shell:: bash
 
    $git clone git@github.com:analogdevicesinc/hdl.git
 
@@ -118,16 +118,16 @@ HDL repo. The **main** branch always points to the latest stable release
 branch, but it also has features **that are not fully tested**. If you
 want to switch to any other branch you need to checkout that branch:
 
-.. shell::
+.. shell:: bash
 
-   $cd hdl
+   ~/hdl
    $git checkout hdl_2022_r2
 
 If this is your first time cloning, you have the latest source files.
 If not, you can simply pull the latest sources using ``git pull`` or
 ``git rebase`` if you have local changes.
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $git fetch origin               # shows what changes will be pulled on your local copy
@@ -152,7 +152,7 @@ method in your **~/.bashrc** file as follows:
 
 .. code-block:: bash
 
-   XVERSION=2023.1
+   XVERSION=2023.2
    load_amd ()
    {
        source /opt/Xilinx/Vivado/$XVERSION/settings64.sh
@@ -164,14 +164,13 @@ method in your **~/.bashrc** file as follows:
    .bashrc files outside of wrapper methods, as multiple vendor environments
    may conflict with each other.
 
-
 Then, `re-source your bashrc <https://linuxcommand.org/lc3_man_pages/sourceh.html>`__
 for the current session (or open a new one) and call the defined method:
 
-.. code-block:: bash
+.. shell:: bash
 
-   source ~/.bashrc
-   load_amd
+   $source ~/.bashrc
+   $load_amd
 
 Check out the following sections for the paths you need to export.
 
@@ -186,21 +185,30 @@ package name.
 
    Change the path and the tool version accordingly to your installation!
 
-.. code-block:: bash
-   :linenos:
+For AMD Xilinx Vivado:
 
-   # for AMD Xilinx
-   source /opt/Xilinx/Vivado/202x.x/settings64.sh
+.. shell:: bash
 
-   export PATH=$PATH:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
-   export PATH=$PATH:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+   ~/hdl
+   $source /opt/Xilinx/Vivado/202x.x/settings64.sh
 
-   # for Intel
-   export PATH=$PATH:/opt/intelFPGA_pro/2x.x/quartus/bin
+   $export PATH=$PATH:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
+   $export PATH=$PATH:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
 
-   # for Lattice
-   export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
-   export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
+For Intel Quartus:
+
+.. shell:: bash
+
+   ~/hdl
+   $export PATH=$PATH:/opt/intelFPGA_pro/2x.x/quartus/bin
+
+For Lattice:
+
+.. shell:: bash
+
+   ~/hdl
+   $export PATH=$PATH:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+   $export PATH=$PATH:/opt/lscc/radiant/202x.x/bin/lin64
 
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,29 +221,36 @@ and command-line interface for Microsoft Windows.
 
    Change the path and the tool version accordingly to your installation!
 
-For example:
+For AMD Xilinx Vivado:
 
-.. code-block:: bash
-   :linenos:
+.. shell:: bash
 
-   # for AMD Xilinx
-   source /cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
+   ~/hdl
+   $source /cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
 
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-   export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 
-   # for Intel
-   export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+For Intel Quartus:
 
-   # for Lattice
-   export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
-   export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+.. shell:: bash
+
+   ~/hdl
+   $export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+
+For Lattice:
+
+.. shell:: bash
+
+   ~/hdl
+   $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+   $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
 
 .. collapsible:: Alternatives to Cygwin/Linux terminal
 
@@ -258,7 +273,7 @@ For example:
 Use the ``which`` command to locate the command which would be executed in the
 current environment, for example:
 
-.. shell::
+.. shell:: bash
 
    $which git
     /usr/bin/git
@@ -317,7 +332,7 @@ A generic path where you want to build the project would look like:
 
 **EXAMPLE**: Here we are building the **DAQ2** project on the **ZC706** carrier.
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $cd projects/daq2/zc706
@@ -367,7 +382,7 @@ the ``ADI_USE_OOC_SYNTHESIS`` system variable. By setting the
 maximum parallel out-of-context synthesis jobs. If not set, the default
 parallel job number is set to 4.
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $export ADI_USE_OOC_SYNTHESIS=y
@@ -392,7 +407,7 @@ project in OOC mode since the cache is not cleared as with normal compile flow.
 
    Set:
 
-   .. shell::
+   .. shell:: bash
 
       ~/hdl
       $export ADI_USE_OOC_SYNTHESIS=n
@@ -408,19 +423,19 @@ commands are in the source Tcl file and output is redirected to a log
 file. In the below example that is **axi_ad7768_ip.log** inside the
 **library/axi_ad7768** directory.
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $make -C library/axi_ad7768
-   make[1]: Entering directory '/path/to/hdl/library/axi_ad7768'
-   rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
-   vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
+    make[1]: Entering directory '/path/to/hdl/library/axi_ad7768'
+    rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
+    vivado -mode batch -source axi_ad7768_ip.tcl  >> axi_ad7768_ip.log 2>&1
 
 If the ``make`` command returns an error (and stops), **you must first check
 the contents of the log file**.
 You may also check the generated files for more information.
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $ls -ltr library/axi_ad7768
@@ -434,18 +449,20 @@ It is exactly the same **rule** as the library component. The log file, in
 this example, is called **daq2_zc706_vivado.log** and is inside the
 **projects/daq2/zc706** directory.
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl/projects/daq2/zc706
    $make
-   [ -- snip --]
-   rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
-   vivado -mode batch -source system_project.tcl >> daq2_zc706_vivado.log 2>&1
-   make: Leaving directory '/path/to/hdl/projects/daq2/zc706'
+    [ -- snip --]
+    rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
+    vivado -mode batch -source system_project.tcl >> daq2_zc706_vivado.log 2>&1
+    make: Leaving directory '/path/to/hdl/projects/daq2/zc706'
 
 Do a quick (or detailed) check on files.
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $ls -ltr projects/daq2/zc706
    $tail projects/daq2/zc706/daq2_zc706_vivado.log
 
@@ -456,8 +473,9 @@ Do a quick (or detailed) check on files.
 And finally, if the project build is successful, the **system_top.xsa** file
 should be in the **.sdk** folder.
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $ls -ltr projects/daq2/zc706/daq2_zc706.sdk
 
 You may now use this **system_top.xsa** file as the input to your no-OS and/or Linux
@@ -490,7 +508,7 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    To create a swap file you can use the following commands:
 
-   .. shell::
+   .. shell:: bash
 
       $sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
       $sudo chmod 600 /swapfile
@@ -499,13 +517,13 @@ Starting with Vivado 2019.3, the output file extension was changed from
 
    If you want to make the change permanent, add this line to */etc/fstab*:
 
-   .. code-block:: bash
+   .. shell:: bash
 
-      /swapfile swap swap defaults 0 0
+      $/swapfile swap swap defaults 0 0
 
    If you want to deactivate the swap memory:
 
-   .. shell::
+   .. shell:: bash
 
       $sudo swapoff -v /swapfile
 
@@ -562,8 +580,9 @@ A generic path where you want to build the project would look like:
 **EXAMPLE**: Here we are building the **ADRV9371X** project on the
 **Arria 10 SoC** carrier.
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $cd projects/adrv9371x/a10soc
    $make
 
@@ -597,16 +616,18 @@ this contains the most relevant information that you need to provide.
 
    Do NOT copy-paste ``make`` command line text
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $ls -ltr projects/adrv9371x/a10soc
    $tail projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
 
 And finally, if the project was built is successfully, the **.sopcinfo** and
 **.sof** files should be in the same folder.
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $ls -ltr projects/adrv9371x/a10soc/*.sopcinfo
    $ls -ltr projects/adrv9371x/a10soc/*.sof
 
@@ -642,7 +663,7 @@ The **sof** file is used to program the device.
    allocate 15 GB of virtual memory, to be able to make a build for the
    project. To create a swap file you can use the following commands:
 
-   .. shell::
+   .. shell:: bash
 
       $sudo fallocate -l "memory size (e.g 1G, 2G, 8G, etc.)" /swapfile
       $sudo chmod 600 /swapfile
@@ -651,13 +672,13 @@ The **sof** file is used to program the device.
 
    If you want to make the change permanent, add this line to */etc/fstab*:
 
-   .. code-block:: bash
+   .. shell:: bash
 
-      /swapfile swap swap defaults 0 0
+      $/swapfile swap swap defaults 0 0
 
    If you want to deactivate the swap memory:
 
-   .. shell::
+   .. shell:: bash
 
       $sudo swapoff -v /swapfile
 
@@ -733,7 +754,7 @@ axi2apb_bridge       AXI4 to APB Bridge             1.1.1
 gp_timer             Timer-Counter                  1.3.0
 ==================== ============================= =======
 
-.. shell::
+.. shell:: bash
 
    ~/hdl
    $cd projects/common/lfcpnx
@@ -763,8 +784,9 @@ This contains the most relevant information that you need to provide.
 
    Do NOT copy-paste ``make`` command line text!
 
-.. shell::
+.. shell:: bash
 
+   ~/hdl
    $ls -ltr <ADI_carrier_proj_dir>
    $ls -ltr <ADI_carrier_proj_dir>/<project_name>
    $ls -ltr <ADI_carrier_proj_dir>/<project_name>/<project_name>
