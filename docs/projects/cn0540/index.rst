@@ -43,8 +43,8 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
--  :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
+-  :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
+-  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
 
 Block design
 -------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ axi_spi_engine_0**        0x0003_0000
    :class: note
 
    -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for De10-Nano
+   -   ``**`` instantiated only for DE10-Nano
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,7 +189,7 @@ The Software GPIO number is calculated as follows:
      - 32
      - 86
 
--  De10-Nano: the offset is 32
+-  DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -202,7 +202,7 @@ The Software GPIO number is calculated as follows:
    * -
      - (from FPGA view)
      -
-     - De10-Nano
+     - DE10-Nano
    * - ltc2308_cs
      - OUT
      - 41
@@ -254,7 +254,7 @@ spi_cn0540          11  55         87
 =================== === ========== ===========
 
 ================ === =============== ================
-Instance name    HDL Linux De10-Nano Actual De10-Nano
+Instance name    HDL Linux DE10-Nano Actual DE10-Nano
 ================ === =============== ================
 axi_spi_engine_0 5   45               77
 axi_dmac_0       4   44               76
@@ -349,7 +349,7 @@ HDL related
    :class: note
 
    -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for De10-Nano
+   -   ``**`` instantiated only for DE10-Nano
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 

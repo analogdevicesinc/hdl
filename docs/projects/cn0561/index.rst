@@ -31,7 +31,7 @@ The HDL reference design for the EVAL-CN0561 provides all the interfaces that
 are necessary to interact with the device using a Xilinx FPGA development
 board; to acquire data from the ADC device, supporting continuous data
 capture at maximum 1.5 MSPS data rate. However, due to a hardware limitation,
-the Cora-Z7s variant will only support a maximum data clock of 24MHz,
+the Cora Z7S variant will only support a maximum data clock of 24MHz,
 in contrast with 50MHz supported on the Zedboard.
 
 Supported boards
@@ -48,8 +48,9 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
-- `Cora Z7-07S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development/>`_ on Arduino type headers
-- `DE10-Nano <https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`__ on Arduino type headers
+- :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` on Arduino type headers
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+  on Arduino type headers
 
 Block design
 -------------------------------------------------------------------------------
@@ -66,12 +67,12 @@ The data path and clock domains are depicted in the below diagrams:
 .. image:: cn0561_hdl.svg
    :width: 800
    :align: center
-   :alt: CN0561/ZED/Cora Z7-07S block diagram *
+   :alt: CN0561/ZED/Cora Z7S block diagram *
 
 .. admonition:: Legend
    :class: note
 
-   ``*`` The block design for Cora Z7-07S remains the same, the only
+   ``*`` The block design for Cora Z7S remains the same, the only
    difference is the data clock frequency of 24MHz.
 
 Jumper setup
