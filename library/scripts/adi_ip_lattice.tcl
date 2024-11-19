@@ -20,13 +20,13 @@
 #
 #  1. IP related procedures and descriptors for users:
 #     * $::ipl::ip
-#       - This describes an IP itself, it is used to set a new IP instance like:
+#       - This describes an IP itself. It is used to set a new IP instance like:
 #                                                            'set ip $::ipl::ip'
 #       - After the instance is correctly configured, it is used to generate an
-#         actual IP on specified path.
-#       - This instance is input parameter for every IP related procedure and
-#         and also set by every IP related procedure like:
-#                                         'set ip [<some_ip_procedure> -ip $ip]'
+#         actual IP on a specified path.
+#       - This instance is updated by every IP related procedure like:
+#         set ip [<some_ip_procedure> -ip $ip]' except the 'ipl::generate_ip'
+#         and 'ipl::parse_module'.
 #     * ipl::general
 #       - sets the IP structure with the specified general IP parameters.
 #     * ipl::parse_module
@@ -60,12 +60,13 @@
 #       - sets the IP structure with a configuration parameter which will appear
 #         in the IP GUI also.
 #     * ipl::ignore_ports
-#       - ignores/hides a list of ports by a Verilog expression which depends on
-#         the value of a parameter.
+#       - ignores/hides a list of ports by a Python expression which usually
+#         depends on the value of a Verilog parameter.
 #     * ipl::ignore_ports_by_prefix
-#       - ignores/hides a some of the parsed ports from the top module by a
-#         verilog expression which depends on the value of a parameter and
-#         and match with a specified prefix from the ports names.
+#       - ignores/hides ports which are matching with a specified prefix from
+#         the ports' names in the parsed ports from the top module, by a
+#         Python expression which usually depends on the value of a Verilog 
+#         parameter.
 #     * ipl::generate_ip
 #       - generates the IP on specified path, if no path parameter, then in
 #         default IP download directory of Lattice Propel Builder.
