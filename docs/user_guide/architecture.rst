@@ -146,6 +146,8 @@ In HDL, these ports are named slightly different than how they're in
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.
 
+.. _architecture cpu-intercon-addr:
+
 CPU/Memory interconnects addresses
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
