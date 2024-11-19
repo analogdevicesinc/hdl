@@ -1,0 +1,13 @@
+# ad469x
+
+Pin   Port    Schematic_name  System_top_name     IOSTANDARD Termination
+P3.10 CK_SCL  SCL_ARD         iic_eeprom_scl      LVCMOS35   #N/A
+P3.9  CK_SDA  SDA_ARD         iic_eeprom_sda      LVCMOS35   #N/A
+P3.6  CK_IO10 CSB_1           ad469x_spi_cs       LVCMOS35   IOB TRUE
+P3.5  CK_IO11 MOSI_ARD        ad469x_spi_sdi      LVCMOS35   IOB TRUE PULLTYPE PULLUP
+P3.4  CK_IO12 MISO_ARD        ad469x_spi_sdo      LVCMOS35   IOB TRUE PULLTYPE PULLUP
+P3.3  CK_IO13 SCKL_ARD        ad469x_spi_sclk     LVCMOS35   IOB TRUE
+P3.2  CK_IO09 GP0_ARD         ad469x_busy_alt_gp0 LVCMOS35   #N/A
+
+P4.7  CK_IO06 CNV_ARD         ad469x_spi_cnv      LVCMOS35   #N/A
+P4.5  CK_IO04 RSTb_ARD        ad469x_resetn       LVCMOS35   #N/A

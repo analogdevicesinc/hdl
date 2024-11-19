@@ -9,6 +9,7 @@ set SPI_4WIRE $ad_project_params(SPI_4WIRE)
 puts "build parameter: SPI_4WIRE: $SPI_4WIRE"
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad469x_spi
+
 create_bd_port -dir O ad469x_spi_cnv
 create_bd_port -dir I ad469x_spi_busy
 create_bd_port -dir I gpio_cnv
@@ -36,13 +37,9 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
-## to setup the sample rate of the system change the PULSE_PERIOD value
-## the acutal sample rate will be PULSE_PERIOD * (1/sys_cpu_clk)
-set sampling_cycle [expr int(ceil(double($spi_clk_ref_frequency * 1000000) / $adc_sampling_rate))]
-
 ad_ip_instance axi_pwm_gen ad469x_trigger_gen
 
-ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_0_PERIOD $sampling_cycle
+ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_0_PERIOD 160
 ad_ip_parameter ad469x_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
 ad_connect spi_clk ad469x_trigger_gen/ext_clk
