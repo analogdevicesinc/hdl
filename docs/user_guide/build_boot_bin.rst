@@ -45,7 +45,7 @@ The script can take 3 parameters:
 - the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**);
   see the note below.
 
-.. shell::
+.. shell:: bash
 
    $build_boot_bin.sh system_top.xsa u-boot.elf [output-archive]
 
@@ -97,7 +97,7 @@ The script can take 4 parameters:
 - the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**);
   see the note below.
 
-.. shell::
+.. shell:: bash
 
    $build_zynqmp_boot_bin.sh system_top.xsa u-boot.elf (download | bl31.elf | <path-to-arm-trusted-firmware-source>) [output-archive]
 

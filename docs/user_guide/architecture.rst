@@ -40,7 +40,7 @@ Take :adi:`AD-FMCOMMS2 <EVAL-ADFMCOMMS2>` with
 :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`;
 the ``system_bd.tcl`` will look like the following:
 
-.. code-block:: bash
+.. shell::
 
    source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
    source ../common/fmcomms2_bd.tcl
@@ -315,25 +315,25 @@ AMD platforms
      - FMC connector 2
      - VADJ FMC connector
      - Family
-   * - `AC701 <https://www.xilinx.com/products/boards-and-kits/ek-a7-ac701-g.html>`__ **
+   * - :xilinx:`AC701` **
      - JTAG
      - HPC (2 GTP @ 6.6 Gbps)
      - ---
      - 3.3V/**\*2.5V**/1.8V
      - Artix-7
-   * - `Cora Z7-07S <https://digilent.com/reference/programmable-logic/cora-z7/start>`__
+   * - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
      - SD card
      - ---
      - ---
      - ---
      - Zynq-7000
-   * - `KC705 <https://www.xilinx.com/products/boards-and-kits/ek-k7-kc705-g.html>`__
+   * - :xilinx:`KC705`
      - JTAG
      - HPC (4 GTX @ 10.3125 Gbps)
      - LPC (1 GTX @ 10.3125 Gbps)
      - 3.3V/**\*2.5V**/1.8V
      - Kintex-7
-   * - `KCU105 <https://www.xilinx.com/products/boards-and-kits/kcu105.html>`__
+   * - :xilinx:`KCU105`
      - JTAG
      - HPC (8 GTH @ 16.3 Gbps)
      - LPC (1 GTH @ 16.3 Gbps)
@@ -345,61 +345,61 @@ AMD platforms
      - ---
      - ---
      - Zynq-7000
-   * - `VC707 <https://www.xilinx.com/products/boards-and-kits/ek-v7-vc707-g.html>`__
+   * - :xilinx:`VC707`
      - JTAG
      - HPC (8 GTX @ 12.5 Gbps)
      - HPC (8 GTX @ 12.5 Gbps)
      - **\*1.8V**/1.5V/1.2V
      - Virtex-7
-   * - `VC709 <https://www.xilinx.com/products/boards-and-kits/dk-v7-vc709-g.html>`__ **
+   * - :xilinx:`VC709` **
      - JTAG
      - HPC (10 GTH @ 13.1 Gbps)
      - ---
      - **\*1.8V**
      - Virtex-7
-   * - `VCK190 <https://www.xilinx.com/products/boards-and-kits/vck190.html>`__
+   * - :xilinx:`VCK190`
      - SD card
      - FMC+ (12 GTY @ 28.21 Gbps)
      - FMC+ (12 GTY @ 28.21 Gbps)
      - **\*1.5V**/1.2V
      - Versal AI Core
-   * - `VCU118 <https://www.xilinx.com/products/boards-and-kits/vcu118.html>`__
+   * - :xilinx:`VCU118`
      - JTAG
      - FMC+ (24 GTY @ 28.21 Gbps)
      - LPC
      - **\*1.8V**/1.5V/1.2V
      - Virtex UltraScale+
-   * - `VCU128 <https://www.xilinx.com/products/boards-and-kits/vcu128.html>`__
+   * - :xilinx:`VCU128`
      - JTAG
      - FMC+ (24 GTY @ 28.21 Gbps)
      - ---
      - **\*1.8V**/1.5V/1.2V
      - Virtex UltraScale+ HBM
-   * - `VMK180 <https://www.xilinx.com/products/boards-and-kits/vmk180.html>`__
+   * - :xilinx:`VMK180`
      - SD card
      - FMC+ (12 GTY @ 28.21 Gbps)
      - FMC+ (12 GTY @ 28.21 Gbps)
      - **\*1.5V**/1.2V
      - Versal Prime Series
-   * - `VPK180 <https://www.xilinx.com/products/boards-and-kits/vpk180.html>`__
+   * - :xilinx:`VPK180`
      - SD card
      - FMC+ (8 GTYP @ 32.75 Gbps)
      - ---
      - **\*1.5V**/1.2V
      - Versal Premium
-   * - `ZC702 <https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html>`__
+   * - :xilinx:`ZC702`
      - SD card
      - LPC
      - LPC
      - 3.3V/**\*2.5V**/1.8V
      - Zynq-7000
-   * - `ZC706 <https://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html>`__
+   * - :xilinx:`ZC706`
      - SD card
      - HPC (8 GTX @ 10.3125 Gbps)
      - LPC (1 GTX @ 10.3125 Gbps)
      - 3.3V/**\*2.5V**/1.8V
      - Zynq-7000
-   * - `ZCU102 <https://www.xilinx.com/products/boards-and-kits/ek-u1-zcu102-es2-g.html>`__
+   * - :xilinx:`ZCU102`
      - SD card
      - HPC (8 GTH @ 16.3 Gbps)
      - HPC (8 GTH @ 16.3 Gbps)
