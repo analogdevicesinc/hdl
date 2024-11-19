@@ -5,18 +5,19 @@ Use ADI IPs into your own project
 
 Clone the GitHub repository:
 
-.. code:: bash
+.. shell::
 
-   git clone https://github.com/analogdevicesinc/hdl.git
+   $git clone https://github.com/analogdevicesinc/hdl.git
 
 Vivado
 -------------------------------------------------------------------------------
 
 Navigate to hdl/library and build all the libraries
 
-.. code:: bash
+.. shell::
 
-   make -C library all
+   ~/hdl
+   $make -C library all
 
 Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
 There you will find a section called Repository.

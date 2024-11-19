@@ -125,7 +125,7 @@ simulation environment as well.
    RO
    Value of the Version is hardcoded in the IP.
    ENDFIELD
-   
+
    FIELD
    [31:0] ID
    PERIPHERAL_ID

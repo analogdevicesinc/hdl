@@ -16,22 +16,24 @@ Before creating a new page
 
 This section has the sole role to present the steps that are required to be
 able to create and build a new documentation related page. Some steps are
-recommended to be revised regularly to keep the necessary tools updated. 
+recommended to be revised regularly to keep the necessary tools updated.
 
 First, make sure you have the latest version of ``pip`` installed. It must be
 newer than 23 version. If not, update it by running the following command:
 
-.. code-block::
+.. shell:: bash
+   :no-path:
 
-   pip install pip --upgrade
+   $pip install pip --upgrade
 
 Then install the necessary documentation tools by running (:git-hdl:`HDL <>`
 repository is the working directory):
 
-.. code-block::
-   
-   cd docs/
-   pip install -r requirements.txt --upgrade
+.. shell:: bash
+
+   ~/hdl
+   $cd docs/
+   $pip install -r requirements.txt --upgrade
 
 Use the same command to regularly update the documentation tools.
 Specially if something looks broken.
@@ -41,18 +43,20 @@ Before building a page, it's recommended to build all the projects from
 directly taken from the libraries' project folder (e.g.: ``/library/axi_dmac/component.xml``)
 after being built. Build the libraries by running:
 
-.. code-block::
-   
-   cd library/
-   make
+.. shell:: bash
+
+   ~/hdl
+   $cd library/
+   $make
 
 Now, after the page has been written, inside ``/docs`` folder run the following
 command:
 
-.. code-block::
-   
-   cd docs/
-   make html
+.. shell:: bash
+
+   ~/hdl
+   $cd docs/
+   $make html
 
 The generated documentation will be available at ``/docs/_build/html``.
 
@@ -62,16 +66,18 @@ This is because Sphinx rebuilds only "touched" pages and, for example,
 adding a page changes the sidebar navigation for all pages.
 This is done by running the below commands (inside ``/docs`` folder):
 
-.. code-block::
-   
-   make clean
-   make html
+.. shell:: bash
+
+   ~/hdl/docs
+   $make clean
+   $make html
 
 Or more straight forward (clean & rebuild):
 
-.. code-block::
-   
-   make clean html
+.. shell:: bash
+
+   ~/hdl/docs
+   $make clean html
 
 Make sure to read the next chapters as they provide more info on how to write
 a HDL specific Sphinx documentation page.
@@ -107,7 +113,7 @@ they're not included in any toctree.
 
 They are inserted like this:
 
-.. code-block::
+.. code-block:: rst
 
    .. include:: ../common/more_information.rst
 
