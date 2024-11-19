@@ -29,9 +29,11 @@ ad_connect axi_ad35xxr_dac/sdio_i         dac_spi_sdi
 ad_connect axi_ad35xxr_dac/sdio_o         dac_spi_sdo
 ad_connect axi_ad35xxr_dac/sdio_t         dac_spi_sdo_t
 ad_connect axi_ad35xxr_dac/qspi_sel       dac_qspi_sel
-ad_connect axi_ad35xxr_dac/dma_data       axi_dac_dma/m_axis_data
-ad_connect axi_ad35xxr_dac/valid_in_dma   axi_dac_dma/m_axis_valid
-ad_connect axi_ad35xxr_dac/dac_data_ready axi_dac_dma/m_axis_ready
+
+ad_connect axi_ad35xxr_dac/s_axis axi_dac_dma/m_axis
+#ad_connect axi_ad35xxr_dac/dma_data       axi_dac_dma/m_axis_data
+#ad_connect axi_ad35xxr_dac/valid_in_dma   axi_dac_dma/m_axis_valid
+#ad_connect axi_ad35xxr_dac/dac_data_ready axi_dac_dma/m_axis_ready
 ad_connect sys_rstgen/peripheral_aresetn  axi_dac_dma/m_src_axi_aresetn
 
 # Tie unused inputs to GND
