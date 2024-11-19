@@ -107,15 +107,15 @@ hardware modifications need to be done on the board and/or ``make`` command:
 
 In case of the **PARALLEL** interface:
 
-.. code-block::
+.. shell:: bash
 
-   make INTF=0
+   $make INTF=0
 
 In case of the **SERIAL** interface:
 
-.. code-block::
+.. shell:: bash
 
-   make INTF=1
+   $make INTF=1
 
 .. note::
 
@@ -305,10 +305,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7606x_fmc/zed
-   user@analog:~/hdl/projects/ad7606x_fmc/zed$ make DEV_CONFIG=2 INTF=0
+   $cd hdl/projects/ad7606x_fmc/zed
+   $make INTF=0 ADC_N_BITS=16
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

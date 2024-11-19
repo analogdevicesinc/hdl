@@ -23,27 +23,27 @@ at 100 Mbps or 10 Mbps.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-CN0506 <design-center/reference-designs/circuits-from-the-lab/cn0506>`
+- :adi:`EVAL-CN0506 <design-center/reference-designs/circuits-from-the-lab/cn0506>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADIN1300`
--  :adi:`LTC4316 <media/en/technical-documentation/data-sheets/4316fa.pdf>`
--  :adi:`LTC3502 <media/en/technical-documentation/data-sheets/3502fd.pdf>`
+- :adi:`ADIN1300`
+- :adi:`LTC4316 <media/en/technical-documentation/data-sheets/4316fa.pdf>`
+- :adi:`LTC3502 <media/en/technical-documentation/data-sheets/3502fd.pdf>`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :intel:`A10SOC <content/www/us/en/products/details/fpga/arria/10/sx.html>` on FMC_A HPC *
--  :xilinx:`ZCU102` on FMC HPC1
--  :xilinx:`ZC706` on FMC LPC
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :intel:`A10SOC <content/www/us/en/products/details/fpga/arria/10/sx.html>` on FMC_A HPC *
+- :xilinx:`ZCU102` on FMC HPC1
+- :xilinx:`ZC706` on FMC LPC
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only the MII interface is supported to be connected to A10SoC
+   - ``*``  only the MII interface is supported to be connected to A10SoC
 
 Block design
 -------------------------------------------------------------------------------
@@ -155,16 +155,16 @@ axi_iic_fmc **            0x4162_0000
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed and ZC706 carriers
-   -  ``**`` instantiated only for Zed carrier
+   - ``*``  instantiated only for Zed and ZC706 carriers
+   - ``**`` instantiated only for Zed carrier
 
 GPIO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 EMIOs are used, then offset is 54
--  ZynqMP: if PS8 EMIOs are used, then offset is 78
+- Zynq-7000: if PS7 EMIOs are used, then offset is 54
+- ZynqMP: if PS8 EMIOs are used, then offset is 78
 
 .. list-table::
    :widths: 25 25 25 25
@@ -211,7 +211,7 @@ The Software GPIO number is calculated as follows:
      - 7:0
      - 85:78
 
--  Intel FPGAs - Altera Arria 10 SoC
+- Intel FPGAs - Altera Arria 10 SoC
 
 .. list-table::
    :widths: 25 25 25
@@ -245,9 +245,9 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed carrier
-   -  ``**`` instantiated only for ZC706 carrier
-   -  ``***`` instantiated only for ZCU102 carrier
+   - ``*``  instantiated only for Zed carrier
+   - ``**`` instantiated only for ZC706 carrier
+   - ``***`` instantiated only for ZCU102 carrier
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,8 +265,8 @@ axi_iic_fmc/iic2intc_irpt*  11  55           87
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed and ZC706 carriers
-   -  ``**`` instantiated only for Zed carrier
+   - ``*``  instantiated only for Zed and ZC706 carriers
+   - ``**`` instantiated only for Zed carrier
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -281,11 +281,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0506/zed
-   user@analog:~/hdl/projects/cn0506/zed$ make INTF_CFG=MII
+   $cd hdl/projects/cn0506/zed
+   $make INTF_CFG=MII
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
@@ -307,13 +306,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`CN0506`
--  ADIN1300 datasheet: :adi:`ADIN1300`
+- Product datasheet: :adi:`CN0506`
+- ADIN1300 datasheet: :adi:`ADIN1300`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0506 HDL project source code <projects/cn0506>`
+- :git-hdl:`CN0506 HDL project source code <projects/cn0506>`
 
 .. list-table::
    :widths: 30 35 35
@@ -350,46 +349,30 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed and ZC706 carriers
-   -  ``**`` instantiated only for Zed carrier
-   -  ``***`` instantiated only for Zed, ZC706 and ZCU102 carriers
+   - ``*``  instantiated only for Zed and ZC706 carriers
+   - ``**`` instantiated only for Zed carrier
+   - ``***`` instantiated only for Zed, ZC706 and ZCU102 carriers
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`CN0506 MII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-mii.dtsi>`
-
--  :git-linux:`CN0506 RGMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rgmii.dtsi>`
-
--  :git-linux:`CN0506 RMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rmii.dtsi>`
-
--  :git-linux:`CN0506 MII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-mii.dtsi>`
-
--  :git-linux:`CN0506 RGMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rgmii.dtsi>`
-
--  :git-linux:`CN0506 RMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rmii.dtsi>`
-
--  :git-linux:`CN0506 MII - A10SOC dts source code (arm32) <arch/arm/boot/dts/socfpga_arria10_socdk_cn0506_mii.dts>`
-
--  :git-linux:`CN0506 MII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-mii.dts>`
-
--  :git-linux:`CN0506 RGMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rgmii.dts>`
-
--  :git-linux:`CN0506 RMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rmii.dts>`
-
--  :git-linux:`CN0506 MII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-mii.dts>`
-
--  :git-linux:`CN0506 RGMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rgmii.dts>`
-
--  :git-linux:`CN0506 RMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rmii.dts>`
-
--  :git-linux:`CN0506 MII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-mii.dts>`
-
--  :git-linux:`CN0506 RGMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rgmii.dts>`
-
--  :git-linux:`CN0506 RMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rmii.dts>`
-
--  :dokuwiki:`ADIN1300 driver docs <resources/tools-software/linux-drivers/net-phy/adin>`
+- :git-linux:`CN0506 MII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-mii.dtsi>`
+- :git-linux:`CN0506 RGMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rgmii.dtsi>`
+- :git-linux:`CN0506 RMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rmii.dtsi>`
+- :git-linux:`CN0506 MII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-mii.dtsi>`
+- :git-linux:`CN0506 RGMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rgmii.dtsi>`
+- :git-linux:`CN0506 RMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rmii.dtsi>`
+- :git-linux:`CN0506 MII - A10SOC dts source code (arm32) <arch/arm/boot/dts/socfpga_arria10_socdk_cn0506_mii.dts>`
+- :git-linux:`CN0506 MII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-mii.dts>`
+- :git-linux:`CN0506 RGMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rgmii.dts>`
+- :git-linux:`CN0506 RMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rmii.dts>`
+- :git-linux:`CN0506 MII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-mii.dts>`
+- :git-linux:`CN0506 RGMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rgmii.dts>`
+- :git-linux:`CN0506 RMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rmii.dts>`
+- :git-linux:`CN0506 MII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-mii.dts>`
+- :git-linux:`CN0506 RGMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rgmii.dts>`
+- :git-linux:`CN0506 RMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rmii.dts>`
+- :dokuwiki:`ADIN1300 driver docs <resources/tools-software/linux-drivers/net-phy/adin>`
 
 .. include:: ../common/more_information.rst
 

@@ -219,11 +219,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7134_fmc/zed
-   user@analog:~/hdl/projects/ad7134_fmc/zed$ make
+   $cd hdl/projects/ad7134_fmc/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl`
 user guide.
@@ -296,9 +295,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`AD7134-FMC No-OS project source code <projects/ad713x_fmcz>`
-
 - :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
-
 - :dokuwiki:`AD4134/AD7134 No-OS Driver documentation <resources/tools-software/uc-drivers/ad713x>`
 
 .. include:: ../common/more_information.rst

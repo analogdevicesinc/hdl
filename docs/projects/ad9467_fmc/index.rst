@@ -18,18 +18,18 @@ and/or setting up the :adi:`ADL5565` differential amplifier, respectively.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`AD9467-FMC-250EBZ <EVAL-AD9467>` also referred to as EVAL-AD9467
+- :adi:`AD9467-FMC-250EBZ <EVAL-AD9467>` also referred to as EVAL-AD9467
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9467`
+- :adi:`AD9467`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`KC705` LPC slot
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+- :xilinx:`KC705` LPC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -102,8 +102,8 @@ The evaluation board can be set up to be clocked from the **crystal
 oscillator**, Y200. This oscillator is a low phase noise oscillator from
 Vectron (VCC6-QCD-250M000).
 
--  Install C205 and C206
--  Remove C202
+- Install C205 and C206
+- Remove C202
 
 Jumper P200 is used to disable the oscillator from running.
 
@@ -113,9 +113,9 @@ Clock generator AD9517
 A **differential LVPECL or LVDS clock driver** can also be used to clock
 the ADC input using the AD9517.
 
--  Populate (C304, C305) for LVPECL clock driver **or** (C306, C307) for
+- Populate (C304, C305) for LVPECL clock driver **or** (C306, C307) for
    LVDS clock driver, with 0.1 µF capacitors
--  Remove C209 and C210 to disconnect the default clock path inputs
+- Remove C209 and C210 to disconnect the default clock path inputs
 
 The :adi:`AD9517` has many SPI-selectable options that are set to a default
 mode of operation. Consult the :adi:`AD9517` data sheet for more information
@@ -190,16 +190,12 @@ location and run the make command by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9467_fmc/zed
-   user@analog:~/hdl/projects/ad9467_fmc/zed$ make
+   $cd hdl/projects/ad9467_fmc/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
-
-Check this wiki page if you're not familiar about `how to build an ADI
-HDL project </resources/fpga/docs/build>`__.
 
 Resources
 -------------------------------------------------------------------------------
@@ -207,21 +203,21 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`AD9467-FMC Quick Start Guide <resources/fpga/xilinx/fmc/ad9467>`
+- :dokuwiki:`AD9467-FMC Quick Start Guide <resources/fpga/xilinx/fmc/ad9467>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD9467`
--  The schematic of the board can be found
-   :dokuwiki:`here <resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`,
-   or :dokuwiki:`here <resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`
-   for older versions.
+- Product datasheet: :adi:`AD9467`
+- The schematic of the board can be found
+  :dokuwiki:`here <resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`,
+  or :dokuwiki:`here <resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`
+  for older versions.
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9467_FMC HDL project source code <project/ad467_fmc>`
+- :git-hdl:`AD9467_FMC HDL project source code <project/ad467_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -261,11 +257,11 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  AD9467-FMC KC705 Linux device tree :git-linux:`arch/microblaze/boot/dts/kc705_ad9467_fmc.dts`
--  :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
--  :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
--  :dokuwiki:`[Wiki] AD9467-FMC on ZedBoard using ACE </resources/eval/ad9467-fmc-250ebz-zedboard>`
--  :git-no-os:`No-OS project <projects/ad9467>` and :git-no-os:`no-OS driver <drivers/adc/ad9467>`
+- AD9467-FMC KC705 Linux device tree :git-linux:`arch/microblaze/boot/dts/kc705_ad9467_fmc.dts`
+- :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
+- :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
+- :dokuwiki:`[Wiki] AD9467-FMC on ZedBoard using ACE </resources/eval/ad9467-fmc-250ebz-zedboard>`
+- :git-no-os:`No-OS project <projects/ad9467>` and :git-no-os:`no-OS driver <drivers/adc/ad9467>`
 
 .. include:: ../common/more_information.rst
 

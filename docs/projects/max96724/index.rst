@@ -23,29 +23,29 @@ standard FAKRA coaxial cables.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`MAX96724 DPHY Evaluation Kit (EV Kit) <MAX96724F-BAK-EVK>`
+- :adi:`MAX96724 DPHY Evaluation Kit (EV Kit) <MAX96724F-BAK-EVK>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`MAX9724`
+- :adi:`MAX9724`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`KV260 Vision Evaluation Kit <products/system-on-modules/kria/k26/kv260-vision-starter-kit.html>` using Raspberry Pi camera interface
+- :xilinx:`KV260 Vision Evaluation Kit <products/system-on-modules/kria/k26/kv260-vision-starter-kit.html>` using Raspberry Pi camera interface
 
 Block design
 -------------------------------------------------------------------------------
 
 The data path designed in this reference design is as follows:
 
--  the virtual channel inputs of one CSI-2 output port of the deserializer are
-   captured using Xilinx's `MIPI CSI-2 Rx Subsystem IP <https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx>`_
--  data is written into memory by using a Xilinx video-related DMA implementation
-   `Video Framebuffer Write <https://docs.amd.com/r/en-US/pg278-v-frmbuf>`_
--  the control of the camera modules is realized through I2C using Xilinx's
-   `AXI IIC logic <https://docs.amd.com/v/u/en-US/pg090-axi-iic>`_
+- the virtual channel inputs of one CSI-2 output port of the deserializer are
+  captured using Xilinx's `MIPI CSI-2 Rx Subsystem IP <https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx>`_
+- data is written into memory by using a Xilinx video-related DMA implementation
+  `Video Framebuffer Write <https://docs.amd.com/r/en-US/pg278-v-frmbuf>`_
+- the control of the camera modules is realized through I2C using Xilinx's
+  `AXI IIC logic <https://docs.amd.com/v/u/en-US/pg090-axi-iic>`_
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,7 +99,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  ZynqMP: if PS8 EMIOs are used, then offset is 78
+- ZynqMP: if PS8 EMIOs are used, then offset is 78
 
 .. list-table::
    :widths: 25 25 25 25
@@ -171,11 +171,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/max96724/kv260
-   user@analog:~/hdl/projects/max96724/kv260$ make
+   $cd hdl/projects/max96724/kv260
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -185,15 +184,15 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`MAX96724 <media/en/technical-documentation/data-sheets/max96724.pdf>`
-   -  :adi:`MAX96724 DPHY Evaluation Kit (EV Kit) <media/en/technical-documentation/data-sheets/max96724-bak-evk-max96724r-bak-evk.pdf>`
+  - :adi:`MAX96724 <media/en/technical-documentation/data-sheets/max96724.pdf>`
+  - :adi:`MAX96724 DPHY Evaluation Kit (EV Kit) <media/en/technical-documentation/data-sheets/max96724-bak-evk-max96724r-bak-evk.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`MAX96724 HDL project source code <projects/max96724>`
+- :git-hdl:`MAX96724 HDL project source code <projects/max96724>`
 
 .. list-table::
    :widths: 30 35 35
@@ -208,9 +207,11 @@ HDL related
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--  `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
--  The user guide that exemplify the system interfaced using :adi:`AD-GMSLCAMRPI-ADP adaptor <AD-GMSLCAMRPI-ADP>` is available in wiki `page <https://wiki.analog.com/resources/eval/user-guides/ad-gmslcamrpi-adp/ug_amd_kria>`_
--  :git-linux:`GMSL drivers/dts <gmsl/xilinx_v6.1_LTS:/>`
+- `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
+- The user guide that exemplify the system interfaced using
+  :adi:`AD-GMSLCAMRPI-ADP adaptor <AD-GMSLCAMRPI-ADP>` is available at
+  :dokuwiki:`wiki page <resources/eval/user-guides/ad-gmslcamrpi-adp/ug_amd_kria>`
+- :git-linux:`GMSL drivers/dts <gmsl/xilinx_v6.1_LTS:/>`
 
 .. include:: ../common/more_information.rst
 

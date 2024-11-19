@@ -252,19 +252,19 @@ Example block design for Single link; M=2; L=8; JESD204C
 
    The project must be built with the following parameters:
 
-   .. code-block:: bash
+   .. shell:: bash
 
-      make JESD_MODE=64B66B \
-      RX_RATE=16.5 \
-      TX_RATE=16.5 \
-      RX_JESD_M=2 \
-      RX_JESD_L=8 \
-      RX_JESD_S=2 \
-      RX_JESD_NP=16 \
-      TX_JESD_M=2 \
-      TX_JESD_L=8 \
-      TX_JESD_S=4 \
-      TX_JESD_NP=8
+      $make JESD_MODE=64B66B \
+      $     RX_RATE=16.5     \
+      $     TX_RATE=16.5     \
+      $     RX_JESD_M=2      \
+      $     RX_JESD_L=8      \
+      $     RX_JESD_S=2      \
+      $     RX_JESD_NP=16    \
+      $     TX_JESD_M=2      \
+      $     TX_JESD_L=8      \
+      $     TX_JESD_S=4      \
+      $     TX_JESD_NP=8
 
 The Rx link is operating with the following parameters:
 
@@ -534,27 +534,26 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/ad9081_fmca_ebz <projects/ad9081_fmca_ebz>`
-location and run the make command by typing in your command prompt:
+Then go to the :git-hdl:`projects/ad9081_fmca_ebz` or
+(:git-hdl:`projects/ad9082_fmca_ebz`)
+location and run the make command by typing in you command prompt:
+
+Example for building the project with parameters:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
-   :emphasize-lines: 2, 6
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/zcu102
-   // these are just examples of how to write the *make* command with parameters
-   user@analog:~/hdl/projects/ad9081_fmca_ebz/zcu102$ make parameter1=value parameter2=value
-
-   user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/a10soc
-   // these are just examples of how to write the *make* command with parameters
-   user@analog:~/hdl/projects/ad9081_fmca_ebz/a10soc$ make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
+   $cd hdl/projects/ad9081_fmca_ebz/zcu102
+   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5     \
+   $     RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1   \
+   $     RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 \
+   $     TX_JESD_S=1 TX_JESD_NP=16
 
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
+for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).
 
 .. warning::
 

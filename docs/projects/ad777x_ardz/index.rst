@@ -20,14 +20,14 @@ range of the signal chain.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7770/1/9-ARDZ <EVAL-AD7770-AD7779>`
+- :adi:`EVAL-AD7770/1/9-ARDZ <EVAL-AD7770-AD7779>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7770`
--  :adi:`AD7771`
--  :adi:`AD7779`
+- :adi:`AD7770`
+- :adi:`AD7771`
+- :adi:`AD7779`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -82,12 +82,12 @@ Clock scheme
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-==============  ===========
-Instance        Zynq
-==============  ===========
-axi_ad777x_adc  0x43C0_0000
-ad777x_dma      0x7C48_0000
-==============  ===========
+==============  =========== ===========
+Instance        Zynq        DE10-Nano
+==============  =========== ===========
+axi_ad777x_adc  0x43C0_0000 0x0002_0000
+ad777x_dma      0x7C48_0000 0x0003_0000
+==============  =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,8 +112,8 @@ SPI connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only for ZedBoard
-   -  ``**`` only for DE10-Nano
+   - ``*``  only for ZedBoard
+   - ``**`` only for DE10-Nano
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,17 +177,17 @@ Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ================ === ========== =========== =============== ================
-Instance name    HDL Linux Zynq Actual Zynq Linux Cyclone V Actual Cyclone V
+Instance name    HDL Linux Zynq Actual Zynq Linux DE10-Nano Actual DE10-Nano
 ================ === ========== =========== =============== ================
-ad777x_dma*      10  54         86          -               -
-ad777x_dma**     5   -          -           45              77
+ad777x_dma*      10  54         86          ---             ---
+ad777x_dma**     5   ---        ---         45              77
 ================ === ========== =========== =============== ================
 
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only for ZedBoard
-   -  ``**`` only for DE10-Nano
+   - ``*``  only for ZedBoard
+   - ``**`` only for DE10-Nano
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -202,21 +202,19 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
-Make for ZedBoard project:
+Building the ZedBoard project:
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad777x_ardz/zed
-   user@analog:~/hdl/projects/ad777x_ardz/zed$ make
+   $cd hdl/projects/ad777x_ardz/zed
+   $make
 
-Make for De10Nano project:
+Building the DE10-Nano project:
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad777x_ardz/de10nano
-   user@analog:~/hdl/projects/ad777x_ardz/de10nano$ make
+   $cd hdl/projects/ad777x_ardz/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -226,16 +224,16 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7770`
-   -  :adi:`AD7771`
-   -  :adi:`AD7779`
+  - :adi:`AD7770`
+  - :adi:`AD7771`
+  - :adi:`AD7779`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD777X-ARDZ HDL project source code <projects/ad777x_ardz>`
+- :git-hdl:`AD777X-ARDZ HDL project source code <projects/ad777x_ardz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -278,7 +276,7 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  only for ZedBoard
+   - ``*``  only for ZedBoard
 
 .. include:: ../common/more_information.rst
 

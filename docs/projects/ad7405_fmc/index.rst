@@ -19,16 +19,16 @@ single-ended, and for :adi:`AD7405` is differential.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7405`
--  :adi:`EVAL-AD7403`
--  :adi:`EVAL-ADuM7701`
+- :adi:`EVAL-AD7405`
+- :adi:`EVAL-AD7403`
+- :adi:`EVAL-ADuM7701`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7405`
--  :adi:`AD7403`
--  :adi:`ADuM7701`
+- :adi:`AD7405`
+- :adi:`AD7403`
+- :adi:`ADuM7701`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -77,10 +77,10 @@ Block design for the single-ended signals (:adi:`ADuM7701` and :adi:`AD7403`)
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  LVDS_CMOS_N: specific to the type of the data and clock signals
+- LVDS_CMOS_N: specific to the type of the data and clock signals
 
-   -  0 - Single-ended data and clock signals (default)
-   -  1 - Differential data and clock signals
+   - 0 - Single-ended data and clock signals (default)
+   - 1 - Differential data and clock signals
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,19 +147,17 @@ the HDL repository.
 
 Default (Single-ended data and clock signals):
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7405/zed
-   user@analog:~/hdl/projects/ad7405/zed$ make
+   $cd hdl/projects/ad7405/zed
+   $make
 
 If differential data and clock signals are desired:
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7405/zed
-   user@analog:~/hdl/projects/ad7405/zed$ make LVDS_CMOS_N=1
+   $cd hdl/projects/ad7405/zed
+   $make LVDS_CMOS_N=1
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -169,25 +167,25 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADuM7701 - Reference Design <resources/eval/user-guides/adum770x>`
+- :dokuwiki:`[Wiki] ADuM7701 - Reference Design <resources/eval/user-guides/adum770x>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7405`
-   -  :adi:`AD7403`
-   -  :adi:`ADuM7701`
+  - :adi:`AD7405`
+  - :adi:`AD7403`
+  - :adi:`ADuM7701`
 
--  `UG-690, EVAL-AD7405FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7405FMCZ_UG-690.pdf>`__
--  `UG-683, EVAL-AD7403FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7403FMCZ%20_UG-683.pdf>`__
--  `UG-1525, EV-ADuM7701-8FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EV-ADuM7701-8FMCZ-UG-1525.pdf>`__
+- `UG-690, EVAL-AD7405FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7405FMCZ_UG-690.pdf>`__
+- `UG-683, EVAL-AD7403FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7403FMCZ%20_UG-683.pdf>`__
+- `UG-1525, EV-ADuM7701-8FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EV-ADuM7701-8FMCZ-UG-1525.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD7405-FMC HDL project source code <projects/ad7405_fmc>`
+- :git-hdl:`AD7405-FMC HDL project source code <projects/ad7405_fmc>`
 
 .. list-table::
    :widths: 30 35 35

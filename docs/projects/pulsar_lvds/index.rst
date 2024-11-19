@@ -47,34 +47,34 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7625-FMCZ <AD7625>`
--  :adi:`EVAL-AD7626-FMCZ <AD7626>`
--  :adi:`EVAL-AD7960-FMCZ <AD7960>`
--  :adi:`EVAL-AD7961-FMCZ <AD7961>`
+- :adi:`EVAL-AD7625`
+- :adi:`EVAL-AD7626`
+- :adi:`EVAL-AD7960`
+- :adi:`EVAL-AD7961`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7625`
--  :adi:`AD7626`
--  :adi:`AD7960`
--  :adi:`AD7961`
--  :adi:`ADR3412`
--  :adi:`ADR4520`
--  :adi:`AD74540`
--  :adi:`AD4550`
--  :adi:`AD8031`
--  :adi:`ADA4899-1`
--  :adi:`ADA4897-1`
--  :adi:`ADP7102`
--  :adi:`ADP7104`
--  :adi:`ADP124`
--  :adi:`ADP2300`
+- :adi:`AD7625`
+- :adi:`AD7626`
+- :adi:`AD7960`
+- :adi:`AD7961`
+- :adi:`ADR3412`
+- :adi:`ADR4520`
+- :adi:`AD74540`
+- :adi:`AD4550`
+- :adi:`AD8031`
+- :adi:`ADA4899-1`
+- :adi:`ADA4897-1`
+- :adi:`ADP7102`
+- :adi:`ADP7104`
+- :adi:`ADP124`
+- :adi:`ADP2300`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -97,15 +97,15 @@ hardware modifications need to be done on the board and/or make command:
 
 In case of the **AD7960** project:
 
-.. code-block::
+.. shell:: bash
 
-   make RESOLUTION_16_18N=0
+   $make RESOLUTION_16_18N=0
 
 In case of the **AD7625/AD7626/AD7961** project:
 
-.. code-block::
+.. shell:: bash
 
-   make RESOLUTION_16_18N=1
+   $make RESOLUTION_16_18N=1
 
 Jumper setup AD7625/AD7626
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -204,7 +204,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -238,7 +238,7 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -   ``**`` instantiated only for AD7960/AD7961
+   - ``**`` instantiated only for AD7960/AD7961
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,11 +264,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell:: bash
 
-   user@analog:~$ cd hdl/projects/pulsar_lvds_adc/zed
-   user@analog:~/hdl/projects/pulsar_lvds_adc/zed$ make RESOLUTION_16_18N=0
+   $cd hdl/projects/pulsar_lvds_adc/zed
+   $make RESOLUTION_16_18N=0
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
@@ -289,20 +288,20 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7625`
-   -  :adi:`AD7626`
-   -  :adi:`AD7960`
-   -  :adi:`AD7961`
-   -  :adi:`UG-745, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`
-   -  :adi:`UG-490, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-490.pdf>`
-   -  :adi:`UG-581, Evaluation Board User Guide <media/en/technical-documentation/user-guides/ug-581.pdf>`
+  - :adi:`AD7625`
+  - :adi:`AD7626`
+  - :adi:`AD7960`
+  - :adi:`AD7961`
+  - :adi:`UG-745, Evaluation Board User Guide <media/en/technical-documentation/user-guides/EVAL-AD7625FMCZ_7626FMCZ_UG-745.pdf>`
+  - :adi:`UG-490, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-490.pdf>`
+  - :adi:`UG-581, Evaluation Board User Guide <media/en/technical-documentation/user-guides/ug-581.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`PULSAR_LVDS HDL project source code <projects/pulsar_lvds_adc>`
+- :git-hdl:`PULSAR_LVDS HDL project source code <projects/pulsar_lvds_adc>`
 
 .. list-table::
    :widths: 30 35 35

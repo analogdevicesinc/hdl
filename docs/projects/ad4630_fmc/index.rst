@@ -332,11 +332,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad4630_fmc/zed
-   user@analog:~/hdl/projects/ad4630_fmc/zed$ make NUM_OF_SDI=4 CAPTURE_ZONE=2
+   $cd hdl/projects/ad4630_fmc/zed
+   $make NUM_OF_SDI=4 CAPTURE_ZONE=2
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

@@ -32,19 +32,19 @@ signal processor (DSP).
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7768-1`
--  :adi:`EVAL-ADAQ7768-1`
+- :adi:`EVAL-AD7768-1`
+- :adi:`EVAL-ADAQ7768-1`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7768-1`
--  :adi:`ADAQ7768-1`
+- :adi:`AD7768-1`
+- :adi:`ADAQ7768-1`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -173,11 +173,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad77681evb/zed
-   user@analog:~/hdl/projects/ad77681evb/zed$ make
+   $cd hdl/projects/ad77681evb/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -192,16 +191,16 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7768-1`
-   -  :adi:`ADAQ7768-1`
+  - :adi:`AD7768-1`
+  - :adi:`ADAQ7768-1`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad77681evb HDL project source code <projects/ad77681evb>`
--  :dokuwiki:`[Wiki] AD7768-1 User Guide <resources/eval/user-guides/ad7768-1>`
+- :git-hdl:`ad77681evb HDL project source code <projects/ad77681evb>`
+- :dokuwiki:`[Wiki] AD7768-1 User Guide <resources/eval/user-guides/ad7768-1>`
 
 .. list-table::
    :widths: 30 40 30
@@ -247,14 +246,14 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer`
      - ---
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD7768-1 Linux driver source code <drivers/iio/adc/ad7768-1.c>`
--  AD7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-ad7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad7768-1-evb.dts>`
--  ADAQ7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-adaq7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-adaq7768-1-evb.dts>`
+- AD7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-ad7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad7768-1-evb.dts>`
+- ADAQ7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-adaq7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-adaq7768-1-evb.dts>`
 
 .. include:: ../common/more_information.rst
 

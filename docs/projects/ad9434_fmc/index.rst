@@ -148,10 +148,10 @@ make command by typing in your command prompt (this example is for
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9434_fmc/zc706
-   user@analog:~/hdl/projects/ad9434_fmc/zc706$ make
+   $cd hdl/projects/ad9434_fmc/zc706
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
@@ -176,14 +176,14 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD9434`
--  Schematic file: `ad9434_fmc_500ebz_sch.pdf <https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_sch.pdf>`__
--  :dokuwiki:`EVAL-AD9434 user guide <resources/eval/ad9434fmc-500ebz>`
+- Product datasheet: :adi:`AD9434`
+- Schematic file: `ad9434_fmc_500ebz_sch.pdf <https://wiki.analog.com/_media/resources/eval/ad9434_fmc_500ebz_sch.pdf>`__
+- :dokuwiki:`EVAL-AD9434 user guide <resources/eval/ad9434fmc-500ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9434-FMC HDL project source code <projects/ad9434_fmc>`
+- :git-hdl:`AD9434-FMC HDL project source code <projects/ad9434_fmc>`
 
 .. list-table::
    :widths: 30 35 35

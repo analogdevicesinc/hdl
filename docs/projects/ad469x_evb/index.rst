@@ -107,15 +107,15 @@ modifications need to be done on the board and/or ``make`` command:
 
 In case we link CNV signal to PWM:
 
-.. code-block::
+.. shell:: bash
 
-   make SPI_4WIRE=0
+   $make SPI_4WIRE=0
 
 In case we link CNV signal to SPI_CS:
 
-.. code-block::
+.. shell:: bash
 
-   make SPI_4WIRE=1
+   $make SPI_4WIRE=1
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,10 +282,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad469x_evb/zed
-   user@analog:~/hdl/projects/ad469x_evb/zed$ make SPI_4WIRE=0
+   $cd hdl/projects/ad469x_evb/zed
+   $make SPI_4WIRE=0
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

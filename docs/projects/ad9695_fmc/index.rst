@@ -76,9 +76,9 @@ Configuration modes
 
 The following are the parameters of this project that can be configured:
 
--  RX_JESD_M: number of converters per link - by default set to 2
--  RX_JESD_L: number of lanes per link - by default set to 4
--  RX_JESD_S: number of samples per frame - by default set to 1
+- RX_JESD_M: number of converters per link - by default set to 2
+- RX_JESD_L: number of lanes per link - by default set to 4
+- RX_JESD_S: number of samples per frame - by default set to 1
 
 For more ways to configure this project, check
 :adi:`Table 35 from the AD9695 data sheet <media/en/technical-documentation/data-sheets/ad9695.pdf>`,
@@ -219,16 +219,19 @@ Examples on how to build the project:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+Example for building with the default configuration:
 
-   // without parameters (default configuration)
-   user@analog:~$ cd hdl/projects/ad9695_fmc/zcu102
-   user@analog:~/hdl/projects/ad9695_fmc/zcu102$ make
+.. shell::
 
-   // with parameters
-   user@analog:~$ cd hdl/projects/ad9695_fmc/zcu102
-   user@analog:~/hdl/projects/ad9695_fmc/zcu102$ make RX_JESD_M=2 RX_JESD_L=4
+   $cd hdl/projects/ad9695_fmc/zcu102
+   $make
+
+Example for building with parameters:
+
+.. shell::
+
+   $cd hdl/projects/ad9695_fmc/zcu102
+   $make RX_JESD_M=2 RX_JESD_L=4
 
 Default values of the ``make`` parameters for AD9695-FMC:
 
@@ -275,7 +278,7 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD9695`
+- Product datasheet: :adi:`AD9695`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -317,8 +320,8 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
      - :ref:`ad_ip_jesd204_tpl_adc`
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

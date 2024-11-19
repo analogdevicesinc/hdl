@@ -20,17 +20,17 @@ available for driving the clock externally.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD9739A <EVAL-AD9739A>`
+- :adi:`EVAL-AD9739A <EVAL-AD9739A>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9739A <AD9739A>`
+- :adi:`AD9739A <AD9739A>`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZC706` on FMC LPC slot
+- :xilinx:`ZC706` on FMC LPC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -76,24 +76,24 @@ Clock scheme
 Two clock paths are available to drive the clock input on the
 :adi:`AD9739A <AD9739A>`:
 
--  The factory default option connects the :adi:`ADF4350 <ADF4350>` to
-   the :adi:`AD9739A <AD9739A>`. The :adi:`ADF4350 <ADF4350>` is able to
-   synthesize a clock over the entire specified range of
-   the :adi:`AD9739A <AD9739A>` (1.6GHz to 2.5GHz)
+- The factory default option connects the :adi:`ADF4350 <ADF4350>` to
+  the :adi:`AD9739A <AD9739A>`. The :adi:`ADF4350 <ADF4350>` is able to
+  synthesize a clock over the entire specified range of
+  the :adi:`AD9739A <AD9739A>` (1.6GHz to 2.5GHz)
 
-    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>`
-       position
+  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>`
+    position
 
--  Alternatively, an external clock can be provided via the SMA CLKIN (J3) jack
+- Alternatively, an external clock can be provided via the SMA CLKIN (J3) jack
 
-    -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914 <ADCLK914>`
-       position. C102 and C99 on the back of the board also need to be removed
-       from their default position, and then soldered into the vertical position
-       from the large square pad they were previously soldered to and the narrow
-       pads closer to the :adi:`ADCLK914 <ADCLK914>` (U3). Observe the
-       orientation of the caps before removing them; they must be soldered with
-       their narrow edge against the PCB, and not the wide side as is common
-       with most components.
+  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914 <ADCLK914>`
+    position. C102 and C99 on the back of the board also need to be removed
+    from their default position, and then soldered into the vertical position
+    from the large square pad they were previously soldered to and the narrow
+    pads closer to the :adi:`ADCLK914 <ADCLK914>` (U3). Observe the
+    orientation of the caps before removing them; they must be soldered with
+    their narrow edge against the PCB, and not the wide side as is common
+    with most components.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,11 +139,10 @@ To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9739a_fmc/zc706
-   user@analog:~/hdl/projects/ad9739a_fmc/zc706$ make
+   $cd hdl/projects/ad9739a_fmc/zc706
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
@@ -154,19 +153,19 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD9737A-EBZ/AD9739A-EBZ Quick Start Guide <resources/eval/dpg/ad9739a-ebz>`
-   (with ACE)
--  :dokuwiki:`[Wiki] AD9739A Native FMC Card/Xilinx Reference Designs <resources/fpga/xilinx/fmc/ad9739a>`
+- :dokuwiki:`[Wiki] AD9737A-EBZ/AD9739A-EBZ Quick Start Guide <resources/eval/dpg/ad9739a-ebz>`
+  (with ACE)
+- :dokuwiki:`[Wiki] AD9739A Native FMC Card/Xilinx Reference Designs <resources/fpga/xilinx/fmc/ad9739a>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets: :adi:`AD9739A`
+- Product datasheets: :adi:`AD9739A`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9739A-FMC HDL project source code <projects/ad9739a_fmc>`
+- :git-hdl:`AD9739A-FMC HDL project source code <projects/ad9739a_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -177,7 +176,7 @@ HDL related
      - Documentation link
    * - AXI_AD9739A
      - :git-hdl:`library/axi_ad9739a`
-     -  —
+     - —
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
@@ -200,10 +199,10 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`AD9739A-FMC Linux driver <drivers/iio/frequency/ad9739a.c>`
--  :git-linux:`AD9739A-FMC Linux device tree <arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
--  :git-no-os:`AD9739A-FMC No-Os project <drivers/dac/ad9739a>`
--  :git-no-os:`AD9739A-FMC No-Os driver <drivers/dac/ad9739a/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux driver <drivers/iio/frequency/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux device tree <arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
+- :git-no-os:`AD9739A-FMC No-Os project <drivers/dac/ad9739a>`
+- :git-no-os:`AD9739A-FMC No-Os driver <drivers/dac/ad9739a/ad9739a.c>`
 
 .. include:: ../common/more_information.rst
 

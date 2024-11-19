@@ -26,14 +26,14 @@ is provided in a 100-lead LQFP surface-mount plastic package and is specified ov
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADV7511`
+- :adi:`ADV7511`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZC702`
--  :xilinx:`ZC706`
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+- :xilinx:`ZC702`
+- :xilinx:`ZC706`
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -85,14 +85,14 @@ axi_iic_fmc*              0x4162_0000
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed carrier
+   - ``*``  instantiated only for Zed carrier
 
 GPIO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 EMIOs are used, then offset is 54
+- Zynq-7000: if PS7 EMIOs are used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -122,9 +122,9 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed carrier
-   -  ``**`` instantiated only for ZC706 carrier
-   -  ``***`` instantiated only for ZC702 carrier
+   - ``*``  instantiated only for Zed carrier
+   - ``**`` instantiated only for ZC706 carrier
+   - ``***`` instantiated only for ZC702 carrier
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +142,7 @@ axi_iic_fmc/iic2intc_irpt*  11  55           87
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed carrier
+   - ``*``  instantiated only for Zed carrier
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -157,13 +157,12 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/adv7511/zed
-   user@analog:~/hdl/projects/adv7511/zed$ make
+   $cd hdl/projects/adv7511/zed
+   $make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` 
+A more comprehensive build guide can be found in the :ref:`build_hdl`
 user guide.
 
 Resources
@@ -172,12 +171,12 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`ADV7511`
+- Product datasheet: :adi:`ADV7511`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ADV7511 HDL project source code <projects/adv7511>`
+- :git-hdl:`ADV7511 HDL project source code <projects/adv7511>`
 
 .. list-table::
    :widths: 30 35 35
@@ -210,28 +209,20 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -  ``*``  instantiated only for Zed carrier
+   - ``*``  instantiated only for Zed carrier
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`ADV7511 driver source code <drivers/gpu/drm/bridge/adv7511>`
-
--  :git-linux:`ADV7511 - ZED dtsi source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dtsi>`
-
--  :git-linux:`ADV7511 - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dts>`
-
--  :git-linux:`ADV7511 - ZC706 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dtsi>`
-
--  :git-linux:`ADV7511 - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dts>`
-
--  :git-linux:`ADV7511 - ZC702 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dtsi>`
-
--  :git-linux:`ADV7511 - ZC702 dts source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dts>`
-
--  :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
-
--  :git-no-OS:`ADV7511 no-OS project source code <projects/adv7511>`
+- :git-linux:`ADV7511 driver source code <drivers/gpu/drm/bridge/adv7511>`
+- :git-linux:`ADV7511 - ZED dtsi source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dtsi>`
+- :git-linux:`ADV7511 - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dts>`
+- :git-linux:`ADV7511 - ZC706 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dtsi>`
+- :git-linux:`ADV7511 - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dts>`
+- :git-linux:`ADV7511 - ZC702 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dtsi>`
+- :git-linux:`ADV7511 - ZC702 dts source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dts>`
+- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :git-no-OS:`ADV7511 no-OS project source code <projects/adv7511>`
 
 .. include:: ../common/more_information.rst
 

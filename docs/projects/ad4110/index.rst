@@ -138,18 +138,16 @@ ADI distributes the bit/elf files of these projects as part of the
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the HDL repository, and then build the project as follows:.
+the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad4110/zed
-   user@analog:~/hdl/projects/ad4110/zed$ make
+   $cd hdl/projects/ad4110/zed
+   $make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl`
-user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
 -------------------------------------------------------------------------------
