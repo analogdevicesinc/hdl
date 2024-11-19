@@ -22,12 +22,12 @@ an AXI-Lite interface.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`AD9213-EVB <EVAL-AD9213>`
+- :adi:`AD9213-EVB <EVAL-AD9213>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9213`
+- :adi:`AD9213`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -60,13 +60,13 @@ The data path and clock domains are depicted in the below diagrams:
 
    The Rx links (ADC Path) operate with the following parameters:
 
-   -  Rx parameters: L=16, M=1, F=2, S=16, NP=16, N=16
-   -  Sample Rate: 10 GSPS
-   -  Dual link: No
-   -  RX_DEVICE_CLK: 312.25 MHz (Lane Rate/40)
-   -  REF_CLK: 625 MHz (Lane Rate/20)
-   -  JESD204B Lane Rate: 12.5 Gbps
-   -  QPLL0
+   - Rx parameters: L=16, M=1, F=2, S=16, NP=16, N=16
+   - Sample Rate: 10 GSPS
+   - Dual link: No
+   - RX_DEVICE_CLK: 312.25 MHz (Lane Rate/40)
+   - REF_CLK: 625 MHz (Lane Rate/20)
+   - JESD204B Lane Rate: 12.5 Gbps
+   - QPLL0
 
 .. math::
    Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}
@@ -167,8 +167,15 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/ad9213_evb <projects/ad9213_evb>`
-location and run the "make" command by typing in your command prompt.
+Then go to the :git-hdl:`projects/ad9213_evb` location and run the make
+command by typing in your command prompt:
+
+**Linux/Cygwin/WSL**
+
+.. shell::
+
+   $cd hdl/projects/ad9213_evb/vcu118
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -178,14 +185,14 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD9213`
--  :adi:`Device data sheet <media/en/technical-documentation/data-sheets/AD9213.pdf>`
--  :adi:`Evaluation Board <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9213.html>`
+- Product datasheet: :adi:`AD9213`
+- :adi:`Device data sheet <media/en/technical-documentation/data-sheets/AD9213.pdf>`
+- :adi:`Evaluation Board <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9213.html>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9213_EVB HDL project source code <projects/ad9213_evb>`
+- :git-hdl:`AD9213_EVB HDL project source code <projects/ad9213_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -216,8 +223,8 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_adc`
      - :ref:`ad_ip_jesd204_tpl_adc`
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 .. include:: ../common/more_information.rst
 

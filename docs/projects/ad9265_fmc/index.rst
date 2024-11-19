@@ -20,12 +20,12 @@ inputs of the ADC.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD9265 <EVAL-AD9265>`
+- :adi:`EVAL-AD9265 <EVAL-AD9265>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9265`
+- :adi:`AD9265`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -129,10 +129,10 @@ make command by typing in your command prompt(this example :xilinx:`ZC706`):
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9265_fmc/zc706
-   user@analog:~/hdl/projects/ad9265_fmc/zc706$ make
+   $cd hdl/projects/ad9265_fmc/zc706
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -156,13 +156,13 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets: :adi:`AD9265`
--  :dokuwiki:`[Wiki] Evaluating AD9265, user guide <resources/eval/ad9265-fmc-125ebz>`
+- Product datasheets: :adi:`AD9265`
+- :dokuwiki:`[Wiki] Evaluating AD9265, user guide <resources/eval/ad9265-fmc-125ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9265-FMC HDL project source code <projects/ad9265_fmc>`
+- :git-hdl:`AD9265-FMC HDL project source code <projects/ad9265_fmc>`
 
 .. list-table::
    :widths: 30 35 35

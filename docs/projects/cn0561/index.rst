@@ -203,10 +203,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0561/zed
-   user@analog:~/hdl/projects/cn0561/zed$ make
+   $cd hdl/projects/cn0561/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl`
 user guide.

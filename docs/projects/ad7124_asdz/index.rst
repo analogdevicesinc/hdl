@@ -22,19 +22,19 @@ samples at the maximum sample rate.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7124-4`
--  :adi:`EVAL-AD7124-8`
+- :adi:`EVAL-AD7124-4`
+- :adi:`EVAL-AD7124-8`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7124-4`
--  :adi:`AD7124-8`
+- :adi:`AD7124-4`
+- :adi:`AD7124-8`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
 
 Block design
 -------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  DE10-Nano: the offset is 32
+- DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -120,10 +120,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7124_asdz/de10nano
-   user@analog:~/hdl/projects/ad7124_asdz/de10nano make
+   $cd hdl/projects/ad7124_asdz/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

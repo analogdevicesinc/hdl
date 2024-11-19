@@ -103,15 +103,15 @@ be done on the board and/or ``make`` command:
 
 In case of the **Serial Data Output Pin** functionality:
 
-.. code-block::
+.. shell:: bash
 
-   make ALERT_SPI_N=0
+   $make ALERT_SPI_N=0
 
 In case of the **Alert Indication Output Pin** functionality:
 
-.. code-block::
+.. shell:: bash
 
-   make ALERT_SPI_N=1
+   $make ALERT_SPI_N=1
 
 The **NUM_OF_SDI** configuration parameter defines the number of SDI lines used:
 **{1, 2, 4}**. By default is set to 1.
@@ -262,11 +262,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad738x_fmc/zed
-   user@analog:~/hdl/projects/ad738x_fmc/zed$ make ALERT_SPI_N=0 NUM_OF_SDI=4
+   $cd hdl/projects/ad738x_fmc/zed
+   $make ALERT_SPI_N=0 NUM_OF_SDI=4
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

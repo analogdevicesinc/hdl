@@ -379,19 +379,18 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/adrv9026 <projects/adrv9026>`
-location and run the make command by typing in your command prompt:
+Then go to the project location, choose your carrier and run the make command
+by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/adrv9026/zcu102
-   user@analog:~/hdl/projects/adrv9026/zcu102$ make
+   $cd hdl/projects/adrv9026/zcu102
+   $make
 
-   user@analog:~$ cd hdl/projects/adrv9026/a10soc
-   user@analog:~/hdl/projects/adrv9026/a10soc$ make
+   $cd hdl/projects/adrv9026/a10soc
+   $make
 
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.

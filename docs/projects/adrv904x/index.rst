@@ -15,12 +15,12 @@ stations.
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADRV9040`
+- :adi:`ADRV9040`
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-ADRV904x`
+- :adi:`EVAL-ADRV904x`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -57,23 +57,23 @@ Example block design for Single link; M=16; L=8
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
--  Sample Rate: 491.52 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
--  REF_CLK: 491.52 MHz (Lane Rate/33)
--  JESD204C Lane Rate: 16.22 Gbps
--  QPLL0
+- Rx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
+- REF_CLK: 491.52 MHz (Lane Rate/33)
+- JESD204C Lane Rate: 16.22 Gbps
+- QPLL0
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
--  Sample Rate: 491.52 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
--  REF_CLK: 491.52 MHz (Lane Rate/33)
--  JESD204C Lane Rate: 16.22 Gbps
--  QPLL0
+- Tx Deframer parameters: L=8, M=16, F=4, S=1, NP=16, N=16
+- Sample Rate: 491.52 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/66)
+- REF_CLK: 491.52 MHz (Lane Rate/33)
+- JESD204C Lane Rate: 16.22 Gbps
+- QPLL0
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,18 +95,18 @@ for each project.
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C
-   -  8B10B  - 8b10b link layer defined in JESD204B
+   - 64B66B - 64b66b link layer defined in JESD204C
+   - 8B10B  - 8b10b link layer defined in JESD204B
 
--  RX_LANE_RATE: lane rate of the Rx link
--  TX_LANE_RATE: lane rate of the Tx link
--  [RX/TX]_JESD_M: number of converters per link
--  [RX/TX]_JESD_L: number of lanes per link
--  [RX/TX]_JESD_S: number of samples per frame
--  [RX/TX]_JESD_NP: number of bits per sample
--  [RX/TX]_NUM_LINKS: number of links
+- RX_LANE_RATE: lane rate of the Rx link
+- TX_LANE_RATE: lane rate of the Tx link
+- [RX/TX]_JESD_M: number of converters per link
+- [RX/TX]_JESD_L: number of lanes per link
+- [RX/TX]_JESD_S: number of samples per frame
+- [RX/TX]_JESD_NP: number of bits per sample
+- [RX/TX]_NUM_LINKS: number of links
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -261,11 +261,10 @@ location and run the make command by typing in your command prompt:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/adrv904x/zcu102
-   user@analog:~/hdl/projects/adrv904x/zcu102$ make
+   $cd hdl/projects/adrv904x/zcu102
+   $make
 
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
@@ -347,7 +346,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADRV904x Prototyping Platform User Guide <resources/eval/user-guides/adrv904x>`
+- :dokuwiki:`[Wiki] ADRV904x Prototyping Platform User Guide <resources/eval/user-guides/adrv904x>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -363,12 +362,12 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets: :adi:`ADRV9040 <media/en/technical-documentation/data-sheets/adrv9040.pdf>`
+- Product datasheets: :adi:`ADRV9040`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ADRV904x HDL project source code <projects/adrv904x>`
+- :git-hdl:`ADRV904x HDL project source code <projects/adrv904x>`
 
 .. list-table::
    :widths: 30 40 35
@@ -417,12 +416,12 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
 
--  :ref:`jesd204`
+- :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADRV904x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv904x>`
+- :dokuwiki:`[Wiki] ADRV904x Linux driver wiki page <resources/tools-software/linux-drivers/iio-transceiver/adrv904x>`
 
 .. include:: ../common/more_information.rst
 

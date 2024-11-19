@@ -33,25 +33,25 @@ maximum sample rate.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD5780ARDZ`
--  :adi:`EVAL-AD5781ARDZ`
--  :adi:`EVAL-AD5791ARDZ`
+- :adi:`EVAL-AD5780ARDZ`
+- :adi:`EVAL-AD5781ARDZ`
+- :adi:`EVAL-AD5791ARDZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD5760`
--  :adi:`AD5780`
--  :adi:`AD5781`
--  :adi:`AD5790`
--  :adi:`AD5791`
+- :adi:`AD5760`
+- :adi:`AD5780`
+- :adi:`AD5781`
+- :adi:`AD5790`
+- :adi:`AD5791`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+- :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
    Arduino shield connector
--  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
    Arduino shield connector
 
 Block design
@@ -97,8 +97,8 @@ spi_clk_pll_reconfig**    0x0006_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,8 +126,8 @@ I2C connections
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,7 +150,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Cora Z7S: the offset is 54
+- Cora Z7S: the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -177,7 +177,7 @@ The Software GPIO number is calculated as follows:
      - 32
      - 86
 
--  DE10-Nano: the offset is 32
+- DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -236,17 +236,15 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad57xx_ardz/coraz7s
-   user@analog:~/hdl/projects/ad57xx_ardz/coraz7s$ make
+   $cd hdl/projects/ad57xx_ardz/coraz7s
+   $make
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad57xx_ardz/de10nano
-   user@analog:~/hdl/projects/ad57xx_ardz/de10nano$ make
+   $cd hdl/projects/ad57xx_ardz/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -267,7 +265,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD57XX_ARDZ HDL project source code <projects/ad57xx_ardz>`
+- :git-hdl:`AD57XX_ARDZ HDL project source code <projects/ad57xx_ardz>`
 
 .. list-table::
    :widths: 30 40 30
@@ -310,15 +308,15 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-..
-  - :git-linux:`AD57XX Linux driver ad57xx.c <drivers/iio/adc/ad57xx.c>`
+
+- :git-linux:`AD57XX Linux driver ad57xx.c <drivers/iio/adc/ad57xx.c>`
 
 .. include:: ../common/more_information.rst
 

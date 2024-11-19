@@ -29,12 +29,12 @@ specific system requirements
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD9656`
+- :adi:`EVAL-AD9656`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9656`
+- :adi:`AD9656`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -63,12 +63,12 @@ Block diagram
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=4, M=4, S=1, NP=16, N=16
--  Dual link: No
--  RX_DEVICE_CLK: 62.5 MHz
--  REF_CLK: 125MHz
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Rx Deframer parameters: L=4, M=4, S=1, NP=16, N=16
+- Dual link: No
+- RX_DEVICE_CLK: 62.5 MHz
+- REF_CLK: 125MHz
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 AD9656 FMC Card block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,19 +177,19 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9656_fmc/zcu102
-   user@analog:~/hdl/projects/ad9656_fmc/zcu102$ make
+   $cd hdl/projects/ad9656_fmc/zcu102
+   $make
 
 Below are the parameters that are used to configure this project, on :xilinx:`ZCU102`.
 
--  JESD_MODE :red:`8B10B`
--  RX_NUM_OF_LANES 4
--  RX_NUM_OF_CONVERTERS 4
--  RX_SAMPLES_PER_FRAME 1
--  RX_SAMPLE_WIDTH 16
--  RX_SAMPLES_PER_CHANNEL 2
+- JESD_MODE :red:`8B10B`
+- RX_NUM_OF_LANES 4
+- RX_NUM_OF_CONVERTERS 4
+- RX_SAMPLES_PER_FRAME 1
+- RX_SAMPLE_WIDTH 16
+- RX_SAMPLES_PER_CHANNEL 2
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
@@ -200,14 +200,14 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets: :adi:`AD9656`
--  :dokuwiki:`[Wiki] Evaluating the AD9656 ADC converter <resources/eval/ad9656-125ebz>`
+- Product datasheets: :adi:`AD9656`
+- :dokuwiki:`[Wiki] Evaluating the AD9656 ADC converter <resources/eval/ad9656-125ebz>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
--  :git-hdl:`AD9656-FMC HDL project source code <projects/ad9656_fmc>`
+- :dokuwiki:`[Wiki] AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
+- :git-hdl:`AD9656-FMC HDL project source code <projects/ad9656_fmc>`
 
 .. list-table::
    :widths: 30 35 35

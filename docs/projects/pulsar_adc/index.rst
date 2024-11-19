@@ -71,66 +71,66 @@ Supported boards
 
 PulSAR with PMOD connector:
 
--  :adi:`EVAL-AD7685-PMDZ`
--  :adi:`EVAL-AD7686-PMDZ`
--  :adi:`EVAL-AD7687-PMDZ`
--  :adi:`EVAL-AD7688-PMDZ`
--  :adi:`EVAL-AD7690-PMDZ`
--  :adi:`EVAL-AD7691-PMDZ`
--  :adi:`EVAL-AD7693-PMDZ`
--  :adi:`EVAL-AD7942-PMDZ`
--  :adi:`EVAL-AD7946-PMDZ`
--  :adi:`EVAL-AD7980-PMDZ`
--  :adi:`EVAL-AD7982-PMDZ`
--  :adi:`EVAL-AD7983-PMDZ`
--  :adi:`EVAL-AD7984-PMDZ`
--  :adi:`EVAL-AD7988-1-PMDZ`
--  :adi:`EVAL-AD7988-5-PMDZ`
--  :adi:`EVAL-ADAQ40xx`
+- :adi:`EVAL-AD7685-PMDZ`
+- :adi:`EVAL-AD7686-PMDZ`
+- :adi:`EVAL-AD7687-PMDZ`
+- :adi:`EVAL-AD7688-PMDZ`
+- :adi:`EVAL-AD7690-PMDZ`
+- :adi:`EVAL-AD7691-PMDZ`
+- :adi:`EVAL-AD7693-PMDZ`
+- :adi:`EVAL-AD7942-PMDZ`
+- :adi:`EVAL-AD7946-PMDZ`
+- :adi:`EVAL-AD7980-PMDZ`
+- :adi:`EVAL-AD7982-PMDZ`
+- :adi:`EVAL-AD7983-PMDZ`
+- :adi:`EVAL-AD7984-PMDZ`
+- :adi:`EVAL-AD7988-1-PMDZ`
+- :adi:`EVAL-AD7988-5-PMDZ`
+- :adi:`EVAL-ADAQ40xx`
 
 PulSAR with FMC connector:
 
--  :adi:`EVAL-AD400x-FMCZ`
+- :adi:`EVAL-AD400x-FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 PulSAR with PMOD connector:
 
--  :adi:`AD7685`
--  :adi:`AD7686`
--  :adi:`AD7687`
--  :adi:`AD7688`
--  :adi:`AD7690`
--  :adi:`AD7691`
--  :adi:`AD7693`
--  :adi:`AD7942`
--  :adi:`AD7946`
--  :adi:`AD7980`
--  :adi:`AD7982`
--  :adi:`AD7983`
--  :adi:`AD7984`
--  :adi:`AD7988-1`
--  :adi:`AD7988-5`
--  :adi:`ADAQ4003`
+- :adi:`AD7685`
+- :adi:`AD7686`
+- :adi:`AD7687`
+- :adi:`AD7688`
+- :adi:`AD7690`
+- :adi:`AD7691`
+- :adi:`AD7693`
+- :adi:`AD7942`
+- :adi:`AD7946`
+- :adi:`AD7980`
+- :adi:`AD7982`
+- :adi:`AD7983`
+- :adi:`AD7984`
+- :adi:`AD7988-1`
+- :adi:`AD7988-5`
+- :adi:`ADAQ4003`
 
 PulSAR with FMC connector:
 
--  :adi:`AD4003`
--  :adi:`AD4007`
--  :adi:`AD4011`
--  :adi:`AD4020`
+- :adi:`AD4003`
+- :adi:`AD4007`
+- :adi:`AD4011`
+- :adi:`AD4020`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` PMOD connector
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` PMOD connector
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Other required hardware
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-PMD-IB1Z`
+- :adi:`EVAL-PMD-IB1Z`
 
 .. note::
 
@@ -168,18 +168,18 @@ connector or the Pmod JA connector.
 
 The ``FMC_N_PMOD`` parameter is used to select between the them:
 
-*  0 - for PMOD
-*  1 - for FMC (default)
+- 0 - for PMOD
+- 1 - for FMC (default)
 
 The PulSAR project supports different configurations required for certain
 ADCs, like the AD7944.
 
 These modes are selected using the ``SPI_OP_MODE`` parameter:
 
-*  0 - for normal SPI Engine connections (default)
-*  1 - for 3-wire "single" mode where CS drives the SDO line while the CS line
-   is driven by GPIO
-*  2 - SDO is driven by GPIO and the CS line is driven by CS.
+- 0 - for normal SPI Engine connections (default)
+- 1 - for 3-wire "single" mode where CS drives the SDO line while the CS line
+  is driven by GPIO
+- 2 - SDO is driven by GPIO and the CS line is driven by CS.
 
 .. caution::
 
@@ -248,7 +248,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 40 25 25 25
@@ -278,8 +278,8 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` instantiated only for PulSAR_ADC_PMDZ projects
-   -  ``**`` instantiated only for FMC_N_PMOD=1 (AD40xx)
+   - ``*`` instantiated only for PulSAR_ADC_PMDZ projects
+   - ``**`` instantiated only for FMC_N_PMOD=1 (AD40xx)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,44 +306,43 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell:: bash
 
-   user@analog:~$ cd hdl/projects/pulsar_adc/zed
-   user@analog:~/hdl/projects/pulsar_adc/zed$ make FMC_N_PMOD=1 SPI_OP_MODE=0
+   $cd hdl/projects/pulsar_adc/zed
+   $make FMC_N_PMOD=1 SPI_OP_MODE=0
 
 Build examples:
 
 Zedboard Pmod support
 
-.. code-block::
+.. shell:: bash
 
-   make FMC_N_PMOD=0
+   $make FMC_N_PMOD=0
 
 Zedboard standard configuration FMC support (default)
 
-.. code-block::
+.. shell:: bash
 
-   make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
+   $make FMC_N_PMOD=1 SPI_OP_MODE=0 - builds standard FMC version
 
 Zedboard FMC support for AD7944 4-wire mode ("multi")
 
-.. code-block::
+.. shell:: bash
 
-   make FMC_N_PMOD=1 SPI_OP_MODE=1
+   $make FMC_N_PMOD=1 SPI_OP_MODE=1
 
 Zedboard FMC support for AD7944 chain mode or 3-wire "single"
 
-.. code-block::
+.. shell:: bash
 
-   make FMC_N_PMOD=1 SPI_OP_MODE=2
+   $make FMC_N_PMOD=1 SPI_OP_MODE=2
 
 The result of the build, if parameters were used, will be in a folder named
 by the used configuration. If the following command was run
 
-.. code-block::
+.. shell:: bash
 
-   make FMC_N_PMOD=1 SPI_OP_MODE=0
+   $make FMC_N_PMOD=1 SPI_OP_MODE=0
 
 then the folder name will be:
 
@@ -363,41 +362,41 @@ Hardware related
 
 Datasheets for PulSAR with PMOD connector:
 
--  :adi:`AD7942`
--  :adi:`AD7946`
--  :adi:`AD7988-1`
--  :adi:`AD7685`
--  :adi:`AD7687`
--  :adi:`AD7691`
--  :adi:`AD7686`
--  :adi:`AD7688`
--  :adi:`AD7693`
--  :adi:`AD7988-5`
--  :adi:`AD7980`
--  :adi:`AD7983`
--  :adi:`AD7690`
--  :adi:`AD7982`
--  :adi:`AD7984`
--  :adi:`UG-682, Evaluation Board User Guide <media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf>`
--  :adi:`UG-340, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-340.pdf>`
+- :adi:`AD7942`
+- :adi:`AD7946`
+- :adi:`AD7988-1`
+- :adi:`AD7685`
+- :adi:`AD7687`
+- :adi:`AD7691`
+- :adi:`AD7686`
+- :adi:`AD7688`
+- :adi:`AD7693`
+- :adi:`AD7988-5`
+- :adi:`AD7980`
+- :adi:`AD7983`
+- :adi:`AD7690`
+- :adi:`AD7982`
+- :adi:`AD7984`
+- :adi:`UG-682, Evaluation Board User Guide <media/en/technical-documentation/user-guides/6-Lead_SOT-23_ADC_Driver_UG-682.pdf>`
+- :adi:`UG-340, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-340.pdf>`
 
 Datasheets PulSAR with FMC connector:
 
--  :adi:`AD4003`
--  :adi:`AD4007`
--  :adi:`AD4011`
--  :adi:`AD4020`
--  :adi:`ADAQ4003`
--  :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-1042.pdf>`
--  :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf>`
+- :adi:`AD4003`
+- :adi:`AD4007`
+- :adi:`AD4011`
+- :adi:`AD4020`
+- :adi:`ADAQ4003`
+- :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/UG-1042.pdf>`
+- :adi:`UG-1042, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-adaq4001fmcz_eval-adaq4003fmcz-ug-1533.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`pulsar_adc HDL project source code <projects/pulsar_adc>`
--  :dokuwiki:`[Wiki] PulSAR ADC PMOD HDL start guide <resources/eval/user-guides/pulsar_adc_pmods_hdl>`
--  :dokuwiki:`[Wiki] PulSAR ADC PMOD quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
--  :dokuwiki:`[Wiki] AD40xx/ADAQ40xx quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
+- :git-hdl:`pulsar_adc HDL project source code <projects/pulsar_adc>`
+- :dokuwiki:`[Wiki] PulSAR ADC PMOD HDL start guide <resources/eval/user-guides/pulsar_adc_pmods_hdl>`
+- :dokuwiki:`[Wiki] PulSAR ADC PMOD quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
+- :dokuwiki:`[Wiki] AD40xx/ADAQ40xx quick start guide <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`
 
 .. list-table::
    :widths: 30 40 30
@@ -451,7 +450,7 @@ HDL related
 
    ``*`` instantiated only for AD40xx/ADAQ40xx
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

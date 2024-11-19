@@ -40,10 +40,11 @@ Take :adi:`AD-FMCOMMS2 <EVAL-ADFMCOMMS2>` with
 :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`;
 the ``system_bd.tcl`` will look like the following:
 
-.. shell::
+.. shell:: bash
+   :no-path:
 
-   source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-   source ../common/fmcomms2_bd.tcl
+   $source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
+   $source ../common/fmcomms2_bd.tcl
 
 Typical project diagram
 -------------------------------------------------------------------------------

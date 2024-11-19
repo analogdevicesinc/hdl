@@ -17,8 +17,8 @@ Overview
 
 The  :adi:`X-Band Development Platform <x-band-development-platform>` contains
 one MxFE® software defined, direct RF sampling transceivers,
-:dokuwiki:`X-Band to C-Band Up/Down Converter <resources/eval/user-guides/stingray>`
-, and a :dokuwiki:`X/Ku Band analog phased array <resources/eval/user-guides/xud1a>`
+:dokuwiki:`X-Band to C-Band Up/Down Converter <resources/eval/user-guides/stingray>`,
+and a :dokuwiki:`X/Ku Band analog phased array <resources/eval/user-guides/xud1a>`
 proto-typing platform.
 The target application is phased array radars, electronic warfare, and
 ground-based SATCOM, specifically a X Band 32 transmit/32 receive channel hybrid
@@ -35,26 +35,26 @@ reference software, HDL code, and MATLAB system-level interfacing software.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`X-Band Phased Array Platform <x-band-development-platform>`
--  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
--  :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
+- :adi:`X-Band Phased Array Platform <x-band-development-platform>`
+- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+- :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
+- :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
 
 Supported devices
 -------------------------------------------------------------------------------
--  :adi:`AD9081`
--  :adi:`ADAR1000`
--  :adi:`ADTR1107`
--  :adi:`HMC652LP2E`
--  :adi:`HMC773ALC3B`
--  :adi:`ADL8111`
--  :adi:`HMC8411`
--  :adi:`HMC963`
--  :adi:`HMC383LC4`
--  :adi:`ADF4371`
--  :adi:`ADRF5020`
--  :adi:`HMC903LP3E`
--  :adi:`LT8653S`
+- :adi:`AD9081`
+- :adi:`ADAR1000`
+- :adi:`ADTR1107`
+- :adi:`HMC652LP2E`
+- :adi:`HMC773ALC3B`
+- :adi:`ADL8111`
+- :adi:`HMC8411`
+- :adi:`HMC963`
+- :adi:`HMC383LC4`
+- :adi:`ADF4371`
+- :adi:`ADRF5020`
+- :adi:`HMC903LP3E`
+- :adi:`LT8653S`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -86,57 +86,57 @@ Example block design for Single link; M=8; L=4
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
+- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
    Config 0x0A)
--  Sample Rate: 250 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Sample Rate: 250 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
+- Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
    0x09)
--  Sample Rate: 250 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Sample Rate: 250 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
+   - 64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
       Layer
-   -  8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+   - 8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
       Layer
 
--  RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
--  TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
--  [RX/TX]_JESD_M: number of converters per link
--  [RX/TX]_JESD_L: number of lanes per link
--  [RX/TX]_JESD_S: number of samples per frame
--  [RX/TX]_JESD_NP: number of bits per sample
--  [RX/TX]_NUM_LINKS: number of links
--  TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through
+- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+- [RX/TX]_JESD_M: number of converters per link
+- [RX/TX]_JESD_L: number of lanes per link
+- [RX/TX]_JESD_S: number of samples per frame
+- [RX/TX]_JESD_NP: number of bits per sample
+- [RX/TX]_NUM_LINKS: number of links
+- TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through
    TDD. Must be set to 1 when SHARED_DEVCLK=1
--  SHARED_DEVCLK
--  TDD_CHANNEL_CNT
--  TDD_SYNC_WIDTH
--  TDD_SYNC_INT
--  TDD_SYNC_EXT
--  TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal
+- SHARED_DEVCLK
+- TDD_CHANNEL_CNT
+- TDD_SYNC_WIDTH
+- TDD_SYNC_INT
+- TDD_SYNC_EXT
+- TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal
    is added
--  [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+- [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
    kilosamples per converter (M)
--  Check out this guide on more details regarding these parameters:
+- Check out this guide on more details regarding these parameters:
    :ref:`axi_tdd`
 
 CPU/Memory interconnects addresses
@@ -233,7 +233,7 @@ GPIOs
 
 ====================== ================ ============== ==============
 GPIO signal            Direction        HDL GPIO EMIO  Software GPIO
----                    (from FPGA view) ---            Zynq MP
+                       (from FPGA view)                Zynq MP
 ====================== ================ ============== ==============
 gpio_o_86_ms           OUT              86             163
 gpio_o_85_ms           OUT              85             162
@@ -299,15 +299,15 @@ the HDL repository.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
-   user@analog:~/hdl/projects/ad9081_fmca_ebz_x_band/zcu102$ make
+   $cd hdl/projects/ad9081_fmca_ebz_x_band/zcu102
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 .. warning::
+
    All the details regarding the build parameters can be found on the
    :ref:`AD9081/AD9082/AD9986/AD9988 HDL project page <ad9081_fmca_ebz>`
 
@@ -324,37 +324,36 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADAR1000EVAL1Z (STINGRAY) ANALOG BEAMFORMING FRONT-END  <resources/eval/user-guides/stingray/userguide>`
+- :dokuwiki:`[Wiki] ADAR1000EVAL1Z (STINGRAY) ANALOG BEAMFORMING FRONT-END  <resources/eval/user-guides/stingray/userguide>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD9081`
-   -  :adi:`ADAR1000`
-   -  :adi:`ADTR1107`
-   -  :adi:`HMC652LP2E`
-   -  :adi:`HMC773ALC3B`
-   -  :adi:`ADL8111`
-   -  :adi:`HMC8411`
-   -  :adi:`HMC963`
-   -  :adi:`HMC383LC4`
-   -  :adi:`ADF4371`
-   -  :adi:`ADRF5020`
-   -  :adi:`HMC903LP3E`
-   -  :adi:`LT8653S`
+  - :adi:`AD9081`
+  - :adi:`ADAR1000`
+  - :adi:`ADTR1107`
+  - :adi:`HMC652LP2E`
+  - :adi:`HMC773ALC3B`
+  - :adi:`ADL8111`
+  - :adi:`HMC8411`
+  - :adi:`HMC963`
+  - :adi:`HMC383LC4`
+  - :adi:`ADF4371`
+  - :adi:`ADRF5020`
+  - :adi:`HMC903LP3E`
+  - :adi:`LT8653S`
 
--  :dokuwiki:`[Wiki] X-Band Platform Hardware  <resources/eval/user-guides/x-band-platform/hardware>`
--  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-
--  :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
--  :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
+- :dokuwiki:`[Wiki] X-Band Platform Hardware  <resources/eval/user-guides/x-band-platform/hardware>`
+- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+- :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
+- :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9081_FMCA_EBZ_X_BAND HDL project source code <projects/ad9081_fmca_ebz_x_band>`
+- :git-hdl:`AD9081_FMCA_EBZ_X_BAND HDL project source code <projects/ad9081_fmca_ebz_x_band>`
 
 .. list-table::
    :widths: 30 35 35
@@ -427,26 +426,26 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`ad_ip_jesd204_tpl_dac`
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] X-Band Platform Software  <resources/eval/user-guides/x-band-platform/software>`
--  :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :dokuwiki:`[Wiki] X-Band Platform Software  <resources/eval/user-guides/x-band-platform/software>`
+- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
 
--  Stingray devicetrees:
+- Stingray devicetrees:
 
-   - :git-linux:`zynqmp-zcu102-rev10-stingray-vcxo100.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts>`
-   - :git-linux:`zynqmp-zcu102-rev10-stingray.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts>`
-   - :git-linux:`zynqmp-zcu102-rev10-stingray-direct-clk.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-direct-clk.dts>`
-   - :git-linux:`zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts>`
+  - :git-linux:`zynqmp-zcu102-rev10-stingray-vcxo100.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts>`
+  - :git-linux:`zynqmp-zcu102-rev10-stingray.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts>`
+  - :git-linux:`zynqmp-zcu102-rev10-stingray-direct-clk.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-direct-clk.dts>`
+  - :git-linux:`zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts<arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100-direct-clk.dts>`
 
--  Python support:
+- Python support:
 
-   -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+  - `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
+  - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
 
 .. include:: ../common/more_information.rst
 

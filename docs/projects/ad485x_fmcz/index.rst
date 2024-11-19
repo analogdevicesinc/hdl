@@ -179,10 +179,10 @@ make command by typing in your command prompt (this example is for
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad485x_fmc/zed
-   user@analog:~$ make
+   $cd hdl/projects/ad485x_fmc/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.

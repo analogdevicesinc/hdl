@@ -180,11 +180,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad408x_fmc_evb/zed
-   user@analog:~/hdl/projects/ad408x_fmc_evb/zed$ make
+   $cd hdl/projects/ad408x_fmc_evb/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
