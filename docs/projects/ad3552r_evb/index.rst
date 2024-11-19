@@ -1,16 +1,16 @@
 .. _ad3552r_evb:
 
-EVAL-AD3552R HDL project
+AD3552R-EVB HDL project
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD3552R <EVAL-AD3552R>` is an evaluation board for the 
-:adi:`AD3552R <AD3552R>`, a dual-channel, 16-bit fast precision 
-digital-to-analog converter (DAC). Each channel of the :adi:`AD3552R <AD3552R>` 
-is equipped with a different transimpedance amplifier: Channel 0 has a fast 
-amplifier that achieves the optimal dynamic performance and Channel 1 has a 
+The :adi:`EVAL-AD3552R` is an evaluation board for the
+:adi:`AD3552R`, a dual-channel, 16-bit fast precision
+digital-to-analog converter (DAC). Each channel of the :adi:`AD3552R`
+is equipped with a different transimpedance amplifier: Channel 0 has a fast
+amplifier that achieves the optimal dynamic performance and Channel 1 has a
 precision amplifier that guarantees the optimal DC precision over temperature.
 
 The board allows testing all the output ranges of the DAC, waveform generation,
@@ -19,12 +19,12 @@ power supply and reference options.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD3552R <EVAL-AD3552R>`
+- :adi:`EVAL-AD3552R`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD3552R`
+- :adi:`AD3552R`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ Block design
 
 .. warning::
 
-    The VADJ for the Zedboard must be set to 1.8V.
+    The VADJ for Zedboard must be set to 1.8V.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,8 +131,8 @@ Below are the Programmable Logic interrupts used in this project.
 
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
-================ === ========== ===========      
-axi_dac_dma      13  57         89 
+================ === ========== ===========
+axi_dac_dma      13  57         89
 ================ === ========== ===========
 
 Building the HDL project
@@ -162,21 +162,22 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] EVAL-AD3552R Evaluation Board on ZedBoard User Guide </resources/eval/user-guides/dac/ad3552r_eval_zed>`
+- :dokuwiki:`[Wiki] EVAL-AD3552R Evaluation Board on ZedBoard User Guide <resources/eval/user-guides/dac/ad3552r_eval_zed>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD3552R`
+  - :adi:`AD3552R`
+  - :adi:`EVAL-AD3552R`
 
--  :adi:`UG-2217, User Guide | EVAL-AD3552R <media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`
+- :adi:`UG-2217, User Guide | EVAL-AD3552R <media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`EVAL-AD3552R HDL project source code <projects/ad3552r_evb>`
+- :git-hdl:`EVAL-AD3552R HDL project source code <projects/ad3552r_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -217,7 +218,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver </resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
+- :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver </resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
 
 .. include:: ../common/more_information.rst
 

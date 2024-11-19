@@ -6,8 +6,8 @@ AD485x_FMCZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-This design is meant to support the AD485x family.
-For example, :adi:`EVAL-AD4858` board contains :adi:`AD4858` chip, which is a 20-bit, low
+This design is meant to support the AD485x family. For example,
+:adi:`EVAL-AD4858` board contains :adi:`AD4858` chip, which is a 20-bit, low
 noise 8-channel simultaneous sampling successive approximation register (SAR)
 ADC, with buffered differential, wide common range picoamp inputs.
 
@@ -38,37 +38,25 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 35 35 30
-   :header-rows: 1
-
-   * - Evaluation board
-     - Carrier
-     - FMC slot
-   * - :adi:`EVAL-AD4858 <EVAL-AD4858>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4857 <EVAL-AD4857>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4856 <EVAL-AD4856>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4855 <EVAL-AD4855>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4854 <EVAL-AD4854>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4853 <EVAL-AD4853>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4852 <EVAL-AD4852>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
-   * - :adi:`EVAL-AD4851 <EVAL-AD4851>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC LPC
++--------------------+----------+----------+
+| Evaluation board   | Carrier  | FMC slot |
++====================+==========+==========+
+| :adi:`EVAL-AD4858` | ZedBoard | FMC LPC  |
++--------------------+          |          |
+| :adi:`EVAL-AD4857` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4856` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4855` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4854` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4853` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4852` |          |          |
++--------------------+          |          |
+| :adi:`EVAL-AD4851` |          |          |
++--------------------+----------+----------+
 
 Block design
 -------------------------------------------------------------------------------
@@ -219,7 +207,7 @@ Here you can find the quick start guides available for these evaluation boards:
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD485x_FMCZ HDL project source code <projects/ad485x_fmc>`
+- :git-hdl:`AD485x_FMCZ HDL project source code <projects/ad485x_fmc>`
 
 .. list-table::
    :widths: 30 35 35

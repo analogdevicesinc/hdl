@@ -6,7 +6,7 @@ AD9213-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9213-EVB <EVAL-AD9213>` reference design is a processor based 
+The :adi:`AD9213-EVB <EVAL-AD9213>` reference design is a processor based
 (e.g. Microblaze) embedded system.
 
 The design implements a high-speed receive chain using JESD204B.
@@ -46,6 +46,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The data path and clock domains are depicted in the below diagrams:
 
 .. image:: ad9213_jesd_diagram.svg
@@ -53,15 +56,17 @@ The data path and clock domains are depicted in the below diagrams:
    :align: center
    :alt: AD9213-EVB JESD204B M=1 L=16 block diagram
 
-The Rx links (ADC Path) operate with the following parameters:
+.. important::
 
--  Rx parameters: L=16, M=1, F=2, S=16, NP=16, N=16 
--  Sample Rate: 10 GSPS
--  Dual link: No
--  RX_DEVICE_CLK: 312.25 MHz (Lane Rate/40)
--  REF_CLK: 625 MHz (Lane Rate/20)
--  JESD204B Lane Rate: 12.5 Gbps
--  QPLL0
+   The Rx links (ADC Path) operate with the following parameters:
+
+   -  Rx parameters: L=16, M=1, F=2, S=16, NP=16, N=16
+   -  Sample Rate: 10 GSPS
+   -  Dual link: No
+   -  RX_DEVICE_CLK: 312.25 MHz (Lane Rate/40)
+   -  REF_CLK: 625 MHz (Lane Rate/20)
+   -  JESD204B Lane Rate: 12.5 Gbps
+   -  QPLL0
 
 .. math::
    Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}
@@ -69,15 +74,10 @@ The Rx links (ADC Path) operate with the following parameters:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The clock sources depend on the carrier that is used:
-
-:xilinx:`VCU118`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. image:: ad9213_clocks.svg
    :width: 500
    :align: center
-   :alt: AD9213-EVB VCU118 clock scheme
+   :alt: AD9213-EVB/VCU118 clock scheme
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -152,8 +152,8 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name    IRQ number
 ================ ===========
 hmc7044_spi      5
-axi_ad9213_dma   12 
-axi_ad9213_jesd  13 
+axi_ad9213_dma   12
+axi_ad9213_jesd  13
 ================ ===========
 
 Building the HDL project
@@ -178,10 +178,7 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`AD9213`
-
+-  Product datasheet: :adi:`AD9213`
 -  :adi:`Device data sheet <media/en/technical-documentation/data-sheets/AD9213.pdf>`
 -  :adi:`Evaluation Board <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9213.html>`
 

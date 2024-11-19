@@ -26,33 +26,33 @@ high-speed serial and parallel interfaces.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7616 <EVAL-AD7616>`
+- :adi:`EVAL-AD7616`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7616`
+- :adi:`AD7616`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
--  :xilinx:`ZC706` on FMC LPC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZC706` on FMC LPC slot
 
 Other required hardware
 -------------------------------------------------------------------------------
 
--   :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
+- :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
 
 Block design
 -------------------------------------------------------------------------------
 
 The data path of the HDL design is simple as follows:
 
--  the parallel interface is controlled by the axi_ad7616 IP core
--  the serial interface is controlled by the SPI Engine Framework
--  data is written into memory by a DMA (axi_dmac core)
--  all the control pins of the device are driven by GPIOs
+- the parallel interface is controlled by the axi_ad7616 IP core
+- the serial interface is controlled by the SPI Engine Framework
+- data is written into memory by a DMA (axi_dmac core)
+- all the control pins of the device are driven by GPIOs
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,8 +99,8 @@ In case of the **SERIAL** interface:
    This switch is a *hardware* switch. Please rebuild the  design if the
    variable has been changed.
 
-   -   SL5 - unmounted - Parallel interface
-   -   SL5 - mounted - Serial interface
+   - SL5 - unmounted - Parallel interface
+   - SL5 - mounted - Serial interface
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,8 +138,8 @@ axi_ad7616 *              0x44A8_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
+   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,7 +185,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -231,7 +231,7 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,8 +249,8 @@ axi_ad7616 *    10  54         87
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
+   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -297,8 +297,8 @@ Connections and hardware changes
    Depending on the required interface mode, some hardware modifications need to
    be done.
 
-   -   **SL5** - unmounted - Parallel interface
-   -   **SL5** - mounted - Serial interface
+   - **SL5** - unmounted - Parallel interface
+   - **SL5** - mounted - Serial interface
 
 Resources
 -------------------------------------------------------------------------------
@@ -306,14 +306,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD7616`
-
--  `UG-1012, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf>`__
+- Product datasheet: :adi:`AD7616`
+- `UG-1012, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7616SDZ-7616-PSDZ-UG-1012.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD7616_SDZ HDL project source code <projects/ad7616_sdz>`
+- :git-hdl:`AD7616_SDZ HDL project source code <projects/ad7616_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -371,17 +370,15 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   -   ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
+   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`AD7616_SDZ No-OS project source code <projects/ad7616-sdz>`
-
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`AD7616_SDZ No-OS project source code <projects/ad7616-sdz>`
 
 .. include:: ../common/more_information.rst
 

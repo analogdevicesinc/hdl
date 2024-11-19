@@ -6,41 +6,42 @@ AD4170_ASDZ HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD4170-4` and :adi:`AD4170-8` provides a 
-high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise 
+The HDL reference design for the :adi:`AD4170-4` and :adi:`AD4170-8` provides a
+high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise
 Precision Sigma-Delta ADC with PGA.
 
 The data acquisition board incorporates the AD4170-4 or AD4170-8, a DC to 50 kHz
-input bandwidth, low noise, high speed, completely integrated analog front end 
-for high precision measurement applications. 
+input bandwidth, low noise, high speed, completely integrated analog front end
+for high precision measurement applications.
 
-The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS. 
+The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS.
 The device contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC),
-and can be configured to have 4 differential inputs or 8 single-ended or 
+and can be configured to have 4 differential inputs or 8 single-ended or
 pseudodifferential inputs. The on-chip low noise gain stage ensures that signals
 of small amplitude can be interfaced directly to the AD4170-4/8.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD4170-4/8 24-bit precision ADC. This instance provides support for 
+the AD4170-4/8 24-bit precision ADC. This instance provides support for
 capturing continuous samples at the maximum sample rate.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7140-ASDZ <AD4170-4>`
+- EVAL-AD4170-ASDZ
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD4170`
--  :adi:`AD4171`
--  :adi:`AD4172`
+- :adi:`AD4170`
+- :adi:`AD4170-4`
+- :adi:`AD4171`
+- :adi:`AD4172`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
--  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
+- :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
 
 Block design
 -------------------------------------------------------------------------------
@@ -75,8 +76,8 @@ axi_spi_engine_0**        0x0003_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,8 +105,8 @@ I2C connections
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,7 +129,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Cora Z7S: the offset is 54
+- Cora Z7S: the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -151,7 +152,7 @@ The Software GPIO number is calculated as follows:
      - 32
      - 86
 
--  DE10-Nano: the offset is 32
+- DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -227,14 +228,12 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets:
-
-  - :adi:`AD4170-4`
+- Product datasheet: :adi:`AD4170-4`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4170_ASDZ HDL project source code <projects/ad4170_asdz>`
+- :git-hdl:`AD4170_ASDZ HDL project source code <projects/ad4170_asdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -274,10 +273,10 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

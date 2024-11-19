@@ -306,7 +306,7 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheet:
+- Product datasheets:
 
   - :adi:`AD4695`/:adi:`AD4696`
   - :adi:`AD4697`/:adi:`AD4698`

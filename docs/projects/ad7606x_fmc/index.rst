@@ -27,56 +27,55 @@ lower Vdrive operation, diagnostics, additional oversampling ratios and per
 channel analog input range selection with bipolar differential, bipolar
 single-ended and unipolar single-ended options.
 
-The :adi:`EVAL-AD7606B-FMCZ <EVAL-AD7606B-FMCZ>` and
-:adi:`EVAL-AD7606C-18 <EVAL-AD7606C-18>` evaluation boards are designed to
-help users to easily evaluate the features of :adi:`AD7606B`,
+The :adi:`EVAL-AD7606B-FMCZ` and :adi:`EVAL-AD7606C-18` evaluation boards
+are designed to help users to easily evaluate the features of :adi:`AD7606B`,
 :adi:`AD7606C-16` and :adi:`AD7606C-18` analog-to-digital converters (ADCs).
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7606B <EVAL-AD7606B>`
--  :adi:`EVAL-AD7606C-16 <AD7606C-16>`
--  :adi:`EVAL-AD7606C-18 <EVAL-AD7606C-18>`
--  :adi:`EVAL-AD7605-4 <EVAL-AD7605-4>`
--  :adi:`EVAL-AD7606-8 <EVAL-AD7606>`
--  :adi:`EVAL-AD7606-6 <EVAL-AD7606-6>`
--  :adi:`EVAL-AD7606-4 <EVAL-AD7606-4>`
--  :adi:`EVAL-AD7607 <EVAL-AD7607>`
--  :adi:`EVAL-AD7608 <EVAL-AD7608>`
--  :adi:`EVAL-AD7609 <EVAL-AD7609>`
+- :adi:`EVAL-AD7606B`
+- :adi:`EVAL-AD7606C-16`
+- :adi:`EVAL-AD7606C-18`
+- :adi:`EVAL-AD7605-4`
+- :adi:`EVAL-AD7606-8`
+- :adi:`EVAL-AD7606-6`
+- :adi:`EVAL-AD7606-4`
+- :adi:`EVAL-AD7607`
+- :adi:`EVAL-AD7608`
+- :adi:`EVAL-AD7609`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7606B`
--  :adi:`AD7606C-16`
--  :adi:`AD7606C-18`
--  :adi:`AD7606`
--  :adi:`AD7606-6`
--  :adi:`AD7606-4`
--  :adi:`AD7607`
--  :adi:`AD7608`
--  :adi:`AD7609`
--  :adi:`ADP7118`
--  :adi:`ADR4525`
+- :adi:`AD7606B`
+- :adi:`AD7606C-16`
+- :adi:`AD7606C-18`
+- :adi:`AD7606`
+- :adi:`AD7606-6`
+- :adi:`AD7606-4`
+- :adi:`AD7607`
+- :adi:`AD7608`
+- :adi:`AD7609`
+- :adi:`ADP7118`
+- :adi:`ADR4525`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
 
 The data path of the HDL design is simple as follows:
 
--  the parallel interface is controlled by the
-   :dokuwiki:`axi_ad7606x <resources/fpga/docs/axi_ad7606x>` IP core
--  the serial interface is controlled by the :ref:`SPI_Engine <spi_engine>`
-   Framework
--  data is written into memory by a DMA (:ref:`axi_dmac core <axi_dmac>`)
--  all the control pins of the device are driven by GPIOs
+- the parallel interface is controlled by the
+  :ref:`axi_ad7606x IP core <axi_ad7606x>`
+- the serial interface is controlled by the :ref:`SPI_Engine <spi_engine>`
+  Framework
+- data is written into memory by a DMA (:ref:`axi_dmac core <axi_dmac>`)
+- all the control pins of the device are driven by GPIOs
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -123,16 +122,14 @@ In case of the **SERIAL** interface:
    This switch is a **hardware** switch. Please rebuild the design if the
    variable has been changed.
 
-   -   JP5 - Position A - Serial interface
-   -   JP5 - Position B - Parallel interface
+   - JP5 - Position A - Serial interface
+   - JP5 - Position B - Parallel interface
 
 The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
--  Options: 1, 2, 4, 8.
-By default is set to 8.
+**{1, 2, 4, 8}**. By default is set to 8.
 
 The ADC_N_BITS configuration parameter specifies the ADC resolution:
--  Options: 16, 18.
-By default it is set to 16.
+**{16, 18}**. By default it is set to 16.
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -181,8 +178,8 @@ axi_ad7606x *             0x44A0_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for INTF=0 (parallel interface)
-   -   ``**`` instantiated only for INTF=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -228,7 +225,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -274,8 +271,8 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for INTF=0 (parallel interface)
-   -   ``**`` instantiated only for INTF=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,8 +289,8 @@ spi_ad7606 **   12  56         88
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for INTF=0 (parallel interface)
-   -   ``**`` instantiated only for INTF=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -309,7 +306,6 @@ the HDL repository, and then build the project as follows:.
 **Linux/Cygwin/WSL**
 
 .. code-block::
-   :linenos:
 
    user@analog:~$ cd hdl/projects/ad7606x_fmc/zed
    user@analog:~/hdl/projects/ad7606x_fmc/zed$ make DEV_CONFIG=2 INTF=0
@@ -337,9 +333,9 @@ Connections and hardware changes
    Depending on the required interface mode, some hardware modifications need to
    be done.
 
-   -   **JP5** - A - Serial interface
-   -   **JP5** - B - Parallel interface
-   -   **JP7, JP12, JP13, JP14** - B - Differential operation
+   - **JP5** - A - Serial interface
+   - **JP5** - B - Parallel interface
+   - **JP7, JP12, JP13, JP14** - B - Differential operation
 
 Resources
 -------------------------------------------------------------------------------
@@ -347,27 +343,27 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7606`
-   -  :adi:`AD7606B`
-   -  :adi:`AD7606C-16`
-   -  :adi:`AD7606C-18`
-   -  :adi:`AD7605-4`
-   -  :adi:`AD7606`
-   -  :adi:`AD7606-6`
-   -  :adi:`AD7606-4`
-   -  :adi:`AD7607`
-   -  :adi:`AD7608`
-   -  :adi:`AD7609`
-   -  :adi:`ADP7118`
-   -  :adi:`ADR4525`
-   -  :adi:`UG-1870, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf>`
+  - :adi:`AD7606`
+  - :adi:`AD7606B`
+  - :adi:`AD7606C-16`
+  - :adi:`AD7606C-18`
+  - :adi:`AD7605-4`
+  - :adi:`AD7606`
+  - :adi:`AD7606-6`
+  - :adi:`AD7606-4`
+  - :adi:`AD7607`
+  - :adi:`AD7608`
+  - :adi:`AD7609`
+  - :adi:`ADP7118`
+  - :adi:`ADR4525`
+  - :adi:`UG-1870, Evaluation Board User Guide <media/en/technical-documentation/user-guides/eval-ad7606c-fmcz-ug-1870.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD7606X_FMC HDL project source code <projects/ad7606x_fmc>`
+- :git-hdl:`AD7606X_FMC HDL project source code <projects/ad7606x_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -431,17 +427,16 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for INTF=0 (parallel interface)
-   -   ``**`` instantiated only for INTF=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`AD7606_FMC No-OS driver source code <drivers/adc/ad7606>`
--  :dokuwiki:`AD7606 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad7606>`
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`AD7606_FMC No-OS driver source code <drivers/adc/ad7606>`
+- :dokuwiki:`AD7606 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad7606>`
 
 .. include:: ../common/more_information.rst
 

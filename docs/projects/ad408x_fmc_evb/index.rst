@@ -6,12 +6,11 @@ AD408X-FMC-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>` is designed to demonstrate the
-:adi:`AD4080 <AD4080>`
-performance.
+The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
+:adi:`AD4080` performance.
 
-The :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>`  HDL design supports the following
-:adi:`AD4080 <AD4080>` features:
+The :adi:`EVAL-AD4080-FMC`  HDL design supports the following
+:adi:`AD4080` features:
 
 * Single/Dual lane DDR data capture
 * Self synchronization using the fixed pattern and bit-slip feature
@@ -20,23 +19,24 @@ The :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>`  HDL design supports the following
   interface (SPI)
 * Sampling rate capability between 1.25 MSPS and 40 MSPS
 
-The :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>` evaluation board was designed for
+The :adi:`EVAL-AD4080-FMC` evaluation board was designed for
 use with the Digilent ZedBoard via the field programmable gate array(FPGA)
 mezzanine card (FMC) connector.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>`
+- :adi:`EVAL-AD4080-FMC`
 
 Supported devices
 -------------------------------------------------------------------------------
--  :adi:`AD4080`
--  :adi:`AD9508`
--  :adi:`ADF4350`
--  :adi:`LT6236`
--  :adi:`ADP7182`
--  :adi:`ADA4945-1`
+
+- :adi:`AD4080`
+- :adi:`AD9508`
+- :adi:`ADA4945-1`
+- :adi:`ADF4350`
+- :adi:`ADP7182`
+- :adi:`LT6236`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -199,19 +199,19 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD4080`
-   -  :adi:`AD9508`
-   -  :adi:`ADF4350`
-   -  :adi:`LT6236`
-   -  :adi:`ADP7182`
-   -  :adi:`ADA4945-1`
+  - :adi:`AD4080`
+  - :adi:`AD9508`
+  - :adi:`ADA4945-1`
+  - :adi:`ADF4350`
+  - :adi:`ADP7182`
+  - :adi:`LT6236`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD408x-FMC-EVB HDL project source code <projects/ad408x_fmc_evb>`
+- :git-hdl:`AD408x-FMC-EVB HDL project source code <projects/ad408x_fmc_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -248,14 +248,13 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Python support:
+- Python support:
 
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
-   -  `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/examples/ad4080_example.py>`__
-   -  `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/adi/ad4080.py>`__
-   -  AD4080-FMC-EVB Linux device tree :git-linux:`zynq-zed-adv7511-ad4080.dts
-      <arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts>`
-   -  AD4080 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
+  - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+  - `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/examples/ad4080_example.py>`__
+  - `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/adi/ad4080.py>`__
+  - AD4080-FMC-EVB Linux device tree :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts`
+  - AD4080 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst
 

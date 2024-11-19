@@ -1,6 +1,6 @@
 .. _ad4110:
 
-AD4110-SDZ HDL project
+AD4110 HDL project
 ================================================================================
 
 Overview
@@ -42,17 +42,17 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4110-1SDZ <eval-ad4110-1>`
+- :adi:`EVAL-AD4110-1`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD4110-1`
+- :adi:`AD4110-1`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on PMODs
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on PMODs
 
 Block design
 -------------------------------------------------------------------------------
@@ -65,8 +65,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad4110_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD4110_SDZ block diagram
-
+   :alt: AD4110 block diagram
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,7 +110,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then the offset is 54
+- Zynq-7000: if PS7 is used, then the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -158,13 +157,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD4110-1`
--  `UG-1203: EVAL-AD4110-1SDZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD4110-1SDZ-UG-1203.pdf>`__
+- Product datasheet: :adi:`AD4110-1`
+- `UG-1203: EVAL-AD4110-1SDZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD4110-1SDZ-UG-1203.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4110-SDZ HDL project source code <projects/ad4110>`
+- :git-hdl:`AD4110 HDL project source code <projects/ad4110>`
 
 .. list-table::
    :widths: 30 35 35
@@ -201,10 +200,10 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-no-os:`AD4110-SDZ No-OS project source code <projects/ad4110>`
--  :git-no-os:`AD4110 No-OS Driver source code <drivers/afe/ad4110>`
--  :dokuwiki:`AD4110 No-OS Driver documentation <resources/tools-software/uc-drivers/ad4110>`
--  :dokuwiki:`AD4110 IIO Application <resources/tools-software/product-support-software/ad4110_mbed_iio_application>`
+- :git-no-os:`AD4110 No-OS project source code <projects/ad4110>`
+- :git-no-os:`AD4110 No-OS Driver source code <drivers/afe/ad4110>`
+- :dokuwiki:`AD4110 No-OS Driver documentation <resources/tools-software/uc-drivers/ad4110>`
+- :dokuwiki:`AD4110 IIO Application <resources/tools-software/product-support-software/ad4110_mbed_iio_application>`
 
 .. include:: ../common/more_information.rst
 

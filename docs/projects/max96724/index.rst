@@ -150,12 +150,12 @@ Below are the Programmable Logic interrupts used in this project.
 ====================== === ============ =============
 Instance name          HDL Linux ZynqMP Actual ZynqMP
 ====================== === ============ =============
-csirxss_irq            13  109          141          
-iic2intc_irpt          12  108          140          
-v_frmbuf_wr0/interrupt 11  107          139          
-v_frmbuf_wr1/interrupt 10  106          138          
-v_frmbuf_wr2/interrupt  9  105          137          
-v_frmbuf_wr3/interrupt  8  104          136          
+csirxss_irq            13  109          141
+iic2intc_irpt          12  108          140
+v_frmbuf_wr0/interrupt 11  107          139
+v_frmbuf_wr1/interrupt 10  106          138
+v_frmbuf_wr2/interrupt  9  105          137
+v_frmbuf_wr3/interrupt  8  104          136
 ====================== === ============ =============
 
 Building the HDL project

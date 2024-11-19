@@ -9,8 +9,8 @@ Overview
 The :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` / :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 reference design (also known as Single MxFE) is a processor based
 (e.g. Microblaze) embedded system.
-This reference design works with :adi:`EVAL-AD9986 <EVAL-AD9986>` and
-:adi:`EVAL-AD9988 <EVAL-AD9988>` as well.
+This reference design works with :adi:`EVAL-AD9986` and
+:adi:`EVAL-AD9988` as well.
 The design consists from a receive and a transmit chain.
 
 The receive chain transports the captured samples from ADC to the system
@@ -42,29 +42,29 @@ but must share the same reference clock.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
--  :adi:`EVAL-AD9988 <EVAL-AD9988>`
--  :adi:`EVAL-AD9986 <EVAL-AD9986>`
+- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+- :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+- :adi:`EVAL-AD9988`
+- :adi:`EVAL-AD9986`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD9081`
--  :adi:`AD9082`
--  :adi:`AD9177`
--  :adi:`AD9207`
--  :adi:`AD9209`
--  :adi:`AD9986`
--  :adi:`AD9988`
+- :adi:`AD9081`
+- :adi:`AD9082`
+- :adi:`AD9177`
+- :adi:`AD9207`
+- :adi:`AD9209`
+- :adi:`AD9986`
+- :adi:`AD9988`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
 .. note::
 
-   :adi:`EVAL-AD9988 <EVAL-AD9988>` can be an alternative to
-   :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` and :adi:`EVAL-AD9986 <EVAL-AD9986>`
+   :adi:`EVAL-AD9988` can be an alternative to
+   :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` and :adi:`EVAL-AD9986`
    can be an alternative to :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`.
 
    Both :adi:`AD9081` and :adi:`AD9988` have MxFE Quad, 16-bit, 12 GSPS RF DAC
@@ -135,13 +135,13 @@ Supported carriers
    in your setup, the following reworks are required **on the evaluation
    board**:
 
-   -  To avoid using an external clock source and fully rely on the HMC7044
-      clock chip, rotate the C6D/C4D caps in C5D/C3D position
-      (Please note: In the latest version of the board, this is now the
-      default configuration, so this configuration step **might not
-      be needed anymore**).
-   -  If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M
-      and populate R2M**
+   - To avoid using an external clock source and fully rely on the HMC7044
+     clock chip, rotate the C6D/C4D caps in C5D/C3D position
+     (Please note: In the latest version of the board, this is now the
+     default configuration, so this configuration step **might not
+     be needed anymore**).
+   - If LEDS V1P0_LED and VINT_LED are not on, please **depopulate R22M
+     and populate R2M**
 
    For the carrier,
    :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`,
@@ -185,25 +185,23 @@ Example block design for Single link; M=8; L=4
 
 The Rx links (ADC Path) operate with the following parameters:
 
--  Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
-   Config 0x0A)
--  Sample Rate: 250 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config 0x0A)
+- Sample Rate: 250 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 The Tx links (DAC Path) operate with the following parameters:
 
--  Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
-   0x09)
--  Sample Rate: 250 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
--  REF_CLK: 500MHz (Lane Rate/20)
--  JESD204B Lane Rate: 10Gbps
--  QPLL0 or CPLL
+- Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config 0x09)
+- Sample Rate: 250 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
+- REF_CLK: 500MHz (Lane Rate/20)
+- JESD204B Lane Rate: 10Gbps
+- QPLL0 or CPLL
 
 Example block design for Single link; M=4; L=8
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -216,29 +214,28 @@ Example block design for Single link; M=4; L=8
 The Rx links are set for full bandwidth mode and operate with the
 following parameters:
 
--  Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick
-   Config 0x12)
--  Sample Rate: 1550 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)
--  REF_CLK: 775MHz (Lane Rate/20)
--  JESD204B Lane Rate: 15.5Gbps
--  QPLL0
+- Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x12)
+- Sample Rate: 1550 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)
+- REF_CLK: 775MHz (Lane Rate/20)
+- JESD204B Lane Rate: 15.5Gbps
+- QPLL0
 
 The Tx links are set for full bandwidth mode and operate with the
 following parameters:
 
--  Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config
-   0x11)
--  Sample Rate: 1550 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)
--  REF_CLK: 775MHz (Lane Rate/20)
--  JESD204B Lane Rate: 15.5Gbps
--  QPLL0
+- Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x11)
+- Sample Rate: 1550 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)
+- REF_CLK: 775MHz (Lane Rate/20)
+- JESD204B Lane Rate: 15.5Gbps
+- QPLL0
 
 Example block design for Single link; M=2; L=8; JESD204C
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. note::
 
    In 2019_R2 release, the AMD JESD Physical layer IP Core is used,
@@ -271,25 +268,23 @@ Example block design for Single link; M=2; L=8; JESD204C
 
 The Rx link is operating with the following parameters:
 
--  Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config
-   0x13)
--  Sample Rate: 4000 MSPS
--  Dual link: No
--  RX_DEVICE_CLK: 250 MHz (Lane Rate/66)
--  REF_CLK: 500 MHz (Lane Rate/33)
--  JESD204C Lane Rate: 16.5Gbps
--  QPLL1
+- Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config 0x13)
+- Sample Rate: 4000 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 250 MHz (Lane Rate/66)
+- REF_CLK: 500 MHz (Lane Rate/33)
+- JESD204C Lane Rate: 16.5Gbps
+- QPLL1
 
 The Tx link is operating with the following parameters:
 
--  Tx Framer parameters: L=8, M=2, F=1, S=4, NP=8, N=8 (Quick Config
-   0x13)
--  Sample Rate: 8000 MSPS
--  Dual link: No
--  TX_DEVICE_CLK: 250 MHz (Lane Rate/66)
--  REF_CLK: 500 MHz (Lane Rate/33)
--  JESD204C Lane Rate: 16.5Gbps
--  QPLL1
+- Tx Framer parameters: L=8, M=2, F=1, S=4, NP=8, N=8 (Quick Config 0x13)
+- Sample Rate: 8000 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 250 MHz (Lane Rate/66)
+- REF_CLK: 500 MHz (Lane Rate/33)
+- JESD204C Lane Rate: 16.5Gbps
+- QPLL1
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -312,35 +307,35 @@ for each project.
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
-      Layer
-   -  8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
-      Layer
-
--  RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
--  TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
--  REF_CLK_RATE: the rate of the reference clock
--  DEVICE_CLK_RATE: the rate of the device clock (Intel only)
--  [RX/TX]_JESD_M: number of converters per link
--  [RX/TX]_JESD_L: number of lanes per link
--  [RX/TX]_JESD_S: number of samples per frame
--  [RX/TX]_JESD_NP: number of bits per sample
--  [RX/TX]_NUM_LINKS: number of links
--  [RX/TX]_TPL_WIDTH
--  TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1
--  SHARED_DEVCLK
--  TDD_CHANNEL_CNT
--  TDD_SYNC_WIDTH
--  TDD_SYNC_INT
--  TDD_SYNC_EXT
--  TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added
--  [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
-   kilosamples per converter (M)
--  [ADC/DAC]_DO_MEM_TYPE
--  Check out this guide on more details regarding these parameters:
-   :dokuwiki:`resources/fpga/docs/axi_tdd`
+  - 64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
+    Layer
+  - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+    Layer
+- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+- REF_CLK_RATE: the rate of the reference clock
+- DEVICE_CLK_RATE: the rate of the device clock (Intel only)
+- [RX/TX]_JESD_M: number of converters per link
+- [RX/TX]_JESD_L: number of lanes per link
+- [RX/TX]_JESD_S: number of samples per frame
+- [RX/TX]_JESD_NP: number of bits per sample
+- [RX/TX]_NUM_LINKS: number of links
+- [RX/TX]_TPL_WIDTH
+- TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization
+  through TDD. Must be set to 1 when SHARED_DEVCLK=1
+- SHARED_DEVCLK
+- TDD_CHANNEL_CNT
+- TDD_SYNC_WIDTH
+- TDD_SYNC_INT
+- TDD_SYNC_EXT
+- TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal
+  is added
+- [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+  kilosamples per converter (M)
+- [ADC/DAC]_DO_MEM_TYPE
+- Check out this guide on more details regarding these parameters: :ref:`axi_tdd`
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -370,10 +365,10 @@ Limitations
 
    For the parameter selection, the following restrictions apply:
 
-   -  NP = 8, 12, 16
-   -  F = 1, 2, 3, 4, 6, 8
-   -  :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
-   -  :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
+   - NP = 8, 12, 16
+   - F = 1, 2, 3, 4, 6, 8
+   - :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
+   - :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -565,10 +560,10 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
 
    For the parameter selection, the following restrictions apply:
 
-   -  NP = 8, 12, 16
-   -  F = 1, 2, 3, 4, 6, 8
-   -  :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
-   -  :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
+   - NP = 8, 12, 16
+   - F = 1, 2, 3, 4, 6, 8
+   - :ref:`JESD204B/C Link Rx peripheral > restrictions <axi_jesd204_rx restrictions>`
+   - :ref:`JESD204B/C Link Tx peripheral > restrictions <axi_jesd204_tx restrictions>`
 
    ``NP`` notation is equivalent with ``N'``
 
@@ -681,7 +676,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
    | TX_KS_PER_CHANNEL |     64 |     64 |     64 |          --- |          --- |
    +-------------------+--------+--------+--------+--------------+--------------+
 
-   .. warning::
+   .. admonition:: Legend
+      :class: note
 
       ``*`` --- for this carrier only the 8B10B mode is supported
 
@@ -756,9 +752,9 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
--  Here you can find all the quick start guides on wiki documentation
-   :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+- :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
+- Here you can find all the quick start guides on wiki documentation
+  :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -784,20 +780,20 @@ Here you can find the quick start guides available for these evaluation boards:
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD9081`
-   -  :adi:`AD9082`
-   -  :adi:`AD9988`
-   -  :adi:`AD9986`
--  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
--  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
+  - :adi:`AD9081`
+  - :adi:`AD9082`
+  - :adi:`AD9988`
+  - :adi:`AD9986`
+- `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
+- `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
--  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
+- :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
+- :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -843,17 +839,17 @@ HDL related
      - :git-hdl:`library/jesd204/ad_ip_jesd204_tpl_dac`
      - :ref:`here <ad_ip_jesd204_tpl_dac>`
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
--  Python support:
+- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- Python support:
 
-   -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+  - `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
+  - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
 
 .. include:: ../common/more_information.rst
 

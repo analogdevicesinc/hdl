@@ -6,24 +6,24 @@ AD7124-ASDZ HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD7124-4` and :adi:`AD7124-8` provides a 
-4/8-Channel, Low Noise, Low Power, 24-Bit, Sigma-Delta ADC with PGA and 
+The HDL reference design for the :adi:`AD7124-4` and :adi:`AD7124-8` provides a
+4/8-Channel, Low Noise, Low Power, 24-Bit, Sigma-Delta ADC with PGA and
 Reference.
 
-The AD7124-4/8 offers output data rates from 1.17 SPS up to 19,200 SPS. 
-The AD7124-4/8 can achieve simultaneous 50 Hz and 60 Hz rejection when operating 
-at an output data rate of 25 SPS (single cycle settling), with rejection in 
+The AD7124-4/8 offers output data rates from 1.17 SPS up to 19,200 SPS.
+The AD7124-4/8 can achieve simultaneous 50 Hz and 60 Hz rejection when operating
+at an output data rate of 25 SPS (single cycle settling), with rejection in
 excess of 80 dB achieved at lower output data rates.
 
 This project has a SPI instance to control and acquire data from the AD7124-4/8
-24-bit precision ADC. This instance provides support for capturing continuous 
+24-bit precision ADC. This instance provides support for capturing continuous
 samples at the maximum sample rate.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7124-4 <AD7124-4>`
--  :adi:`EVAL-AD7124-8 <AD7124-8>`
+-  :adi:`EVAL-AD7124-4`
+-  :adi:`EVAL-AD7124-8`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -121,7 +121,6 @@ the HDL repository, and then build the project as follows:
 **Linux/Cygwin/WSL**
 
 .. code-block::
-   :linenos:
 
    user@analog:~$ cd hdl/projects/ad7124_asdz/de10nano
    user@analog:~/hdl/projects/ad7124_asdz/de10nano make
