@@ -102,10 +102,10 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture`).
+added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
 
 =========================  ===========
-Instance                   Address
+Instance                   Zynq
 =========================  ===========
 axi_ad7768_adc             0x43C0_0000
 ad7768_dma                 0x7C40_0000

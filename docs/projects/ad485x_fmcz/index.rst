@@ -133,16 +133,16 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture`).
+added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== ===============
-Instance             Zynq
-==================== ===============
-axi_ad485x           0x43c00000
-axi_pwm_gen          0x43d00000
-ad485x_dma           0x43e00000
-adc_clkgen           0x44000000
-==================== ===============
+============== ===========
+Instance       Zynq
+============== ===========
+axi_ad485x     0x43C0_0000
+axi_pwm_gen    0x43D0_0000
+ad485x_dma     0x43E0_0000
+adc_clkgen     0x4400_0000
+============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

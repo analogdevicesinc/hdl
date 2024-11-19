@@ -201,7 +201,7 @@ CPU/Memory interconnects addresses
    KEEP THIS PARAGRAPH
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ..
    If there are any PL SPI connections, they must be added in this table too

@@ -98,16 +98,24 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture`).
+added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
 
-========================  ===========
-Instance                  Address
-========================  ===========
+========================  ===============
+Instance                  Zynq/DE10-Nano*
+========================  ===============
 spi_cn0561_axi_regmap     0x44A0_0000
 axi_cn0561_dma            0x44A3_0000
 odr_generator             0x44B0_0000
 axi_cn0561_clkgen         0x44B1_0000
-========================  ===========
+axi_dmac_0*               0x0002_0000
+axi_spi_engine_0*         0x0003_0000
+odr_generator*            0x0004_0000
+========================  ===============
+
+.. admonition:: Legend
+   :class: note
+
+   ``*`` instantiated only for DE10-Nano
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

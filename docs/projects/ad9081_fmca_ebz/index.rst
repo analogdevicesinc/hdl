@@ -379,7 +379,7 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
 some IPs are instatiated and some are not.
@@ -401,6 +401,25 @@ axi_mxfe_tx_dma      $INTF_CFG!="RX"                   0x7C43_0000     0x9C43_00
 mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_0000 0xBC44_00000
 axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
 ==================== ================================= =============== =========== ============
+
+For the Intel carriers, only a part of the CPU interrupts are specified,
+as the rest depend on the values of $TX_NUM_OF_LANES and $TRANSCEIVER_TYPE
+(see :git-hdl:`projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_qsys.tcl`
+for more details).
+
+===============================  ===========
+Instance                         Intel
+===============================  ===========
+mxfe_rx_jesd204.link_reconfig    0x000C_0000
+mxfe_rx_jesd204.link_management  0x000C_4000
+mxfe_tx_jesd204.link_reconfig    0x000C_8000
+mxfe_tx_jesd204.link_management  0x000C_C000
+mxfe_rx_tpl.s_axi                0x000D_2000
+mxfe_tx_tpl.s_axi                0x000D_4000
+mxfe_rx_dma.s_axi                0x000D_8000
+mxfe_tx_dma.s_axi                0x000D_C000
+mxfe_gpio.s1                     0x000E_0000
+===============================  ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

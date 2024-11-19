@@ -120,20 +120,20 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== =========== =========== ===========
-Instance             ZynqMP      Versal      Microblaze
-==================== =========== =========== ===========
-axi_adrv9026_tx_jesd 0x84A90000  0xA4A90000  0x44A90000
-axi_adrv9026_rx_jesd 0x84AA0000  0xA4AA0000  0x44AA0000
-axi_adrv9026_tx_dma  0x9c420000  0xBC420000  0x7c420000
-axi_adrv9026_rx_dma  0x9c400000  0xBC400000  0x7c400000
-tx_adrv9026_tpl_core 0x84A04000  0xA4A04000  0x44A04000
-rx_adrv9026_tpl_core 0x84A00000  0xA4A00000  0x44A00000
-axi_adrv9026_tx_xcvr 0x84A80000  0xA4A80000  0x44A80000
-axi_adrv9026_rx_xcvr 0x84A60000  0xA4A60000  0x44A60000
-==================== =========== =========== ===========
+==================== ==================== =============== =========== ===========
+Instance             Depends on parameter Zynq/Microblaze ZynqMP      Versal
+==================== ==================== =============== =========== ===========
+rx_adrv9026_tpl_core                      0x44A0_0000     0x84A0_0000 0xA4A0_0000
+tx_adrv9026_tpl_core                      0x44A0_4000     0x84A0_4000 0xA4A0_4000
+axi_adrv9026_rx_xcvr $ADI_PHY_SEL==1      0x44A6_0000     0x84A6_0000 0xA4A6_0000
+axi_adrv9026_tx_xcvr $ADI_PHY_SEL==1      0x44A8_0000     0x84A8_0000 0xA4A8_0000
+axi_adrv9026_tx_jesd                      0x44A9_0000     0x84A9_0000 0xA4A9_0000
+axi_adrv9026_rx_jesd                      0x44AA_0000     0x84AA_0000 0xA4AA_0000
+axi_adrv9026_rx_dma                       0x7C40_0000     0x9C40_0000 0xBC40_0000
+axi_adrv9026_tx_dma                       0x7C42_0000     0x9C42_0000 0xBC42_0000
+==================== ==================== =============== =========== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
