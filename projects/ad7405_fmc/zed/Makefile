@@ -13,6 +13,7 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
 M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/util_cdc/sync_data.v
 
 LIB_DEPS += axi_ad7405
 LIB_DEPS += axi_clkgen
@@ -25,5 +26,6 @@ LIB_DEPS += sysid_rom
 #LIB_DEPS += util_dec256sinc24b
 LIB_DEPS += util_i2c_mixer
 LIB_DEPS += util_pack/util_cpack2
+#LIB_DEPS += util_cdc
 
 include ../../scripts/project-xilinx.mk

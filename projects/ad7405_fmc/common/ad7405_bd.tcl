@@ -6,8 +6,6 @@
 create_bd_port -dir O adc_clk
 create_bd_port -dir I adc_data
 
-create_bd_port -dir I -from 15 -to 0 filter_decimation_ratio
-
 # ADC's DMA
 
 ad_ip_instance axi_dmac axi_ad7405_dma
@@ -52,7 +50,6 @@ ad_connect axi_ad7405/clk_in axi_adc_clkgen/clk_0
 ad_connect axi_ad7405_dma/fifo_wr_clk axi_adc_clkgen/clk_0
 
 ad_connect adc_data axi_ad7405/adc_data_in
-ad_connect filter_decimation_ratio axi_ad7405/adc_dec_rate
 
 # interconnect
 
