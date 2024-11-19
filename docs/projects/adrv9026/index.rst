@@ -28,7 +28,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`ADRV9026/ADRV9029 <EVAL-ADRV9026>`
-     - A10SoC`_
+     - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - FMCA
    * -
      - :xilinx:`ZCU102`
@@ -542,5 +542,3 @@ Software related
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html

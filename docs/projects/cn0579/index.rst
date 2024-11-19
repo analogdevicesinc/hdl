@@ -43,7 +43,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`CN0579`
-     - :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>`
+     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
      - Arduino headers
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
@@ -87,7 +87,7 @@ axi_iic_dac*    0x44A4_0000 ---
 .. admonition:: Legend
    :class: note
 
-    ``*`` instantiated only for Cora Z7-07S
+    ``*`` instantiated only for Cora Z7S
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,7 +115,7 @@ I2C connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7-07S
+   -  ``*`` only for Cora Z7S
    -  ``**`` only for DE10-Nano
 
 SPI connections
@@ -141,7 +141,7 @@ SPI connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7-07S
+   -  ``*`` only for Cora Z7S
    -  ``**`` only for DE10-Nano
 
 GPIOs
@@ -183,7 +183,7 @@ cn0579_dma**  5   ---        ---         45              77
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7-07S
+   -  ``*`` only for Cora Z7S
    -  ``**`` only for DE10-Nano
 
 Building the HDL project
