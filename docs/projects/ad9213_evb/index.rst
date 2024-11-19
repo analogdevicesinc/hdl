@@ -83,17 +83,17 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 Check-out the table below to find out the conditions.
 
 ====================  ===============
 Instance              Zynq/Microblaze
 ====================  ===============
-axi_ad9213_xcvr       0x44A6_0000    
-rx_ad9213_tpl_core    0x44A1_0000    
-axi_ad9213_jesd       0x44A9_0000    
-axi_ad9213_dma        0x7C42_0000    
+axi_ad9213_xcvr       0x44A6_0000
+rx_ad9213_tpl_core    0x44A1_0000
+axi_ad9213_jesd       0x44A9_0000
+axi_ad9213_dma        0x7C42_0000
 ====================  ===============
 
 SPI connections

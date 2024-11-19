@@ -66,24 +66,24 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== =======================
-Instance             Address Zynq/Microblaze
-==================== =======================
-  axi_ltc2387_0       0X44A0_0000
-  axi_ltc2387_1       0X44A1_0000
-  axi_ltc2387_2       0X44A2_0000
-  axi_ltc2387_3       0X44A3_0000
-  axi_ltc2387_dma     0X44A4_0000
-  axi_clkgen          0X44B0_0000
-  axi_pwm_gen         0X44B1_0000
-  max_spi             0X44B2_0000
-  axi_ad3552r_0       0X44D0_0000
-  axi_dac_0_dma       0X44D3_0000
-  axi_ad3552r_1       0X44E0_0000
-  axi_dac_1_dma       0X44E3_0000
-==================== =======================
+================ ===============
+Instance         Zynq/Microblaze
+================ ===============
+axi_ltc2387_0    0X44A0_0000
+axi_ltc2387_1    0X44A1_0000
+axi_ltc2387_2    0X44A2_0000
+axi_ltc2387_3    0X44A3_0000
+axi_ltc2387_dma  0X44A4_0000
+axi_clkgen       0X44B0_0000
+axi_pwm_gen      0X44B1_0000
+max_spi          0X44B2_0000
+axi_ad3552r_0    0X44D0_0000
+axi_dac_0_dma    0X44D3_0000
+axi_ad3552r_1    0X44E0_0000
+axi_dac_1_dma    0X44E3_0000
+================ ===============
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

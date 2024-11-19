@@ -92,10 +92,10 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ========================  ===========
-Instance                  Address
+Instance                  DE10-Nano
 ========================  ===========
 axi_dmac_0                0x0002_0000
 axi_spi_engine_0          0x0003_0000

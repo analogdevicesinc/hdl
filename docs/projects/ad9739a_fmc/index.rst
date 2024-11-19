@@ -98,11 +98,14 @@ Two clock paths are available to drive the clock input on the
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
+
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
-axi_ad9739a          0x7420_0000    
-axi_ad9739a_dma      0x7c42_0000    
+axi_ad9739a          0x7420_0000
+axi_ad9739a_dma      0x7C42_0000
 ==================== ===============
 
 SPI connections

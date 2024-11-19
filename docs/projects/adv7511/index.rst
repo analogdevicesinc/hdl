@@ -67,19 +67,19 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture`).
+added to the base address from HDL(see more at :ref:`architecture cpu-intercon-addr`).
 
 ========================  ===========
-Instance                  Address
+Instance                  Zynq
 ========================  ===========
 axi_iic_main              0x4160_0000
 axi_sysid_0               0x4500_0000
 axi_hdmi_clkgen           0x7900_0000
 axi_hdmi_dma              0x4300_0000
-axi_hdmi_core             0x70e0_0000
-axi_spdif_tx_core         0x75c0_0000
-axi_i2s_adi *             0x7760_0000
-axi_iic_fmc *             0x4162_0000
+axi_hdmi_core             0x70E0_0000
+axi_spdif_tx_core         0x75C0_0000
+axi_i2s_adi*              0x7760_0000
+axi_iic_fmc*              0x4162_0000
 ========================  ===========
 
 .. admonition:: Legend

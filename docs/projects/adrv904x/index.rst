@@ -120,19 +120,19 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ==================== =========== ===========
-Instance             ZynqMP      Versal     
+Instance             ZynqMP      Versal
 ==================== =========== ===========
-axi_adrv904x_tx_jesd 0x84A90000  0xA4A90000
-axi_adrv904x_rx_jesd 0x84AA0000  0xA4AA0000
-axi_adrv904x_tx_dma  0x9C420000  0xBC420000
-axi_adrv904x_rx_dma  0x9C400000  0xBC400000
-tx_adrv904x_tpl_core 0x84A04000  0xA4A04000
-rx_adrv904x_tpl_core 0x84A00000  0xA4A00000
-axi_adrv904x_tx_xcvr 0x84A80000  0xA4A80000
-axi_adrv904x_rx_xcvr 0x84A60000  0xA4A60000
+axi_adrv904x_tx_jesd 0x84A9_0000 0xA4A9_0000
+axi_adrv904x_rx_jesd 0x84AA_0000 0xA4AA_0000
+axi_adrv904x_tx_dma  0x9C42_0000 0xBC42_0000
+axi_adrv904x_rx_dma  0x9C40_0000 0xBC40_0000
+tx_adrv904x_tpl_core 0x84A0_4000 0xA4A0_4000
+rx_adrv904x_tpl_core 0x84A0_0000 0xA4A0_0000
+axi_adrv904x_tx_xcvr 0x84A8_0000 0xA4A8_0000
+axi_adrv904x_rx_xcvr 0x84A6_0000 0xA4A6_0000
 ==================== =========== ===========
 
 SPI connections
