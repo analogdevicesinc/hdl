@@ -2,7 +2,7 @@
 
 SOURCE="$0.v"
 SOURCE+=" axi_read_slave.v axi_slave.v"
-SOURCE+=" ../axi_dmac_transfer.v ../request_arb.v ../request_generator.v ../splitter.v"
+SOURCE+=" ../axi_dmac_transfer.v ../request_arb.v ../request_generator.v ../splitter.v ../axi_dmac_ext_sync.v"
 SOURCE+=" ../dmac_2d_transfer.v"
 SOURCE+=" ../axi_dmac_resize_src.v ../axi_dmac_resize_dest.v"
 SOURCE+=" ../axi_dmac_burst_memory.v"
