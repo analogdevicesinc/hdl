@@ -37,7 +37,8 @@
 
 module axi_ad408x #(
   parameter   ID = 0,
-  parameter   FPGA_TECHNOLOGY = 0
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
 
   // ADC interface
@@ -270,6 +271,7 @@ module axi_ad408x #(
 
   ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .IODELAY_CTRL(1)
   ) ad408x_interface (
     .dclk_in_n(dclk_in_n),
