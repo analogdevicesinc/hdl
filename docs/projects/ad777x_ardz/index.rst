@@ -6,23 +6,21 @@ AD777X-ARDZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-AD7770-ARDZ / EVAL-AD7771-ARDZ / EVAL-AD7779-ARDZ evaluation kit 
-features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit, 
+The EVAL-AD7770-ARDZ / EVAL-AD7771-ARDZ / EVAL-AD7779-ARDZ evaluation kit
+features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).
 
-The AD777x is an 8-channel, simultaneous sampling analog-to-digital converter 
-(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777x provides an ultralow input 
-current to allow direct sensor connection. Each input channel has a 
+The AD777x is an 8-channel, simultaneous sampling analog-to-digital converter
+(ADC). Eight full Σ-Δ ADCs are on-chip. The AD777x provides an ultralow input
+current to allow direct sensor connection. Each input channel has a
 programmable gain stage allowing gains of 1, 2, 4, and 8 to map lower amplitude
-sensor outputs into the full-scale ADC input range, maximizing the dynamic 
+sensor outputs into the full-scale ADC input range, maximizing the dynamic
 range of the signal chain.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  EVAL-AD7770-ARDZ
--  EVAL-AD7771-ARDZ
--  EVAL-AD7779-ARDZ
+-  :adi:`EVAL-AD7770/1/9-ARDZ <EVAL-AD7770-AD7779>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -51,13 +49,13 @@ Supported carriers
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - PMOD-JA, PMOD-JB, PMOD-JC
    * - EVAL-AD7770-ARDZ
-     - :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield connector
    * - EVAL-AD7771-ARDZ
-     - :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield connector
    * - EVAL-AD7779-ARDZ
-     - :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield connector
 
 Block design
@@ -107,7 +105,7 @@ SPI connections
      - AD777x
      - 0
    * - PL**
-     - sys_spi 
+     - sys_spi
      - AD777x
      - 0
 
@@ -115,7 +113,7 @@ SPI connections
    :class: note
 
    -  ``*``  only for ZedBoard
-   -  ``**`` only for De10-Nano
+   -  ``**`` only for DE10-Nano
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,7 +136,7 @@ GPIOs
      - OUT
      - 39
      - 93
-     - 7 
+     - 7
    * - GPIO2
      - INOUT
      - 38
@@ -154,22 +152,22 @@ GPIOs
      - 36
      - 90
      - 4
-   * - SDP_MCLK 
+   * - SDP_MCLK
      - OUT
      - 35
      - 89
      - 3
-   * - SDP_CONVST  
+   * - SDP_CONVST
      - OUT
      - 34
      - 88
      - 2
-   * - START_N  
+   * - START_N
      - OUT
      - 33
      - 87
      - 1
-   * - ALERT  
+   * - ALERT
      - IN
      - 32
      - 86
@@ -189,7 +187,7 @@ ad777x_dma**     5   -          -           45              77
    :class: note
 
    -  ``*``  only for ZedBoard
-   -  ``**`` only for De10-Nano
+   -  ``**`` only for DE10-Nano
 
 Building the HDL project
 -------------------------------------------------------------------------------

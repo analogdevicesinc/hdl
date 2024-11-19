@@ -35,17 +35,17 @@ free ADC device.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4134 <EVAL-AD4134>`
+- :adi:`EVAL-AD4134`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD4134`
+- :adi:`AD4134`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -192,14 +192,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD4134`
-
--  `UG-2016, EVAL-AD4134FMCZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4134-ug-2016.pdf>`__
+- Product datasheet: :adi:`AD4134`
+- `UG-2016, EVAL-AD4134FMCZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad4134-ug-2016.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4134-FMC HDL project source code <projects/ad4134_fmc>`
+- :git-hdl:`AD4134-FMC HDL project source code <projects/ad4134_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -248,22 +247,21 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer`
      - ---
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Linux support:
 
--  :git-linux:`Linux device tree zynq-zed-adv7511-ad4134.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4134.dts>`
--  :git-linux:`Linux driver ad4134.c <drivers/iio/adc/ad4134.c>`
+- :git-linux:`Linux device tree zynq-zed-adv7511-ad4134.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4134.dts>`
+- :git-linux:`Linux driver ad4134.c <drivers/iio/adc/ad4134.c>`
 
 No-OS support:
 
--  :git-no-os:`AD4134_FMC No-OS project source code <projects/ad413x>`
--  :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
--  :dokuwiki:`AD4134/AD7134 No-OS Software documentation[Wiki] <resources/tools-software/uc-drivers/ad713x>`
--  :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`AD4134_FMC No-OS project source code <projects/ad413x>`
+- :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
+- :dokuwiki:`AD4134/AD7134 No-OS Software documentation[Wiki] <resources/tools-software/uc-drivers/ad713x>`
 
 .. include:: ../common/more_information.rst
 

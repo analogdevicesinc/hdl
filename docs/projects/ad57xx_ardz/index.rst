@@ -57,6 +57,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The data path and clock domains are depicted in the below diagrams:
 
 

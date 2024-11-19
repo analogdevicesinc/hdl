@@ -28,7 +28,7 @@ negative high voltage power supplies for the output amplifiers. A VLOGIC supply
 pin is provided to set the logic levels for the digital interface pins.
 The :adi:`AD5766`/ :adi:`AD5767` utilize a versatile 4-wire serial interface
 that operates at clock rates of up to 50 MHz for write mode and up to 10MHz for
-readback and daisy-chain mode, and is compatible with SPIR, QSPI., MICROWIRE. 
+readback and daisy-chain mode, and is compatible with SPIR, QSPI., MICROWIRE.
 and DSP interface standards.
 
 The :adi:`AD5766`/ :adi:`AD5767` are available in a 4mm x 4mm WLCSP package
@@ -43,19 +43,19 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD5766 <EVAL-AD5766>`
+- :adi:`EVAL-AD5766`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD5766`
--  :adi:`AD5767`
+- :adi:`AD5766`
+- :adi:`AD5767`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
--  :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :adi:`SDP-I-FMC <EVAL-SDP-I-FMC>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -206,16 +206,16 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD5766`
-   -  :adi:`AD5767`
--  `UG-1070, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD5766SD2Z-5767SD2Z-UG-1070.pdf>`__
+  - :adi:`AD5766`
+  - :adi:`AD5767`
+- `UG-1070, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD5766SD2Z-5767SD2Z-UG-1070.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ad5766_sdz HDL project source code <projects/ad5766_sdz>`
+- :git-hdl:`ad5766_sdz HDL project source code <projects/ad5766_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -235,7 +235,7 @@ HDL related
      - :ref:`here <axi_dmac>`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
-     - :ref:`here <axi_hdmi_tx>`      
+     - :ref:`here <axi_hdmi_tx>`
    * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi <library/axi_i2s_adi>`
      - ---
@@ -259,16 +259,16 @@ HDL related
      - :ref:`here <axi_sysid>`
    * - UTIL_I2C-MIXER
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
-     - ---  
+     - ---
 
 -  :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD5766 - No-OS driver source code <projects/ad5766-sdz>`
-- :dokuwiki:`AD5766 - No-OS Driver [Wiki] <resources/tools-software/uc-drivers/ad5766>`
-- :dokuwiki:`How to build No-OS <resources/no-os/build>`
+- :git-no-os:`AD5766 no-OS project <projects/ad5766-sdz>`
+- :git-no-os:`AD5766 no-OS driver source code ad5766.c <drivers/dac/ad5766/ad5766.c>`
+- :dokuwiki:`[Wiki] AD5766 no-OS driver doc. <resources/tools-software/uc-drivers/ad5766>`
 
 .. include:: ../common/more_information.rst
 

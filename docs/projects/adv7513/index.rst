@@ -27,12 +27,12 @@ with exposed pad and is specified over the −25°C to +85°C temperature range.
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADV7513`
+- :adi:`ADV7513`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  Internal component of :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
+- Internal component of :intel:`De10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
 
 Block design
 -------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Block design
 The reference design uses HDL-related HDMI cores in order to interface the :adi:`ADV7513`
 IC into the De10-Nano evaluation kit.
 
-ADV7513 Block Diagram
+Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: adv7513_bd.svg
@@ -52,7 +52,7 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ========================  ===========
 Instance                  DE10-Nano
@@ -97,14 +97,14 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-=========================== === ===== 
-Instance name               HDL Linux        
 =========================== === =====
-sys_gpio_bd/irq             0   40           
-sys_spi/irq                 1   41          
-sys_gpio_in/irq             2   42          
-ltc2308_spi/irq             3   43          
-video_dmac/interrupt_sender 7   47  
+Instance name               HDL Linux
+=========================== === =====
+sys_gpio_bd/irq             0   40
+sys_spi/irq                 1   41
+sys_gpio_in/irq             2   42
+ltc2308_spi/irq             3   43
+video_dmac/interrupt_sender 7   47
 =========================== === =====
 
 Building the HDL project
@@ -116,18 +116,16 @@ ADI distributes the bit/elf files of these projects as part of the
 If you want to build the sources, ADI makes them available on the
 :git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the HDL repository, and then build the project as follows:.
+the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/adv7513/de10nano
-   user@analog:~/hdl/projects/adv7513/de10nano$ make
+   $ cd hdl/projects/adv7513/de10nano
+   $ make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl` 
-user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -135,12 +133,12 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`ADV7513`
+- Product datasheet: :adi:`ADV7513`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`ADV7513 HDL project source code <projects/adv7513>`
+- :git-hdl:`ADV7513 HDL project source code <projects/adv7513>`
 
 .. list-table::
    :widths: 30 35 35
@@ -165,11 +163,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-linux:`ADV7513 driver source code <drivers/gpu/drm/bridge/adv7511>`
-
--  :git-linux:`ADV7513 - DE10-Nano Base dtsi source code (arm32) <arch/arm/boot/dts/socfpga_cyclone5_de10nano_hps.dtsi>`
-  
--  :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :git-linux:`ADV7513 driver source code <drivers/gpu/drm/bridge/adv7511>`
+- :git-linux:`ADV7513 - DE10-Nano Base dtsi source code (arm32) <arch/arm/boot/dts/socfpga_cyclone5_de10nano_hps.dtsi>`
+- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
 
 .. include:: ../common/more_information.rst
 

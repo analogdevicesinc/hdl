@@ -9,7 +9,7 @@ Overview
 The :adi:`AD4630-24` is a two-channel, simultaneous sampling, Easy Drive, 2 MSPS
 successive approximation register (SAR) analog-to-digital converter (ADC). The
 :adi:`AD4030-24` is the single channel version. With a guaranteed maximum ±0.9
-ppm INL and no missing codes at 24-bits, the :adi:`AD4630-24` and 
+ppm INL and no missing codes at 24-bits, the :adi:`AD4630-24` and
 :adi:`AD4030-24` achieve unparalleled precision from −40°C to +125°C.
 The :adi:`AD4030-16` is a 16-bit dual channel version.
 
@@ -37,10 +37,10 @@ integrates all critical power supply and reference bypass capacitors, reducing
 the footprint and system component count, and lessening sensitivity to board
 layout.
 
-The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain 
-solution that reduces the development cycle of a precision measurement system 
-by transferring the signal chain design challenge of component selection, 
-optimization, and layout from the designer to the device. With a guaranteed 
+The ADAQ4224 is a μModule® precision data acquisition (DAQ) signal chain
+solution that reduces the development cycle of a precision measurement system
+by transferring the signal chain design challenge of component selection,
+optimization, and layout from the designer to the device. With a guaranteed
 maximum ±TBD ppm INL and no missing codes at 24 bits, the ADAQ4224 achieves
 unparalleled precision from −40°C to +85°C.
 
@@ -62,28 +62,28 @@ Applications:
 * Seismology
 * Semiconductor manufacturing
 * Scientific instrumentation
-  
+
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4030-24FMCZ <EVAL-AD4030-24FMCZ>`
--  :adi:`EVAL-AD4630-16FMCZ <EVAL-AD4630-16FMCZ>`
--  :adi:`EVAL-AD4630-24FMCZ <EVAL-AD4630-24FMCZ>`
--  EVAL-ADAQ4224-FMCZ <EVAL-ADAQ4224>
--  EVAL-ISO-4224-FMCZ <EVAL-ISO-ADAQ4224>
+- :adi:`EVAL-AD4030-24FMCZ`
+- :adi:`EVAL-AD4630-16FMCZ`
+- :adi:`EVAL-AD4630-24FMCZ`
+- :adi:`EVAL-ADAQ4224-FMCZ`
+- :adi:`EV-ISO-4224-FMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD4030-24`
--  :adi:`AD4630-16`
--  :adi:`AD4630-24`
--  ADAQ4224
+- :adi:`AD4030-24`
+- :adi:`AD4630-16`
+- :adi:`AD4630-24`
+- :adi:`ADAQ4224`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 ---------------------------------------------------------------------------------
@@ -169,20 +169,31 @@ Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The CLK_MODE configuration parameter defines clocking mode of the device's
-digital interface: Options: 0 - SPI mode, 1 - Echo-clock or Master clock mode
+digital interface:
+
+* 0 - SPI mode
+* 1 - Echo-clock or Master clock mode
 
 The NUM_OF_SDI configuration parameter defines the number of MOSI lines of the
-SPI interface: Options: 1 - Interleaved mode, 2 - 1 lane per channel,
-4 - 2 lanes per channel, 8 - 4 lanes per channel
+SPI interface:
+
+* 1 - Interleaved mode
+* 2 - 1 lane per channel,
+* 4 - 2 lanes per channel
+* 8 - 4 lanes per channel
 
 The CAPTURE_ZONE configuration parameter defines the capture zone of the next
-sample. There are two capture zones: 1 - from negative edge of the BUSY line
-until the next CNV positive edge -20ns, 2 - from the next consecutive CNV
-positive edge +20ns until the second next consecutive CNV positive edge -20ns
+sample. There are two capture zones:
+
+* 1 - from negative edge of the BUSY line until the next CNV positive edge -20ns
+* 2 - from the next consecutive CNV positive edge +20ns until the second next
+  consecutive CNV positive edge -20ns
 
 The DDR_EN configuration parameter defines the type of data transfer. In echo
 and master clock mode the SDI lines can have Single or Double Data Rates.
-Options: 0 - MISO runs on SDR, 1 - MISO runs on DDR.
+
+* 0 - MISO runs on SDR
+* 1 - MISO runs on DDR.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,7 +214,7 @@ sync_generator*           0x44C0_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated, but only used for ADAQ4224 with isolated power supply 
+   ``*`` instantiated, but only used for ADAQ4224 with isolated power supply
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -222,21 +233,21 @@ I2C connections
      - axi_iic_fmc
      - 0x4162_0000
      - ---
-   * - 
-     - 
-     - 
+   * -
+     -
+     -
      - 0x50
      - eeprom
-   * - 
-     - 
-     - 
+   * -
+     -
+     -
      - 0x5F
      - temperature sensor  *
 
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` Temperature Sensor HW Monitor is present only in ADAQ4224
+   - ``*`` Temperature Sensor HW Monitor is present only in ADAQ4224
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,7 +270,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then offset is 54
+- Zynq-7000: if PS7 is used, then offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -293,8 +304,8 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated, but used for ADAQ4224 only
-   -   ``**`` instantiated, but used for ADAQ4224 with isolated power supply
+   - ``*`` instantiated, but used for ADAQ4224 only
+   - ``**`` instantiated, but used for ADAQ4224 with isolated power supply
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,18 +362,18 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
--  :adi:`AD4030-24`
--  :adi:`AD4630-16`
--  :adi:`AD4630-24`
--  :dokuwiki:`[Wiki] AD4630/AD4030 Evaluation Board User Guide <resources/eval/ad4630-24-eval-board>`
+  - :adi:`AD4030-24`
+  - :adi:`AD4630-16`
+  - :adi:`AD4630-24`
+- :dokuwiki:`[Wiki] AD4630/AD4030 Evaluation Board User Guide <resources/eval/ad4630-24-eval-board>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4630_FMC HDL project source code <projects/ad4630_fmc>`
--  :dokuwiki:`[Wiki] AD4630_FMC HDL project documentation <resources/eval/user-guides/ad463x/hdl>`
+- :git-hdl:`AD4630_FMC HDL project source code <projects/ad4630_fmc>`
+- :dokuwiki:`[Wiki] AD4630_FMC HDL project documentation <resources/eval/user-guides/ad463x/hdl>`
 
 .. list-table::
    :widths: 30 35 35
@@ -414,7 +425,7 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

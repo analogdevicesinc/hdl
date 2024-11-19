@@ -226,7 +226,7 @@ HDL related
      - :ref:`here <axi_dmac>`
    * - AXI_GENERIC_ADC
      - :git-hdl:`library/axi_generic_adc <library/axi_generic_adc>`
-     - ---   
+     - ---
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx <library/axi_hdmi_tx>`
      - :ref:`here <axi_hdmi_tx>`
@@ -265,7 +265,7 @@ HDL related
      - :ref:`here <axi_sysid>`
    * - UTIL_AXIS_RESIZE
      - :git-hdl:`library/util_axis_resize`
-     - ---   
+     - ---
    * - UTIL_I2C-MIXER
      - :git-hdl:`library/util_i2c_mixer <library/util_i2c_mixer>`
      - ---

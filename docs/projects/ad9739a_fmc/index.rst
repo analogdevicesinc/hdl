@@ -62,7 +62,7 @@ AD9739A FMC Card block diagram
    :alt: AD9739A-FMC/ZC706 fmc card block diagram
 
 The DDS consists of a Xilinx DDS IP core and a DDR based data generator. The
-core generates 6 samples at every fDAC/3 clock cycles for each port of 
+core generates 6 samples at every fDAC/3 clock cycles for each port of
 :adi:`AD9739A <AD9739A>`.
 
 The SPI interface allows programming the :adi:`ADF4350 <ADF4350>` and/or
@@ -78,7 +78,7 @@ Two clock paths are available to drive the clock input on the
 
 -  The factory default option connects the :adi:`ADF4350 <ADF4350>` to
    the :adi:`AD9739A <AD9739A>`. The :adi:`ADF4350 <ADF4350>` is able to
-   synthesize a clock over the entire specified range of 
+   synthesize a clock over the entire specified range of
    the :adi:`AD9739A <AD9739A>` (1.6GHz to 2.5GHz)
 
     -  Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>`
@@ -90,7 +90,7 @@ Two clock paths are available to drive the clock input on the
        position. C102 and C99 on the back of the board also need to be removed
        from their default position, and then soldered into the vertical position
        from the large square pad they were previously soldered to and the narrow
-       pads closer to the :adi:`ADCLK914 <ADCLK914>` (U3). Observe the 
+       pads closer to the :adi:`ADCLK914 <ADCLK914>` (U3). Observe the
        orientation of the caps before removing them; they must be soldered with
        their narrow edge against the PCB, and not the wide side as is common
        with most components.

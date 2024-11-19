@@ -28,7 +28,7 @@ digital signal conditioning blocks to allow users to configure an individual
 setup for  each analog input channel in use.
 
 The :adi:`AD7172-2` /:adi:`AD7172-4` /:adi:`AD7173-8` features a maximum output
-data rate of 31.25 kSPS, :adi:`AD7175-2`/ :adi:`AD7175-8` /:adi:`AD7176-2` 
+data rate of 31.25 kSPS, :adi:`AD7175-2`/ :adi:`AD7175-8` /:adi:`AD7176-2`
 features a maximum output data rate of 250 kSPS and :adi:`AD7177-2` features a
 maximum output data rate of 10 kSPS.
 
@@ -44,42 +44,41 @@ capturing continuous samples at the maximum sample rate.
 Supported boards
 ---------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD4111-ARDZ <AD4111>`
--  :adi:`EVAL-AD4112-ARDZ <AD4112>`
--  :adi:`EVAL-AD4114-SDZ <AD4114>`
--  :adi:`EVAL-AD4115-SDZ <AD4115>`
--  :adi:`EVAL-AD4116-ASDZ <AD4116>`
--  :adi:`EVAL-AD7173-8ARDZ <AD7173-8>`
--  :adi:`EVAL-AD7175-8ARDZ <AD7175-8>`
+- :adi:`EVAL-AD4111`
+- :adi:`EVAL-AD4112`
+- :adi:`EVAL-AD4114`
+- :adi:`EVAL-AD4115`
+- :adi:`EVAL-AD4116`
+- :adi:`EVAL-AD7173-8SDZ`
+- :adi:`EVAL-AD7175-8`
 
 Supported devices
 ---------------------------------------------------------------------------------
 
--  :adi:`AD4111`
--  :adi:`AD4112`
--  :adi:`AD4113`
--  :adi:`AD4114`
--  :adi:`AD4115`
--  :adi:`AD4116`
--  :adi:`AD7172-2`
--  :adi:`AD7172-4`
--  :adi:`AD7173-8`
--  :adi:`AD7175-2`
--  :adi:`AD7175-8`
--  :adi:`AD7176-2`
--  :adi:`AD7177-2`
+- :adi:`AD4111`
+- :adi:`AD4112`
+- :adi:`AD4113`
+- :adi:`AD4114`
+- :adi:`AD4115`
+- :adi:`AD4116`
+- :adi:`AD7172-2`
+- :adi:`AD7172-4`
+- :adi:`AD7173-8`
+- :adi:`AD7175-2`
+- :adi:`AD7175-8`
+- :adi:`AD7176-2`
+- :adi:`AD7177-2`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
 
 Block design
 -------------------------------------------------------------------------------
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 The data path and clock domains are depicted in the below diagram:
 
@@ -141,7 +140,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  DE10-Nano: the offset is 32
+- DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -176,8 +175,8 @@ Below are the Programmable Logic interrupts used in this project.
 ================ === =============== ================
 Instance name    HDL Linux DE10-Nano Actual DE10-Nano
 ================ === =============== ================
-axi_spi_engine_0 5   45               77
-axi_dmac_0       4   44               76
+axi_spi_engine_0 5   45              77
+axi_dmac_0       4   44              76
 ================ === =============== ================
 
 Building the HDL project
@@ -209,13 +208,13 @@ Hardware related
 
 - Product datasheets:
 
-  - :adi:`AD4170-4`
   - :adi:`AD4111`
   - :adi:`AD4112`
   - :adi:`AD4113`
   - :adi:`AD4114`
   - :adi:`AD4115`
   - :adi:`AD4116`
+  - :adi:`AD4170-4`
   - :adi:`AD7172-2`
   - :adi:`AD7172-4`
   - :adi:`AD7173-8`
@@ -227,7 +226,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD411x_AD717x HDL project source code <projects/ad411x_ad717x>`
+- :git-hdl:`AD411x_AD717x HDL project source code <projects/ad411x_ad717x>`
 
 .. list-table::
    :widths: 30 35 35
@@ -244,7 +243,7 @@ HDL related
      - :ref:`here <axi_hdmi_tx>`
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`  
+     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_pwm_gen>`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid <library/axi_sysid>`
      - :ref:`here <axi_sysid>`

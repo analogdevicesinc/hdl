@@ -72,7 +72,7 @@ one-bit-adc-dac, in software.
 
     - Shorting pins 1 and 2 → PD_N = 1, device is not powered down
     - Shorting pins 2 and 3 → PD_N = 0, device is powered down
-  
+
   - P2 - configures TESTPAT
 
     - Shorting pins 1 and 2 → TESTPAT = 1, pattern testing is active
