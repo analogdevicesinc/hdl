@@ -374,11 +374,11 @@ module axi_ad35xxr_if_tb;
   // data is circullary shifted at every sampling edge 
 
   assign readback_data_shift = (sdr_ddr_n | address_write[7]) ? 4'h1 : 4'h0;
-  assign sdio_i = (sdio_t[1] === 1'b1) ? transfer_reg[31:30] : 2'h0;
+  assign sdio_i = (sdio_t[1] === 1'b1) ? transfer_reg[31:28] : 2'h0;//transfer_reg[31:30] : 2'h0;
 
   always @(posedge dac_clk) begin 
     if (shift_count == readback_data_shift) begin 
-      transfer_reg <= (~(|multi_io_mode)) ? {transfer_reg[30:0],transfer_reg[31]} : {transfer_reg[29:0],transfer_reg[31:30]};
+      transfer_reg <= (~(|multi_io_mode)) ? {transfer_reg[30:0],transfer_reg[31]} : {transfer_reg[27:0],transfer_reg[31:28]};//{transfer_reg[29:0],transfer_reg[31:30]};
     end else if (sdio_t[1] === 1'b1) begin 
       transfer_reg <= transfer_reg;
     end

@@ -73,8 +73,11 @@ module axi_ad35xxr_if (
   wire            dac_data_valid_synced;
   wire            external_sync_s;
 
-  reg    [55:0]   transfer_reg        = 56'h0;
-  reg    [15:0]   counter             = 16'h0;
+  reg    [55:0]   transfer_reg_single = 0;
+  reg    [55:0]   transfer_reg_dual   = 0;
+  reg    [55:0]   transfer_reg_quad   = 0;
+
+  reg    [15:0]   counter             = 0;
   reg             wa_cp               = 1'b0;
   reg    [ 3:0]   tf_cp               = 4'h0;
   reg    [ 3:0]   st_cp               = 4'h0;
@@ -198,19 +201,20 @@ module axi_ad35xxr_if (
         // 8-bit addressing requires 8 clock cycles because dual mode only support
         // the address on a single lane
         // step requires at least (t1)ns
+        // it works either at full speed (66 MHz) when streaming or
+        // normal at speed (16.5 MHz)
+        // full speed - 2 clock cycles
+        // half speed 8 clock cycles
         cycle_done = wa_cp; //It is considering 8 bit address only
-        //cycle_done = (counter == 16'hf);
         transfer_state_next = cycle_done ? (stream ? STREAM : TRANSFER_REGISTER) : WRITE_ADDRESS;
         csn = 1'b0;
         // in streaming, change data on falledge. On regular transfer, change data on negedge.
-        transfer_step = (counter[0] == 1'h1);
+        transfer_step = full_speed ? counter[0] : ((counter[2:0] == 3'h5));
       end
       TRANSFER_REGISTER : begin
+        // always works at 15 MHz due to the DAC limitation
         // can be DDR or SDR
         // counter is based on the "Clock Cycles Required to Transfer One Byte" table in the doc
-        // counter is twice the number because clk_in is twice the frequency
-        // cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? (counter == 16'h8) : (counter == 16'h10)):
-        //                                        (symb_8_16b ? (counter == 16'h4) : (counter == 16'h8));
         cycle_done = (sdr_ddr_n | data_r_wn) ? (symb_8_16b ? tf_cp[0] : tf_cp[1]):
                                                (symb_8_16b ? tf_cp[2] : tf_cp[3]);
                                  //DDR requires one more cycle to fulfill t3
@@ -219,14 +223,12 @@ module axi_ad35xxr_if (
         transfer_state_next = cycle_done ? CS_HIGH : TRANSFER_REGISTER;
         csn = 1'b0;
         // in DDR mode, change data on falledge
-        transfer_step = (sdr_ddr_n | data_r_wn) ? counter[0] : 1'b1;
+        transfer_step = (sdr_ddr_n | data_r_wn) ? (counter[2:0] == 3'h5) : (counter[1:0] == 2'h0);
       end
       STREAM : begin
         // can be DDR or SDR
         // in DDR mode needs to be make sure the clock and data is shifted by 2 ns (t7 and t8)
         // the last word in the stream needs one more clock cycle to guarantee t3
-        // cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? (counter == 16'h1f) : (counter == 16'hf)):
-        //                       ((sdr_ddr_n | data_r_wn) ? (counter == 16'h20) : (counter == 16'h10));
         cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? st_cp[0] : st_cp[1]):
                               ((sdr_ddr_n | data_r_wn) ? st_cp[2] : st_cp[3]);
         transfer_state_next = (stream && external_sync_s) ? STREAM: ((cycle_done || external_sync_s == 1'b0) ?  CS_HIGH :STREAM);
@@ -254,7 +256,7 @@ module axi_ad35xxr_if (
 
   always @(posedge clk_in) begin
     if (transfer_state == IDLE || reset_in == 1'b1) begin
-      counter  <= 'b0;
+      counter  <= 0;
       wa_cp    <= 1'b0;
       tf_cp[0] <= 1'b0;
       tf_cp[1] <= 1'b0;
@@ -279,31 +281,31 @@ module axi_ad35xxr_if (
       end else  begin
         counter  <= counter + 1;
         if (multi_io_mode == 2'h1) begin //dual SPI
-          wa_cp    <= (counter == 16'he);
-          tf_cp[0] <= (counter == 16'h7);
-          tf_cp[1] <= (counter == 16'hf);
-          tf_cp[2] <= (counter == 16'h3);
-          tf_cp[3] <= (counter == 16'h7);
+          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3f);
+          tf_cp[0] <= (counter == 16'h1f);
+          tf_cp[1] <= (counter == 16'h3f);
+          tf_cp[2] <= (counter == 16'h10);
+          tf_cp[3] <= (counter == 16'h20);
           st_cp[0] <= (counter == 16'h1e);
           st_cp[1] <= (counter == 16'he);
           st_cp[2] <= (counter == 16'h1f);
           st_cp[3] <= (counter == 16'hf);
         end else if (multi_io_mode == 2'h2) begin //Quad SPI
-          wa_cp    <= (counter == 16'h2);
-          tf_cp[0] <= (counter == 16'h3);
-          tf_cp[1] <= (counter == 16'h7);
-          tf_cp[2] <= (counter == 16'h1);
-          tf_cp[3] <= (counter == 16'h3);
+          wa_cp    <= full_speed ? (counter == 16'h2) : (counter == 16'he);
+          tf_cp[0] <= (counter == 16'he);
+          tf_cp[1] <= (counter == 16'h1f);
+          tf_cp[2] <= (counter == 16'h8);
+          tf_cp[3] <= (counter == 16'h10);
           st_cp[0] <= (counter == 16'he);
           st_cp[1] <= (counter == 16'h6);
           st_cp[2] <= (counter == 16'hf);
           st_cp[3] <= (counter == 16'h7);
         end else begin //Any other case is classic SPI
-          wa_cp    <= (counter == 16'he);
-          tf_cp[0] <= (counter == 16'hf);
-          tf_cp[1] <= (counter == 16'h1f);
-          tf_cp[2] <= (counter == 16'h7);
-          tf_cp[3] <= (counter == 16'hf);
+          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3f);
+          tf_cp[0] <= (counter == 16'h3f);
+          tf_cp[1] <= (counter == 16'h7f);
+          tf_cp[2] <= (counter == 16'h1f);
+          tf_cp[3] <= (counter == 16'h3f);
           st_cp[0] <= (counter == 16'h3e);
           st_cp[1] <= (counter == 16'h1e);
           st_cp[2] <= (counter == 16'h3f);
@@ -325,16 +327,17 @@ module axi_ad35xxr_if (
     end
   end
 
-  // selection between 66 MHz clocks for the SCLK
+  // 66MHz for full speed
+  // 16.5 MHz for normal speed
+  // selection between 66 MHz and 16.5 MHz clocks for the SCLK
   // DDR mode requires a phase shift for the t7 and t8
-
-  assign sclk = (sdr_ddr_n | data_r_wn) ? counter[0] : sclk_ddr;
+  assign sclk = full_speed ? ((sdr_ddr_n | data_r_wn) ? counter[0] : sclk_ddr) : counter[2];
 
   always @(posedge clk_in) begin
     if (transfer_state == CS_LOW) begin
       data_r_wn <= address[7];
     end else if (transfer_state == CS_HIGH) begin
-      data_r_wn <=1'b0;
+      data_r_wn <= 1'b0;
     end
     if (transfer_state == STREAM) begin
       if (cycle_done == 1'b1) begin
@@ -348,27 +351,49 @@ module axi_ad35xxr_if (
     if (transfer_state == CS_LOW) begin
       full_speed = stream;
       if(stream) begin
-        transfer_reg <= {address,dac_data_int, 16'h0};
+        transfer_reg_single <= {address,dac_data_int, {16{1'b0}}};
+        transfer_reg_dual   <= {address,dac_data_int, {16{1'b0}}};
+        transfer_reg_quad   <= {address,dac_data_int, {16{1'b0}}};
       end else begin
-        transfer_reg <= {address,data_write, 24'h0};
+        transfer_reg_single <= {address,data_write, {24{1'b0}}};
+        transfer_reg_dual   <= {address,data_write, {24{1'b0}}};
+        transfer_reg_quad   <= {address,data_write, {24{1'b0}}};
       end
     end else if ((transfer_state == STREAM & cycle_done) || (transfer_state != STREAM  && transfer_state_next == STREAM)) begin
-      transfer_reg <= {dac_data_int, 24'h0};
+      transfer_reg_single <= {dac_data_int, {24{1'b0}}};
+      transfer_reg_dual   <= {dac_data_int, {24{1'b0}}};
+      transfer_reg_quad   <= {dac_data_int, {24{1'b0}}};
     end else if (transfer_step && transfer_state != CS_HIGH) begin
       if (multi_io_mode == 2'h2) begin //Quad SPI
-        transfer_reg <= {transfer_reg[51:0], sdio_i};
-      end else if (multi_io_mode == 2'h0 || multi_io_mode == 2'h3 || transfer_state == WRITE_ADDRESS) begin //Classic SPI
-        transfer_reg <= {transfer_reg[54:0], sdio_i[0]};
+        transfer_reg_quad <= {transfer_reg_quad[51:0], sdio_i};
+      end else if ((multi_io_mode == 2'h0 || multi_io_mode == 2'h3)) begin
+        transfer_reg_single <= {transfer_reg_single[54:0], sdio_i[1]};
       end else begin //Dual SPI
-        transfer_reg <= {transfer_reg[53:0], sdio_i[1:0]};
+        if (transfer_state == WRITE_ADDRESS) begin
+          transfer_reg_dual <= {transfer_reg_dual[54:0], sdio_i[0]};
+        end else begin
+          transfer_reg_dual <= {transfer_reg_dual[53:0], sdio_i[1:0]};
+        end
       end
     end
 
     if (transfer_state == CS_HIGH) begin
       if (symb_8_16b == 1'b0) begin
-        data_read <= {8'h0,transfer_reg[15:0]};
+        if (multi_io_mode == 2'h2) begin //Quad SPI
+          data_read <= {8'h0, transfer_reg_quad[15:0]};
+        end else if((multi_io_mode == 2'h0 || multi_io_mode == 2'h3)) begin
+          data_read <= {8'h0, transfer_reg_single[15:0]};
+        end else begin
+          data_read <= {8'h0, transfer_reg_dual[15:0]};
+        end
       end else begin
-        data_read <= {16'h0,transfer_reg[7:0]};
+        if (multi_io_mode == 2'h2) begin //Quad SPI
+          data_read <= {16'h0, transfer_reg_quad[7:0]};
+        end else if((multi_io_mode == 2'h0 || multi_io_mode == 2'h3)) begin //Classic SPI
+          data_read <= {16'h0, transfer_reg_single[7:0]};
+        end else begin //dual SPI
+          data_read <= {16'h0, transfer_reg_dual[7:0]};
+        end
       end
     end else begin
       data_read <= data_read;
@@ -383,12 +408,13 @@ module axi_ad35xxr_if (
   // address[7] is r_wn : depends also on the state machine, input only when
   // in TRANSFER register mode
 
-  assign sdio_t[0]   = (~(|multi_io_mode)) ? 1'b0 : (data_r_wn & transfer_state == TRANSFER_REGISTER); //for the Single SPI case
-  assign sdio_t[1]   = (~(|multi_io_mode)) ? 1'b1 : (data_r_wn & transfer_state == TRANSFER_REGISTER); //for the Single SPI case
-  assign sdio_t[3:2] = {2{(data_r_wn & transfer_state == TRANSFER_REGISTER)}};
+  assign sdio_t[0]   = (~(|multi_io_mode)) ? 1'b0 : (data_r_wn && transfer_state == TRANSFER_REGISTER); //for the Single SPI case
+  assign sdio_t[3:1] = (~(|multi_io_mode)) ? 3'hf : {3{(data_r_wn && transfer_state == TRANSFER_REGISTER)}}; //high-impedance for the Single SPI case
+  
   //multi_io_mode == 0xh3 is undefined, so the Classic SPI is chosen
-  assign sdio_o = ( multi_io_mode == 2'h2) ? transfer_reg[55:52] :
-                  ((multi_io_mode == 2'h0 || multi_io_mode == 2'h3 || transfer_state == WRITE_ADDRESS) ? {3'h0, transfer_reg[55]} :
-                                                                                                         {2'h0, transfer_reg[55:54]});
+  assign sdio_o = (multi_io_mode == 2'h2) ? transfer_reg_quad[55:52] :
+                  ((multi_io_mode == 2'h0 || multi_io_mode == 2'h3) ? {3'h0, transfer_reg_single[55]} :
+                                                                      ((transfer_state == WRITE_ADDRESS) ? {3'h0, transfer_reg_dual[55]} :
+                                                                      {2'h0, transfer_reg_dual[55:54]}));
 
 endmodule
