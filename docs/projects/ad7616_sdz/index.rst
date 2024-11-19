@@ -84,15 +84,15 @@ some hardware modifications need to be done on the board and/or make command:
 
 In case of the **PARALLEL** interface:
 
-.. code-block::
+.. shell:: bash
 
-   make SER_PAR_N=0
+   $make SER_PAR_N=0
 
 In case of the **SERIAL** interface:
 
-.. code-block::
+.. shell:: bash
 
-   make SER_PAR_N=1
+   $make SER_PAR_N=1
 
 .. note::
 
@@ -265,11 +265,10 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7616_sdz/zed
-   user@analog:~/hdl/projects/ad7616_sdz/zed$ make SER_PAR_N=0
+   $cd hdl/projects/ad7616_sdz/zed
+   $make SER_PAR_N=0
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:

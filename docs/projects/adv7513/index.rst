@@ -122,8 +122,8 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $ cd hdl/projects/adv7513/de10nano
-   $ make
+   $cd hdl/projects/adv7513/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

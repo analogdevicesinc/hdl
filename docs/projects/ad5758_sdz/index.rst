@@ -34,22 +34,22 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD5758 <EVAL-AD5758>`
+- :adi:`EVAL-AD5758`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD5758`
+- :adi:`AD5758`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Other required hardware
 -------------------------------------------------------------------------------
 
--  :adi:`SDP-S`
+- :adi:`SDP-S`
 
 Block design
 -------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Zynq-7000: if PS7 is used, then the offset is 54
+- Zynq-7000: if PS7 is used, then the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -146,14 +146,12 @@ the HDL repository, and then build the project as follows:.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad5758_sdz/zed
-   user@analog:~/hdl/projects/ad5758_sdz/zed$ make
+   $cd hdl/projects/ad5758_sdz/zed
+   $make
 
-A more comprehensive build guide can be found in the :ref:`build_hdl`
-user guide.
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 Resources
 -------------------------------------------------------------------------------
@@ -161,13 +159,13 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheet: :adi:`AD5758`
--  :adi:`UG-1268: EVAL-AD5758 Board User Guide <media/en/technical-documentation/user-guides/eval-ad5758-ug-1268.pdf>`
+- Product datasheet: :adi:`AD5758`
+- :adi:`UG-1268: EVAL-AD5758 Board User Guide <media/en/technical-documentation/user-guides/eval-ad5758-ug-1268.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD5758-SDZ HDL project source code <projects/ad5758_sdz>`
+- :git-hdl:`AD5758-SDZ HDL project source code <projects/ad5758_sdz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -213,9 +211,9 @@ Linux support:
 
 No-OS support:
 
--  :git-no-os:`AD5758-SDZ No-OS project source code <projects/ad5758-sdz>`
--  :git-no-os:`AD5758 No-OS Driver source code <drivers/dac/ad5758>`
--  :dokuwiki:`AD5758 No-OS Driver documentation <resources/tools-software/uc-drivers/ad5758>`
+- :git-no-os:`AD5758-SDZ No-OS project source code <projects/ad5758-sdz>`
+- :git-no-os:`AD5758 No-OS Driver source code <drivers/dac/ad5758>`
+- :dokuwiki:`AD5758 No-OS Driver documentation <resources/tools-software/uc-drivers/ad5758>`
 
 .. include:: ../common/more_information.rst
 

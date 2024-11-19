@@ -208,17 +208,15 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad4170_asdz/coraz7s
-   user@analog:~/hdl/projects/ad4170_asdz/coraz7s$ make
+   $cd hdl/projects/ad4170_asdz/coraz7s
+   $make
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad4170_asdz/de10nano
-   user@analog:~/hdl/projects/ad4170_asdz/de10nano$ make
+   $cd hdl/projects/ad4170_asdz/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

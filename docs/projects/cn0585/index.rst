@@ -18,17 +18,17 @@ together to build a development system setup.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`CN0585 <CN0585>`
--  :adi:`CN0584 <CN0584>`
+- :adi:`CN0585 <CN0585>`
+- :adi:`CN0584 <CN0584>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD3552R`
--  :adi:`ADAQ23876`
--  :adi:`AD7291`
--  :adi:`ADG5421F`
--  :adi:`MAX7301`
+- :adi:`AD3552R`
+- :adi:`ADAQ23876`
+- :adi:`AD7291`
+- :adi:`ADG5421F`
+- :adi:`MAX7301`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -192,11 +192,10 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0585/zed
-   user@analog:~/hdl/projects/cn0585/zed$ make
+   $cd hdl/projects/cn0585/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
@@ -207,25 +206,25 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] EVAL-CN0585-FMCZ User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0585>`
--  :dokuwiki:`[Wiki] CN0584 User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0584>`
+- :dokuwiki:`[Wiki] EVAL-CN0585-FMCZ User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0585>`
+- :dokuwiki:`[Wiki] CN0584 User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0584>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`ADAQ23876`
-   -  :adi:`AD3552R`
-   -  :adi:`AD7291`
-   -  :adi:`MAX7301`
--  `Circuit Note CN-0585 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0585.pdf>`__
--  `Circuit Note CN-0584 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0584.pdf>`__
+  - :adi:`ADAQ23876`
+  - :adi:`AD3552R`
+  - :adi:`AD7291`
+  - :adi:`MAX7301`
+- `Circuit Note CN-0585 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0585.pdf>`__
+- `Circuit Note CN-0584 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0584.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0585 HDL project source code <projects/cn0585>`
+- :git-hdl:`CN0585 HDL project source code <projects/cn0585>`
 
 .. list-table::
    :widths: 30 35 35
@@ -274,12 +273,12 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
--  :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
+- :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
+- :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
 
--  Python support:
+- Python support:
 
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+   - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
 
 .. include:: ../common/more_information.rst
 

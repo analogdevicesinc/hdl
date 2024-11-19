@@ -153,10 +153,8 @@ connected to Cora Z7S through PMOD JA:
 
 .. shell::
 
-   $ cd hdl/projects/ad719x_asdz/coraz7s
-   $ make
-   # or explicitly setting the variable to 0, which is the same
-   $ make ARDZ_PMOD_N=0
+   $cd hdl/projects/ad719x_asdz/coraz7s
+   $make
 
 The other possible way to connect the supported boards to CoraZ7S, is through
 the Arduino header, for which the project needs to be built with the parameter
@@ -166,8 +164,8 @@ The built project will be located at hdl/projects/ad719x_asdz/coraz7s/**ARDZPMOD
 
 .. shell::
 
-   $ cd hdl/projects/ad719x_asdz/coraz7s
-   $ make ARDZ_PMOD_N=1
+   $cd hdl/projects/ad719x_asdz/coraz7s
+   $make ARDZ_PMOD_N=1
 
 DE10-Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,8 +177,8 @@ is not parameterizable:
 
 .. shell::
 
-   $ cd hdl/projects/ad719x_asdz/de10nano
-   $ make
+   $cd hdl/projects/ad719x_asdz/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 

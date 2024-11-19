@@ -27,31 +27,31 @@ and the PTP logic.
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`MAX96724`
--  :adi:`MAX17573`
--  :adi:`ADM7154`
--  :adi:`MAX25206`
--  :adi:`LTC3303`
--  :adi:`LTC4355`
--  :adi:`AD9545`
+- :adi:`MAX96724`
+- :adi:`MAX17573`
+- :adi:`ADM7154`
+- :adi:`MAX25206`
+- :adi:`LTC3303`
+- :adi:`LTC4355`
+- :adi:`AD9545`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`K26 SOM <en/products/system-on-modules/kria/k26/k26i-industrial.html>`
+- :xilinx:`K26 SOM <en/products/system-on-modules/kria/k26/k26i-industrial.html>`
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The data path designed in this reference design is as follows:
 
--  the virtual channel inputs of one CSI-2 output port of the deserializer are
-   captured using Xilinx's `MIPI CSI-2 Rx Subsystem IP <https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx>`_
--  data is written into memory by using a Xilinx video-related DMA implementation
-   `Video Framebuffer Write <https://docs.amd.com/r/en-US/pg278-v-frmbuf>`_
--  the control of the camera modules is realized through I2C using Xilinx's
-   `AXI IIC logic <https://docs.amd.com/v/u/en-US/pg090-axi-iic>`_
--  data is transmitted to a 10G-capable node by using Corundum NIC implementation
+- the virtual channel inputs of one CSI-2 output port of the deserializer are
+  captured using Xilinx's `MIPI CSI-2 Rx Subsystem IP <https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx>`_
+- data is written into memory by using a Xilinx video-related DMA implementation
+  `Video Framebuffer Write <https://docs.amd.com/r/en-US/pg278-v-frmbuf>`_
+- the control of the camera modules is realized through I2C using Xilinx's
+  `AXI IIC logic <https://docs.amd.com/v/u/en-US/pg090-axi-iic>`_
+- data is transmitted to a 10G-capable node by using Corundum NIC implementation
 
 The data path and elements of the video network, 10G NIC, are depicted in the below diagram:
 
@@ -124,7 +124,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  ZynqMP: if PS8 EMIOs are used, then offset is 78
+- ZynqMP: if PS8 EMIOs are used, then offset is 78
 
 .. list-table::
    :widths: 25 25 25 25
@@ -227,9 +227,9 @@ and it needs to be cloned alongside this repository.
 
    The following papers pertain to the Corundum source code:
 
-   -  J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM'20.
-      (`FCCM Paper`_, `FCCM Presentation`_)
-   -  J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (`Thesis`_)
+   - J- A. Forencich, A. C. Snoeren, G. Porter, G. Papen, Corundum: An Open-Source 100-Gbps NIC, in FCCM'20.
+     (`FCCM Paper`_, `FCCM Presentation`_)
+   - J- A. Forencich, System-Level Considerations for Optical Switching in Data Center Networks. (`Thesis`_)
 
 .. _FCCM Paper: https://www.cse.ucsd.edu/~snoeren/papers/corundum-fccm20.pdf
 .. _FCCM Presentation: https://www.fccm.org/past/2020/forums/topic/corundum-an-open-source-100-gbps-nic/
@@ -237,13 +237,12 @@ and it needs to be cloned alongside this repository.
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ git clone https://github.com/corundum/corundum.git
-   user@analog:~$ git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-   user@analog:~$ cd hdl/projects/ad_gmsl2eth_sl/k26
-   user@analog:~/hdl/projects/ad_gmsl2eth_sl/k26$ make
+   $git clone https://github.com/corundum/corundum.git
+   $git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
+   $cd hdl/projects/ad_gmsl2eth_sl/k26
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -253,21 +252,21 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-  -  :adi:`AD-GMSL2ETH-SL`
-  -  :adi:`MAX96724 <media/en/technical-documentation/data-sheets/max96724.pdf>`
-  -  :adi:`MAX17573 <media/en/technical-documentation/data-sheets/max17573.pdf>`
-  -  :adi:`ADM7154 <media/en/technical-documentation/data-sheets/adm7154.pdf>`
-  -  :adi:`MAX25206 <media/en/technical-documentation/data-sheets/MAX25206-MAX25208.pdf>`
-  -  :adi:`LTC3303 <media/en/technical-documentation/data-sheets/ltc3303.pdf>`
-  -  :adi:`LTC4355 <media/en/technical-documentation/data-sheets/4355ff.pdf>`
-  -  :adi:`AD9545 <media/en/technical-documentation/data-sheets/ad9545.pdf>`
+  - :adi:`AD-GMSL2ETH-SL`
+  - :adi:`MAX96724 <media/en/technical-documentation/data-sheets/max96724.pdf>`
+  - :adi:`MAX17573 <media/en/technical-documentation/data-sheets/max17573.pdf>`
+  - :adi:`ADM7154 <media/en/technical-documentation/data-sheets/adm7154.pdf>`
+  - :adi:`MAX25206 <media/en/technical-documentation/data-sheets/MAX25206-MAX25208.pdf>`
+  - :adi:`LTC3303 <media/en/technical-documentation/data-sheets/ltc3303.pdf>`
+  - :adi:`LTC4355 <media/en/technical-documentation/data-sheets/4355ff.pdf>`
+  - :adi:`AD9545 <media/en/technical-documentation/data-sheets/ad9545.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD-GMSL2ETH-SL HDL project source code <projects/ad_gmsl2eth_sl>`
+- :git-hdl:`AD-GMSL2ETH-SL HDL project source code <projects/ad_gmsl2eth_sl>`
 
 .. list-table::
    :widths: 30 35 35
@@ -295,8 +294,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
--  :git-linux:`GMSL drivers/dts <gmsl_k26/xilinx_v6.1_LTS>`
+- `GMSL-related repository <https://github.com/analogdevicesinc/gmsl>`_
+- :git-linux:`GMSL drivers/dts <gmsl_k26/xilinx_v6.1_LTS>`
 
 .. include:: ../common/more_information.rst
 

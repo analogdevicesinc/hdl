@@ -30,21 +30,21 @@ capturing continuous samples at the maximum sample rate.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-CN0540-ARDZ <CN0540>`
+- :adi:`EVAL-CN0540-ARDZ <CN0540>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7768-1`
--  :adi:`ADA4945-1`
--  :adi:`LT3092`
--  :adi:`LTC2606`
+- :adi:`AD7768-1`
+- :adi:`ADA4945-1`
+- :adi:`LT3092`
+- :adi:`LTC2606`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
--  :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
+- :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` Arduino shield connector
+- :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>` Arduino shield connector
 
 Block design
 -------------------------------------------------------------------------------
@@ -91,8 +91,8 @@ axi_spi_engine_0**        0x0003_0000
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,7 +138,7 @@ GPIOs
 
 The Software GPIO number is calculated as follows:
 
--  Cora Z7S: the offset is 54
+- Cora Z7S: the offset is 54
 
 .. list-table::
    :widths: 25 25 25 25
@@ -189,7 +189,7 @@ The Software GPIO number is calculated as follows:
      - 32
      - 86
 
--  DE10-Nano: the offset is 32
+- DE10-Nano: the offset is 32
 
 .. list-table::
    :widths: 25 25 25 25
@@ -273,11 +273,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0540/coraz7s
-   user@analog:~/hdl/projects/cn0540/coraz7s$ make
+   $cd hdl/projects/cn0540/coraz7s
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -307,8 +306,8 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0540_ARDZ HDL project source code <projects/cn0540>`
--  :dokuwiki:`[Wiki] CN0540 HDL project documentation <resources/eval/user-guides/circuits-from-the-lab/cn0540/hdl>`
+- :git-hdl:`CN0540_ARDZ HDL project source code <projects/cn0540>`
+- :dokuwiki:`[Wiki] CN0540 HDL project documentation <resources/eval/user-guides/circuits-from-the-lab/cn0540/hdl>`
 
 .. list-table::
    :widths: 30 35 35
@@ -348,10 +347,10 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   -   ``*`` instantiated only for Cora Z7S
-   -   ``**`` instantiated only for DE10-Nano
+   - ``*`` instantiated only for Cora Z7S
+   - ``**`` instantiated only for DE10-Nano
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -21,13 +21,13 @@ which must be consulted in conjunction with this user guide when using the
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-ADAQ8092 <EVAL-ADAQ8092>`
--  :adi:`DC1075B`
+- :adi:`EVAL-ADAQ8092`
+- :adi:`DC1075B`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADAQ8092`
+- :adi:`ADAQ8092`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -61,10 +61,10 @@ Block diagram
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  External clock source
+- External clock source
 
-   -  Rohde & Schwarz SMA100A (clock source) - Suggested
-   -  :adi:`DC1075B (Clock Divider) - Suggested <DC1075B>`
+  - Rohde & Schwarz SMA100A (clock source) - Suggested
+  - :adi:`DC1075B (Clock Divider) - Suggested <DC1075B>`
 
 .. image:: ../adaq8092_fmc/adaq8092_clock_scheme.svg
    :width: 800
@@ -162,11 +162,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/adaq8092_fmc/zed
-   user@analog:~/hdl/projects/adaq8092_fmc/zed$ make
+   $cd hdl/projects/adaq8092_fmc/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -176,19 +175,17 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADAQ8092 Evaluation Board User Guide </resources/eval/user-guide/adaq8092-eval-board>`
+- :dokuwiki:`[Wiki] ADAQ8092 Evaluation Board User Guide </resources/eval/user-guide/adaq8092-eval-board>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`ADAQ8092`
+- Product datasheets: :adi:`ADAQ8092`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`EVAL-ADAQ8092 HDL project source code <projects/adaq8092_fmc>`
+- :git-hdl:`EVAL-ADAQ8092 HDL project source code <projects/adaq8092_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -231,13 +228,13 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver </resources/tools-software/linux-drivers/iio-adc/adaq8092>`
+- :dokuwiki:`[Wiki] ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver </resources/tools-software/linux-drivers/iio-adc/adaq8092>`
 
--  Python support :
+- Python support :
 
-   -  `ADAQ8092 Python class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.adaq8092.html>`__
-   -  :git-pyadi-iio:`ADAQ8092 PyADI-IIO example <examples/adaq8092_example.py>`
-   -  :git-pyadi-iio:`PyADI-IIO documentation </>`
+  - `ADAQ8092 Python class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.adaq8092.html>`__
+  - :git-pyadi-iio:`ADAQ8092 PyADI-IIO example <examples/adaq8092_example.py>`
+  - :git-pyadi-iio:`PyADI-IIO documentation </>`
 
 .. include:: ../common/more_information.rst
 

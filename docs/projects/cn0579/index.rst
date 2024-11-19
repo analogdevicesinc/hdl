@@ -22,15 +22,15 @@ techniques for system characterization and machine learning algorithms.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`CN0579`
+- :adi:`CN0579`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`AD7768-4`
--  :adi:`AD5696R`
--  :adi:`ADA4945-1`
--  :adi:`ADG5421F`
+- :adi:`AD7768-4`
+- :adi:`AD5696R`
+- :adi:`ADA4945-1`
+- :adi:`ADG5421F`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -115,8 +115,8 @@ I2C connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7S
-   -  ``**`` only for DE10-Nano
+   - ``*`` only for Cora Z7S
+   - ``**`` only for DE10-Nano
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,8 +141,8 @@ SPI connections
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7S
-   -  ``**`` only for DE10-Nano
+   - ``*`` only for Cora Z7S
+   - ``**`` only for DE10-Nano
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -183,8 +183,8 @@ cn0579_dma**  5   ---        ---         45              77
 .. admonition:: Legend
    :class: note
 
-   -  ``*`` only for Cora Z7S
-   -  ``**`` only for DE10-Nano
+   - ``*`` only for Cora Z7S
+   - ``**`` only for DE10-Nano
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -201,19 +201,17 @@ the HDL repository, and then build the project as follows:
 
 Building the CoraZ7S project:
 
-.. code-block:: bash
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0579/coraz7s
-   user@analog:~/hdl/projects/cn0579/coraz7s$ make
+   $cd hdl/projects/cn0579/coraz7s
+   $make
 
 Building the DE-10Nano project:
 
-.. code-block:: bash
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/cn0579/de10nano
-   user@analog:~/hdl/projects/cn0579/de10nano$ make
+   $cd hdl/projects/cn0579/de10nano
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -223,23 +221,23 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] EVAL-CN0579-ARDZ User Guide </resources/eval/user-guides/circuits-from-the-lab/cn0579>`
--  :adi:`Circuit Note CN0579 <media/en/reference-design-documentation/reference-designs/cn0579.pdf>`
+- :dokuwiki:`[Wiki] EVAL-CN0579-ARDZ User Guide </resources/eval/user-guides/circuits-from-the-lab/cn0579>`
+- :adi:`Circuit Note CN0579 <media/en/reference-design-documentation/reference-designs/cn0579.pdf>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD7768-4`
-   -  :adi:`AD5696R`
-   -  :adi:`ADA4945-1`
-   -  :adi:`ADG5421F`
+   - :adi:`AD7768-4`
+   - :adi:`AD5696R`
+   - :adi:`ADA4945-1`
+   - :adi:`ADG5421F`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0579 HDL project source code <projects/cn0579>`
+- :git-hdl:`CN0579 HDL project source code <projects/cn0579>`
 
 .. list-table::
    :widths: 30 35 35
@@ -267,19 +265,19 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
+- :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
 
--  Python support:
+- Python support:
 
    - :git-pyadi-iio:`PyADI-IIO documentation </>`
    - :git-pyadi-iio:`PyADI-IIO CN0579 class <adi/cn0579.py>`
    - :git-pyadi-iio:`PyADI-IIO CN0579 example <examples/cn0579/cn0579_example.py>`
 
--  CN0579 on Cora Z7s Linux device tree
+- CN0579 on Cora Z7s Linux device tree
    :git-linux:`arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts`
--  CN0579 on DE-10Nano Linux device tree
+- CN0579 on DE-10Nano Linux device tree
    :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts`
--  AD7768 Linux driver :git-linux:`ad7768.c <drivers/iio/adc/ad7768.c>`
+- AD7768 Linux driver :git-linux:`ad7768.c <drivers/iio/adc/ad7768.c>`
 
 .. include:: ../common/more_information.rst
 

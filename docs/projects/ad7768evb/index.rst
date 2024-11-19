@@ -197,11 +197,10 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. code-block::
-   :linenos:
+.. shell::
 
-   user@analog:~$ cd hdl/projects/ad7768evb/zed
-   user@analog:~/hdl/projects/ad7768evb/zed$ make
+   $cd hdl/projects/ad7768evb/zed
+   $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
