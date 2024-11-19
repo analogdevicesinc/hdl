@@ -37,10 +37,9 @@
 
 module axi_ad7405 (
 
-input         adc_data_in,      /* input data to be filtered */
-output [15:0] adc_data_out,     /* filtered output */
-output        adc_data_en,
-input  [15:0] adc_dec_rate,
+(* mark_debug = "true" *) input         adc_data_in,      /* input data to be filtered */
+(* mark_debug = "true" *) output [15:0] adc_data_out,     /* filtered output */
+(* mark_debug = "true" *) output        adc_data_en,
 
 // AXI Slave Memory Map
 
@@ -67,10 +66,10 @@ output [31:0] s_axi_rdata,
 input         s_axi_rready,
 
 input         clk_in,
-output        adc_reset,
+(* mark_debug = "true" *) output        adc_reset,
 output        adc_clk,
-output        adc_enable,
-input         adc_dovf
+(* mark_debug = "true" *) output        adc_enable,
+(* mark_debug = "true" *) input         adc_dovf
 );
 
 localparam [31:0] RD_RAW_CAP = 32'h2000;
@@ -83,6 +82,8 @@ reg  [31:0] up_rdata = 32'b0;
 reg  [31:0] up_rdata_r;
 reg         up_rack_r;
 reg         up_wack_r;
+wire [15:0] up_dec_rate;
+wire [15:0] adc_dec_rate;
 
 wire        adc_reset_s;
 wire        adc_clk_s;
@@ -112,7 +113,7 @@ assign adc_reset = adc_reset_s;
 assign adc_clk_s = clk_in;
 assign up_clk = s_axi_aclk;
 assign up_rstn = s_axi_aresetn;
-assign adc_clk = adc_clk_s; // ???? or up_clk
+assign adc_clk = adc_clk_s;
 assign adc_enable = adc_enable_s;
 
  // processor read interface
@@ -130,7 +131,7 @@ always @(*) begin
   end
 end
 
-always @(negedge up_rstn or posedge up_clk) begin // up_clk or adc_clk_s ???
+always @(negedge up_rstn or posedge up_clk) begin
   if (up_rstn == 0) begin
     up_rdata <= 'd0;
     up_rack <= 'd0;
@@ -141,6 +142,15 @@ always @(negedge up_rstn or posedge up_clk) begin // up_clk or adc_clk_s ???
     up_wack <= up_wack_r;
   end
 end
+
+ sync_data #(
+  .NUM_OF_BITS (16),
+  .ASYNC_CLK (1)
+ ) i_cdc_status (
+    .in_clk (up_clk),
+    .in_data (up_dec_rate),
+    .out_clk (adc_clk_s),
+    .out_data (adc_dec_rate));
 
  up_adc_channel #(
     .CHANNEL_ID(0)
@@ -174,14 +184,14 @@ end
     .up_usr_datatype_total_bits (),
     .up_usr_datatype_bits (),
     .up_usr_decimation_m (),
-    .up_usr_decimation_n (),
+    .up_usr_decimation_n (up_dec_rate),
     .adc_usr_datatype_be (1'b0),
     .adc_usr_datatype_signed (1'b1),
     .adc_usr_datatype_shift (8'd0),
     .adc_usr_datatype_total_bits (8'd16),
     .adc_usr_datatype_bits (8'd16),
     .adc_usr_decimation_m (16'd1),
-    .adc_usr_decimation_n (16'd1),
+    .adc_usr_decimation_n (up_dec_rate),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -218,7 +228,7 @@ end
  assign adc_data_out = dma_data[15:0];
 
  up_adc_common #(
-    .CONFIG (RD_RAW_CAP)
+   .CONFIG (RD_RAW_CAP)
  ) i_up_adc_common (
   .mmcm_rst (),
   .adc_clk (adc_clk_s),

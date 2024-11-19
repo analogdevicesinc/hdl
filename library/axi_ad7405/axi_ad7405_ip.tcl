@@ -22,6 +22,8 @@ adi_ip_files axi_ad7405 [list \
     "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
     "$ad_hdl_dir/library/common/up_adc_channel.v" \
     "$ad_hdl_dir/library/common/up_adc_common.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_data.v" \
+    "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
     "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
     "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \

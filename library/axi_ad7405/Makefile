@@ -16,6 +16,7 @@ GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_delay_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += ../util_cdc/sync_data.v
 GENERIC_DEPS += axi_ad7405.v
 GENERIC_DEPS += ../common/util_dec256sinc24b.v
 
@@ -25,5 +26,7 @@ XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_ad7405_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk
