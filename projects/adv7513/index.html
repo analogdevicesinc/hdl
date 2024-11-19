@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CN0579 HDL project &#8212; HDL  documentation</title>
+    <title>ADV7513 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="CN0585 HDL project" href="../cn0585/index.html" />
-    <link rel="prev" title="CN0577 HDL project" href="../cn0577/index.html" />
+    <link rel="next" title="CN0363 HDL project" href="../cn0363/index.html" />
+    <link rel="prev" title="ADV7511 HDL project" href="../adv7511/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -101,23 +101,19 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">CN0579 HDL project</a><ul>
+<li><a class="reference internal" href="#">ADV7513 HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
-<li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
+<li><a class="reference internal" href="#adv7513-block-diagram">ADV7513 Block Diagram</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
-<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
-<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#gpio">GPIO</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
@@ -310,13 +306,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7511/index.html">ADV7511</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adv7513/index.html">ADV7513</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0506/index.html">CN0506</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0577/index.html">CN0577</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">CN0579</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
@@ -336,221 +332,123 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="cn0579-hdl-project">
-<span id="cn0579"></span><h1>CN0579 HDL project<a class="headerlink" href="#cn0579-hdl-project" title="Permalink to this heading">#</a></h1>
+  <section id="adv7513-hdl-project">
+<span id="adv7513"></span><h1>ADV7513 HDL project<a class="headerlink" href="#adv7513-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/CN0579">CN0579</a> is a 4-channel, high resolution, wide bandwidth,
-high dynamic range, integrated electronics piezoelectric (IEPE)-compatible
-interface data acquisition (DAQ) system that interfaces with IC piezoelectric
-(ICP®)/IEPE sensors. The solution provides flexible sensor interfacing to
-either piezoelectric or micro-electromechanical systems (MEMS) sensor with
-measurement capabilities that extend the frequency response to DC.</p>
-<p>The design provides four channels of full bandwidth, synchronized vibration
-data to the processor, where data analysis can be done locally or on a remote
-host over Ethernet via standard IIO framework. Large buffers of continuous
-data can be streamed and analyzed using standard fast Fourier transform (FFT)
-techniques for system characterization and machine learning algorithms.</p>
-</section>
-<section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/CN0579">CN0579</a></p></li>
-</ul>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> is a 165 MHz, High-Definition Multimedia Interface (HDMI®)
+transmitter that is ideal for DVD players/ recorders, digital set-top boxes,
+A/V receivers, gaming consoles, and PCs.</p>
+<p>The digital video interface contains an HDMI v1.4/DVI v1.0-compatible transmitter
+and supports all HDTV formats. The <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> supports HDMI v1.4-specific
+features, including 3D video. The <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> also supports x.v.Color™,
+high bit rate (HBR) audio, and the programmable auxiliary video information
+(AVI) InfoFrame features. With the inclusion of HDCP, the <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> allows
+the secure transmission of protected content as specified by the HDCP v1.4 protocol.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> supports both S/PDIF and 8-channel I2S audio. Its high
+fidelity 8-channel I2S interface can transmit either stereo or 7.1 surround
+audio up to 768 kHz. The S/PDIF interface can carry compressed audio, including
+Dolby® Digital, DTS®, and THX®. Fabricated in an advanced CMOS process, the
+<a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a> is provided in a 64-lead LQFP surface-mount plastic package
+with exposed pad and is specified over the −25°C to +85°C temperature range.</p>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-4">AD7768-4</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD5696R">AD5696R</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADG5421F">ADG5421F</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Carrier</p></th>
-<th class="head"><p>FMC slot</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/CN0579">CN0579</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7-07S</a></p></td>
-<td><p>Arduino headers</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">DE10-Nano</a></p></td>
-<td><p>Arduino headers</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="simple">
+<li><p>Internal component of <a class="reference external" href="https://www.intel.com/content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html">De10-Nano</a></p></li>
+</ul>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
-<p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/cn0579_block_diagram.svg"><img alt="CN0579 block diagram" class="align-center" src="../../_images/cn0579_block_diagram.svg" width="800" /></a>
-<section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
-<a class="reference internal image-reference" href="../../_images/cn0579_clock_diagram.svg"><img alt="CN0579 clock scheme" class="align-center" src="../../_images/cn0579_clock_diagram.svg" width="600" /></a>
+<p>The reference design uses HDL-related HDMI cores in order to interface the <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a>
+IC into the De10-Nano evaluation kit.</p>
+<section id="adv7513-block-diagram">
+<h3>ADV7513 Block Diagram<a class="headerlink" href="#adv7513-block-diagram" title="Permalink to this heading">#</a></h3>
+<a class="reference internal image-reference" href="../../_images/adv7513_bd.svg"><img alt="ADV7513 block diagram" class="align-center" src="../../_images/adv7513_bd.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Zynq</p></th>
-<th class="head"><p>Cyclone V</p></th>
+<th class="head"><p>DE10-Nano</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad77684_adc</p></td>
-<td><p>0x44A0_0000</p></td>
-<td><p>0x0002_8000</p></td>
+<tr class="row-even"><td><p>sys_spi</p></td>
+<td><p>0x0108_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>cn0579_dma</p></td>
-<td><p>0x44A3_0000</p></td>
-<td><p>0x0003_0000</p></td>
+<tr class="row-odd"><td><p>sys_id</p></td>
+<td><p>0x0001_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_iic_dac*</p></td>
-<td><p>0x44A4_0000</p></td>
-<td><p>—</p></td>
+<tr class="row-even"><td><p>sys_gpio_bd</p></td>
+<td><p>0x0001_0080</p></td>
+</tr>
+<tr class="row-odd"><td><p>sys_gpio_in</p></td>
+<td><p>0x0001_0100</p></td>
+</tr>
+<tr class="row-even"><td><p>video_dmac</p></td>
+<td><p>0x0008_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_hdmi_tx</p></td>
+<td><p>0x0009_0000</p></td>
+</tr>
+<tr class="row-even"><td><p>pixel_clk_pll_reconfig</p></td>
+<td><p>0x0010_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>sys_gpio_out</p></td>
+<td><p>0x0010_9000</p></td>
+</tr>
+<tr class="row-even"><td><p>ltc2308_spi</p></td>
+<td><p>0x0010_A000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_sysid</p></td>
+<td><p>0x0001_8000</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for Cora Z7-07S</p>
-</div></blockquote>
-</div>
 </section>
-<section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
+<section id="gpio">
+<h3>GPIO<a class="headerlink" href="#gpio" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>I2C type</p></th>
-<th class="head"><p>I2C manager instance</p></th>
-<th class="head"><p>Alias</p></th>
-<th class="head"><p>Address</p></th>
-<th class="head"><p>I2C subordinate</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>PL*</p></td>
-<td><p>axi_iic</p></td>
-<td><p>axi_iic_dac</p></td>
-<td><p>0x0C</p></td>
-<td><p>AD5696R</p></td>
-</tr>
-<tr class="row-odd"><td><p>PS**</p></td>
-<td><p>I2C1</p></td>
-<td></td>
-<td><p>0x0C</p></td>
-<td><p>AD5696R</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
-</ul>
-</div>
-</section>
-<section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>SPI type</p></th>
-<th class="head"><p>SPI manager instance</p></th>
-<th class="head"><p>SPI subordinate</p></th>
-<th class="head"><p>CS</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>PS*</p></td>
-<td><p>SPI 0</p></td>
-<td><p>AD7786-4</p></td>
-<td><p>0</p></td>
-</tr>
-<tr class="row-odd"><td><p>PL**</p></td>
-<td><p>SYS_SPI</p></td>
-<td><p>AD7786-4</p></td>
-<td><p>0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
-</ul>
-</div>
-</section>
-<section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 15.0%" />
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
 <th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
 <th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-<th class="head"><p>Cyclone V</p></th>
+<th class="head"><p>DE10-Nano</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>RESET_N</p></td>
+<tr class="row-odd"><td><p>ltc2308_cs</p></td>
 <td><p>OUT</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
-<td><p>0</p></td>
+<td><p>41</p></td>
+</tr>
+<tr class="row-even"><td><p>gpio_bd[5:0]</p></td>
+<td><p>IN</p></td>
+<td><p>13:8</p></td>
+</tr>
+<tr class="row-odd"><td><p>gpio_bd_o[7:0]</p></td>
+<td><p>OUT</p></td>
+<td><p>7:0</p></td>
 </tr>
 </tbody>
 </table>
@@ -564,43 +462,32 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
 <th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
-<th class="head"><p>Linux Cyclone V</p></th>
-<th class="head"><p>Actual Cyclone V</p></th>
+<th class="head"><p>Linux</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>cn0579_dma*</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
+<tr class="row-even"><td><p>sys_gpio_bd/irq</p></td>
+<td><p>0</p></td>
+<td><p>40</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_iic_dac*</p></td>
-<td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
+<tr class="row-odd"><td><p>sys_spi/irq</p></td>
+<td><p>1</p></td>
+<td><p>41</p></td>
 </tr>
-<tr class="row-even"><td><p>cn0579_dma**</p></td>
-<td><p>5</p></td>
-<td><p>—</p></td>
-<td><p>—</p></td>
-<td><p>45</p></td>
-<td><p>77</p></td>
+<tr class="row-even"><td><p>sys_gpio_in/irq</p></td>
+<td><p>2</p></td>
+<td><p>42</p></td>
+</tr>
+<tr class="row-odd"><td><p>ltc2308_spi/irq</p></td>
+<td><p>3</p></td>
+<td><p>43</p></td>
+</tr>
+<tr class="row-even"><td><p>video_dmac/interrupt_sender</p></td>
+<td><p>7</p></td>
+<td><p>47</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="note admonition">
-<p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
-</ul>
 </div>
 </section>
 </section>
@@ -612,46 +499,27 @@ ADI distributes the bit/elf files of these projects as part of the
 If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
-the HDL repository, and then build the project as follows:</p>
+the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<p>Building the CoraZ7S project:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/coraz7s
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0579/coraz7s$<span class="w"> </span>make
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/adv7513/de10nano
+<span class="linenos">2</span>user@analog:~/hdl/projects/adv7513/de10nano$ make
 </pre></div>
 </div>
-<p>Building the DE-10Nano project:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/de10nano
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0579/de10nano$<span class="w"> </span>make
-</pre></div>
-</div>
-<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>
+user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
-<section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0579">[Wiki] EVAL-CN0579-ARDZ User Guide</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0579.pdf">Circuit Note CN0579</a></p></li>
-</ul>
-</section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p>
-<ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-4">AD7768-4</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD5696R">AD5696R</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADG5421F">ADG5421F</a></p></li>
-</ul>
-</li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADV7513">ADV7513</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0579">CN0579 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adv7513">ADV7513 HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -667,13 +535,13 @@ the HDL repository, and then build the project as follows:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_AD7768</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768">library/axi_ad7768</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_ad7768/index.html#axi-ad7768"><span class="std std-ref">here</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
@@ -683,10 +551,6 @@ the HDL repository, and then build the project as follows:</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -694,19 +558,9 @@ the HDL repository, and then build the project as follows:</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7768">[Wiki] AD7768 IIO Precision ADC Linux Driver</a></p></li>
-<li><p>Python support:</p>
-<ul>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/">PyADI-IIO documentation</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/adi/cn0579.py">PyADI-IIO CN0579 class</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/examples/cn0579/cn0579_example.py">PyADI-IIO CN0579 example</a></p></li>
-</ul>
-</li>
-<li><p>CN0579 on Cora Z7s Linux device tree
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts">arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts</a></p></li>
-<li><p>CN0579 on DE-10Nano Linux device tree
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts</a></p></li>
-<li><p>AD7768 Linux driver <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7768.c">ad7768.c</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/gpu/drm/bridge/adv7511">ADV7513 driver source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10nano_hps.dtsi">ADV7513 - DE10-Nano Base dtsi source code (arm32)</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/drm/adv7511">ADV7511 driver docs</a></p></li>
 </ul>
 </section>
 </section>
@@ -742,8 +596,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../cn0577/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">CN0577 HDL project</a>
-    <a href="../cn0585/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">CN0585 HDL project</a>
+    <a href="../adv7511/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADV7511 HDL project</a>
+    <a href="../cn0363/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">CN0363 HDL project</a>
               </div>
           
         </div>
