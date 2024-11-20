@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -12,6 +12,10 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+
+if {![info exists CACHE_COHERENCY]} {
+  set CACHE_COHERENCY false
+}
 
 # JESD204B interface configurations
 
@@ -66,6 +70,7 @@ ad_ip_instance axi_dmac axi_ad9144_dma [list \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC 128 \
   DMA_DATA_WIDTH_DEST $dac_data_width \
+  CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
 ad_data_offload_create axi_ad9144_offload \
@@ -115,6 +120,7 @@ ad_ip_instance axi_dmac axi_ad9680_dma [list \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC $adc_data_width \
   DMA_DATA_WIDTH_DEST 64 \
+  CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
 ad_data_offload_create axi_ad9680_offload \
@@ -237,10 +243,10 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9680_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9144_dma/m_src_axi
-ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9680_dma/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1 $CACHE_COHERENCY
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9144_dma/m_src_axi $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9680_dma/m_dest_axi $CACHE_COHERENCY
 
 # interrupts
 

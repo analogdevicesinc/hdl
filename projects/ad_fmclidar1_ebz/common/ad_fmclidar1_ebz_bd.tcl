@@ -1,9 +1,13 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+
+if {![info exists CACHE_COHERENCY]} {
+  set CACHE_COHERENCY false
+}
 
 # interfaces and IO ports
 
@@ -57,6 +61,7 @@ ad_ip_instance axi_dmac ad9694_dma [list \
   DMA_DATA_WIDTH_DEST 64 \
   SYNC_TRANSFER_START 1 \
   FIFO_SIZE 32 \
+  CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
 # 3-wire SPI for clock synthesizer & VCO - 12.5MHz SCLK rate
@@ -199,8 +204,8 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9694_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk ad9694_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_dma_clk ad9694_dma/m_dest_axi $CACHE_COHERENCY
 
 # interrupts
 

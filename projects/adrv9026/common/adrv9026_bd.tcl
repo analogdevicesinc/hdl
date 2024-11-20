@@ -7,6 +7,10 @@ if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
 }
 
+if {![info exists CACHE_COHERENCY]} {
+  set CACHE_COHERENCY false
+}
+
 if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
 }
@@ -102,6 +106,7 @@ ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_wid
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 if {$ADI_PHY_SEL == 1} {
@@ -147,6 +152,7 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_O
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # xcvr interfaces
 
@@ -364,10 +370,10 @@ if {$ADI_PHY_SEL == 1} {
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi $CACHE_COHERENCY
+ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3 $CACHE_COHERENCY
+ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi $CACHE_COHERENCY
 
 # interrupts
 
