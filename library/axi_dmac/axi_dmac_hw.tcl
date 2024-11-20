@@ -246,11 +246,11 @@ set_parameter_property DMA_2D_TLAST_MODE HDL_PARAMETER true
 set_parameter_property DMA_2D_TLAST_MODE ALLOWED_RANGES { "0:End of Frame" "1:End of Line" }
 set_parameter_property DMA_2D_TLAST_MODE GROUP $group_2d
 
-add_parameter ENABLE_FRAMELOCK INTEGER 0
-set_parameter_property ENABLE_FRAMELOCK DISPLAY_NAME "Frame Lock Support"
-set_parameter_property ENABLE_FRAMELOCK DISPLAY_HINT boolean
-set_parameter_property ENABLE_FRAMELOCK HDL_PARAMETER true
-set_parameter_property ENABLE_FRAMELOCK GROUP $group_2d
+add_parameter FRAMELOCK INTEGER 0
+set_parameter_property FRAMELOCK DISPLAY_NAME "Frame Lock Support"
+set_parameter_property FRAMELOCK DISPLAY_HINT boolean
+set_parameter_property FRAMELOCK HDL_PARAMETER true
+set_parameter_property FRAMELOCK GROUP $group_2d
 
 add_parameter MAX_NUM_FRAMES_WIDTH INTEGER 4
 set_parameter_property MAX_NUM_FRAMES_WIDTH DISPLAY_NAME "Max Number Of Frame Buffers"
@@ -449,12 +449,12 @@ proc axi_dmac_validate {} {
 
   if {([get_parameter_value CYCLIC] == 0 ||
        [get_parameter_value DMA_2D_TRANSFER] == 0) &&
-       [get_parameter_value ENABLE_FRAMELOCK] == 1 } {
-    send_message error "ENABLE_FRAMELOCK can be set only in 2D Cyclic mode !!!"
+       [get_parameter_value FRAMELOCK] == 1 } {
+    send_message error "FRAMELOCK can be set only in 2D Cyclic mode"
   }
 
-  upvar reg_defaults d
-  foreach p $d {
+  upvar defaults d
+  foreach {p desc} $d {
     set_parameter_property $p ENABLED [get_parameter_value AUTORUN]
   }
 
@@ -728,7 +728,7 @@ proc axi_dmac_elaborate {} {
     set_interface_property $intf ENABLED false
   }
 
-  if {[get_parameter_value ENABLE_FRAMELOCK] == 1} {
+  if {[get_parameter_value FRAMELOCK] == 1} {
     set_parameter_property MAX_NUM_FRAMES_WIDTH VISIBLE true
 
     set flock_width [get_parameter_value MAX_NUM_FRAMES_WIDTH]
@@ -850,7 +850,7 @@ set defaults [list \
   "AUTORUN_FRAMELOCK_STRIDE" "Framelock stride" \
 ]
 
-foreach {p desc} $reg_defaults {
+foreach {p desc} $defaults {
   add_parameter $p STD_LOGIC_VECTOR
   set_parameter_property $p DISPLAY_NAME $desc
   set_parameter_property $p HDL_PARAMETER true
