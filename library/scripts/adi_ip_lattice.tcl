@@ -864,17 +864,17 @@ namespace eval ipl {
 # \opt[conn_mod] -conn_mod axi_dmac
 # \opt[default] -default 64
 # \opt[value_expr] -value_expr <check the IP Packager manual>
-# \opt[options] -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} / {[(True, 1), (False, 0)]}
+# \opt[options] -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} / {[(True, 1), (False, 0)]} / {[('OPT1', 0), ('OPT2', 1), ('OPT3', 2)]}
 # \opt[output_formatter] -output_formatter nostr
 # \opt[bool_value_mapping] -bool_value_mapping <check the IP Packager manual>
-# \opt[editable] -editable (<python expression based on the top module parameters>)
-# \opt[hidden] -hidden (<python expression based on the top module parameters>)
+# \opt[editable] -editable {(<python expression based on the top module parameters>)}
+# \opt[hidden] -hidden {(<python expression based on the top module parameters>)}
 # \opt[drc] -drc <check the IP Packager manual>
 # \opt[regex] -regex <check the IP Packager manual>
 # \opt[value_range] -value_range {(0, 255)}
 # \opt[config_groups] -config_groups <check the IP Packager manual>
 # \opt[group1] -group1 {Sub Group}
-# \opt[group2] -group2 {Main Group}
+# \opt[group2] -group2 {Tab Group}
 # \opt[macro_name] -macro_name <check the IP Packager manual>
 ###############################################################################
     proc set_parameter {args} {
