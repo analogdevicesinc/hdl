@@ -35,6 +35,7 @@ LIB_DEPS += jesd204/axi_jesd204_tx
 LIB_DEPS += jesd204/jesd204_rx
 LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += sysid_rom
+LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
