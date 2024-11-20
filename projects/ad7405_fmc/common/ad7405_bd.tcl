@@ -19,12 +19,6 @@ ad_ip_parameter axi_ad7405_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-# cpack
-
-ad_ip_instance util_cpack2 ad7405_adc_pack
-ad_ip_parameter ad7405_adc_pack CONFIG.NUM_OF_CHANNELS 1
-ad_ip_parameter ad7405_adc_pack CONFIG.SAMPLE_DATA_WIDTH 16;
-
 # MCLK generation 50 MHz
 
 ad_ip_instance axi_clkgen axi_adc_clkgen
@@ -34,22 +28,14 @@ ad_ip_parameter axi_adc_clkgen CONFIG.CLK0_DIV 20
 
 ad_ip_instance axi_ad7405 axi_ad7405
 
-ad_connect axi_ad7405/adc_data_out ad7405_adc_pack/fifo_wr_data_0
-ad_connect axi_ad7405/adc_enable ad7405_adc_pack/enable_0
-ad_connect axi_ad7405/adc_data_en ad7405_adc_pack/fifo_wr_en
-ad_connect  axi_ad7405/adc_clk ad7405_adc_pack/clk
-ad_connect  axi_ad7405/adc_reset ad7405_adc_pack/reset
-
-ad_connect ad7405_adc_pack/fifo_wr_overflow axi_ad7405/adc_dovf
-ad_connect ad7405_adc_pack/packed_fifo_wr axi_ad7405_dma/fifo_wr
-ad_connect ad7405_adc_pack/packed_sync axi_ad7405_dma/sync
-
 ad_connect adc_clk axi_adc_clkgen/clk_0
 ad_connect sys_cpu_clk axi_adc_clkgen/clk
 ad_connect axi_ad7405/clk_in axi_adc_clkgen/clk_0
 ad_connect axi_ad7405_dma/fifo_wr_clk axi_adc_clkgen/clk_0
 
 ad_connect adc_data axi_ad7405/adc_data_in
+ad_connect axi_ad7405/adc_data_out axi_ad7405_dma/fifo_wr_din
+ad_connect axi_ad7405/adc_data_en axi_ad7405_dma/fifo_wr_en
 
 # interconnect
 
