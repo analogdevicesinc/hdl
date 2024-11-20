@@ -3,6 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+## Offload attributes
 set dac_offload_type 0                   ; ## BRAM
 set dac_offload_size [expr 2*1024*1024]  ; ## 2 MB
 set plddr_offload_axi_data_width 0
