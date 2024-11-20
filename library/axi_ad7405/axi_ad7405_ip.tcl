@@ -32,12 +32,8 @@ adi_ip_files axi_ad7405 [list \
 	"axi_ad7405.v" ]
 
 adi_ip_properties axi_ad7405
-#ipx::remove_all_bus_interface [ipx::current_core]
 
 set cc [ipx::current_core]
-
-#ipx::infer_bus_interface clk xilinx.com:signal:clock_rtl:1.0 $cc
-#ipx::infer_bus_interface reset xilinx.com:signal:reset_rtl:1.0 $cc
 
 ipx::create_xgui_files $cc
 ipx::save_core $cc
