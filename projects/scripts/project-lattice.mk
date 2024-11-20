@@ -31,6 +31,7 @@ HDL_PROJECT_PATH := $(subst scripts/project-lattice.mk,,$(lastword $(MAKEFILE_LI
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
+include $(HDL_LIBRARY_PATH)scripts/lattice_tool_set.mk
 
 ifeq ($(OS), Windows_NT)
 	RADIANT := pnmainc
@@ -102,15 +103,14 @@ clean-all:
 	done
 
 # The library name in .tcl script must be the same as the library folder name
-M_DEPS += $(foreach dep,$(LIB_DEPS),$(HDL_LIBRARY_PATH)$(dep)/$(lastword $(subst /, ,$(dep)))/metadata.xml)
+LIB_TARGETS += $(foreach dep,$(LIB_DEPS),${LATTICE_IP_PATH}/$(lastword $(subst /, ,$(dep)))/metadata.xml)
 
-$(HDL_LIBRARY_PATH)%/metadata.xml: TARGET:=lattice
-FORCE:
-$(HDL_LIBRARY_PATH)%/metadata.xml: FORCE
-	flock $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@))/.lock sh -c " \
-	$(MAKE) -C $(patsubst %/$(lastword $(subst /, ,$(dir $@)))/,%,$(dir $@)) $(TARGET)"; exit $$?
+$(LIB_TARGETS):
+	$(foreach dep,$(LIB_DEPS), \
+		flock $(HDL_LIBRARY_PATH)$(dep)/.lock -c "cd $(HDL_LIBRARY_PATH)$(dep) \
+		&& $(MAKE) lattice";) exit $$?
 
-$(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
+$(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS))) $(LIB_TARGETS)
 	$(call skip_if_missing, \
 		Project, \
 		$(PROJECT_NAME), \
