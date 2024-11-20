@@ -13,16 +13,16 @@ L_DEPS := interfaces_ltt.tcl
 L_DEPS += ../../scripts/adi_env.tcl
 L_DEPS += ../scripts/adi_ip_lattice.tcl
 
-LTT_INTERFACES := analog.com/ADI/fifo_rd/1.0/fifo_rd.xml
-LTT_INTERFACES += analog.com/ADI/fifo_rd/1.0/fifo_rd_rtl.xml
-LTT_INTERFACES += analog.com/ADI/fifo_wr/1.0/fifo_wr.xml
-LTT_INTERFACES += analog.com/ADI/fifo_wr/1.0/fifo_wr_rtl.xml
-LTT_INTERFACES += analog.com/ADI/spi_master/1.0/spi_master.xml
-LTT_INTERFACES += analog.com/ADI/spi_master/1.0/spi_master_rtl.xml
-LTT_INTERFACES += analog.com/ADI/spi_engine_ctrl/1.0/spi_engine_ctrl.xml
-LTT_INTERFACES += analog.com/ADI/spi_engine_ctrl/1.0/spi_engine_ctrl_rtl.xml
-LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl.xml
-LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl_rtl.xml
+LTT_INTERFACES := ${LATTICE_INTERFACE_PATH}/analog.com/ADI/fifo_rd/1.0/fifo_rd.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/fifo_rd/1.0/fifo_rd_rtl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/fifo_wr/1.0/fifo_wr.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/fifo_wr/1.0/fifo_wr_rtl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_master/1.0/spi_master.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_master/1.0/spi_master_rtl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_engine_ctrl/1.0/spi_engine_ctrl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_engine_ctrl/1.0/spi_engine_ctrl_rtl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl.xml
+LTT_INTERFACES += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl_rtl.xml
 
 ifneq (${LATTICE_INTERFACE_PATH},)
 	CLEAN_TARGETS += ${LATTICE_INTERFACE_PATH}/analog.com/ADI/fifo_rd
@@ -44,10 +44,10 @@ clean: clean-all
 clean-all:
 	$(call clean, \
 		$(CLEAN_TARGETS) .lock, \
-		$(HL)ADI$(NC) interfaces)
+		$(HL)ADI$(NC) interfaces for lattice)
 
 $(LTT_INTERFACES): $(L_DEPS)
 	$(call build, \
 		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
-		$(HL)ADI$(NC) interfaces)
+		$(HL)ADI$(NC) interfaces for lattice)

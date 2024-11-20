@@ -51,9 +51,9 @@ CLEAN_TARGET += tb/xsim_gui_cmd.tcl
 CLEAN_TARGET += tb/libraries
 
 ifneq ($(LATTICE_DEPS),)
-	CLEAN_TARGET += ${LIBRARY_NAME}
+	LATTICE_CLEAN_TARGET += ${LIBRARY_NAME}
 	ifneq ($(LATTICE_IP_PATH),)
-		CLEAN_TARGET += ${LATTICE_IP_PATH}/${LIBRARY_NAME}
+		LATTICE_CLEAN_TARGET += ${LATTICE_IP_PATH}/${LIBRARY_NAME}
 	endif
 endif
 
@@ -67,7 +67,7 @@ clean: clean-all clean-ltt-interfaces
 
 clean-all:
 	$(call clean, \
-		$(CLEAN_TARGET) .lock, \
+		$(CLEAN_TARGET) $(LATTICE_CLEAN_TARGET) .lock, \
 		$(HL)$(LIBRARY_NAME)$(NC) library)
 	@for lib in $(XILINX_LIB_DEPS); do \
 		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
@@ -139,16 +139,16 @@ LATTICE_DEPS += $(GENERIC_DEPS)
 LATTICE_DEPS += $(HDL_LIBRARY_PATH)scripts/adi_ip_lattice.tcl
 _LATTICE_INTF_DEPS := $(foreach dep,$(LATTICE_INTERFACE_DEPS),$(HDL_LIBRARY_PATH)$(dep))
 
-lattice: ltt-interfaces ${LIBRARY_NAME}/metadata.xml
+lattice: ltt-interfaces ${LATTICE_IP_PATH}/${LIBRARY_NAME}/metadata.xml
 
 .DELETE_ON_ERROR:
 
-$(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
+${LATTICE_IP_PATH}/$(LIBRARY_NAME)/metadata.xml: $(LATTICE_DEPS)
 	$(call skip_if_missing, \
 		Library, \
 		$(LIBRARY_NAME), \
 		true, \
-	rm -rf $(CLEAN_TARGET) ; \
+	rm -rf $(LATTICE_CLEAN_TARGET) ; \
 	$(call build, \
 		$(LATTICE_IP_TOOL) $(LIBRARY_NAME)_ltt.tcl, \
 		$(LIBRARY_NAME)_ltt.log, \
