@@ -37,9 +37,9 @@
 
 module axi_ad7405 (
 
-(* mark_debug = "true" *) input         adc_data_in,      /* input data to be filtered */
-(* mark_debug = "true" *) output [15:0] adc_data_out,     /* filtered output */
-(* mark_debug = "true" *) output        adc_data_en,
+input         adc_data_in,      /* input data to be filtered */
+output [15:0] adc_data_out,     /* filtered output */
+output        adc_data_en,
 
 // AXI Slave Memory Map
 
@@ -65,11 +65,7 @@ output [ 1:0] s_axi_rresp,
 output [31:0] s_axi_rdata,
 input         s_axi_rready,
 
-input         clk_in,
-(* mark_debug = "true" *) output        adc_reset,
-output        adc_clk,
-(* mark_debug = "true" *) output        adc_enable,
-(* mark_debug = "true" *) input         adc_dovf
+input         clk_in
 );
 
 localparam [31:0] RD_RAW_CAP = 32'h2000;
@@ -87,7 +83,6 @@ wire [15:0] adc_dec_rate;
 
 wire        adc_reset_s;
 wire        adc_clk_s;
-wire        adc_enable_s;
 
 wire        up_clk;
 wire        up_rstn;
@@ -109,12 +104,9 @@ wire        adc_dfmt_enable_s;
 wire        adc_dfmt_type_s;
 wire        adc_dfmt_se_s;
 
-assign adc_reset = adc_reset_s;
 assign adc_clk_s = clk_in;
 assign up_clk = s_axi_aclk;
 assign up_rstn = s_axi_aresetn;
-assign adc_clk = adc_clk_s;
-assign adc_enable = adc_enable_s;
 
  // processor read interface
 
@@ -157,7 +149,7 @@ end
   ) i_up_adc_channel (
     .adc_clk (adc_clk_s),
     .adc_rst (adc_reset_s),
-    .adc_enable (adc_enable_s),
+    .adc_enable (/*adc_enable_s*/),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),
     .adc_dfmt_se (adc_dfmt_se_s),
@@ -238,7 +230,7 @@ end
   .adc_pin_mode (),
   .adc_status (),
   .adc_sync_status (1'b1),
-  .adc_status_ovf (adc_dovf),
+  .adc_status_ovf (/*adc_dovf*/),
   .adc_clk_ratio (),
   .adc_start_code (),
   .adc_sref_sync (),
