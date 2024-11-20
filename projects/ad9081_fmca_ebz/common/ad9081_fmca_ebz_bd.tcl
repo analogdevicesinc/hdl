@@ -24,6 +24,10 @@ if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
 }
 
+if {![info exists CACHE_COHERENCY]} {
+  set CACHE_COHERENCY false
+}
+
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
@@ -316,6 +320,7 @@ if {$INTF_CFG != "TX"} {
   } else {
     ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
   }
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
 # Instantiate DAC (Tx) path
@@ -384,6 +389,7 @@ if {$INTF_CFG != "RX"} {
     ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
   }
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
 if {$ADI_PHY_SEL == 1} {
@@ -490,8 +496,8 @@ if {$INTF_CFG != "TX"} {
   if {$ADI_PHY_SEL == 1} {
     ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
   }
-  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-  ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
+  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1 $CACHE_COHERENCY
+  ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi $CACHE_COHERENCY
 
   # Interrupts
   ad_cpu_interrupt ps-13 mb-12 axi_mxfe_rx_dma/irq
@@ -541,8 +547,8 @@ if {$INTF_CFG != "RX"} {
   ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
   ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
   # GT / ADC
-  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-  ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
+  ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi $CACHE_COHERENCY
 
   # Interrupts
   ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
