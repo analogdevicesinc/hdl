@@ -32,13 +32,13 @@ create_bd_port -dir I fpga_a_ref_clk
 create_bd_port -dir I fpga_b_ref_clk
 
 
-create_bd_port -dir O -from 1 -to 0 ad9508_adf4350_csn_o
-create_bd_port -dir I -from 1 -to 0 ad9508_adf4350_csn_i
-create_bd_port -dir I               ad9508_adf4350_clk_i
-create_bd_port -dir O               ad9508_adf4350_clk_o
-create_bd_port -dir I               ad9508_adf4350_sdo_i
-create_bd_port -dir O               ad9508_adf4350_sdo_o
-create_bd_port -dir I               ad9508_adf4350_sdi_i
+create_bd_port -dir O               ad4080_b_spi_csn_o
+create_bd_port -dir I               ad4080_b_spi_csn_i
+create_bd_port -dir I               ad4080_b_spi_clk_i
+create_bd_port -dir O               ad4080_b_spi_clk_o
+create_bd_port -dir I               ad4080_b_spi_sdo_i
+create_bd_port -dir O               ad4080_b_spi_sdo_o
+create_bd_port -dir I               ad4080_b_spi_sdi_i
 
 # ad408x_clock_monitor
 
@@ -50,19 +50,19 @@ ad_connect fpga_b_ref_clk  ad408x_clock_monitor/clock_1
 
 #ad9508 and adf4350 AXI_SPI
 
-ad_ip_instance axi_quad_spi ad9508_adf4350_spi
-ad_ip_parameter ad9508_adf4350_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter ad9508_adf4350_spi CONFIG.C_NUM_SS_BITS 2
-ad_ip_parameter ad9508_adf4350_spi CONFIG.C_SCK_RATIO 8
+ad_ip_instance axi_quad_spi ad4080_b_spi
+ad_ip_parameter ad4080_b_spi CONFIG.C_USE_STARTUP 0
+ad_ip_parameter ad4080_b_spi CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter ad4080_b_spi CONFIG.C_SCK_RATIO 8
 
-ad_connect ad9508_adf4350_csn_i ad9508_adf4350_spi/ss_i
-ad_connect ad9508_adf4350_csn_o ad9508_adf4350_spi/ss_o
-ad_connect ad9508_adf4350_clk_i ad9508_adf4350_spi/sck_i
-ad_connect ad9508_adf4350_clk_o ad9508_adf4350_spi/sck_o
-ad_connect ad9508_adf4350_sdo_o ad9508_adf4350_spi/io0_o
-ad_connect ad9508_adf4350_sdi_i ad9508_adf4350_spi/io1_i
+ad_connect ad4080_b_spi_csn_i ad4080_b_spi/ss_i
+ad_connect ad4080_b_spi_csn_o ad4080_b_spi/ss_o
+ad_connect ad4080_b_spi_clk_i ad4080_b_spi/sck_i
+ad_connect ad4080_b_spi_clk_o ad4080_b_spi/sck_o
+ad_connect ad4080_b_spi_sdo_o ad4080_b_spi/io0_o
+ad_connect ad4080_b_spi_sdi_i ad4080_b_spi/io1_i
 
-ad_connect $sys_cpu_clk ad9508_adf4350_spi/ext_spi_clk
+ad_connect $sys_cpu_clk ad4080_b_spi/ext_spi_clk
 
 # axi_ad408x
 
@@ -146,7 +146,7 @@ ad_cpu_interconnect 0x44A00000 axi_ad4080_adc_a
 ad_cpu_interconnect 0x44A10000 axi_ad4080_adc_b
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma_adca
 ad_cpu_interconnect 0x44A50000 axi_ad4080_dma_adcb
-ad_cpu_interconnect 0x44a70000 ad9508_adf4350_spi
+ad_cpu_interconnect 0x44a70000 ad4080_b_spi
 ad_cpu_interconnect 0x44A80000 ad408x_clock_monitor
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
@@ -155,4 +155,4 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma_adcb/m_dest_axi
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad4080_dma_adca/irq
 ad_cpu_interrupt ps-12 mb-11 axi_ad4080_dma_adcb/irq
-ad_cpu_interrupt ps-11 mb-10 ad9508_adf4350_spi/ip2intc_irpt
+ad_cpu_interrupt ps-10 mb-9 ad4080_b_spi/ip2intc_irpt

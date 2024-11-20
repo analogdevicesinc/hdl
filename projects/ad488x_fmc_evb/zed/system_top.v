@@ -186,6 +186,8 @@ module system_top (
   wire            fpga_100_clk;
   wire            fpga_ref_clk;
 
+  wire  [ 1:0]    ad9508_adf4350_csn;
+
   assign adca_gp0_dir = 1'b0;
   assign adca_gp1_dir = 1'b0;
   assign adca_gp2_dir = 1'b1;
@@ -304,14 +306,14 @@ module system_top (
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (adca_ad4080_mosi),
     .spi1_clk_i (1'b0),
-    .spi1_clk_o (adcb_ad4080_sclk),
-    .spi1_csn_0_o (adcb_ad4080_csn),
-    .spi1_csn_1_o (),
+    .spi1_clk_o (ad9508_adf4350_sclk),
+    .spi1_csn_0_o (ad9508_csn),
+    .spi1_csn_1_o (adf4350_csn),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (adcb_ad4080_miso),
+    .spi1_sdi_i (ad9508_adf4350_miso),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (adcb_ad4080_mosi),
+    .spi1_sdo_o (ad9508_adf4350_mosi),
 
     .adca_dco_p (adca_dco_p),
     .adca_dco_n (adca_dco_n),
@@ -335,13 +337,13 @@ module system_top (
     .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
     .adcb_sync_n (ad9508_sync),
 
-    .ad9508_adf4350_csn_o({adf4350_csn,ad9508_csn}),
-    .ad9508_adf4350_csn_i(2'b11),
-    .ad9508_adf4350_clk_i(1'b0),
-    .ad9508_adf4350_clk_o(ad9508_adf4350_sclk),
-    .ad9508_adf4350_sdo_i(1'b0),
-    .ad9508_adf4350_sdo_o(ad9508_adf4350_mosi),
-    .ad9508_adf4350_sdi_i(ad9508_adf4350_miso),
+    .ad4080_b_spi_csn_o(adcb_ad4080_csn),
+    .ad4080_b_spi_csn_i(2'b11),
+    .ad4080_b_spi_clk_i(1'b0),
+    .ad4080_b_spi_clk_o(adcb_ad4080_sclk),
+    .ad4080_b_spi_sdo_i(1'b0),
+    .ad4080_b_spi_sdo_o(adcb_ad4080_mosi),
+    .ad4080_b_spi_sdi_i(adcb_ad4080_miso),
 
     .fpga_a_ref_clk(fpga_a_ref_clk),
     .fpga_b_ref_clk(fpga_b_ref_clk));
