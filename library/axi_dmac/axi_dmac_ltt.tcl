@@ -22,7 +22,6 @@ set ip [ipl::general  -vendor "analog.com" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2022.1" \
-    -max_radiant_version "2023.2" \
     -min_esi_version "2022.1" -ip $ip]
 
 set ip [ipl::add_memory_map -ip $ip \
