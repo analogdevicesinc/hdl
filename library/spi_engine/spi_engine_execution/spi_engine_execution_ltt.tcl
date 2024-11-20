@@ -159,4 +159,3 @@ set ip [ipl::ignore_ports -ip $ip \
     -expression {(ECHO_SCLK != 1)}]
 
 ipl::generate_ip $ip
-ipl::generate_ip $ip ./

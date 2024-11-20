@@ -179,5 +179,3 @@ set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "axi_pwm_gen_regmap.sv" ]]
 
 ipl::generate_ip $ip
-ipl::generate_ip $ip ./
-

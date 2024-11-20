@@ -67,4 +67,3 @@ set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "axi_clock_monitor.v" ]]
 
 ipl::generate_ip $ip
-ipl::generate_ip $ip ./

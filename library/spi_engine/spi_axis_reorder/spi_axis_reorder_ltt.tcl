@@ -63,4 +63,3 @@ set ip [ipl::set_parameter -ip $ip \
     -group2 Config]
 
 ipl::generate_ip $ip
-ipl::generate_ip $ip ./

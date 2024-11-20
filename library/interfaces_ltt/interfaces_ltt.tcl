@@ -21,7 +21,6 @@ set if [ipl::create_interface -vendor analog.com \
         {-n XFER_REQ -p optional -w 1 -d in}
     }]
 ipl::generate_interface $if
-ipl::generate_interface $if ./
 
 set if [ipl::create_interface -vendor analog.com \
     -library ADI \
@@ -38,7 +37,6 @@ set if [ipl::create_interface -vendor analog.com \
         {-n XFER_REQ -d in -p optional -w 1}
     }]
 ipl::generate_interface $if
-ipl::generate_interface $if ./
 
 set if [ipl::create_interface -vendor analog.com \
     -library ADI \
@@ -62,7 +60,6 @@ set if [ipl::create_interface -vendor analog.com \
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
 ipl::generate_interface $if
-ipl::generate_interface $if ./
 
 set if [ipl::create_interface -vendor analog.com \
     -library ADI \
@@ -84,7 +81,6 @@ set if [ipl::create_interface -vendor analog.com \
         {-n SYNC_DATA -p required -w 8 -d in}
     }]
 ipl::generate_interface $if
-ipl::generate_interface $if ./
 
 set if [ipl::create_interface -vendor analog.com \
     -library ADI \
@@ -102,4 +98,3 @@ set if [ipl::create_interface -vendor analog.com \
         {-n CS -p required -d out}
     }]
 ipl::generate_interface $if
-ipl::generate_interface $if ./
