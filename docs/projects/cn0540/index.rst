@@ -79,9 +79,9 @@ added to the base address from HDL (see more at :ref:`architecture`).
 ========================  ===========
 Instance                  Address
 ========================  ===========
+axi_iic_ard*              0x4160_0000
 spi_cn0540_axi_regmap*    0x44A0_0000
 axi_cn0540_dma*           0x44A3_0000
-axi_iic_cn0540*           0x44A4_0000
 xadc_in*                  0x44A5_0000
 spi_clkgen*               0x44A7_0000
 axi_dmac_0**              0x0002_0000
@@ -109,8 +109,8 @@ I2C connections
    * - PL
      - axi_iic
      - axi_iic_cn0540
-     - 0x44A4_0000
-     - ---
+     - 0x4160_0000
+     - LTC2606
    * - PS
      - i2c1
      - sys_hps_i2c1
@@ -249,8 +249,8 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name       HDL Linux Zynq Actual Zynq
 =================== === ========== ===========
 axi_cn0540_dma      13  57         89
-axi_iic_cn0540      12  56         88
-spi_cn0540          11  55         87
+spi_cn0540          12  56         88
+axi_iic_ard         11  55         87
 =================== === ========== ===========
 
 ================ === =============== ================

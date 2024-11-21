@@ -66,7 +66,6 @@ Instance                  Address
 ========================  ===========
 spi_ad4170_axi_regmap*    0x44A0_0000
 axi_ad4170_dma*           0x44A3_0000
-axi_ad4170_iic*           0x44A4_0000
 spi_clkgen*               0x44A7_0000
 axi_dmac_0**              0x0002_0000
 axi_spi_engine_0**        0x0003_0000
@@ -91,10 +90,10 @@ I2C connections
      - Address
      - I2C subordinate
    * - PL*
-     - axi_iic
-     - axi_ad4170_iic
-     - 0x44A4_0000
-     - ---
+     - iic_ard
+     - axi_iic_ard
+     - 0x4160_0000
+     - 24AA32A
    * - PS**
      - i2c1
      - sys_hps_i2c1
@@ -183,8 +182,8 @@ Below are the Programmable Logic interrupts used in this project.
 Instance name       HDL Linux Zynq Actual Zynq
 =================== === ========== ===========
 axi_ad4170_dma      13  57         89
-axi_ad4170_iic      12  56         88
-spi_ad4170          11  55         87
+spi_ad4170          12  56         88
+axi_iic_ard         11  55         87
 =================== === ========== ===========
 
 ================ === =============== ================

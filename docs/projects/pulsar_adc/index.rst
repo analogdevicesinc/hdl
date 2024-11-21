@@ -203,7 +203,7 @@ pulsar_adc_trigger_gen     0x44B0_0000
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
+.. list-table:: ZedBoard
    :widths: 20 20 20 20 20
    :header-rows: 1
 
@@ -223,9 +223,24 @@ I2C connections
      - 0x4160_0000
      - ---
 
+.. list-table:: CoraZ7S
+   :widths: 20 20 20 20 20
+   :header-rows: 1
+
+   * - I2C type
+     - I2C manager instance
+     - Alias
+     - Address
+     - I2C subordinate
+   * - PL
+     - iic_ard
+     - axi_ard_fmc
+     - 0x4160_0000
+     - ---
+
 .. note::
 
-  Only for AD40xx/ADAQ40xx
+   Only for AD40xx/ADAQ40xx
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -286,12 +301,15 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-================== === ========== ===========
-Instance name      HDL Linux Zynq Actual Zynq
-================== === ========== ===========
-axi_pulsar_adc_dma 13  57         89
-spi_pulsar_adc     12  56         88
-================== === ========== ===========
+.. table:: ZedBoard/CoraZ7S
+
+   ================== === ========== ===========
+   Instance name      HDL Linux Zynq Actual Zynq
+   ================== === ========== ===========
+   axi_pulsar_adc_dma 13  57         89
+   spi_pulsar_adc     12  56         88
+   iic_fmc/ard        11  55         87
+   ================== === ========== ===========
 
 Building the HDL project
 -------------------------------------------------------------------------------

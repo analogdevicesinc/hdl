@@ -76,9 +76,9 @@ added to the base address from HDL (see more at :ref:`architecture`).
 =============== =========== ===========
 Instance        Zynq        Cyclone V
 =============== =========== ===========
+axi_iic_ard*    0x4160_0000 ---
 axi_ad77684_adc 0x44A0_0000 0x0002_8000
 cn0579_dma      0x44A3_0000 0x0003_0000
-axi_iic_dac*    0x44A4_0000 ---
 =============== =========== ===========
 
 .. admonition:: Legend
@@ -100,7 +100,7 @@ I2C connections
      - I2C subordinate
    * - PL*
      - axi_iic
-     - axi_iic_dac
+     - axi_iic_ard
      - 0x0C
      - AD5696R
    * - PS**
@@ -169,19 +169,22 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-============= === ========== =========== =============== ================
-Instance name HDL Linux Zynq Actual Zynq Linux Cyclone V Actual Cyclone V
-============= === ========== =========== =============== ================
-cn0579_dma*   13  57         89          ---             ---
-axi_iic_dac*  12  56         88          ---             ---
-cn0579_dma**  5   ---        ---         45              77
-============= === ========== =========== =============== ================
+.. table:: CoraZ7S
 
-.. admonition:: Legend
-   :class: note
+   ============= === ========== ===========
+   Instance name HDL Linux Zynq Actual Zynq
+   ============= === ========== ===========
+   cn0579_dma    12  56         88
+   axi_iic_ard   11  55         87
+   ============= === ========== ===========
 
-   -  ``*`` only for Cora Z7-07S
-   -  ``**`` only for DE10-Nano
+.. table:: DE10-Nano
+
+   ============= === =============== ================
+   Instance name HDL Linux Cyclone V Actual Cyclone V
+   ============= === =============== ================
+   cn0579_dma    5   45              77
+   ============= === =============== ================
 
 Building the HDL project
 -------------------------------------------------------------------------------
