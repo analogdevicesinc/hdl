@@ -37,4 +37,7 @@ adi_project_files adrv9009zu11eg [list \
   "../common/adrv2crr_fmc_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
 
+set_property STEPS.POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+
 adi_project_run adrv9009zu11eg
