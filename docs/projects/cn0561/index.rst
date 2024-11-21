@@ -118,6 +118,44 @@ odr_generator*            0x0004_0000
 
    ``*`` instantiated only for DE10-Nano
 
+I2C connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table:: ZedBoard
+   :widths: 20 20 20 20 20
+   :header-rows: 1
+
+   * - I2C type
+     - I2C manager instance
+     - Alias
+     - Address
+     - I2C subordinate
+   * - PL
+     - iic_fmc
+     - axi_iic_fmc
+     - 0x4162_0000
+     - M24C02
+   * - PL
+     - iic_main
+     - axi_iic_main
+     - 0x4160_0000
+     - ---
+
+.. list-table:: CoraZ7S
+   :widths: 20 20 20 20 20
+   :header-rows: 1
+
+   * - I2C type
+     - I2C manager instance
+     - Alias
+     - Address
+     - I2C subordinate
+   * - PL
+     - iic_ard
+     - axi_ard_fmc
+     - 0x4160_0000
+     - M24C02
+
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -188,6 +226,7 @@ Instance name   HDL Linux Zynq Actual Zynq
 =============== === ========== ===========
 axi_cn0561_dma  13  57         89
 spi_cn0561      12  56         88
+axi_iic_ard     11  55         87
 =============== === ========== ===========
 
 Building the HDL project
