@@ -512,7 +512,7 @@ The tcl file must start with two tcl dependencies:
 The ``adi_env.tcl`` sets some build related and versioning variables, and the
 default hdl directory variable. The ``adi_ip_lattice.tcl`` file contains all the
 procedures for creating IPs in the ``ipl`` namespace. The IP procedures can be
-called like: ``ipl::<procedure>``.
+called like: ``ipl::<procedure_name>``.
 
 Namespace for Lattice IP packaging
 ----------------------------------
@@ -520,10 +520,10 @@ Namespace for Lattice IP packaging
 There are two main parts of procedures and structures in this namespace:
 
 1. **IP related procedures and descriptors for users:**
-   
+
    * ``$::ipl::ip`` - This describes an IP itself. It is used to set a new IP
      instance like: ``set ip $::ipl::ip``. After the instance is correctly
-     configured, it is used to generate an actual IP on a specified path. 
+     configured, it is used to generate an actual IP on a specified path.
      This instance is updated by every IP related procedure like:
      ``set ip [<some_ip_procedure> -ip $ip]`` except the
      ``ipl::generate_ip`` and ``ipl::parse_module``. You will see later on in
@@ -536,7 +536,7 @@ There are two main parts of procedures and structures in this namespace:
      other procedures.
    * ``ipl::add_ports_from_module`` - It is used to set the IP structure with
      the port's data from the module data which is set by ``ipl::parse_module``
-   * ``ipl::add_memory_map`` - Sets the IP structure with a new memory map, 
+   * ``ipl::add_memory_map`` - Sets the IP structure with a new memory map,
      the name of this memory map must be used for slave memory mapped interface
      configuration.
    * ``ipl::add_address_space`` - Sets the IP structure with an address space,
@@ -546,7 +546,7 @@ There are two main parts of procedures and structures in this namespace:
      parsed module data from top module.
    * ``ipl::add_interface`` - Sets the IP structure with an interface instance.
    * ``ipl::add_interface_by_prefix`` - Sets the IP structure with an interface
-     by filtering ports by prefix from module data parsed with 
+     by filtering ports by prefix from module data parsed with
      ``ipl::parse_module`` when a naming standard like
      ``<verilog_prefix>_<standard_port_name>`` is used.
    * ``ipl::add_ip_files`` - Sets the IP structure with IP file dependencies
@@ -555,7 +555,7 @@ There are two main parts of procedures and structures in this namespace:
      ``-sdepth`` deep.
    * ``ipl::set_parameter`` - Sets the IP structure with a configuration
      parameter which will appear in the IP GUI also.
-   * ``ipl::ignore_ports`` - Ignores/Hides a list of ports by a Python 
+   * ``ipl::ignore_ports`` - Ignores/Hides a list of ports by a Python
      expression which usually depends on the value of a Verilog parameter.
    * ``ipl::ignore_ports_by_prefix`` - Ignores/Hides ports which are matching
      with a specified prefix from the ports' names in the parsed ports from
@@ -766,12 +766,56 @@ trying to simulate most of the available options when creating a new IP.
       "<path>/<dependency0>.v" \
       "<path>/<dependency1>.sv"]
 
+   # You can also create your own interfaces.
+   # The options for ports are the following:
+   #     -n <logical_name>
+   #     -d <in/out> #direction
+   #     -p <required/optional> #presence
+   #     -w <port_width>
+   #     -q <clock/reset/data/address> #qualifier #default is DATA
+   # We usually put these in a separate script for make, but you can use it here.
+   set if [ipl::create_interface -vendor analog.com \
+      -library ADI \
+      -name fifo_wr \
+      -version 1.0 \
+      -directConnection true \
+      -isAddressable false \
+      -description "ADI fifo wr interface" \
+      -ports {
+         {-n DATA -d out -p required}
+         {-n EN -d out -p required -w 1}
+         {-n OVERFLOW -w 1 -p optional -d in}
+         {-n SYNC -p optional -w 1 -d out}
+         {-n XFER_REQ -p optional -w 1 -d in}
+      }]
+   # This will generate the interface in the default interface directory
+   # of Lattice Propel Builder (~/PropelIPLocal/interfaces).
+   # You can remove it by deleting the interface folder from this directory.
+   # You can use a second path parameter to generate it on a specified path.
+   # For make it is a dedicated file for generating interfaces namely
+   # 'library/interfaces_ltt/interfaces_ltt.tcl' where you can add new
+   # interfaces and edit the 'library/interfaces_ltt/Makefile' to work
+   # correspondingly.
+   ipl::generate_interface $if
+
+   # You can add it to the IP
+   set ip [ipl::add_interface -ip $ip \
+    -inst_name fifo_wr \
+    -display_name fifo_wr \
+    -description fifo_wr \
+    -master_slave slave \
+    -portmap { \
+        {"fifo_wr_en" "EN"} \
+        {"fifo_wr_din" "DATA"} \
+        {"fifo_wr_overflow" "OVERFLOW"} \
+        {"fifo_wr_xfer_req" "XFER_REQ"} \
+    } \
+    -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+
    # Generating the IP given as first parameter on the path given as the second
    # parameter. Without the second parameter the IP will be generated in
-   # default IP download directory of Lattice Propel Builder.
-   # You need to use as in the following in order for the make work correctly.
+   # default IP download directory of Lattice Propel Builder (~/PropelIPLocal).
    ipl::generate_ip $ip
-   ipl::generate_ip $ip ./
 
 Makefile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -798,4 +842,3 @@ and apply the same logic to make your changes.
 
 Now you can run ``make`` from the IP directory.
 After that the IP will be accessible in Lattice Propel Builder.
-
