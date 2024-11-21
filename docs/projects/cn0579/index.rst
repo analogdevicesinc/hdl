@@ -175,8 +175,8 @@ Below are the Programmable Logic interrupts used in this project.
 ============= === ========== =========== =============== ================
 Instance name HDL Linux Zynq Actual Zynq Linux Cyclone V Actual Cyclone V
 ============= === ========== =========== =============== ================
-cn0579_dma*   13  57         89          ---             ---
-axi_iic_dac*  12  56         88          ---             ---
+cn0579_dma*   12  56         88          ---             ---
+axi_iic_ard*  11  55         87          ---             ---
 cn0579_dma**  5   ---        ---         45              77
 ============= === ========== =========== =============== ================
 

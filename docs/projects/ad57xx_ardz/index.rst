@@ -112,11 +112,11 @@ I2C connections
      - Alias
      - Address
      - I2C subordinate
-   * - PS*
-     - iic_0
-     - iic_0_io
-     - ---
-     - ---
+   * - PL*
+     - iic_ard
+     - axi_ard_fmc
+     - 0x4160_0000
+     - 24AA32A
    * - PS**
      - i2c1
      - sys_hps_i2c1
@@ -212,8 +212,9 @@ Below are the Programmable Logic interrupts used in this project.
 =================== === ========== ===========
 Instance name       HDL Linux Zynq Actual Zynq
 =================== === ========== ===========
-ad57xx_tx_dma       12  56         88
-spi_ad57xx          11  55         87
+ad57xx_tx_dma       13  57         89
+spi_ad57xx          12  56         88
+axi_iic_ard         11  55         87
 =================== === ========== ===========
 
 ================ === =============== ================
