@@ -788,8 +788,8 @@ trying to simulate most of the available options when creating a new IP.
          {-n SYNC -p optional -w 1 -d out}
          {-n XFER_REQ -p optional -w 1 -d in}
       }]
-   # This will generate the interface in the default interface directory
-   # of Lattice Propel Builder (~/PropelIPLocal/interfaces).
+   # This will generate the interface in the default interface directory of
+   # Lattice Propel Builder (~/PropelIPLocal/interfaces).
    # You can remove it by deleting the interface folder from this directory.
    # You can use a second path parameter to generate it on a specified path.
    # For make it is a dedicated file for generating interfaces namely
@@ -798,7 +798,7 @@ trying to simulate most of the available options when creating a new IP.
    # correspondingly.
    ipl::generate_interface $if
 
-   # You can add it to the IP
+   # You can add it to the IP.
    set ip [ipl::add_interface -ip $ip \
     -inst_name fifo_wr \
     -display_name fifo_wr \
@@ -820,13 +820,19 @@ trying to simulate most of the available options when creating a new IP.
 Makefile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this file you will also have to change/add paths to every file in ``<other_components>``
-list, using GENERIC_DEPS.
-Make sure to also change LIBRARY_NAME and LATTICE_DEPS to match the name for the new IP.
+In this file you will also have to change/add paths to every file dependency for
+the IP, using ``GENERIC_DEPS`` for generic dependencies, ``LATTICE_DEPS`` for
+Lattice specific file dependencies, ``LATTICE_INTERFACE_DEPS`` for Lattice
+interface dependencies. We set the Lattice interface dependencies when we need
+custom interfaces to ``LATTICE_INTERFACE_DEPS := interfaces_ltt`` where
+``interfaces_ltt`` means the ``hdl/library/interfaces_ltt`` directory where the
+make script will enter in order to generate the interfaces defined there. If you
+want to add a new interface, you can add it to
+``hdl/library/interfaces_ltt/interfaces_ltt.tcl`` file then update the
+``hdl/library/interfaces_ltt/Makefile`` correspondingly.
+Make sure you set the ``LIBRARY_NAME`` correctly.
 
-If you need more help, here is an example of an IP called axi_led_control.
-You can open it side by side with the Makefile from the original axi_fan_control
-and apply the same logic to make your changes.
+The following is an example for ``Makefile``:
 
 .. code:: makefile
 
