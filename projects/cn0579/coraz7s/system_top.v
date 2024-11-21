@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -62,6 +62,9 @@ module system_top (
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led,
 
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
+
   input           clk_in,
   input           ready_in,
   input   [ 3:0]  data_in,
@@ -71,12 +74,7 @@ module system_top (
   output          spi_mosi,
   input           spi_miso,
   output          shutdown_n,
-  output          reset_n,
-
-  // dac i2c
-
-  inout           dac_i2c_scl,
-  inout           dac_i2c_sda
+  output          reset_n
 );
 
   // internal signals
@@ -112,8 +110,6 @@ module system_top (
     .clk_in (clk_in),
     .ready_in (ready_in),
     .data_in (data_in),
-    .iic_dac_scl_io (dac_i2c_scl),
-    .iic_dac_sda_io (dac_i2c_sda),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
@@ -155,6 +151,8 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o ());
+    .spi1_sdo_o (),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda));
 
 endmodule

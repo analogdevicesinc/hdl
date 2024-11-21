@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -63,8 +63,8 @@ module system_top (
   inout   [1:0]   btn,
   inout   [5:0]   led,
 
-  inout           iic_scl,
-  inout           iic_sda,
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
 
   // cn0561 SPI configuration interface
 
@@ -142,8 +142,8 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .iic_0_io_scl_io (iic_scl),
-    .iic_0_io_sda_io (iic_sda),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
     .spi0_clk_i (cn0561_spi_sclk),
     .spi0_clk_o (cn0561_spi_sclk),
     .spi0_csn_0_o (cn0561_spi_cs),

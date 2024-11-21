@@ -63,8 +63,8 @@ module system_top (
   inout  [1:0]  btn,
   inout  [5:0]  led,
 
-  inout         iic_eeprom_scl,
-  inout         iic_eeprom_sda,
+  inout         iic_ard_scl,
+  inout         iic_ard_sda,
 
   // ad4170
   input         ad4170_spi_miso,
@@ -141,8 +141,6 @@ module system_top (
     .adc_spi_cs (ad4170_spi_csn),
     .adc_spi_sclk (ad4170_spi_sclk),
     .adc_data_ready (ad4170_dig_aux[0]),
-    .iic_ad4170_scl_io (iic_eeprom_scl),
-    .iic_ad4170_sda_io (iic_eeprom_sda),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
@@ -160,6 +158,8 @@ module system_top (
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o());
+    .spi1_sdo_o (),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda));
 
 endmodule
