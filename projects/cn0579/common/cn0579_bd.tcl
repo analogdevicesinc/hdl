@@ -3,17 +3,11 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_dac
 # ad7768-4 interface
 
 create_bd_port -dir I clk_in
 create_bd_port -dir I ready_in
 create_bd_port -dir I -from 7 -to 0 data_in
-
-#dac iic 
-
-ad_ip_instance axi_iic axi_iic_dac
-ad_connect iic_dac axi_iic_dac/iic
 
 # adc(cn0579-dma)
 
@@ -62,14 +56,12 @@ ad_connect  cn0579_dma/sync                     cn0579_adc_pack/packed_sync
 
 # interrupts
 
-ad_cpu_interrupt "ps-13" "mb-13"  cn0579_dma/irq
-ad_cpu_interrupt "ps-12" "mb-12" axi_iic_dac/iic2intc_irpt
+ad_cpu_interrupt "ps-12" "mb-12"  cn0579_dma/irq
 
 # cpu / memory interconnects
 
 ad_cpu_interconnect 0x44a00000 axi_ad77684_adc 
 ad_cpu_interconnect 0x44a30000 cn0579_dma
-ad_cpu_interconnect 0x44a40000 axi_iic_dac
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk cn0579_dma/m_dest_axi

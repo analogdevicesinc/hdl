@@ -4,7 +4,6 @@
 ###############################################################################
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 adc_spi
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_cn0540
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 xadc_mux
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 xadc_vaux1
 create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 xadc_vaux9
@@ -28,9 +27,6 @@ set echo_sclk     0
 set hier_spi_engine spi_cn0540
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
-
-ad_ip_instance axi_iic axi_iic_cn0540
-ad_connect iic_cn0540 axi_iic_cn0540/iic
 
 # Generate a 80MHz spi_clk for the SPI Engine (targeted SCLK is 20MHz)
 
@@ -100,15 +96,13 @@ ad_connect xadc_in/Vaux15 xadc_vaux15
 
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_cn0540_dma
-ad_cpu_interconnect 0x44a40000 axi_iic_cn0540
 ad_cpu_interconnect 0x44a50000 xadc_in
 ad_cpu_interconnect 0x44a70000 spi_clkgen
 
 # interrupts
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_cn0540_dma/irq
-ad_cpu_interrupt "ps-12" "mb-12" axi_iic_cn0540/iic2intc_irpt
-ad_cpu_interrupt "ps-11" "mb-11" $hier_spi_engine/irq
+ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 
 # memory interconnects
 

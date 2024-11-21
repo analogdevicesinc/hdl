@@ -67,7 +67,10 @@ module system_top (
   output          pulsar_adc_spi_pd,
 
   inout   [ 1:0]  btn,
-  inout   [ 5:0]  led
+  inout   [ 5:0]  led,
+
+  inout           iic_ard_scl,
+  inout           iic_ard_sda
 );
 
   // internal signals
@@ -148,6 +151,8 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
     .pulsar_adc_spi_cs(pulsar_adc_spi_cs),
     .pulsar_adc_spi_sclk(pulsar_adc_spi_sclk),
     .pulsar_adc_spi_sdi(pulsar_adc_spi_sdi),
