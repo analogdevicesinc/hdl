@@ -86,6 +86,16 @@ namespace eval ipl {
     set check [catch {exec cygpath --version}]
     if {$check == 0} {
         set PropelIPLocal_path [exec cygpath -H]/[exec whoami]/PropelIPLocal
+        if {[info exists env(LATTICE_INTERFACE_SEARCH_PATH)]} {
+            set interfaces_paths_list [split $env(LATTICE_INTERFACE_SEARCH_PATH) ";"]
+
+            foreach file $interfaces_paths_list {
+                if {[regexp {^.+\/PropelIPLocal} $file PropelIPLocal_path]} {
+                    puts $file
+                    set PropelIPLocal_path
+                }
+            }
+        }
     } else {
         set PropelIPLocal_path $env(HOME)/PropelIPLocal
     }
