@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -68,5 +68,6 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-adi_project_run ad9081_fmca_ebz_vcu118
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
+adi_project_run ad9081_fmca_ebz_vcu118
