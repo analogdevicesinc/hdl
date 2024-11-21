@@ -71,8 +71,8 @@ ad_cpu_interconnect 0x44b10000 axi_ad57xx_clkgen
 
 # interrupts
 
-ad_cpu_interrupt "ps-12" "mb-12" ad57xx_dma/irq
-ad_cpu_interrupt "ps-11" "mb-11" $hier_spi_engine/irq
+ad_cpu_interrupt "ps-13" "mb-13" ad57xx_dma/irq
+ad_cpu_interrupt "ps-12" "mb-12" $hier_spi_engine/irq
 
 # memory interconnects
 

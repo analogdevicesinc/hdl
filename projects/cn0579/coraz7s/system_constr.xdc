@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,8 +18,6 @@
  set_property  -dict {PACKAGE_PIN K18   IOSTANDARD LVCMOS33}  [get_ports spi_mosi   ]; ##   P12.7  IO11
  set_property  -dict {PACKAGE_PIN J18   IOSTANDARD LVCMOS33}  [get_ports spi_miso   ]; ##   P12.6  IO12
  set_property  -dict {PACKAGE_PIN G15   IOSTANDARD LVCMOS33}  [get_ports spi_clk    ]; ##   P12.5  IO13
- set_property  -dict {PACKAGE_PIN P16   IOSTANDARD LVCMOS33}  [get_ports dac_i2c_scl]; ##   P12.1  CK_SCL
- set_property  -dict {PACKAGE_PIN P15   IOSTANDARD LVCMOS33}  [get_ports dac_i2c_sda]; ##   P12.2  CK_SDA
 
 set input_clock_period  30.51;    # Period of input clock fMAX_DCLK=32.768MHz
 set hold_time           8.5;               

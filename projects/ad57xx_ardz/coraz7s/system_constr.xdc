@@ -5,9 +5,6 @@
 
 # ad57xx interface
 
-set_property -dict {PACKAGE_PIN P16 IOSTANDARD LVCMOS33} [get_ports ad57xx_ardz_scl]
-set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33} [get_ports ad57xx_ardz_sda]
-
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports ad57xx_ardz_spi_mosi]
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports ad57xx_ardz_spi_miso]
 set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports ad57xx_ardz_spi_sclk]

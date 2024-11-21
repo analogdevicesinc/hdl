@@ -63,6 +63,9 @@ module system_top (
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led,
 
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
+
   // ad7190 spi pins
 
   output          adc_spi_sclk,
@@ -141,6 +144,9 @@ module system_top (
     .spi0_sdi_i (adc_spi_miso_rdyn),
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (adc_spi_mosi),
+
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
 
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
