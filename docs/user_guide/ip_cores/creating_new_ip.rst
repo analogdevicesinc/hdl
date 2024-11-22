@@ -515,7 +515,7 @@ procedures for creating IPs in the ``ipl`` namespace. The IP procedures can be
 called like: ``ipl::<procedure_name>``.
 
 Namespace for Lattice IP packaging
-----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are two main parts of procedures and structures in this namespace:
 
@@ -572,8 +572,8 @@ There are two main parts of procedures and structures in this namespace:
    * ``ipl::generate_interface`` - Generates a custom interface from the
      structure set by ``ipl::create_interface``.
 
-Example for creating an IP:
----------------------------
+Example for creating an IP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the following section is a generic example for creating IPs which is
 trying to simulate most of the available options when creating a new IP.
