@@ -47,13 +47,13 @@ XILINX_DEPS += ../interfaces/fifo_rd.xml
 XILINX_DEPS += ../interfaces/fifo_rd_rtl.xml
 XILINX_DEPS += ../interfaces/fifo_wr.xml
 XILINX_DEPS += ../interfaces/fifo_wr_rtl.xml
-XILINX_DEPS += ../interfaces/if_framelock.xml
-XILINX_DEPS += ../interfaces/if_framelock_rtl.xml
+XILINX_DEPS += interfaces/if_framelock.xml
+XILINX_DEPS += interfaces/if_framelock_rtl.xml
 
 XILINX_LIB_DEPS += util_axis_fifo
 XILINX_LIB_DEPS += util_cdc
 
-XILINX_INTERFACE_DEPS += interfaces
+XILINX_INTERFACE_DEPS += axi_dmac/interfaces
 
 INTEL_DEPS += ../util_axis_fifo/util_axis_fifo.v
 INTEL_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
