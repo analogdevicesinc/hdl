@@ -15,8 +15,7 @@ set ADC_RESOLUTION 8            ; # N & NP
 set CHANNEL_DATA_WIDTH [expr 32 * $NUM_OF_LANES / $NUM_OF_CHANNELS]
 set ADC_DATA_WIDTH [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
 # we have to calculate with an additional dummy channel for TIA
-set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH > 127 ? 256 : \
-                         $ADC_DATA_WIDTH >  63 ? 128 : 64]
+set DMA_DATA_WIDTH $ADC_DATA_WIDTH
 set SAMPLE_WIDTH [expr $ADC_RESOLUTION > 8 ? 16 : 8]
 
 # add RTL sources which will be instantiated in system_bd directly
