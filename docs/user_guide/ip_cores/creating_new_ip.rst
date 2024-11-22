@@ -578,7 +578,7 @@ Example for creating an IP:
 In the following section is a generic example for creating IPs which is
 trying to simulate most of the available options when creating a new IP.
 
-.. code:: tcl
+.. code::
 
    source ../../scripts/adi_env.tcl
    source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
@@ -597,7 +597,10 @@ trying to simulate most of the available options when creating a new IP.
    # Adding parameters from the $mod_data. This procedure automatically adds
    # all the parameters found in top module, but it is useful only if we use
    # them as they are and the ordering and grouping of them does not count.
-   # set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
+   # NOTE: Do not use it if you want to organize the GUI parameters, in that
+   # case you should add the parameters manually by the following
+   # ipl::set_parameter procedure.
+   set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
    #Setting the IP name.
    set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
@@ -619,7 +622,7 @@ trying to simulate most of the available options when creating a new IP.
       -keywords "<keywords related to the IP>" \
       -min_radiant_version "2023.2" \
       -min_esi_version "2023.2" \
-      -href "<https://<example_webpage/ip>" \
+      -href "<https://example_webpage/ip>" \
       -ip $ip]
 
    # If the IP has AXI interfaces and the naming standard
