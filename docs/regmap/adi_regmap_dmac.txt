@@ -135,7 +135,6 @@ Use external sync.
 ENDFIELD
 
 FIELD
-DMA_TYPE_DEST
 [26] DMA_2D_TLAST_MODE
 DMA_2D_TLAST_MODE
 R
@@ -742,14 +741,13 @@ SG_ADDRESS
 ENDREG
 
 FIELD
-[31:0] ''AUTORUN_SG_ADDRESS''
+[31:0] 0x00000000
 SG_ADDRESS
 RW
 This register contains the starting address of the scatter-gather transfer. The address needs
 to be aligned to the bus width.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_SG_ADDRESS``.
 
-If ``AUTORUN`` is unset, the default value of the field is 0x00000000.
 This register is only valid if the DMA channel has been configured with SG transfer support.
 ENDFIELD
 
