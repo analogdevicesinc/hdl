@@ -149,7 +149,7 @@ module util_axis_fifo #(
           end
           assign m_axis_tlast = axis_tlast_d;
         end else
-          assign m_axis_tlast = 'b0;
+          assign m_axis_tlast = 1'b1;
 
         // TKEEP support
         if (TKEEP_EN) begin
@@ -162,7 +162,7 @@ module util_axis_fifo #(
           end
           assign m_axis_tkeep = axis_tkeep_d;
         end else
-          assign m_axis_tkeep = {DATA_WIDTH/8{1'b1}};
+          assign m_axis_tkeep = ~0;
 
     end /* zerodeep */
     else
@@ -206,7 +206,7 @@ module util_axis_fifo #(
         end
         assign m_axis_tlast = axis_tlast_d;
       end else
-        assign m_axis_tlast = 'b0;
+        assign m_axis_tlast = 1'b1;
 
       // TKEEP support
       if (TKEEP_EN) begin
@@ -221,7 +221,7 @@ module util_axis_fifo #(
         end
         assign m_axis_tkeep = axis_tkeep_d;
       end else
-        assign m_axis_tkeep = {DATA_WIDTH/8{1'b1}};
+        assign m_axis_tkeep = ~0;
 
      end /* !ASYNC_CLK */
 
@@ -289,17 +289,17 @@ module util_axis_fifo #(
     end else if (TKEEP_EN) begin
       assign s_axis_data_int_s = {s_axis_tkeep, s_axis_data};
       assign m_axis_tkeep = m_axis_data_int_s[MEM_WORD-1-:DATA_WIDTH/8];
-      assign m_axis_tlast = 'b0;
+      assign m_axis_tlast = 1'b1;
       assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
     end else if (TLAST_EN) begin
       assign s_axis_data_int_s = {s_axis_tlast, s_axis_data};
-      assign m_axis_tkeep = {DATA_WIDTH/8{1'b1}};
+      assign m_axis_tkeep = ~0;
       assign m_axis_tlast = m_axis_data_int_s[DATA_WIDTH];
       assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
     end else begin
       assign s_axis_data_int_s = {s_axis_data};
-      assign m_axis_tkeep = {DATA_WIDTH/8{1'b1}};
-      assign m_axis_tlast = 'b0;
+      assign m_axis_tkeep = ~0;
+      assign m_axis_tlast = 1'b1;
       assign m_axis_data = m_axis_data_int_s[DATA_WIDTH-1:0];
     end
 
