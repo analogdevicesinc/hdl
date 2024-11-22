@@ -575,7 +575,7 @@ There are two main parts of procedures and structures in this namespace:
 Example for creating an IP
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the following section is a generic example for creating IPs which is
+The following section is a generic example for creating IPs which is
 trying to simulate most of the available options when creating a new IP.
 
 .. code::
@@ -626,9 +626,9 @@ trying to simulate most of the available options when creating a new IP.
       -ip $ip]
 
    # If the IP has AXI interfaces and the naming standard
-   # <interface_name>_<standard_ip_portname> is used than you can use the
+   # <interface_name>_<standard_ip_portname> is used then you can use the
    # following procedure to add all the AXI interfaces to the IP.
-   # The supported interfaces are AXI4 AXI4-Lite AXI4-Stream.
+   # The supported interfaces are AXI4, AXI4-Lite and AXI4-Stream.
    set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]
 
    # You can define memory maps for every slave memory mapped interface.
