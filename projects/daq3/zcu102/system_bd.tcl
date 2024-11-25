@@ -3,13 +3,12 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 8Mb - 500k samples
-set dac_fifo_address_width 16
-
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~28%
+## Offload attributes
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 1*1024*1024]  ; ## 1 MB
+set plddr_offload_axi_data_width 0
 
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/daq3_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -24,7 +23,8 @@ S=$ad_project_params(RX_JESD_S)\
 TX:M=$ad_project_params(TX_JESD_M)\
 L=$ad_project_params(TX_JESD_L)\
 S=$ad_project_params(TX_JESD_S)\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
 
@@ -32,8 +32,6 @@ sysid_gen_sys_init_file $sys_cstring
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG0 0x03fe
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG1 0x0021
 ad_ip_parameter util_daq3_xcvr CONFIG.CPLL_CFG2 0x0203
-
-create_bd_port -dir I dac_fifo_bypass
 
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_FBDIV 20
 ad_ip_parameter util_daq3_xcvr CONFIG.QPLL_REFCLK_DIV 1
@@ -72,11 +70,10 @@ ad_connect sys_cpu_resetn sys_dma_rstgen/ext_reset_in
 ad_connect sys_dma_reset sys_dma_rstgen/peripheral_reset
 ad_connect sys_dma_resetn sys_dma_rstgen/peripheral_aresetn
 
-ad_connect sys_dma_clk axi_ad9152_fifo/dma_clk
-ad_connect sys_dma_reset axi_ad9152_fifo/dma_rst
+ad_connect sys_dma_clk $dac_offload_name/s_axis_aclk
+ad_connect sys_dma_resetn $dac_offload_name/s_axis_aresetn
 ad_connect sys_dma_clk axi_ad9152_dma/m_axis_aclk
 ad_connect sys_dma_resetn axi_ad9152_dma/m_src_axi_aresetn
-ad_connect axi_ad9152_fifo/bypass dac_fifo_bypass
 
 ad_connect sys_dma_resetn axi_ad9680_dma/m_dest_axi_aresetn
 ad_connect axi_ad9680_dma/fifo_wr_clk util_daq3_xcvr/rx_out_clk_0
