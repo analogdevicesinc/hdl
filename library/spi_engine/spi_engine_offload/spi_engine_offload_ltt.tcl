@@ -11,18 +11,18 @@ set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
-set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
-set ip [ipl::general -ip $ip -display_name "AXI SPI Engine Offload ADI"]
-set ip [ipl::general -ip $ip -supported_products {*}]
-set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
-set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_offload.html"]
-set ip [ipl::general  -vendor "analog.com" \
-    -library "ip" \
-    -version "1.0" \
+set mod_name [dict get $mod_data mod_name]
+
+set ip [ipl::general \
+    -vlnv "analog.com:ip:${mod_name}:1.0" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2022.1" \
     -min_esi_version "2022.1" -ip $ip]
+set ip [ipl::general -ip $ip -display_name "AXI SPI Engine Offload ADI"]
+set ip [ipl::general -ip $ip -supported_products {*}]
+set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
+set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_offload.html"]
 
 set ip [ipl::add_interface -ip $ip \
     -inst_name spi_engine_offload_ctrl \
@@ -41,7 +41,7 @@ set ip [ipl::add_interface -ip $ip \
         { "status_sync_valid" "SYNC_VALID"} \
         { "status_sync_data" "SYNC_DATA"} \
     } \
-    -vendor analog.com -library ADI -name spi_engine_offload_ctrl -version 1.0]
+    -vlnv {analog.com:ADI:spi_engine_offload_ctrl:1.0}]
 
 set ip [ipl::add_interface -ip $ip \
     -inst_name spi_engine_ctrl \
@@ -62,7 +62,7 @@ set ip [ipl::add_interface -ip $ip \
         {"sync_valid" "SYNC_VALID"} \
         {"sync_data" "SYNC_DATA"} \
     } \
-    -vendor analog.com -library ADI -name spi_engine_ctrl -version 1.0]
+    -vlnv {analog.com:ADI:spi_engine_ctrl:1.0}]
 
 set ip [ipl::add_interface -ip $ip \
     -inst_name offload_sdi \
@@ -74,7 +74,7 @@ set ip [ipl::add_interface -ip $ip \
         {"offload_sdi_ready" "TREADY"} \
         {"offload_sdi_data" "TDATA"} \
     } \
-    -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0]
+    -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
 
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "$ad_hdl_dir/library/util_cdc/sync_bits.v" \

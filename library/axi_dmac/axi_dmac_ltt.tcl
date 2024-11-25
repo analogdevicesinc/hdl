@@ -11,14 +11,14 @@ set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
-set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
+set mod_name [dict get $mod_data mod_name]
+
 set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
 set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/axi_dmac/index.html"]
-set ip [ipl::general  -vendor "analog.com" \
-    -library "ip" \
-    -version "1.0" \
+set ip [ipl::general \
+    -vlnv "analog.com:ip:${mod_name}:1.0" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2022.1" \
@@ -56,7 +56,7 @@ set ip [ipl::add_interface -ip $ip \
         {"fifo_wr_overflow" "OVERFLOW"} \
         {"fifo_wr_xfer_req" "XFER_REQ"} \
     } \
-    -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+    -vlnv {analog.com:ADI:fifo_wr:1.0}]
 
 set ip [ipl::add_interface -ip $ip \
     -inst_name fifo_rd \
@@ -69,7 +69,7 @@ set ip [ipl::add_interface -ip $ip \
         {"fifo_rd_valid" "VALID"} \
         {"fifo_rd_underflow" "UNDERFLOW"} \
     } \
-    -vendor analog.com -library ADI -name fifo_rd -version 1.0]
+    -vlnv {analog.com:ADI:fifo_rd:1.0}]
 
 # Do not use a port name as interface name except if you use case differences.
 set ip [ipl::add_interface -ip $ip \
@@ -78,7 +78,7 @@ set ip [ipl::add_interface -ip $ip \
     -description IRQ \
     -master_slave master \
     -portmap [list {"irq" "IRQ"}] \
-    -vendor spiritconsortium.org -library busdef.interrupt -name interrupt -version 1.0]
+    -vlnv {spiritconsortium.org:busdef.interrupt:interrupt:1.0}]
 
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "$ad_hdl_dir/library/common/ad_mem_asym.v" \

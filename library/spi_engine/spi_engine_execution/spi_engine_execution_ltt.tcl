@@ -43,7 +43,7 @@ set ip [ipl::add_interface -ip $ip \
         {"sync_valid" "SYNC_VALID"} \
         {"sync" "SYNC_DATA"} \
     } \
-    -vendor analog.com -library ADI -name spi_engine_ctrl -version 1.0]
+    -vlnv {analog.com:ADI:spi_engine_ctrl:1.0}]
 set ip [ipl::add_interface -ip $ip \
     -inst_name spi_master \
     -display_name spi_master \
@@ -57,7 +57,7 @@ set ip [ipl::add_interface -ip $ip \
         {"three_wire" "THREE_WIRE"} \
         {"cs" "CS"} \
     } \
-    -vendor analog.com -library ADI -name spi_master -version 1.0]
+    -vlnv {analog.com:ADI:spi_master:1.0}]
 
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "spi_engine_execution.v" ]]

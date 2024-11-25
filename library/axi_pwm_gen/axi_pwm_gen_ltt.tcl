@@ -11,15 +11,14 @@ set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
+set mod_name [dict get $mod_data mod_name]
+
 set ip [ipl::general \
-    -name [dict get $mod_data mod_name] \
+    -vlnv "analog.com:ip:${mod_name}:1.0" \
     -display_name "ADI AXI PWM generator" \
     -supported_products {*} \
     -supported_platforms {esi radiant} \
     -href "https://analogdevicesinc.github.io/hdl/library/axi_pwm_gen/index.html" \
-    -vendor "analog.com" \
-    -library "ip" \
-    -version "1.0" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2023.1" \

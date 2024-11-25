@@ -260,10 +260,7 @@ namespace eval ipl {
 ## Quick usage: 'ipl::generate_interface [ipl::create_interface <options>] ./'
 #
 # \opt[if] -if $if
-# \opt[vendor] -vendor analog.com
-# \opt[library] -library <lib_name>
-# \opt[name] -name <interface_name>
-# \opt[version] -version <interface_version>
+# \opt[vlnv] -vlnv {analog.com:<lib_name>:<interface_name>:<interface_version>}
 # \opt[directConnection] -directConnection true
 # \opt[isAddressable] -isAddressable false
 # \opt[description] -description "description of the interface"
@@ -276,6 +273,7 @@ namespace eval ipl {
 ###############################################################################
     proc create_interface {args} {
         array set opt [list -if "$::ipl::if" \
+            -vlnv "" \
             -vendor "" \
             -library "" \
             -name "" \
@@ -285,13 +283,25 @@ namespace eval ipl {
             -description "" \
             -ports ""  \
         {*}$args]
-        
+
         set if $opt(-if)
         set ports $opt(-ports)
-        set library $opt(-library)
-        set name $opt(-name)
-        set version $opt(-version)
-        set vendor $opt(-vendor)
+        set vlnv $opt(-vlnv)
+
+        set vlnv [split $vlnv ":"]
+        set ll [llength $vlnv]
+        if {$ll == 4} {
+            set vendor [lindex $vlnv 0]
+            set library [lindex $vlnv 1]
+            set name [lindex $vlnv 2]
+            set version [lindex $vlnv 3]
+            set opt(-vendor) [lindex $vlnv 0]
+            set opt(-library) [lindex $vlnv 1]
+            set opt(-name) [lindex $vlnv 2]
+            set opt(-version) [lindex $vlnv 3]
+        } else {
+            puts {WARNING: vlnv is not correct!}
+        }
 
         set optla {
             vendor
@@ -757,11 +767,8 @@ namespace eval ipl {
 ## Quick usage: 'set ip [ipl::general -ip $ip <options>]'
 #
 # \opt[ip] -ip $ip
-# \opt[vendor] -vendor "analog.com"
-# \opt[library] -library "ip"
-# \opt[name] -name axi_dmac <- this is the top modules name
+# \opt[vlnv] -vlnv {analog.com:<lib_name>:<ip_name>:<ip_version>}
 # \opt[display_name] -display_name "AXI_DMA ADI"
-# \opt[version] -version 1.0
 # \opt[category] -category "DATA_TRANSFER"
 # \opt[keywords] -keywords "<some descriptive words>"
 # \opt[min_radiant_version] -min_radiant_version 2022.1
@@ -774,6 +781,7 @@ namespace eval ipl {
 ###############################################################################
     proc general {args} {
         array set opt [list -ip "$::ipl::ip" \
+            -vlnv "" \
             -vendor "analog.com" \
             -library "ip" \
             -name "" \
@@ -790,6 +798,19 @@ namespace eval ipl {
             -supported_platforms "" \
             -href "" \
         {*}$args]
+
+        set vlnv $opt(-vlnv)
+
+        set vlnv [split $vlnv ":"]
+        set ll [llength $vlnv]
+        if {$ll == 4} {
+            set opt(-vendor) [lindex $vlnv 0]
+            set opt(-library) [lindex $vlnv 1]
+            set opt(-name) [lindex $vlnv 2]
+            set opt(-version) [lindex $vlnv 3]
+        } else {
+            puts {WARNING: vlnv is not correct!}
+        }
 
         set optl {
             vendor
@@ -1504,17 +1525,11 @@ namespace eval ipl {
 # \opt[portmap] -portmap {{"fifo_rd_en" "EN"} {"fifo_rd_dout" "DATA"}}
 # \opt[mem_map_ref] -mem_map_ref s_axi_mem_map
 # \opt[addr_space_ref] -addr_space_ref m_axi_aspace_ref
-# \opt[vendor] -vendor analog.com
-# \opt[library] -library ADI
-# \opt[name] -name fifo_wr
-# \opt[version] -version 1.0
+# \opt[vlnv] -vlnv {analog.com:<lib_name>:<interface_name>:<interface_version>}
 ###############################################################################
     proc add_interface {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -vendor "" \
-            -library "" \
-            -name "" \
-            -version "" \
+            -vlnv "" \
             -inst_name "" \
             -display_name "" \
             -description "" \
@@ -1525,18 +1540,26 @@ namespace eval ipl {
         {*}$args]
 
         set c {"}
+        set vlnv $opt(-vlnv)
         set ip $opt(-ip)
         set inst_name $opt(-inst_name)
         set display_name $opt(-display_name)
         set description $opt(-description)
-        set vendor $opt(-vendor)
-        set library $opt(-library)
-        set name $opt(-name)
-        set version $opt(-version)
         set master_slave $opt(-master_slave)
         set mem_map_ref $opt(-mem_map_ref)
         set addr_space_ref $opt(-addr_space_ref)
         set portmap $opt(-portmap)
+
+        set vlnv [split $vlnv ":"]
+        set ll [llength $vlnv]
+        if {$ll == 4} {
+            set vendor [lindex $vlnv 0]
+            set library [lindex $vlnv 1]
+            set name [lindex $vlnv 2]
+            set version [lindex $vlnv 3]
+        } else {
+            puts {WARNING: vlnv is not correct!}
+        }
 
         if {$master_slave == "slave" && $mem_map_ref != ""} {
             if {[ipl::getnode memoryMaps_desc $mem_map_ref $ip] == ""} {
@@ -1633,10 +1656,7 @@ namespace eval ipl {
 ###############################################################################
     proc add_interface_by_prefix {args} {
         array set opt [list -ip "$::ipl::ip" \
-            -vendor "" \
-            -library "" \
-            -name "" \
-            -version "" \
+            -vlnv "" \
             -inst_name "" \
             -display_name "" \
             -description "" \
@@ -1654,10 +1674,7 @@ namespace eval ipl {
             -inst_name
             -display_name
             -description
-            -vendor
-            -library
-            -name
-            -version
+            -vlnv
             -master_slave
             -mem_map_ref
             -addr_space_ref
@@ -2102,7 +2119,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave slave \
                         -mem_map_ref ${interface_name}_mem_map \
-                        -vendor amba.com -library AMBA4 -name AXI4 -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4:r0p0}]
                 } elseif {$brk == "master"} {
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
@@ -2110,7 +2127,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave master \
                         -addr_space_ref ${interface_name}_aspace \
-                        -vendor amba.com -library AMBA4 -name AXI4 -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4:r0p0}]
                 }
                 continue
             }
@@ -2136,7 +2153,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave slave \
                         -mem_map_ref ${interface_name}_mem_map \
-                        -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4-Lite:r0p0}]
                 } elseif {$brk == "master"} {
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
@@ -2144,7 +2161,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave master \
                         -addr_space_ref ${interface_name}_aspace \
-                        -vendor amba.com -library AMBA4 -name AXI4-Lite -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4-Lite:r0p0}]
                 }
                 continue
             }
@@ -2169,14 +2186,14 @@ namespace eval ipl {
                         -display_name $interface_name \
                         -description $interface_name \
                         -master_slave slave \
-                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
                 } elseif {$brk == "master"} {
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
                         -display_name $interface_name \
                         -description $interface_name \
                         -master_slave master \
-                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
                 }
                 continue
             }
@@ -2202,7 +2219,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave slave \
                         -t t \
-                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
                 } elseif {$brk == "master"} {
                     set ip [ipl::add_interface_by_prefix -ip $ip -mod_data $mod_data -inst_name $interface_name -v_prefix $interface_name \
                         -xptn_portlist [list {*}$xptn_portlist ${interface_name}_$clock ${interface_name}_$reset] \
@@ -2210,7 +2227,7 @@ namespace eval ipl {
                         -description $interface_name \
                         -master_slave master \
                         -t t \
-                        -vendor amba.com -library AMBA4 -name AXI4Stream -version r0p0 ]
+                        -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
                 }
                 continue
             }

@@ -6,10 +6,8 @@
 source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name fifo_wr \
-    -version 1.0 \
+set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:fifo_wr:1.0} \
     -directConnection true \
     -isAddressable false \
     -description "ADI fifo wr interface" \
@@ -22,10 +20,8 @@ set if [ipl::create_interface -vendor analog.com \
     }]
 ipl::generate_interface $if
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name fifo_rd \
-    -version 1.0 \
+set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:fifo_rd:1.0} \
     -directConnection true \
     -isAddressable false \
     -description "ADI fifo rd interface" \
@@ -38,10 +34,8 @@ set if [ipl::create_interface -vendor analog.com \
     }]
 ipl::generate_interface $if
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name spi_engine_ctrl \
-    -version 1.0 \
+set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:spi_engine_ctrl:1.0} \
     -directConnection true \
     -isAddressable false \
     -description "ADI SPI Engine Control Interface" \
@@ -61,10 +55,8 @@ set if [ipl::create_interface -vendor analog.com \
     }]
 ipl::generate_interface $if
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name spi_engine_offload_ctrl \
-    -version 1.0 \
+set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:spi_engine_offload_ctrl:1.0} \
     -directConnection true \
     -isAddressable false \
     -description "ADI SPI Engine Offload Control Interface" \
@@ -82,10 +74,8 @@ set if [ipl::create_interface -vendor analog.com \
     }]
 ipl::generate_interface $if
 
-set if [ipl::create_interface -vendor analog.com \
-    -library ADI \
-    -name spi_master \
-    -version 1.0 \
+set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:spi_master:1.0} \
     -directConnection true \
     -isAddressable false \
     -description "SPI Master Interface" \
