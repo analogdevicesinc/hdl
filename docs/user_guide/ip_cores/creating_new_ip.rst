@@ -586,7 +586,7 @@ trying to simulate most of the available options when creating a new IP.
    # Parsing ports and parameters from top module.
    # In order to this procedure to work correctly please define your top module
    # by following the HDL coding guideline.
-   set mod_data [ipl::parse_module ./<top_module>.v]
+   set mod_data [ipl::parse_module ./<top_module_name>.v]
 
    # Initializing the IP structure.
    set ip $::ipl::ip
@@ -602,22 +602,17 @@ trying to simulate most of the available options when creating a new IP.
    # ipl::set_parameter procedure.
    set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
-   #Setting the IP name.
-   set ip [ipl::general -ip $ip -name [dict get $mod_data mod_name]]
+   #Getting the name of the top module. <top_module_name>
+   set mod_name [dict get $mod_data mod_name]
 
-   # Setting the general IP parameters, also updating the IP name. This shows
-   # that you can use any options separately and you can overwrite previously
-   # set parameters.
-   # there are two optional parameters for this procedure: -max_radiant_version
+   # Setting the general IP parameters.
+   # There are two optional parameters for this procedure: -max_radiant_version
    #                                                       -max_esi_version
    set ip [ipl::general \
-      -name <top_module> \
+      -vlnv "analog.com:ip:$mod_name:1.0" \
       -display_name "<Display name of the IP>" \
       -supported_products {*} \
       -supported_platforms {esi radiant} \
-      -vendor "analog.com" \
-      -library "ip" \
-      -version "1.0" \
       -category "<IP Category>" \
       -keywords "<keywords related to the IP>" \
       -min_radiant_version "2023.2" \
@@ -662,10 +657,8 @@ trying to simulate most of the available options when creating a new IP.
                      {"s_apb_pwdata" "PWDATA"} \
                      {"s_apb_pwrite" "PWRITE"}] \
       -mem_map_ref <interface_name>_mem_map \
-      -vendor amba.com -library AMBA3 -name APB -version r1p0]
-   # these options refer to the interface definition:
-   # -vendor amba.com -library AMBA3 -name APB -version r1p0
-   # in most of the cases the containing folder names are describing these values
+      -vlnv {amba.com:AMBA3:APB:r1p0}]
+   # In most of the cases the containing folder names are describing the vlnv
    # for the existing interfaces as in the following example:
    # lscc/propel/<tool_version>/builder/rtf/ip/interfaces/amba.com/AMBA3/APB/r1p0
 
@@ -702,8 +695,8 @@ trying to simulate most of the available options when creating a new IP.
                      {"s_apb_pslverr" "PSLVERR"} \
                      {"s_apb_pwdata" "PWDATA"} \
                      {"s_apb_pwrite" "PWRITE"}] \
-      -addr_space_ref <interface_name>_aspace\
-      -vendor amba.com -library AMBA3 -name APB -version r1p0]
+      -addr_space_ref <interface_name>_aspace \
+      -vlnv {amba.com:AMBA3:APB:r1p0}]
 
    # Example adding parameters to the IP.
    # You must use the Verilog parameter name at '-id' option.
@@ -775,12 +768,10 @@ trying to simulate most of the available options when creating a new IP.
    #     -d <in/out> #direction
    #     -p <required/optional> #presence
    #     -w <port_width>
-   #     -q <clock/reset/data/address> #qualifier #default is DATA
+   #     -q <clock/reset/data/address> #qualifier #default is data
    # We usually put these in a separate script for make, but you can use it here.
-   set if [ipl::create_interface -vendor analog.com \
-      -library ADI \
-      -name fifo_wr \
-      -version 1.0 \
+   set if [ipl::create_interface
+      -vlnv {analog.com:ADI:fifo_wr:1.0}
       -directConnection true \
       -isAddressable false \
       -description "ADI fifo wr interface" \
@@ -813,7 +804,7 @@ trying to simulate most of the available options when creating a new IP.
         {"fifo_wr_overflow" "OVERFLOW"} \
         {"fifo_wr_xfer_req" "XFER_REQ"} \
     } \
-    -vendor analog.com -library ADI -name fifo_wr -version 1.0]
+    -vlnv {analog.com:ADI:fifo_wr:1.0}]
 
    # Generating the IP given as first parameter on the path given as the second
    # parameter. Without the second parameter the IP will be generated in
