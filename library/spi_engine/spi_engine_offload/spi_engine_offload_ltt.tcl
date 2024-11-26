@@ -76,6 +76,18 @@ set ip [ipl::add_interface -ip $ip \
     } \
     -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
 
+set ip [ipl::add_interface -ip $ip \
+    -inst_name offload_sdo \
+    -display_name offload_sdo \
+    -description offload_sdo \
+    -master_slave slave \
+    -portmap { \
+        {"s_axis_sdo_valid" "TVALID"} \
+        {"s_axis_sdo_ready" "TREADY"} \
+        {"s_axis_sdo_data" "TDATA"} \
+    } \
+    -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
+
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
     "$ad_hdl_dir/library/util_cdc/sync_event.v" \
@@ -136,6 +148,10 @@ set ip [ipl::set_parameter -ip $ip \
     -output_formatter nostr \
     -group1 {General Configuration} \
     -group2 Config]
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
+    -mod_data $mod_data \
+    -v_prefix s_axis_sdo \
+    -expression {(SDO_STREAMING == 0)}]
 
 set ip [ipl::set_parameter -ip $ip \
     -id CMD_MEM_ADDRESS_WIDTH \
