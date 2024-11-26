@@ -63,8 +63,8 @@ module system_top (
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led,
 
-  inout           iic_eeprom_scl,
-  inout           iic_eeprom_sda,
+  inout           iic_ard_scl,
+  inout           iic_ard_sda,
 
   output          adc_spi_sclk,
   input           adc_spi_sdi,
@@ -159,8 +159,8 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
-    .iic_eeprom_scl_io(iic_eeprom_scl),
-    .iic_eeprom_sda_io(iic_eeprom_sda),
+    .iic_ard_scl_io(iic_ard_scl),
+    .iic_ard_sda_io(iic_ard_sda),
     .adc_spi_sclk(adc_spi_sclk),
     .adc_spi_sdi(adc_spi_sdi),
     .adc_spi_sdo(adc_spi_sdo),

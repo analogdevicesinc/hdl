@@ -4,8 +4,6 @@
 ###############################################################################
 
 # ADC SPI interface
-set_property -dict {PACKAGE_PIN P16 IOSTANDARD LVCMOS33}          [get_ports iic_eeprom_scl] ; ## Arduino_SCL
-set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33}          [get_ports iic_eeprom_sda] ; ## Arduino_SDA
 set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports adc_spi_sclk]   ; ## Arduino_IO13
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports adc_spi_sdi]    ; ## Arduino_IO12
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports adc_spi_sdo]    ; ## Arduino_IO11

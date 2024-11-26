@@ -6,7 +6,6 @@
 create_bd_port -dir O adc_cnv
 create_bd_port -dir I adc_gp1_n
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 adc_spi
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_eeprom
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
 
@@ -32,8 +31,6 @@ ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 6
 ad_ip_instance axi_pwm_gen adc_trigger_gen
 ad_ip_parameter adc_trigger_gen CONFIG.PULSE_0_PERIOD 120
 ad_ip_parameter adc_trigger_gen CONFIG.PULSE_0_WIDTH 1
-
-ad_ip_instance axi_iic axi_iic_eeprom
 
 # dma to receive data stream
 ad_ip_instance axi_dmac axi_adc_dma
@@ -65,17 +62,13 @@ ad_connect spi_clk axi_adc_dma/s_axis_aclk
 ad_connect sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect sys_cpu_resetn axi_adc_dma/m_dest_axi_aresetn
 
-ad_connect iic_eeprom axi_iic_eeprom/iic
-
 ad_cpu_interconnect 0x44a00000 $hier_spi_engine/${hier_spi_engine}_axi_regmap
 ad_cpu_interconnect 0x44a30000 axi_adc_dma
-ad_cpu_interconnect 0x44a40000 axi_iic_eeprom
 ad_cpu_interconnect 0x44a70000 spi_clkgen
 ad_cpu_interconnect 0x44b00000 adc_trigger_gen
 
 ad_cpu_interrupt "ps-13" "mb-13" axi_adc_dma/irq
 ad_cpu_interrupt "ps-12" "mb-12" /$hier_spi_engine/irq
-ad_cpu_interrupt "ps-11" "mb-11" axi_iic_eeprom/iic2intc_irpt
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_adc_dma/m_dest_axi
