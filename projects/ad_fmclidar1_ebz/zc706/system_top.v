@@ -184,7 +184,7 @@ module system_top (
   // laser driver
 
   OBUFDS i_obufds_laser_driver (
-    .I (laser_driver),
+    .I (1'b0),
     .O (laser_driver_p),
     .OB (laser_driver_n));
 
@@ -266,10 +266,6 @@ module system_top (
     .rx_sync_0 (rx_sync),
     .rx_sysref_0 (rx_sysref),
     .spdif (spdif),
-    .laser_driver (laser_driver),
-    .laser_driver_en_n (laser_driver_en_n),
-    .laser_driver_otw_n (laser_driver_otw_n),
-    .tia_chsel (tia_chsel),
     .iic_dac_scl_io (afe_dac_scl),
     .iic_dac_sda_io (afe_dac_sda),
     .spi0_clk_i (spi_adc_clk),
