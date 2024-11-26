@@ -22,6 +22,8 @@ create_bd_port -dir I spi_afe_adc_sdo_i
 create_bd_port -dir O spi_afe_adc_sdo_o
 create_bd_port -dir I spi_afe_adc_sdi_i
 
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 250
+
 # ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 300
 
 # NOTE: adc peripherals - controlled by PS7/SPI0
