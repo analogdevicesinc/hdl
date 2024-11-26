@@ -77,9 +77,9 @@ set ip [ipl::add_interface -ip $ip \
     -vlnv {amba.com:AMBA4:AXI4Stream:r0p0}]
 
 set ip [ipl::add_interface -ip $ip \
-    -inst_name offload_sdo \
-    -display_name offload_sdo \
-    -description offload_sdo \
+    -inst_name s_axis_sdo \
+    -display_name s_axis_sdo \
+    -description s_axis_sdo \
     -master_slave slave \
     -portmap { \
         {"s_axis_sdo_valid" "TVALID"} \
