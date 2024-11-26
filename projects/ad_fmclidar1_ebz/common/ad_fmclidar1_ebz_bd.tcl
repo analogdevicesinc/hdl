@@ -4,6 +4,8 @@
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+
 
 # interfaces and IO ports
 
@@ -56,6 +58,14 @@ ad_ip_instance axi_dmac ad9694_dma [list \
 ]
 
 ad_ip_parameter ad9694_dma CONFIG.MAX_BYTES_PER_BURST 4096
+
+ad_data_offload_create data_offload \
+                       0 \
+                       $adc_offload_type \
+                       $adc_offload_size \
+                       $ADC_DATA_WIDTH \
+                       $ADC_DATA_WIDTH \
+                       $plddr_offload_axi_data_width
 
 # 3-wire SPI for clock synthesizer & VCO - 12.5MHz SCLK rate
 
@@ -140,6 +150,20 @@ ad_connect spi_afe_adc_sdi_i axi_spi_afe_adc/io1_i
 
 ad_connect util_ad9694_cpack/enable_$NUM_OF_CHANNELS VCC
 
+# data_offload synchronization interface
+ad_connect  data_offload/init_req  ad9694_dma/s_axis_xfer_req
+ad_connect  data_offload/sync_ext  GND
+ad_connect  $sys_cpu_clk  data_offload/s_axi_aclk
+ad_connect  axi_ad9694_xcvr/rx_out_clk_0  data_offload/s_axis_aclk
+ad_connect  $sys_cpu_clk  data_offload/m_axis_aclk
+ad_connect  $sys_cpu_resetn  data_offload/s_axi_aresetn
+ad_connect  axi_ad9694_jesd_rstgen/peripheral_aresetn  data_offload/s_axis_aresetn
+ad_connect  $sys_cpu_resetn  data_offload/m_axis_aresetn
+ad_connect  util_ad9694_cpack/packed_fifo_wr_en  data_offload/i_data_offload/s_axis_valid
+ad_connect  util_ad9694_cpack/packed_fifo_wr_data  data_offload/i_data_offload/s_axis_data
+
+ad_connect data_offload/m_axis ad9694_dma/s_axis
+
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A50000 axi_ad9694_xcvr
@@ -148,6 +172,7 @@ ad_cpu_interconnect 0x44AA0000 ad9694_jesd
 ad_cpu_interconnect 0x7c400000 ad9694_dma
 ad_cpu_interconnect 0x7c500000 axi_spi_vco
 ad_cpu_interconnect 0x7c600000 axi_spi_afe_adc
+ad_cpu_interconnect 0x7c700000 data_offload
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
 
