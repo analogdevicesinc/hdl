@@ -11,14 +11,12 @@ set ip $::ipl::ip
 
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 
-set mod_name [dict get $mod_data mod_name]
-
 set ip [ipl::general -ip $ip -display_name "AXI_DMA ADI"]
 set ip [ipl::general -ip $ip -supported_products {*}]
 set ip [ipl::general -ip $ip -supported_platforms {esi radiant}]
 set ip [ipl::general -ip $ip -href "https://analogdevicesinc.github.io/hdl/library/axi_dmac/index.html"]
 set ip [ipl::general \
-    -vlnv "analog.com:ip:${mod_name}:1.0" \
+    -vlnv "analog.com:ip:axi_dmac:1.0" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2022.1" \

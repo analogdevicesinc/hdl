@@ -12,10 +12,8 @@ set ip $::ipl::ip
 set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
 # set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
 
-set mod_name [dict get $mod_data mod_name]
-
 set ip [ipl::general \
-    -vlnv "analog.com:ip:${mod_name}:1.0" \
+    -vlnv "analog.com:ip:axi_spi_engine:1.0" \
     -category "ADI" \
     -keywords "ADI IP" \
     -min_radiant_version "2022.1" \
