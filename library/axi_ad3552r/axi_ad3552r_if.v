@@ -92,7 +92,9 @@ parameter   MASTER_SLAVE_N = 1
   reg             start_transfer      = 1'b0;
   reg             if_busy_reg         = 1'b0;
   reg             dac_data_ready_s    = 1'b0;
-  reg    [ 1:0]   external_sync_d   = 'b0;
+  reg    [ 1:0]   external_sync_d      = 'b0;
+  reg    [ 1:0]   dac_data_valid_ext_d = 'b0;
+  reg    [ 1:0]   dac_data_valid_d     = 'b0;
   reg             external_sync_arm_reg = 1'b0;
 
 
@@ -117,13 +119,17 @@ parameter   MASTER_SLAVE_N = 1
 
   // use dac_data valid from an external source only if external_sync_arm_reg is 1
 
-  assign dac_data_valid_synced = (external_sync_arm_reg == 1'b1) ? (dac_data_valid & dac_data_valid_ext) : dac_data_valid ;
+  assign dac_data_valid_synced = (external_sync_arm_reg == 1'b1) ? ((MASTER_SLAVE_N) ? (dac_data_valid & dac_data_valid_ext) : (dac_data_valid_d[1] & dac_data_valid_ext_d[1]))
+                                                                  : dac_data_valid ;
+
   assign dac_data_ready = dac_data_ready_s & dac_data_valid_synced;
   assign dac_data_int = dac_data;
 
 // delay the sync_ext with 2 clocks
   always @(posedge clk_in) begin
     external_sync_d <= {external_sync_d[0],external_sync};
+    dac_data_valid_ext_d <= {dac_data_valid_ext_d[0],dac_data_valid_ext};
+    dac_data_valid_d     <= {dac_data_valid_d[0],dac_data_valid};
   end
 
   wire external_sync_int;
