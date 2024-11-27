@@ -19,7 +19,7 @@ case "$SIMULATOR" in
 
 	xsim)
 		# XSim flow
-		xvlog --sv -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
+		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
 		xelab -log ${NAME}_xelab.log -debug all ${NAME} || exit 1
 		if [[ "$MODE" == "-gui" ]]; then
 			echo "log_wave -r *" > xsim_gui_cmd.tcl
