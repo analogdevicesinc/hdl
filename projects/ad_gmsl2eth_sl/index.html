@@ -18,7 +18,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="EVAL-AD3552R HDL project" href="../ad3552r_evb/index.html" />
+    <link rel="next" title="AD3552R-EVB HDL project" href="../ad3552r_evb/index.html" />
     <link rel="prev" title="Projects" href="../index.html" />
    
   
@@ -389,7 +389,7 @@ captured using Xilinx’s <a class="reference external" href="https://docs.amd.c
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -691,23 +691,39 @@ and it needs to be cloned alongside this repository.</p>
 </ul>
 </div>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ git clone https://github.com/corundum/corundum.git
-<span class="linenos">2</span>user@analog:~$ git checkout ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
-<span class="linenos">3</span>user@analog:~$ cd hdl/projects/ad_gmsl2eth_sl/k26
-<span class="linenos">4</span>user@analog:~/hdl/projects/ad_gmsl2eth_sl/k26$ make
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/corundum/corundum.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>ed4a26e2cbc0a429c45d5cd5ddf1177f86838914
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad_gmsl2eth_sl/k26
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad_gmsl2eth_sl/k26$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p></li>
-</ul>
-<blockquote>
-<div><ul class="simple">
+<li><p>Product datasheets:</p>
+<ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-GMSL2ETH-SL">AD-GMSL2ETH-SL</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/max96724.pdf">MAX96724</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/max17573.pdf">MAX17573</a></p></li>
@@ -717,7 +733,8 @@ and it needs to be cloned alongside this repository.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/4355ff.pdf">LTC4355</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/data-sheets/ad9545.pdf">AD9545</a></p></li>
 </ul>
-</div></blockquote>
+</li>
+</ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
@@ -740,23 +757,23 @@ and it needs to be cloned alongside this repository.</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_PWM_GEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>CORUNDUM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/corundum">library/corundum</a></p></td>
-<td><p><a class="reference internal" href="../../library/corundum/index.html#corundum"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/corundum/index.html#corundum"><span class="std std-ref">Corundum</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -803,7 +820,7 @@ are, the lower the chances to receive support from <a class="reference external"
               <div class="related">
                 &nbsp;
     <a href="../index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Projects</a>
-    <a href="../ad3552r_evb/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">EVAL-AD3552R HDL project</a>
+    <a href="../ad3552r_evb/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD3552R-EVB HDL project</a>
               </div>
           
         </div>

@@ -471,7 +471,7 @@ See <a class="reference internal" href="#software-related">Software related</a> 
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -481,16 +481,16 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </thead>
 <tbody>
 <tr class="row-even"><td><p>rx_ad9695_tpl_core</p></td>
-<td><p>0x44A0_0000</p></td>
+<td><p>0x84A0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_ad9695_rx_xcvr</p></td>
-<td><p>0x44A6_0000</p></td>
+<td><p>0x84A6_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_ad9695_rx_jesd</p></td>
-<td><p>0x44AA_0000</p></td>
+<td><p>0x84AA_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_ad9695_rx_dma</p></td>
-<td><p>0x7C40_0000</p></td>
+<td><p>0x9C40_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -621,16 +621,33 @@ If you want to build the sources, ADI makes them available on the
 the HDL repository.</p>
 <p>Examples on how to build the project:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>// without parameters (default configuration)
-<span class="linenos">2</span>user@analog:~$ cd hdl/projects/ad9695_fmc/zcu102
-<span class="linenos">3</span>user@analog:~/hdl/projects/ad9695_fmc/zcu102$ make
-<span class="linenos">4</span>
-<span class="linenos">5</span>// with parameters
-<span class="linenos">6</span>user@analog:~$ cd hdl/projects/ad9695_fmc/zcu102
-<span class="linenos">7</span>user@analog:~/hdl/projects/ad9695_fmc/zcu102$ make RX_JESD_M=2 RX_JESD_L=4
+<p>Example for building with the default configuration:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>Default values of the <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters for AD9695-FMC:</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad9695_fmc/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9695_fmc/zcu102$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Example for building with parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad9695_fmc/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9695_fmc/zcu102$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">4</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Default values of the <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters for AD9695-FMC:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_M</span></code>: 2</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_L</span></code>: 4</p></li>
@@ -708,7 +725,7 @@ of the source clock.</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>

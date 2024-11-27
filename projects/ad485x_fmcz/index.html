@@ -342,8 +342,8 @@ Content on this topic
 <span id="ad485x-fmc"></span><h1>AD485x_FMCZ HDL project<a class="headerlink" href="#ad485x-fmcz-hdl-project" title="Permalink to this heading">#</a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
-<p>This design is meant to support the AD485x family.
-For example, <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4858">EVAL-AD4858</a> board contains <a class="icon adi reference external" href="https://www.analog.com/AD4858">AD4858</a> chip, which is a 20-bit, low
+<p>This design is meant to support the AD485x family. For example,
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4858">EVAL-AD4858</a> board contains <a class="icon adi reference external" href="https://www.analog.com/AD4858">AD4858</a> chip, which is a 20-bit, low
 noise 8-channel simultaneous sampling successive approximation register (SAR)
 ADC, with buffered differential, wide common range picoamp inputs.</p>
 </section>
@@ -375,13 +375,8 @@ ADC, with buffered differential, wide common range picoamp inputs.</p>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
 <th class="head"><p>Carrier</p></th>
@@ -390,36 +385,22 @@ ADC, with buffered differential, wide common range picoamp inputs.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4858">EVAL-AD4858</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
+<td rowspan="8"><p>ZedBoard</p></td>
+<td rowspan="8"><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4857">EVAL-AD4857</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4856">EVAL-AD4856</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4855">EVAL-AD4855</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4854">EVAL-AD4854</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4853">EVAL-AD4853</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4852">EVAL-AD4852</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4851">EVAL-AD4851</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC LPC</p></td>
 </tr>
 </tbody>
 </table>
@@ -468,7 +449,7 @@ Therefore, the external clocks given to AXI_AD485x IP are:</p>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -478,16 +459,16 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </thead>
 <tbody>
 <tr class="row-even"><td><p>axi_ad485x</p></td>
-<td><p>0x43c00000</p></td>
+<td><p>0x43C0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_pwm_gen</p></td>
-<td><p>0x43d00000</p></td>
+<td><p>0x43D0_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>ad485x_dma</p></td>
-<td><p>0x43e00000</p></td>
+<td><p>0x43E0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>adc_clkgen</p></td>
-<td><p>0x44000000</p></td>
+<td><p>0x4400_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -558,11 +539,19 @@ the HDL repository.</p>
 make command by typing in your command prompt (this example is for
 <a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>):</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@analog:~$ cd hdl/projects/ad485x_fmc/zed
-user@analog:~$ make
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad485x_fmc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad485x_fmc/zed$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
 guide.</p>
 </section>
 <section id="resources">
@@ -614,19 +603,19 @@ guide.</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_PWM_GEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
@@ -634,11 +623,11 @@ guide.</p>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 </tbody>
 </table>

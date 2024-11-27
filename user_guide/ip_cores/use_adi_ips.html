@@ -327,16 +327,22 @@ Content on this topic
   <section id="use-adi-ips-into-your-own-project">
 <span id="use-adi-ips"></span><h1>Use ADI IPs into your own project<a class="headerlink" href="#use-adi-ips-into-your-own-project" title="Permalink to this heading">#</a></h1>
 <p>Clone the GitHub repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<section id="vivado">
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><section id="vivado">
 <h2>Vivado<a class="headerlink" href="#vivado" title="Permalink to this heading">#</a></h2>
 <p>Navigate to hdl/library and build all the libraries</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<p>Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
 There you will find a section called Repository.
 From here you can add the path to the library folder inside the ADI repository
 you just cloned.</p>

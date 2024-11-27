@@ -556,8 +556,7 @@ the following reworks are required:</p>
 <a class="reference internal image-reference" href="../../_images/ad9081_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_204b_M8L4.svg" width="800" /></a>
 <p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
-<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick
-Config 0x0A)</p></li>
+<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config 0x0A)</p></li>
 <li><p>Sample Rate: 250 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
@@ -567,8 +566,7 @@ Config 0x0A)</p></li>
 </ul>
 <p>The Tx links (DAC Path) operate with the following parameters:</p>
 <ul class="simple">
-<li><p>Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config
-0x09)</p></li>
+<li><p>Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config 0x09)</p></li>
 <li><p>Sample Rate: 250 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
@@ -583,8 +581,7 @@ Config 0x0A)</p></li>
 <p>The Rx links are set for full bandwidth mode and operate with the
 following parameters:</p>
 <ul class="simple">
-<li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick
-Config 0x12)</p></li>
+<li><p>Rx Deframer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x12)</p></li>
 <li><p>Sample Rate: 1550 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>RX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)</p></li>
@@ -595,8 +592,7 @@ Config 0x12)</p></li>
 <p>The Tx links are set for full bandwidth mode and operate with the
 following parameters:</p>
 <ul class="simple">
-<li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config
-0x11)</p></li>
+<li><p>Tx Framer parameters: L=8, M=4, F=1, S=1, NP=16, N=16 (Quick Config 0x11)</p></li>
 <li><p>Sample Rate: 1550 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>TX_DEVICE_CLK: 387.5 MHz (Lane Rate/40)</p></li>
@@ -617,24 +613,26 @@ however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 <p class="admonition-title">Warning</p>
 <p><strong>Build instructions:</strong></p>
 <p>The project must be built with the following parameters:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w"> </span><span class="se">\</span>
-<span class="nv">RX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
-<span class="nv">TX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
-<span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
-<span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">8</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">    </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">4</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">8</span>
+</pre></div>
 </div>
+<div class="clear-left"></div></div></div></div>
 <p>The Rx link is operating with the following parameters:</p>
 <ul class="simple">
-<li><p>Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config
-0x13)</p></li>
+<li><p>Rx Deframer parameters: L=8, M=2, F=1, S=2, NP=16, N=16 (Quick Config 0x13)</p></li>
 <li><p>Sample Rate: 4000 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/66)</p></li>
@@ -644,8 +642,7 @@ however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 </ul>
 <p>The Tx link is operating with the following parameters:</p>
 <ul class="simple">
-<li><p>Tx Framer parameters: L=8, M=2, F=1, S=4, NP=8, N=8 (Quick Config
-0x13)</p></li>
+<li><p>Tx Framer parameters: L=8, M=2, F=1, S=4, NP=8, N=8 (Quick Config 0x13)</p></li>
 <li><p>Sample Rate: 8000 MSPS</p></li>
 <li><p>Dual link: No</p></li>
 <li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/66)</p></li>
@@ -677,7 +674,7 @@ hdl/projects/ad9081_fmca_ebz/$CARRIER/system_project.tcl</p>
 <ul>
 <li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
 Layer</p></li>
-<li><p>8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+<li><p>8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
 Layer</p></li>
 </ul>
 </li>
@@ -691,18 +688,19 @@ Layer</p></li>
 <li><p>[RX/TX]_JESD_NP: number of bits per sample</p></li>
 <li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
 <li><p>[RX/TX]_TPL_WIDTH</p></li>
-<li><p>TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1</p></li>
+<li><p>TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization
+through TDD. Must be set to 1 when SHARED_DEVCLK=1</p></li>
 <li><p>SHARED_DEVCLK</p></li>
 <li><p>TDD_CHANNEL_CNT</p></li>
 <li><p>TDD_SYNC_WIDTH</p></li>
 <li><p>TDD_SYNC_INT</p></li>
 <li><p>TDD_SYNC_EXT</p></li>
-<li><p>TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added</p></li>
+<li><p>TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal
+is added</p></li>
 <li><p>[RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
 kilosamples per converter (M)</p></li>
 <li><p>[ADC/DAC]_DO_MEM_TYPE</p></li>
-<li><p>Check out this guide on more details regarding these parameters:
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_tdd">axi_tdd</a></p></li>
+<li><p>Check out this guide on more details regarding these parameters: <a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></li>
 </ul>
 </section>
 <section id="clock-scheme">
@@ -733,7 +731,7 @@ kilosamples per converter (M)</p></li>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <p>Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
 some IPs are instatiated and some are not.</p>
 <p>Check-out the table below to find out the conditions.</p>
@@ -813,6 +811,48 @@ some IPs are instatiated and some are not.</p>
 <td><p>0x7C46_0000</p></td>
 <td><p>0x9C46_0000</p></td>
 <td><p>0xBC46_00000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For the Intel carriers, only a part of the CPU interrupts are specified,
+as the rest depend on the values of $TX_NUM_OF_LANES and $TRANSCEIVER_TYPE
+(see <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_qsys.tcl">projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_qsys.tcl</a>
+for more details).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Intel</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mxfe_rx_jesd204.link_reconfig</p></td>
+<td><p>0x000C_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>mxfe_rx_jesd204.link_management</p></td>
+<td><p>0x000C_4000</p></td>
+</tr>
+<tr class="row-even"><td><p>mxfe_tx_jesd204.link_reconfig</p></td>
+<td><p>0x000C_8000</p></td>
+</tr>
+<tr class="row-odd"><td><p>mxfe_tx_jesd204.link_management</p></td>
+<td><p>0x000C_C000</p></td>
+</tr>
+<tr class="row-even"><td><p>mxfe_rx_tpl.s_axi</p></td>
+<td><p>0x000D_2000</p></td>
+</tr>
+<tr class="row-odd"><td><p>mxfe_tx_tpl.s_axi</p></td>
+<td><p>0x000D_4000</p></td>
+</tr>
+<tr class="row-even"><td><p>mxfe_rx_dma.s_axi</p></td>
+<td><p>0x000D_8000</p></td>
+</tr>
+<tr class="row-odd"><td><p>mxfe_tx_dma.s_axi</p></td>
+<td><p>0x000D_C000</p></td>
+</tr>
+<tr class="row-even"><td><p>mxfe_gpio.s1</p></td>
+<td><p>0x000E_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -1003,22 +1043,30 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz">projects/ad9081_fmca_ebz</a>
-location and run the make command by typing in your command prompt:</p>
+<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz">projects/ad9081_fmca_ebz</a> or
+(<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz">projects/ad9082_fmca_ebz</a>)
+location and run the make command by typing in you command prompt:</p>
+<p>Example for building the project with parameters:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/zcu102
-<span class="hll"><span class="linenos">2</span>// these are just examples of how to write the *make* command with parameters
-</span><span class="linenos">3</span>user@analog:~/hdl/projects/ad9081_fmca_ebz/zcu102$ make parameter1=value parameter2=value
-<span class="linenos">4</span>
-<span class="linenos">5</span>user@analog:~$ cd hdl/projects/ad9081_fmca_ebz/a10soc
-<span class="hll"><span class="linenos">6</span>// these are just examples of how to write the *make* command with parameters
-</span><span class="linenos">7</span>user@analog:~/hdl/projects/ad9081_fmca_ebz/a10soc$ make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>The following dropdowns contain tables with the parameters that can be used to
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad9081_fmca_ebz/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9081_fmca_ebz/zcu102$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">   </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
 Where a cell contains a — (dash) it means that the parameter doesn’t exist
-for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
+for that project (ad9081_fmca_ebz/$carrier or ad9082_fmca_ebz/$carrier).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>For the parameter selection, the following restrictions apply:</p>
@@ -1031,7 +1079,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <p><code class="docutils literal notranslate"><span class="pre">NP</span></code> notation is equivalent with <code class="docutils literal notranslate"><span class="pre">N'</span></code></p>
 </div>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="fc0f46c3ea2e90b1d7100564768ddb489b181b2a" name="fc0f46c3ea2e90b1d7100564768ddb489b181b2a" type="checkbox"></input><label for="fc0f46c3ea2e90b1d7100564768ddb489b181b2a"><p>Default values of the ``make`` parameters for AD9081-FMCA-EBZ</p>
+<input class="collapsible_input" id="6daa2de687edefcc153a6ef1a32ff41919e8348b" name="6daa2de687edefcc153a6ef1a32ff41919e8348b" type="checkbox"></input><label for="6daa2de687edefcc153a6ef1a32ff41919e8348b"><p>Default values of the ``make`` parameters for AD9081-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1052,7 +1100,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 <tbody>
 <tr class="row-odd"><td><p>JESD_MODE</p></td>
 <td><p>—</p></td>
-<td><p>8B10B</p></td>
+<td><p>64B66B</p></td>
 <td><p>64B66B</p></td>
 <td><p>64B66B</p></td>
 <td><p>8B10B</p></td>
@@ -1336,7 +1384,7 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="8963ce80c6ccd0de24d5f73a407a382bd6f14662" name="8963ce80c6ccd0de24d5f73a407a382bd6f14662" type="checkbox"></input><label for="8963ce80c6ccd0de24d5f73a407a382bd6f14662"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
+<input class="collapsible_input" id="0f84ab6ccd2cfa06db5254938ddcac99c530d92c" name="0f84ab6ccd2cfa06db5254938ddcac99c530d92c" type="checkbox"></input><label for="0f84ab6ccd2cfa06db5254938ddcac99c530d92c"><p>Default values of the ``make`` parameters for AD9082-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1485,8 +1533,8 @@ for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).</p>
 </tbody>
 </table>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
 <p><code class="docutils literal notranslate"><span class="pre">*</span></code> — for this carrier only the 8B10B mode is supported</p>
 </div>
 </div>
@@ -1672,51 +1720,51 @@ accordingly.</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-intel"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-intel"><span class="std std-ref">Intel Devices</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
 </tbody>
 </table>

@@ -490,12 +490,12 @@ in the below diagrams:</p>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Address</p></th>
+<th class="head"><p>Zynq</p></th>
 </tr>
 </thead>
 <tbody>
@@ -512,10 +512,10 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>0x4300_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_hdmi_core *</p></td>
-<td><p>0x70e0_0000</p></td>
+<td><p>0x70E0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_spdif_tx_core *</p></td>
-<td><p>0x75c0_0000</p></td>
+<td><p>0x75C0_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_i2s_adi **</p></td>
 <td><p>0x7760_0000</p></td>
@@ -712,11 +712,19 @@ If you want to build the sources, ADI makes them available on the
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/cn0506/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0506/zed$ make INTF_CFG=MII
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>The result of the build, if parameters were used, will be in a folder named
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0506/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/cn0506/zed$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF_CFG</span><span class="o">=</span>MII
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used:</p>
 <p>if the following command was run</p>
 <p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF_CFG=MII</span></code></p>
@@ -755,11 +763,11 @@ user guide.</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_CLKGEN *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_HDMI_TX *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_I2S_ADI **</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
@@ -767,11 +775,11 @@ user guide.</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SDDIF_TX *</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
@@ -783,7 +791,7 @@ user guide.</p>
 </tr>
 <tr class="row-odd"><td><p>UTIL_MII_TO_RMII ***</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_mii_to_rmii">library/util_mii_to_rmii</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_mii_to_rmii/index.html#util-mii-to-rmii"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_mii_to_rmii/index.html#util-mii-to-rmii"><span class="std std-ref">Util MII to RMII</span></a></p></td>
 </tr>
 </tbody>
 </table>

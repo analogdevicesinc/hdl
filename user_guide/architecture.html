@@ -392,11 +392,19 @@ the <em>base design first</em>, then the <em>board design</em>.</p>
 <p>Take <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADFMCOMMS2">AD-FMCOMMS2</a> with
 <a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>;
 the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> will look like the following:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span>/projects/common/zed/zed_system_bd.tcl
-<span class="nb">source</span><span class="w"> </span>../common/fmcomms2_bd.tcl
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
-</section>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span>/projects/common/zed/zed_system_bd.tcl
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>../common/fmcomms2_bd.tcl
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
 </section>
 <section id="typical-project-diagram">
 <h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Permalink to this heading">#</a></h2>
@@ -496,7 +504,7 @@ the prototyping board or the FMC I/O board.</p>
 the documentations. Thus, to make it easier for beginners, here you
 have the naming of the ports depending on the microprocessor used.</p>
 <section id="cpu-memory-interconnects-addresses">
-<h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h4>
+<span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h4>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
 on the architecture of the used FPGA (see also <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl">ad_cpu_interconnect
@@ -521,6 +529,11 @@ by adding 0x6000_0000 to the address.</p>
 <p>If the address is between 0x7000_0000 - 0x7FFF_FFFF then the
 AXI peripherics will be placed in 0xB000_0000 - 0xBFFF_FFFF range
 by adding 0x4000_0000 to the address.</p>
+<p><strong>Intel</strong></p>
+<p>Applying to DE10-Nano, C5SoC.</p>
+<p>The address usually (but not always) starts from 0x0002_0000, or the first
+available block of a bigger size. In Quartus block design you should be
+able to determine it.</p>
 </section>
 <section id="spi">
 <h4>SPI<a class="headerlink" href="#spi" title="Permalink to this heading">#</a></h4>
@@ -834,28 +847,28 @@ might be used in the base design of the carrier!</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-a7-ac701-g.html">AC701</a> **</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/AC701">AC701</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (2 GTP &#64; 6.6 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Artix-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://digilent.com/reference/programmable-logic/cora-z7/start">Cora Z7-07S</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
 <td><p>SD card</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-k7-kc705-g.html">KC705</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KC705">KC705</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (4 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Kintex-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/kcu105.html">KCU105</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p>LPC (1 GTH &#64; 16.3 Gbps)</p></td>
@@ -869,70 +882,70 @@ might be used in the base design of the carrier!</p>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-v7-vc707-g.html">VC707</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
 <td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex-7</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/dk-v7-vc709-g.html">VC709</a> **</p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VC709">VC709</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (10 GTH &#64; 13.1 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.8V</strong></p></td>
 <td><p>Virtex-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/vck190.html">VCK190</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal AI Core</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/vcu118.html">VCU118</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>LPC</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex UltraScale+</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/vcu128.html">VCU128</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VCU128">VCU128</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex UltraScale+ HBM</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/vmk180.html">VMK180</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VMK180">VMK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Prime Series</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/vpk180.html">VPK180</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (8 GTYP &#64; 32.75 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Premium</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-z7-zc702-g.html">ZC702</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/ZC702">ZC702</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>LPC</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-z7-zc706-g.html">ZC706</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
 <td><p>SD card</p></td>
 <td><p>HPC (8 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/ek-u1-zcu102-es2-g.html">ZCU102</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
 <td><p>SD card</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>

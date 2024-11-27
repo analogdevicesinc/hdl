@@ -345,7 +345,7 @@ Content on this topic
 <span id="build-intel-boot-image"></span><h1>Generating HDL boot image for Intel projects<a class="headerlink" href="#generating-hdl-boot-image-for-intel-projects" title="Permalink to this heading">#</a></h1>
 <p>This page is dedicated to the building process of boot image for supported
 Intel/Altera projects. One key file specific to these projects is
-the <code class="docutils literal notranslate"><span class="pre">bootloader</span></code>. It’s role is to initialize the system after the
+the <code class="docutils literal notranslate"><span class="pre">bootloader</span></code>. Its role is to initialize the system after the
 BootROM runs. It bridges the gap between the limited functionality of the
 BootROM and the end user application, configuring the system as needed before
 the larger application can run.</p>
@@ -367,10 +367,9 @@ recent versions of Quartus.</p>
 </div>
 <p>To boot a system with Linux + HDL on an Intel board, you need the following
 files:</p>
-<ul>
+<ul class="simple">
 <li><p>For Arria 10 SoC projects (<a class="reference internal" href="#build-intel-boot-image-arria10"><span class="std std-ref">build example</span></a>):</p>
-<blockquote>
-<div><ul class="simple">
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot.img</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/fit_spl_fpga.itb</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/extlinux/extlinux.conf</span></code> (keep the directory)</p></li>
@@ -378,11 +377,11 @@ files:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/socfpga_arria10-common/zImage</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot-splx4.sfp</span></code> (preloader image)</p></li>
 </ul>
-</div></blockquote>
 </li>
-<li><p>For Cyclone5 SoC project (build examples: <a class="reference internal" href="#build-intel-boot-image-c5soc"><span class="std std-ref">Terasic C5</span></a>, <a class="reference internal" href="#build-intel-boot-image-de10nano"><span class="std std-ref">DE10Nano</span></a>):</p>
-<blockquote>
-<div><ul class="simple">
+<li><p>For Cyclone5 SoC project (build examples:
+<a class="reference internal" href="#build-intel-boot-image-c5soc"><span class="std std-ref">Terasic C5</span></a>,
+<a class="reference internal" href="#build-intel-boot-image-de10nano"><span class="std std-ref">DE10Nano</span></a>):</p>
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot.scr</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/soc_system.rbf</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/extlinux/extlinux.conf</span></code> (keep the directory)</p></li>
@@ -390,7 +389,6 @@ files:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/zImage</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot-with-spl.sfp</span></code> (preloader image)</p></li>
 </ul>
-</div></blockquote>
 </li>
 </ul>
 <div class="admonition note">
@@ -465,10 +463,13 @@ image mounted at <code class="docutils literal notranslate"><span class="pre">/m
 <div class="clear-left"></div></div></div><p>Writing the boot preloader partition requires special attention,
 first look for the device with BOOT mountpoint and annotate the third partition
 from the same device:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsblk
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>Then, clear the partition with zeros and write the preloader image
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>lsblk
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Then, clear the partition with zeros and write the preloader image
 (in this example, Arria10 SoC’s <em>./u-boot-splx4.sfp</em>):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
@@ -549,16 +550,15 @@ cross compiler, build the configuration file, build the Kernel image, and
 lastly build the device tree (specific to each combination of carrier and eval
 board).</p>
 <p>You may notice that in the <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">CROSS_COMPILE</span></code> examples there is a
-“trailing” dash <code class="docutils literal notranslate"><span class="pre">-</span></code>, and the reason for this is because an export:</p>
+“trailing” dash <code class="docutils literal notranslate"><span class="pre">-</span></code>. That is because within the Makeiles, this path becomes
+/path/to/arm-linux-gnueabihf-gcc (with <code class="docutils literal notranslate"><span class="pre">gcc</span></code> appended).</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>/path/to/arm-linux-gnueabihf-
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Within the Makefiles, this path becomes /path/to/arm-linux-gnueabihf-gcc
-(with <code class="docutils literal notranslate"><span class="pre">gcc</span></code> added at the end).</p>
-<p>If your environment already has the compiler in the path
+<div class="clear-left"></div></div></div><p>If your environment already has the compiler in the path
 (test if <code class="code docutils literal notranslate"><span class="pre">which</span> <span class="pre">arm-linux-gnueabihf-gcc</span></code> returns the expected path),
 you can set <code class="docutils literal notranslate"><span class="pre">CROSS_COMPILE</span></code> to:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -581,7 +581,7 @@ were checked-out.</p>
 <span id="build-intel-boot-image-arria10"></span><h3>ADRV9371/Arria 10<a class="headerlink" href="#adrv9371-arria-10" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc">projects/adrv9371x/a10soc</a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">here</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts">arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts</a></p></li>
 </ul>
 <section id="building-the-linux-kernel-image-and-the-devicetree">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#building-the-linux-kernel-image-and-the-devicetree" title="Permalink to this heading">#</a></h4>
@@ -1015,8 +1015,8 @@ sdz           8:48  1   29.1G  0 disk
 <section id="arradio-terasic-c5-soc">
 <span id="build-intel-boot-image-c5soc"></span><h3>ARRADIO/Terasic C5 SoC<a class="headerlink" href="#arradio-terasic-c5-soc" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc"></a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">here</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/arradio/c5soc">projects/arradio/c5soc</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts">arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts</a></p></li>
 </ul>
 <section id="id1">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
@@ -1141,8 +1141,8 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SOC Quick Start Guide</a>.</p>
-<p>In HDL project directory, create the software/bootloader folder and clone the
-<code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that create a new BSP settings file:</p>
+<p>In the HDL project directory, create the <code class="docutils literal notranslate"><span class="pre">software/bootloader</span></code> folder and
+clone the <code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that, create a new BSP settings file:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
@@ -1509,8 +1509,8 @@ sdz           8:48  1   29.1G  0 disk
 <section id="cn0540-de10nano">
 <span id="build-intel-boot-image-de10nano"></span><h3>CN0540/DE10Nano<a class="headerlink" href="#cn0540-de10nano" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano"></a></p></li>
-<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">here</a></p></li>
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0540/de10nano">projects/cn0540/de10nano</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts</a></p></li>
 </ul>
 <section id="id5">
 <h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
@@ -1635,8 +1635,8 @@ and always confirm with <code class="docutils literal notranslate"><span class="
 Quartus Pro version 20.1. For older versions of the flow see previous versions
 of this page on wiki
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SOC Quick Start Guide</a>.</p>
-<p>In HDL project directory, create the software/bootloader folder and clone the
-<code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that create a new BSP settings file:</p>
+<p>In the HDL project directory, create the <code class="docutils literal notranslate"><span class="pre">software/bootloader</span></code> folder and
+clone the <code class="docutils literal notranslate"><span class="pre">u-boot-socfpga</span></code> image. Before that, create a new BSP settings file:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>

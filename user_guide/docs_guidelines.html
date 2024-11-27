@@ -332,46 +332,84 @@ able to create and build a new documentation related page. Some steps are
 recommended to be revised regularly to keep the necessary tools updated.</p>
 <p>First, make sure you have the latest version of <code class="docutils literal notranslate"><span class="pre">pip</span></code> installed. It must be
 newer than 23 version. If not, update it by running the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pip</span> <span class="o">--</span><span class="n">upgrade</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
-<p>Then install the necessary documentation tools by running (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">HDL</a>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pip<span class="w"> </span>--upgrade
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Then install the necessary documentation tools by running (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">HDL</a>
 repository is the working directory):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span><span class="o">/</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span> <span class="o">--</span><span class="n">upgrade</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<p>Use the same command to regularly update the documentation tools.
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>--upgrade
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Use the same command to regularly update the documentation tools.
 Specially if something looks broken.</p>
 <p>Before building a page, it’s recommended to build all the projects from
 <code class="docutils literal notranslate"><span class="pre">/library</span></code>. Some references (files used in specific parts of the page) are
 directly taken from the libraries’ project folder (e.g.: <code class="docutils literal notranslate"><span class="pre">/library/axi_dmac/component.xml</span></code>)
 after being built. Build the libraries by running:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">library</span><span class="o">/</span>
-<span class="n">make</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<p>Now, after the page has been written, inside <code class="docutils literal notranslate"><span class="pre">/docs</span></code> folder run the following
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>library/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/library$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Now, after the page has been written, inside <code class="docutils literal notranslate"><span class="pre">/docs</span></code> folder run the following
 command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docs</span><span class="o">/</span>
-<span class="n">make</span> <span class="n">html</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<p>The generated documentation will be available at <code class="docutils literal notranslate"><span class="pre">/docs/_build/html</span></code>.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The generated documentation will be available at <code class="docutils literal notranslate"><span class="pre">/docs/_build/html</span></code>.</p>
 <p>It’s recommended to clean the cached data when changing the document structure,
 like adding a new page or if other major changes have been made.
 This is because Sphinx rebuilds only “touched” pages and, for example,
 adding a page changes the sidebar navigation for all pages.
 This is done by running the below commands (inside <code class="docutils literal notranslate"><span class="pre">/docs</span></code> folder):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span>
-<span class="n">make</span> <span class="n">html</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<p>Or more straight forward (clean &amp; rebuild):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clean</span> <span class="n">html</span>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean
 </pre></div>
 </div>
-<p>Make sure to read the next chapters as they provide more info on how to write
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Or more straight forward (clean &amp; rebuild):</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean<span class="w"> </span>html
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Make sure to read the next chapters as they provide more info on how to write
 a HDL specific Sphinx documentation page.</p>
 </section>
 <section id="templates">
@@ -401,9 +439,9 @@ and cannot be referenced here because they don’t have an ID at the beginning
 of the page, so not to have warnings when the documentation is rendered that
 they’re not included in any toctree.</p>
 <p>They are inserted like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">include</span><span class="p">::</span> <span class="o">../</span><span class="n">common</span><span class="o">/</span><span class="n">more_information</span><span class="o">.</span><span class="n">rst</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">include</span><span class="p">::</span> ../common/more_information.rst
 
-<span class="o">..</span> <span class="n">include</span><span class="p">::</span> <span class="o">../</span><span class="n">common</span><span class="o">/</span><span class="n">support</span><span class="o">.</span><span class="n">rst</span>
+<span class="p">..</span> <span class="ow">include</span><span class="p">::</span> ../common/support.rst
 </pre></div>
 </div>
 <p>And they will be rendered as sections of the page.</p>

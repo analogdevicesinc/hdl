@@ -405,8 +405,8 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4030-24FMCZ">EVAL-AD4030-24FMCZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-16FMCZ">EVAL-AD4630-16FMCZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4630-24FMCZ">EVAL-AD4630-24FMCZ</a></p></li>
-<li><p>EVAL-ADAQ4224-FMCZ &lt;EVAL-ADAQ4224&gt;</p></li>
-<li><p>EVAL-ISO-4224-FMCZ &lt;EVAL-ISO-ADAQ4224&gt;</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ4224-FMCZ">EVAL-ADAQ4224-FMCZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EV-ISO-4224-FMCZ">EV-ISO-4224-FMCZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -415,7 +415,7 @@ Zynq-7000 re-programmable SoC from Xilinx.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
-<li><p>ADAQ4224</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ4224">ADAQ4224</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -495,27 +495,42 @@ mode.</p>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading">#</a></h3>
 <p>The CLK_MODE configuration parameter defines clocking mode of the device’s
-digital interface: Options: 0 - SPI mode, 1 - Echo-clock or Master clock mode</p>
+digital interface:</p>
+<ul class="simple">
+<li><p>0 - SPI mode</p></li>
+<li><p>1 - Echo-clock or Master clock mode</p></li>
+</ul>
 <p>The NUM_OF_SDI configuration parameter defines the number of MOSI lines of the
-SPI interface: Options: 1 - Interleaved mode, 2 - 1 lane per channel,
-4 - 2 lanes per channel, 8 - 4 lanes per channel</p>
+SPI interface:</p>
+<ul class="simple">
+<li><p>1 - Interleaved mode</p></li>
+<li><p>2 - 1 lane per channel,</p></li>
+<li><p>4 - 2 lanes per channel</p></li>
+<li><p>8 - 4 lanes per channel</p></li>
+</ul>
 <p>The CAPTURE_ZONE configuration parameter defines the capture zone of the next
-sample. There are two capture zones: 1 - from negative edge of the BUSY line
-until the next CNV positive edge -20ns, 2 - from the next consecutive CNV
-positive edge +20ns until the second next consecutive CNV positive edge -20ns</p>
+sample. There are two capture zones:</p>
+<ul class="simple">
+<li><p>1 - from negative edge of the BUSY line until the next CNV positive edge -20ns</p></li>
+<li><p>2 - from the next consecutive CNV positive edge +20ns until the second next
+consecutive CNV positive edge -20ns</p></li>
+</ul>
 <p>The DDR_EN configuration parameter defines the type of data transfer. In echo
-and master clock mode the SDI lines can have Single or Double Data Rates.
-Options: 0 - MISO runs on SDR, 1 - MISO runs on DDR.</p>
+and master clock mode the SDI lines can have Single or Double Data Rates.</p>
+<ul class="simple">
+<li><p>0 - MISO runs on SDR</p></li>
+<li><p>1 - MISO runs on DDR.</p></li>
+</ul>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL(see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Address</p></th>
+<th class="head"><p>Zynq</p></th>
 </tr>
 </thead>
 <tbody>
@@ -539,9 +554,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 </div>
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated, but only used for ADAQ4224 with isolated power supply</p></li>
-</ul>
+<p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated, but only used for ADAQ4224 with isolated power supply</p>
 </div>
 </section>
 <section id="i2c-connections">
@@ -715,11 +728,19 @@ If you want to build the sources, ADI makes them available on the
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:.</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad4630_fmc/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad4630_fmc/zed$ make NUM_OF_SDI=4 CAPTURE_ZONE=2
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>The result of the build, if parameters were used, will be in a folder named
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad4630_fmc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad4630_fmc/zed$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">CAPTURE_ZONE</span><span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used:</p>
 <p>if the following command was run</p>
 <p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">NUM_OF_SDI=4</span> <span class="pre">CAPTURE_ZONE=2</span></code></p>
@@ -738,10 +759,13 @@ by the configuration used:</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p></li>
+<li><p>Product datasheets:</p>
+<ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4030-24">AD4030-24</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-16">AD4630-16</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4630-24">AD4630-24</a></p></li>
+</ul>
+</li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/ad4630-24-eval-board">[Wiki] AD4630/AD4030 Evaluation Board User Guide</a></p></li>
 </ul>
 </section>
@@ -771,15 +795,15 @@ by the configuration used:</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
@@ -787,7 +811,7 @@ by the configuration used:</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_PWM_GEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
@@ -795,7 +819,7 @@ by the configuration used:</p>
 </tr>
 <tr class="row-odd"><td><p>AXI_SPI_ENGINE</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">library/spi_engine/axi_spi_engine</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html#spi-engine-axi"><span class="std std-ref">AXI SPI Engine Module</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_AXIS_REORDER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_axis_reorder">library/spi_engine/spi_axis_reorder</a></p></td>
@@ -803,19 +827,19 @@ by the configuration used:</p>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_EXECUTION</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_execution">library/spi_engine/spi_engine_execution</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html#spi-engine-execution"><span class="std std-ref">SPI Engine Execution Module</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SPI_ENGINE_INTERCONNECT</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_interconnect">library/spi_engine/spi_engine_interconnect</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html#spi-engine-interconnect"><span class="std std-ref">SPI Engine Interconnect Module</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SPI_ENGINE_OFFLOAD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/spi_engine_offload">library/spi_engine/spi_engine_offload</a></p></td>
-<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>

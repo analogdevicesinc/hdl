@@ -107,6 +107,7 @@
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
@@ -385,7 +386,7 @@ techniques for system characterization and machine learning algorithms.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/CN0579">CN0579</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7-07S</a></p></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
 <td><p>Arduino headers</p></td>
 </tr>
 <tr class="row-odd"><td></td>
@@ -398,8 +399,11 @@ techniques for system characterization and machine learning algorithms.</p>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/cn0579_block_diagram.svg"><img alt="CN0579 block diagram" class="align-center" src="../../_images/cn0579_block_diagram.svg" width="800" /></a>
+</section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading">#</a></h3>
 <a class="reference internal image-reference" href="../../_images/cn0579_clock_diagram.svg"><img alt="CN0579 clock scheme" class="align-center" src="../../_images/cn0579_clock_diagram.svg" width="600" /></a>
@@ -407,7 +411,7 @@ techniques for system characterization and machine learning algorithms.</p>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -435,7 +439,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for Cora Z7-07S</p>
+<div><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for Cora Z7S</p>
 </div></blockquote>
 </div>
 </section>
@@ -477,7 +481,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7S</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
 </ul>
 </div>
@@ -516,7 +520,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7S</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
 </ul>
 </div>
@@ -599,7 +603,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7-07S</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only for Cora Z7S</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only for DE10-Nano</p></li>
 </ul>
 </div>
@@ -616,16 +620,32 @@ If you want to build the sources, ADI makes them available on the
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <p>Building the CoraZ7S project:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/coraz7s
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0579/coraz7s$<span class="w"> </span>make
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>Building the DE-10Nano project:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/de10nano
-<span class="linenos">2</span>user@analog:~/hdl/projects/cn0579/de10nano$<span class="w"> </span>make
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/coraz7s
 </pre></div>
 </div>
-<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/cn0579/coraz7s$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Building the DE-10Nano project:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0579/de10nano
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/cn0579/de10nano$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
@@ -638,14 +658,16 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Product datasheets:</p>
 <ul>
+<li><p>Product datasheets:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7768-4">AD7768-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD5696R">AD5696R</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADG5421F">ADG5421F</a></p></li>
 </ul>
+</div></blockquote>
 </li>
 </ul>
 </section>
@@ -670,23 +692,23 @@ the HDL repository, and then build the project as follows:</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD7768</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7768">library/axi_ad7768</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_ad7768/index.html#axi-ad7768"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_ad7768/index.html#axi-ad7768"><span class="std std-ref">AXI AD7768</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -694,19 +716,27 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
-<ul class="simple">
+<ul>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7768">[Wiki] AD7768 IIO Precision ADC Linux Driver</a></p></li>
 <li><p>Python support:</p>
-<ul>
+<blockquote>
+<div><ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/">PyADI-IIO documentation</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/adi/cn0579.py">PyADI-IIO CN0579 class</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/examples/cn0579/cn0579_example.py">PyADI-IIO CN0579 example</a></p></li>
 </ul>
+</div></blockquote>
 </li>
-<li><p>CN0579 on Cora Z7s Linux device tree
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts">arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts</a></p></li>
-<li><p>CN0579 on DE-10Nano Linux device tree
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts</a></p></li>
+<li><dl class="simple">
+<dt>CN0579 on Cora Z7s Linux device tree</dt><dd><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts">arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts</a></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>CN0579 on DE-10Nano Linux device tree</dt><dd><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts">arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts</a></p>
+</dd>
+</dl>
+</li>
 <li><p>AD7768 Linux driver <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad7768.c">ad7768.c</a></p></li>
 </ul>
 </section>

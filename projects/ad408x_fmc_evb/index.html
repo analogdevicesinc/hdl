@@ -18,8 +18,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD4110-SDZ HDL project" href="../ad4110/index.html" />
-    <link rel="prev" title="EVAL-AD3552R HDL project" href="../ad3552r_evb/index.html" />
+    <link rel="next" title="AD4110 HDL project" href="../ad4110/index.html" />
+    <link rel="prev" title="AD3552R-EVB HDL project" href="../ad3552r_evb/index.html" />
    
   
   <meta name="global_root" content="../../../">
@@ -342,8 +342,7 @@ Content on this topic
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC">EVAL-AD4080-FMC</a> is designed to demonstrate the
-<a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a>
-performance.</p>
+<a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a> performance.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC">EVAL-AD4080-FMC</a>  HDL design supports the following
 <a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a> features:</p>
 <ul class="simple">
@@ -369,10 +368,10 @@ mezzanine card (FMC) connector.</p>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9508">AD9508</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350">ADF4350</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LT6236">LT6236</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADP7182">ADP7182</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350">ADF4350</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADP7182">ADP7182</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LT6236">LT6236</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -417,7 +416,7 @@ mezzanine card (FMC) connector.</p>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -566,11 +565,19 @@ If you want to build the sources, ADI makes them available on the
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository, and then build the project as follows:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/ad408x_fmc_evb/zed
-<span class="linenos">2</span>user@analog:~/hdl/projects/ad408x_fmc_evb/zed$ make
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad408x_fmc_evb/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad408x_fmc_evb/zed$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
@@ -587,10 +594,10 @@ the HDL repository, and then build the project as follows:</p>
 <ul>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9508">AD9508</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350">ADF4350</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LT6236">LT6236</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADP7182">ADP7182</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADA4945-1">ADA4945-1</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4350">ADF4350</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADP7182">ADP7182</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LT6236">LT6236</a></p></li>
 </ul>
 </li>
 </ul>
@@ -616,33 +623,37 @@ the HDL repository, and then build the project as follows:</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD408X</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad408x">library/axi_ad408x</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_ad408x/index.html#axi-ad408x"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_ad408x/index.html#axi-ad408x"><span class="std std-ref">AXI AD408x</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
+<tr class="row-odd"><td><p>AXI_CLOCK_MONITOR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clock_monitor">library/axi_clock_monitor</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clock_monitor/index.html#axi-clock-monitor"><span class="std std-ref">AXI Clock Monitor</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
+<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
+<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
+<tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
+<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -658,7 +669,7 @@ the HDL repository, and then build the project as follows:</p>
 <li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/">PyADI-IIO documentation</a></p></li>
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/examples/ad4080_example.py">PyADI-IIO example</a></p></li>
 <li><p><a class="reference external" href="https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/adi/ad4080.py">PyADI-IIO class</a></p></li>
-<li><p>AD4080-FMC-EVB Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts">zynq-zed-adv7511-ad4080.dts</a></p></li>
+<li><p>AD4080-FMC-EVB Linux device tree <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts">arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts</a></p></li>
 <li><p>AD4080 Linux driver <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad4080.c">ad4080.c</a></p></li>
 </ul>
 </li>
@@ -697,8 +708,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad3552r_evb/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">EVAL-AD3552R HDL project</a>
-    <a href="../ad4110/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD4110-SDZ HDL project</a>
+    <a href="../ad3552r_evb/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD3552R-EVB HDL project</a>
+    <a href="../ad4110/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD4110 HDL project</a>
               </div>
           
         </div>

@@ -114,9 +114,11 @@
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
-<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a><ul>
 <li><a class="reference internal" href="#zcu102">ZCU102</a></li>
 <li><a class="reference internal" href="#vcu118">VCU118</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 <li><a class="reference internal" href="#microblaze">Microblaze</a></li>
 </ul>
@@ -447,12 +449,14 @@ hdl/projects/adrv9026/$CARRIER/system_project.tcl</p>
 \[Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}\]</div>
 </div>
 <p>The following are the parameters of this project that can be configured:</p>
-<ul class="simple">
-<li><p>JESD_MODE: used link layer encoder mode</p>
 <ul>
+<li><p>JESD_MODE: used link layer encoder mode</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>64B66B - 64b66b link layer defined in JESD204C</p></li>
-<li><p>8B10B  - 8b10b link layer defined in JESD204B</p></li>
+<li><p>8B10B - 8b10b link layer defined in JESD204B</p></li>
 </ul>
+</div></blockquote>
 </li>
 <li><p>RX_LANE_RATE: lane rate of the Rx link</p></li>
 <li><p>TX_LANE_RATE: lane rate of the Tx link</p></li>
@@ -469,56 +473,65 @@ hdl/projects/adrv9026/$CARRIER/system_project.tcl</p>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>Depends on parameter</p></th>
+<th class="head"><p>Zynq/Microblaze</p></th>
 <th class="head"><p>ZynqMP</p></th>
 <th class="head"><p>Versal</p></th>
-<th class="head"><p>Microblaze</p></th>
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>rx_adrv9026_tpl_core</p></td>
+<td></td>
+<td><p>0x44A0_0000</p></td>
+<td><p>0x84A0_0000</p></td>
+<td><p>0xA4A0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>tx_adrv9026_tpl_core</p></td>
+<td></td>
+<td><p>0x44A0_4000</p></td>
+<td><p>0x84A0_4000</p></td>
+<td><p>0xA4A0_4000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9026_rx_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1</p></td>
+<td><p>0x44A6_0000</p></td>
+<td><p>0x84A6_0000</p></td>
+<td><p>0xA4A6_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_tx_xcvr</p></td>
+<td><p>$ADI_PHY_SEL==1</p></td>
+<td><p>0x44A8_0000</p></td>
+<td><p>0x84A8_0000</p></td>
+<td><p>0xA4A8_0000</p></td>
+</tr>
 <tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
-<td><p>0x84A90000</p></td>
-<td><p>0xA4A90000</p></td>
-<td><p>0x44A90000</p></td>
+<td></td>
+<td><p>0x44A9_0000</p></td>
+<td><p>0x84A9_0000</p></td>
+<td><p>0xA4A9_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
-<td><p>0x84AA0000</p></td>
-<td><p>0xA4AA0000</p></td>
-<td><p>0x44AA0000</p></td>
+<td></td>
+<td><p>0x44AA_0000</p></td>
+<td><p>0x84AA_0000</p></td>
+<td><p>0xA4AA_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
-<td><p>0x9c420000</p></td>
-<td><p>0xBC420000</p></td>
-<td><p>0x7c420000</p></td>
+<tr class="row-even"><td><p>axi_adrv9026_rx_dma</p></td>
+<td></td>
+<td><p>0x7C40_0000</p></td>
+<td><p>0x9C40_0000</p></td>
+<td><p>0xBC40_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
-<td><p>0x9c400000</p></td>
-<td><p>0xBC400000</p></td>
-<td><p>0x7c400000</p></td>
-</tr>
-<tr class="row-even"><td><p>tx_adrv9026_tpl_core</p></td>
-<td><p>0x84A04000</p></td>
-<td><p>0xA4A04000</p></td>
-<td><p>0x44A04000</p></td>
-</tr>
-<tr class="row-odd"><td><p>rx_adrv9026_tpl_core</p></td>
-<td><p>0x84A00000</p></td>
-<td><p>0xA4A00000</p></td>
-<td><p>0x44A00000</p></td>
-</tr>
-<tr class="row-even"><td><p>axi_adrv9026_tx_xcvr</p></td>
-<td><p>0x84A80000</p></td>
-<td><p>0xA4A80000</p></td>
-<td><p>0x44A80000</p></td>
-</tr>
-<tr class="row-odd"><td><p>axi_adrv9026_rx_xcvr</p></td>
-<td><p>0x84A60000</p></td>
-<td><p>0xA4A60000</p></td>
-<td><p>0x44A60000</p></td>
+<tr class="row-odd"><td><p>axi_adrv9026_tx_dma</p></td>
+<td></td>
+<td><p>0x7C42_0000</p></td>
+<td><p>0x9C42_0000</p></td>
+<td><p>0xBC42_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -558,9 +571,8 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
-</section>
 <section id="zcu102">
-<h3>ZCU102<a class="headerlink" href="#zcu102" title="Permalink to this heading">#</a></h3>
+<h4>ZCU102<a class="headerlink" href="#zcu102" title="Permalink to this heading">#</a></h4>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -682,7 +694,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="vcu118">
-<h3>VCU118<a class="headerlink" href="#vcu118" title="Permalink to this heading">#</a></h3>
+<h4>VCU118<a class="headerlink" href="#vcu118" title="Permalink to this heading">#</a></h4>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -803,6 +815,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </table>
 </div>
 </section>
+</section>
 <section id="interrupts">
 <h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
@@ -881,17 +894,37 @@ If you want to build the sources, ADI makes them available on the
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">HDL repository</a>. To get the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026">projects/adrv9026</a>
-location and run the make command by typing in your command prompt:</p>
+<p>Then go to the project location, choose your carrier and run the make command
+by typing in your command prompt:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/adrv9026/zcu102
-<span class="linenos">2</span>user@analog:~/hdl/projects/adrv9026/zcu102$ make
-<span class="linenos">3</span>
-<span class="linenos">4</span>user@analog:~$ cd hdl/projects/adrv9026/a10soc
-<span class="linenos">5</span>user@analog:~/hdl/projects/adrv9026/a10soc$ make
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>The following dropdowns contain tables with the parameters that can be used to
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv9026/zcu102
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9026/zcu102$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9026/zcu102$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv9026/a10soc
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9026/zcu102/hdl/projects/adrv9026/a10soc$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
 <input class="collapsible_input" id="2363f3f0ff799727e1ad52cb932e4726a590850c" name="2363f3f0ff799727e1ad52cb932e4726a590850c" type="checkbox"></input><label for="2363f3f0ff799727e1ad52cb932e4726a590850c"><p>Default values of the make parameters for ADRV9026</p>
@@ -1030,11 +1063,7 @@ following table.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p>
-<ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a></p></li>
-</ul>
-</li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a></p></li>
 <li><p><a class="reference external" href="https://www.analog.com/media/radioverse-adrv9026/adrv9026-system-development-user-guide-ug-1727.pdf">UG-1578, Device User Guide</a></p></li>
 </ul>
 </section>
@@ -1059,51 +1088,51 @@ following table.</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-intel"><span class="std std-ref">Intel Devices</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr-amd"><span class="std std-ref">AMD Xilinx Devices</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
-<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">here</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
 </tr>
 </tbody>
 </table>

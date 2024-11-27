@@ -468,13 +468,7 @@ For example: (<code class="code docutils literal notranslate"><span class="pre">
 HDL repo. The <strong>main</strong> branch always points to the latest stable release
 branch, but it also has features <strong>that are not fully tested</strong>. If you
 want to switch to any other branch you need to checkout that branch:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2022_r2
@@ -507,7 +501,7 @@ For details on loading the appropriate environment, consult the vendor documenta
 Typically, they provide source scripts (<strong>settings*.sh</strong>) for this purpose.</p>
 <p>To simplify setting up the environment, consider adding a wrapper for the correct
 method in your <strong>~/.bashrc</strong> file as follows:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">XVERSION</span><span class="o">=</span><span class="m">2023</span>.1
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">XVERSION</span><span class="o">=</span><span class="m">2023</span>.2
 load_amd<span class="w"> </span><span class="o">()</span>
 <span class="o">{</span>
 <span class="w">    </span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/<span class="nv">$XVERSION</span>/settings64.sh
@@ -522,11 +516,19 @@ may conflict with each other.</p>
 </div>
 <p>Then, <a class="reference external" href="https://linuxcommand.org/lc3_man_pages/sourceh.html">re-source your bashrc</a>
 for the current session (or open a new one) and call the defined method:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.bashrc
-load_amd
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>Check out the following sections for the paths you need to export.</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>load_amd
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Check out the following sections for the paths you need to export.</p>
 <section id="a-linux-environment-setup">
 <h3>3a. Linux environment setup<a class="headerlink" href="#a-linux-environment-setup" title="Permalink to this heading">#</a></h3>
 <p>All major distributions should have <code class="docutils literal notranslate"><span class="pre">make</span></code> installed by default. If not,
@@ -536,21 +538,49 @@ package name.</p>
 <p class="admonition-title">Caution</p>
 <p>Change the path and the tool version accordingly to your installation!</p>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># for AMD Xilinx</span>
-<span class="linenos"> 2</span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/202x.x/settings64.sh
-<span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
-<span class="linenos"> 5</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-<span class="linenos"> 6</span>
-<span class="linenos"> 7</span><span class="c1"># for Intel</span>
-<span class="linenos"> 8</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
-<span class="linenos"> 9</span>
-<span class="linenos">10</span><span class="c1"># for Lattice</span>
-<span class="linenos">11</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
-<span class="linenos">12</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
+<p>For AMD Xilinx Vivado:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-</section>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/202x.x/settings64.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Lattice:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
 <section id="b-windows-environment-setup">
 <h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading">#</a></h3>
 <p>Because GNU Make is not supported on Windows, you need to install
@@ -560,28 +590,85 @@ and command-line interface for Microsoft Windows.</p>
 <p class="admonition-title">Caution</p>
 <p>Change the path and the tool version accordingly to your installation!</p>
 </div>
-<p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1"># for AMD Xilinx</span>
-<span class="linenos"> 2</span><span class="nb">source</span><span class="w"> </span>/cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
-<span class="linenos"> 3</span>
-<span class="linenos"> 4</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
-<span class="linenos"> 5</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
-<span class="linenos"> 6</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
-<span class="linenos"> 7</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-<span class="linenos"> 8</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-<span class="linenos"> 9</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-<span class="linenos">10</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-<span class="linenos">11</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
-<span class="linenos">12</span>
-<span class="linenos">13</span><span class="c1"># for Intel</span>
-<span class="linenos">14</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
-<span class="linenos">15</span>
-<span class="linenos">16</span><span class="c1"># for Lattice</span>
-<span class="linenos">17</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
-<span class="linenos">18</span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+<p>For AMD Xilinx Vivado:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div><div class="collapsible docutils container">
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Lattice:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
 <input class="collapsible_input" id="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d" name="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d" type="checkbox"></input><label for="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d"><p>Alternatives to Cygwin/Linux terminal</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>A very good alternative to Cygwin – <strong>but not supported by us</strong> – is
@@ -780,12 +867,8 @@ file. In the below example that is <strong>axi_ad7768_ip.log</strong> inside the
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>make[1]: Entering directory &#39;/path/to/hdl/library/axi_ad7768&#39;
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>vivado -mode batch -source axi_ad7768_ip.tcl  &gt;&gt; axi_ad7768_ip.log 2&gt;&amp;1
+rm -rf *.cache *.data *.xpr *.log component.xml *.jou xgui *.ip_user_files *.srcs *.hw *.sim .Xil
+vivado -mode batch -source axi_ad7768_ip.tcl  &gt;&gt; axi_ad7768_ip.log 2&gt;&amp;1
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If the <code class="docutils literal notranslate"><span class="pre">make</span></code> command returns an error (and stops), <strong>you must first check
@@ -810,32 +893,26 @@ You may also check the generated files for more information.</p>
 It is exactly the same <strong>rule</strong> as the library component. The log file, in
 this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
 <strong>projects/daq2/zc706</strong> directory.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/daq2/zc706$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>[ -- snip --]
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>vivado -mode batch -source system_project.tcl &gt;&gt; daq2_zc706_vivado.log 2&gt;&amp;1
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>make: Leaving directory &#39;/path/to/hdl/projects/daq2/zc706&#39;
+rm -rf *.cache *.data *.xpr *.log *.jou xgui *.runs *.srcs *.sdk *.hw *.sim .Xil *.ip_user_files
+vivado -mode batch -source system_project.tcl &gt;&gt; daq2_zc706_vivado.log 2&gt;&amp;1
+make: Leaving directory &#39;/path/to/hdl/projects/daq2/zc706&#39;
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Do a quick (or detailed) check on files.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/daq2/zc706/daq2_zc706_vivado.log
@@ -847,7 +924,7 @@ this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
 </div>
 <p>And finally, if the project build is successful, the <strong>system_top.xsa</strong> file
 should be in the <strong>.sdk</strong> folder.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706/daq2_zc706.sdk
@@ -858,7 +935,7 @@ build.</p>
 <p>Starting with Vivado 2019.3, the output file extension was changed from
 <strong>.hdf</strong> to <strong>.xsa</strong>.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="8ae7c2a815aec332d24d9cea1a7c568ab234ad58" name="8ae7c2a815aec332d24d9cea1a7c568ab234ad58" type="checkbox"></input><label for="8ae7c2a815aec332d24d9cea1a7c568ab234ad58"><p>Building an AMD project in WSL - known issues</p>
+<input class="collapsible_input" id="e8f4cdfd340ec3cf78201bd4ea87df00a499aa9c" name="e8f4cdfd340ec3cf78201bd4ea87df00a499aa9c" type="checkbox"></input><label for="e8f4cdfd340ec3cf78201bd4ea87df00a499aa9c"><p>Building an AMD project in WSL - known issues</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>For some projects it is possible to face the following error when you make a
 build:</p>
@@ -902,10 +979,13 @@ find more information about what a swap file is at this link:
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to make the change permanent, add this line to <em>/etc/fstab</em>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>If you want to deactivate the swap memory:</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>If you want to deactivate the swap memory:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -961,13 +1041,13 @@ want to use, then enter the folder of the FPGA carrier that you want, and run
 <code class="docutils literal notranslate"><span class="pre">hdl/projects/$ADI_part/$FPGA_carrier</span></code>.</p>
 <p><strong>EXAMPLE</strong>: Here we are building the <strong>ADRV9371X</strong> project on the
 <strong>Arria 10 SoC</strong> carrier.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/adrv9371x/a10soc
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/projects/adrv9371x/a10soc$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9371x/a10soc$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
@@ -998,13 +1078,13 @@ this contains the most relevant information that you need to provide.</p>
 <p class="admonition-title">Warning</p>
 <p>Do NOT copy-paste <code class="docutils literal notranslate"><span class="pre">make</span></code> command line text</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
@@ -1012,13 +1092,13 @@ this contains the most relevant information that you need to provide.</p>
 </div>
 <div class="clear-left"></div></div></div><p>And finally, if the project was built is successfully, the <strong>.sopcinfo</strong> and
 <strong>.sof</strong> files should be in the same folder.</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sopcinfo
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sof
@@ -1028,7 +1108,7 @@ this contains the most relevant information that you need to provide.</p>
 and/or <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux</a> build.</p>
 <p>The <strong>sof</strong> file is used to program the device.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="33460ca4d69288944ba4942bf68c8dc99a5d5790" name="33460ca4d69288944ba4942bf68c8dc99a5d5790" type="checkbox"></input><label for="33460ca4d69288944ba4942bf68c8dc99a5d5790"><p>Building an Intel project in WSL - known issues</p>
+<input class="collapsible_input" id="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2" name="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2" type="checkbox"></input><label for="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2"><p>Building an Intel project in WSL - known issues</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>For a10Soc and s10Soc projects it’s very possible to face the following
 error when you try to build the project:</p>
@@ -1076,10 +1156,13 @@ project. To create a swap file you can use the following commands:</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to make the change permanent, add this line to <em>/etc/fstab</em>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<p>If you want to deactivate the swap memory:</p>
+<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>If you want to deactivate the swap memory:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -1220,31 +1303,31 @@ This contains the most relevant information that you need to provide.</p>
 <p class="admonition-title">Warning</p>
 <p>Do NOT copy-paste <code class="docutils literal notranslate"><span class="pre">make</span></code> command line text!</p>
 </div>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_propel_builder.log
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
 <div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_radiant.log
