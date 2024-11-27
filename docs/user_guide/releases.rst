@@ -67,19 +67,24 @@ Release branches
      - Release notes
      - List of supported projects and IP cores
    * - :git-hdl:`main <main:/>`
-     - Quartus Pro 23.2
+     - Quartus Pro 24.2
      - Vivado 2023.2
      -
      -
+   * - :git-hdl:`hdl_2023_r2 <hdl_2023_r2:>`
+     - Quartus Pro 23.2
+     - Vivado 2023.2
+     - `Release notes 2023_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2023_R2>`_
+     - `Wiki list for hdl_2023_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2023_r2>`_
    * - :git-hdl:`hdl_2022_r2 patch1 <2022_r2_p1:>`
      - Quartus Pro 22.4
      - Vivado 2022.2
-     - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_r2_p1>`
+     - `Release notes 2022_R2_p1 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_r2_p1>`__
      - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`_
    * - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:>`
      - Quartus Pro 22.4
      - Vivado 2022.2
-     - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_R2>`
+     - `Release notes 2022_R2 <https://github.com/analogdevicesinc/hdl/releases/tag/2022_R2>`_
      - `Wiki list for hdl_2022_r2 <https://wiki.analog.com/resources/fpga/docs/hdl/downloads_2022_r2>`_
    * - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:>`
      - Quartus Pro 21.4
