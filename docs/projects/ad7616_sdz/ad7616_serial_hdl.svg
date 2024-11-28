@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    sodipodi:docname="ad7616_serial_hdl.svg"
-   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    style="shape-rendering:crispEdges"
    id="svg6470"
    version="1.1"
@@ -1116,9 +1116,9 @@
      showgrid="true"
      inkscape:current-layer="g11134"
      inkscape:document-units="px"
-     inkscape:cy="358.09908"
-     inkscape:cx="471.23616"
-     inkscape:zoom="0.98994949"
+     inkscape:cy="312.85714"
+     inkscape:cx="373.92857"
+     inkscape:zoom="1.4"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1132,7 +1132,11 @@
        originy="140.74579"
        originx="190.74586"
        id="grid7015"
-       type="xygrid" />
+       type="xygrid"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata6467">
@@ -1362,21 +1366,12 @@
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
-         y="-51.59026"
-         x="112.39101"
-         height="360.83545"
-         width="441.32794"
+         y="-51.508568"
+         x="28.490313"
+         height="360.67206"
+         width="525.14679"
          id="rect6078"
-         style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.74916497;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.74916497,5.2474947;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
-      <rect
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         y="-52.566616"
-         x="15.106209"
-         height="361.94696"
-         width="80.052429"
-         id="rect6078-1"
-         style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.74916497;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.74916497,5.24749284;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
+         style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:1.90762;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.90762, 5.72286;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1701,20 +1696,15 @@
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          id="text6100-7-7-9"
-         y="289.00757"
-         x="27.253187"
+         y="298.58969"
+         x="40.952003"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
          xml:space="preserve"><tspan
-           id="tspan331"
            style="stroke-width:1"
-           y="289.00757"
-           x="27.253187"
-           sodipodi:role="line">  sys_clk </tspan><tspan
-           style="stroke-width:1"
-           y="302.34094"
-           x="27.253187"
+           y="298.58969"
+           x="40.952003"
            sodipodi:role="line"
-           id="tspan673">= 100MHz</tspan></text>
+           id="tspan673">  sys_clk = 100MHz</tspan></text>
       <flowRoot
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          id="flowRoot482"
@@ -1830,48 +1820,6 @@
            x="398.68881"
            y="-9.0366869"
            id="tspan5269-3-5">AXI PWM GEN</tspan></text>
-      <rect
-         y="321.03195"
-         x="67.918343"
-         height="55"
-         width="121.31427"
-         id="rect35512-6-1-2-4-9"
-         style="display:inline;fill:#e5e5e5;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.95052;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;shape-rendering:crispEdges;enable-background:new" />
-      <text
-         id="text2401-1-7-3-9-9-74-3-7-7-1"
-         y="353.56772"
-         x="129.00612"
-         style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-         xml:space="preserve"><tspan
-           style="text-align:center;text-anchor:middle;stroke-width:1"
-           id="tspan4332-0-3"
-           y="353.56772"
-           x="129.00612"
-           sodipodi:role="line">AXI CLKGEN</tspan></text>
-      <text
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         id="text6100-7-7-9-3"
-         y="288.51907"
-         x="176.57347"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
-         xml:space="preserve"><tspan
-           id="tspan331-4"
-           style="stroke-width:1"
-           y="288.51907"
-           x="176.57347"
-           sodipodi:role="line">   spi_clk </tspan><tspan
-           style="stroke-width:1"
-           y="301.85245"
-           x="176.57347"
-           sodipodi:role="line"
-           id="tspan673-8">= 100MHz</tspan></text>
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path1206-1-0-95-1-1-2"
-         d="M 43.728437,345.95587 H 61.741822"
-         style="display:inline;fill:none;stroke:#000000;stroke-width:1.98635;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-0-3-1-2-6-8);shape-rendering:crispEdges;enable-background:new" />
       <path
          style="fill:#000000;stroke-width:1.74916;stroke-dasharray:1.74916, 5.24749;stroke-dashoffset:0"
          d="M 44.671689,346.59627 44.457448,308.57128"
@@ -1880,24 +1828,6 @@
          style="fill:#000000;stroke-width:1.74916497;stroke-dasharray:1.74916497,5.2475047;stroke-dashoffset:0"
          d="m 44.136086,346.25473 -0.10712,-37.22806"
          id="path16730" />
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path1206-9-7-0-7-8-9-2"
-         d="M 207.35096,347.1312 V 315.14473"
-         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-4-20-7-4);shape-rendering:crispEdges;enable-background:new" />
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path1206-9-7-0-7-8-9-2-9"
-         d="m 43.875294,346.97637 0,-37.1"
-         style="display:inline;fill:none;stroke:#000000;stroke-width:1.74916;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new" />
-      <path
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0"
-         id="path1206-1-0-95-1-1-2-5"
-         d="m 188.97818,346.11688 h 18.01335"
-         style="display:inline;fill:none;stroke:#000000;stroke-width:1.98635;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:;shape-rendering:crispEdges;enable-background:new" />
     </g>
     <g
        transform="matrix(1.4208528,0,0,1.4208528,-279.98358,-157.21811)"
