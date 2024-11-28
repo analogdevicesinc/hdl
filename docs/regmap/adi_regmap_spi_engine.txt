@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x00
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 1.04.00.
+Version of the peripheral. Follows semantic versioning. Current version 1.04.01.
 ENDREG
 
 FIELD
