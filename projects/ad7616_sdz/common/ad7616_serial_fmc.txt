@@ -12,7 +12,7 @@ M22     FMC_LPC_LA04_N       CSn              ad7616_spi_cs     LVCOMOS25     #N
 A18     FMC_LPC_LA24_P       CONVST           adc_cnvst         LVCOMOS25     #N/A
 E20     FMC_LPC_LA21_N       CHSEL0           adc_chsel[0]      LVCOMOS25     #N/A
 E18     FMC_LPC_LA26_N       CHSEL1           adc_chsel[1]      LVCOMOS25     #N/A
-D22     FMC_LPC_LA25_P       CHSEL2           adc_chsel[2       LVCOMOS25     #N/A
+D22     FMC_LPC_LA25_P       CHSEL2           adc_chsel[2]      LVCOMOS25     #N/A
 E19     FMC_LPC_LA21_P       HW_RNGSEL0       adc_hw_rngsel[0]  LVCOMOS25     #N/A
 F18     FMC_LPC_LA26_P       HW_RNGSEL1       adc_hw_rngsel[1]  LVCOMOS25     #N/A
 T19     FMC_LPC_LA10_N       BUSY             adc_busy          LVCOMOS25     #N/A
