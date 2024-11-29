@@ -165,7 +165,11 @@ proc get_config_param {param} {
   upvar params params
 
   set jesd_params {M L S F HD N NP}
-  set index [lsearch $jesd_params $param]
 
-  return [lindex $params($device,$mode) $index]
+  if {[info exists ::env($param)]} {
+    return $::env($param)
+  } else {
+    set index [lsearch $jesd_params $param]
+    return [lindex $params($device,$mode) $index]
+  }
 }

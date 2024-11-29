@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -128,13 +128,13 @@ module system_top #(
 
   // spi_en is active ...
   //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
-  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ, AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  //                                        9135/9144/9172    916(1,2,3,4)
+  //                                      AD9135/9144/9172   AD916(1,2,3,4)
   assign spi_csn_dac  = spi0_csn[1];
   assign spi_csn_clk  = spi0_csn[0];    //   HMC7044          AD9508
   assign spi_csn_clk2 = spi0_csn[2];    //   NC               ADF4355
@@ -238,7 +238,7 @@ module system_top #(
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref));
+    .tx_sysref_0 (tx_sysref_loc));
 
   // AD9161/2/4-FMC-EBZ works only in single link,
   // The FMC connector instead of SYNC1 has SYSREF connected to it
