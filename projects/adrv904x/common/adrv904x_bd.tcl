@@ -219,16 +219,46 @@ if {$ADI_PHY_SEL == 1} {
   ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
   ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_OUT_DIV 1
   ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_OUT_DIV 1
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV 4
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV 2
   ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV_4_5 5
   ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CLK25_DIV 20
   ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_CLK25_DIV 20
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_PMA_CFG 0x001E7080
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_PMA_CFG 0x280A
   ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
   ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_FBDIV 33
   ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_REFCLK_DIV 1
   ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_INVERT 15
   ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_LANE_INVERT 255
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG0 0x1fa
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG1 0x23
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG2 0x2
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.A_TXDIFFCTRL 0xC
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG0 0x3
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN2 0x269
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN4 0x164
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3 0x12
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN4 0x12
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.CH_HSPMUX 0x6868
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.PREIQ_FREQ_BST 1
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG0 0x4
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG1 0x0
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG 0x0
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_PI_BIASSET 3
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.POR_CFG 0x0
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG0 0x333c
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG4 0x45
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.PPF0_CFG 0xF00
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP 0xFF
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP_G3 0xF
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_LPF 0x31D
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG2 {0x2631} 
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG3 {0x411C} 
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_WIDEMODE_CDR {"01"} 
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_XMODE_SEL {"0"} 
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG0 {0x0000} 
+  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG1 {0x0000} 
 } else {
   source ../common/versal_transceiver.tcl
 
