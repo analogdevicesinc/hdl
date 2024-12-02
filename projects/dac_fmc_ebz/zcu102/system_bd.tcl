@@ -11,9 +11,9 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/dac_fmc_ebz_bd.tcl
 
 if {[info exists ::env(ADI_LANE_RATE)]} {
-  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 15.4]
+  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 12.5]
 } elseif {![info exists ADI_LANE_RATE]} {
-  set ADI_LANE_RATE 15.4
+  set ADI_LANE_RATE 12.5
 }
 
 # Common for both 12.5 and 15.4 GHz Lane Rate
@@ -49,8 +49,18 @@ if { $ADI_LANE_RATE == 15.4 } {
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF0_CFG        0x800
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF1_CFG        0x600
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_LPF        0x37F
+} elseif { $ADI_LANE_RATE == 4.16 } {
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_CFG2       0xFC1
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_CFG0       0x331C
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_CFG4       0x4
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_CFG2_G3    0xFC1
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TX_CLK25_DIV    13
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TX_PI_BIASSET   2
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF0_CFG        0x800
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF1_CFG        0x600
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_LPF        0x37F
 } else {
-    error "ADI_LANE_RATE must be either 12.5 GHz or 15.4GHz"
+    error "ADI_LANE_RATE must be either 4.16, 12.5 GHz or 15.4GHz"
 }
 
 ad_ip_parameter  dac_jesd204_link/tx   CONFIG.SYSREF_IOB         false
