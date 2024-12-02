@@ -375,7 +375,6 @@ ad_connect  $sys_cpu_clk $adc_data_offload_name/s_axi_aclk
 
 # Resets
 # create_bd_port -dir O rx_device_clk_rstn
-ad_connect axi_adf4030_0/rstn rx_device_clk_rstgen/peripheral_aresetn
 
 ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
 ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn

@@ -12,7 +12,6 @@ module axi_adf4030 #(
   inout  logic bsync_n,
   input  logic device_clk,
   input  logic trigger,
-  input  logic rstn,
   output logic sysref,
   output logic [CHANNEL_COUNT-1:0] trig_channel,
 
@@ -49,7 +48,6 @@ module axi_adf4030 #(
   logic        bsync_alignment_error;
   logic        bsync_captured;
   logic [ 2:0] bsync_state;
-  // wire [2:0] trig_state;
 
   // Internal up bus, translated by up_axi
   logic        up_rstn;
@@ -68,6 +66,7 @@ module axi_adf4030 #(
 
   logic [CHANNEL_COUNT-1:0] trig_channel_en;
   logic [15:0]              trig_channel_phase [CHANNEL_COUNT - 1:0];
+  logic [ 2:0]              trig_state         [CHANNEL_COUNT - 1:0];
   logic                     direction;
   logic                     disable_internal_bsync;
 
@@ -117,6 +116,7 @@ module axi_adf4030 #(
         .bsync_ready (bsync_ready),
         .bsync_delay (bsync_delay),
         .bsync_ratio (bsync_ratio),
+        .trig_state  (trig_state[i]),
         .out         (trig_channel[i]));
     end
   endgenerate
@@ -140,7 +140,7 @@ module axi_adf4030 #(
     .bsync_alignment_error  (bsync_alignment_error),
     .bsync_captured         (bsync_captured),
     .bsync_state            (bsync_state),
-    // .trig_state (trig_state),
+    .trig_state             (trig_state),
 
     .up_rstn                (up_rstn),
     .up_clk                 (up_clk),

@@ -1,15 +1,15 @@
 `timescale 1ns / 1ps
 
 module trigger_channel (
-  input logic        clk,
-  input logic        rstn,
-  input logic        trigger,
-  input logic        ch_en,
-  input logic [15:0] ch_phase,
-  input logic        bsync_ready,
-  input logic [ 4:0] bsync_delay,
-  input logic [15:0] bsync_ratio,
-  // output     [ 2:0] trig_state,
+  input  logic        clk,
+  input  logic        rstn,
+  input  logic        trigger,
+  input  logic        ch_en,
+  input  logic [15:0] ch_phase,
+  input  logic        bsync_ready,
+  input  logic [ 4:0] bsync_delay,
+  input  logic [15:0] bsync_ratio,
+  output logic [ 2:0] trig_state,
   output logic        out
 );
 
@@ -110,6 +110,6 @@ module trigger_channel (
     end
   end
 
-  // assign trig_state = curr_state;
+  assign trig_state = curr_state;
 
 endmodule
