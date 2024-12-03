@@ -118,6 +118,7 @@ module spi_engine_execution #(
 
   reg last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
+  reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
@@ -244,6 +245,7 @@ module spi_engine_execution #(
       sdo_idle_state <= SDO_DEFAULT;
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
+      last_bit_count <= DATA_WIDTH-1;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
       if (cmd[9:8] == REG_CONFIG) begin
@@ -256,6 +258,7 @@ module spi_engine_execution #(
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0];
+        last_bit_count <= cmd[7:0] - 1;
         left_aligned <= DATA_WIDTH - cmd[7:0];
       end
     end
@@ -458,7 +461,7 @@ module spi_engine_execution #(
   // end_of_word will signal the end of a transaction, pushing the command
   // stream execution to the next command. end_of_word in normal mode can be
   // generated using the global bit_counter
-  assign last_bit = bit_counter == word_length - 1;
+  assign last_bit = (bit_counter == last_bit_count);
   assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
   always @(posedge clk) begin
