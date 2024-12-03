@@ -175,7 +175,7 @@ module corundum_core #(
   parameter AXIL_IF_CTRL_ADDR_WIDTH = AXIL_CTRL_ADDR_WIDTH-$clog2(IF_COUNT),
   parameter AXIL_CSR_ADDR_WIDTH = AXIL_IF_CTRL_ADDR_WIDTH-5-$clog2((SCHED_PER_IF+4+7)/8),
   parameter AXIL_CSR_PASSTHROUGH_ENABLE = 0,
-  parameter RB_NEXT_PTR = 0,
+  parameter RB_NEXT_PTR = 32'h0,
 
   // AXI lite interface configuration (application control)
   parameter AXIL_APP_CTRL_DATA_WIDTH = AXIL_CTRL_DATA_WIDTH,

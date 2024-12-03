@@ -8,7 +8,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
 
-adi_ip_create corundum
+adi_ip_create corundum_core
 
 # Corundum sources
 add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
@@ -99,12 +99,12 @@ add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl" \
 ]
 
-adi_ip_properties_lite corundum
+adi_ip_properties_lite corundum_core
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
 set cc [ipx::current_core]
 
-set_property display_name "Corundum" $cc
+set_property display_name "Corundum Core" $cc
 set_property description "Corundum MQNIC Core AXI IP" $cc
 
 # Remove all inferred interfaces and address spaces

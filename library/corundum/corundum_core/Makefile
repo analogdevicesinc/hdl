@@ -1,6 +1,6 @@
-LIBRARY_NAME := corundum
+LIBRARY_NAME := corundum_core
 
-XILINX_DEPS += corundum_ip.tcl
+XILINX_DEPS += corundum_core_ip.tcl
 
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/rtl/mqnic_core_axi.v
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/rtl/mqnic_core.v
