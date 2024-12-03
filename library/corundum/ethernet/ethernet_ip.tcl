@@ -110,6 +110,48 @@ adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_rx [lis
   "ptp_ts_step eth_rx_ptp_ts_step" \
 ]
 
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave axis_tx_ptp [list \
+  "ts    axis_eth_tx_ptp_ts" \
+  "tag   axis_eth_tx_ptp_ts_tag" \
+  "valid axis_eth_tx_ptp_ts_valid" \
+  "ready axis_eth_tx_ptp_ts_ready" \
+]
+
+adi_if_infer_bus analog.com:interface:if_qspi master qspi0 [list \
+  "dq_i  qspi_0_dq_i" \
+  "dq_o  qspi_0_dq_o" \
+  "dq_oe qspi_0_dq_oe" \
+  "cs    qspi_0_cs" \
+]
+
+adi_if_infer_bus analog.com:interface:if_qspi master qspi1 [list \
+  "dq_i  qspi_1_dq_i" \
+  "dq_o  qspi_1_dq_o" \
+  "dq_oe qspi_1_dq_oe" \
+  "cs    qspi_1_cs" \
+]
+
+adi_if_infer_bus analog.com:interface:if_qsfp master qsfp [list \
+  "tx_p    qsfp_tx_p" \
+  "tx_n    qsfp_tx_n" \
+  "rx_p    qsfp_rx_p" \
+  "rx_n    qsfp_rx_n" \
+  "modsell qsfp_modsell" \
+  "resetl  qsfp_resetl" \
+  "modprsl qsfp_modprsl" \
+  "intl    qsfp_intl" \
+  "lpmode  qsfp_lpmode" \
+]
+
+adi_if_infer_bus analog.com:interface:if_i2c master i2c [list \
+  "scl_i i2c_scl_i" \
+  "scl_o i2c_scl_o" \
+  "scl_t i2c_scl_t" \
+  "sda_i i2c_sda_i" \
+  "sda_o i2c_sda_o" \
+  "sda_t i2c_sda_t" \
+]
+
 set_property part xcvu9p-flga2104-2L-e [current_project]
 
 source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"

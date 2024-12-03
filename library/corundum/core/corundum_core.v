@@ -164,10 +164,6 @@ module corundum_core #(
   parameter RAM_ADDR_WIDTH = $clog2(TX_RAM_SIZE > RX_RAM_SIZE ? TX_RAM_SIZE : RX_RAM_SIZE),
   parameter RAM_PIPELINE = 2,
   parameter AXI_DMA_MAX_BURST_LEN = 256,
-  parameter AXI_DMA_READ_USE_ID = 0,
-  parameter AXI_DMA_WRITE_USE_ID = 1,
-  parameter AXI_DMA_READ_OP_TABLE_SIZE = 2**(AXI_ID_WIDTH),
-  parameter AXI_DMA_WRITE_OP_TABLE_SIZE = 2**(AXI_ID_WIDTH),
 
   // Interrupt configuration
   parameter IRQ_COUNT = 32,
@@ -190,7 +186,6 @@ module corundum_core #(
   parameter AXIS_DATA_WIDTH = 64,
   parameter AXIS_KEEP_WIDTH = AXIS_DATA_WIDTH/8,
   parameter AXIS_SYNC_DATA_WIDTH = AXIS_DATA_WIDTH,
-  parameter AXIS_IF_DATA_WIDTH = AXIS_SYNC_DATA_WIDTH*2**$clog2(PORTS_PER_IF),
   parameter AXIS_TX_USER_WIDTH = TX_TAG_WIDTH + 1,
   parameter AXIS_RX_USER_WIDTH = (PTP_TS_ENABLE ? PTP_TS_WIDTH : 0) + 1,
   parameter AXIS_RX_USE_READY = 0,

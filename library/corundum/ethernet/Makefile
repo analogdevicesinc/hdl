@@ -109,6 +109,14 @@ XILINX_DEPS  += ../interfaces/if_flow_control_rx.xml
 XILINX_DEPS  += ../interfaces/if_flow_control_rx_rtl.xml
 XILINX_DEPS  += ../interfaces/if_ethernet_ptp.xml
 XILINX_DEPS  += ../interfaces/if_ethernet_ptp_rtl.xml
+XILINX_DEPS  += ../interfaces/if_axis_tx_ptp.xml
+XILINX_DEPS  += ../interfaces/if_axis_tx_ptp_rtl.xml
+XILINX_DEPS  += ../interfaces/if_qspi.xml
+XILINX_DEPS  += ../interfaces/if_qspi_rtl.xml
+XILINX_DEPS  += ../interfaces/if_qsfp.xml
+XILINX_DEPS  += ../interfaces/if_qsfp_rtl.xml
+XILINX_DEPS  += ../interfaces/if_i2c.xml
+XILINX_DEPS  += ../interfaces/if_i2c_rtl.xml
 
 XILINX_INTERFACE_DEPS += corundum/interfaces
 

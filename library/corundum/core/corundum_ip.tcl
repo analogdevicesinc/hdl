@@ -443,6 +443,25 @@ adi_if_infer_bus analog.com:interface:if_ethernet_ptp master ethernet_ptp_rx [li
   "ptp_ts_step rx_ptp_ts_step" \
 ]
 
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp master axis_tx_ptp [list \
+  "ts    s_axis_tx_cpl_ts" \
+  "tag   s_axis_tx_cpl_tag" \
+  "valid s_axis_tx_cpl_valid" \
+  "ready s_axis_tx_cpl_ready" \
+]
+
+adi_if_infer_bus analog.com:interface:if_jtag master jtag [list \
+  "tdi app_jtag_tdi" \
+  "tdo app_jtag_tdo" \
+  "tms app_jtag_tms" \
+  "tck app_jtag_tck" \
+]
+
+adi_if_infer_bus analog.com:interface:if_gpio master gpio [list \
+  "gpio_in     app_gpio_in" \
+  "gpio_out    app_gpio_out" \
+]
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 ipx::save_core $cc
