@@ -1316,16 +1316,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5862247"
-     inkscape:cx="584.7217"
-     inkscape:cy="263.51878"
+     inkscape:zoom="1.2875855"
+     inkscape:cx="429.09771"
+     inkscape:cy="242.70232"
      inkscape:document-units="px"
-     inkscape:current-layer="g17988"
+     inkscape:current-layer="layer8"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1018"
-     inkscape:window-x="-6"
-     inkscape:window-y="-6"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-grids="false"
      inkscape:snap-bbox="false"
@@ -1424,12 +1424,12 @@
            transform="rotate(-90)"
            id="text5775"
            y="89.925331"
-           x="-984.08795"
+           x="-988.08795"
            style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#a01414;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            xml:space="preserve"><tspan
              style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
              y="89.925331"
-             x="-984.08795"
+             x="-988.08795"
              id="tspan5777"
              sodipodi:role="line">AXI_DMAC</tspan></text>
       </g>
@@ -1645,13 +1645,13 @@
         <text
            xml:space="preserve"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13.3333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
-           x="664.01215"
+           x="624.01215"
            y="325.83942"
            id="text24539-4"><tspan
              sodipodi:role="line"
              id="tspan24537-7"
-             x="664.01215"
-             y="325.83942">JESD lane rate 4Gbps </tspan></text>
+             x="624.01215"
+             y="325.83942">JESD204B lane rate = 4Gbps </tspan></text>
         <text
            xml:space="preserve"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.33333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
