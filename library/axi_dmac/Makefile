@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2024 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -57,7 +57,13 @@ INTEL_DEPS += ../util_cdc/sync_gray.v
 INTEL_DEPS += axi_dmac_constr.sdc
 INTEL_DEPS += axi_dmac_hw.tcl
 
+LATTICE_DEPS += ../util_axis_fifo/util_axis_fifo.v
+LATTICE_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
+LATTICE_DEPS += ../util_cdc/sync_bits.v
+LATTICE_DEPS += ../util_cdc/sync_event.v
+LATTICE_DEPS += ../util_cdc/sync_gray.v
 LATTICE_DEPS += axi_dmac_ltt.tcl
+
 LATTICE_INTERFACE_DEPS += interfaces_ltt
 
 include ../scripts/library.mk

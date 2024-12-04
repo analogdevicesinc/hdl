@@ -33,7 +33,13 @@ INTEL_DEPS += ../../util_cdc/sync_gray.v
 INTEL_DEPS += axi_spi_engine_constr.sdc
 INTEL_DEPS += axi_spi_engine_hw.tcl
 
+LATTICE_DEPS += ../../common/ad_mem.v
+LATTICE_DEPS += ../../util_axis_fifo/util_axis_fifo.v
+LATTICE_DEPS += ../../util_axis_fifo/util_axis_fifo_address_generator.v
+LATTICE_DEPS += ../../util_cdc/sync_bits.v
+LATTICE_DEPS += ../../util_cdc/sync_gray.v
 LATTICE_DEPS += axi_spi_engine_ltt.tcl
+
 LATTICE_INTERFACE_DEPS += interfaces_ltt
 
 include ../../scripts/library.mk
