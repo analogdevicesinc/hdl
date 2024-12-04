@@ -241,14 +241,7 @@ module corundum #(
   output           sfp_tx_disable,
   input            sfp_tx_fault,
   input            sfp_rx_los,
-  input            sfp_mod_abs,
-
-  input            scl_i,
-  output reg       scl_o,
-  output reg       scl_t,
-  input            sda_i,
-  output reg       sda_o,
-  output reg       sda_t
+  input            sfp_mod_abs
 );
 
   // PTP configuration
@@ -270,20 +263,6 @@ module corundum #(
   localparam AXIS_ETH_SYNC_DATA_WIDTH = AXIS_ETH_DATA_WIDTH;
   localparam AXIS_ETH_TX_USER_WIDTH = TX_TAG_WIDTH + 1;
   localparam AXIS_ETH_RX_USER_WIDTH = (PTP_TS_ENABLE ? PTP_TS_WIDTH : 0) + 1;
-
-  wire sfp_iic_scl_i_w;
-  wire sfp_iic_scl_o_w;
-  wire sfp_iic_scl_t_w;
-  wire sfp_iic_sda_i_w;
-  wire sfp_iic_sda_o_w;
-  wire sfp_iic_sda_t_w;
-
-  always @(posedge clk) begin
-      scl_o <= sfp_iic_scl_o_w;
-      scl_t <= sfp_iic_scl_t_w;
-      sda_o <= sfp_iic_sda_o_w;
-      sda_t <= sfp_iic_sda_t_w;
-  end
 
   reg [(IRQ_COUNT*IRQ_STRETCH)-1:0] irq_stretch = {(IRQ_COUNT*IRQ_STRETCH){1'b0}};
 
@@ -343,12 +322,12 @@ module corundum #(
   wire ptp_sample_clk;
 
   sync_signal #(
-    .WIDTH(5),
+    .WIDTH(3),
     .N(2)
   ) sync_signal_inst (
     .clk(clk),
-    .in({sfp_tx_fault,      sfp_rx_los,     sfp_mod_abs,     scl_i,   sda_i}),
-    .out({sfp_tx_fault_int, sfp_rx_los_int, sfp_mod_abs_int, sfp_iic_scl_i_w, sfp_iic_sda_i_w})
+    .in({sfp_tx_fault,      sfp_rx_los,     sfp_mod_abs}),
+    .out({sfp_tx_fault_int, sfp_rx_los_int, sfp_mod_abs_int})
   );
 
   always @(posedge clk) begin
@@ -662,8 +641,8 @@ module corundum #(
      * Clock: 250 MHz
      * Synchronous reset
      */
-    .clk_250mhz(clk),
-    .rst_250mhz(rst),
+    .clk_300mhz(clk),
+    .rst_300mhz(rst),
 
     /*
      * PTP clock
@@ -771,29 +750,20 @@ module corundum #(
     /*
      * Ethernet: SFP+
      */
-    .sfp_tx_clk(sfp_tx_clk_int),
-    .sfp_tx_rst(sfp_tx_rst_int),
-    .sfp_txd(sfp_txd_int),
-    .sfp_txc(sfp_txc_int),
-    .sfp_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
-    .sfp_rx_clk(sfp_rx_clk_int),
-    .sfp_rx_rst(sfp_rx_rst_int),
-    .sfp_rxd(sfp_rxd_int),
-    .sfp_rxc(sfp_rxc_int),
-    .sfp_rx_prbs31_enable(sfp_rx_prbs31_enable_int),
-    .sfp_rx_error_count(sfp_rx_error_count_int),
-    .sfp_rx_status(sfp_rx_status),
+    .sfp0_tx_clk(sfp_tx_clk_int),
+    .sfp0_tx_rst(sfp_tx_rst_int),
+    .sfp0_txd(sfp_txd_int),
+    .sfp0_txc(sfp_txc_int),
+    .sfp0_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
+    .sfp0_rx_clk(sfp_rx_clk_int),
+    .sfp0_rx_rst(sfp_rx_rst_int),
+    .sfp0_rxd(sfp_rxd_int),
+    .sfp0_rxc(sfp_rxc_int),
+    .sfp0_rx_prbs31_enable(sfp_rx_prbs31_enable_int),
+    .sfp0_rx_error_count(sfp_rx_error_count_int),
+    .sfp0_rx_status(sfp_rx_status),
 
-    .sfp_tx_disable(sfp_tx_disable),
-    .sfp_tx_fault(sfp_tx_fault_int),
-    .sfp_rx_los(sfp_rx_los_int),
-    .sfp_mod_abs(sfp_mod_abs_int),
-    .sfp_i2c_scl_i(sfp_iic_scl_i_w),
-    .sfp_i2c_scl_o(sfp_iic_scl_o_w),
-    .sfp_i2c_scl_t(sfp_iic_scl_t_w),
-    .sfp_i2c_sda_i(sfp_iic_sda_i_w),
-    .sfp_i2c_sda_o(sfp_iic_sda_o_w),
-    .sfp_i2c_sda_t(sfp_iic_sda_t_w),
+    .sfp0_tx_disable_b(sfp_tx_disable),
 
     .sfp_drp_clk(sfp_drp_clk),
     .sfp_drp_rst(sfp_drp_rst),

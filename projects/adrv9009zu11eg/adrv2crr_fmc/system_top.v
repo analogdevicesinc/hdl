@@ -217,7 +217,17 @@ module system_top (
   input               ddr4_rtl_1_alert_n,
   output              spi_clk,
   inout               spi_sdio,
-  input               spi_miso
+  input               spi_miso,
+
+  //Ethernet: SFP+
+
+  input         sfp_rx_p,
+  input         sfp_rx_n,
+  output        sfp_tx_p,
+  output        sfp_tx_n,
+  input         sfp_mgt_refclk_p,
+  input         sfp_mgt_refclk_n,
+  output        sfp_tx_disable
 );
 
   // internal signals
@@ -542,6 +552,19 @@ module system_top (
     .spi0_csn(spi_csn),
     .spi0_miso(spi0_miso),
     .spi0_mosi(spi_mosi),
-    .spi0_sclk(spi_clk));
+    .spi0_sclk(spi_clk),
+    .sfp_mgt_refclk_n (sfp_mgt_refclk_n),
+    .sfp_mgt_refclk_p (sfp_mgt_refclk_p),
+    .sfp_rx_n (sfp_rx_n),
+    .sfp_rx_p (sfp_rx_p),
+    .sfp_tx_n (sfp_tx_n),
+    .sfp_tx_p (sfp_tx_p),
+    .sfp_tx_disable (sfp_tx_disable),
+    .sfp_tx_fault(sfp_tx_fault),
+    .sfp_rx_los(sfp_rx_los),
+    .sfp_mod_abs(sfp_mod_abs),
+    .sfp_led(sfp_led),
+    .iic_port_scl_io(i2c1_scl),
+    .iic_port_sda_io(i2c1_sda));
 
 endmodule
