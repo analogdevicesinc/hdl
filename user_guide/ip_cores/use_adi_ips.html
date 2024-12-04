@@ -7,14 +7,14 @@
 
     <title>Use ADI IPs into your own project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -326,21 +326,21 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="use-adi-ips-into-your-own-project">
-<span id="use-adi-ips"></span><h1>Use ADI IPs into your own project<a class="headerlink" href="#use-adi-ips-into-your-own-project" title="Permalink to this heading">#</a></h1>
+<span id="use-adi-ips"></span><h1>Use ADI IPs into your own project<a class="headerlink" href="#use-adi-ips-into-your-own-project" title="Permalink to this heading"></a></h1>
 <p>Clone the GitHub repository:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><section id="vivado">
-<h2>Vivado<a class="headerlink" href="#vivado" title="Permalink to this heading">#</a></h2>
+<h2>Vivado<a class="headerlink" href="#vivado" title="Permalink to this heading"></a></h2>
 <p>Navigate to hdl/library and build all the libraries</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
@@ -355,7 +355,7 @@ Wait for the IP Catalog to refresh and now you should be able to see the IPs the
 under User Repository/Analog Devices section.</p>
 </section>
 <section id="quartus">
-<h2>Quartus<a class="headerlink" href="#quartus" title="Permalink to this heading">#</a></h2>
+<h2>Quartus<a class="headerlink" href="#quartus" title="Permalink to this heading"></a></h2>
 <p>Launch a Quartus GUI and select the Tools dropdown from the top menu.
 Click the Options category.
 From the pop-up window, select IP Catalog Search Locations and add the path to
@@ -367,9 +367,9 @@ the library folder inside the ADI repository you just cloned.</p>
 under Library/Analog Devices.</p>
 </section>
 <section id="jesd204">
-<h2>JESD204<a class="headerlink" href="#jesd204" title="Permalink to this heading">#</a></h2>
+<h2>JESD204<a class="headerlink" href="#jesd204" title="Permalink to this heading"></a></h2>
 <section id="id1">
-<h3>Vivado<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3>Vivado<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p>For the JESD204 IP, it is not as straightforward as for other modules.
 Here you have an example of an instantiation for this interface:
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/common/daq2_bd.tcl">projects/daq2/common/daq2_bd.tcl</a>.
@@ -447,9 +447,9 @@ together.</p>
 </section>
 </section>
 <section id="spi-engine">
-<h2>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading">#</a></h2>
+<h2>SPI Engine<a class="headerlink" href="#spi-engine" title="Permalink to this heading"></a></h2>
 <section id="id2">
-<h3>Vivado<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<h3>Vivado<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <p>The SPI Engine is a special module too, since it consists of more than one IP.
 In order to use it into your own project, you will have to add all of its components.
 For this example, the code shown here is from the ad4630_fmc project:

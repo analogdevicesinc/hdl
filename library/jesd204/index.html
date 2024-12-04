@@ -7,14 +7,14 @@
 
     <title>JESD204 Interface Framework &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -343,7 +343,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="jesd204-interface-framework">
-<span id="jesd204"></span><h1>JESD204 Interface Framework<a class="headerlink" href="#jesd204-interface-framework" title="Permalink to this heading">#</a></h1>
+<span id="jesd204"></span><h1>JESD204 Interface Framework<a class="headerlink" href="#jesd204-interface-framework" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
@@ -375,7 +375,7 @@ devices and FPGA HDL peripherals</p></li>
 </ul>
 </div>
 <section id="how-to-obtain-a-license">
-<h2>How to Obtain a License<a class="headerlink" href="#how-to-obtain-a-license" title="Permalink to this heading">#</a></h2>
+<h2>How to Obtain a License<a class="headerlink" href="#how-to-obtain-a-license" title="Permalink to this heading"></a></h2>
 <p>When customers and partners download/use software from GitHub, e-mail or
 similar ways, they are obligated to comply to the terms and conditions of
 the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIJESD204">Software License Agreement</a>.
@@ -395,7 +395,7 @@ If you have a question about the license, you can email
 <a class="reference external" href="mailto:jesd204-licensing&#37;&#52;&#48;analog&#46;com">jesd204-licensing<span>&#64;</span>analog<span>&#46;</span>com</a>.</p>
 </section>
 <section id="fpga-hdl-support">
-<span id="fpga-hdl-support-label"></span><h2>FPGA HDL Support<a class="headerlink" href="#fpga-hdl-support" title="Permalink to this heading">#</a></h2>
+<span id="fpga-hdl-support-label"></span><h2>FPGA HDL Support<a class="headerlink" href="#fpga-hdl-support" title="Permalink to this heading"></a></h2>
 <img alt="JESD204B/C Layers" class="align-center" src="../../_images/jesd204_layers.svg" /><p>The JESD204B/C standard defines multiple layers, each layer being responsible
 for a particular function. The Analog Devices JESD204B/C HDL solution follows
 the current standard and defines 4 layers. Physical layer, link layer, transport
@@ -412,7 +412,7 @@ JESD204B/C link.</p>
 application-specific signal processing.</p>
 <a class="reference internal image-reference" href="../../_images/jesd204_chain.svg"><img alt="JESD204B/C chain" class="align-center" src="../../_images/jesd204_chain.svg" width="600" /></a>
 <section id="physical-layer">
-<span id="jesd204-physical-layer"></span><h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Permalink to this heading">#</a></h3>
+<span id="jesd204-physical-layer"></span><h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Permalink to this heading"></a></h3>
 <p>Physical layer peripherals are responsible for interfacing and configuring the
 high-speed serial transceivers. Currently, we have support for GTXE2, GTHE3,
 GTHE4, GTYE4 for AMD Xilinx and Arria 10 transceivers for Intel.</p>
@@ -424,7 +424,7 @@ Transceiver Interface Peripheral for AMD Xilinx FPGAs</p></li>
 </ul>
 </section>
 <section id="link-layer">
-<h3>Link Layer<a class="headerlink" href="#link-layer" title="Permalink to this heading">#</a></h3>
+<h3>Link Layer<a class="headerlink" href="#link-layer" title="Permalink to this heading"></a></h3>
 <p>Link layer peripherals are responsible for JESD204B/C protocol handling,
 including scrambling/descrambling, lane alignment, character replacement and
 alignment monitoring.</p>
@@ -436,7 +436,7 @@ JESD204B/C Link Layer Receive Peripheral</p></li>
 </ul>
 </section>
 <section id="transport-layer">
-<span id="jesd204-transport-layer"></span><h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Permalink to this heading">#</a></h3>
+<span id="jesd204-transport-layer"></span><h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Permalink to this heading"></a></h3>
 <p>Transport layer peripherals are responsible for converter specific data framing
 and de-framing.</p>
 <ul class="simple">
@@ -447,16 +447,16 @@ JESD204B/C Transport Layer Transmit Peripheral</p></li>
 </ul>
 </section>
 <section id="interfaces">
-<h3>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h3>
+<h3>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h3>
 <p>Interfaces are a well-defined collection of wires that are used to communicate
 between components. The following interfaces are used to connect components of
 the HDL JESD204B/C processing stack.</p>
 </section>
 </section>
 <section id="software-support">
-<span id="software-support-label"></span><h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<span id="software-support-label"></span><h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <section id="linux">
-<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this heading">#</a></h3>
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/jesd204-fsm-framework">JESD204 (FSM) Interface Linux Kernel Framework</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx">JESD204B/C Transmit Linux Driver</a>:
@@ -485,7 +485,7 @@ Linux driver for the JESD204B receive core.</p></li>
 </ul>
 </section>
 <section id="no-os">
-<h3>No-OS<a class="headerlink" href="#no-os" title="Permalink to this heading">#</a></h3>
+<h3>No-OS<a class="headerlink" href="#no-os" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_adxcvr">ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers No-OS Driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_jesd204_rx">ADI JESD204B/C Receive Peripheral No-OS Driver</a></p></li>
@@ -496,7 +496,7 @@ Linux driver for the JESD204B receive core.</p></li>
 </section>
 </section>
 <section id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading">#</a></h2>
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/introduction">Introduction</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/system_architecture">System Architecture</a></p></li>
@@ -512,7 +512,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ol>
 </section>
 <section id="hdl-example-projects">
-<h2>HDL Example Projects<a class="headerlink" href="#hdl-example-projects" title="Permalink to this heading">#</a></h2>
+<h2>HDL Example Projects<a class="headerlink" href="#hdl-example-projects" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc2-ebz">AD-FMCADC2-EBZ Reference Design</a></p>
 <ul>
@@ -696,19 +696,19 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="additional-information">
-<h2>Additional Information<a class="headerlink" href="#additional-information" title="Permalink to this heading">#</a></h2>
+<h2>Additional Information<a class="headerlink" href="#additional-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary">JESD204B Glossary</a></p></li>
 </ul>
 <section id="technical-articles">
-<h3>Technical Articles<a class="headerlink" href="#technical-articles" title="Permalink to this heading">#</a></h3>
+<h3>Technical Articles<a class="headerlink" href="#technical-articles" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/technical-articles/JESD204B-Survival-Guide.pdf">JESD204B Survival Guide</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/technical-articles/synchronizing-sample-clocks-of-a-data-converter-array">Synchronizing Sample Clocks of a Data Converter Array</a></p></li>
 </ul>
 </section>
 <section id="jesd204b-rapid-prototyping-platforms">
-<span id="rapid-prototyping-label"></span><h3>JESD204B Rapid Prototyping Platforms<a class="headerlink" href="#jesd204b-rapid-prototyping-platforms" title="Permalink to this heading">#</a></h3>
+<span id="rapid-prototyping-label"></span><h3>JESD204B Rapid Prototyping Platforms<a class="headerlink" href="#jesd204b-rapid-prototyping-platforms" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS11-EBZ">AD-FMCOMMS11-EBZ</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz">(User Guide)</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009-ZU11EG">ADRV9009-ZU11EG</a> <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG (User Guide)</a></p></li>
@@ -724,7 +724,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="jesd204b-adcs">
-<h3>JESD204B ADCs<a class="headerlink" href="#jesd204b-adcs" title="Permalink to this heading">#</a></h3>
+<h3>JESD204B ADCs<a class="headerlink" href="#jesd204b-adcs" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
@@ -751,7 +751,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="jesd204b-dacs">
-<h3>JESD204B DACs<a class="headerlink" href="#jesd204b-dacs" title="Permalink to this heading">#</a></h3>
+<h3>JESD204B DACs<a class="headerlink" href="#jesd204b-dacs" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9135">AD9135</a>: Dual, 11-bit, high dynamic, 2.8 GSPS, TxDAC+ DAC</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9136">AD9136</a>: Dual, 16-bit, 2.8 GSPS, TxDAC+ DAC</p></li>
@@ -771,7 +771,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="jesd204b-rf-transceivers">
-<h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading">#</a></h3>
+<h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with Observation Path</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with Observation Path and DPD</p></li>
@@ -781,7 +781,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="jesd204b-c-mixed-signal-front-ends">
-<h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading">#</a></h3>
+<h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a>: MxFE™ Quad, 16-bit, 12 GSPS RF DAC and Quad, 12-bit, 4 GSPS RF ADC</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a>: MxFE™ QUAD, 16-bit, 12 GSPS RF DAC and DUAL, 12-bit, 6 GSPS RF ADC</p></li>
@@ -790,7 +790,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="jesd204b-clocking-solutions">
-<h3>JESD204B Clocking Solutions<a class="headerlink" href="#jesd204b-clocking-solutions" title="Permalink to this heading">#</a></h3>
+<h3>JESD204B Clocking Solutions<a class="headerlink" href="#jesd204b-clocking-solutions" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9528">AD9528</a>: JESD204B Clock Generator with 14 LVDS/HSTL Outputs</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4371">ADF4371</a>: Microwave Wideband Synthesizer with Integrated VCO</p></li>
@@ -801,7 +801,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </section>
 </section>
 <section id="id1">
-<h2>Software Support<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<h2>Software Support<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>No-OS JESD204 project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/jesd204">jesd204</a></p></li>
 <li><p>Linux JESD204 project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/jesd204">drivers/jesd204</a></p></li>
@@ -809,7 +809,7 @@ This will help you understand the generic blocks for the next steps.</p></li>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204">library/jesd204</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204">[Wiki] JESD204 Interface Framework</a></p></li>

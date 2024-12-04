@@ -7,14 +7,14 @@
 
     <title>AXI Laser Driver &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -322,7 +322,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-laser-driver">
-<span id="id1"></span><h1>AXI Laser Driver<a class="headerlink" href="#axi-laser-driver" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI Laser Driver<a class="headerlink" href="#axi-laser-driver" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.8 210" width="358.8" height="210"><style>
                 a {
@@ -336,7 +336,7 @@ TIA channels and synchronize all the data flow inside the FPGA. This
 documentation covers the main functionality of the IP core and its software
 programmable registers.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>PWM generator with a free running counter</p></li>
 <li><p>Software configurable frequency and pulse width for the PWM</p></li>
@@ -346,7 +346,7 @@ programmable registers.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -363,7 +363,7 @@ programmable registers.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -413,7 +413,7 @@ programmable registers.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="abe53f64b0501f5100c875a6b045c62a1f04841f" name="abe53f64b0501f5100c875a6b045c62a1f04841f" type="checkbox"></input><label for="abe53f64b0501f5100c875a6b045c62a1f04841f"><div><p>s_axi</p>
@@ -680,7 +680,7 @@ programmable registers.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-AXI_LASER_DRIVER">
 <div class="collapsible docutils container">
@@ -774,7 +774,7 @@ In case of multiple instances, each instance will have a unique ID.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -830,7 +830,7 @@ LOAD_CONFIG bit must be asserted to load the registers value into the PWM logic.
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRIVER_OTW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -868,7 +868,7 @@ minimum is 1.523kHz and maximum is 6.554THz.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PULSE_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -879,7 +879,7 @@ bit after the interrupt was handled as required.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_ENTER_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -890,7 +890,7 @@ not set. Set this bit after the interrupt was handled as required.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_EXIT_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -909,7 +909,7 @@ not set. Set this bit after the interrupt was handled as required.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_PULSE_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -920,7 +920,7 @@ IRQ_PENDING bit.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_ENTER_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -931,7 +931,7 @@ corresponding IRQ_PENDING bit.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IRQ_OTW_EXIT_SOURCE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -950,7 +950,7 @@ corresponding IRQ_PENDING bit.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SEQUENCER_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -960,7 +960,7 @@ corresponding IRQ_PENDING bit.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">AUTO_SEQUENCE_EN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1117,7 +1117,7 @@ software must set the TIA_MANUAL_CONFIG register to change the TIA channel selec
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_laser_driver">library/axi_laser_driver</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_laser_driver">AXI Laser Driver on wiki</a></p></li>

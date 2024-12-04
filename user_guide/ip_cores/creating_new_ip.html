@@ -7,14 +7,14 @@
 
     <title>Creating a new IP &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -332,7 +332,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="creating-a-new-ip">
-<span id="creating-new-ip"></span><h1>Creating a new IP<a class="headerlink" href="#creating-a-new-ip" title="Permalink to this heading">#</a></h1>
+<span id="creating-new-ip"></span><h1>Creating a new IP<a class="headerlink" href="#creating-a-new-ip" title="Permalink to this heading"></a></h1>
 <p>Here is a quick start guide about creating a new IP. You can start from these
 files and modify them as you need.
 Here is the code for a fan control IP: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_fan_control">library/axi_fan_control</a>.
@@ -340,7 +340,7 @@ In this tutorial, we will make a led control IP, using AXI. In this case,
 <code class="docutils literal notranslate"><span class="pre">&lt;module_name&gt;</span></code> will be replaced in code with <code class="docutils literal notranslate"><span class="pre">axi_led_control</span></code> for Xilinx
 and <code class="docutils literal notranslate"><span class="pre">axi_led_control_intel</span></code> for Intel.</p>
 <section id="verilog-file">
-<h2>Verilog File<a class="headerlink" href="#verilog-file" title="Permalink to this heading">#</a></h2>
+<h2>Verilog File<a class="headerlink" href="#verilog-file" title="Permalink to this heading"></a></h2>
 <p>Lets say you want to make a new IP with the name <code class="docutils literal notranslate"><span class="pre">&lt;module_name&gt;</span></code>.
 You must edit the verilog file so that it has the same name (e.g. <code class="docutils literal notranslate"><span class="pre">axi_led_control.v</span></code>).
 After that, feel free to write the verilog code for your purpose.
@@ -348,7 +348,7 @@ You can also use other instances of modules, but be sure to include them after,
 in the tcl file, under the <code class="docutils literal notranslate"><span class="pre">&lt;other_components&gt;</span></code> list.</p>
 </section>
 <section id="register-map">
-<span id="adi-regmap"></span><h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<span id="adi-regmap"></span><h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The register map is defined in a <em>docs/regmap/adi_regmap_*.txt</em> file and
 follows a special syntax.</p>
 <p>One file can have more than one register map, and they are bounded by the header:</p>
@@ -484,7 +484,7 @@ ENDFIELD
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/regmap/adi_regmap_axi_ad3552r.txt">docs/regmap/adi_regmap_axi_ad3552r.txt</a>, uses <code class="docutils literal notranslate"><span class="pre">USING</span></code></p></li>
 </ul>
 <section id="importing-with-using-method">
-<span id="hdl-regmap-using"></span><h3>Importing with Using Method<a class="headerlink" href="#importing-with-using-method" title="Permalink to this heading">#</a></h3>
+<span id="hdl-regmap-using"></span><h3>Importing with Using Method<a class="headerlink" href="#importing-with-using-method" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">USING</span></code> method allows to look-up a register map to import register and
 fields.
 A register map can look-up multiple register maps by repeating the method for
@@ -543,7 +543,7 @@ method.</p></li>
 </ul>
 </section>
 <section id="ranged-registers-and-fields">
-<span id="hdl-regmap-ranged"></span><h3>Ranged Registers and Fields<a class="headerlink" href="#ranged-registers-and-fields" title="Permalink to this heading">#</a></h3>
+<span id="hdl-regmap-ranged"></span><h3>Ranged Registers and Fields<a class="headerlink" href="#ranged-registers-and-fields" title="Permalink to this heading"></a></h3>
 <p>Registers and fields can use a special <code class="docutils literal notranslate"><span class="pre">n</span></code> variable and the <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> method
 to define an incrementing/repeating register/field. There is an option increase
 the address increment value by an additional parameter. This parameter must be
@@ -584,9 +584,9 @@ use the generic adc/dac templates that include all available registers:</p>
 </section>
 </section>
 <section id="xilinx">
-<h2>Xilinx<a class="headerlink" href="#xilinx" title="Permalink to this heading">#</a></h2>
+<h2>Xilinx<a class="headerlink" href="#xilinx" title="Permalink to this heading"></a></h2>
 <section id="tcl-file">
-<h3>TCL File<a class="headerlink" href="#tcl-file" title="Permalink to this heading">#</a></h3>
+<h3>TCL File<a class="headerlink" href="#tcl-file" title="Permalink to this heading"></a></h3>
 <p>The tcl file should be named <code class="docutils literal notranslate"><span class="pre">&lt;module_name_ip&gt;.tcl</span></code> (ex: <code class="docutils literal notranslate"><span class="pre">axi_led_control_ip.tcl</span></code>).
 Here you should keep the two lines that source our scripts :</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
@@ -636,7 +636,7 @@ ipx::save_core $cc
 </div>
 </section>
 <section id="makefile">
-<h3>Makefile<a class="headerlink" href="#makefile" title="Permalink to this heading">#</a></h3>
+<h3>Makefile<a class="headerlink" href="#makefile" title="Permalink to this heading"></a></h3>
 <p>In this file you will also have to change/add paths to every file in <code class="docutils literal notranslate"><span class="pre">&lt;other_components&gt;</span></code>
 list, using GENERIC_DEPS.
 Make sure to also change LIBRARY_NAME and XILINX_DEPS to match the name for the new IP.</p>
@@ -658,9 +658,9 @@ After that, <code class="docutils literal notranslate"><span class="pre">&lt;mod
 </section>
 </section>
 <section id="intel">
-<h2>Intel<a class="headerlink" href="#intel" title="Permalink to this heading">#</a></h2>
+<h2>Intel<a class="headerlink" href="#intel" title="Permalink to this heading"></a></h2>
 <section id="id1">
-<h3>TCL File<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3>TCL File<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p>The tcl file should be named &lt;module_name_hw&gt;.tcl (ex: axi_led_control_intel_hw.tcl)
 These first 4 lines of code you should keep:</p>
 <div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">package</span><span class="w"> </span>require<span class="w"> </span>qsys<span class="w"> </span><span class="mf">14.0</span>
@@ -726,7 +726,7 @@ add_interface_port led_on_if led_on data Output 1
 </div>
 </section>
 <section id="id2">
-<h3>Makefile<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<h3>Makefile<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <p>You don’t need to run make for the IP to be visible in the Catalogue.
 Yet, here is the Makefile for the example mentioned before:</p>
 <div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="nv">LIBRARY_NAME</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>axi_led_control_intel

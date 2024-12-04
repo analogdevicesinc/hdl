@@ -7,14 +7,14 @@
 
     <title>Build the boot image BOOT.BIN &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -318,7 +318,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="build-the-boot-image-boot-bin">
-<span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Permalink to this heading">#</a></h1>
+<span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Permalink to this heading"></a></h1>
 <p>The boot image <code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code> is built using the
 <a class="reference external" href="https://www.xilinx.com/support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf">AMD Xilinx Bootgen tool</a>
 which requires several input files.</p>
@@ -340,7 +340,7 @@ the <code class="docutils literal notranslate"><span class="pre">$PATH</span></c
 <p>Check the <a class="reference internal" href="build_hdl.html#build-hdl-environment"><span class="std std-ref">Enviroment</span></a> section of <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a>.</p>
 </div>
 <section id="for-zynq-carriers">
-<span id="build-boot-bin-zynq"></span><h2>For Zynq carriers<a class="headerlink" href="#for-zynq-carriers" title="Permalink to this heading">#</a></h2>
+<span id="build-boot-bin-zynq"></span><h2>For Zynq carriers<a class="headerlink" href="#for-zynq-carriers" title="Permalink to this heading"></a></h2>
 <p>This section applies to the Zynq-based carriers from
 <a class="reference internal" href="architecture.html#architecture-amd-platforms"><span class="std std-ref">our list</span></a>, but not limited to them only.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">build_boot_bin.sh</span></code> script can be downloaded from
@@ -356,7 +356,7 @@ see the note below.</p></li>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>build_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>build_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
@@ -375,7 +375,7 @@ instructions on how to obtain the image.</p>
 <a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.ps1">build_boot_bin.ps1</a>.</p>
 </section>
 <section id="for-zynqmp-carriers">
-<span id="build-boot-bin-zynqmp"></span><h2>For ZynqMP carriers<a class="headerlink" href="#for-zynqmp-carriers" title="Permalink to this heading">#</a></h2>
+<span id="build-boot-bin-zynqmp"></span><h2>For ZynqMP carriers<a class="headerlink" href="#for-zynqmp-carriers" title="Permalink to this heading"></a></h2>
 <p>This section applies to the ZynqMP-based carriers, usually <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a>
 but not limited to this one only.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
@@ -403,7 +403,7 @@ see the note below.</p></li>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>build_zynqmp_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>build_zynqmp_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>

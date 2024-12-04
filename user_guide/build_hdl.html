@@ -7,14 +7,14 @@
 
     <title>Build an HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -358,7 +358,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="build-an-hdl-project">
-<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading">#</a></h1>
+<span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading"></a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Please note that ADI only provides the source files necessary to create
@@ -386,7 +386,7 @@ in many ways. We use <strong>command line</strong> and mostly <strong>Linux syst
 <strong>clone, status, checkout, log, fetch, rebase</strong>.</p>
 </div>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>This is a detailed guide with lots of information regarding everything.
 Careful reading is needed. To put it in few words, the following steps will
 be described:</p>
@@ -399,7 +399,7 @@ be described:</p>
 </ol>
 </section>
 <section id="needed-tools">
-<span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Permalink to this heading">#</a></h2>
+<span id="build-hdl-needed-tools"></span><h2>1. Needed tools<a class="headerlink" href="#needed-tools" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Install the required FPGA design suite. We use <a class="reference external" href="https://www.xilinx.com/support/download.html">AMD Xilinx Vivado</a>,
 <a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html">Intel Quartus Prime Pro and Standard</a>, <a class="reference external" href="https://www.latticesemi.com/Products/DesignSoftwareAndIP/FPGAandLDS/Radiant">Lattice Radiant</a> and
@@ -432,7 +432,7 @@ projects. Depending on what OS you’re using, you have these options:</p></li>
 </ol>
 </section>
 <section id="setup-the-hdl-repository">
-<span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading">#</a></h2>
+<span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading"></a></h2>
 <p>These designs are built upon ADI’s generic HDL reference designs framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
@@ -445,7 +445,7 @@ Please refer to the <a class="reference internal" href="git_repository.html#git-
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:analogdevicesinc/hdl.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:analogdevicesinc/hdl.git
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
@@ -472,7 +472,7 @@ want to switch to any other branch you need to checkout that branch:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2022_r2
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2022_r2
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If this is your first time cloning, you have the latest source files.
@@ -481,18 +481,18 @@ If not, you can simply pull the latest sources using <code class="docutils liter
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w">               </span><span class="c1"># shows what changes will be pulled on your local copy</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w">               </span><span class="c1"># shows what changes will be pulled on your local copy</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>origin/hdl_2022_r2<span class="w">  </span><span class="c1"># updates your local copy</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>origin/hdl_2022_r2<span class="w">  </span><span class="c1"># updates your local copy</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="environment">
-<span id="build-hdl-environment"></span><h2>3. Environment<a class="headerlink" href="#environment" title="Permalink to this heading">#</a></h2>
+<span id="build-hdl-environment"></span><h2>3. Environment<a class="headerlink" href="#environment" title="Permalink to this heading"></a></h2>
 <p>Our recommended build flow involves using <code class="docutils literal notranslate"><span class="pre">make</span></code> and the command line versions
 of the FPGA design tools.
 This approach streamlines our overall build and release process, as it
@@ -520,18 +520,18 @@ for the current session (or open a new one) and call the defined method:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.bashrc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>~/.bashrc
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>load_amd
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>load_amd
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Check out the following sections for the paths you need to export.</p>
 <section id="a-linux-environment-setup">
-<h3>3a. Linux environment setup<a class="headerlink" href="#a-linux-environment-setup" title="Permalink to this heading">#</a></h3>
+<h3>3a. Linux environment setup<a class="headerlink" href="#a-linux-environment-setup" title="Permalink to this heading"></a></h3>
 <p>All major distributions should have <code class="docutils literal notranslate"><span class="pre">make</span></code> installed by default. If not,
 when trying the command, it should tell you how to install it with the
 package name.</p>
@@ -543,7 +543,7 @@ package name.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/202x.x/settings64.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/Xilinx/Vivado/202x.x/settings64.sh
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
@@ -552,38 +552,38 @@ package name.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vivado/202x.x/bin:/opt/Xilinx/Vitis/202x.x/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/intelFPGA_pro/2x.x/quartus/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Lattice:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/propel/202x.x/builder/rtf/bin/lin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/lscc/radiant/202x.x/bin/lin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="b-windows-environment-setup">
-<h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading">#</a></h3>
+<h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading"></a></h3>
 <p>Because GNU Make is not supported on Windows, you need to install
 <a class="reference external" href="https://www.cygwin.com/">Cygwin</a>, which is a UNIX-like environment
 and command-line interface for Microsoft Windows.</p>
@@ -595,7 +595,7 @@ and command-line interface for Microsoft Windows.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
@@ -604,69 +604,69 @@ and command-line interface for Microsoft Windows.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>For Lattice:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
@@ -691,7 +691,7 @@ current environment, for example:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>git
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/usr/bin/git
@@ -700,7 +700,7 @@ current environment, for example:</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/usr/bin/make
@@ -709,7 +709,7 @@ current environment, for example:</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>vivado
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>vivado
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vivado/2023.1/bin/vivado
@@ -718,7 +718,7 @@ current environment, for example:</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>quartus
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>quartus
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/intelFPGA/23.1/quartus/bin/quartus
@@ -727,7 +727,7 @@ current environment, for example:</p>
 <div class="clear-left"></div></div></div></section>
 </section>
 <section id="building-the-projects">
-<span id="build-hdl-build"></span><h2>4. Building the projects<a class="headerlink" href="#building-the-projects" title="Permalink to this heading">#</a></h2>
+<span id="build-hdl-build"></span><h2>4. Building the projects<a class="headerlink" href="#building-the-projects" title="Permalink to this heading"></a></h2>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>Before building any project, you <strong>must</strong>:</p>
@@ -753,7 +753,7 @@ run <code class="docutils literal notranslate"><span class="pre">make</span> <sp
 To clean both the already built IP cores which the project depends on and the project,
 run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean-all</span></code>.</p>
 <section id="a-building-an-amd-project">
-<h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading">#</a></h3>
+<h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading"></a></h3>
 <p>An AMD project is built the same way as an Intel project. The only
 exception is that there are a few ‘sub-make(s)’ for the library
 components. The way of building a project in Cygwin and WSL is almost the same.</p>
@@ -766,13 +766,13 @@ want to use, then enter the folder of the FPGA carrier that you want, and run
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/daq2/zc706$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The <code class="docutils literal notranslate"><span class="pre">make</span></code> builds all the libraries first and then builds the project.
@@ -802,7 +802,7 @@ characters.</p>
 </pre></div>
 </div>
 <section id="enabling-out-of-context-synthesis">
-<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Permalink to this heading">#</a></h4>
+<h4>Enabling Out-of-Context synthesis<a class="headerlink" href="#enabling-out-of-context-synthesis" title="Permalink to this heading"></a></h4>
 <p>You can opt in for out-of-context synthesis during the build by defining
 the <code class="docutils literal notranslate"><span class="pre">ADI_USE_OOC_SYNTHESIS</span></code> system variable. By setting the
 <code class="docutils literal notranslate"><span class="pre">ADI_MAX_OOC_JOBS</span></code> system variable you can adjust the number of
@@ -811,25 +811,25 @@ parallel job number is set to 4.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>y
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>y
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_MAX_OOC_JOBS</span><span class="o">=</span><span class="m">8</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_MAX_OOC_JOBS</span><span class="o">=</span><span class="m">8</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/daq2/zc706
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/daq2/zc706$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>This will synthesize each IP from the block design individually and will
@@ -848,14 +848,14 @@ default mode. There is no need to set ADI_USE_OOC_SYNTHESIS variable.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>n
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ADI_USE_OOC_SYNTHESIS</span><span class="o">=</span>n
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>only in case you want to use Project Mode.</p>
 </div>
 </section>
 <section id="checking-the-build-and-analyzing-results-of-library-components">
-<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Permalink to this heading">#</a></h4>
+<h4>Checking the build and analyzing results of library components<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-library-components" title="Permalink to this heading"></a></h4>
 <p>If you look closely, you see what it is actually doing. It enters a
 library component folder then calls <strong>Vivado</strong> in batch mode. The IP
 commands are in the source Tcl file and output is redirected to a log
@@ -864,7 +864,7 @@ file. In the below example that is <strong>axi_ad7768_ip.log</strong> inside the
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library/axi_ad7768
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library/axi_ad7768
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>make[1]: Entering directory &#39;/path/to/hdl/library/axi_ad7768&#39;
@@ -878,18 +878,18 @@ You may also check the generated files for more information.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>library/axi_ad7768
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>library/axi_ad7768
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>library/axi_ad7768/axi_ad7768_ip.log
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>library/axi_ad7768/axi_ad7768_ip.log
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
 <section id="checking-the-build-and-analyzing-results-of-projects">
-<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Permalink to this heading">#</a></h4>
+<h4>Checking the build and analyzing results of projects<a class="headerlink" href="#checking-the-build-and-analyzing-results-of-projects" title="Permalink to this heading"></a></h4>
 <p>The last thing that <code class="docutils literal notranslate"><span class="pre">make</span></code> does in this above example is building the project.
 It is exactly the same <strong>rule</strong> as the library component. The log file, in
 this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
@@ -897,7 +897,7 @@ this example, is called <strong>daq2_zc706_vivado.log</strong> and is inside the
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/daq2/zc706$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>[ -- snip --]
@@ -910,13 +910,13 @@ make: Leaving directory &#39;/path/to/hdl/projects/daq2/zc706&#39;
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/daq2/zc706/daq2_zc706_vivado.log
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/daq2/zc706/daq2_zc706_vivado.log
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div class="admonition caution">
@@ -928,7 +928,7 @@ should be in the <strong>.sdk</strong> folder.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706/daq2_zc706.sdk
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/daq2/zc706/daq2_zc706.sdk
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>You may now use this <strong>system_top.xsa</strong> file as the input to your no-OS and/or Linux
@@ -958,39 +958,39 @@ find more information about what a swap file is at this link:
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to make the change permanent, add this line to <em>/etc/fstab</em>:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to deactivate the swap memory:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div>
@@ -1032,7 +1032,7 @@ IP targets, synthesize the netlist and implementation.</p>
 </div></section>
 </section>
 <section id="b-building-an-intel-project">
-<h3>4b. Building an Intel project<a class="headerlink" href="#b-building-an-intel-project" title="Permalink to this heading">#</a></h3>
+<h3>4b. Building an Intel project<a class="headerlink" href="#b-building-an-intel-project" title="Permalink to this heading"></a></h3>
 <p>An Intel project build is relatively easy. There is no need to build any
 library components.</p>
 <p>You just need to go to the hdl/projects folder, choose the ADI part that you
@@ -1045,13 +1045,13 @@ want to use, then enter the folder of the FPGA carrier that you want, and run
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/adrv9371x/a10soc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/adrv9371x/a10soc
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9371x/a10soc$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>This assumes that you have the tools and licenses set up correctly. If
@@ -1067,7 +1067,7 @@ In that case, the make will get an additional attribute:
 <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">NIOS2_MMU=0</span></code></p>
 </div>
 <section id="checking-the-build-and-analyzing-results">
-<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Permalink to this heading">#</a></h4>
+<h4>Checking the build and analyzing results<a class="headerlink" href="#checking-the-build-and-analyzing-results" title="Permalink to this heading"></a></h4>
 <p>If you look closely at the <strong>rule</strong> for this target, you see it is just
 calling <code class="docutils literal notranslate"><span class="pre">quartus_sh</span></code> with the project TCL file and redirecting the
 output to a log file.</p>
@@ -1082,13 +1082,13 @@ this contains the most relevant information that you need to provide.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>projects/adrv9371x/a10soc/adrv9371x_a10soc_quartus.log
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>And finally, if the project was built is successfully, the <strong>.sopcinfo</strong> and
@@ -1096,13 +1096,13 @@ this contains the most relevant information that you need to provide.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sopcinfo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sopcinfo
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sof
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>projects/adrv9371x/a10soc/*.sof
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>You may now use this <strong>sopcinfo</strong> file as the input to your <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">no-OS</a>
@@ -1135,39 +1135,39 @@ project. To create a swap file you can use the following commands:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>fallocate<span class="w"> </span>-l<span class="w"> </span><span class="s2">&quot;memory size (e.g 1G, 2G, 8G, etc.)&quot;</span><span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mkswap<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapon<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to make the change permanent, add this line to <em>/etc/fstab</em>:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/swapfile<span class="w"> </span>swap<span class="w"> </span>swap<span class="w"> </span>defaults<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If you want to deactivate the swap memory:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>swapoff<span class="w"> </span>-v<span class="w"> </span>/swapfile
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></div>
@@ -1202,7 +1202,7 @@ implementation.</p>
 </div></section>
 </section>
 <section id="c-building-a-lattice-project">
-<h3>4c. Building a Lattice project<a class="headerlink" href="#c-building-a-lattice-project" title="Permalink to this heading">#</a></h3>
+<h3>4c. Building a Lattice project<a class="headerlink" href="#c-building-a-lattice-project" title="Permalink to this heading"></a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Instantiating IPs in Propel Builder CLI or GUI does not work in WSL for an
@@ -1226,7 +1226,7 @@ to build the only base design we have available for
 <strong>CertusPro-NX Evaluation Board</strong> by entering the base design directory and
 running <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p>
 <section id="required-lattice-provided-ips-to-download-for-projects-common-lfcpnx">
-<h4>Required Lattice Provided IPs to download for projects/common/lfcpnx<a class="headerlink" href="#required-lattice-provided-ips-to-download-for-projects-common-lfcpnx" title="Permalink to this heading">#</a></h4>
+<h4>Required Lattice Provided IPs to download for projects/common/lfcpnx<a class="headerlink" href="#required-lattice-provided-ips-to-download-for-projects-common-lfcpnx" title="Permalink to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1274,13 +1274,13 @@ running <code class="docutils literal notranslate"><span class="pre">make</span>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/common/lfcpnx
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/common/lfcpnx
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/common/lfcpnx$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>This, assuming that you have the tools and licenses set up correctly. If
@@ -1289,7 +1289,7 @@ There is nothing you can gather from the <code class="docutils literal notransla
 build failed or not); the actual failure message is in a log file.</p>
 </section>
 <section id="id1">
-<h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<h4>Checking the build and analyzing results<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <p>The make script for Lattice projects is the <strong>projects/scripts/project-lattice.mk</strong>
 that is included in <strong>Makefile</strong> after setting the project dependencies.
 If you check this make script, you can note that we have two rules we run by the
@@ -1307,31 +1307,31 @@ This contains the most relevant information that you need to provide.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-ltr<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;/&lt;project_name&gt;
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_propel_builder.log
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_propel_builder.log
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_radiant.log
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail<span class="w"> </span>&lt;ADI_carrier_proj_dir&gt;/&lt;project_name&gt;_radiant.log
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Note that if the <strong>Propel Builder</strong> project fails to build, the
@@ -1370,7 +1370,7 @@ successfully built.</p>
 </section>
 </section>
 <section id="supported-targets-of-make-command">
-<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading">#</a></h3>
+<h3>Supported targets of <code class="docutils literal notranslate"><span class="pre">make</span></code> command<a class="headerlink" href="#supported-targets-of-make-command" title="Permalink to this heading"></a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">Make</a> is a build
@@ -1422,14 +1422,14 @@ e.g. <code class="docutils literal notranslate"><span class="pre">component.xml<
 </section>
 </section>
 <section id="preparing-the-sd-card">
-<span id="build-hdl-boot-file"></span><h2>5. Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this heading">#</a></h2>
+<span id="build-hdl-boot-file"></span><h2>5. Preparing the SD card<a class="headerlink" href="#preparing-the-sd-card" title="Permalink to this heading"></a></h2>
 <p>First, you have to write the SD card with the
 <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/index.html" title="(in System Level Documentation)"><span class="xref std std-doc">ADI Kuiper image</span></a>.
 Check this
 <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span class="xref std std-ref">tutorial</span></a>.</p>
 <p>Once you are done with that, you can go on with the following steps.</p>
 <section id="for-amd-fpgas">
-<h3>For AMD FPGAs<a class="headerlink" href="#for-amd-fpgas" title="Permalink to this heading">#</a></h3>
+<h3>For AMD FPGAs<a class="headerlink" href="#for-amd-fpgas" title="Permalink to this heading"></a></h3>
 <p>On the BOOT partition recently created, you will find folders for each
 carrier that we support, and each of these folders contain an archive
 called <strong>bootgen_sysfiles.tgz</strong>. These have all the files needed to
@@ -1460,14 +1460,14 @@ found in <em>zynqmp-common</em></p></li>
 </div>
 </section>
 <section id="b-for-intel-fpgas">
-<h3>5b. For Intel FPGAs<a class="headerlink" href="#b-for-intel-fpgas" title="Permalink to this heading">#</a></h3>
+<h3>5b. For Intel FPGAs<a class="headerlink" href="#b-for-intel-fpgas" title="Permalink to this heading"></a></h3>
 <p>Check out <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">this guide</a>.</p>
 </section>
 </section>
 <section id="tools-and-their-versions">
-<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Permalink to this heading">#</a></h2>
+<h2>Tools and their versions<a class="headerlink" href="#tools-and-their-versions" title="Permalink to this heading"></a></h2>
 <section id="tools">
-<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this heading">#</a></h3>
+<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this heading"></a></h3>
 <p>ADI provides reference designs for Intel, AMD and soon Lattice.</p>
 <p>Please note that this is NOT a comparison (generic or otherwise).
 This is what you should expect and understand when using ADI HDL repository
@@ -1478,7 +1478,7 @@ on these tools.</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper colwidths-auto docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Tools from Intel and AMD</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Intel</p></th>
@@ -1543,7 +1543,7 @@ slow and frustrating process)</span></p></td>
 </div>
 <div class="table-wrapper colwidths-auto docutils container" id="id4">
 <table class="docutils align-default" id="id4">
-<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Tools from Lattice</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>Notes</p></th>
 <th class="head"><p>Lattice</p></th>
@@ -1596,7 +1596,7 @@ IP’s name is the same as the new (sometimes it changes by version).</span></p>
 </div>
 </div></section>
 <section id="tool-versions">
-<span id="build-hdl-tool-versions"></span><h3>Tool versions<a class="headerlink" href="#tool-versions" title="Permalink to this heading">#</a></h3>
+<span id="build-hdl-tool-versions"></span><h3>Tool versions<a class="headerlink" href="#tool-versions" title="Permalink to this heading"></a></h3>
 <p>Though the ADI libraries work across different versions of the tools,
 the projects we provide <strong>may not</strong>. The AMD, Intel and Lattice IPs may or may
 not work across versions. We can only assure you that they are tested and
@@ -1621,7 +1621,7 @@ which builds the projects.</p>
 </section>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/altera_soc_images">Altera SoC quick start guide</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quickstart/a10soc">Arria 10 SoC quick start guide</a></p></li>
@@ -1630,7 +1630,7 @@ kernel</a></p></li>
 </ul>
 </section>
 <section id="errors-warnings-and-notes">
-<h2>Errors, warnings and notes<a class="headerlink" href="#errors-warnings-and-notes" title="Permalink to this heading">#</a></h2>
+<h2>Errors, warnings and notes<a class="headerlink" href="#errors-warnings-and-notes" title="Permalink to this heading"></a></h2>
 <p>Assuming the right to make an honest comment, the tools (both Quartus
 and Vivado) are not that useful or friendly when it comes to messages.
 In most cases, you may see <strong>hacked-in</strong> debugging <code class="docutils literal notranslate"><span class="pre">printf</span></code> sort of
@@ -1639,7 +1639,7 @@ going to see a lot of <strong>warnings</strong> and some <strong>critical-warnin
 to what could be hard to answer). Here are some of the commonly asked
 EngineerZone questions and their explanations.</p>
 <section id="amd-xilinx-vivado">
-<h3>AMD Xilinx Vivado<a class="headerlink" href="#amd-xilinx-vivado" title="Permalink to this heading">#</a></h3>
+<h3>AMD Xilinx Vivado<a class="headerlink" href="#amd-xilinx-vivado" title="Permalink to this heading"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">BD</span> <span class="mi">5</span><span class="o">-</span><span class="mi">216</span><span class="p">]</span> <span class="n">VLNV</span> <span class="o">&lt;</span><span class="n">analog</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">user</span><span class="p">:</span><span class="n">axi_clkgen</span><span class="p">:</span><span class="mf">1.0</span><span class="o">&gt;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">supported</span> <span class="k">for</span> <span class="n">the</span> <span class="n">current</span> <span class="n">part</span><span class="o">.</span>
 
 <span class="n">ERROR</span><span class="p">:</span> <span class="p">[</span><span class="n">Common</span> <span class="mi">17</span><span class="o">-</span><span class="mi">39</span><span class="p">]</span> <span class="s1">&#39;create_bd_cell&#39;</span> <span class="n">failed</span> <span class="n">due</span> <span class="n">to</span> <span class="n">earlier</span> <span class="n">errors</span> <span class="k">while</span> <span class="n">executing</span>

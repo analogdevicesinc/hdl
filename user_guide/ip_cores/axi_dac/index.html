@@ -7,14 +7,14 @@
 
     <title>Generic AXI DAC &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -97,7 +97,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -330,7 +330,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="generic-axi-dac">
-<span id="axi-dac"></span><h1>Generic AXI DAC<a class="headerlink" href="#generic-axi-dac" title="Permalink to this heading">#</a></h1>
+<span id="axi-dac"></span><h1>Generic AXI DAC<a class="headerlink" href="#generic-axi-dac" title="Permalink to this heading"></a></h1>
 <p>This page presents a generic framework, which is used to design
 and develop an AXI based IP core for interfacing a Digital to Analog Converter
 (DAC) device with a high speed serial (JESD204B) or source synchronous parallel
@@ -347,7 +347,7 @@ document is highly appreciated and can be addressed through the <a class="icon e
 community forum.</p>
 </div>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -367,7 +367,7 @@ community forum.</p>
 </div>
 </section>
 <section id="architecture">
-<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading">#</a></h2>
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading"></a></h2>
 <p>The main function of an AXI DAC IP is to handle all the low level signalling,
 which is defined by the device’s digital data interface, and to forward the
 received data from the DMA or any other data source to the device. Beside this
@@ -376,7 +376,7 @@ core, which can be used for signal conditioning. All these processing modules
 are optional, the are enabled or disabled by setting the appropriate parameters.
 The following block diagram presents a generic AXI DAC IP cores data path.</p>
 <img alt="AXI DAC Datapath" src="../../../_images/dac_datapath.svg" /><section id="transmit-phy">
-<h3>Transmit PHY<a class="headerlink" href="#transmit-phy" title="Permalink to this heading">#</a></h3>
+<h3>Transmit PHY<a class="headerlink" href="#transmit-phy" title="Permalink to this heading"></a></h3>
 <p>The most important part of the core is the Transmit PHY module.
 This module contains all the IO primitive instantiations and all the control
 logic required to transmit data to the device.</p>
@@ -405,14 +405,14 @@ interface. Lower layers are implemented by other cores.</p>
 </aside>
 </section>
 <section id="dac-channel">
-<span id="axi-dac-dac-channel"></span><h3>DAC Channel<a class="headerlink" href="#dac-channel" title="Permalink to this heading">#</a></h3>
+<span id="axi-dac-dac-channel"></span><h3>DAC Channel<a class="headerlink" href="#dac-channel" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Data source multiplexer</p></li>
 <li><p>IQ correction module</p></li>
 </ul>
 </section>
 <section id="dac-core">
-<h3>DAC Core<a class="headerlink" href="#dac-core" title="Permalink to this heading">#</a></h3>
+<h3>DAC Core<a class="headerlink" href="#dac-core" title="Permalink to this heading"></a></h3>
 <p>The DAC core is the top file of the IP core, the naming convention of this file
 is: <code class="docutils literal notranslate"><span class="pre">axi_&lt;device_name&gt;.v</span></code>.
 Here are instantiated all the internal module discussed above, and a wrapper
@@ -422,7 +422,7 @@ This interface is used to interconnect the different memory mapped module pieces
 </section>
 </section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <p>A generic AXI DAC core have at least three different interfaces:</p>
 <ul class="simple">
 <li><p>The physical data interface (<a class="reference external" href="https://en.wikipedia.org/wiki/LVDS">LVDS</a> or
@@ -433,7 +433,7 @@ from the link layer.</p></li>
 </ul>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">LVDS or CMOS TX interface</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">LVDS or CMOS TX interface</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -456,7 +456,7 @@ from the link layer.</p></li>
 </div>
 <div class="table-wrapper docutils container" id="id3">
 <table class="docutils align-default" id="id3">
-<caption><span class="caption-text">JESD TX interface</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">JESD TX interface</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -475,7 +475,7 @@ from the link layer.</p></li>
 </div>
 <div class="table-wrapper docutils container" id="id4">
 <table class="docutils align-default" id="id4">
-<caption><span class="caption-text">Read FIFO interface</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Read FIFO interface</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -518,7 +518,7 @@ from the link layer.</p></li>
 </div>
 <div class="table-wrapper docutils container" id="id5">
 <table class="docutils align-default" id="id5">
-<caption><span class="caption-text">AXI Memory Map Slave</span><a class="headerlink" href="#id5" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">AXI Memory Map Slave</span><a class="headerlink" href="#id5" title="Permalink to this table"></a></caption>
 <tbody>
 <tr class="row-odd"><td><p>Pin</p></td>
 <td><p>Type</p></td>
@@ -533,7 +533,7 @@ from the link layer.</p></li>
 </div>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The following block diagram presents the different register maps physical
 location in the core. These register maps are generic and can be found in each
 AXI DAC core.</p>
@@ -566,7 +566,7 @@ To find the instantiation of this module search for <code class="docutils litera
 the IP’s directory.</p>
 </div>
 <section id="typical-register-map-base-addresses">
-<h3>Typical Register Map base addresses<a class="headerlink" href="#typical-register-map-base-addresses" title="Permalink to this heading">#</a></h3>
+<h3>Typical Register Map base addresses<a class="headerlink" href="#typical-register-map-base-addresses" title="Permalink to this heading"></a></h3>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-COMMON">
 <div class="collapsible docutils container">
@@ -654,7 +654,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCORRECTION_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -664,7 +664,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILTER_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -674,7 +674,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -684,7 +684,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -694,7 +694,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MODE_1R1T</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -704,7 +704,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -714,7 +714,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -724,7 +724,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMOS_OR_LVDS_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -734,7 +734,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_RECEIVER_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -744,7 +744,7 @@ the IP’s directory.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[9:9]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCALECORRECTION_ONLY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -755,7 +755,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -765,7 +765,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RD_RAW_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -783,7 +783,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -882,7 +882,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CE_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -893,7 +893,7 @@ the module to control clock enables</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -904,7 +904,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -922,7 +922,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -933,7 +933,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -946,7 +946,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_DISARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -958,7 +958,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -978,7 +978,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -988,7 +988,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[15:15]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_OP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -998,7 +998,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[14:14]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1018,7 +1018,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1028,7 +1028,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1038,7 +1038,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R1_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1048,7 +1048,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_FORMAT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1096,7 +1096,7 @@ The samples are generated at 1/RATE of the interface clock.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1157,7 +1157,7 @@ and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1176,7 +1176,7 @@ are errors, software may try resetting the cores.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CLKSEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1194,7 +1194,7 @@ are errors, software may try resetting the cores.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1213,7 +1213,7 @@ This bit has an effect only the EXT_SYNC synthesis parameter is set.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1254,7 +1254,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[17:17]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1264,7 +1264,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1368,7 +1368,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IF_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1378,7 +1378,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_OVF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1390,7 +1390,7 @@ bit.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_UNF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1825,7 +1825,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1836,7 +1836,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1847,7 +1847,7 @@ If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1935,7 +1935,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[25:25]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[25]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1946,7 +1946,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[24:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2034,7 +2034,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2045,7 +2045,7 @@ of I and Q sample pairs.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2191,7 +2191,7 @@ Otherwise will be the last set up value.</p>
 </div></section>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad9361">AXI_AD9361 IP Description</a></p></li>
 </ul>

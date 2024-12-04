@@ -7,14 +7,14 @@
 
     <title>AXI ADXCVR &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -342,7 +342,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-adxcvr">
-<span id="id1"></span><h1>AXI ADXCVR<a class="headerlink" href="#axi-adxcvr" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI ADXCVR<a class="headerlink" href="#axi-adxcvr" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310.79999999999995 234" width="310.79999999999995" height="234"><style>
                 a {
@@ -356,7 +356,7 @@ small differences between the AMD Xilinx’s and Intel’s transceivers architec
 For the AMD Xilinx architecture, the transceivers are instantiated in
 <a class="reference internal" href="../xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Supports <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr">Intel</a>
 and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">AMD Xilinx</a> devices.</p></li>
@@ -369,14 +369,14 @@ interface.</p></li>
 </ul>
 </section>
 <section id="intel-devices">
-<span id="axi-adxcvr-intel"></span><h2>Intel Devices<a class="headerlink" href="#intel-devices" title="Permalink to this heading">#</a></h2>
+<span id="axi-adxcvr-intel"></span><h2>Intel Devices<a class="headerlink" href="#intel-devices" title="Permalink to this heading"></a></h2>
 <p>For Intel devices, the ADI JESD204 IP is using the AXI ADXCVR core, which can be
 accessed by the <strong>link_management</strong> interface. It provides a global reset signal
 for the JESD204B framework. Resets the XCVR reset controller IP, the link PLL
 reset controller, the PHY itself, and also the link layer of the stack. Besides
 the reset generation, monitors the PLLs and the PHY state.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -511,7 +511,7 @@ the reset generation, monitors the PLLs and the PHY state.</p>
 </section>
 </div></section>
 <section id="interfaces">
-<h3>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading">#</a></h3>
+<h3>Interfaces<a class="headerlink" href="#interfaces" title="Permalink to this heading"></a></h3>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="6883f8a270c0393d5b4ec054f587a593f406bc9d" name="6883f8a270c0393d5b4ec054f587a593f406bc9d" type="checkbox"></input><label for="6883f8a270c0393d5b4ec054f587a593f406bc9d"><div><p>s_axi</p>
@@ -932,7 +932,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </section>
 </div></section>
 <section id="register-map">
-<h3>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h3>
+<h3>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h3>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-INTEL_XCVR">
 <div class="collapsible docutils container">
@@ -1020,7 +1020,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -1038,7 +1038,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -1066,7 +1066,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[NUM_OF_LANES:NUM_OF_LANES]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[NUM_OF_LANES]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UP_PLL_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -1182,7 +1182,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -1228,7 +1228,7 @@ Connect logical port <code class="docutils literal notranslate"><span class="pre
 </section>
 </div></section>
 <section id="software-guidelines">
-<h3>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h3>
+<h3>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading"></a></h3>
 <p>When the board powers up, both ATX and fPLL’s must have a stable reference clock
 in order to lock automatically. If this requirement can not be respected by the
 system (e.g. the reference clocks are generated by a device that requires
@@ -1237,12 +1237,12 @@ needs to reconfigure both PLLs, and just after that resets the transceivers.</p>
 </section>
 </section>
 <section id="amd-xilinx-devices">
-<span id="axi-adxcvr-amd"></span><h2>AMD Xilinx Devices<a class="headerlink" href="#amd-xilinx-devices" title="Permalink to this heading">#</a></h2>
+<span id="axi-adxcvr-amd"></span><h2>AMD Xilinx Devices<a class="headerlink" href="#amd-xilinx-devices" title="Permalink to this heading"></a></h2>
 <p>In AMD Xilinx Devices, the core configures itself to be interfaced with the GT
 variant supported by the UTIL_ADXCVR core. All the transceiver primitives are
 configured and programmed identically.</p>
 <section id="parameters-1">
-<span id="id2"></span><h3>Parameters<a class="headerlink" href="#parameters-1" title="Permalink to this heading">#</a></h3>
+<span id="id2"></span><h3>Parameters<a class="headerlink" href="#parameters-1" title="Permalink to this heading"></a></h3>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -1401,7 +1401,7 @@ configured and programmed identically.</p>
 </section>
 </div></section>
 <section id="id3">
-<h3>Interfaces<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<h3>Interfaces<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="6883f8a270c0393d5b4ec054f587a593f406bc9d" name="6883f8a270c0393d5b4ec054f587a593f406bc9d" type="checkbox"></input><label for="6883f8a270c0393d5b4ec054f587a593f406bc9d"><div><p>s_axi</p>
@@ -1809,7 +1809,7 @@ configured and programmed identically.</p>
 </section>
 </div></section>
 <section id="register-map-1">
-<span id="id4"></span><h3>Register Map<a class="headerlink" href="#register-map-1" title="Permalink to this heading">#</a></h3>
+<span id="id4"></span><h3>Register Map<a class="headerlink" href="#register-map-1" title="Permalink to this heading"></a></h3>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-XCVR">
 <div class="collapsible docutils container">
@@ -1897,7 +1897,7 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">BUFSTATUS_RST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -1907,7 +1907,7 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESETN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -1935,7 +1935,7 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PLL_LOCK_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -1945,7 +1945,7 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2011,7 +2011,7 @@ configured and programmed identically.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LPM_DFE_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2064,7 +2064,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[20:20]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">QPLL_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2094,7 +2094,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TX_OR_RX_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2140,7 +2140,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_WR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2178,7 +2178,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CM_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2224,7 +2224,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_WR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2262,7 +2262,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CH_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2308,7 +2308,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_REQ</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2456,7 +2456,7 @@ refer Xilinx documentation.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ES_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2565,7 +2565,7 @@ Where n is from 0 to 31.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSFORCEERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2575,7 +2575,7 @@ Where n is from 0 to 31.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSCNTRESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><p></p></td>
@@ -2603,7 +2603,7 @@ Where n is from 0 to 31.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2613,7 +2613,7 @@ Where n is from 0 to 31.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PRBSLOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><p></p></td>
@@ -2631,7 +2631,7 @@ Where n is from 0 to 31.</p>
 </section>
 </div></section>
 <section id="software-guidelines-1">
-<span id="id5"></span><h3>Software Guidelines<a class="headerlink" href="#software-guidelines-1" title="Permalink to this heading">#</a></h3>
+<span id="id5"></span><h3>Software Guidelines<a class="headerlink" href="#software-guidelines-1" title="Permalink to this heading"></a></h3>
 <p>The system must have active DRP and reference clocks before any software access.
 The software is expected to write necessary control parameters to LPM_DFE_N,
 RATE, SYSCLK_SEL, OUTCLK_SEL register bits and then set RESETN bit to 0x1.
@@ -2654,7 +2654,7 @@ transceiver error counters are zero. To start eye-scan, set ES_REQ to 0x1 and
 wait for the same bit to self-clear. If eye-scan needs to be stopped, set the
 ES_REQ bit to 0x0.</p>
 <section id="table-1">
-<span id="axi-adxcvr-table-one-label"></span><h4>Table 1<a class="headerlink" href="#table-1" title="Permalink to this heading">#</a></h4>
+<span id="axi-adxcvr-table-one-label"></span><h4>Table 1<a class="headerlink" href="#table-1" title="Permalink to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2695,7 +2695,7 @@ ES_REQ bit to 0x0.</p>
 </div>
 </section>
 <section id="table-2">
-<span id="axi-adxcvr-table-two-label"></span><h4>Table 2<a class="headerlink" href="#table-2" title="Permalink to this heading">#</a></h4>
+<span id="axi-adxcvr-table-two-label"></span><h4>Table 2<a class="headerlink" href="#table-2" title="Permalink to this heading"></a></h4>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -2749,12 +2749,12 @@ QPLL0 or QPLL1 refclk.</p>
 </section>
 </section>
 <section id="physical-layer-prbs-testing">
-<h3>Physical layer PRBS testing<a class="headerlink" href="#physical-layer-prbs-testing" title="Permalink to this heading">#</a></h3>
+<h3>Physical layer PRBS testing<a class="headerlink" href="#physical-layer-prbs-testing" title="Permalink to this heading"></a></h3>
 <p>The PRBS_CNTRL and PRBS_STATUS registers expose controls of internal
 PRBS generators and checkers allowing the testing the multi-gigabit serial link
 at the physical layer without the need of the link layer bringup.</p>
 <section id="tx-link-procedure">
-<h4>TX link procedure<a class="headerlink" href="#tx-link-procedure" title="Permalink to this heading">#</a></h4>
+<h4>TX link procedure<a class="headerlink" href="#tx-link-procedure" title="Permalink to this heading"></a></h4>
 <ol class="arabic simple">
 <li><p>Configure the reference clock and device clocks for under test lane rate.
 Bring XCVR out from reset.</p></li>
@@ -2770,7 +2770,7 @@ injection into the stream of bits.</p></li>
 </ol>
 </section>
 <section id="rx-link-procedure">
-<h4>RX link procedure<a class="headerlink" href="#rx-link-procedure" title="Permalink to this heading">#</a></h4>
+<h4>RX link procedure<a class="headerlink" href="#rx-link-procedure" title="Permalink to this heading"></a></h4>
 <ol class="arabic simple">
 <li><p>Configure the reference clock and device clocks for under test lane rate.
 Bring XCVR out from reset.</p></li>
@@ -2789,7 +2789,7 @@ transceiver guide for details.</p></li>
 </section>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>No-OS project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/jesd204">drivers/axi_core/jesd204</a></p></li>
 <li><p>No-OS device driver at  <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/drivers/axi_core/jesd204/axi_adxcvr.c">drivers/axi_core/jesd204/axi_adxcvr.c</a></p></li>
@@ -2802,7 +2802,7 @@ transceiver guide for details.</p></li>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL Intel IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></li>
 <li><p>HDL Xilinx IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></li>

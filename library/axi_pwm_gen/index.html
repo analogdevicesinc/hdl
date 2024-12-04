@@ -7,14 +7,14 @@
 
     <title>AXI PWM Generator &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -331,7 +331,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-pwm-generator">
-<span id="axi-pwm-gen"></span><h1>AXI PWM Generator<a class="headerlink" href="#axi-pwm-generator" title="Permalink to this heading">#</a></h1>
+<span id="axi-pwm-gen"></span><h1>AXI PWM Generator<a class="headerlink" href="#axi-pwm-generator" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 262.79999999999995 210" width="262.79999999999995" height="210"><style>
                 a {
@@ -343,7 +343,7 @@ a maximum of 16 configurable signals (Pulse-Width Modulations).
 The pulses are generated according to the state of a counter;
 there is one counter for each pulse.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Up to 16 configurable signals (period, width, offset)</p></li>
 <li><p>External synchronization</p></li>
@@ -351,7 +351,7 @@ there is one counter for each pulse.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -386,10 +386,10 @@ there is one counter for each pulse.</p>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
 <img alt="AXI PWM Generator block diagram" src="../../_images/block_diagram23.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The pulse period, width and offset are set in number of clock cycles.
@@ -724,7 +724,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </section>
 </div></section>
 <section id="interface">
-<span id="axi-pwm-gen-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<span id="axi-pwm-gen-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e" name="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e" type="checkbox"></input><label for="a886bf1d79cf0b03c1531d3ca8e3a217fdad671e"><div><p>s_axi</p>
@@ -956,7 +956,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </section>
 </div></section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>Let’s start with some base notions:</p>
 <ul class="simple">
 <li><p>The pulse generators are based on incrementing counters.</p></li>
@@ -974,7 +974,7 @@ For more info see the below channel phase alignment feature.</p></li>
 <p>The following features can be enabled by setting a flag in the
 register REG_UP_CONTROL(0x18):</p>
 <section id="channel-phase-alignment">
-<h3>Channel phase alignment<a class="headerlink" href="#channel-phase-alignment" title="Permalink to this heading">#</a></h3>
+<h3>Channel phase alignment<a class="headerlink" href="#channel-phase-alignment" title="Permalink to this heading"></a></h3>
 <p>The AXI PWM Generator core can be synchronized by an external signal on the
 HIGH -&gt; LOW transition of the ext_sync signal.</p>
 <p>The external sync can be used in two modes, based on the external sync align
@@ -987,18 +987,18 @@ the external sync must be held HIGH.</p></li>
 </ul>
 </section>
 <section id="software-bringup-software-reset">
-<h3>Software bringup (software reset)<a class="headerlink" href="#software-bringup-software-reset" title="Permalink to this heading">#</a></h3>
+<h3>Software bringup (software reset)<a class="headerlink" href="#software-bringup-software-reset" title="Permalink to this heading"></a></h3>
 <p>If set, the software must bring the core out of reset, after a system reset,
 for the pwm signals to be generated.</p>
 </section>
 <section id="force-align">
-<h3>Force align<a class="headerlink" href="#force-align" title="Permalink to this heading">#</a></h3>
+<h3>Force align<a class="headerlink" href="#force-align" title="Permalink to this heading"></a></h3>
 <p>If set, the current active pulses are immediately stopped and realigned.
 Otherwise, the synchronized pulses will start only after all running pulse
 periods end. Software overwritable at runtime.</p>
 </section>
 <section id="start-at-sync">
-<h3>Start at sync<a class="headerlink" href="#start-at-sync" title="Permalink to this heading">#</a></h3>
+<h3>Start at sync<a class="headerlink" href="#start-at-sync" title="Permalink to this heading"></a></h3>
 <p>If active, the pulses will start after the trigger event.
 Otherwise each pulse will start after a period equal to the one for which
 it is set. Software over writable at runtime.</p>
@@ -1012,7 +1012,7 @@ it is set. Software over writable at runtime.</p>
 </section>
 </section>
 <section id="timing-diagrams-and-examples">
-<h2>Timing Diagrams and examples<a class="headerlink" href="#timing-diagrams-and-examples" title="Permalink to this heading">#</a></h2>
+<h2>Timing Diagrams and examples<a class="headerlink" href="#timing-diagrams-and-examples" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The diagrams below, that refer to <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality, are
@@ -1139,7 +1139,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </div>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-axi_pwm_gen">
 <div class="collapsible docutils container">
@@ -1245,7 +1245,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">LOAD_CONFIG</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1255,7 +1255,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1273,7 +1273,7 @@ foot: {text: ['tspan', 'External sync without start at sync e.g.'],
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ALIGN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1284,7 +1284,7 @@ Otherwise the phase align will be armed by a load config toggle.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FORCE_ALIGN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1295,7 +1295,7 @@ Otherwise, the synchronized pulses will start only after all running pulse perio
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">START_AT_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1414,7 +1414,7 @@ Where n is from 0 to 15.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_pwm_gen">AXI PWM GEN on wiki</a></p></li>

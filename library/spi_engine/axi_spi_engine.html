@@ -7,14 +7,14 @@
 
     <title>AXI SPI Engine Module &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -330,7 +330,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-spi-engine-module">
-<span id="spi-engine-axi"></span><h1>AXI SPI Engine Module<a class="headerlink" href="#axi-spi-engine-module" title="Permalink to this heading">#</a></h1>
+<span id="spi-engine-axi"></span><h1>AXI SPI Engine Module<a class="headerlink" href="#axi-spi-engine-module" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 445.2 354" width="445.2" height="354"><style>
                 a {
@@ -345,7 +345,7 @@ generate SPI transactions.</p>
 <p>The peripheral has also support for providing memory-mapped access to one or more
 <a class="reference internal" href="spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a> cores and change its content dynamically at runtime.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -369,7 +369,7 @@ generate SPI transactions.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -482,7 +482,7 @@ generate SPI transactions.</p>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="be21216f9c2f696574f009b0ece2b1680559cd62" name="be21216f9c2f696574f009b0ece2b1680559cd62" type="checkbox"></input><label for="be21216f9c2f696574f009b0ece2b1680559cd62"><div><p>s_axi</p>
@@ -906,7 +906,7 @@ generate SPI transactions.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-AXI_SPI_ENGINE">
 <div class="collapsible docutils container">
@@ -1116,7 +1116,7 @@ For proper operation, the bit needs to be set to 0.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1126,7 +1126,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1136,7 +1136,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1146,7 +1146,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1156,7 +1156,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SYNC_ID_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1534,7 +1534,7 @@ discarded. Reading from this register always returns 0x0.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
 <p>Typically a software application running on a CPU will be able to execute much
 faster than the SPI engine command will be processed.
 In order to allow the software to execute other tasks while the SPI engine is
@@ -1544,7 +1544,7 @@ been executed.
 In order to reduce the necessary context switches the AXI SPI Engine peripheral
 incorporates FIFOs to buffer the command as well as the data streams.</p>
 <section id="fifos">
-<h3>FIFOs<a class="headerlink" href="#fifos" title="Permalink to this heading">#</a></h3>
+<h3>FIFOs<a class="headerlink" href="#fifos" title="Permalink to this heading"></a></h3>
 <p>The AXI SPI Engine peripheral has three FIFOs, one for each of the command, SDO
 and SDI streams.
 The size of the FIFOs can be configured by setting the CMD_FIFO_ADDRESS_WIDTH,
@@ -1570,7 +1570,7 @@ the SDI_FIFO_LEVEL register.</p>
 stored in the FIFOs is discarded and the state of the FIFO is reset.</p>
 </section>
 <section id="synchronization-events">
-<h3>Synchronization Events<a class="headerlink" href="#synchronization-events" title="Permalink to this heading">#</a></h3>
+<h3>Synchronization Events<a class="headerlink" href="#synchronization-events" title="Permalink to this heading"></a></h3>
 <p>Synchronization events can be used to notify the software application about the
 progress of the command stream.
 An application can insert a SYNC instruction at any point in the command stream.
@@ -1592,7 +1592,7 @@ the ID of the last completed event.</p>
 </section>
 </section>
 <section id="interrupts">
-<h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h2>
+<h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h2>
 <p>The SPI Engine AXI peripheral has 4 internal interrupts, which are
 asserted when:</p>
 <ul class="simple">
@@ -1620,7 +1620,7 @@ combined state of the <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 <section id="fifo-threshold-interrupts">
-<h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Permalink to this heading">#</a></h3>
+<h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Permalink to this heading"></a></h3>
 <p>The FIFO threshold interrupts can be used by software for flow control of the
 command, <code class="docutils literal notranslate"><span class="pre">SDI</span></code> and <code class="docutils literal notranslate"><span class="pre">SDO</span></code> streams.</p>
 <p>If an application wants to send more data than what fits into the FIFO can write
@@ -1634,7 +1634,7 @@ watermark and is automatically de-asserted when the level drops below the
 watermark.</p>
 </section>
 <section id="sync-event-interrupt">
-<h3>SYNC_EVENT Interrupt<a class="headerlink" href="#sync-event-interrupt" title="Permalink to this heading">#</a></h3>
+<h3>SYNC_EVENT Interrupt<a class="headerlink" href="#sync-event-interrupt" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> interrupt is asserted when a new sync event is received from
 the sync stream.
 An application that generated a <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> instruction on the command stream can

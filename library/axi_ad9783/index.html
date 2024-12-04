@@ -7,14 +7,14 @@
 
     <title>AXI AD9783 &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -97,7 +97,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -338,7 +338,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-ad9783">
-<span id="id1"></span><h1>AXI AD9783<a class="headerlink" href="#axi-ad9783" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI AD9783<a class="headerlink" href="#axi-ad9783" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 349.2 282" width="349.2" height="282"><style>
                 a {
@@ -352,7 +352,7 @@ rates up to 500 MSPS. This documentation only covers the IP core and requires
 that one must be familiar with the device for a complete and better understanding.</p>
 <p>More about the generic framework interfacing DACs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#axi-dac"><span class="std std-ref">Generic AXI DAC</span></a>.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI Memory-Mapped to Streaming control/status interface</p></li>
 <li><p>PRBS monitoring</p></li>
@@ -362,7 +362,7 @@ that one must be familiar with the device for a complete and better understandin
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -385,7 +385,7 @@ that one must be familiar with the device for a complete and better understandin
 </div>
 </section>
 <section id="functional-description">
-<h2>Functional Description<a class="headerlink" href="#functional-description" title="Permalink to this heading">#</a></h2>
+<h2>Functional Description<a class="headerlink" href="#functional-description" title="Permalink to this heading"></a></h2>
 <p>The axi_ad9783 cores architecture contains:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v#L135">Interface</a>
@@ -405,7 +405,7 @@ module, which contains:</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v">AXI control and status</a> modules.</p></li>
 </ul>
 <section id="device-interface-description">
-<h3>Device Interface Description<a class="headerlink" href="#device-interface-description" title="Permalink to this heading">#</a></h3>
+<h3>Device Interface Description<a class="headerlink" href="#device-interface-description" title="Permalink to this heading"></a></h3>
 <p>The interface also provides a single clock tree for the entire core. This clock
 uses a global buffer that has the minimum skew all across the die. On Xilinx
 devices, this is done via the IBUFGDS, BUFGCE_DIV and BUFG primitives. The clock
@@ -414,18 +414,18 @@ divided clock: through IBUFGDS, then BUFGCE_DIV to BUFG. The core and the
 interface run at the same clock frequency.</p>
 </section>
 <section id="internal-interface-description">
-<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading">#</a></h3>
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Permalink to this heading"></a></h3>
 <p>The main purpose of all (including this) ADI IP cores is to provide a common,
 well-defined internal interface within the FPGA. This interface consists of the
 following signals per channel, except for VALID which is common to all channels.</p>
 <section id="valid">
-<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading">#</a></h4>
+<h4>VALID<a class="headerlink" href="#valid" title="Permalink to this heading"></a></h4>
 <p>It is always set to logic 1 and indicates a valid sample on each DATA port.
 Because it is in the transmit (DAC) direction, this indicates the current sample
 is being read by the core.</p>
 </section>
 <section id="enable">
-<h4>ENABLE<a class="headerlink" href="#enable" title="Permalink to this heading">#</a></h4>
+<h4>ENABLE<a class="headerlink" href="#enable" title="Permalink to this heading"></a></h4>
 <p>The enable signal is only for software use and it is controlled by the
 corresponding register bit. The core simply reflects the programmed bit as an
 output port. In ADI reference projects, this bit is used to activate the channel
@@ -436,7 +436,7 @@ SERDES factor was chosen to be 8, we have 4 samples of 16 bits each, on I
 channel and Q channel also, resulting in DMA with 128 bits as data width.</p>
 </section>
 <section id="data">
-<h4>DATA<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h4>
+<h4>DATA<a class="headerlink" href="#data" title="Permalink to this heading"></a></h4>
 <p>The DATA is the raw analog samples, and 4096 samples generated by PRBS are sent.
 It follows two simple rules.</p>
 <ol class="arabic simple">
@@ -460,7 +460,7 @@ S3 across time with S0 being the oldest and S3 being the newest sample.</p></li>
 </section>
 </section>
 <section id="parallel-data-port-interface">
-<h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Permalink to this heading">#</a></h2>
+<h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Permalink to this heading"></a></h2>
 <p>The parallel port data interface consists of up to 18 differential signals,
 <code class="docutils literal notranslate"><span class="pre">dac_clk_out_*</span></code>, <code class="docutils literal notranslate"><span class="pre">dac_clk_in_*</span></code>, and up to 16 data lines
 (<code class="docutils literal notranslate"><span class="pre">dac_data_out_*</span></code>[15:0]).
@@ -479,7 +479,7 @@ data that is processed on rising edge will be outputted on the I DAC, and the
 data that is on falling edge will be outputted on Q DAC (see figure below).</p>
 <img alt="AXI AD9783 parallel interface" src="../../_images/parallel_interface.svg" /></section>
 <section id="calibration-of-the-device">
-<h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Permalink to this heading">#</a></h2>
+<h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Permalink to this heading"></a></h2>
 <p>Calibrating the device means finding the proper value for the SMP_DLY register
 (see datasheet) in order for the PRBS function (PN23 in this case) to work
 properly when generating the 4096 samples of data.</p>
@@ -516,11 +516,11 @@ the DAC_DDS_SEL register is calculated by adding 0x418 (for the first channel)
 to the offset found in the devicetree, for the device.</p>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
 <a class="reference internal image-reference" href="../../_images/block_diagram12.svg"><img alt="AXI AD9783 block diagram" src="../../_images/block_diagram12.svg" width="600" /></a>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -614,7 +614,7 @@ to the offset found in the devicetree, for the device.</p>
 </div>
 </section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" name="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" type="checkbox"></input><label for="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed"><div><p>s_axi</p>
@@ -901,7 +901,7 @@ to the offset found in the devicetree, for the device.</p>
 </section>
 </div></section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <p>The register map of the core contains instances of several generic register maps
 like ADC common, ADC channel, DAC common, DAC channel etc. The following table
 presents the base addresses of each instance, after that can be found the
@@ -910,7 +910,7 @@ register should be calculated by adding the instance base address to the
 registers relative address.</p>
 <div class="table-wrapper docutils container" id="id2">
 <table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad9783</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
+<caption><span class="caption-text">Register Map base addresses for axi_ad9783</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>DWORD</p></th>
 <th class="head"><p>BYTE</p></th>
@@ -1024,7 +1024,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCORRECTION_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1034,7 +1034,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DCFILTER_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1044,7 +1044,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1054,7 +1054,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1064,7 +1064,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MODE_1R1T</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1074,7 +1074,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1084,7 +1084,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DDS_DISABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1094,7 +1094,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMOS_OR_LVDS_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1104,7 +1104,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_RECEIVER_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1114,7 +1114,7 @@ registers relative address.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[9:9]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SCALECORRECTION_ONLY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1125,7 +1125,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[12:12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1135,7 +1135,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[13:13]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[13]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RD_RAW_DATA</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1153,7 +1153,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1252,7 +1252,7 @@ IQ correction must be enabled. (as a result of a configuration of the IP instanc
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CE_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1263,7 +1263,7 @@ the module to control clock enables</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1274,7 +1274,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1292,7 +1292,7 @@ Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.<
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1303,7 +1303,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1316,7 +1316,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_DISARM</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1328,7 +1328,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1348,7 +1348,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1358,7 +1358,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[15:15]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_OP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1368,7 +1368,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[14:14]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[14]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1388,7 +1388,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_TYPE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1398,7 +1398,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PAR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1408,7 +1408,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">R1_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1418,7 +1418,7 @@ This bit self clears.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DATA_FORMAT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1466,7 +1466,7 @@ The samples are generated at 1/RATE of the interface clock.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">FRAME</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1527,7 +1527,7 @@ and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1546,7 +1546,7 @@ are errors, software may try resetting the cores.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_CLKSEL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1564,7 +1564,7 @@ are errors, software may try resetting the cores.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1583,7 +1583,7 @@ This bit has an effect only the EXT_SYNC synthesis parameter is set.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[28:28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1624,7 +1624,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[17:17]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[17]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_LOCKED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1634,7 +1634,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[16:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1738,7 +1738,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IF_BUSY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1748,7 +1748,7 @@ NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_OVF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1760,7 +1760,7 @@ bit.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">UI_UNF</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2049,7 +2049,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2060,7 +2060,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2071,7 +2071,7 @@ If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2159,7 +2159,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[25:25]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[25]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2170,7 +2170,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[24:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2258,7 +2258,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2269,7 +2269,7 @@ of I and Q sample pairs.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -2362,21 +2362,21 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </section>
 </div></section>
 <section id="software-guidelines">
-<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading">#</a></h2>
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Permalink to this heading"></a></h2>
 <p>The software for this IP can be found as part of the ZCU102 Reference Design.
 The IP expects the software run a calibration at least once. It has to find
 out what value for the SMP_DLY (see in datasheet) is good for the PRBS to
 work.</p>
 </section>
 <section id="software-support">
-<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading">#</a></h2>
+<h2>Software Support<a class="headerlink" href="#software-support" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Linux device driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad9783.c">drivers/iio/adc/ad9783.c</a></p></li>
 <li><p>Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts">arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts</a></p></li>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783">library/axi_ad9783</a></p></li>
 <li><p>HDL project at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9783_ebz">projects/ad9783_ebz</a></p></li>

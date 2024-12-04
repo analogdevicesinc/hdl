@@ -7,14 +7,14 @@
 
     <title>CN0363 HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -339,9 +339,9 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="cn0363-hdl-project">
-<span id="cn0363"></span><h1>CN0363 HDL project<a class="headerlink" href="#cn0363-hdl-project" title="Permalink to this heading">#</a></h1>
+<span id="cn0363"></span><h1>CN0363 HDL project<a class="headerlink" href="#cn0363-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/CN0363">EVAL-CN0363-PMDZ</a> is a dual channel colorimeter featuring a
 modulated light source transmitter, programmable gain transimpedance amplifiers
 on each channel, and a very low noise, 24-bit sigma delta ADC. The output of the
@@ -367,13 +367,13 @@ generating the LED excitation signal. A simplified functional block diagram of
 the system is given below.</p>
 </section>
 <section id="supported-boards">
-<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading">#</a></h2>
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/CN0363">EVAL-CN0363-PMDZ</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
-<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading">#</a></h2>
+<h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/CN0363">CN0363</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD7175-2">AD7175-2</a></p></li>
@@ -381,20 +381,20 @@ the system is given below.</p>
 </ul>
 </section>
 <section id="supported-carriers">
-<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading">#</a></h2>
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a> on PMOD connector</p></li>
 </ul>
 </section>
 <section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading">#</a></h2>
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h3>
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/cn0363_hdl_block_diagram.svg"><img alt="CN0363_PMDZ block diagram" class="align-center" src="../../_images/cn0363_hdl_block_diagram.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
-<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading">#</a></h3>
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture-cpu-intercon-addr"><span class="std std-ref">CPU/Memory interconnects addresses</span></a>).</p>
 <div class="table-wrapper docutils container">
@@ -419,7 +419,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="i2c-connections">
-<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading">#</a></h3>
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -455,7 +455,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading">#</a></h3>
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -482,7 +482,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading">#</a></h3>
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
 <p>The Software GPIO number is calculated as follows:</p>
 <ul class="simple">
 <li><p>Zynq-7000: if PS7 is used, then offset is 54</p></li>
@@ -528,7 +528,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </div>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>Below are the Programmable Logic interrupts used in this project.</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -556,7 +556,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </section>
 </section>
 <section id="building-the-hdl-project">
-<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading">#</a></h2>
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
 <p>The design is built upon ADI’s generic HDL reference design framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
@@ -568,21 +568,21 @@ the HDL repository, and then build the project as follows:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0363/zed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/cn0363/zed
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/cn0363/zed$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading">#</a></h3>
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <p>Here you can find the quick start guides available for these evaluation boards:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz">[Wiki] EVAL-CN0363-PMDZ user guide</a></p></li>
@@ -591,7 +591,7 @@ the HDL repository, and then build the project as follows:</p>
 </ul>
 </section>
 <section id="hardware-related">
-<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading">#</a></h3>
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
@@ -609,7 +609,7 @@ the HDL repository, and then build the project as follows:</p>
 </ul>
 </section>
 <section id="hdl-related">
-<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading">#</a></h3>
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/cn0363">CN0363_PMDZ HDL project source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl">[Wiki] CN0540 HDL project documentation</a></p></li>
@@ -704,7 +704,7 @@ the HDL repository, and then build the project as follows:</p>
 </ul>
 </section>
 <section id="software-related">
-<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading">#</a></h3>
+<h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ad_adc.c">CN0363 Linux driver source code</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/eval-cn0363-pmdz/software/linux/drivers">CN0363 Linux Driver [Wiki]</a></p></li>
@@ -712,13 +712,13 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 </section>
 <section id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
 </ul>
 </section>
 <section id="support">
-<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading"></a></h2>
 <p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
 using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
 <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>

@@ -7,14 +7,14 @@
 
     <title>AXI ADC Decimate &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -324,7 +324,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-adc-decimate">
-<span id="id1"></span><h1>AXI ADC Decimate<a class="headerlink" href="#axi-adc-decimate" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI ADC Decimate<a class="headerlink" href="#axi-adc-decimate" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 397.2 306" width="397.2" height="306"><style>
                 a {
@@ -342,7 +342,7 @@ though the input data bus width is 16, it will not work with anything higher
 than 12-bit sign extended (to 16-bit) data.</p>
 </div>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI Lite control/status interface</p></li>
 <li><p>Allows decimation by 10/100/1000/10000/100000 with filtering</p></li>
@@ -352,7 +352,7 @@ compensation FIR filter.</p></li>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -369,10 +369,10 @@ compensation FIR filter.</p></li>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
 <img alt="AXI ADC Decimate block diagram" class="align-center" src="../../_images/block_diagram15.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -398,7 +398,7 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="1c03d168d68e1beea56fcfd2f55dcf8e59c92567" name="1c03d168d68e1beea56fcfd2f55dcf8e59c92567" type="checkbox"></input><label for="1c03d168d68e1beea56fcfd2f55dcf8e59c92567"><div><p>s_axi</p>
@@ -725,7 +725,7 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>For some applications, the maximum sampling rate is not required and leads to
 lots of samples transferred to memory. To avoid it, the decimation IP
 can be used.</p>
@@ -739,7 +739,7 @@ arbitrary decimation can be activated independently and it does not implement
 any type of filtering.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-axi_adc_decimate">
 <div class="collapsible docutils container">
@@ -860,7 +860,7 @@ default: No filtered decimation</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CORRECTION_ENABLE_B</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -871,7 +871,7 @@ the value from the CORRECTION_COEFFICIENT_B register.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CORRECTION_ENABLE_A</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -950,7 +950,7 @@ Allows for correction of the CIC filter amplification.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adc_decimate">library/axi_adc_decimate</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adc_decimate">AXI ADC DECIMATE on wiki</a></p></li>

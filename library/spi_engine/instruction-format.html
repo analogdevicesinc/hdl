@@ -7,14 +7,14 @@
 
     <title>SPI Engine Instruction Set Specification &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -97,7 +97,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -332,13 +332,13 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="spi-engine-instruction-set-specification">
-<span id="spi-engine-instruction-format"></span><h1>SPI Engine Instruction Set Specification<a class="headerlink" href="#spi-engine-instruction-set-specification" title="Permalink to this heading">#</a></h1>
+<span id="spi-engine-instruction-format"></span><h1>SPI Engine Instruction Set Specification<a class="headerlink" href="#spi-engine-instruction-set-specification" title="Permalink to this heading"></a></h1>
 <p>The SPI Engine instruction set is a simple 16-bit instruction set of which
 13-bits are currently allocated (bits 15,11,10 are always 0).</p>
 <section id="instructions">
-<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this heading">#</a></h2>
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this heading"></a></h2>
 <section id="transfer-instruction">
-<h3>Transfer Instruction<a class="headerlink" href="#transfer-instruction" title="Permalink to this heading">#</a></h3>
+<h3>Transfer Instruction<a class="headerlink" href="#transfer-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -424,7 +424,7 @@ the SDO pin.</p></td>
 </div>
 </section>
 <section id="chip-select-instruction">
-<span id="spi-engine-cs-instruction"></span><h3>Chip-Select Instruction<a class="headerlink" href="#chip-select-instruction" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-cs-instruction"></span><h3>Chip-Select Instruction<a class="headerlink" href="#chip-select-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -517,7 +517,7 @@ prescaled) before for the internal logic.</p>
 </div>
 </section>
 <section id="configuration-write-instruction">
-<h3>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Permalink to this heading">#</a></h3>
+<h3>Configuration Write Instruction<a class="headerlink" href="#configuration-write-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -593,7 +593,7 @@ of the SPI Engine execution module with a new value.</p>
 </div>
 </section>
 <section id="synchronize-instruction">
-<h3>Synchronize Instruction<a class="headerlink" href="#synchronize-instruction" title="Permalink to this heading">#</a></h3>
+<h3>Synchronize Instruction<a class="headerlink" href="#synchronize-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -664,7 +664,7 @@ process.</p>
 </div>
 </section>
 <section id="sleep-instruction">
-<h3>Sleep Instruction<a class="headerlink" href="#sleep-instruction" title="Permalink to this heading">#</a></h3>
+<h3>Sleep Instruction<a class="headerlink" href="#sleep-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -739,7 +739,7 @@ is the minimum, needed by the internal logic.</p>
 </div>
 </section>
 <section id="cs-invert-mask-instruction">
-<span id="spi-engine-cs-invert-mask-instruction"></span><h3>CS Invert Mask Instruction<a class="headerlink" href="#cs-invert-mask-instruction" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-cs-invert-mask-instruction"></span><h3>CS Invert Mask Instruction<a class="headerlink" href="#cs-invert-mask-instruction" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -826,11 +826,11 @@ corresponding channel will be inverted at the output.</p></td>
 </section>
 </section>
 <section id="configuration-registers">
-<span id="spi-engine-configuration-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading">#</a></h2>
+<span id="spi-engine-configuration-registers"></span><h2>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading"></a></h2>
 <p>The SPI Engine execution module has a set of 8-bit configuration registers which
 can be used to dynamically modify the behavior of the module at runtime.</p>
 <section id="spi-configuration-register">
-<span id="spi-engine-spi-configuration-register"></span><h3>SPI Configuration Register<a class="headerlink" href="#spi-configuration-register" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-spi-configuration-register"></span><h3>SPI Configuration Register<a class="headerlink" href="#spi-configuration-register" title="Permalink to this heading"></a></h3>
 <p>The SPI configuration register configures various aspects of the low-level SPI
 bus behavior.</p>
 <div class="table-wrapper colwidths-given docutils container">
@@ -877,7 +877,7 @@ sampled on the trailing edge and updated on the leading edge.</p></td>
 </div>
 </section>
 <section id="prescaler-configuration-register">
-<span id="spi-engine-prescaler-configuration-register"></span><h3>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-prescaler-configuration-register"></span><h3>Prescaler Configuration Register<a class="headerlink" href="#prescaler-configuration-register" title="Permalink to this heading"></a></h3>
 <p>The prescaler configuration register configures the divider that is applied to
 the module clock when generating the SCLK signal and other internal control
 signals used by the sleep and chip-select commands.</p>
@@ -906,7 +906,7 @@ using the following formula:</p>
 <p>If no prescaler block is present div is 0.</p>
 </section>
 <section id="dynamic-transfer-length-register">
-<span id="spi-engine-dynamic-transfer-length-register"></span><h3>Dynamic Transfer Length Register<a class="headerlink" href="#dynamic-transfer-length-register" title="Permalink to this heading">#</a></h3>
+<span id="spi-engine-dynamic-transfer-length-register"></span><h3>Dynamic Transfer Length Register<a class="headerlink" href="#dynamic-transfer-length-register" title="Permalink to this heading"></a></h3>
 <p>The dynamic transfer length register sets the length (in bits) of a transfer. By
 default, the transfer length is equal to the DATA_WIDTH of the execution module.
 If required the user can reduce this length by setting this register. A general

@@ -7,14 +7,14 @@
 
     <title>Control Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -336,7 +336,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="control-interface">
-<span id="i3c-controller-control-interface"></span><h1>Control Interface<a class="headerlink" href="#control-interface" title="Permalink to this heading">#</a></h1>
+<span id="i3c-controller-control-interface"></span><h1>Control Interface<a class="headerlink" href="#control-interface" title="Permalink to this heading"></a></h1>
 <p>The control interface exchanges data between the cores within the I3C Controller.</p>
 <p>The interface consists of five streams:</p>
 <ul class="simple">
@@ -347,11 +347,11 @@ Content on this topic
 <li><p>ibi: carries data received from the I3C bus during an IBI.</p></li>
 </ul>
 <section id="instruction-set-specification">
-<span id="i3c-controller-instruction-format"></span><h2>Instruction Set Specification<a class="headerlink" href="#instruction-set-specification" title="Permalink to this heading">#</a></h2>
+<span id="i3c-controller-instruction-format"></span><h2>Instruction Set Specification<a class="headerlink" href="#instruction-set-specification" title="Permalink to this heading"></a></h2>
 <p>The I3C Controller instruction set is a pair of 32-bit command descriptors
 (command 0 and command 1), with the latter present only for some command 0 values.</p>
 <section id="command-descriptors">
-<span id="i3c-controller-command-descriptors"></span><h3>Command Descriptors<a class="headerlink" href="#command-descriptors" title="Permalink to this heading">#</a></h3>
+<span id="i3c-controller-command-descriptors"></span><h3>Command Descriptors<a class="headerlink" href="#command-descriptors" title="Permalink to this heading"></a></h3>
 <p>The generic structure of command 0 is:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -417,7 +417,7 @@ the following subsections.</p>
 is ignored for CCCs.</p>
 </div>
 <section id="ccc-instruction">
-<span id="i3c-controller-ccc"></span><h4>CCC Instruction<a class="headerlink" href="#ccc-instruction" title="Permalink to this heading">#</a></h4>
+<span id="i3c-controller-ccc"></span><h4>CCC Instruction<a class="headerlink" href="#ccc-instruction" title="Permalink to this heading"></a></h4>
 <p>Sent with <code class="code docutils literal notranslate"><span class="pre">adi_i3c_controller_send_ccc_cmd</span></code>, it does a CCC transfer.
 The CCC ID is defined in the <em>linux/i3c/ccc.h</em> file.</p>
 <div class="admonition note">
@@ -506,7 +506,7 @@ payload to be sent in the bus.</p></td>
 </div>
 </section>
 <section id="private-transfer">
-<h4>Private Transfer<a class="headerlink" href="#private-transfer" title="Permalink to this heading">#</a></h4>
+<h4>Private Transfer<a class="headerlink" href="#private-transfer" title="Permalink to this heading"></a></h4>
 <p>Sent with <code class="code docutils literal notranslate"><span class="pre">adi_i3c_controller_priv_xfers</span></code>, it does a private transfer.</p>
 <p>Bits not presented in the tables are assumed 0.
 When Value is filled, it means it is is the required constant value for this
@@ -588,7 +588,7 @@ mode).</p></td>
 </section>
 </section>
 <section id="command-receipts">
-<span id="i3c-controller-cmdr"></span><h3>Command Receipts<a class="headerlink" href="#command-receipts" title="Permalink to this heading">#</a></h3>
+<span id="i3c-controller-cmdr"></span><h3>Command Receipts<a class="headerlink" href="#command-receipts" title="Permalink to this heading"></a></h3>
 <p>Command receipts (cmdr) are returned descriptors for each command descriptor
 executed (cmd).
 When a new cmdr is written to the CMDR FIFO, an interrupton is sent to
@@ -633,7 +633,7 @@ length</p></td>
 <p>The Sync is a synchronization identifier that increases (then returns to 0)
 at each transfer.</p>
 <section id="error-codes">
-<h4>Error codes<a class="headerlink" href="#error-codes" title="Permalink to this heading">#</a></h4>
+<h4>Error codes<a class="headerlink" href="#error-codes" title="Permalink to this heading"></a></h4>
 <p>The error codes are:</p>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -683,7 +683,7 @@ a transfer, when the controller sends the broadcast address 7’h7e.</p>
 </section>
 </section>
 <section id="in-band-interrupts">
-<span id="i3c-controller-ibi"></span><h3>In-Band Interrupts<a class="headerlink" href="#in-band-interrupts" title="Permalink to this heading">#</a></h3>
+<span id="i3c-controller-ibi"></span><h3>In-Band Interrupts<a class="headerlink" href="#in-band-interrupts" title="Permalink to this heading"></a></h3>
 <p>IBI’s are resolved autonomously during bus available per specification,
 if they are accepted or rejected depends if the feature itself is enabled;
 see I3C Controller’s <a class="reference internal" href="i3c_controller_host_interface.html#i3c-controller-regmap"><span class="std std-ref">Register Map</span></a> register <code class="docutils literal notranslate"><span class="pre">IBI_CONFIG</span></code> for
@@ -742,7 +742,7 @@ In both cases, the controller will proceed with the cmd transfer after resolving
 the IBI request (since the request occur during the header broadcast).</p>
 </section>
 <section id="sdi-and-sdo">
-<h3>SDI and SDO<a class="headerlink" href="#sdi-and-sdo" title="Permalink to this heading">#</a></h3>
+<h3>SDI and SDO<a class="headerlink" href="#sdi-and-sdo" title="Permalink to this heading"></a></h3>
 <p>During the serialization of the 32-bits FIFOs into 1-byte packages,
 if the command descriptor describes a payload of length 5, the controller will
 send the 4 bytes of the element at the top of SDO FIFO’s stack, then the
@@ -812,7 +812,7 @@ a transfer of 6 bytes would fill the SDI FIFO as follows:</p>
 </div>
 </section>
 <section id="dynamic-address-assignment">
-<span id="i3c-controller-daa"></span><h3>Dynamic Address Assignment<a class="headerlink" href="#dynamic-address-assignment" title="Permalink to this heading">#</a></h3>
+<span id="i3c-controller-daa"></span><h3>Dynamic Address Assignment<a class="headerlink" href="#dynamic-address-assignment" title="Permalink to this heading"></a></h3>
 <p>The Dynamic Address Assignment (DAA) is a procedure that is entered through the
 ENTDAA CCC, see <a class="reference internal" href="#i3c-controller-ccc"><span class="std std-ref">CCC Instruction</span></a> for the instruction itself.</p>
 <div class="admonition attention">
@@ -841,7 +841,7 @@ during the DAA, and also the software resolves every subsequent interrupt.</p>
 time, while the first guarantees the target will be assigned the desired address.</p>
 </section>
 <section id="word-command-interface">
-<h3>Word Command Interface<a class="headerlink" href="#word-command-interface" title="Permalink to this heading">#</a></h3>
+<h3>Word Command Interface<a class="headerlink" href="#word-command-interface" title="Permalink to this heading"></a></h3>
 <p>The word command interface is an internal interface between the Framing/DAA and
 the Word modules, it is based on the patterns of the I3C specifications, allowing
 to yield events as commands, for example, broadcasting the I3C 7’h7e and waiting
@@ -852,11 +852,11 @@ MIPI I3C specification<a class="footnote-reference brackets" href="#f1" id="id3"
 the possible commands, and body is a 1-byte that depends on the header.</p>
 </section>
 <section id="configuration-registers">
-<h3>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading">#</a></h3>
+<h3>Configuration Registers<a class="headerlink" href="#configuration-registers" title="Permalink to this heading"></a></h3>
 </section>
 </section>
 <section id="offload-interface">
-<span id="i3c-controller-offload-interface"></span><h2>Offload Interface<a class="headerlink" href="#offload-interface" title="Permalink to this heading">#</a></h2>
+<span id="i3c-controller-offload-interface"></span><h2>Offload Interface<a class="headerlink" href="#offload-interface" title="Permalink to this heading"></a></h2>
 <p>The offload interface allows to cyclic operation with SDI output to a DMA.
 The offload commands are the same as in <a class="reference internal" href="#i3c-controller-command-descriptors"><span class="std std-ref">Command Descriptors</span></a>,
 however no command receipt is emitted and less complex transactions are preferred
@@ -880,7 +880,7 @@ Also, one shall set the OPS_MODE to offload at the same write of the
 OPS_OFFLOAD_LENGTH.</p>
 </section>
 <section id="the-block-ram-offload">
-<h2>The Block RAM Offload<a class="headerlink" href="#the-block-ram-offload" title="Permalink to this heading">#</a></h2>
+<h2>The Block RAM Offload<a class="headerlink" href="#the-block-ram-offload" title="Permalink to this heading"></a></h2>
 <p>A 5-bit wide address, 32-bit data dual access block ram is used to store the
 offload commands and SDO.</p>
 <p>The bit 5 indicates if it’s a command descriptor (‘b0) or a SDO payload (‘b1).
@@ -888,7 +888,7 @@ The actual width of the address and data depends on the implementation, but in
 general the 5-bit address is placed as a 16-bit address with the 11 MSB grounded.</p>
 </section>
 <section id="debugging-tips">
-<h2>Debugging Tips<a class="headerlink" href="#debugging-tips" title="Permalink to this heading">#</a></h2>
+<h2>Debugging Tips<a class="headerlink" href="#debugging-tips" title="Permalink to this heading"></a></h2>
 <p>To ease debugging with the ILA core, the following signals are recommended to be
 sampled:</p>
 <ul class="simple">

@@ -7,14 +7,14 @@
 
     <title>I3C Controller Host Interface &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -325,7 +325,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="i3c-controller-host-interface">
-<span id="id1"></span><h1>I3C Controller Host Interface<a class="headerlink" href="#i3c-controller-host-interface" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>I3C Controller Host Interface<a class="headerlink" href="#i3c-controller-host-interface" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 339.6 234" width="339.6" height="234"><style>
                 a {
@@ -340,7 +340,7 @@ generate I3C transactions.</p>
 <a class="reference internal" href="interface.html#i3c-controller-offload-interface"><span class="std std-ref">Offload Interface</span></a> cores and change its content dynamically at
 runtime.</p>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -367,7 +367,7 @@ runtime.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -400,7 +400,7 @@ runtime.</p>
 </section>
 </div></section>
 <section id="signal-and-interface-pins">
-<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading">#</a></h2>
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="ea9561b869275cae96759586842a48260d5a22f2" name="ea9561b869275cae96759586842a48260d5a22f2" type="checkbox"></input><label for="ea9561b869275cae96759586842a48260d5a22f2"><div><p>s_axi</p>
@@ -836,7 +836,7 @@ runtime.</p>
 </section>
 </div></section>
 <section id="register-map">
-<span id="i3c-controller-regmap"></span><h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<span id="i3c-controller-regmap"></span><h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-i3c_controller_host_interface">
 <div class="collapsible docutils container">
@@ -926,7 +926,7 @@ runtime.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -942,7 +942,7 @@ For proper operation, the bit needs to be set to 0.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAA_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -952,7 +952,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -962,7 +962,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_PENDING</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -972,7 +972,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -982,7 +982,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -992,7 +992,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1002,7 +1002,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_ALMOST_FULL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1012,7 +1012,7 @@ For proper operation, the bit needs to be set to 0.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1145,7 +1145,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[22:22]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[22]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_IS_CCC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><p></p></td>
@@ -1155,7 +1155,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[21:21]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[21]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_BCAST_HEADER</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><p></p></td>
@@ -1165,7 +1165,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[20:20]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[20]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_SR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><p></p></td>
@@ -1195,7 +1195,7 @@ See <a class="reference internal" href="interface.html#i3c-controller-instructio
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMD_RNW</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><p></p></td>
@@ -1345,7 +1345,7 @@ Writing to it has no effect.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SDI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1355,7 +1355,7 @@ Writing to it has no effect.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1365,7 +1365,7 @@ Writing to it has no effect.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">CMDR_EMPTY</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1383,7 +1383,7 @@ Writing to it has no effect.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_STATUS_NOP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1419,7 +1419,7 @@ Speed with 100MHz driver clock are:
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OPS_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1437,7 +1437,7 @@ Speed with 100MHz driver clock are:
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_LISTEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1450,7 +1450,7 @@ This should be set to 1 during normal operation, even if IBI_CONFIG_ENABLE is di
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IBI_CONFIG_ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1487,7 +1487,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[8:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_WEN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
 <td class="default"><p></p></td>
@@ -1497,7 +1497,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_HAS_IBI_PAYLOAD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1508,7 +1508,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_IBI_CAPABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1519,7 +1519,7 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_ATTACHED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1625,7 +1625,7 @@ Where n is from 0 to 15.</p>
 </section>
 </div></section>
 <section id="interrupts">
-<span id="i3c-controller-interrupts"></span><h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h2>
+<span id="i3c-controller-interrupts"></span><h2>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h2>
 <p>The I3C Controller Host Interface peripheral has 8 internal interrupts, which are
 asserted when:</p>
 <ul class="simple">
@@ -1657,7 +1657,7 @@ combined state of the <code class="docutils literal notranslate"><span class="pr
 </pre></div>
 </div>
 <section id="fifo-threshold-interrupts">
-<h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Permalink to this heading">#</a></h3>
+<h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Permalink to this heading"></a></h3>
 <p>The FIFO threshold interrupts can be used by software for flow control of the
 streams, for example,
 listen to the FIFO level interrupts during data transfer to and from the FIFOs
@@ -1667,7 +1667,7 @@ watermark and is automatically de-asserted when the level drops below the
 watermark.</p>
 </section>
 <section id="pending-interrupts">
-<h3>Pending Interrupts<a class="headerlink" href="#pending-interrupts" title="Permalink to this heading">#</a></h3>
+<h3>Pending Interrupts<a class="headerlink" href="#pending-interrupts" title="Permalink to this heading"></a></h3>
 <p>The pending interrupt <code class="docutils literal notranslate"><span class="pre">*_PENDING</span></code> is asserted when a new sync event is received
 from a stream.
 For information about the <code class="docutils literal notranslate"><span class="pre">CMDR</span></code> see <a class="reference internal" href="interface.html#i3c-controller-cmdr"><span class="std std-ref">Command Receipts</span></a>, and about the

@@ -7,14 +7,14 @@
 
     <title>AD Direct Digital Synthesis &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -97,7 +97,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -337,7 +337,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="ad-direct-digital-synthesis">
-<span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading">#</a></h1>
+<span id="ad-dds"></span><h1>AD Direct Digital Synthesis<a class="headerlink" href="#ad-direct-digital-synthesis" title="Permalink to this heading"></a></h1>
 <p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">AD Direct Digital Synthesis (DDS)</a> module
 is used to generate sine waves on a clock (referenced to sampling clock).</p>
 <p>Typically, in the reference designs each HDL DAC interface IP has a DDS for every
@@ -350,7 +350,7 @@ channel.</p>
 <li><p>clock frequency (sampling rate - where possible)</p></li>
 </ul>
 <section id="dds-basics">
-<h2>DDS basics<a class="headerlink" href="#dds-basics" title="Permalink to this heading">#</a></h2>
+<h2>DDS basics<a class="headerlink" href="#dds-basics" title="Permalink to this heading"></a></h2>
 <p>A generic DDS consists of a phase accumulator and a phase to amplitude
 converter.</p>
 <p>The phase accumulator is basically a counter that increments by a frequency word
@@ -372,9 +372,9 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="adi-dds-module">
-<h2>ADI DDS module<a class="headerlink" href="#adi-dds-module" title="Permalink to this heading">#</a></h2>
+<h2>ADI DDS module<a class="headerlink" href="#adi-dds-module" title="Permalink to this heading"></a></h2>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -421,7 +421,7 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="interface">
-<h3>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h3>
+<h3>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -480,7 +480,7 @@ multiple DDS instances are added for each tone and independent I/Q channels.</p>
 </div>
 </section>
 <section id="control">
-<h3>Control<a class="headerlink" href="#control" title="Permalink to this heading">#</a></h3>
+<h3>Control<a class="headerlink" href="#control" title="Permalink to this heading"></a></h3>
 <p>In the reference designs, the DDS is controlled through the register map
 (DAC channel section).</p>
 <div><section id="hdl-regmap">
@@ -679,7 +679,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -690,7 +690,7 @@ NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -701,7 +701,7 @@ If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -789,7 +789,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[25:25]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[25]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -800,7 +800,7 @@ NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[24:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -888,7 +888,7 @@ Where n is from 0 to 15.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -899,7 +899,7 @@ of I and Q sample pairs.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1013,9 +1013,9 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 </div></section>
 </section>
 <section id="config">
-<h2>Config<a class="headerlink" href="#config" title="Permalink to this heading">#</a></h2>
+<h2>Config<a class="headerlink" href="#config" title="Permalink to this heading"></a></h2>
 <section id="dds-scale">
-<h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Permalink to this heading">#</a></h3>
+<h3>DDS_SCALE<a class="headerlink" href="#dds-scale" title="Permalink to this heading"></a></h3>
 <p>The DDS scale for a tone contributes to the amplitude of the channel (I or Q -
 where it applies).</p>
 <p>The format is 1.1.14 fixed point. See below:</p>
@@ -1051,7 +1051,7 @@ output will over-range.</p>
 </ol>
 </section>
 <section id="phase-dds-init">
-<h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Permalink to this heading">#</a></h3>
+<h3>PHASE - DDS_INIT<a class="headerlink" href="#phase-dds-init" title="Permalink to this heading"></a></h3>
 <p>All tones/channels start on a sync event (internal or external).
 The DDS_INIT value will be used by the phase accumulator as a starting point in
 other words as a phase offset.</p>
@@ -1060,7 +1060,7 @@ other words as a phase offset.</p>
 <p>e.g., for 90°. <span class="math notranslate nohighlight">\(init = (90 * 2^{phaseDW})/360\)</span>.</p>
 </section>
 <section id="frequency-dds-incr">
-<h3>FREQUENCY - DDS_INCR<a class="headerlink" href="#frequency-dds-incr" title="Permalink to this heading">#</a></h3>
+<h3>FREQUENCY - DDS_INCR<a class="headerlink" href="#frequency-dds-incr" title="Permalink to this heading"></a></h3>
 <p>The value can be calculated by:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
@@ -1076,7 +1076,7 @@ other words as a phase offset.</p>
 </ol>
 </section>
 <section id="structure">
-<h3>STRUCTURE<a class="headerlink" href="#structure" title="Permalink to this heading">#</a></h3>
+<h3>STRUCTURE<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h3>
 <p>Below is the hierarchical structure of the modules.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">ad_dds</span> <span class="o">-&gt;</span>
   <span class="o">*</span> <span class="n">ad_dds_2</span> <span class="o">-&gt;</span>
@@ -1086,13 +1086,13 @@ other words as a phase offset.</p>
 </div>
 </section>
 <section id="id1">
-<h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<h3>ad_dds<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">ad_dds</a>
 is the main module, it contains the phase accumulators and the phase to
 amplitude converters.</p>
 <img alt="../../../_images/dds_dual_tone.svg" src="../../../_images/dds_dual_tone.svg" /></section>
 <section id="ad-dds-2">
-<h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading">#</a></h3>
+<h3>ad_dds_2<a class="headerlink" href="#ad-dds-2" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v">ad_dds_2</a>
 contains two phase to amplitude converters. The resulting waveforms will be
 summed. The resulting waveform must have a maximum amplitude level of 0x8000
@@ -1101,7 +1101,7 @@ and shift, there is no constraint for the amplitude, but if is equal for both
 channels, it should not be more than 0x400 -1 for each channel.</p>
 </section>
 <section id="ad-dds-1">
-<h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading">#</a></h3>
+<h3>ad_dds_1<a class="headerlink" href="#ad-dds-1" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v">ad_dds_1</a>
 contains the phase to amplitude converter and an “amplifier”. The phase to
 amplitude converter is always generating a full scale sine wave. Because the
@@ -1109,7 +1109,7 @@ data format is two’s complement, for a 16-bit data angle, min value will be
 -(2^16)/2 and max (2^16)/2-1.</p>
 <img alt="../../../_images/ad_dds_1.svg" src="../../../_images/ad_dds_1.svg" /></section>
 <section id="ad-dds-sine">
-<h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading">#</a></h3>
+<h3>ad_dds_sine_*<a class="headerlink" href="#ad-dds-sine" title="Permalink to this heading"></a></h3>
 <p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine.v">ad_dds_sine</a>
 and
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_sine_cordic.v">ad_dds_sine_cordic</a>
@@ -1117,7 +1117,7 @@ are the available phase to amplitude converters.</p>
 </section>
 </section>
 <section id="clock-ratio">
-<h2>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Permalink to this heading">#</a></h2>
+<h2>CLOCK RATIO<a class="headerlink" href="#clock-ratio" title="Permalink to this heading"></a></h2>
 <p>The clock ratio (number of data paths processed in parallel) instantiates more
 DDS logic, but it is controlled by the same register map for all
 CLOCK_RATIO/DATA_PATH parameters.</p>
@@ -1183,7 +1183,7 @@ in the case of the CORDIC type, the number of rotation stages will also have a
 direct impact on this clock period delay.</p>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">library/common/ad_dds.v</a> and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_1.v">library/common/ad_dds_1.v</a>
 and <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds_2.v">library/common/ad_dds_2.v</a></p></li>

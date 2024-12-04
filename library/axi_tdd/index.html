@@ -7,14 +7,14 @@
 
     <title>AXI TDD &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -324,7 +324,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-tdd">
-<span id="id1"></span><h1>AXI TDD<a class="headerlink" href="#axi-tdd" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI TDD<a class="headerlink" href="#axi-tdd" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320.4 258" width="320.4" height="258"><style>
                 a {
@@ -346,7 +346,7 @@ which require more than six controlling signals.</p>
 the receive and transmit bursts.</p>
 </div>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Up to 32 independent output channels</p></li>
 <li><p>Start/stop time values per channel</p></li>
@@ -358,7 +358,7 @@ the receive and transmit bursts.</p>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -396,7 +396,7 @@ the receive and transmit bursts.</p>
 </div>
 </section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -486,7 +486,7 @@ the receive and transmit bursts.</p>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f" name="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f" type="checkbox"></input><label for="03f873a68b5b8f1bd14a9f1e4f34d3ed1394f93f"><div><p>s_axi</p>
@@ -768,7 +768,7 @@ the receive and transmit bursts.</p>
 </section>
 </div></section>
 <section id="theory-of-operation">
-<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading">#</a></h2>
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
 <p>The central idea of the TDD controller is “frame”-based operation, i.e. all the
 timing defined for the individual channels is relative to the beginning of a
 frame. The <code class="docutils literal notranslate"><span class="pre">FRAME_LENGTH</span></code> value controls the length of a single frame, while
@@ -785,7 +785,7 @@ manner, they are completely independent of each other.</p>
 </div>
 </section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>In order to begin its operation, the peripheral must be enabled. This is done by
 setting the <code class="docutils literal notranslate"><span class="pre">ENABLE</span></code> bit. Next, the peripheral waits to receive a synchronization
 signal. There are 3 possible sync sources, which can be independently activated
@@ -832,7 +832,7 @@ state.</p>
 is highly flexible and can substantially reduce resource utilization.</p>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-TDDN_CNTRL">
 <div class="collapsible docutils container">
@@ -967,7 +967,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[7:7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXTERNAL_CDC</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​EXTERNAL_​CDC</span></code></td>
@@ -977,7 +977,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[6:6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXTERNAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​EXTERNAL</span></code></td>
@@ -987,7 +987,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[5:5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_INTERNAL</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">SYNC_​INTERNAL</span></code></td>
@@ -1031,7 +1031,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[4:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_SOFT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1041,7 +1041,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_EXT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1051,7 +1051,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_INT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1061,7 +1061,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SYNC_RST</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1071,7 +1071,7 @@ is highly flexible and can substantially reduce resource utilization.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1295,7 +1295,7 @@ Where n is from 0 to 31.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_tdd">library/axi_tdd</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_tdd">Generic Time-Division Duplexing Controller on wiki</a></p></li>

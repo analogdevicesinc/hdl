@@ -7,14 +7,14 @@
 
     <title>Documentation guidelines &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -319,7 +319,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="documentation-guidelines">
-<span id="docs-guidelines"></span><h1>Documentation guidelines<a class="headerlink" href="#documentation-guidelines" title="Permalink to this heading">#</a></h1>
+<span id="docs-guidelines"></span><h1>Documentation guidelines<a class="headerlink" href="#documentation-guidelines" title="Permalink to this heading"></a></h1>
 <p>This documentation is built with <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> and
 all source code is available at the path <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs">docs</a>.</p>
 <p>To contribute to it, open a pull request with the changes to
@@ -327,7 +327,7 @@ all source code is available at the path <a class="icon git reference external" 
 <a class="reference external" href="https://analogdevicesinc.github.io/doctools/docs_guidelines.html#docs-guidelines" title="(in Doctools v0.3)"><span>Documentation guidelines</span></a> first <strong>and</strong> the additional guidelines
 below specific to the HDL repository.</p>
 <section id="before-creating-a-new-page">
-<h2>Before creating a new page<a class="headerlink" href="#before-creating-a-new-page" title="Permalink to this heading">#</a></h2>
+<h2>Before creating a new page<a class="headerlink" href="#before-creating-a-new-page" title="Permalink to this heading"></a></h2>
 <p>This section has the sole role to present the steps that are required to be
 able to create and build a new documentation related page. Some steps are
 recommended to be revised regularly to keep the necessary tools updated.</p>
@@ -336,7 +336,7 @@ newer than 23 version. If not, update it by running the following command:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pip<span class="w"> </span>--upgrade
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pip<span class="w"> </span>--upgrade
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Then install the necessary documentation tools by running (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">HDL</a>
@@ -344,13 +344,13 @@ repository is the working directory):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>--upgrade
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>--upgrade
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Use the same command to regularly update the documentation tools.
@@ -362,13 +362,13 @@ after being built. Build the libraries by running:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>library/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>library/
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/library$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Now, after the page has been written, inside <code class="docutils literal notranslate"><span class="pre">/docs</span></code> folder run the following
@@ -376,13 +376,13 @@ command:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs/
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>The generated documentation will be available at <code class="docutils literal notranslate"><span class="pre">/docs/_build/html</span></code>.</p>
@@ -394,27 +394,27 @@ This is done by running the below commands (inside <code class="docutils literal
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>html
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Or more straight forward (clean &amp; rebuild):</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/docs$
 </pre></div>
 </div>
-<div class="bold highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean<span class="w"> </span>html
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean<span class="w"> </span>html
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>Make sure to read the next chapters as they provide more info on how to write
 a HDL specific Sphinx documentation page.</p>
 </section>
 <section id="templates">
-<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this heading">#</a></h2>
+<h2>Templates<a class="headerlink" href="#templates" title="Permalink to this heading"></a></h2>
 <p>Templates are available:</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/docs/library/template_ip">docs/library/template_ip</a> (<a class="reference internal" href="../library/template_ip/index.html#template-ip"><span class="std std-ref">rendered</span></a>).</p></li>
@@ -432,7 +432,7 @@ importing text from there, consider <code class="docutils literal notranslate"><
 </div>
 </section>
 <section id="common-sections">
-<h2>Common sections<a class="headerlink" href="#common-sections" title="Permalink to this heading">#</a></h2>
+<h2>Common sections<a class="headerlink" href="#common-sections" title="Permalink to this heading"></a></h2>
 <p>The <strong>More information</strong> and <strong>Support</strong> sections that are present in
 the HDL project documentation, are actually separate pages inserted as links.
 They’re located at hdl/projects/common/more_information.rst and /support.rst,

@@ -7,14 +7,14 @@
 
     <title>AXI Fan Control &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=95305861" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.min.css?v=ab97267f" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
-    <script defer="" src="../../_static/app.umd.js?v=c93eadd1"></script>
+    <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -96,7 +96,7 @@
     <div class="localtoc">
       <div class="tocwrapper">
         <div>
-          <div class="localtoc-header">On this page</div>
+          <div class="localtoc-header"></div>
           <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
         </div>
         <nav>
@@ -330,7 +330,7 @@ Content on this topic
           <div class="body" role="main">
             
   <section id="axi-fan-control">
-<span id="id1"></span><h1>AXI Fan Control<a class="headerlink" href="#axi-fan-control" title="Permalink to this heading">#</a></h1>
+<span id="id1"></span><h1>AXI Fan Control<a class="headerlink" href="#axi-fan-control" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 243.6 210" width="243.6" height="210"><style>
                 a {
@@ -347,7 +347,7 @@ outputs a PWM signal to control the fan rotation accordingly. The tacho signal
 coming from the fan is also measured and evaluated to ensure that the RPM is
 correct and the fan is working properly.</p>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>AXI Lite control/status interface</p></li>
 <li><p>Allows interpolation by 10/100/1000/10000/100000 with filtering</p></li>
@@ -357,7 +357,7 @@ compensation FIR filter.</p></li>
 </ul>
 </section>
 <section id="files">
-<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading">#</a></h2>
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -374,10 +374,10 @@ compensation FIR filter.</p></li>
 </div>
 </section>
 <section id="block-diagram">
-<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading">#</a></h2>
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
 <img alt="AXI Fan Control block diagram" class="align-center" src="../../_images/block_diagram20.svg" /></section>
 <section id="configuration-parameters">
-<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading">#</a></h2>
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -531,7 +531,7 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="interface">
-<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading">#</a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe" name="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe" type="checkbox"></input><label for="0df7dfe69ef2e21970f0b0c7a0765303d921b2fe"><div><p>s_axi</p>
@@ -754,11 +754,11 @@ compensation FIR filter.</p></li>
 </section>
 </div></section>
 <section id="clocking">
-<h2>Clocking<a class="headerlink" href="#clocking" title="Permalink to this heading">#</a></h2>
+<h2>Clocking<a class="headerlink" href="#clocking" title="Permalink to this heading"></a></h2>
 <p>The IP core runs on the AXI clock and requires a frequency of 100MHz.</p>
 </section>
 <section id="detailed-description">
-<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading">#</a></h2>
+<h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
 <p>The main features of this IP core are its independent operation and the fact
 that it does not require an external temperature sensor. All of the mechanisms
 contained inside the core are controlled by a state machine, so that they do not
@@ -769,7 +769,7 @@ have defaults set in hardware and can be modified by the software. The
 INTERNAL_SYSMONE parameter is used to set the temperature values source, 0 when
 reading from temp_in and 1 when instantiating the internal SYSMONE primitive.</p>
 <section id="running-independently">
-<h3>Running independently<a class="headerlink" href="#running-independently" title="Permalink to this heading">#</a></h3>
+<h3>Running independently<a class="headerlink" href="#running-independently" title="Permalink to this heading"></a></h3>
 <p>The hardware can operate with no input from the software; the IP core starts
 working after the bitstream is loaded, without needing to be brought out of
 reset. To activate the interrupts, the software must write to the
@@ -839,7 +839,7 @@ duty-cycle the tacho period must stay within 9.6 ms and 16 ms.</em></p>
 <p>A time-out is also used to check if there is any tacho signal at all.</p>
 </section>
 <section id="software-control-and-customization">
-<h3>Software control and customization<a class="headerlink" href="#software-control-and-customization" title="Permalink to this heading">#</a></h3>
+<h3>Software control and customization<a class="headerlink" href="#software-control-and-customization" title="Permalink to this heading"></a></h3>
 <p>The software can overwrite the temperature thresholds and the tacho values if
 needed. The TEMP_00_H -&gt; TEMP_100_L registers can redefine the temperature
 intervals and the TACHO_25 -&gt; TACHO_100 registers can also be used to redefine
@@ -872,7 +872,7 @@ the TACHO_TOLERANCE register. The hardware will only start to monitor the tacho
 signal when the tolerance is provided.</p>
 </section>
 <section id="interrupts">
-<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading">#</a></h3>
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Permalink to this heading"></a></h3>
 <p>The fan controller supports interrupts to both inform the software of any
 possible errors and to facilitate the control of the core. There are four
 interrupt sources:</p>
@@ -893,7 +893,7 @@ seconds.</p></li>
 </section>
 </section>
 <section id="register-map">
-<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading">#</a></h2>
+<h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-regmap">
 <section id="hdl-regmap-AXI_FAN_CONTROL">
 <div class="collapsible docutils container">
@@ -998,7 +998,7 @@ seconds.</p></li>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1008,7 +1008,7 @@ seconds.</p></li>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1018,7 +1018,7 @@ seconds.</p></li>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1028,7 +1028,7 @@ seconds.</p></li>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
@@ -1043,7 +1043,7 @@ seconds.</p></li>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1055,7 +1055,7 @@ register is not set.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1067,7 +1067,7 @@ the IRQ_MASK register is not set.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1080,7 +1080,7 @@ Also, the TACHO_ERR bit in the IRQ_MASK register must not be set.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1097,7 +1097,7 @@ the PWM_CHANGED bit in the IRQ_MASK register must not be set.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[3:3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">NEW_TACHO_MEASUREMENT</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1108,7 +1108,7 @@ TACHO_MEASUREMENT register.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[2:2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TEMP_INCREASE</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1119,7 +1119,7 @@ duty-cycle indicating a rise in temperature.</p>
 </td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[1:1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TACHO_ERR</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1131,7 +1131,7 @@ period of the tacho signal is no longer whithin the defined valid interval.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PWM_CHANGED</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1147,7 +1147,7 @@ changed. The delay is used to allow the fan rotation speed to stabilize.</p>
 <td class="description bold"><p></p></td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[0:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
@@ -1554,7 +1554,7 @@ primitive.</p>
 </section>
 </div></section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>HDL IP core at <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_fan_control">library/axi_fan_control</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_fan_control">AXI FAN CONTROL on wiki</a></p></li>
