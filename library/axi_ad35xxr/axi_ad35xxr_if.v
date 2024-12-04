@@ -281,7 +281,7 @@ module axi_ad35xxr_if (
       end else  begin
         counter  <= counter + 1;
         if (multi_io_mode == 2'h1) begin //dual SPI
-          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3f);
+          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3e);
           tf_cp[0] <= (counter == 16'h1f);
           tf_cp[1] <= (counter == 16'h3f);
           tf_cp[2] <= (counter == 16'h10);
@@ -301,7 +301,7 @@ module axi_ad35xxr_if (
           st_cp[2] <= (counter == 16'hf);
           st_cp[3] <= (counter == 16'h7);
         end else begin //Any other case is classic SPI
-          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3f);
+          wa_cp    <= full_speed ? (counter == 16'he) : (counter == 16'h3e);
           tf_cp[0] <= (counter == 16'h3f);
           tf_cp[1] <= (counter == 16'h7f);
           tf_cp[2] <= (counter == 16'h1f);
