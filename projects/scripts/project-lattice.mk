@@ -75,12 +75,9 @@ PB_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
 R_TARGETS += $(PROJECT_NAME)/$(PROJECT_NAME).rdf
 R_TARGETS += $(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
 
-CLEAN_TARGET := ${PROJECT_NAME}
 CLEAN_TARGET += $(wildcard ./*/)
 CLEAN_TARGET += $(wildcard *.log)
-CLEAN_TARGET += ./ipcfg
 CLEAN_TARGET += $(filter-out . .. ./. ./.., $(wildcard .*))
-CLEAN_TARGET += ./sge
 
 .PHONY: all pb rd force rd-force pb-force clean clean-all
 
