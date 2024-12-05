@@ -1,15 +1,13 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 16Mb - 1M Samples
-set adc_fifo_address_width 18
-
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~70%
+## Offload attributes
+set adc_offload_type 0                   ; ## BRAM
+set adc_offload_size [expr 2*1024*1024]  ; ## 2 MB
 
 source $ad_hdl_dir/projects/common/vc707/vc707_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/fmcadc5_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -18,7 +16,8 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set sys_cstring "ADC_FIFO_ADDR_WIDTH=$adc_fifo_address_width"
+set sys_cstring "ADC_OFFLOAD:TYPE=$adc_offload_type\
+SIZE=$adc_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
 

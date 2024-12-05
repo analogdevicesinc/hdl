@@ -1,11 +1,12 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
-set adc_fifo_name axi_ad9625_fifo
+set adc_offload_name ad9625_data_offload
 set adc_data_width 512
 set adc_dma_data_width 64
 
@@ -76,7 +77,21 @@ ad_ip_parameter axi_ad9625_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9625_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_ip_instance util_cpack2 util_ad9625_cpack [list \
+  NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $RX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
+]
+
+ad_data_offload_create $adc_offload_name \
+                       0 \
+                       $adc_offload_type \
+                       $adc_offload_size \
+                       $adc_data_width \
+                       $adc_dma_data_width
+
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $adc_offload_name/sync_ext GND
 
 # reference clocks & resets
 
@@ -116,17 +131,24 @@ ad_connect  axi_ad9625_0_jesd/rx_sof axi_ad9625_1_core/rx_sof
 ad_connect  axi_ad9625_1_jesd/rx_data_tdata axi_ad9625_1_core/rx_data
 ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_0_core/adc_raddr_in
 ad_connect  axi_ad9625_0_core/adc_raddr_out axi_ad9625_1_core/adc_raddr_in
-ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
-ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
-ad_connect  axi_ad9625_fifo/adc_wovf axi_ad9625_0_core/adc_dovf
-ad_connect  axi_ad9625_fifo/adc_wovf axi_ad9625_1_core/adc_dovf
-ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
+
+ad_connect  $sys_cpu_clk axi_ad9625_fifo/m_axis_aclk
 ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
 ad_connect  $sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
-ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
-ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
-ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
-ad_connect  axi_ad9625_fifo/dma_xfer_req axi_ad9625_dma/s_axis_xfer_req
+
+ad_connect  util_fmcadc5_0_xcvr/rx_out_clk_0 axi_ad9625_fifo/s_axis_aclk
+ad_connect  axi_ad9625_0_jesd_rstgen/peripheral_aresetn axi_ad9625_fifo/s_axis_aresetn
+ad_connect  axi_ad9625_0_core/adc_dovf util_ad9625_cpack/fifo_wr_overflow
+ad_connect  axi_ad9625_1_core/adc_dovf util_ad9625_cpack/fifo_wr_overflow
+
+ad_connect  util_ad9625_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
+ad_connect  util_ad9625_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
+ad_connect  $adc_offload_name/s_axis_tlast GND
+ad_connect  $adc_offload_name/s_axis_tkeep VCC
+ad_connect  $adc_offload_name/s_axis_tready rx_do_rstout_logic/op1
+
+ad_connect  $adc_offload_name/m_axis axi_ad9625_dma/s_axis
+ad_connect  $adc_offload_name/init_req axi_ad9625_dma/s_axis_xfer_req
 
 # interconnect (cpu)
 
@@ -137,6 +159,7 @@ ad_cpu_interconnect 0x44b10000 axi_ad9625_1_core
 ad_cpu_interconnect 0x44a90000 axi_ad9625_0_jesd
 ad_cpu_interconnect 0x44b90000 axi_ad9625_1_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9625_dma
+ad_cpu_interconnect 0x7c430000 $adc_offload_name
 
 # interconnect (gt/adc)
 
