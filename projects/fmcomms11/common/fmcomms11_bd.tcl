@@ -4,6 +4,7 @@
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # JESD204 TX parameters
 set TX_NUM_OF_LANES 8      ; # L
@@ -20,19 +21,15 @@ set RX_NUM_OF_CONVERTERS 1 ; # M
 set RX_SAMPLES_PER_FRAME 4 ; # S
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
-# Data path FIFO attributes
+# Data path attributes
 
-set adc_fifo_name axi_ad9625_fifo
+set adc_offload_name ad9625_data_offload
 set adc_data_width 256
-set adc_dma_data_width 64
+set adc_dma_data_width 256
 
-set dac_fifo_name axi_ad9162_fifo
+set dac_offload_name ad9162_data_offload
 set dac_data_width 256
 set dac_dma_data_width 256
-
-# DAC FIFO bypass
-
-create_bd_port -dir I dac_fifo_bypass
 
 # dac peripherals
 
@@ -70,7 +67,17 @@ ad_ip_instance axi_dmac axi_ad9162_dma [list \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+ad_data_offload_create $dac_offload_name \
+                       1 \
+                       $dac_offload_type \
+                       $dac_offload_size \
+                       $dac_dma_data_width \
+                       $dac_data_width \
+                       $plddr_offload_axi_data_width
+
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.HAS_BYPASS 0
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $dac_offload_name/sync_ext GND
 
 # adc peripherals
 
@@ -103,7 +110,17 @@ ad_ip_instance axi_dmac axi_ad9625_dma [list \
   DMA_DATA_WIDTH_DEST 64 \
 ]
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_data_offload_create $adc_offload_name \
+                       0 \
+                       $adc_offload_type \
+                       $adc_offload_size \
+                       $adc_data_width \
+                       $adc_dma_data_width \
+                       $plddr_offload_axi_data_width
+
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.HAS_BYPASS 0
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $adc_offload_name/sync_ext GND
 
 # shared transceiver core
 
@@ -146,22 +163,18 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
   ad_connect  axi_ad9162_core/dac_enable_$i  util_ad9162_upack/enable_$i
 }
 
-ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_fifo/dac_clk
-ad_connect  axi_ad9162_jesd_rstgen/peripheral_reset axi_ad9162_fifo/dac_rst
-ad_connect  $sys_cpu_clk axi_ad9162_fifo/dma_clk
-ad_connect  $sys_cpu_reset axi_ad9162_fifo/dma_rst
+ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 $dac_offload_name/m_axis_aclk
+ad_connect  axi_ad9162_jesd_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
+ad_connect  $sys_cpu_clk $dac_offload_name/s_axis_aclk
+ad_connect  $sys_cpu_resetn $dac_offload_name/s_axis_aresetn
 ad_connect  $sys_cpu_clk axi_ad9162_dma/m_axis_aclk
 ad_connect  $sys_cpu_resetn axi_ad9162_dma/m_src_axi_aresetn
-ad_connect  util_ad9162_upack/s_axis_valid VCC
-ad_connect  util_ad9162_upack/s_axis_ready axi_ad9162_fifo/dac_valid
-ad_connect  util_ad9162_upack/s_axis_data axi_ad9162_fifo/dac_data
-ad_connect  axi_ad9162_core/dac_dunf axi_ad9162_fifo/dac_dunf
-ad_connect  axi_ad9162_fifo/dma_xfer_req axi_ad9162_dma/m_axis_xfer_req
-ad_connect  axi_ad9162_fifo/dma_ready axi_ad9162_dma/m_axis_ready
-ad_connect  axi_ad9162_fifo/dma_data axi_ad9162_dma/m_axis_data
-ad_connect  axi_ad9162_fifo/dma_valid axi_ad9162_dma/m_axis_valid
-ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
-ad_connect  dac_fifo_bypass axi_ad9162_fifo/bypass
+
+ad_connect  util_ad9162_upack/s_axis $dac_offload_name/m_axis
+ad_connect  axi_ad9162_core/dac_dunf util_ad9162_upack/fifo_rd_underflow
+
+ad_connect  $dac_offload_name/s_axis axi_ad9162_dma/m_axis
+ad_connect  $dac_offload_name/init_req axi_ad9162_dma/m_axis_xfer_req
 
 # connections (adc)
 # rx lane mapping {0 1 2 3 4 5 6 7}
@@ -173,18 +186,23 @@ ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/link_sof
 ad_connect  axi_ad9625_jesd/rx_data_tdata axi_ad9625_core/link_data
 ad_connect  axi_ad9625_jesd/rx_data_tvalid axi_ad9625_core/link_valid
 
-ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_fifo/adc_clk
-ad_connect  axi_ad9625_jesd_rstgen/peripheral_reset axi_ad9625_fifo/adc_rst
-ad_connect  axi_ad9625_core/adc_valid_0 axi_ad9625_fifo/adc_wr
-ad_connect  axi_ad9625_core/adc_data_0 axi_ad9625_fifo/adc_wdata
-ad_connect  $sys_cpu_clk axi_ad9625_fifo/dma_clk
+ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 $adc_offload_name/s_axis_aclk
+ad_connect  axi_ad9625_jesd_rstgen/peripheral_aresetn $adc_offload_name/s_axis_aresetn
+
+ad_connect  axi_ad9625_core/adc_valid_0 $adc_offload_name/s_axis_tvalid
+ad_connect  axi_ad9625_core/adc_data_0 $adc_offload_name/s_axis_tdata
+ad_connect  axi_ad9625_core/adc_dovf GND
+
+ad_connect  $adc_offload_name/s_axis_tlast GND
+ad_connect  $adc_offload_name/s_axis_tkeep VCC
+
+ad_connect  $sys_cpu_clk $adc_offload_name/m_axis_aclk
 ad_connect  $sys_cpu_clk axi_ad9625_dma/s_axis_aclk
+ad_connect  $sys_cpu_resetn $adc_offload_name/m_axis_aresetn
 ad_connect  $sys_cpu_resetn axi_ad9625_dma/m_dest_axi_aresetn
-ad_connect  axi_ad9625_fifo/dma_wr axi_ad9625_dma/s_axis_valid
-ad_connect  axi_ad9625_fifo/dma_wdata axi_ad9625_dma/s_axis_data
-ad_connect  axi_ad9625_fifo/dma_wready axi_ad9625_dma/s_axis_ready
-ad_connect  axi_ad9625_fifo/dma_xfer_req axi_ad9625_dma/s_axis_xfer_req
-ad_connect  axi_ad9625_core/adc_dovf axi_ad9625_fifo/adc_wovf
+
+ad_connect  $adc_offload_name/m_axis axi_ad9625_dma/s_axis
+ad_connect  $adc_offload_name/init_req axi_ad9625_dma/s_axis_xfer_req
 
 # interconnect (cpu)
 
@@ -192,10 +210,12 @@ ad_cpu_interconnect 0x44A60000 axi_ad9162_xcvr
 ad_cpu_interconnect 0x44A00000 axi_ad9162_core
 ad_cpu_interconnect 0x44A90000 axi_ad9162_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9162_dma
+ad_cpu_interconnect 0x7c430000 $dac_offload_name
 ad_cpu_interconnect 0x44A50000 axi_ad9625_xcvr
 ad_cpu_interconnect 0x44A10000 axi_ad9625_core
 ad_cpu_interconnect 0x44AA0000 axi_ad9625_jesd
 ad_cpu_interconnect 0x7c400000 axi_ad9625_dma
+ad_cpu_interconnect 0x7c410000 $adc_offload_name
 
 # gt uses hp3, and 100MHz clock for both DRP and AXI4
 
