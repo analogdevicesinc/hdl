@@ -139,7 +139,11 @@ module axi_dmac_response_manager #(
 
   always @(posedge req_clk)
   begin
-    if (response_dest_valid & response_dest_ready) begin
+    if (req_resetn == 1'b0) begin
+      req_eot <= 1'b0;
+      req_response_partial <= 1'b0;
+      req_response_dest_data_burst_length <= 'h0;
+    end else if (response_dest_valid & response_dest_ready) begin
       req_eot <= response_dest_resp_eot;
       req_response_partial <= response_dest_partial;
       req_response_dest_data_burst_length <= response_dest_data_burst_length;
