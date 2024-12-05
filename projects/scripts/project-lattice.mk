@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2023 - 2024 Analog Devices, Inc.
+## Copyright (c) 2023 - 2025 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -28,8 +28,10 @@
 ################################################################################
 
 HDL_PROJECT_PATH := $(subst scripts/project-lattice.mk,,$(lastword $(MAKEFILE_LIST)))
+HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
+include $(HDL_LIBRARY_PATH)scripts/lattice_tool_set.mk
 
 ifeq ($(OS), Windows_NT)
 	RADIANT := pnmainc
@@ -50,6 +52,7 @@ M_DEPS += system_top.v
 M_DEPS += _bld/$(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
 M_DEPS += $(wildcard *system_constr.pdc)
 M_DEPS += $(wildcard *system_constr.sdc)
+M_DEPS += _bld/pb_design_finished.log
 
 PB_DEPS_FILTER += %.tcl
 PB_DEPS_FILTER += %.mem
@@ -65,9 +68,11 @@ R_DEPS_FILTER += %.ipx
 R_DEPS_FILTER += %adi_env.tcl
 R_DEPS_FILTER += %adi_project_lattice.tcl
 R_DEPS_FILTER += %system_project.tcl
+R_DEPS_FILTER += %.log
 
 PB_TARGETS += _bld/$(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).sbx
 PB_TARGETS += _bld/$(PROJECT_NAME)/$(PROJECT_NAME)/$(PROJECT_NAME).v
+PB_TARGETS += _bld/pb_design_finished.log
 
 R_TARGETS += _bld/$(PROJECT_NAME)/$(PROJECT_NAME).rdf
 R_TARGETS += _bld/$(PROJECT_NAME)/impl_1/$(PROJECT_NAME)_impl_1.bit
@@ -94,8 +99,22 @@ clean-all:
 	$(call clean, \
 		$(CLEAN_TARGET), \
 		$(HL)$(PROJECT_NAME)$(NC) project)
+	@for lib in $(LIB_DEPS); do \
+		$(MAKE) -C $(HDL_LIBRARY_PATH)$${lib} clean; \
+	done
 
-$(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS)))
+# The library name in .tcl script must be the same as the library folder name
+LIB_TARGETS := $(foreach dep,$(LIB_DEPS),${HDL_LIBRARY_PATH}$(dep)/ltt/metadata.xml)
+ifeq ($(LATTICE_DEFAULT_PATHS),1)
+LIB_TARGETS := $(LIB_TARGETS) $(foreach dep,$(LIB_DEPS),${LATTICE_DEFAULT_IP_PATH}/$(lastword $(subst /, ,$(dep)))/metadata.xml)
+endif
+
+$(LIB_TARGETS):
+	$(foreach dep,$(LIB_DEPS), \
+		flock $(HDL_LIBRARY_PATH)$(dep)/.lock -c "cd $(HDL_LIBRARY_PATH)$(dep) \
+		&& $(MAKE) lattice";) exit $$?
+
+$(PB_TARGETS): $(filter-out $(PB_DEPS_FILTER_OUT),$(filter $(PB_DEPS_FILTER), $(M_DEPS))) $(LIB_TARGETS)
 	$(call skip_if_missing, \
 		Project, \
 		$(PROJECT_NAME), \
@@ -121,6 +140,13 @@ $(R_TARGETS): $(filter $(R_DEPS_FILTER), $(M_DEPS))
 		$(RADIANT) system_project.tcl, \
 		$(PROJECT_NAME)_radiant.log, \
 		$(HL)$(PROJECT_NAME)$(NC) project)
+	@for file in $(R_TARGETS); do \
+		if [ ! -f $$file ]; then \
+			echo "No [$(HL)$$file$(NC)] found. ... $(RED)FAILED$(NC)"; \
+			echo "For details see $(HL)$(CURDIR)/$(PROJECT_NAME)_radiant.log$(NC)"; \
+			exit 2; \
+		fi \
+	done
 
 force: pb-force rd-force
 

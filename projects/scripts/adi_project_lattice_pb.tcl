@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -40,6 +40,7 @@ proc adi_project_pb {project_name args} {
   puts "\nadi_project_pb:\n"
 
   global env
+  global ad_hdl_dir
   set preinst_ip_mod_dir ${env(TOOLRTF)}
 
   array set opt [list -dev_select "auto" \
@@ -50,6 +51,7 @@ proc adi_project_pb {project_name args} {
     -language "verilog" \
     -psc "${env(TOOLRTF)}/../../templates/MachXO3D_Template01/MachXO3D_Template01.psc" \
     -cmd_list {{source ./system_pb.tcl}} \
+    -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
     {*}$args]
 
   set dev_select $opt(-dev_select)
@@ -57,8 +59,7 @@ proc adi_project_pb {project_name args} {
   set language $opt(-language)
   set cmd_list $opt(-cmd_list)
   set psc $opt(-psc)
-
-  global ad_hdl_dir
+  set interface_paths $opt(-interface_paths)
 
   if { [string match "auto" $dev_select] } {
     source $ad_hdl_dir/projects/scripts/adi_lattice_dev_select.tcl
@@ -93,6 +94,11 @@ proc adi_project_pb {project_name args} {
 proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
 
+  global ad_hdl_dir
+  global required_lattice_version
+  global IGNORE_VERSION_CHECK
+  global env
+
   array set opt [list -ppath "./_bld" \
     -device "" \
     -board "" \
@@ -100,6 +106,7 @@ proc adi_project_create_pb {project_name args} {
     -language "verilog" \
     -psc "" \
     -cmd_list "" \
+    -interface_paths "$ad_hdl_dir/library/interfaces_ltt" \
     {*}$args]
 
   set ppath [file normalize $opt(-ppath)]
@@ -109,13 +116,7 @@ proc adi_project_create_pb {project_name args} {
   set language $opt(-language)
   set psc $opt(-psc)
   set cmd_list $opt(-cmd_list)
-
-  global ad_hdl_dir
-  global ad_ghdl_dir
-  global ad_project_dir
-  global required_lattice_version
-  global IGNORE_VERSION_CHECK
-  global env
+  set interface_paths $opt(-interface_paths)
 
   # Extracting the Propel Builder version from $env(TOOLRTF)/../../components.xml
   set regex "<Name>com\.latticesemi\.systembuilder.*<Version>$required_lattice_version"
@@ -173,6 +174,13 @@ proc adi_project_create_pb {project_name args} {
 
   sbp_design save
 
+  if {$interface_paths != ""} {
+    foreach interface_path $interface_paths {
+      set env(LATTICE_INTERFACE_SEARCH_PATH) \
+        "$env(LATTICE_INTERFACE_SEARCH_PATH);$interface_path"
+    }
+  }
+
   foreach cmd $cmd_list {
     puts "Executing cmd: $cmd"
     sbp_design save
@@ -186,6 +194,10 @@ proc adi_project_create_pb {project_name args} {
   sbp_design pge sge \
     -i "$propel_builder_project_dir/$project_name.sbx" \
     -o "$ppath/$project_name"
+
+  set file [open _bld/pb_design_finished.log "w"]
+  puts $file "Design generated."
+  close $file
 
   sbp_design close
 }
@@ -202,7 +214,9 @@ proc adi_project_create_pb {project_name args} {
 # \opt[cfg_value] -cfg_value {SIMULATION: false, DEBUG_ENABLE: true}
 # \opt[ip_iname] -ip_iname cpu0_inst
 ###############################################################################
+set adi_move_ip_to_project "false"
 proc adi_ip_config {args} {
+  global adi_move_ip_to_project
   array set opt [list -cfg_path "./ipcfg" \
     -vlnv "" \
     -ip_path "" \
@@ -210,6 +224,7 @@ proc adi_ip_config {args} {
     -ip_params "" \
     -ip_iname "" \
     -cfg_value "" \
+    -move_to_project "$adi_move_ip_to_project" \
     {*}$args]
 
   set cfg_path $opt(-cfg_path)
@@ -219,8 +234,205 @@ proc adi_ip_config {args} {
   set ip_iname $opt(-ip_iname)
   set meta_vlnv $opt(-meta_vlnv)
   set cfg_value $opt(-cfg_value)
+  set move_to_project $opt(-move_to_project)
+  set checked 0
 
   puts "adi_ip_config: $ip_iname"
+
+  if {$ip_path == "" && $meta_vlnv == ""} {
+    puts "ERROR: no -meta_vlnv nor -ip_path is specified!"
+    exit 2
+  }
+
+  if {[info exists ::env(LATTICE_EXTERNAL_LIBS)] && \
+    $::env(LATTICE_EXTERNAL_LIBS) != ""} {
+
+    if {$meta_vlnv != ""} {
+      global external_lattice_ip_folder_map
+
+      # Mapping IPs from external directories.
+      if {$external_lattice_ip_folder_map == {}} {
+        global tcl_platform
+        if {$tcl_platform(platform) eq "windows"} {
+          puts "WARNING: Please make shure you export a valid Windows paths in 'LATTICE_EXTERNAL_LIBS' env variable!"
+        }
+        set external_lattice_ip_folder_map {}
+        set paths [string map [list \\ /] $::env(LATTICE_EXTERNAL_LIBS)]
+        foreach path $paths {
+          set external_lattice_ip_folder_map \
+            [dict merge $external_lattice_ip_folder_map \
+            [map_lattice_ips $path 5]]
+        }
+        puts $external_lattice_ip_folder_map
+      }
+      if {[dict keys $external_lattice_ip_folder_map $meta_vlnv] != ""} {
+        puts "INSTANTIATING from '$::env(LATTICE_EXTERNAL_LIBS)' directories."
+        # Setting IP path for instantiation.
+        set ip_path [dict get $external_lattice_ip_folder_map $meta_vlnv]
+
+        if {$move_to_project == "true"} {
+          set folder_name [string map [list ":" "_"] $meta_vlnv]
+          set ddir [file normalize [lindex [get_dir_list ./ /lib 8] 0]]/IPs
+          if {[file exists $ddir/$folder_name] != 1} {
+            file mkdir $ddir/$folder_name
+            file copy -force {*}[glob -nocomplain -directory $ip_path *] \
+              $ddir/$folder_name
+            puts "COPYING from $ip_path to $ddir/$folder_name paths."
+          } else {
+            puts "The '$ddir/$folder_name' directory already exists! (1)"
+          }
+        }
+        set checked 1
+        set meta_vlnv {}
+      }
+    }
+  }
+
+  if {(![info exists ::env(LATTICE_DEFAULT_PATHS)] || \
+    $::env(LATTICE_DEFAULT_PATHS) != 1) && $checked != 1} {
+
+    if {$meta_vlnv != ""} {
+      global hdl_lattice_ip_folder_map
+      global ad_hdl_dir
+      set lib_dir $ad_hdl_dir/library
+
+      # Mapping IPs from local repo.
+      if {$hdl_lattice_ip_folder_map == {}} {
+        set hdl_lattice_ip_folder_map [map_lattice_ips $lib_dir 8]
+        puts $hdl_lattice_ip_folder_map
+      }
+
+      if {[dict keys $hdl_lattice_ip_folder_map $meta_vlnv] != ""} {
+        puts "INSTANTIATING from '$ad_hdl_dir/library'."
+
+        # Setting IP path for instantiation.
+        set ip_path [dict get $hdl_lattice_ip_folder_map $meta_vlnv]
+
+        if {$move_to_project == "true"} {
+          set folder_name [string map [list ":" "_"] $meta_vlnv]
+          set ddir [file normalize [lindex [get_dir_list ./ /lib 8] 0]]/IPs
+          if {[file exists $ddir/$folder_name] != 1} {
+            file mkdir $ddir/$folder_name
+            file copy -force {*}[glob -nocomplain -directory $ip_path *] \
+              $ddir/$folder_name
+            puts "COPYING from $ip_path to $ddir/$folder_name paths."
+          } else {
+            puts "The '$ddir/$folder_name' directory already exists! (2)"
+          }
+        }
+        set checked 1
+
+        # Clearing meta_vlnv because ip_path is set which will be used instead.
+        set meta_vlnv {}
+      }
+    }
+  }
+
+  # Copying installed IPs to the project.
+  if {[info exists ::env(LATTICE_DEFAULT_PATHS)] && \
+    $::env(LATTICE_DEFAULT_PATHS) == 1 && \
+    $checked != 1 && $move_to_project == "true" && \
+    $meta_vlnv != ""} {
+
+    set splt [split $meta_vlnv ":"]
+    set vendor [lindex $splt 0]
+
+    global lattice_local_ip_folder_map
+    global env
+    global tcl_platform
+
+    # Mapping installed IPs.
+    if {$lattice_local_ip_folder_map == {}} {
+      if {[info exists env(TOOLRTF)]} {
+        set lattice_local_ip_folder_map [map_lattice_ips $env(TOOLRTF)/ip 8]
+      }
+      if {$tcl_platform(platform) eq "windows"} {
+        if {[info exists env(HOMEDRIVE)] && [info exists env(HOMEPATH)]} {
+          set home $env(HOMEDRIVE)[string map [list \\ /] $env(HOMEPATH)]
+          set lattice_local_ip_folder_map \
+            [dict merge $lattice_local_ip_folder_map \
+            [map_lattice_ips $home/PropelIPLocal 3]]
+        }
+      } else {
+        if {[info exists env(HOME)]} {
+          set lattice_local_ip_folder_map \
+            [dict merge $lattice_local_ip_folder_map \
+            [map_lattice_ips $env(HOME)/PropelIPLocal 3]]
+        }
+      }
+      puts $lattice_local_ip_folder_map
+    }
+
+    # Copying IPs if they exist in map.
+    if {[dict keys $lattice_local_ip_folder_map $meta_vlnv] != ""} {
+      set ddir [file normalize [lindex [get_dir_list ./ /lib 8] 0]]/IPs
+      set src_path [dict get $lattice_local_ip_folder_map $meta_vlnv]
+      set folder_name [string map [list ":" "_"] $meta_vlnv]
+      if {[file exists $ddir/$folder_name] != 1} {
+        file mkdir $ddir/$folder_name
+        file copy -force {*}[glob -nocomplain -directory $src_path *] \
+          $ddir/$folder_name
+        puts "COPYING from $src_path to $ddir/$folder_name paths."
+      } else {
+        puts "The '$ddir/$folder_name' directory already exists! (3)"
+      }
+    }
+  }
+
+  # Copying IPs instantiated using -ip_path.
+  if {$checked != 1 && $move_to_project == "true" && $ip_path != ""} {
+    set ddir [file normalize [lindex [get_dir_list ./ /lib 8] 0]]/IPs
+
+    if {[set mt_vlnv [get_lattice_vlnv "$ip_path/metadata.xml"]] != {}} {
+      set folder_name [string map [list ":" "_"] $mt_vlnv]
+      if {[file exists $ddir/$folder_name] != 1} {
+        file mkdir $ddir/$folder_name
+        file copy -force {*}[glob -nocomplain -directory $ip_path *] \
+          $ddir/$folder_name
+        puts "COPYING from $ip_path to $ddir/$folder_name paths."
+      } else {
+        puts "The '$ddir/$folder_name' directory already exists! (4)"
+      }
+    }
+  }
+
+  # Trying to install the locally inexistent IPs from server.
+  if {[info exists ::env(LATTICE_DEFAULT_PATHS)] && \
+    $::env(LATTICE_DEFAULT_PATHS) == 1 && $checked != 1} {
+    if {$meta_vlnv != ""} {
+      set splt [split $meta_vlnv ":"]
+      set vendor [lindex $splt 0]
+
+      if {$vendor == "latticesemi.com"} {
+        global lattice_local_ip_folder_map
+        global env
+        global tcl_platform
+        if {$lattice_local_ip_folder_map == {}} {
+          if {[info exists env(TOOLRTF)]} {
+            set lattice_local_ip_folder_map [map_lattice_ips $env(TOOLRTF)/ip 8]
+          }
+          if {$tcl_platform(platform) eq "windows"} {
+            if {[info exists env(HOMEDRIVE)] && [info exists env(HOMEPATH)]} {
+              set home $env(HOMEDRIVE)[string map [list \\ /] $env(HOMEPATH)]
+              set lattice_local_ip_folder_map \
+                [dict merge $lattice_local_ip_folder_map \
+                [map_lattice_ips $home/PropelIPLocal 3]]
+            }
+          } else {
+            if {[info exists env(HOME)]} {
+              set lattice_local_ip_folder_map \
+                [dict merge $lattice_local_ip_folder_map \
+                [map_lattice_ips $env(HOME)/PropelIPLocal 3]]
+            }
+          }
+          puts $lattice_local_ip_folder_map
+        }
+        if {[dict keys $lattice_local_ip_folder_map $meta_vlnv] == ""} {
+          ip_catalog_install -vlnv $meta_vlnv
+        }
+      }
+    }
+  }
 
   if {$cfg_value != ""} {
     if {$meta_vlnv != ""} {
@@ -276,12 +488,14 @@ proc adi_ip_instance {args} {
     -ip_params "" \
     -ip_iname "" \
     -cfg_value "" \
+    -project_name "" \
+    -move_to_project "false" \
     {*}$args]
 
   set vlnv $opt(-vlnv)
   set ip_iname $opt(-ip_iname)
 
-  puts "adi_ip_instance: $ip_iname"
+  puts "\nadi_ip_instance: $ip_iname\n"
 
   adi_ip_config {*}$args
 
@@ -310,13 +524,14 @@ proc adi_ip_update {project_name args} {
     -ip_iname "" \
     -ip_niname "" \
     -cfg_value "" \
+    -move_to_project "false" \
     {*}$args]
 
   set vlnv $opt(-vlnv)
   set ip_iname $opt(-ip_iname)
   set ip_niname $opt(-ip_niname)
 
-  puts "adi_ip_update: $ip_iname"
+  puts "\nadi_ip_update: $ip_iname\n"
 
   adi_ip_config {*}$args
 
@@ -324,5 +539,62 @@ proc adi_ip_update {project_name args} {
     sbp_replace -vlnv $vlnv -name $ip_iname -component $project_name/$ip_iname
   } else {
     sbp_replace -vlnv $vlnv -name $ip_niname -component $project_name/$ip_iname
+  }
+}
+
+proc get_file_list {path {extension_list {*.v}} {depth 0}} {
+    set file_list {}
+    foreach ext $extension_list {
+        set file_list [list {*}$file_list \
+        {*}[glob -nocomplain -type f -directory $path $ext]]
+    }
+    if {$depth > 0} {
+        foreach dir [glob -nocomplain -type d -directory $path *] {
+        set file_list [list {*}$file_list \
+            {*}[get_file_list $dir $extension_list [expr {$depth-1}]]]
+        }
+    }
+    return $file_list
+}
+
+proc get_dir_list {path {extension_list {*}} {depth 0}} {
+    set dir_list {}
+    foreach ext $extension_list {
+        set dir_list [list {*}$dir_list \
+        {*}[glob -nocomplain -type d -directory $path $ext]]
+    }
+    if {$depth > 0} {
+        foreach dir [glob -nocomplain -type d -directory $path *] {
+        set dir_list [list {*}$dir_list \
+            {*}[get_dir_list $dir $extension_list [expr {$depth-1}]]]
+        }
+    }
+    return $dir_list
+}
+
+set hdl_lattice_ip_folder_map {}
+set lattice_local_ip_folder_map {}
+set external_lattice_ip_folder_map {}
+proc map_lattice_ips {path depth} {
+  set ip_map {}
+  set file_list [get_file_list $path {metadata.xml} $depth]
+  foreach file $file_list {
+    set file [file normalize $file]
+    if {[set meta_vlnv [get_lattice_vlnv $file]] != {}} {
+      dict set ip_map $meta_vlnv [file dirname $file]
+    }
+  }
+  return $ip_map
+}
+
+proc get_lattice_vlnv {xml} {
+  set regex ".*<lsccip:ip.*>.*<lsccip:general>.*<lsccip:vendor>(.+)</lsccip:vendor>.*<lsccip:library>(.+)</lsccip:library>.*<lsccip:name>(.+)</lsccip:name>.*<lsccip:version>(.+)</lsccip:version>.*</lsccip:general>"
+  set file [open $xml]
+  set data [read $file]
+  close $file
+  if {[regexp $regex $data -> vnd lib nm vrs]} {
+    return $vnd:$lib:$nm:$vrs
+  } else {
+    return {}
   }
 }
