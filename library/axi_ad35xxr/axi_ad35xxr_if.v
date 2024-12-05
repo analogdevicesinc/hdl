@@ -83,6 +83,8 @@ module axi_ad35xxr_if (
   reg    [ 3:0]   st_cp               = 4'h0;
   reg    [ 2:0]   transfer_state      = 0;
   reg    [ 2:0]   transfer_state_next = 0;
+  reg    [ 2:0]   transfer_state_p    = 0;
+  reg    [ 2:0]   transfer_state_prev = 0;
   reg             cycle_done          = 1'b0;
   reg             transfer_step       = 1'b0;
   reg             sclk_ddr            = 1'b0;
@@ -172,6 +174,7 @@ module axi_ad35xxr_if (
       transfer_state <= IDLE;
     end else begin
       transfer_state <= transfer_state_next;
+      transfer_state_p <= transfer_state_prev;
     end
   end
 
@@ -182,6 +185,7 @@ module axi_ad35xxr_if (
       IDLE : begin
         // goes in to the next state only if the control is to transfer register or synced transfer(if it's armed in software)
         transfer_state_next = ((transfer_data_s == 1'b1 && stream == 1'b0) || (start_synced == 1'b1 && external_sync_s))  ? CS_LOW : IDLE;
+        transfer_state_prev = IDLE;
         csn = 1'b1;
         transfer_step = 0;
         cycle_done = 0;
@@ -192,6 +196,7 @@ module axi_ad35xxr_if (
         // puts data on the SDIO pins
         // needs 5 ns before the rising edge of the clock (t2)
         transfer_state_next = WRITE_ADDRESS;
+        transfer_state_prev = CS_LOW;
         csn = 1'b0;
         transfer_step = 0;
         cycle_done = 0;
@@ -207,6 +212,7 @@ module axi_ad35xxr_if (
         // half speed 8 clock cycles
         cycle_done = wa_cp; //It is considering 8 bit address only
         transfer_state_next = cycle_done ? (stream ? STREAM : TRANSFER_REGISTER) : WRITE_ADDRESS;
+        transfer_state_prev = WRITE_ADDRESS;
         csn = 1'b0;
         // in streaming, change data on falledge. On regular transfer, change data on negedge.
         transfer_step = full_speed ? counter[0] : ((counter[2:0] == 3'h5));
@@ -223,7 +229,8 @@ module axi_ad35xxr_if (
         transfer_state_next = cycle_done ? CS_HIGH : TRANSFER_REGISTER;
         csn = 1'b0;
         // in DDR mode, change data on falledge
-        transfer_step = (sdr_ddr_n | data_r_wn) ? (counter[2:0] == 3'h5) : (counter[1:0] == 2'h0);
+        transfer_step = (sdr_ddr_n | data_r_wn) ? (counter[2:0] == 3'h5) : ((counter[1:0] == 2'h0) && (transfer_state_p != WRITE_ADDRESS));
+        transfer_state_prev = TRANSFER_REGISTER;
       end
       STREAM : begin
         // can be DDR or SDR
@@ -232,18 +239,21 @@ module axi_ad35xxr_if (
         cycle_done = stream ? ((sdr_ddr_n | data_r_wn) ? st_cp[0] : st_cp[1]):
                               ((sdr_ddr_n | data_r_wn) ? st_cp[2] : st_cp[3]);
         transfer_state_next = (stream && external_sync_s) ? STREAM: ((cycle_done || external_sync_s == 1'b0) ?  CS_HIGH :STREAM);
+        transfer_state_prev = STREAM;
         csn = 1'b0;
         transfer_step = (sdr_ddr_n | data_r_wn) ? counter[0] :  1'b1;
       end
       CS_HIGH : begin
         cycle_done = 1'b1;
         transfer_state_next = cycle_done ? IDLE : CS_HIGH;
+        transfer_state_prev = CS_HIGH;
         csn = 1'b1;
         transfer_step = 0;
       end
       default : begin
         cycle_done = 0;
         transfer_state_next = IDLE;
+        transfer_state_prev = IDLE;
         csn = 1'b1;
         transfer_step = 0;
       end
