@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -311,7 +311,6 @@ module system_top (
     .tx_data_7_p (tx_data_p[7]),
     .tx_ref_clk_0 (trx_ref_clk),
     .tx_sync_0 (tx_sync),
-    .tx_sysref_0 (1'b0),
-    .dac_fifo_bypass (gpio_o[60]));
+    .tx_sysref_0 (1'b0));
 
 endmodule
