@@ -173,8 +173,6 @@ module system_top #(
   *        4  D15   NC           NC
   */
 
-  assign dac_fifo_bypass = gpio_o[40];
-
   /* PMOD GPIOs 48-51 */
   ad_iobuf #(
     .DATA_WIDTH(4)
@@ -273,7 +271,6 @@ module system_top #(
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref),
-    .dac_fifo_bypass (dac_fifo_bypass));
+    .tx_sysref_0 (tx_sysref));
 
 endmodule

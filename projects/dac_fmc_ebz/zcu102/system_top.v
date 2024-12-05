@@ -179,8 +179,6 @@ module system_top #(
   *        3  H14   FMC_TXEN_1   NC
   */
 
-  assign dac_fifo_bypass = gpio_o[40];
-
   /* PMOD GPIOs 48-51 */
   ad_iobuf #(
     .DATA_WIDTH(4)
@@ -205,7 +203,6 @@ module system_top #(
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
