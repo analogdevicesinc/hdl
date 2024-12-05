@@ -3,16 +3,14 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 18Mb - 1M samples
-set dac_fifo_address_width 17
-
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~57%
+## Offload attributes
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 2*1024*1024]  ; ## 2 MB
 
 set ADI_PHY_SEL 0
 set TRANSCEIVER_TYPE GTY
 
 source $ad_hdl_dir/projects/common/vck190/vck190_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 adi_project_files adrv9026_vck190 [list \
