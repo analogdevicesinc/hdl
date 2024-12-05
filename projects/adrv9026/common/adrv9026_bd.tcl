@@ -32,7 +32,7 @@ set RX_SAMPLE_WIDTH 16                                     ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
-set dac_fifo_name axi_adrv9026_dacfifo
+set dac_offload_name adrv9026_data_offload
 set dac_data_width [expr 32*$TX_NUM_OF_LANES]
 set dac_dma_data_width 128
 
@@ -47,10 +47,10 @@ if {$JESD_MODE == "8B10B"} {
 }
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 # adrv9026
 
-create_bd_port -dir I dac_fifo_bypass
 create_bd_port -dir I core_clk
 
 # dac peripherals
@@ -90,7 +90,15 @@ ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
-ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
+ad_data_offload_create $dac_offload_name \
+                       1 \
+                       $dac_offload_type \
+                       $dac_offload_size \
+                       $dac_dma_data_width \
+                       $dac_data_width
+
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $dac_offload_name/sync_ext GND
 
 # adc peripherals
 
@@ -191,23 +199,16 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect  tx_adrv9026_tpl_core/dac_valid_0  util_adrv9026_tx_upack/fifo_rd_en
-ad_connect  core_clk axi_adrv9026_dacfifo/dac_clk
-ad_connect  core_clk_rstgen/peripheral_reset axi_adrv9026_dacfifo/dac_rst
+ad_connect  core_clk $dac_offload_name/m_axis_aclk
+ad_connect  core_clk_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
+ad_connect  util_adrv9026_tx_upack/s_axis $dac_offload_name/m_axis
 
-ad_connect  util_adrv9026_tx_upack/s_axis_valid VCC
-ad_connect  util_adrv9026_tx_upack/s_axis_ready axi_adrv9026_dacfifo/dac_valid
-ad_connect  util_adrv9026_tx_upack/s_axis_data axi_adrv9026_dacfifo/dac_data
-
-ad_connect  core_clk axi_adrv9026_dacfifo/dma_clk
-ad_connect  core_clk_rstgen/peripheral_reset axi_adrv9026_dacfifo/dma_rst
-ad_connect  core_clk  axi_adrv9026_tx_dma/m_axis_aclk
-ad_connect  axi_adrv9026_dacfifo/dma_valid axi_adrv9026_tx_dma/m_axis_valid
-ad_connect  axi_adrv9026_dacfifo/dma_data axi_adrv9026_tx_dma/m_axis_data
-ad_connect  axi_adrv9026_dacfifo/dma_ready axi_adrv9026_tx_dma/m_axis_ready
-ad_connect  axi_adrv9026_dacfifo/dma_xfer_req axi_adrv9026_tx_dma/m_axis_xfer_req
-ad_connect  axi_adrv9026_dacfifo/dma_xfer_last axi_adrv9026_tx_dma/m_axis_last
-ad_connect  axi_adrv9026_dacfifo/dac_dunf tx_adrv9026_tpl_core/dac_dunf
-ad_connect  axi_adrv9026_dacfifo/bypass dac_fifo_bypass
+ad_connect  core_clk $dac_offload_name/s_axis_aclk
+ad_connect  core_clk_rstgen/peripheral_aresetn $dac_offload_name/s_axis_aresetn
+ad_connect  core_clk axi_adrv9026_tx_dma/m_axis_aclk
+ad_connect  $dac_offload_name/s_axis axi_adrv9026_tx_dma/m_axis
+ad_connect  $dac_offload_name/init_req axi_adrv9026_tx_dma/m_axis_xfer_req
+ad_connect  tx_adrv9026_tpl_core/dac_dunf util_adrv9026_tx_upack/fifo_rd_underflow
 ad_connect  core_clk_rstgen/peripheral_aresetn axi_adrv9026_tx_dma/m_src_axi_aresetn
 
 # connections (adc)
@@ -240,6 +241,7 @@ ad_cpu_interconnect 0x44A60000 axi_adrv9026_rx_xcvr
 ad_cpu_interconnect 0x44A80000 axi_adrv9026_tx_xcvr
 ad_cpu_interconnect 0x44A90000 axi_adrv9026_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_adrv9026_tx_dma
+ad_cpu_interconnect 0x7c430000 $dac_offload_name
 ad_cpu_interconnect 0x44AA0000 axi_adrv9026_rx_jesd
 ad_cpu_interconnect 0x7c400000 axi_adrv9026_rx_dma
 
