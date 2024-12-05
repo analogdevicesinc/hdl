@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -178,8 +178,6 @@ module system_top #(
   *        4  D15   NC           FMC_HMC849VCTL  NC
   */
 
-  assign dac_fifo_bypass = gpio_o[40];
-
   /* Board GPIOS. Buttons, LEDs, etc... */
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -256,8 +254,7 @@ module system_top #(
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (tx_sysref),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .dac_fifo_bypass (dac_fifo_bypass));
+    .uart_sout (uart_sout));
 
   // AD9161/2/4-FMC-EBZ works only in single link,
   // The FMC connector instead of SYNC1 has SYSREF connected to it

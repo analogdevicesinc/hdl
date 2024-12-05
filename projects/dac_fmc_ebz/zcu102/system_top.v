@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -184,8 +184,6 @@ module system_top #(
   *        4  D15   NC           FMC_HMC849VCTL  NC
   */
 
-  assign dac_fifo_bypass = gpio_o[40];
-
   /* PMOD GPIOs 48-51 */
   ad_iobuf #(
     .DATA_WIDTH(4)
@@ -210,7 +208,6 @@ module system_top #(
   system_wrapper i_system_wrapper (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
-    .dac_fifo_bypass(dac_fifo_bypass),
     .spi0_csn (spi0_csn),
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),

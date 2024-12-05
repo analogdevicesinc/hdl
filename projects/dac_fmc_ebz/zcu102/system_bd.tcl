@@ -1,13 +1,14 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set dac_fifo_address_width 13
+## Offload attributes
+set dac_offload_type 0                ; ## BRAM
+set dac_offload_size [expr 256*1024]  ; ## 256 kB
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/dac_fmc_ebz_bd.tcl
 
 if {[info exists ::env(ADI_LANE_RATE)]} {
@@ -78,6 +79,7 @@ DEVICE_CODE=$ADI_DEVICE_CODE\
 DAC_DEVICE=$ADI_DAC_DEVICE\
 DAC_MODE=$ADI_DAC_MODE\
 ADI_LANE_RATE=$ADI_LANE_RATE\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
