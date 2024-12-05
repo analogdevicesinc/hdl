@@ -367,10 +367,7 @@ ad_connect  $sys_dma_resetn axi_adrv9009_tx_dma/m_src_axi_aresetn
 
 ad_connect  $dac_offload_name/s_axis axi_adrv9009_tx_dma/m_axis
 ad_connect  $dac_offload_name/init_req axi_adrv9009_tx_dma/m_axis_xfer_req
-ad_connect  tx_adrv9009_tpl_core/dac_dunf GND
-
-ad_connect  $sys_cpu_clk $dac_offload_name/s_axi_aclk
-ad_connect  $sys_cpu_resetn $dac_offload_name/s_axi_aresetn
+ad_connect  tx_adrv9009_tpl_core/dac_dunf util_adrv9009_tx_upack/fifo_rd_underflow
 
 # connections (adc)
 
