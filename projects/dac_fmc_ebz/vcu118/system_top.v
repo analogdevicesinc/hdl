@@ -173,8 +173,6 @@ module system_top #(
   *        3  H14   FMC_TXEN_1   NC
   */
 
-  assign dac_fifo_bypass = gpio_o[40];
-
   /* Board GPIOS. Buttons, LEDs, etc... */
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -251,7 +249,6 @@ module system_top #(
     .tx_sync_0 (tx_sync),
     .tx_sysref_0 (tx_sysref),
     .uart_sin (uart_sin),
-    .uart_sout (uart_sout),
-    .dac_fifo_bypass (dac_fifo_bypass));
+    .uart_sout (uart_sout));
 
 endmodule

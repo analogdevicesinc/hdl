@@ -4,6 +4,7 @@
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
 set JESD_M    $ad_project_params(JESD_M)
 set JESD_L    $ad_project_params(JESD_L)
@@ -16,11 +17,9 @@ set SAMPLE_WIDTH $ad_project_params(JESD_NP)
 
 set DAC_DATA_WIDTH [expr $NUM_OF_LANES * 32]
 set SAMPLES_PER_CHANNEL [expr $DAC_DATA_WIDTH / $NUM_OF_CONVERTERS / $SAMPLE_WIDTH]
-
 set MAX_NUM_OF_LANES 8
-# Top level ports
 
-create_bd_port -dir I dac_fifo_bypass
+set dac_offload_name dac_data_offload
 
 # dac peripherals
 
@@ -55,10 +54,15 @@ ad_ip_instance axi_dmac dac_dma [list \
   CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
-ad_dacfifo_create axi_dac_fifo \
-                  $DAC_DATA_WIDTH \
-                  $dac_dma_data_width \
-                  $dac_fifo_address_width
+ad_data_offload_create $dac_offload_name \
+                       1 \
+                       $dac_offload_type \
+                       $dac_offload_size \
+                       $dac_dma_data_width \
+                       $DAC_DATA_WIDTH
+
+ad_ip_parameter $dac_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $dac_offload_name/sync_ext GND
 
 # shared transceiver core
 
@@ -106,21 +110,16 @@ for {set i 0} {$i < $NUM_OF_CONVERTERS} {incr i} {
   ad_connect dac_jesd204_transport/dac_enable_$i  dac_upack/enable_$i
 }
 
-ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 axi_dac_fifo/dac_clk
-ad_connect dac_jesd204_link_rstgen/peripheral_reset axi_dac_fifo/dac_rst
-ad_connect dac_upack/s_axis_valid VCC
-ad_connect dac_upack/s_axis_ready axi_dac_fifo/dac_valid
-ad_connect dac_upack/s_axis_data axi_dac_fifo/dac_data
-ad_connect dac_jesd204_transport/dac_dunf axi_dac_fifo/dac_dunf
-ad_connect sys_cpu_clk axi_dac_fifo/dma_clk
-ad_connect sys_cpu_reset axi_dac_fifo/dma_rst
+ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 $dac_offload_name/m_axis_aclk
+ad_connect dac_jesd204_link_rstgen/peripheral_aresetn $dac_offload_name/m_axis_aresetn
+ad_connect dac_upack/s_axis $dac_offload_name/m_axis
+ad_connect dac_jesd204_transport/dac_dunf dac_upack/fifo_rd_underflow
+ad_connect sys_cpu_clk $dac_offload_name/s_axis_aclk
+ad_connect sys_cpu_resetn $dac_offload_name/s_axis_aresetn
 ad_connect sys_cpu_clk dac_dma/m_axis_aclk
 ad_connect sys_cpu_resetn dac_dma/m_src_axi_aresetn
-ad_connect axi_dac_fifo/dma_xfer_req dac_dma/m_axis_xfer_req
-ad_connect axi_dac_fifo/dma_ready dac_dma/m_axis_ready
-ad_connect axi_dac_fifo/dma_data dac_dma/m_axis_data
-ad_connect axi_dac_fifo/dma_valid dac_dma/m_axis_valid
-ad_connect axi_dac_fifo/dma_xfer_last dac_dma/m_axis_last
+ad_connect $dac_offload_name/init_req dac_dma/m_axis_xfer_req
+ad_connect $dac_offload_name/s_axis dac_dma/m_axis
 
 # interconnect (cpu)
 
@@ -128,6 +127,7 @@ ad_cpu_interconnect 0x44A60000 dac_jesd204_xcvr
 ad_cpu_interconnect 0x44A04000 dac_jesd204_transport
 ad_cpu_interconnect 0x44A90000 dac_jesd204_link
 ad_cpu_interconnect 0x7c420000 dac_dma
+ad_cpu_interconnect 0x7c430000 $dac_offload_name
 
 # interconnect (mem/dac)
 
@@ -143,6 +143,3 @@ if {$CACHE_COHERENCY} {
 
 ad_cpu_interrupt ps-10 mb-15 dac_jesd204_link/irq
 ad_cpu_interrupt ps-12 mb-13 dac_dma/irq
-
-ad_connect axi_dac_fifo/bypass dac_fifo_bypass
-
