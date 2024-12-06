@@ -153,7 +153,7 @@ module ad_serdes_in #(
   endgenerate
 
   generate
-    for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_io
+    for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin
       if (CMOS_LVDS_N == 0) begin
         IBUFDS i_ibuf (
           .I (frame_in_p[l_inst]),

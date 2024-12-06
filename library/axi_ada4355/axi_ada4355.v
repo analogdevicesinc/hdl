@@ -49,8 +49,8 @@ module axi_ada4355 #(
   input                   db_p,
   input                   db_n,
 
-  input                   clk_in_p,
-  input                   clk_in_n,
+  //input                   clk_in_p,
+  //input                   clk_in_n,
   input                   data_frame_p,
   input                   data_frame_n,
 
@@ -266,10 +266,10 @@ module axi_ada4355 #(
 
  // ad4080 interface module
 
-   ada4355 #(
+   axi_ada4355_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IODELAY_CTRL(1)
-   ) ada4355_interface (
+   ) i_ada4355_interface (
     .dco_n(dco_n),
     .dco_p(dco_p),
     .da_p(da_p),
