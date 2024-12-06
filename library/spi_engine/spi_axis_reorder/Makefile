@@ -10,4 +10,6 @@ GENERIC_DEPS += spi_axis_reorder.v
 
 XILINX_DEPS += spi_axis_reorder_ip.tcl
 
+LATTICE_DEPS += spi_axis_reorder_ltt.tcl
+
 include ../../scripts/library.mk
