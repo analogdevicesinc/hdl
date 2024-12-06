@@ -24,4 +24,10 @@ INTEL_DEPS += ../../util_cdc/sync_bits.v
 INTEL_DEPS += ../../util_cdc/sync_event.v
 INTEL_DEPS += spi_engine_offload_hw.tcl
 
+LATTICE_DEPS += ../../util_cdc/sync_bits.v
+LATTICE_DEPS += ../../util_cdc/sync_event.v
+LATTICE_DEPS += spi_engine_offload_ltt.tcl
+
+LATTICE_INTERFACE_DEPS += interfaces_ltt
+
 include ../../scripts/library.mk
