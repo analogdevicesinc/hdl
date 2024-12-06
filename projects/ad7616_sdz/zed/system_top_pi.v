@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -135,7 +135,7 @@ module system_top (
   ad_iobuf #(
     .DATA_WIDTH(16)
   ) i_iobuf_adc_db (
-    .dio_t(adc_db_t),
+    .dio_t({16{adc_db_t}}),
     .dio_i(adc_db_o[15:0]),
     .dio_o(adc_db_i[15:0]),
     .dio_p(adc_db[15:0]));

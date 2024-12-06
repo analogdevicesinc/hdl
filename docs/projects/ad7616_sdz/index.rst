@@ -49,10 +49,12 @@ Block design
 
 The data path of the HDL design is simple as follows:
 
-- the parallel interface is controlled by the axi_ad7616 IP core
-- the serial interface is controlled by the SPI Engine Framework
-- data is written into memory by a DMA (axi_dmac core)
-- all the control pins of the device are driven by GPIOs
+-  the parallel interface is controlled by the
+   :dokuwiki:`axi_ad7616 <resources/fpga/docs/axi_ad7616>` IP core
+-  the serial interface is controlled by the :ref:`SPI_Engine <spi_engine>`
+   Framework
+-  data is written into memory by a DMA (:ref:`axi_dmac core <axi_dmac>`)
+-  all the control pins of the device are driven by GPIOs
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,21 +80,21 @@ AD7616_SDZ parallel interface
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The SER_PAR_N configuration parameter defines the interface type (Serial or
-Parallel). By default it is set to 1. Depending on the required interface mode,
+The INTF configuration parameter defines the interface type (Serial or
+Parallel). By default it is set to Parallel (0). Depending on the required interface mode,
 some hardware modifications need to be done on the board and/or make command:
 
 In case of the **PARALLEL** interface:
 
 .. shell:: bash
 
-   $make SER_PAR_N=0
+   $make INTF=0
 
 In case of the **SERIAL** interface:
 
 .. shell:: bash
 
-   $make SER_PAR_N=1
+   $make INTF=1
 
 .. note::
 
@@ -129,7 +131,6 @@ added to the base address from HDL(see more at :ref:`architecture cpu-intercon-a
 Instance                  Zynq
 ========================  ===========
 axi_ad7616_dma            0x44A3_0000
-spi_clkgen                0x44A7_0000
 ad7616_pwm_gen            0x44B0_0000
 spi_ad7616_axi_regmap **  0x44A0_0000
 axi_ad7616 *              0x44A8_0000
@@ -138,8 +139,8 @@ axi_ad7616 *              0x44A8_0000
 .. admonition:: Legend
    :class: note
 
-   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 I2C connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +232,7 @@ The Software GPIO number is calculated as follows:
 .. admonition:: Legend
    :class: note
 
-   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,8 +250,8 @@ axi_ad7616 *    10  54         87
 .. admonition:: Legend
    :class: note
 
-   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -268,18 +269,20 @@ the HDL repository, and then build the project as follows:.
 .. shell::
 
    $cd hdl/projects/ad7616_sdz/zed
-   $make SER_PAR_N=0
+   $make INTF=0
+
+The default configuration is Parallel Mode (0).
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``make SER_PAR_N=0``
+``make INTF=0``
 
 then the folder name will be:
 
-``SERPARN0``
+``INTF0``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -291,7 +294,7 @@ Connections and hardware changes
    **The following hardware changes are required:**
 
    (**Please note:** Because of the **SDP-I-FMC** the level of the **VADJ** in
-   the carrier board needs to be set to **3.3V**.
+   the carrier board needs to be set to **3.3V**.)
 
    Depending on the required interface mode, some hardware modifications need to
    be done.
@@ -326,12 +329,12 @@ HDL related
    * - AXI_AD7616
      - :git-hdl:`library/axi_ad7616` *
      - :ref:`axi_ad7616`
-   * - AXI_CLKGEN
-     - :git-hdl:`library/axi_clkgen`
-     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - AXI_CLKGEN
+     - :git-hdl:`library/axi_clkgen`
+     - :ref:`axi_clkgen`
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
@@ -364,13 +367,16 @@ HDL related
      - ---
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`axi_sysid`
+     - :ref:`here <axi_sysid>`
+   * - UTIL_CPACK2
+     - :git-hdl:`library/util_pack/util_cpack2` *
+     - :ref:`here <util_cpack2>`
 
 .. admonition:: Legend
    :class: note
 
-   - ``*`` instantiated only for SER_PAR_N=0 (parallel interface)
-   - ``**`` instantiated only for SER_PAR_N=1 (serial interface)
+   - ``*`` instantiated only for INTF=0 (parallel interface)
+   - ``**`` instantiated only for INTF=1 (serial interface)
 
 - :ref:`SPI Engine Framework documentation <spi_engine>`
 
