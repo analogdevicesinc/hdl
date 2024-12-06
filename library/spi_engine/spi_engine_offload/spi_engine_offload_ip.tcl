@@ -54,6 +54,7 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "ctrl_cmd_wr_data" "cmd_wr_data"} \
 		{ "ctrl_sdo_wr_en" "sdo_wr_en"} \
 		{ "ctrl_sdo_wr_data" "sdo_wr_data"} \
+		{ "ctrl_sdo_src_sel" "sdo_src_sel"} \
 		{ "ctrl_enable" "enable"} \
 		{ "ctrl_enabled" "enabled"} \
 		{ "ctrl_mem_reset" "mem_reset"} \

@@ -57,6 +57,7 @@ adi_add_bus "spi_engine_offload_ctrl0" "master" \
 		{ "offload0_cmd_wr_data" "cmd_wr_data"} \
 		{ "offload0_sdo_wr_en" "sdo_wr_en"} \
 		{ "offload0_sdo_wr_data" "sdo_wr_data"} \
+		{ "offload0_sdo_src_sel" "sdo_src_sel"} \
 		{ "offload0_enable" "enable"} \
 		{ "offload0_enabled" "enabled"} \
 		{ "offload0_mem_reset" "mem_reset"} \
