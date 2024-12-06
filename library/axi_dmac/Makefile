@@ -63,4 +63,15 @@ INTEL_DEPS += ../util_cdc/sync_gray.v
 INTEL_DEPS += axi_dmac_constr.sdc
 INTEL_DEPS += axi_dmac_hw.tcl
 
+LATTICE_DEPS += ../util_axis_fifo/util_axis_fifo.v
+LATTICE_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
+LATTICE_DEPS += ../util_cdc/sync_bits.v
+LATTICE_DEPS += ../util_cdc/sync_event.v
+LATTICE_DEPS += ../util_cdc/sync_gray.v
+LATTICE_DEPS += axi_dmac_ext_sync.v
+LATTICE_DEPS += axi_dmac_framelock.v
+LATTICE_DEPS += axi_dmac_ltt.tcl
+
+LATTICE_INTERFACE_DEPS += interfaces_ltt
+
 include ../scripts/library.mk
