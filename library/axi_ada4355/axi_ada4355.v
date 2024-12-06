@@ -51,8 +51,8 @@ module axi_ada4355 #(
 
   //input                   clk_in_p,
   //input                   clk_in_n,
-  input                   data_frame_p,
-  input                   data_frame_n,
+  //input                   data_frame_p,
+  //input                   data_frame_n,
 
   input                   sync_n,
   input                   filter_data_ready_n,
@@ -276,8 +276,8 @@ module axi_ada4355 #(
     .da_n(da_n),
     .db_p(db_p),
     .db_n(db_n),
-    .data_frame_p(data_frame_p),
-    .data_frame_n(data_frame_n),
+    //.data_frame_p(data_frame_p),
+    //.data_frame_n(data_frame_n),
     //.num_lanes(adc_num_lanes),
     //.self_sync(self_sync),
     .up_clk(up_clk),
