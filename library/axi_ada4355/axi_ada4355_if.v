@@ -156,30 +156,6 @@
         .O(adc_clk_div));
 
     end
-    /*else begin
-
-      BUFGCE #(
-        .CE_TYPE("SYNC"),
-        .IS_CE_INVERTED(1'b0),
-        .IS_I_INVERTED(1'b0)
-      ) i_clk_buf_fast(
-        .O(adc_clk_in_fast),
-        .CE(1'b1),
-        .I(clk_in_s));
-
-      BUFGCE_DIV #(
-        .BUFGCE_DIVIDE(4),
-        .IS_CE_INVERTED(1'b0),
-        .IS_CLR_INVERTED(1'b0),
-        .IS_I_INVERTED(1'b0)
-      ) i_div_clk_buf(
-        .O(adc_clk_div),
-        .CE(1'b1),
-        .CLR(~sync_n),
-        .I(clk_in_s));
-
-    end
-    */
     endgenerate
 
     assign serdes_in_p = {db_p, da_p};
@@ -217,6 +193,8 @@
     .data_s5(data_s5),
     .data_s6(data_s6),
     .data_s7(data_s7),
+    .frame_in_p(data_frame_p),
+    .frame_in_n(data_frame_n),
     .data_in_p(serdes_in_p),
     .data_in_n(serdes_in_n),
     .up_clk(up_clk),
@@ -278,8 +256,13 @@
     .odata(packed_16_20),
     .ovalid(pack16_valid));
 
-    packed_data = packed_16_20;
-    packed_data_valid = pack16_valid;
+    always @(*) begin
+        packed_data = packed_16_20;
+    end
+
+    always @(*) begin
+        packed_data_valid = pack16_valid;
+    end
 
   always @(posedge adc_clk_div) begin
     if(packed_data_valid) begin

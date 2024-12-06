@@ -69,6 +69,8 @@ module ad_serdes_in #(
   output  [(DATA_WIDTH-1):0]      data_s7,  // 1st bit received
   input   [(DATA_WIDTH-1):0]      data_in_p,
   input   [(DATA_WIDTH-1):0]      data_in_n,
+  input   [(DATA_WIDTH-1):0]      frame_in_p,
+  input   [(DATA_WIDTH-1):0]      frame_in_n,
 
   // delay-data interface
 
@@ -107,6 +109,7 @@ module ad_serdes_in #(
   // internal signals
 
   wire  [(DATA_WIDTH-1):0]      data_in_ibuf_s;
+  wire  [(DATA_WIDTH-1):0]      data_in_s;
   wire  [(DATA_WIDTH-1):0]      data_in_idelay_s;
   wire  [(DATA_WIDTH-1):0]      data_shift1_s;
   wire  [(DATA_WIDTH-1):0]      data_shift2_s;
@@ -148,6 +151,21 @@ module ad_serdes_in #(
     end
   end
   endgenerate
+
+  generate
+    for (l_inst = 0; l_inst <= (DATA_WIDTH-1); l_inst = l_inst + 1) begin: g_io
+      if (CMOS_LVDS_N == 0) begin
+        IBUFDS i_ibuf (
+          .I (frame_in_p[l_inst]),
+          .IB (frame_in_n[l_inst]),
+          .O (data_in_s[l_inst]));
+      end else begin
+        IBUF i_ibuf (
+          .I (frame_in_p[l_inst]),
+          .O (data_in_s[l_inst]));
+      end
+    end
+    endgenerate
 
   // bypass IDELAY
 
@@ -237,7 +255,7 @@ module ad_serdes_in #(
         .OCLK (1'b0),
         .DYNCLKDIVSEL (1'b0),
         .DYNCLKSEL (1'b0),
-        .D (1'b0),
+        .D (data_in_s[l_inst]),
         .DDLY (data_in_idelay_s[l_inst]),
         .OFB (1'b0),
         .OCLKB (1'b0),
