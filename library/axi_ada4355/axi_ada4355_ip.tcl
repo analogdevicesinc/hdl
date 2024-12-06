@@ -47,4 +47,4 @@ ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current
 adi_add_auto_fpga_spec_params
 
 ipx::create_xgui_files [ipx::current_core]
-ipx::save_core [ipx::current_core]#
+ipx::save_core [ipx::current_core]
