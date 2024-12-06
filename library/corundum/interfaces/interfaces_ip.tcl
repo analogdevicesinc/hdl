@@ -88,15 +88,16 @@ adi_if_ports  output 3   dq_oe none    0
 adi_if_ports  output 1   cs    none    0
 
 adi_if_define if_qsfp
-adi_if_ports  output -1   tx_p    none    0
-adi_if_ports  output -1   tx_n    none    0
-adi_if_ports  input  -1   rx_p    none    0
-adi_if_ports  input  -1   rx_n    none    0
-adi_if_ports  output -1   modsell none    0
-adi_if_ports  output -1   resetl  none    0
-adi_if_ports  input  -1   modprsl none    0
-adi_if_ports  input  -1   intl    none    0
-adi_if_ports  output -1   lpmode  none    0
+adi_if_ports  output -1   tx_p        none    0
+adi_if_ports  output -1   tx_n        none    0
+adi_if_ports  input  -1   rx_p        none    0
+adi_if_ports  input  -1   rx_n        none    0
+adi_if_ports  output -1   modsell     none    0
+adi_if_ports  output -1   resetl      none    0
+adi_if_ports  input  -1   modprsl     none    0
+adi_if_ports  input  -1   intl        none    0
+adi_if_ports  output -1   lpmode      none    0
+adi_if_ports  output -1   gtpowergood none    0
 
 adi_if_define if_i2c
 adi_if_ports  input   1   scl_i none    0

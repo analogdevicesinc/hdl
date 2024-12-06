@@ -11,7 +11,7 @@ global VIVADO_IP_LIBRARY
 adi_ip_create corundum_core
 
 # Corundum sources
-add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
+adi_ip_files corundum_core [list \
   "corundum_core.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mqnic_core_axi.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mqnic_core.v" \
@@ -51,9 +51,6 @@ add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/stats_dma_latency.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mqnic_tx_scheduler_block_rr.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/tx_scheduler_rr.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/lfsr.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/ptp_clock.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/ptp_clock_cdc.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/ptp_perout.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/ptp_td_phc.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/eth/rtl/ptp_td_leaf.v" \
@@ -97,6 +94,10 @@ add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
   "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
   "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
 ]
 
 adi_ip_properties_lite corundum_core
@@ -236,7 +237,7 @@ adi_add_bus "m_axil_csr" "master" \
     {"m_axil_csr_rready" "RREADY"} \
   }
 
-adi_add_bus_clock "clk" "m_axi_dma:s_axil_app_ctrl:s_axil_ctrl:m_axil_csr" "rst"
+adi_add_bus_clock "clk" "m_axi:m_axi_dma:s_axil_app_ctrl:s_axil_ctrl:m_axil_csr" "rst"
 
 adi_add_bus "m_axi_ddr" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -351,6 +352,8 @@ adi_add_bus "m_axis_tx" "master" \
     {"m_axis_tx_tlast" "TLAST"} \
     {"m_axis_tx_tuser" "TUSER"} ]
 
+adi_add_bus_clock "tx_clk" "m_axis_tx" "tx_rst"
+
 adi_add_bus "s_axis_rx" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -371,8 +374,7 @@ adi_add_bus "s_axis_stat" "slave" \
     {"s_axis_stat_tvalid" "TVALID"} \
     {"s_axis_stat_tready" "TREADY"} ]
 
-adi_add_bus_clock "eth_tx_clk" "m_axis_tx" "eth_tx_rst"
-adi_add_bus_clock "eth_rx_clk" "s_axis_rx" "eth_rx_rst"
+adi_add_bus_clock "rx_clk" "s_axis_rx:s_axis_stat" "rx_rst"
 
 adi_if_infer_bus analog.com:interface:if_ctrl_reg master ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \

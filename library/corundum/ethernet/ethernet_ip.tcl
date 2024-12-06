@@ -10,8 +10,13 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create ethernet
 
+set_property part xcvu9p-flga2104-2L-e [current_project]
+
+source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+
 # Corundum sources
-add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
+adi_ip_files ethernet [list \
   "ethernet_core.v" \
   "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
@@ -21,6 +26,8 @@ add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/rb_drp.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/cmac_pad.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mac_ts_insert.v" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
 ]
 
 adi_ip_properties_lite ethernet
@@ -48,6 +55,8 @@ adi_add_bus "axis_eth_tx" "slave" \
     {"axis_eth_tx_tlast" "TLAST"} \
     {"axis_eth_tx_tuser" "TUSER"} ]
 
+adi_add_bus_clock "eth_tx_clk" "axis_eth_tx" "eth_tx_rst"
+
 adi_add_bus "axis_eth_rx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -59,8 +68,7 @@ adi_add_bus "axis_eth_rx" "master" \
     {"axis_eth_rx_tlast" "TLAST"} \
     {"axis_eth_rx_tuser" "TUSER"} ]
 
-adi_add_bus_clock "tx_clk" "axis_eth_tx" "tx_rst"
-adi_add_bus_clock "rx_clk" "axis_eth_rx" "rx_rst"
+adi_add_bus_clock "eth_rx_clk" "axis_eth_rx" "eth_rx_rst"
 
 adi_if_infer_bus analog.com:interface:if_ctrl_reg slave ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \
@@ -96,7 +104,7 @@ adi_if_infer_bus analog.com:interface:if_flow_control_rx slave flow_control_rx [
   "rx_pfc_ack          eth_rx_pfc_ack" \
 ]
 
-adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_xt [list \
+adi_if_infer_bus analog.com:interface:if_ethernet_ptp slave ethernet_ptp_tx [list \
   "ptp_clk     eth_tx_ptp_clk" \
   "ptp_rst     eth_tx_ptp_rst" \
   "ptp_ts      eth_tx_ptp_ts" \
@@ -132,15 +140,16 @@ adi_if_infer_bus analog.com:interface:if_qspi master qspi1 [list \
 ]
 
 adi_if_infer_bus analog.com:interface:if_qsfp master qsfp [list \
-  "tx_p    qsfp_tx_p" \
-  "tx_n    qsfp_tx_n" \
-  "rx_p    qsfp_rx_p" \
-  "rx_n    qsfp_rx_n" \
-  "modsell qsfp_modsell" \
-  "resetl  qsfp_resetl" \
-  "modprsl qsfp_modprsl" \
-  "intl    qsfp_intl" \
-  "lpmode  qsfp_lpmode" \
+  "tx_p        qsfp_tx_p" \
+  "tx_n        qsfp_tx_n" \
+  "rx_p        qsfp_rx_p" \
+  "rx_n        qsfp_rx_n" \
+  "modsell     qsfp_modsell" \
+  "resetl      qsfp_resetl" \
+  "modprsl     qsfp_modprsl" \
+  "intl        qsfp_intl" \
+  "lpmode      qsfp_lpmode" \
+  "gtpowergood qsfp_gtpowergood" \
 ]
 
 adi_if_infer_bus analog.com:interface:if_i2c master i2c [list \
@@ -151,11 +160,6 @@ adi_if_infer_bus analog.com:interface:if_i2c master i2c [list \
   "sda_o i2c_sda_o" \
   "sda_t i2c_sda_t" \
 ]
-
-set_property part xcvu9p-flga2104-2L-e [current_project]
-
-source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

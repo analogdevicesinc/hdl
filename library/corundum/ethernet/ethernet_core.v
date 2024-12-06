@@ -93,9 +93,12 @@ module ethernet_core #(
   input  wire [QSFP_CNT-1:0]     qsfp_modprsl,
   input  wire [QSFP_CNT-1:0]     qsfp_intl,
   output wire [QSFP_CNT-1:0]     qsfp_lpmode,
+  output wire [QSFP_CNT-1:0]     qsfp_gtpowergood,
 
   input  wire [QSFP_CNT-1:0]     qsfp_mgt_refclk,
   input  wire [QSFP_CNT-1:0]     qsfp_mgt_refclk_bufg,
+
+  output wire [QSFP_CNT-1:0]     qsfp_rst,
 
   /*
   * Ethernet
@@ -191,8 +194,6 @@ genvar n;
   wire [QSFP_CNT-1:0]                           qsfp_drp_rdy;
 
   // Ethernet
-  wire [QSFP_CNT-1:0]                      qsfp_rst;
-
   wire [QSFP_CNT-1:0]                      qsfp_tx_clk;
   wire [QSFP_CNT-1:0]                      qsfp_tx_rst;
 
@@ -247,8 +248,6 @@ genvar n;
   // assign qsfp0_modsell = qsfp_modsell[0 +: 1];
   // assign qsfp0_resetl = qsfp_resetl[0 +: 1];
   // assign qsfp0_lpmode = qsfp_lpmode[0 +: 1];
-
-  wire [QSFP_CNT-1:0] qsfp_gtpowergood;
 
 generate
 
