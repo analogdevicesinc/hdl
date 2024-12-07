@@ -2455,39 +2455,14 @@ the 4kB address boundary.</p>
 </td>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">DMA_TYPE_DEST</span></code></td>
-<td><p></p></td>
-<td class="default"><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">[26]</span> <span class="pre">DMA_2D_TLAST_MODE</span></code></td>
-<td><p></p></td>
-<td class="default"><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">[26]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">DMA_2D_TLAST_MODE</span></code></td>
-<td><p></p></td>
-<td class="default"><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">R</span></code></td>
-<td><p></p></td>
-<td class="default"><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
-<td><code class="docutils literal notranslate"><span class="pre">[]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">TLAST</span> <span class="pre">behaviour</span> <span class="pre">for</span> <span class="pre">2D</span> <span class="pre">transfer</span> <span class="pre">(0</span> <span class="pre">-</span> <span class="pre">End</span> <span class="pre">of</span> <span class="pre">Frame;</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">End</span> <span class="pre">of</span> <span class="pre">Line).</span></code></td>
-<td><p></p></td>
-<td class="default"><p></p></td>
-<td class="description"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DMA_​2D_​TLAST_​MODE</span></code></td>
+<td class="description"><section>
+<p>TLAST behaviour for 2D transfer (0 - End of Frame; 1 - End of Line).</p>
+</section>
+</td>
 </tr>
 <tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:27]</span></code></td>
@@ -3141,13 +3116,12 @@ If <code class="docutils literal notranslate"><span class="pre">AUTORUN</span></
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">SG_ADDRESS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">AUTORUN_​SG_​ADDRESS</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
 <td class="description"><section>
 <p>This register contains the starting address of the scatter-gather transfer. The address needs
 to be aligned to the bus width.
 If <code class="docutils literal notranslate"><span class="pre">AUTORUN</span></code> is set, the default value of the field is <code class="docutils literal notranslate"><span class="pre">AUTORUN_SG_ADDRESS</span></code>.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">AUTORUN</span></code> is unset, the default value of the field is 0x00000000.
-This register is only valid if the DMA channel has been configured with SG transfer support.</p>
+<p>This register is only valid if the DMA channel has been configured with SG transfer support.</p>
 </section>
 </td>
 </tr>

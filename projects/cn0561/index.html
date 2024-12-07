@@ -110,6 +110,7 @@
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
 <li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
@@ -475,6 +476,71 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for DE10-Nano</p>
 </div>
 </section>
+<section id="i2c-connections">
+<h3>I2C connections<a class="headerlink" href="#i2c-connections" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container" id="id1">
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">ZedBoard</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_fmc</p></td>
+<td><p>axi_iic_fmc</p></td>
+<td><p>0x4162_0000</p></td>
+<td><p>M24C02</p></td>
+</tr>
+<tr class="row-odd"><td><p>PL</p></td>
+<td><p>iic_main</p></td>
+<td><p>axi_iic_main</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-wrapper colwidths-given docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">CoraZ7S</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+<col style="width: 20.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>I2C type</p></th>
+<th class="head"><p>I2C manager instance</p></th>
+<th class="head"><p>Alias</p></th>
+<th class="head"><p>Address</p></th>
+<th class="head"><p>I2C subordinate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PL</p></td>
+<td><p>iic_ard</p></td>
+<td><p>axi_ard_fmc</p></td>
+<td><p>0x4160_0000</p></td>
+<td><p>M24C02</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="spi-connections">
 <h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
 <div class="table-wrapper colwidths-given docutils container">
@@ -585,6 +651,11 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <td><p>12</p></td>
 <td><p>56</p></td>
 <td><p>88</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_iic_ard</p></td>
+<td><p>11</p></td>
+<td><p>55</p></td>
+<td><p>87</p></td>
 </tr>
 </tbody>
 </table>
