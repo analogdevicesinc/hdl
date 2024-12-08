@@ -3,6 +3,10 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+if {![info exists CACHE_COHERENCY]} {
+  set CACHE_COHERENCY false
+}
+
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)           ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M)      ; # M
@@ -62,6 +66,7 @@ ad_ip_instance axi_dmac axi_ad9695_rx_dma [list \
   DMA_LENGTH_WIDTH 24 \
   DMA_DATA_WIDTH_DEST 128 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
+  CACHE_COHERENT $CACHE_COHERENCY \
   ]
 
 # common cores
@@ -159,8 +164,8 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9695_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 sys_ps7/S_AXI_HP1
-ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi
+ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 sys_ps7/S_AXI_HP1 $CACHE_COHERENCY
+ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi $CACHE_COHERENCY
 
 # interrupts
 
