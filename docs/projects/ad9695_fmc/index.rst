@@ -108,11 +108,11 @@ J79    CH2_P
 J80    CH2_N
 ====== ==================
 
-Clock scheme
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The jumper settings are the following, on :adi:`AD9695-FMC <EVAL-AD9695>`:
 
-Limitations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- Short P1, P304, P305, P307, P308, P309, P311, P312, P602 (SPI enable)
+- Short pins {3, 2} on P401 (the two towards the inside of the board)
+- DO NOT SHORT P100 (Power Down/Standby)
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,6 +265,9 @@ of the source clock.
    :width: 1000
    :align: center
    :alt: AD-SYNCHRONA14-EBZ output configuration
+
+More details on how to set up the :adi:`AD-SYNCHRONA14-EBZ` can be found on
+:dokuwiki:`its wiki page <resources/eval/user-guides/ad-synchrona14-ebz#gui>`.
 
 Resources
 -------------------------------------------------------------------------------
