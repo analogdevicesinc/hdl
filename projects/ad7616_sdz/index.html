@@ -395,9 +395,11 @@ high-speed serial and parallel interfaces.</p>
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <p>The data path of the HDL design is simple as follows:</p>
 <ul class="simple">
-<li><p>the parallel interface is controlled by the axi_ad7616 IP core</p></li>
-<li><p>the serial interface is controlled by the SPI Engine Framework</p></li>
-<li><p>data is written into memory by a DMA (axi_dmac core)</p></li>
+<li><p>the parallel interface is controlled by the
+<a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_ad7616">axi_ad7616</a> IP core</p></li>
+<li><p>the serial interface is controlled by the <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI_Engine</span></a>
+Framework</p></li>
+<li><p>data is written into memory by a DMA (<a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">axi_dmac core</span></a>)</p></li>
 <li><p>all the control pins of the device are driven by GPIOs</p></li>
 </ul>
 <section id="block-diagram">
@@ -414,21 +416,21 @@ high-speed serial and parallel interfaces.</p>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The SER_PAR_N configuration parameter defines the interface type (Serial or
-Parallel). By default it is set to 1. Depending on the required interface mode,
+<p>The INTF configuration parameter defines the interface type (Serial or
+Parallel). By default it is set to Parallel (0). Depending on the required interface mode,
 some hardware modifications need to be done on the board and/or make command:</p>
 <p>In case of the <strong>PARALLEL</strong> interface:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">SER_PAR_N</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>In case of the <strong>SERIAL</strong> interface:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">SER_PAR_N</span><span class="o">=</span><span class="m">1</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div class="admonition note">
@@ -507,16 +509,13 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <tr class="row-even"><td><p>axi_ad7616_dma</p></td>
 <td><p>0x44A3_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_clkgen</p></td>
-<td><p>0x44A7_0000</p></td>
-</tr>
-<tr class="row-even"><td><p>ad7616_pwm_gen</p></td>
+<tr class="row-odd"><td><p>ad7616_pwm_gen</p></td>
 <td><p>0x44B0_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>spi_ad7616_axi_regmap **</p></td>
+<tr class="row-even"><td><p>spi_ad7616_axi_regmap **</p></td>
 <td><p>0x44A0_0000</p></td>
 </tr>
-<tr class="row-even"><td><p>axi_ad7616 *</p></td>
+<tr class="row-odd"><td><p>axi_ad7616 *</p></td>
 <td><p>0x44A8_0000</p></td>
 </tr>
 </tbody>
@@ -525,8 +524,8 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for INTF=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for INTF=1 (serial interface)</p></li>
 </ul>
 </div>
 </section>
@@ -661,7 +660,7 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for INTF=1 (serial interface)</p></li>
 </ul>
 </div>
 </section>
@@ -699,8 +698,8 @@ added to the base address from HDL(see more at <a class="reference internal" hre
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for INTF=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for INTF=1 (serial interface)</p></li>
 </ul>
 </div>
 </section>
@@ -724,15 +723,16 @@ the HDL repository, and then build the project as follows:.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad7616_sdz/zed$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">SER_PAR_N</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">0</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
+<div class="clear-left"></div></div></div><p>The default configuration is Parallel Mode (0).</p>
+<p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used:</p>
 <p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">SER_PAR_N=0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF=0</span></code></p>
 <p>then the folder name will be:</p>
-<p><code class="docutils literal notranslate"><span class="pre">SERPARN0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">INTF0</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 <section id="connections-and-hardware-changes">
 <h3>Connections and hardware changes<a class="headerlink" href="#connections-and-hardware-changes" title="Permalink to this heading"></a></h3>
@@ -740,7 +740,7 @@ by the configuration used:</p>
 <p class="admonition-title">Warning</p>
 <p><strong>The following hardware changes are required:</strong></p>
 <p>(<strong>Please note:</strong> Because of the <strong>SDP-I-FMC</strong> the level of the <strong>VADJ</strong> in
-the carrier board needs to be set to <strong>3.3V</strong>.</p>
+the carrier board needs to be set to <strong>3.3V</strong>.)</p>
 <p>Depending on the required interface mode, some hardware modifications need to
 be done.</p>
 <ul class="simple">
@@ -786,13 +786,13 @@ be done.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7616">library/axi_ad7616</a> *</p></td>
 <td><p><a class="reference internal" href="../../library/axi_ad7616/index.html#axi-ad7616"><span class="std std-ref">AXI AD7616</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
@@ -836,7 +836,11 @@ be done.</p>
 </tr>
 <tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a> *</p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">here</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -844,8 +848,8 @@ be done.</p>
 <div class="note admonition">
 <p class="admonition-title">Legend</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for SER_PAR_N=0 (parallel interface)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for SER_PAR_N=1 (serial interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> instantiated only for INTF=0 (parallel interface)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> instantiated only for INTF=1 (serial interface)</p></li>
 </ul>
 </div>
 <ul class="simple">
