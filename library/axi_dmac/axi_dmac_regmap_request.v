@@ -136,7 +136,8 @@ module axi_dmac_regmap_request #(
 
   reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_DEST] up_dma_dest_address = DMAC_DEF_DEST_ADDR_DEFAULT;
   reg [DMA_AXI_ADDR_WIDTH-1:BYTES_PER_BEAT_WIDTH_SRC]  up_dma_src_address = DMAC_DEF_SRC_ADDR_DEFAULT;
-  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length = {DMAC_DEF_X_LENGTH_DEFAULT,{DMA_LENGTH_ALIGN{1'b1}}};
+  reg [DMA_LENGTH_WIDTH-1:0] up_dma_x_length =
+    {DMAC_DEF_X_LENGTH_DEFAULT[((DMA_LENGTH_WIDTH - 1) - DMA_LENGTH_ALIGN):0], {DMA_LENGTH_ALIGN{1'b1}}};
   reg up_dma_cyclic = AUTORUN_FLAGS_CYCLIC;
   reg up_dma_last = AUTORUN_FLAGS_LAST;
   reg up_dma_enable_tlen_reporting = AUTORUN_FLAGS_TLEN;
