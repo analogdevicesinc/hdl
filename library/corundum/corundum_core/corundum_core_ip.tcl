@@ -103,6 +103,16 @@ adi_ip_files corundum_core [list \
 adi_ip_properties_lite corundum_core
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
+adi_ip_tcl corundum_core [list \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
+]
+
 set cc [ipx::current_core]
 
 set_property display_name "Corundum Core" $cc
@@ -122,12 +132,10 @@ adi_add_bus "m_axi" "master" \
     {"m_axi_awaddr" "AWADDR"} \
     {"m_axi_awlen" "AWLEN"} \
     {"m_axi_awsize" "AWSIZE"} \
-    {"m_axi_awuser" "AWUSER"} \
     {"m_axi_awburst" "AWBURST"} \
     {"m_axi_awlock" "AWLOCK"} \
     {"m_axi_awcache" "AWCACHE"} \
     {"m_axi_awprot" "AWPROT"} \
-    {"m_axi_awqos" "AWQOS"} \
     {"m_axi_awvalid" "AWVALID"} \
     {"m_axi_awready" "AWREADY"} \
     {"m_axi_wdata" "WDATA"} \
@@ -143,12 +151,10 @@ adi_add_bus "m_axi" "master" \
     {"m_axi_araddr" "ARADDR"} \
     {"m_axi_arlen" "ARLEN"} \
     {"m_axi_arsize" "ARSIZE"} \
-    {"m_axi_aruser" "ARUSER"} \
     {"m_axi_arburst" "ARBURST"} \
     {"m_axi_arlock" "ARLOCK"} \
     {"m_axi_arcache" "ARCACHE"} \
     {"m_axi_arprot" "ARPROT"} \
-    {"m_axi_arqos" "ARQOS"} \
     {"m_axi_arvalid" "ARVALID"} \
     {"m_axi_arready" "ARREADY"} \
     {"m_axi_rid" "RID"} \

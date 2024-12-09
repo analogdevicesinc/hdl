@@ -28,10 +28,19 @@ adi_ip_files ethernet [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mac_ts_insert.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/rb_drp.tcl" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl" \
 ]
 
 adi_ip_properties_lite ethernet
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
+
+adi_ip_tcl ethernet [list \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl" \
+]
 
 set cc [ipx::current_core]
 

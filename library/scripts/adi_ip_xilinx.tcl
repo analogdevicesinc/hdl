@@ -10,6 +10,23 @@ if {[info exists ::env(ADI_VIVADO_IP_LIBRARY)]} {
   set VIVADO_IP_LIBRARY user
 }
 
+## Add a tcl file to the project. XDC does not support if statements
+#  in constraint definitions, this file can be used to add parameter dependent
+#  constraints to the IP.
+#
+# \param[ip_name] - IP name
+# \param[ip_constr_files] - .tcl file name (full path)
+#
+proc adi_ip_tcl {ip_name ip_constr_files} {
+
+  set proj_filegroup [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]
+  set f [ipx::add_file $ip_constr_files $proj_filegroup]
+  set_property -dict [list \
+    type tcl \
+  ] $f
+  ipx::reorder_files -front $ip_constr_files $proj_filegroup
+}
+
 ## Add a ttcl file to the project. XDC does not support if statements
 #  in constraint definitions, this file can be used to add parameter dependent
 #  constraints to the IP.

@@ -35,7 +35,7 @@ set_property -dict {LOC AP21 IOSTANDARD LVCMOS18 PULLUP true} [get_ports qsfp_in
 set_property -dict {LOC AN21 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports qsfp_lpmode]
 
 # 156.25 MHz MGT reference clock
-create_clock -period 6.400 -name qsfp_mgt_refclk_0 [get_ports qsfp_mgt_refclk_0_p]
+create_clock -period 6.400 -name qsfp_mgt_refclk [get_ports qsfp_mgt_refclk_p]
 
 set_false_path -to [get_ports {qsfp_modsell qsfp_resetl qsfp_lpmode}]
 set_output_delay 0 [get_ports {qsfp_modsell qsfp_resetl qsfp_lpmode}]
