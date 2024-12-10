@@ -345,8 +345,8 @@ proc jesd204_compose {} {
   set data_path_width [get_parameter_value "DATA_PATH_WIDTH"]
   set link_mode [get_parameter_value "LINK_MODE"]
 
-  set sip_tile [quartus::device::get_part_info -sip_tile $device]
-
+  set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
+  regexp {[A-Z]\-Tile} $sip_tile_info sip_tile
 
   if {$link_mode == 1} {
     # jesd204b
@@ -442,7 +442,7 @@ proc jesd204_compose {} {
     add_connection sys_clock.clk_reset link_pll_reset_control.reset
     add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
-  } elseif {$device_family == "Stratix 10" && $sip_tile == "{H-Tile}"} {
+  } elseif {$device_family == "Stratix 10" && $sip_tile == "H-Tile"} {
 
     send_message info "Instantiate a fpll_s10_htile for link_pll."
     add_instance link_pll altera_xcvr_fpll_s10_htile
