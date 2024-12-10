@@ -18,6 +18,9 @@ sysid_gen_sys_init_file
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk1
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
 
+ad_ip_parameter axi_dp_interconnect CONFIG.NUM_CLKS 3
+ad_connect axi_dp_interconnect/aclk2 sys_250m_clk
+
 ad_ip_instance axi_gpio axi_gpio_0 [list \
   C_ALL_OUTPUTS 1 \
   C_DOUT_DEFAULT 0x00000001 \
@@ -221,10 +224,10 @@ ad_ip_instance ethernet ethernet_core [list \
   AXIS_RX_USER_WIDTH 49 \
 ]
 
-create_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
-create_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
-create_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-create_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
+create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
+create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
+create_bd_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
 
 create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_port -dir O fpga_boot
@@ -263,10 +266,10 @@ ad_connect corundum_core/app_gpio_in GND
 
 ad_connect corundum_core/clk sys_250m_clk
 ad_connect corundum_core/rst sys_250m_reset
-ad_connect corundum_core/tx_clk ethernet_core/tx_clk
-ad_connect corundum_core/tx_rst ethernet_core/tx_rst
-ad_connect corundum_core/rx_clk ethernet_core/rx_clk
-ad_connect corundum_core/rx_rst ethernet_core/rx_rst
+ad_connect corundum_core/tx_clk ethernet_core/eth_tx_clk
+ad_connect corundum_core/tx_rst ethernet_core/eth_tx_rst
+ad_connect corundum_core/rx_clk ethernet_core/eth_rx_clk
+ad_connect corundum_core/rx_rst ethernet_core/eth_rx_rst
 ad_connect corundum_core/ptp_clk qsfp_mgt_refclk_bufg
 ad_connect corundum_core/ptp_rst ptp_rst
 ad_connect corundum_core/ptp_sample_clk clk_wiz_125mhz/clk_out1
@@ -288,9 +291,9 @@ ad_connect ethernet_core/qspi1 qspi1
 ad_connect ethernet_core/qsfp qsfp
 ad_connect ethernet_core/i2c i2c
 
-ad_cpu_interconnect 0x50000000 corundum_core/s_axil_ctrl
-ad_cpu_interconnect 0x51000000 corundum_core/s_axil_app_ctrl
-ad_cpu_interconnect 0x52000000 axi_gpio_0/s_axi
+ad_cpu_interconnect 0x50000000 corundum_core s_axil_ctrl
+ad_cpu_interconnect 0x51000000 corundum_core s_axil_app_ctrl
+ad_cpu_interconnect 0x52000000 axi_gpio_0
 # ad_cpu_interconnect 0x52000000 corundum_reset_gpio/s_axi
 
 ad_mem_hp1_interconnect sys_250m_clk corundum_core/m_axi
