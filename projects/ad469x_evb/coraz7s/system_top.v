@@ -64,8 +64,8 @@ module system_top #(
   inout  [1:0]  btn,
   inout  [5:0]  led,
 
-  inout         iic_eeprom_scl,
-  inout         iic_eeprom_sda,
+  inout         iic_ard_scl,
+  inout         iic_ard_sda,
 
   // ad469x SPI configuration interface
 
@@ -155,8 +155,8 @@ module system_top #(
     .ad469x_spi_busy (ad469x_busy_alt_gp0),
     .ad469x_spi_cnv (ad469x_spi_cnv_s),
     .gpio_cnv(gpio_o[34]),
-    .ad469x_iic_scl_io (iic_eeprom_scl),
-    .ad469x_iic_sda_io (iic_eeprom_sda),
+    .iic_ard_scl_io (iic_ard_scl),
+    .iic_ard_sda_io (iic_ard_sda),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
