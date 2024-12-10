@@ -14,9 +14,6 @@ set_property -dict {PACKAGE_PIN M18 IOSTANDARD LVCMOS33}            [get_ports a
 set_property -dict {PACKAGE_PIN R17 IOSTANDARD LVCMOS33}            [get_ports ad469x_spi_cnv];      ## CK_IO06
 set_property -dict {PACKAGE_PIN V17 IOSTANDARD LVCMOS33}            [get_ports ad469x_resetn];       ## CK_IO04
 
-set_property -dict {PACKAGE_PIN P16 IOSTANDARD LVCMOS33}            [get_ports iic_eeprom_scl];      ## CK_SCL
-set_property -dict {PACKAGE_PIN P15 IOSTANDARD LVCMOS33}            [get_ports iic_eeprom_sda];      ## CK_SDA
-
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
 create_generated_clock -name spi_clk -source [get_pins -filter name=~*CLKIN1 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]] -master_clock clk_fpga_0 [get_pins -filter name=~*CLKOUT0 -of [get_cells -hier -filter name=~*spi_clkgen*i_mmcm]]
