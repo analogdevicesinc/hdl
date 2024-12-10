@@ -63,11 +63,15 @@ The only parameters of this project that can be configured are:
 
 More details on these values, in the `Limitations`_ section.
 
-Clock scheme!!!!!!!!!!!!!!!!!!!
+Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The system uses an external clock as source for CLKIN signal, given at J201.
-The SYSREF is given as an external signal, at J200. For more details, check the
+The reference clock, sysref and the ADC sampling clock, all have external
+sources.
+
+The system uses an external clock as source for the reference clock signal,
+given at J201. The AD9694 CLK+/- signal is fed through J203. The SYSREF is
+given at J200. For more details, check the
 `schematic <https://wiki.analog.com/_media/eval/9694_board_files_ce04.zip>`__.
 
 Limitations
