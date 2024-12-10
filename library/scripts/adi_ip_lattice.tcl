@@ -65,7 +65,7 @@
 #     * ipl::ignore_ports_by_prefix
 #       - ignores/hides ports which are matching with a specified prefix from
 #         the ports' names in the parsed ports from the top module, by a
-#         Python expression which usually depends on the value of a Verilog 
+#         Python expression which usually depends on the value of a Verilog
 #         parameter.
 #     * ipl::generate_ip
 #       - generates the IP on specified path, if no path parameter, then in
@@ -1417,91 +1417,135 @@ namespace eval ipl {
         set data [read $file]
         close $file
 
-        if {[regexp {\n\s*module\s+[^#(\n]+} $data match]} {
+        set index [string first "\n" $data]
+
+        if {$index == -1} {
+            set first_line $data
+        } else {
+            set first_line [string range $data 0 $index]
+        }
+
+        if {[regexp {\s*module\s+[^#(\n]+} $first_line match]} {
+            set mod_name [string map {" " ""} [lindex $match 1]]
+        } elseif {[regexp {\n\s*module\s+[^#(\n]+} $data match]} {
             set mod_name [string map {" " ""} [lindex $match 1]]
         } else {
             puts {ERROR, no module found in the verilog file!}
             exit 2
         }
-        
-        set lines [regexp -all -inline {\n\s*parameter[^,\n]+|\n\s*input[^,\n]+|\n\s*output[^,\n]+|\n\s*inout[^,\n]+} $data]
+
         set portlist {}
         set parlist {}
-        foreach line $lines {
-            set type [lindex $line 0]
-            set values [lrange $line 1 end]
-            if {[llength $line] == 2} {
-                if {$type == "parameter"} {
-                    set parameter [string map {" " ""} [lindex $values 0]]
-                    set portdata [list type $type name $parameter]
-                    set parlist [list {*}$parlist $portdata]
-                    if {$debug} {
-                        puts "$type\t$parameter"
-                    }
-                } else {
-                    set portname [string map {" " ""} [lindex $values 0]]
-                    set portdata [list type $type name $portname]
-                    set portlist [list {*}$portlist $portdata]
-                    if {$debug} {
-                        puts "$type\t$portname"
-                    }
-                }
-            } elseif {[llength $line] > 2} {
-                if {$type == "parameter"} {
-                    if {[llength $line] == 3} {
-                        set parameter [string map {" " ""} [lindex $values 1]]
-                        set portdata [list type $type name $parameter]
-                        set parlist [list {*}$parlist $portdata]
-                    }
-                    if {[llength $line] == 4} {
-                        set values [split $values "="]
-                        set parameter [string map {" " ""} [lindex $values 0]]
-                        set default_value [string map {" " ""} [lindex $values 1]]
-                        set portdata [list type $type name $parameter defval $default_value]
-                        set parlist [list {*}$parlist $portdata]
-                        if {$debug} {
-                            puts "$type\t$parameter = $default_value"
-                        }
-                    }
-                    if {[llength $line] == 5} {
-                        set values [split $values "="]
-                        set valtype [string map {" " ""} [lindex [lindex $values 0] 0]]
-                        set parameter [string map {" " ""} [lindex [lindex $values 0] 1]]
-                        set default_value [string map {" " ""} [lindex $values 1]]
-                        set portdata [list type $type name $parameter defval $default_value valtype $valtype]
-                        set parlist [list {*}$parlist $portdata]
-                        if {$debug} {
-                            puts "$type\t$parameter = $default_value"
-                        }
-                    }
-                } else {
-                    if {[regexp {^.+\[.+$} $line]} {
-                        set sep {[}
-                        set values [split $line $sep]
-                        set sep {]}
-                        set values [split [lindex $values 1] $sep]
 
-                        set range [string map {" " ""} [lindex $values 0]]
-                        set from_to [split $range ":"]
-                        set from [string map {" " ""} [lindex $from_to 0]]
-                        set to [string map {" " ""} [lindex $from_to 1]]
-                        set portname [string map {" " ""} [lindex $values 1]]
+        set param_lines [regexp -all -inline {\n\s*parameter[^\n]+} $data]
+        set last_param_line [lindex $param_lines end]
+        set param_lines [lrange $param_lines 0 end-1]
 
-                        set portdata [list type $type name $portname from $from to $to]
-                        set portlist [list {*}$portlist $portdata]
-                        if {$debug} {
-                            puts "$type\t$from\t:\t$to\t$portname"
-                        }
-                    } else {
-                        set portname [string map {" " ""} [lindex $values 1]]
-                        set portdata [list type $type name $portname]
-                        set portlist [list {*}$portlist $portdata]
+        set port_lines [regexp -all -inline {\n\s*input[^\n]+|\n\s*output[^\n]+|\n\s*inout[^\n]+} $data]
+
+        # to match {dir, type, size, name}
+        set regx_port {\s*(input|output|inout)\s+(\w+\s+)?(\[.+:.+\]\s+)?(\w+)\s*}
+        # to match {type, size, name, sign, value}
+        set regx_param {\s*parameter\s+(\w+\s+)?(\[.+:.+\]\s+)?(\w+)\s*(=\s*)?([^,;]+)?\s*}
+
+        foreach line $port_lines {
+            set captures [split $line {,;}]
+            foreach cap $captures {
+                if {$cap != ""} {
+                    if {[regexp $regx_port $cap -> direction type size name]} {
+                        set portlist [list {*}$portlist [ipl::format_port $direction $type $size $name]]
                     }
                 }
             }
         }
+
+        foreach line $param_lines {
+            set captures [split $line {,;}]
+            foreach cap $captures {
+                if {$cap != ""} {
+                    if {[regexp $regx_param $cap -> type size name sign value]} {
+                        set parlist [list {*}$parlist [ipl::format_parameter $type $size $name $value]]
+                    }
+                }
+            }
+        }
+        set captures [split $last_param_line {,;}]
+        foreach cap $captures {
+            if {$cap != ""} {
+                if {[regexp $regx_param $cap -> type size name sign value]} {
+                    if {[regexp {(|)} $value]} {
+                        set value [ipl::get_balanced_section $value]
+                    }
+                    set parlist [list {*}$parlist [ipl::format_parameter $type $size $name $value]]
+                }
+            }
+        }
+
         set mod_data [list portlist $portlist parlist $parlist mod_name $mod_name]
         return $mod_data
+    }
+
+    proc get_balanced_section {str {open {(}} {close {)}}} {
+        set diff 0
+        set last_index 0
+
+        for {set i 0} {$i < [string length $str]} {incr i} {
+            set char [string index $str $i]
+            if {$char == $open} {
+                incr diff
+            } elseif {$char == $close} {
+                if {$diff == 0} {
+                    set last_index $i
+                    break
+                }
+                incr diff -1
+            }
+
+            if {$diff == 0} {
+                set last_index [expr {$i + 1}]
+            }
+        }
+
+        return [string range $str 0 [expr {$last_index - 1}]]
+    }
+
+    proc format_parameter {type size name value} {
+        if {$type != ""} {
+            set type [string map {" " ""} $type]
+            dict set param type $type
+        }
+        if {$size != ""} {
+            set size [string map {"[" "" "]" "" " " ""} $size]
+            set size [split $size {:}]
+            set from [lindex $size 0]
+            set to [lindex $size 1]
+            dict set param from $from
+            dict set param to $to
+        }
+        dict set param name $name
+        if {$value != ""} {
+            set value [string map {" " ""} $value]
+            dict set param value $value
+        }
+        return $param
+    }
+
+    proc format_port {direction type size name} {
+        dict set port dir $direction
+        if {$type != ""} {
+            set type [string map {" " ""} $type]
+            dict set port type $type
+        }
+        if {$size != ""} {
+            set size [string map {"[" "" "]" "" " " ""} $size]
+            set size [split $size {:}]
+            set from [lindex $size 0]
+            set to [lindex $size 1]
+            dict set port from $from
+            dict set port to $to
+        }
+        dict set port name $name
+        return $port
     }
 
 ###############################################################################
@@ -1718,7 +1762,7 @@ namespace eval ipl {
         set mod_name [dict get $mod_data mod_name]
 
         foreach data [dict get $mod_data portlist] {
-            set dir [dict get $data type]
+            set dir [dict get $data dir]
             switch $dir {
                 input {
                     set dir in
@@ -1733,9 +1777,17 @@ namespace eval ipl {
             set name [dict get $data name]
             set op {(}
             set cl {)}
-            if {[llength $data] > 4} {
+
+            set from ""
+            set to ""
+            if {[dict keys $data from] != ""} {
                 set from [dict get $data from]
+            }
+            if {[dict keys $data to] != ""} {
                 set to [dict get $data to]
+            }
+
+            if {$from != "" && $to != ""} {
                 set ip [ipl::set_port -ip $ip -name $name \
                     -dir $dir -range "${op}int$op$from$cl,$to$cl" \
                     -conn_port $name \
@@ -1770,28 +1822,31 @@ namespace eval ipl {
         set ip $opt(-ip)
         set mod_data $opt(-mod_data)
 
-        # to do: check the input parameters
         set mod_name [dict get $mod_data mod_name]
         foreach data [dict get $mod_data parlist] {
             set name [dict get $data name]
-            if {[llength $data] > 4} {
-                # check if parameter type is set
-                set defval [dict get $data defval]
+
+            set value ""
+            if {[dict keys $data value] != ""} {
+                set value [dict get $data value]
+            }
+            if {$value != ""} {
+                set value [dict get $data value]
                 set regxf {^\s*-?[0-9]*\.[0-9]+\s*$}
                 set regxi {^\s*-?[0-9]+\s*$}
                 set regxstr {^\".*\"$}
-                if {[regexp $regxf $defval]} {
+                if {[regexp $regxf $value]} {
                     set value_type float
-                } elseif {[regexp $regxi $defval]} {
+                } elseif {[regexp $regxi $value]} {
                     set value_type int
-                } elseif {[regexp $regxstr $defval]} {
+                } elseif {[regexp $regxstr $value]} {
                     set value_type string
                 }
                 
                 set ip [ipl::set_parameter -ip $ip -id $name \
                     -type param -value_type $value_type \
                     -conn_mod $mod_name -title $name \
-                    -default $defval \
+                    -default $value \
                     -output_formatter nostr \
                     -group1 PARAMS -group2 GLOB]
             } else {
@@ -2100,14 +2155,14 @@ namespace eval ipl {
             set brk ""
             foreach line $ports {
                 set name [dict get $line name]
-                set type [dict get $line type]
+                set dir [dict get $line dir]
                 if {[regexp $arid $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 } elseif {[regexp $awid $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 }
             }
@@ -2134,14 +2189,14 @@ namespace eval ipl {
 
             foreach line $ports {
                 set name [dict get $line name]
-                set type [dict get $line type]
+                set dir [dict get $line dir]
                 if {[regexp $araddr $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 } elseif {[regexp $awaddr $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 }
             }
@@ -2168,14 +2223,14 @@ namespace eval ipl {
 
             foreach line $ports {
                 set name [dict get $line name]
-                set type [dict get $line type]
+                set dir [dict get $line dir]
                 if {[regexp $tvalid $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 } elseif {[regexp $tready $name]} {
-                    if {$type == "input"} {set brk master}
-                    if {$type == "output"} {set brk slave}
+                    if {$dir == "input"} {set brk master}
+                    if {$dir == "output"} {set brk slave}
                     break
                 }
             }
@@ -2200,14 +2255,14 @@ namespace eval ipl {
 
             foreach line $ports {
                 set name [dict get $line name]
-                set type [dict get $line type]
+                set dir [dict get $line dir]
                 if {[regexp $valid $name]} {
-                    if {$type == "input"} {set brk slave}
-                    if {$type == "output"} {set brk master}
+                    if {$dir == "input"} {set brk slave}
+                    if {$dir == "output"} {set brk master}
                     break
                 } elseif {[regexp $ready $name]} {
-                    if {$type == "input"} {set brk master}
-                    if {$type == "output"} {set brk slave}
+                    if {$dir == "input"} {set brk master}
+                    if {$dir == "output"} {set brk slave}
                     break
                 }
             }
