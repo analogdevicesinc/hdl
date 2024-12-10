@@ -26,10 +26,12 @@ adi_project_files corundum_test_vcu118 [list \
   "system_top.v" \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
+  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" \
+  "$ad_hdl_dir/library/corundum/constraints.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
+]
 
 ## To improve timing in DDR4 MIG
 set_property strategy Performance_Retiming [get_runs impl_1]
 
 adi_project_run corundum_test_vcu118
-

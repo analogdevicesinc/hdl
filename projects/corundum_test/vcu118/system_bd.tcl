@@ -18,6 +18,31 @@ sysid_gen_sys_init_file
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk1
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
 
+ad_ip_instance axi_gpio axi_gpio_0 [list \
+  C_ALL_OUTPUTS 1 \
+  C_DOUT_DEFAULT 0x00000001 \
+  C_GPIO_WIDTH 1 \
+]
+
+# ad_ip_instance axi_gpio corundum_reset_gpio [list \
+#   C_ALL_OUTPUTS 1 \
+#   C_DOUT_DEFAULT 0x00000001 \
+#   C_GPIO_WIDTH 1 \
+# ]
+
+ad_connect axi_gpio_0/gpio_io_o sys_250m_rstgen/aux_reset_in
+# ad_connect corundum_reset_gpio/gpio_io_o sys_250m_rstgen/aux_reset_in
+
+ad_ip_instance clk_wiz clk_wiz_125mhz
+
+ad_connect clk_wiz_125mhz/clk_in1 sys_250m_clk
+ad_connect clk_wiz_125mhz/reset sys_250m_reset
+
+ad_ip_instance proc_sys_reset sys_125m_rstgen
+ 
+ad_connect sys_125m_rstgen/slowest_sync_clk clk_wiz_125mhz/clk_out1
+ad_connect sys_125m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
+
 ad_ip_instance corundum_core corundum_core [list \
   FPGA_ID 0x04b31093 \
   FW_ID 0x00000000 \
@@ -145,7 +170,7 @@ ad_ip_instance corundum_core corundum_core [list \
   AXIL_CTRL_ADDR_WIDTH 24 \
   AXIL_CTRL_STRB_WIDTH 4 \
   AXIL_IF_CTRL_ADDR_WIDTH 24 \
-  AXIL_CSR_ADDR_WIDTH 18 \
+  AXIL_CSR_ADDR_WIDTH 19 \
   AXIL_CSR_PASSTHROUGH_ENABLE 0 \
   RB_NEXT_PTR 0x00001000 \
   AXIL_APP_CTRL_DATA_WIDTH 32 \
@@ -195,3 +220,82 @@ ad_ip_instance ethernet ethernet_core [list \
   AXIS_TX_USER_WIDTH 17 \
   AXIS_RX_USER_WIDTH 49 \
 ]
+
+create_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
+create_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
+create_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
+create_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+
+create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
+create_bd_port -dir O fpga_boot
+create_bd_port -dir O -type clk qspi_clk
+create_bd_port -dir I -type rst ptp_rst
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_ports ptp_rst]
+create_bd_port -dir I -type clk qsfp_mgt_refclk
+create_bd_port -dir I -type clk qsfp_mgt_refclk_bufg
+
+create_bd_port -dir O -type clk clk_125mhz
+create_bd_port -dir O -type clk clk_250mhz
+
+ad_connect clk_wiz_125mhz/clk_out1 clk_125mhz
+ad_connect sys_250m_clk clk_250mhz
+
+ad_connect corundum_core/m_axis_tx ethernet_core/axis_eth_tx
+ad_connect corundum_core/s_axis_rx ethernet_core/axis_eth_rx
+ad_connect corundum_core/ctrl_reg ethernet_core/ctrl_reg
+ad_connect corundum_core/flow_control_tx ethernet_core/flow_control_tx
+ad_connect corundum_core/flow_control_rx ethernet_core/flow_control_rx
+ad_connect corundum_core/ethernet_ptp_tx ethernet_core/ethernet_ptp_tx
+ad_connect corundum_core/ethernet_ptp_rx ethernet_core/ethernet_ptp_rx
+ad_connect corundum_core/axis_tx_ptp ethernet_core/axis_tx_ptp
+
+ad_connect corundum_core/s_axis_stat_tvalid GND
+ad_connect corundum_core/ddr_clk GND
+ad_connect corundum_core/ddr_rst GND
+ad_connect corundum_core/ddr_status GND
+ad_connect corundum_core/hbm_clk GND
+ad_connect corundum_core/hbm_rst GND
+ad_connect corundum_core/hbm_status GND
+ad_connect corundum_core/app_jtag_tdi GND
+ad_connect corundum_core/app_jtag_tms GND
+ad_connect corundum_core/app_jtag_tck GND
+ad_connect corundum_core/app_gpio_in GND
+
+ad_connect corundum_core/clk sys_250m_clk
+ad_connect corundum_core/rst sys_250m_reset
+ad_connect corundum_core/tx_clk ethernet_core/tx_clk
+ad_connect corundum_core/tx_rst ethernet_core/tx_rst
+ad_connect corundum_core/rx_clk ethernet_core/rx_clk
+ad_connect corundum_core/rx_rst ethernet_core/rx_rst
+ad_connect corundum_core/ptp_clk qsfp_mgt_refclk_bufg
+ad_connect corundum_core/ptp_rst ptp_rst
+ad_connect corundum_core/ptp_sample_clk clk_wiz_125mhz/clk_out1
+
+ad_connect ethernet_core/clk sys_250m_clk
+ad_connect ethernet_core/rst sys_250m_reset
+ad_connect ethernet_core/clk_125mhz clk_wiz_125mhz/clk_out1
+ad_connect ethernet_core/rst_125mhz sys_125m_rstgen/peripheral_reset
+ad_connect ethernet_core/qsfp_drp_clk clk_wiz_125mhz/clk_out1
+ad_connect ethernet_core/qsfp_drp_rst sys_125m_rstgen/peripheral_reset
+ad_connect ethernet_core/qsfp_mgt_refclk qsfp_mgt_refclk
+ad_connect ethernet_core/qsfp_mgt_refclk_bufg qsfp_mgt_refclk_bufg
+ad_connect ethernet_core/qsfp_rst qsfp_rst
+ad_connect ethernet_core/fpga_boot fpga_boot
+ad_connect ethernet_core/qspi_clk qspi_clk
+
+ad_connect ethernet_core/qspi0 qspi0
+ad_connect ethernet_core/qspi1 qspi1
+ad_connect ethernet_core/qsfp qsfp
+ad_connect ethernet_core/i2c i2c
+
+ad_cpu_interconnect 0x50000000 corundum_core/s_axil_ctrl
+ad_cpu_interconnect 0x51000000 corundum_core/s_axil_app_ctrl
+ad_cpu_interconnect 0x52000000 axi_gpio_0/s_axi
+# ad_cpu_interconnect 0x52000000 corundum_reset_gpio/s_axi
+
+ad_mem_hp1_interconnect sys_250m_clk corundum_core/m_axi
+
+ad_cpu_interrupt "ps-5" "mb-5" corundum_core/irq
+
+delete_bd_objs [get_bd_intf_ports iic_main] [get_bd_cells axi_iic_main]
+ad_connect sys_concat_intc/In9 GND

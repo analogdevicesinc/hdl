@@ -91,13 +91,6 @@ adi_ip_files corundum_core [list \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_psdpram.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_client_axis_sink.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_client_axis_source.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
 ]
 
 adi_ip_properties_lite corundum_core
@@ -122,12 +115,10 @@ adi_add_bus "m_axi" "master" \
     {"m_axi_awaddr" "AWADDR"} \
     {"m_axi_awlen" "AWLEN"} \
     {"m_axi_awsize" "AWSIZE"} \
-    {"m_axi_awuser" "AWUSER"} \
     {"m_axi_awburst" "AWBURST"} \
     {"m_axi_awlock" "AWLOCK"} \
     {"m_axi_awcache" "AWCACHE"} \
     {"m_axi_awprot" "AWPROT"} \
-    {"m_axi_awqos" "AWQOS"} \
     {"m_axi_awvalid" "AWVALID"} \
     {"m_axi_awready" "AWREADY"} \
     {"m_axi_wdata" "WDATA"} \
@@ -143,12 +134,10 @@ adi_add_bus "m_axi" "master" \
     {"m_axi_araddr" "ARADDR"} \
     {"m_axi_arlen" "ARLEN"} \
     {"m_axi_arsize" "ARSIZE"} \
-    {"m_axi_aruser" "ARUSER"} \
     {"m_axi_arburst" "ARBURST"} \
     {"m_axi_arlock" "ARLOCK"} \
     {"m_axi_arcache" "ARCACHE"} \
     {"m_axi_arprot" "ARPROT"} \
-    {"m_axi_arqos" "ARQOS"} \
     {"m_axi_arvalid" "ARVALID"} \
     {"m_axi_arready" "ARREADY"} \
     {"m_axi_rid" "RID"} \
@@ -431,7 +420,7 @@ adi_if_infer_bus analog.com:interface:if_flow_control_rx master flow_control_rx 
   "rx_fc_quanta_clk_en rx_fc_quanta_clk_en" \
 ]
 
-adi_if_infer_bus analog.com:interface:if_ethernet_ptp master ethernet_ptp_xt [list \
+adi_if_infer_bus analog.com:interface:if_ethernet_ptp master ethernet_ptp_tx [list \
   "ptp_clk     tx_ptp_clk" \
   "ptp_rst     tx_ptp_rst" \
   "ptp_ts      tx_ptp_ts" \

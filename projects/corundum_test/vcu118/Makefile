@@ -10,6 +10,7 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
 M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
+M_DEPS += ../../../library/corundum/constraints.tcl
 
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom

@@ -26,8 +26,6 @@ adi_ip_files ethernet [list \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/rb_drp.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/cmac_pad.v" \
   "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mac_ts_insert.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/rb_drp.tcl" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
 ]
 
 adi_ip_properties_lite ethernet
