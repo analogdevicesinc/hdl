@@ -453,6 +453,1539 @@ adi_if_infer_bus analog.com:interface:if_gpio master gpio [list \
   "gpio_out    app_gpio_out" \
 ]
 
+## Parameter validation
+
+proc log2 {x} {
+  return [tcl::mathfunc::int [tcl::mathfunc::ceil [expr [tcl::mathfunc::log $x] / [tcl::mathfunc::log 2]]]]
+}
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters DDR_CH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters DDR_GROUP_SIZE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_DATA_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_ADDR_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_STRB_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_ID_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_AWUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1 && \$AXI_DDR_AWUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_AWUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_WUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1 && \$AXI_DDR_WUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_WUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_BUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1 && \$AXI_DDR_BUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_BUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_ARUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1 && \$AXI_DDR_ARUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_ARUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_RUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1 && \$AXI_DDR_RUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_RUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_MAX_BURST_LEN -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_NARROW_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_FIXED_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_DDR_WRAP_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters HBM_CH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters HBM_GROUP_SIZE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_DATA_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_ADDR_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_STRB_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_ID_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_AWUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1 && \$AXI_HBM_AWUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_AWUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_WUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1 && \$AXI_HBM_WUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_WUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_BUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1 && \$AXI_HBM_BUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_BUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_ARUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1 && \$AXI_HBM_ARUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_ARUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_RUSER_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1 && \$AXI_HBM_RUSER_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_RUSER_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_MAX_BURST_LEN -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_NARROW_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_FIXED_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters AXI_HBM_WRAP_BURST -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_ID -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_CTRL_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_DMA_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_AXIS_DIRECT_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_AXIS_SYNC_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_AXIS_IF_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_STAT_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_GPIO_IN_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
+] \
+[ipx::get_user_parameters APP_GPIO_OUT_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$DMA_IMM_ENABLE == 1" \
+] \
+[ipx::get_user_parameters DMA_IMM_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$STAT_ENABLE == 1" \
+] \
+[ipx::get_user_parameters STAT_DMA_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$STAT_ENABLE == 1" \
+] \
+[ipx::get_user_parameters STAT_AXI_ENABLE -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$STAT_ENABLE == 1" \
+] \
+[ipx::get_user_parameters STAT_INC_WIDTH -of_objects $cc]
+
+set_property -dict [list \
+  "enablement_tcl_expr" "\$STAT_ENABLE == 1" \
+] \
+[ipx::get_user_parameters STAT_ID_WIDTH -of_objects $cc]
+
+# Additional parameters
+
+ipx::add_user_parameter -name "AXIL_CSR_ENABLE" -component $cc
+set_property value_resolve_type user [ipx::get_user_parameters "AXIL_CSR_ENABLE" -of_objects $cc]
+set_property -dict [list \
+  "value_resolve_type" "user" \
+] \
+[ipx::get_user_parameters AXIL_CSR_ENABLE -of_objects $cc]
+
+## Customize GUI page
+
+# Remove the automatically generated GUI page
+ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
+ipx::save_core $cc
+
+# General
+ipgui::add_page -name {General} -component $cc -display_name {General}
+set page0 [ipgui::get_pagespec -name "General" -component $cc]
+
+set group [ipgui::add_group -name "FW and board IDs" -component $cc \
+  -parent $page0 -display_name "FW and board IDs"]
+
+ipgui::add_param -name "FPGA_ID" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "FPGA_ID" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "FPGA ID" \
+] $p
+
+ipgui::add_param -name "FW_ID" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "FW_ID" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Firmware ID" \
+] $p
+
+ipgui::add_param -name "FW_VER" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "FW_VER" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Firmware version" \
+] $p
+
+ipgui::add_param -name "BOARD_ID" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "BOARD_ID" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Board ID" \
+] $p
+ipgui::add_param -name "BOARD_VER" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "BOARD_VER" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Board version" \
+] $p
+
+ipgui::add_param -name "BUILD_DATE" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "BUILD_DATE" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Build date" \
+] $p
+
+ipgui::add_param -name "GIT_HASH" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "GIT_HASH" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Git hash" \
+] $p
+
+ipgui::add_param -name "RELEASE_INFO" -component $cc -parent $page0
+set p [ipgui::get_guiparamspec -name "RELEASE_INFO" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Release info" \
+] $p
+
+# Physical
+ipgui::add_page -name {Physical} -component $cc -display_name {Physical}
+set page1 [ipgui::get_pagespec -name "Physical" -component $cc]
+
+set group [ipgui::add_group -name "Structural configuration" -component $cc \
+  -parent $page1 -display_name "Structural configuration"]
+
+ipgui::add_param -name "IF_COUNT" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "IF_COUNT" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Interface count" \
+] $p
+
+ipgui::add_param -name "PORTS_PER_IF" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PORTS_PER_IF" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Ports per interface" \
+] $p
+
+ipgui::add_param -name "SCHED_PER_IF" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "SCHED_PER_IF" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Schedulers per interface" \
+  "tooltip" { PORTS_PER_IF } \
+] $p
+
+ipgui::add_param -name "PORT_COUNT" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PORT_COUNT" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Port count" \
+  "tooltip" { IF_COUNT*PORTS_PER_IF } \
+] $p
+
+set group [ipgui::add_group -name "Clock configuration" -component $cc \
+  -parent $page1 -display_name "Clock configuration"]
+
+ipgui::add_param -name "CLK_PERIOD_NS_NUM" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "CLK_PERIOD_NS_NUM" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Clock period nominator" \
+] $p
+
+ipgui::add_param -name "CLK_PERIOD_NS_DENOM" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "CLK_PERIOD_NS_DENOM" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Clock period denominator" \
+] $p
+
+set group [ipgui::add_group -name "PTP configuration" -component $cc \
+  -parent $page1 -display_name "PTP configuration"]
+
+ipgui::add_param -name "PTP_CLK_PERIOD_NS_NUM" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_NUM" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP clock period denominator" \
+] $p
+
+ipgui::add_param -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_CLK_PERIOD_NS_DENOM" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP clock denominator" \
+] $p
+
+ipgui::add_param -name "PTP_CLOCK_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_CLOCK_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP clock pipeline" \
+] $p
+
+ipgui::add_param -name "PTP_CLOCK_CDC_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_CLOCK_CDC_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP clock CDC pipeline" \
+] $p
+
+ipgui::add_param -name "PTP_SEPARATE_TX_CLOCK" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_SEPARATE_TX_CLOCK" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "PTP separate TX clock" \
+] $p
+
+ipgui::add_param -name "PTP_SEPARATE_RX_CLOCK" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_SEPARATE_RX_CLOCK" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "PTP separate RX clock" \
+] $p
+
+ipgui::add_param -name "PTP_PORT_CDC_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_PORT_CDC_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP port CDC pipeline" \
+] $p
+
+ipgui::add_param -name "PTP_PEROUT_ENABLE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_PEROUT_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "PTP perout enable" \
+] $p
+
+ipgui::add_param -name "PTP_PEROUT_COUNT" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "PTP_PEROUT_COUNT" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP perout count" \
+] $p
+
+set group [ipgui::add_group -name "Ethernet interface configuration" -component $cc \
+  -parent $page1 -display_name "Ethernet interface configuration"]
+
+ipgui::add_param -name "AXIS_DATA_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream data width" \
+] $p
+
+ipgui::add_param -name "AXIS_KEEP_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_KEEP_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream keep width" \
+  "tooltip" { AXIS_DATA_WIDTH/8 } \
+] $p
+
+ipgui::add_param -name "AXIS_SYNC_DATA_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_SYNC_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream sync data width" \
+  "tooltip" { AXIS_DATA_WIDTH } \
+] $p
+
+ipgui::add_param -name "AXIS_IF_DATA_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_IF_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream interface data width" \
+  "tooltip" { AXIS_SYNC_DATA_WIDTH * pow(2, log2(PORTS_PER_IF)) } \
+] $p
+
+ipgui::add_param -name "AXIS_TX_USER_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_TX_USER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream TX user width" \
+  "tooltip" { TX_TAG_WIDTH + 1 } \
+] $p
+
+ipgui::add_param -name "AXIS_RX_USER_WIDTH" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_RX_USER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream RX user width" \
+  "tooltip" { if {PTP_TS_ENABLE} {PTP_TS_WIDTH} else {0} + 1 } \
+] $p
+
+ipgui::add_param -name "AXIS_RX_USE_READY" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_RX_USE_READY" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI4 Stream RX use ready" \
+] $p
+
+ipgui::add_param -name "AXIS_TX_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_TX_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream TX pipeline" \
+] $p
+
+ipgui::add_param -name "AXIS_TX_FIFO_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_TX_FIFO_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream TX FIFO pipeline" \
+] $p
+
+ipgui::add_param -name "AXIS_TX_TS_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_TX_TS_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream TX TS pipeline" \
+] $p
+
+ipgui::add_param -name "AXIS_RX_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_RX_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream RX pipeline" \
+] $p
+
+ipgui::add_param -name "AXIS_RX_FIFO_PIPELINE" -component $cc -parent $page1
+set p [ipgui::get_guiparamspec -name "AXIS_RX_FIFO_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 11 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Stream RX FIFO pipeline" \
+] $p
+
+# Corundum
+ipgui::add_page -name {Corundum} -component $cc -display_name {Corundum}
+set page2 [ipgui::get_pagespec -name "Corundum" -component $cc]
+
+set group [ipgui::add_group -name "Queue manager configuration" -component $cc \
+  -parent $page2 -display_name "Queue manager configuration"]
+
+ipgui::add_param -name "EVENT_QUEUE_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "EVENT_QUEUE_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Event queue operation table size" \
+] $p
+
+ipgui::add_param -name "TX_QUEUE_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_QUEUE_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX queue operation table size" \
+] $p
+
+ipgui::add_param -name "RX_QUEUE_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RX_QUEUE_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX queue operation table size" \
+] $p
+
+ipgui::add_param -name "CQ_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "CQ_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Completion queue operation table size" \
+] $p
+
+ipgui::add_param -name "EQN_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "EQN_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Event queue number width" \
+] $p
+
+ipgui::add_param -name "TX_QUEUE_INDEX_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_QUEUE_INDEX_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX queue index width" \
+] $p
+
+ipgui::add_param -name "RX_QUEUE_INDEX_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RX_QUEUE_INDEX_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX queue index width" \
+] $p
+
+ipgui::add_param -name "CQN_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "CQN_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Completion queue number width" \
+  "tooltip" { {if {TX_QUEUE_INDEX_WIDTH > RX_QUEUE_INDEX_WIDTH} {TX_QUEUE_INDEX_WIDTH} else {RX_QUEUE_INDEX_WIDTH}} + 1 } \
+] $p
+
+ipgui::add_param -name "EQ_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "EQ_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Event queue pipeline" \
+] $p
+
+ipgui::add_param -name "TX_QUEUE_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_QUEUE_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX queue pipeline" \
+  "tooltip" { 3 + if {TX_QUEUE_INDEX_WIDTH > 12} {TX_QUEUE_INDEX_WIDTH-12} else {0} } \
+] $p
+
+ipgui::add_param -name "RX_QUEUE_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RX_QUEUE_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX queue pipeline" \
+  "tooltip" { 3 + if {RX_QUEUE_INDEX_WIDTH > 12} {RX_QUEUE_INDEX_WIDTH-12} else {0} } \
+] $p
+
+ipgui::add_param -name "CQ_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "CQ_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 11 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Completion queue pipeline" \
+  "tooltip" { 3 + if {CQN_WIDTH > 12} {CQN_WIDTH-12} else {0} } \
+] $p
+
+set group [ipgui::add_group -name "TX and RX engine configuration" -component $cc \
+  -parent $page2 -display_name "TX and RX engine configuration"]
+
+ipgui::add_param -name "TX_DESC_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_DESC_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX descriptor table size" \
+] $p
+
+ipgui::add_param -name "RX_DESC_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RX_DESC_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX descriptor table size" \
+] $p
+
+ipgui::add_param -name "RX_INDIR_TBL_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RX_INDIR_TBL_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX indirect table address width" \
+  "tooltip" { if {RX_QUEUE_INDEX_WIDTH > 8} {8} else {RX_QUEUE_INDEX_WIDTH} } \
+] $p
+
+set group [ipgui::add_group -name "Scheduler configuration" -component $cc \
+  -parent $page2 -display_name "Scheduler configuration"]
+
+ipgui::add_param -name "TX_SCHEDULER_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_SCHEDULER_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX scheduler operation table size" \
+  "tooltip" { TX_DESC_TABLE_SIZE } \
+] $p
+
+ipgui::add_param -name "TX_SCHEDULER_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TX_SCHEDULER_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX scheduler pipeline" \
+  "tooltip" { TX_QUEUE_PIPELINE } \
+] $p
+
+ipgui::add_param -name "TDMA_INDEX_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "TDMA_INDEX_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TDMA index width" \
+] $p
+
+set group [ipgui::add_group -name "AXI interface configuration (DMA)" -component $cc \
+  -parent $page2 -display_name "AXI interface configuration (DMA)"]
+
+ipgui::add_param -name "AXI_DATA_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI data width" \
+] $p
+
+ipgui::add_param -name "AXI_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI address width" \
+] $p
+
+ipgui::add_param -name "AXI_STRB_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_STRB_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI strobe width" \
+  "tooltip" { AXI_DATA_WIDTH/8 } \
+] $p
+
+ipgui::add_param -name "AXI_ID_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_ID_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI ID width" \
+] $p
+
+set group [ipgui::add_group -name "DMA interface configuration" -component $cc \
+  -parent $page2 -display_name "DMA interface configuration"]
+
+ipgui::add_param -name "DMA_IMM_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "DMA_IMM_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "DMA IMM enable" \
+] $p
+
+ipgui::add_param -name "DMA_IMM_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "DMA_IMM_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "DMA IMM width" \
+] $p
+
+ipgui::add_param -name "DMA_LEN_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "DMA_LEN_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "DMA length width" \
+] $p
+
+ipgui::add_param -name "DMA_TAG_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "DMA_TAG_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "DMA tag width" \
+] $p
+
+ipgui::add_param -name "RAM_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RAM_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RAM address width" \
+  "tooltip" { log2(if {TX_RAM_SIZE > RX_RAM_SIZE} {TX_RAM_SIZE} else {RX_RAM_SIZE}) } \
+] $p
+
+ipgui::add_param -name "RAM_PIPELINE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RAM_PIPELINE" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RAM pipeline" \
+] $p
+
+ipgui::add_param -name "AXI_DMA_MAX_BURST_LEN" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DMA_MAX_BURST_LEN" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DMA Max burst length" \
+] $p
+
+ipgui::add_param -name "AXI_DMA_READ_USE_ID" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DMA_READ_USE_ID" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DMA read use ID" \
+] $p
+
+ipgui::add_param -name "AXI_DMA_WRITE_USE_ID" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DMA_WRITE_USE_ID" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DMA write use ID" \
+] $p
+
+ipgui::add_param -name "AXI_DMA_READ_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DMA_READ_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DMA read operation table size" \
+  "tooltip" { pow(2, AXI_ID_WIDTH) } \
+] $p
+
+ipgui::add_param -name "AXI_DMA_WRITE_OP_TABLE_SIZE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXI_DMA_WRITE_OP_TABLE_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DMA write operation table size" \
+  "tooltip" { pow(2, AXI_ID_WIDTH) } \
+] $p
+
+set group [ipgui::add_group -name "Interrupt configuration" -component $cc \
+  -parent $page2 -display_name "Interrupt configuration"]
+
+ipgui::add_param -name "IRQ_COUNT" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "IRQ_COUNT" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Interrupt request count" \
+] $p
+
+set group [ipgui::add_group -name "AXI lite interface configuration (control)" -component $cc \
+  -parent $page2 -display_name "AXI lite interface configuration (control)"]
+
+ipgui::add_param -name "AXIL_CTRL_DATA_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CTRL_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite control data width" \
+] $p
+
+ipgui::add_param -name "AXIL_CTRL_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CTRL_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite control address width" \
+] $p
+
+ipgui::add_param -name "AXIL_CTRL_STRB_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CTRL_STRB_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite control strobe width" \
+  "tooltip" { AXIL_CTRL_DATA_WIDTH/8 } \
+] $p
+
+ipgui::add_param -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_IF_CTRL_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite interface control address width" \
+  "tooltip" { AXIL_CTRL_ADDR_WIDTH - log2(IF_COUNT) } \
+] $p
+
+ipgui::add_param -name "AXIL_CSR_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CSR_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI4 Lite CSR enable" \
+] $p
+
+ipgui::add_param -name "AXIL_CSR_ADDR_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CSR_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite CSR address width" \
+  "tooltip" { AXIL_IF_CTRL_ADDR_WIDTH - 5 - log2({SCHED_PER_IF + 4 + 7} / 8) } \
+] $p
+
+ipgui::add_param -name "AXIL_CSR_PASSTHROUGH_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "AXIL_CSR_PASSTHROUGH_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI4 Lite CSR passthrough enable" \
+] $p
+
+ipgui::add_param -name "RB_NEXT_PTR" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "RB_NEXT_PTR" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Register base next pointer" \
+] $p
+
+set group [ipgui::add_group -name "Statistics counter subsystem" -component $cc \
+  -parent $page2 -display_name "Statistics counter subsystem"]
+
+ipgui::add_param -name "STAT_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "STAT_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Statistics enable" \
+] $p
+
+ipgui::add_param -name "STAT_DMA_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "STAT_DMA_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Statistics DMA enable" \
+] $p
+
+ipgui::add_param -name "STAT_AXI_ENABLE" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "STAT_AXI_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Statistics AXI enable" \
+] $p
+
+ipgui::add_param -name "STAT_INC_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "STAT_INC_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Statistics increment width" \
+] $p
+
+ipgui::add_param -name "STAT_ID_WIDTH" -component $cc -parent $page2
+set p [ipgui::get_guiparamspec -name "STAT_ID_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Statistics ID width" \
+] $p
+
+# Memory
+ipgui::add_page -name {Memory} -component $cc -display_name {Memory}
+set page3 [ipgui::get_pagespec -name "Memory" -component $cc]
+
+set group [ipgui::add_group -name "Interface configuration" -component $cc \
+  -parent $page3 -display_name "Interface configuration"]
+
+ipgui::add_param -name "PTP_TS_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "PTP_TS_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "PTP TS enable" \
+] $p
+
+ipgui::add_param -name "PTP_TS_FMT_TOD" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "PTP_TS_FMT_TOD" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP TS FMT TOD" \
+] $p
+
+ipgui::add_param -name "PTP_TS_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "PTP_TS_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "PTP TS width" \
+  "tooltip" { if {PTP_TS_FMT_TOD} {96} else {64} } \
+] $p
+
+ipgui::add_param -name "TX_CPL_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_CPL_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX CPL enable" \
+  "tooltip" { PTP_TS_ENABLE } \
+] $p
+
+ipgui::add_param -name "TX_CPL_FIFO_DEPTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_CPL_FIFO_DEPTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX CPL FIFO depth" \
+] $p
+
+ipgui::add_param -name "TX_TAG_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_TAG_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX tag width" \
+  "tooltip" { log2(TX_DESC_TABLE_SIZE)+1 } \
+] $p
+
+ipgui::add_param -name "TX_CHECKSUM_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_CHECKSUM_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "TX checksum enable" \
+] $p
+
+ipgui::add_param -name "RX_HASH_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "RX_HASH_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "RX hash enable" \
+] $p
+
+ipgui::add_param -name "RX_CHECKSUM_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "RX_CHECKSUM_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "RX checksum enable" \
+] $p
+
+ipgui::add_param -name "PFC_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "PFC_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "PFC enable" \
+] $p
+
+ipgui::add_param -name "LFC_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "LFC_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "LFC enable" \
+  "tooltip" { PFC_ENABLE } \
+] $p
+
+ipgui::add_param -name "MAC_CTRL_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "MAC_CTRL_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 11 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "MAC control enable" \
+] $p
+
+ipgui::add_param -name "TX_FIFO_DEPTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_FIFO_DEPTH" -component $cc]
+ipgui::move_param -component $cc -order 12 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX FIFO depth" \
+] $p
+
+ipgui::add_param -name "RX_FIFO_DEPTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "RX_FIFO_DEPTH" -component $cc]
+ipgui::move_param -component $cc -order 13 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX FIFO depth" \
+] $p
+
+ipgui::add_param -name "MAX_TX_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "MAX_TX_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 14 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Max TX size" \
+] $p
+
+ipgui::add_param -name "MAX_RX_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "MAX_RX_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 15 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Max RX size" \
+] $p
+
+ipgui::add_param -name "TX_RAM_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "TX_RAM_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 16 $p -parent $group
+set_property  -dict [list \
+  "display_name" "TX RAM size" \
+] $p
+
+ipgui::add_param -name "RX_RAM_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "RX_RAM_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 17 $p -parent $group
+set_property  -dict [list \
+  "display_name" "RX RAM size" \
+] $p
+
+set group [ipgui::add_group -name "DDR configuration" -component $cc \
+  -parent $page3 -display_name "DDR configuration"]
+
+ipgui::add_param -name "DDR_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "DDR_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "DDR enable" \
+] $p
+
+ipgui::add_param -name "DDR_CH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "DDR_CH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "DDR channels" \
+] $p
+
+ipgui::add_param -name "DDR_GROUP_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "DDR_GROUP_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "DDR group size" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_DATA_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR data width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_ADDR_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR address width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_STRB_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_STRB_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR strobe width" \
+  "tooltip" { AXI_DDR_DATA_WIDTH/8 } \
+] $p
+
+ipgui::add_param -name "AXI_DDR_ID_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_ID_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR ID width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_AWUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_AWUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR awuser enable" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_AWUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_AWUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR awuser width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_WUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_WUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR wuser enable" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_WUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_WUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR wuser width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_BUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_BUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 11 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR buser enable" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_BUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_BUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 12 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR buser width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_ARUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_ARUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 13 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR aruser enable" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_ARUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_ARUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 14 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR aruser width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_RUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_RUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 15 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR ruser enable" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_RUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_RUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 16 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR user width" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_MAX_BURST_LEN" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_MAX_BURST_LEN" -component $cc]
+ipgui::move_param -component $cc -order 17 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI DDR max burst length" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_NARROW_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_NARROW_BURST" -component $cc]
+ipgui::move_param -component $cc -order 18 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR narrow burst" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_FIXED_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_FIXED_BURST" -component $cc]
+ipgui::move_param -component $cc -order 19 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR fixed burst" \
+] $p
+
+ipgui::add_param -name "AXI_DDR_WRAP_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_DDR_WRAP_BURST" -component $cc]
+ipgui::move_param -component $cc -order 20 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI DDR wrap burst" \
+] $p
+
+set group [ipgui::add_group -name "HBM configuration" -component $cc \
+  -parent $page3 -display_name "HBM configuration"]
+
+ipgui::add_param -name "HBM_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "HBM_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "HBM enable" \
+] $p
+
+ipgui::add_param -name "HBM_CH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "HBM_CH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "HBM channels" \
+] $p
+
+ipgui::add_param -name "HBM_GROUP_SIZE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "HBM_GROUP_SIZE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "HBM group size" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_DATA_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM data width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_ADDR_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM address width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_STRB_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_STRB_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM strobe width" \
+  "tooltip" { AXI_HBM_DATA_WIDTH/8 } \
+] $p
+
+ipgui::add_param -name "AXI_HBM_ID_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_ID_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM ID width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_AWUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_AWUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM awuser enable" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_AWUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_AWUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM awuser width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_WUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_WUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM wuser enable" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_WUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_WUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 10 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM wuser width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_BUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_BUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 11 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM buser enable" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_BUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_BUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 12 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM buser width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_ARUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_ARUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 13 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM aruser enable" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_ARUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_ARUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 14 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM aruser width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_RUSER_ENABLE" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_RUSER_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 15 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM ruser enable" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_RUSER_WIDTH" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_RUSER_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 16 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM ruser width" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_MAX_BURST_LEN" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_MAX_BURST_LEN" -component $cc]
+ipgui::move_param -component $cc -order 17 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI HBM max burst length" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_NARROW_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_NARROW_BURST" -component $cc]
+ipgui::move_param -component $cc -order 18 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM narrow burst" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_FIXED_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_FIXED_BURST" -component $cc]
+ipgui::move_param -component $cc -order 19 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM fixed burst" \
+] $p
+
+ipgui::add_param -name "AXI_HBM_WRAP_BURST" -component $cc -parent $page3
+set p [ipgui::get_guiparamspec -name "AXI_HBM_WRAP_BURST" -component $cc]
+ipgui::move_param -component $cc -order 20 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "AXI HBM wrap burst" \
+] $p
+
+# Application
+ipgui::add_page -name {Application} -component $cc -display_name {Application}
+set page4 [ipgui::get_pagespec -name "Application" -component $cc]
+
+set group [ipgui::add_group -name "Application block configuration" -component $cc \
+  -parent $page4 -display_name "Application block configuration"]
+
+ipgui::add_param -name "APP_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application enable" \
+] $p
+
+ipgui::add_param -name "APP_ID" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_ID" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Application ID" \
+] $p
+
+ipgui::add_param -name "APP_CTRL_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_CTRL_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application control enable" \
+] $p
+
+ipgui::add_param -name "APP_DMA_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_DMA_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 3 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application DMA enable" \
+] $p
+
+ipgui::add_param -name "APP_AXIS_DIRECT_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_AXIS_DIRECT_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 4 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application AXI4 Stream direct enable" \
+] $p
+
+ipgui::add_param -name "APP_AXIS_SYNC_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_AXIS_SYNC_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 5 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application AXI4 Stream sync enable" \
+] $p
+
+ipgui::add_param -name "APP_AXIS_IF_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_AXIS_IF_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 6 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application AXI4 Stream interface enable" \
+] $p
+
+ipgui::add_param -name "APP_STAT_ENABLE" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_STAT_ENABLE" -component $cc]
+ipgui::move_param -component $cc -order 7 $p -parent $group
+set_property  -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Application statistics enable" \
+] $p
+
+ipgui::add_param -name "APP_GPIO_IN_WIDTH" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_GPIO_IN_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 8 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Application GPIO input width" \
+] $p
+
+ipgui::add_param -name "APP_GPIO_OUT_WIDTH" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "APP_GPIO_OUT_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 9 $p -parent $group
+set_property  -dict [list \
+  "display_name" "Application GPIO output width" \
+] $p
+
+set group [ipgui::add_group -name "AXI lite interface configuration (application control)" -component $cc \
+  -parent $page4 -display_name "AXI lite interface configuration (application control)"]
+
+ipgui::add_param -name "AXIL_APP_CTRL_DATA_WIDTH" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "AXIL_APP_CTRL_DATA_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 0 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite application control data width" \
+  "tooltip" { AXIL_CTRL_DATA_WIDTH } \
+] $p
+
+ipgui::add_param -name "AXIL_APP_CTRL_ADDR_WIDTH" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "AXIL_APP_CTRL_ADDR_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 1 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite application control address width" \
+] $p
+
+ipgui::add_param -name "AXIL_APP_CTRL_STRB_WIDTH" -component $cc -parent $page4
+set p [ipgui::get_guiparamspec -name "AXIL_APP_CTRL_STRB_WIDTH" -component $cc]
+ipgui::move_param -component $cc -order 2 $p -parent $group
+set_property  -dict [list \
+  "display_name" "AXI4 Lite application control strobe width" \
+  "tooltip" { AXIL_APP_CTRL_DATA_WIDTH/8 } \
+] $p
+
+# Dependencies
+
+adi_set_bus_dependency "m_axi_ddr" "m_axi_ddr" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axi_hbm" "m_axi_hbm" \
+  "(spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axil_csr" "m_axil_csr" \
+  "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 ipx::save_core $cc

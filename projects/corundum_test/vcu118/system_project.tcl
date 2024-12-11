@@ -29,6 +29,7 @@ adi_project_files corundum_test_vcu118 [list \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" \
   "$ad_hdl_dir/library/corundum/constraints.tcl" \
   "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
+  "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
 ]
 
 ## To improve timing in DDR4 MIG
