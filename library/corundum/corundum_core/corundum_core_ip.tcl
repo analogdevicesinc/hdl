@@ -480,7 +480,7 @@ set_property -dict [list \
 [ipx::get_user_parameters AXI_DDR_ADDR_WIDTH -of_objects $cc]
 
 set_property -dict [list \
-  "enablement_tcl_expr" "\$HBM_ENABLE == 1" \
+  "enablement_tcl_expr" "\$DDR_ENABLE == 1" \
 ] \
 [ipx::get_user_parameters AXI_DDR_STRB_WIDTH -of_objects $cc]
 

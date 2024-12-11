@@ -106,8 +106,8 @@ ad_ip_instance corundum_core corundum_core [list \
   MAX_RX_SIZE 9214 \
   TX_RAM_SIZE 131072 \
   RX_RAM_SIZE 131072 \
+  DDR_ENABLE 1 \
   DDR_CH 2 \
-  DDR_ENABLE 0 \
   DDR_GROUP_SIZE 1 \
   AXI_DDR_DATA_WIDTH 512 \
   AXI_DDR_ADDR_WIDTH 31 \
@@ -122,8 +122,8 @@ ad_ip_instance corundum_core corundum_core [list \
   AXI_DDR_NARROW_BURST 0 \
   AXI_DDR_FIXED_BURST 0 \
   AXI_DDR_WRAP_BURST 0 \
-  HBM_CH 1 \
   HBM_ENABLE 0 \
+  HBM_CH 1 \
   HBM_GROUP_SIZE 1 \
   AXI_HBM_DATA_WIDTH 256 \
   AXI_HBM_ADDR_WIDTH 32 \
@@ -213,7 +213,7 @@ ad_ip_instance ethernet ethernet_core [list \
   PTP_TS_ENABLE 1 \
   AXIL_CTRL_DATA_WIDTH 32 \
   AXIL_CTRL_ADDR_WIDTH 24 \
-  AXIL_CTRL_STRB_WIDTH 8 \
+  AXIL_CTRL_STRB_WIDTH 4 \
   AXIL_CSR_ADDR_WIDTH 19 \
   AXIL_IF_CTRL_ADDR_WIDTH 24 \
   ETH_RX_CLK_FROM_TX 0 \
