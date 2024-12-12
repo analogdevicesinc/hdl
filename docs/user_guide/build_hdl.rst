@@ -719,8 +719,8 @@ The **sof** file is used to program the device.
    unknown compatibility reason. You can use Cygwin on Windows or a normal
    Linux installation.
 
-The Lattice build is in a very early version. It does not support any ADI
-library builds, yet. We're just starting to develop the library build part.
+The Lattice build is in a very early version. We are just adding the first
+version of library infrastructure support.
 Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
