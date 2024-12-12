@@ -3,75 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-create_bd_port -dir O -type clk i2s_mclk
-create_bd_intf_port -mode Master -vlnv analog.com:interface:i2s_rtl:1.0 i2s
-
 create_bd_port -dir I axi_fan_tacho_i
 create_bd_port -dir O axi_fan_pwm_o
-
-# i2s ip
-
-ad_ip_instance axi_i2s_adi axi_i2s_adi
-ad_ip_parameter axi_i2s_adi CONFIG.DMA_TYPE 0
-ad_ip_parameter axi_i2s_adi CONFIG.S_AXI_ADDRESS_WIDTH 32
-
-# dma
-
-ad_ip_instance axi_dmac i2s_tx_dma
-ad_ip_parameter i2s_tx_dma CONFIG.DMA_TYPE_SRC 0
-ad_ip_parameter i2s_tx_dma CONFIG.DMA_TYPE_DEST 1
-ad_ip_parameter i2s_tx_dma CONFIG.CYCLIC 1
-ad_ip_parameter i2s_tx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter i2s_tx_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_DEST_REQ 0
-ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 0
-ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
-ad_ip_parameter i2s_tx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 32
-ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-
-ad_ip_instance axi_dmac i2s_rx_dma
-ad_ip_parameter i2s_rx_dma CONFIG.DMA_TYPE_SRC 1
-ad_ip_parameter i2s_rx_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter i2s_rx_dma CONFIG.CYCLIC 1
-ad_ip_parameter i2s_rx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter i2s_rx_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 0
-ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 0
-ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
-ad_ip_parameter i2s_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
-ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 32
-
-# i2s connections
-
-ad_connect sys_cpu_clk axi_i2s_adi/s_axi_aclk
-ad_connect sys_cpu_clk axi_i2s_adi/s_axis_aclk
-ad_connect sys_cpu_clk axi_i2s_adi/m_axis_aclk
-ad_connect sys_cpu_resetn axi_i2s_adi/s_axi_aresetn
-ad_connect sys_cpu_resetn axi_i2s_adi/s_axis_aresetn
-ad_connect i2s_tx_dma/m_axis axi_i2s_adi/s_axis
-
-# not connecting tlast
-
-ad_connect i2s_rx_dma/s_axis_data axi_i2s_adi/m_axis_tdata
-ad_connect i2s_rx_dma/s_axis_valid axi_i2s_adi/m_axis_tvalid
-ad_connect i2s_rx_dma/s_axis_ready axi_i2s_adi/m_axis_tready
-ad_connect i2s axi_i2s_adi/I2S
-ad_connect i2s_m_clk axi_i2s_adi/data_clk_i
-ad_connect i2s_m_clk i2s_mclk
-
-ad_connect sys_cpu_clk i2s_tx_dma/s_axi_aclk
-ad_connect sys_cpu_clk i2s_tx_dma/m_src_axi_aclk
-ad_connect sys_cpu_clk i2s_tx_dma/m_axis_aclk
-ad_connect sys_cpu_resetn i2s_tx_dma/s_axi_aresetn
-ad_connect sys_cpu_resetn i2s_tx_dma/m_src_axi_aresetn
-
-ad_connect sys_cpu_clk i2s_rx_dma/s_axi_aclk
-ad_connect sys_cpu_clk i2s_rx_dma/m_dest_axi_aclk
-ad_connect sys_cpu_clk i2s_rx_dma/s_axis_aclk
-ad_connect sys_cpu_resetn i2s_rx_dma/s_axi_aresetn
-ad_connect sys_cpu_resetn i2s_rx_dma/m_dest_axi_aresetn
 
 # fan control
 
@@ -91,21 +24,11 @@ ad_connect const_gnd_0/dout axi_fan_control_0/temp_in
 # interconnect
 
 ad_cpu_interconnect 0x40000000 axi_fan_control_0
-ad_cpu_interconnect 0x41000000 i2s_rx_dma
-ad_cpu_interconnect 0x41001000 i2s_tx_dma
-ad_cpu_interconnect 0x42000000 axi_i2s_adi
 
-ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
-ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt ps-6 mb-6 i2s_tx_dma/irq
-ad_cpu_interrupt ps-7 mb-7 i2s_rx_dma/irq
 ad_cpu_interrupt ps-14 mb-14 axi_fan_control_0/irq
-
-
-
 
 ##################################################################################################
 ##################################################################################################
@@ -114,20 +37,34 @@ ad_cpu_interrupt ps-14 mb-14 axi_fan_control_0/irq
 ##################################################################################################
 
 # Corundum NIC
-create_bd_port -dir I sfp_rx_p
-create_bd_port -dir I sfp_rx_n
-create_bd_port -dir O sfp_tx_p
-create_bd_port -dir O sfp_tx_n
-create_bd_port -dir I sfp_mgt_refclk_p
-create_bd_port -dir I sfp_mgt_refclk_n
 
-create_bd_port -dir O sfp_tx_disable
-create_bd_port -dir I sfp_tx_fault
-create_bd_port -dir I sfp_rx_los
-create_bd_port -dir I sfp_mod_abs
+create_bd_port -dir I  qsfp_rx1_p
+create_bd_port -dir I  qsfp_rx1_n
+create_bd_port -dir I  qsfp_rx2_p
+create_bd_port -dir I  qsfp_rx2_n
+create_bd_port -dir I  qsfp_rx3_p
+create_bd_port -dir I  qsfp_rx3_n
+create_bd_port -dir I  qsfp_rx4_p
+create_bd_port -dir I  qsfp_rx4_n
+create_bd_port -dir O  qsfp_tx1_p
+create_bd_port -dir O  qsfp_tx1_n
+create_bd_port -dir O  qsfp_tx2_p
+create_bd_port -dir O  qsfp_tx2_n
+create_bd_port -dir O  qsfp_tx3_p
+create_bd_port -dir O  qsfp_tx3_n
+create_bd_port -dir O  qsfp_tx4_p
+create_bd_port -dir O  qsfp_tx4_n
 
-create_bd_port -dir O -from 1 -to 0 sfp_led
-create_bd_port -dir O -from 1 -to 0 led
+create_bd_port -dir I  qsfp_mgt_refclk_0_p
+create_bd_port -dir I  qsfp_mgt_refclk_0_n
+
+create_bd_port -dir O  qsfp_modsell
+create_bd_port -dir O  qsfp_resetl
+create_bd_port -dir I  qsfp_modprsl
+create_bd_port -dir I  qsfp_intl
+create_bd_port -dir O  qsfp_lpmode
+
+create_bd_port -dir O -from 7 -to 0 led
 
 # Corundum NIC
 
@@ -153,8 +90,8 @@ set release_info [expr 0x00000000]
 # General variables
 set IRQ_SIZE 8
 set PORTS_PER_IF "1"
-set TX_QUEUE_INDEX_WIDTH "5"
-set RX_QUEUE_INDEX_WIDTH "5"
+set TX_QUEUE_INDEX_WIDTH "11"
+set RX_QUEUE_INDEX_WIDTH "8"
 set CQN_WIDTH [expr max($TX_QUEUE_INDEX_WIDTH, $RX_QUEUE_INDEX_WIDTH) + 1]
 set TX_QUEUE_PIPELINE [expr 3 + max($TX_QUEUE_INDEX_WIDTH - 12, 0)]
 set RX_QUEUE_PIPELINE [expr 3 + max($RX_QUEUE_INDEX_WIDTH - 12, 0)]
@@ -198,7 +135,7 @@ ad_ip_parameter corundum CONFIG.EVENT_QUEUE_OP_TABLE_SIZE "32"
 ad_ip_parameter corundum CONFIG.TX_QUEUE_OP_TABLE_SIZE "32"
 ad_ip_parameter corundum CONFIG.RX_QUEUE_OP_TABLE_SIZE "32"
 ad_ip_parameter corundum CONFIG.CQ_OP_TABLE_SIZE "32"
-ad_ip_parameter corundum CONFIG.EQN_WIDTH "2"
+ad_ip_parameter corundum CONFIG.EQN_WIDTH "6"
 ad_ip_parameter corundum CONFIG.TX_QUEUE_INDEX_WIDTH $TX_QUEUE_INDEX_WIDTH
 ad_ip_parameter corundum CONFIG.RX_QUEUE_INDEX_WIDTH $RX_QUEUE_INDEX_WIDTH
 ad_ip_parameter corundum CONFIG.CQN_WIDTH $CQN_WIDTH
@@ -218,7 +155,7 @@ ad_ip_parameter corundum CONFIG.TX_SCHEDULER_PIPELINE $TX_QUEUE_PIPELINE
 ad_ip_parameter corundum CONFIG.TDMA_INDEX_WIDTH "6"
 
 # Interface configuration
-ad_ip_parameter corundum CONFIG.PTP_TS_ENABLE "1"
+ad_ip_parameter corundum CONFIG.PTP_TS_ENABLE "0"
 ad_ip_parameter corundum CONFIG.TX_CPL_FIFO_DEPTH "32"
 ad_ip_parameter corundum CONFIG.TX_CHECKSUM_ENABLE "1"
 ad_ip_parameter corundum CONFIG.RX_HASH_ENABLE "1"
@@ -267,9 +204,10 @@ ad_ip_parameter corundum CONFIG.IRQ_COUNT $IRQ_SIZE
 ad_ip_parameter corundum CONFIG.IRQ_STRETCH "10"
 
 # Ethernet interface configuration
+
 ad_ip_parameter corundum CONFIG.AXIS_ETH_TX_PIPELINE "0"
-ad_ip_parameter corundum CONFIG.AXIS_ETH_TX_FIFO_PIPELINE "2"
 ad_ip_parameter corundum CONFIG.AXIS_ETH_TX_TS_PIPELINE "0"
+ad_ip_parameter corundum CONFIG.AXIS_ETH_TX_FIFO_PIPELINE "2"
 ad_ip_parameter corundum CONFIG.AXIS_ETH_RX_PIPELINE "0"
 ad_ip_parameter corundum CONFIG.AXIS_ETH_RX_FIFO_PIPELINE "2"
 
@@ -280,25 +218,37 @@ ad_ip_parameter corundum CONFIG.STAT_AXI_ENABLE "1"
 ad_ip_parameter corundum CONFIG.STAT_INC_WIDTH "24"
 ad_ip_parameter corundum CONFIG.STAT_ID_WIDTH "12"
 
-ad_connect led     corundum/led
-ad_connect sfp_led corundum/sfp_led
 
 set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [get_filesets sources_1]
 
 ad_connect corundum/clk sys_dma_clk
 ad_connect corundum/rst sys_dma_rstgen/peripheral_reset
 
-ad_connect corundum/sfp_rx_p sfp_rx_p
-ad_connect corundum/sfp_rx_n sfp_rx_n
-ad_connect corundum/sfp_tx_p sfp_tx_p
-ad_connect corundum/sfp_tx_n sfp_tx_n
-ad_connect corundum/sfp_mgt_refclk_p sfp_mgt_refclk_p
-ad_connect corundum/sfp_mgt_refclk_n sfp_mgt_refclk_n
 
-ad_connect corundum/sfp_tx_disable sfp_tx_disable
-ad_connect corundum/sfp_mod_abs sfp_mod_abs
-ad_connect corundum/sfp_rx_los sfp_rx_los
-ad_connect corundum/sfp_tx_fault sfp_tx_fault
+ad_connect corundum/qsfp_rx1_p            qsfp_rx1_p
+ad_connect corundum/qsfp_rx1_n            qsfp_rx1_n
+ad_connect corundum/qsfp_rx2_p            qsfp_rx2_p
+ad_connect corundum/qsfp_rx2_n            qsfp_rx2_n
+ad_connect corundum/qsfp_rx3_p            qsfp_rx3_p
+ad_connect corundum/qsfp_rx3_n            qsfp_rx3_n
+ad_connect corundum/qsfp_rx4_p            qsfp_rx4_p
+ad_connect corundum/qsfp_rx4_n            qsfp_rx4_n
+ad_connect corundum/qsfp_tx1_p            qsfp_tx1_p
+ad_connect corundum/qsfp_tx1_n            qsfp_tx1_n
+ad_connect corundum/qsfp_tx2_p            qsfp_tx2_p
+ad_connect corundum/qsfp_tx2_n            qsfp_tx2_n
+ad_connect corundum/qsfp_tx3_p            qsfp_tx3_p
+ad_connect corundum/qsfp_tx3_n            qsfp_tx3_n
+ad_connect corundum/qsfp_tx4_p            qsfp_tx4_p
+ad_connect corundum/qsfp_tx4_n            qsfp_tx4_n
+ad_connect corundum/qsfp_mgt_refclk_0_p   qsfp_mgt_refclk_0_p
+ad_connect corundum/qsfp_mgt_refclk_0_n   qsfp_mgt_refclk_0_n
+ad_connect corundum/qsfp_modsell          qsfp_modsell
+ad_connect corundum/qsfp_resetl           qsfp_resetl
+ad_connect corundum/qsfp_modprsl          qsfp_modprsl
+ad_connect corundum/qsfp_intl             qsfp_intl
+ad_connect corundum/qsfp_lpmode           qsfp_lpmode
+ad_connect corundum/led                   led
 
 set fifo_num_bytes 4
 set fifo_tdest_width 4
@@ -320,10 +270,6 @@ ad_connect smartconnect_corundum/ARESETN $sys_dma_interconnect_resetn
 ad_connect smartconnect_corundum/S00_ARESETN $sys_dma_interconnect_resetn
 ad_connect smartconnect_corundum/M00_ARESETN $sys_dma_interconnect_resetn
 ad_connect smartconnect_corundum/M01_ARESETN $sys_dma_interconnect_resetn
-
-
-
-
 
 ad_connect smartconnect_corundum/ACLK sys_dma_clk
 ad_connect smartconnect_corundum/S00_ACLK sys_dma_clk
@@ -362,8 +308,6 @@ assign_bd_address [get_bd_addr_segs { \
   sys_ps8/SAXIGP0/HPC0_DDR_LOW \
   sys_ps8/SAXIGP0/HPC0_DDR_HIGH \
 }]
-
-
 
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 iic_port
 

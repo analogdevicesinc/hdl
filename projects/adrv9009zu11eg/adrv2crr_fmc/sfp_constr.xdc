@@ -1,28 +1,56 @@
-# VCCO_HDA
-# set_property -dict {PACKAGE_PIN  IOSTANDARD LVCMOS18 PULLUP true} [get_ports sfp_i2c_sda] ;
-# set_property -dict {PACKAGE_PIN  IOSTANDARD LVCMOS18 PULLUP true} [get_ports sfp_i2c_scl] ;
-# set_property -dict {PACKAGE_PIN  IOSTANDARD LVCMOS18} [get_ports sfp_i2c_rstn]            ;
-# set_property -dict {PACKAGE_PIN  IOSTANDARD LVCMOS18} [get_ports sfp_i2c_en]              ;
+
+set_property -dict {PACKAGE_PIN  AJ16 IOSTANDARD LVCMOS18} [get_ports led_qsfp[0]]
+set_property -dict {PACKAGE_PIN  AH16 IOSTANDARD LVCMOS18} [get_ports led_qsfp[1]]
+set_property -dict {PACKAGE_PIN  AJ12 IOSTANDARD LVCMOS18} [get_ports led_qsfp[2]]
+set_property -dict {PACKAGE_PIN  AK12 IOSTANDARD LVCMOS18} [get_ports led_qsfp[3]]
+
+set_property -dict {PACKAGE_PIN  AU11 IOSTANDARD LVCMOS18 } [get_ports qsfp_resetl  ] ;
+set_property -dict {PACKAGE_PIN  AL12 IOSTANDARD LVCMOS18 PULLUP true } [get_ports qsfp_modprsl ] ;
+set_property -dict {PACKAGE_PIN  AW14 IOSTANDARD LVCMOS18 PULLUP true } [get_ports qsfp_intl    ] ;
+set_property -dict {PACKAGE_PIN  AV11 IOSTANDARD LVCMOS18 } [get_ports qsfp_lpmode  ] ;
 
 
+set_property PACKAGE_PIN AD2   [get_ports qsfp_rx1_p ] ;
+set_property PACKAGE_PIN AD1   [get_ports qsfp_rx1_n ] ;
+
+set_property PACKAGE_PIN AC4   [get_ports qsfp_rx2_p ] ;
+set_property PACKAGE_PIN AC3   [get_ports qsfp_rx2_n ] ;
+
+set_property PACKAGE_PIN AB2   [get_ports qsfp_rx3_p ] ;
+set_property PACKAGE_PIN AB1   [get_ports qsfp_rx3_n ] ;
+
+set_property PACKAGE_PIN AA4   [get_ports qsfp_rx4_p ] ;
+set_property PACKAGE_PIN AA3   [get_ports qsfp_rx4_n ] ;
+
+set_property PACKAGE_PIN AD6   [get_ports qsfp_tx1_p ] ;
+set_property PACKAGE_PIN AD5   [get_ports qsfp_tx1_n ] ;
+
+set_property PACKAGE_PIN AC8   [get_ports qsfp_tx2_p ] ;
+set_property PACKAGE_PIN AC7   [get_ports qsfp_tx2_n ] ;
+
+set_property PACKAGE_PIN AB6   [get_ports qsfp_tx3_p ] ;
+set_property PACKAGE_PIN AB5   [get_ports qsfp_tx3_n ] ;
+
+set_property PACKAGE_PIN AA8   [get_ports qsfp_tx4_p ] ;
+set_property PACKAGE_PIN AA7   [get_ports qsfp_tx4_n ] ;
+
+set_property PACKAGE_PIN AD10  [get_ports qsfp_mgt_refclk_0_p ] ;
+set_property PACKAGE_PIN AD9   [get_ports qsfp_mgt_refclk_0_n ] ;
 
 
-# set_false_path -to [get_ports {sfp_i2c_sda sfp_i2c_scl}]
-# set_output_delay 0 [get_ports {sfp_i2c_sda sfp_i2c_scl}]
+# 156.25 MHz MGT reference clock
+create_clock -period 6.400 -name gt_ref_clk [get_ports qsfp_mgt_refclk_0_p]
 
-# set_false_path -from [get_ports {sfp_i2c_sda sfp_i2c_scl}]
-# set_input_delay 0 [get_ports {sfp_i2c_sda sfp_i2c_scl}]
+set_property -dict {PACKAGE_PIN AR19 IOSTANDARD LVCMOS18} [get_ports resetb_ad9545]
 
-set_property -dict {PACKAGE_PIN AU10 IOSTANDARD LVCMOS18} [get_ports sfp_tx_disable] ;
-set_false_path -to [get_ports {sfp_tx_disable}]
-set_output_delay 0 [get_ports {sfp_tx_disable}]
+set_property -dict {PACKAGE_PIN  AT13 IOSTANDARD LVCMOS18} [get_ports fan_tach]
+set_property -dict {PACKAGE_PIN  AR13 IOSTANDARD LVCMOS18} [get_ports fan_pwm]
 
-# SFP+ Interface corundum
-set_property PACKAGE_PIN U12  [get_ports sfp_mgt_refclk_p] ; ####ETH_REFCLK2_P
-set_property PACKAGE_PIN U11  [get_ports sfp_mgt_refclk_n] ; ####ETH_REFCLK2_N
-set_property PACKAGE_PIN J4   [get_ports sfp_rx_p] ;
-set_property PACKAGE_PIN J3   [get_ports sfp_rx_n] ;
-set_property PACKAGE_PIN J8   [get_ports sfp_tx_p] ;
-set_property PACKAGE_PIN J7   [get_ports sfp_tx_n] ;
+set_property -dict {PACKAGE_PIN AT21 IOSTANDARD LVCMOS18} [get_ports i2c0_scl]
+set_property -dict {PACKAGE_PIN AU21 IOSTANDARD LVCMOS18} [get_ports i2c0_sda]
 
-create_clock -period 6.400 -name gt_ref_clk [get_ports sfp_mgt_refclk_p]
+set_property -dict {PACKAGE_PIN AN19 IOSTANDARD LVCMOS18} [get_ports i2c1_scl]
+set_property -dict {PACKAGE_PIN AN18 IOSTANDARD LVCMOS18} [get_ports i2c1_sda]
+
+set_property -dict {PACKAGE_PIN AN17 IOSTANDARD LVDS} [get_ports oscout_p]
+set_property -dict {PACKAGE_PIN AP17 IOSTANDARD LVDS} [get_ports oscout_n]
