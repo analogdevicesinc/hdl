@@ -436,7 +436,7 @@ module spi_engine_execution #(
        if (ECHO_SCLK) begin
         transfer_done <= echo_last_bit && last_transfer;
        end else begin
-        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && (last_transfer || !io_ready2)); // same conditions that make (!transfer_active && !wait_for_io)
+        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && last_transfer ); // same conditions that make (!transfer_active && !wait_for_io)
        end
     end
   end
