@@ -60,9 +60,9 @@
 
    input       sync_n,
    //input [4:0] num_lanes,
-   //input       bitslip_enable,
-   input       filter_enable,
-   input       filter_rdy_n,
+   input       bitslip_enable,
+   //input       filter_enable,
+   //input       filter_rdy_n,
 
    // delay interface(for IDELAY macros)
    input                             up_clk,
@@ -97,15 +97,15 @@
    localparam ULTRASCALE      = 2;
    localparam ULTRASCALE_PLUS = 3;
 
-   wire                 fall_filter_ready;
+   //wire                 fall_filter_ready;
    wire                 adc_clk_in_fast;
-   //wire [ 4:0]          shift_cnt_value;
-   wire [15:0]          serdes_data_16;
-   //wire [19:0]          pattern_value;
+   wire [7:0]           serdes_data_frame; 
    wire [19:0]          packed_16_20;
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
    wire [ 7:0]          serdes_data_1;
+   wire [ 7:0]          pattern_value;
+   wire [ 4:0]          shift_cnt_value;
 
    wire [NUM_LANES-1:0] serdes_in_p;
    wire [NUM_LANES-1:0] serdes_in_n;
@@ -131,23 +131,27 @@
 
    reg  [5:0]  serdes_reset = 6'b000110;
    reg         sync_status_int = 1'b0;
-   reg  [1:0]  serdes_valid = 2'b00;
-   reg  [3:0]  filter_rdy_n_d = 'b0;
-   //reg         shift_cnt_en = 1'b0;
+   //reg  [1:0]  serdes_valid = 2'b00;
+   //reg  [3:0]  filter_rdy_n_d = 'b0;
    reg         packed_data_valid_d;
    reg         packed_data_valid;
    reg  [19:0] adc_data_shifted;
-   //reg  [ 4:0] shift_cnt = 5'd0;
    reg  [19:0] packed_data_d;
    reg  [19:0] packed_data;
-   //reg         slip_dd;
-   //reg         slip_d;
+   reg  [1:0]  serdes_valid = 2'b00;
+   reg  [1:0]  serdes_valid_d = 2'b00;
+   reg         slip_dd;
+   reg         slip_d;
+   reg         shift_cnt_en = 1'b0;
+   reg  [ 4:0] shift_cnt = 5'd0;
+   wire  [15:0] serdes_data_16;
+   //wire  [15:0] serdes_data_16_d;
 
-   assign fall_filter_ready = filter_rdy_n_d[3] & ~filter_rdy_n_d[2];
+   //assign fall_filter_ready = filter_rdy_n_d[3] & ~filter_rdy_n_d[2];
    assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
-   //assign pattern_value     = 20'hac5d6;
-   //assign shift_cnt_value   = 'd19;
+   assign pattern_value     = 8'hF0;
+   assign shift_cnt_value   = 'd19;
 
    IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -209,8 +213,6 @@
     .data_s5(data_s5),
     .data_s6(data_s6),
     .data_s7(data_s7),
-    //.frame_in_p(data_frame_p),
-    //.frame_in_n(data_frame_n),
     .data_in_p(serdes_in_p),
     .data_in_n(serdes_in_n),
     .up_clk(up_clk),
@@ -222,6 +224,7 @@
     .delay_locked(delay_locked));
 
     // serdes for frame
+    
     ad_serdes_in #(
     .CMOS_LVDS_N(CMOS_LVDS_N),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
@@ -245,8 +248,6 @@
     .data_s5(data_s5_frame),
     .data_s6(data_s6_frame),
     .data_s7(data_s7_frame),
-    //.frame_in_p(data_frame_p),
-    //.frame_in_n(data_frame_n),
     .data_in_p(data_frame_p),
     .data_in_n(data_frame_n),
     .up_clk(up_clk),
@@ -295,66 +296,56 @@
                            serdes_data_0[0],
                            serdes_data_1[0]};
 
-   /*ad_pack #(
-    .I_W(16),
-    .O_W(20),
-    .UNIT_W(1),
-    .ALIGN_TO_MSB(1)
-  ) i_ad_pack_16 (
-    .clk(adc_clk_div),
-    .reset(~serdes_valid[0]),
-    .idata(serdes_data_16),
-    .ivalid(serdes_valid[1]),
-    .odata(packed_16_20),
-    .ovalid(pack16_valid));
+  assign serdes_data_frame = {data_s0_frame,
+                              data_s1_frame,
+                              data_s2_frame,
+                              data_s3_frame,
+                              data_s4_frame,
+                              data_s5_frame,
+                              data_s6_frame,
+                              data_s7_frame};
 
-    always @(*) begin
-        packed_data = packed_16_20;
-    end
+//assign adc_data  = serdes_data_16;
 
-    always @(*) begin
-        packed_data_valid = pack16_valid;
-    end
-
-  always @(posedge adc_clk_div) begin
-    if(packed_data_valid) begin
-          packed_data_d <= packed_data;
-        end
-    end
-
-  always @(posedge adc_clk_div) begin
-    slip_d <= bitslip_enable;
-    slip_dd <= slip_d;
-    if(serdes_reset_s || adc_data_shifted == pattern_value)
-          shift_cnt_en <= 1'b0;
-    else if(slip_d & ~slip_dd)
-          shift_cnt_en <= 1'b1;
+/*always @(posedge adc_clk_div) begin
+  if(serdes_valid[1]) begin
+    serdes_data_16_d <= serdes_data_16;
   end
-
-  always @(posedge adc_clk_div) begin
-    if(shift_cnt_en) begin
-      if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
-        shift_cnt <= 0;
-        sync_status_int <= 1'b0;
-      end else if( adc_data_shifted != pattern_value &&(packed_data_valid_d & ~packed_data_valid) ) begin
-        shift_cnt <= shift_cnt + 1;
-      end
-      if(adc_data_shifted == pattern_value) begin
-        sync_status_int <= 1'b1;
-      end
-    end
-  end
-
-  always @(posedge adc_clk_div) begin
-    adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
-    packed_data_valid_d <= packed_data_valid;
-    filter_rdy_n_d <= {filter_rdy_n_d[2:0], filter_rdy_n};
-  end
+end
 */
-   // Sign extend to 32 bits
 
-  //assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};
-assign adc_data  = serdes_data_16;
-  //assign adc_valid = filter_enable ?  (packed_data_valid_d & fall_filter_ready) : packed_data_valid_d;
+// enable bitslip
+always @(posedge adc_clk_div) begin
+  slip_d <= bitslip_enable;
+  slip_dd <= slip_d;
+  if(serdes_reset_s || serdes_data_frame == pattern_value)
+    shift_cnt_en <= 1'b0;
+  else if(slip_d & ~slip_dd)
+    shift_cnt_en <= 1'b1;
+end
+
+// find offset
+always @(posedge adc_clk_div) begin
+  if(shift_cnt_en) begin
+    if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
+      shift_cnt <= 0;
+      sync_status_int <= 1'b0;
+    end else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
+      shift_cnt <= shift_cnt + 1;
+    end
+    if(serdes_data_frame == pattern_value) begin
+      sync_status_int <= 1'b1;
+    end
+  end
+end
+
+always @(posedge adc_clk_div) begin
+ // adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
+ // adc_data_shifted <= {serdes_data_16_d,serdes_data_16} >> shift_cnt;
+  adc_data_shifted <= serdes_data_16 >> shift_cnt;
+  serdes_valid_d <= serdes_valid;
+  end
+
+  assign adc_data = adc_data_shifted;
 
 endmodule
