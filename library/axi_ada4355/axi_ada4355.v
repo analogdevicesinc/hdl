@@ -51,8 +51,8 @@ module axi_ada4355 #(
 
   //input                   clk_in_p,
   //input                   clk_in_n,
-  //input                   data_frame_p,
-  //input                   data_frame_n,
+  input                   data_frame_p,
+  input                   data_frame_n,
 
   input                   sync_n,
   input                   filter_data_ready_n,
@@ -103,7 +103,7 @@ module axi_ada4355 #(
   wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
   wire    [7:0]    adc_custom_control_s;
-  wire             bitslip_enable;
+  //wire             bitslip_enable;
   wire             filter_enable;
   wire             delay_locked;
   wire             sync_status;
@@ -229,7 +229,7 @@ module axi_ada4355 #(
     .adc_clk_ratio(32'd2),
     .adc_start_code(),
     .adc_sref_sync(),
-    .adc_sync(bitslip_enable),
+    //.adc_sync(bitslip_enable),
     .adc_num_lanes(adc_num_lanes),
     .up_pps_rcounter(32'b0),
     .up_pps_status(1'b0),
@@ -276,8 +276,8 @@ module axi_ada4355 #(
     .da_n(da_n),
     .db_p(db_p),
     .db_n(db_n),
-    //.data_frame_p(data_frame_p),
-    //.data_frame_n(data_frame_n),
+    .data_frame_p(data_frame_p),
+    .data_frame_n(data_frame_n),
     //.num_lanes(adc_num_lanes),
     //.self_sync(self_sync),
     .up_clk(up_clk),
@@ -291,7 +291,7 @@ module axi_ada4355 #(
     .adc_clk(adc_clk_s),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
-    .bitslip_enable(bitslip_enable),
+    //.bitslip_enable(bitslip_enable),
     .sync_status(sync_status),
     .filter_enable(filter_enable),
     .filter_rdy_n(filter_data_ready_n),
@@ -320,7 +320,6 @@ module axi_ada4355 #(
     .up_raddr(up_raddr_s),
     .up_rdata(up_rdata_s[2]),
     .up_rack(up_rack_s[2]));
-
 
   // up bus interface
 
