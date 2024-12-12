@@ -14,7 +14,7 @@ create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
 #create_bd_port -dir I cnv_in_p
 #create_bd_port -dir I cnv_in_n
-create_bd_port -dir I filter_data_ready_n
+#create_bd_port -dir I filter_data_ready_n
 create_bd_port -dir I fpga_ref_clk
 create_bd_port -dir I fpga_100_clk
 create_bd_port -dir I frame_clock_p
@@ -56,7 +56,7 @@ ad_connect db_n                 axi_ada4355_adc/db_n
 ad_connect sync_n               axi_ada4355_adc/sync_n
 #ad_connect cnv_in_p             axi_ada4355_adc/cnv_in_p
 #ad_connect cnv_in_n             axi_ada4355_adc/cnv_in_n
-ad_connect filter_data_ready_n  axi_ada4355_adc/filter_data_ready_n
+#ad_connect filter_data_ready_n  axi_ada4355_adc/filter_data_ready_n
 ad_connect frame_clock_p        axi_ada4355_adc/data_frame_p
 ad_connect frame_clock_n        axi_ada4355_adc/data_frame_n
 ad_connect $sys_iodelay_clk     axi_ada4355_adc/delay_clk

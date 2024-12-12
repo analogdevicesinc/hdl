@@ -154,7 +154,7 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  wire            filter_data_ready_n;
+  //wire            filter_data_ready_n;
   wire            fpga_100_clk;
   wire            fpga_ref_clk;
 
@@ -163,7 +163,7 @@ module system_top (
   assign gp2_dir        = 1'b1;
   assign gp3_dir        = 1'b0;
 
-  assign filter_data_ready_n  = gpio1_fmc;
+  //assign filter_data_ready_n  = gpio1_fmc;
   assign gpio_i[34]           = gpio3_fmc;
   assign gpio2_fmc            = gpio_o[33];
 
@@ -282,7 +282,7 @@ module system_top (
     //.cnv_in_n(cnv_in_n),
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
-    .filter_data_ready_n(filter_data_ready_n),
+    //.filter_data_ready_n(filter_data_ready_n),
     .sync_n (ad9508_sync),
     .fpga_ref_clk(fpga_ref_clk),
     .fpga_100_clk(fpga_100_clk));
