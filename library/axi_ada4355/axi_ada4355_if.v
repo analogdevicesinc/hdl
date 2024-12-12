@@ -53,14 +53,14 @@
    input       da_n,
    input       db_p,
    input       db_n,
-  // input       data_frame_p,
-  // input       data_frame_n,
+   input       data_frame_p,
+   input       data_frame_n,
    input       clk_in_p,
    input       clk_in_n,
 
    input       sync_n,
    //input [4:0] num_lanes,
-   input       bitslip_enable,
+   //input       bitslip_enable,
    input       filter_enable,
    input       filter_rdy_n,
 
@@ -72,6 +72,11 @@
    input                             delay_clk,
    input                             delay_rst,
    output                            delay_locked,
+
+   //frame
+
+   output  [DRP_WIDTH*1-1:0] up_adc_drdata_frame,
+   output                    delay_locked_frame,
 
    // internal reset and clocks
    input                             adc_rst,
@@ -94,9 +99,9 @@
 
    wire                 fall_filter_ready;
    wire                 adc_clk_in_fast;
-   wire [ 4:0]          shift_cnt_value;
+   //wire [ 4:0]          shift_cnt_value;
    wire [15:0]          serdes_data_16;
-   wire [19:0]          pattern_value;
+   //wire [19:0]          pattern_value;
    wire [19:0]          packed_16_20;
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
@@ -115,25 +120,34 @@
    wire [NUM_LANES-1:0] data_s6;
    wire [NUM_LANES-1:0] data_s7;
 
+   wire [NUM_LANES-1:0] data_s0_frame;
+   wire [NUM_LANES-1:0] data_s1_frame;
+   wire [NUM_LANES-1:0] data_s2_frame;
+   wire [NUM_LANES-1:0] data_s3_frame;
+   wire [NUM_LANES-1:0] data_s4_frame;
+   wire [NUM_LANES-1:0] data_s5_frame;
+   wire [NUM_LANES-1:0] data_s6_frame;
+   wire [NUM_LANES-1:0] data_s7_frame;
+
    reg  [5:0]  serdes_reset = 6'b000110;
    reg         sync_status_int = 1'b0;
    reg  [1:0]  serdes_valid = 2'b00;
    reg  [3:0]  filter_rdy_n_d = 'b0;
-   reg         shift_cnt_en = 1'b0;
+   //reg         shift_cnt_en = 1'b0;
    reg         packed_data_valid_d;
    reg         packed_data_valid;
    reg  [19:0] adc_data_shifted;
-   reg  [ 4:0] shift_cnt = 5'd0;
+   //reg  [ 4:0] shift_cnt = 5'd0;
    reg  [19:0] packed_data_d;
    reg  [19:0] packed_data;
-   reg         slip_dd;
-   reg         slip_d;
+   //reg         slip_dd;
+   //reg         slip_d;
 
    assign fall_filter_ready = filter_rdy_n_d[3] & ~filter_rdy_n_d[2];
    assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
-   assign pattern_value     = 20'hac5d6;
-   assign shift_cnt_value   = 'd19;
+   //assign pattern_value     = 20'hac5d6;
+   //assign shift_cnt_value   = 'd19;
 
    IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -170,6 +184,8 @@
       end
       assign serdes_reset_s = serdes_reset[5];
 
+    //serdes for data
+
    ad_serdes_in #(
     .CMOS_LVDS_N(CMOS_LVDS_N),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
@@ -204,6 +220,42 @@
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));
+
+    // serdes for frame
+    ad_serdes_in #(
+    .CMOS_LVDS_N(CMOS_LVDS_N),
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IODELAY_CTRL(IODELAY_CTRL),
+    .IODELAY_GROUP(IO_DELAY_GROUP),
+    .DDR_OR_SDR_N(DDR_OR_SDR_N),
+    .DATA_WIDTH(1),
+    .DRP_WIDTH(DRP_WIDTH),
+    .SERDES_FACTOR(8),
+    .EXT_SERDES_RESET(1)
+    ) i_serdes_frame(
+    .rst(serdes_reset_s),
+    .ext_serdes_rst(serdes_reset_s),
+    .clk(adc_clk_in_fast),
+    .div_clk(adc_clk_div),
+    .data_s0(data_s0_frame),
+    .data_s1(data_s1_frame),
+    .data_s2(data_s2_frame),
+    .data_s3(data_s3_frame),
+    .data_s4(data_s4_frame),
+    .data_s5(data_s5_frame),
+    .data_s6(data_s6_frame),
+    .data_s7(data_s7_frame),
+    //.frame_in_p(data_frame_p),
+    //.frame_in_n(data_frame_n),
+    .data_in_p(data_frame_p),
+    .data_in_n(data_frame_n),
+    .up_clk(up_clk),
+    .up_dld(up_adc_dld),
+    .up_dwdata(up_adc_dwdata),
+    .up_drdata(up_adc_drdata_frame),
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
+    .delay_locked(delay_locked_frame));
 
    assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
    assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
@@ -243,7 +295,7 @@
                            serdes_data_0[0],
                            serdes_data_1[0]};
 
-   ad_pack #(
+   /*ad_pack #(
     .I_W(16),
     .O_W(20),
     .UNIT_W(1),
@@ -298,10 +350,11 @@
     packed_data_valid_d <= packed_data_valid;
     filter_rdy_n_d <= {filter_rdy_n_d[2:0], filter_rdy_n};
   end
-
+*/
    // Sign extend to 32 bits
 
-  assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};
-  assign adc_valid = filter_enable ?  (packed_data_valid_d & fall_filter_ready) : packed_data_valid_d;
+  //assign adc_data  = {{12{adc_data_shifted[19]}},adc_data_shifted};
+assign adc_data  = serdes_data_16;
+  //assign adc_valid = filter_enable ?  (packed_data_valid_d & fall_filter_ready) : packed_data_valid_d;
 
 endmodule
