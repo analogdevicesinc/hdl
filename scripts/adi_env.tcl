@@ -35,7 +35,7 @@ if {![info exists REQUIRED_QUARTUS_VERSION]} {
 }
 
 # Define the supported tool version
-set required_lattice_version "2023.2"
+set required_lattice_version "2024.1"
 if {[info exists ::env(REQUIRED_LATTICE_VERSION)]} {
   set required_lattice_version $::env(REQUIRED_LATTICE_VERSION)
 } elseif {[info exists REQUIRED_LATTICE_VERSION]} {
