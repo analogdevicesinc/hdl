@@ -725,34 +725,11 @@ Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
 
-The build for any supported project works with ``make``, same as the others.
-First, you have to open the **Propel Builder GUI** and download the necessary
-Lattice-provided IPs manually. You can check the **necessary Lattice IPs** and
-and their versions in the
-**<project_name>_system_pb.tcl** script or follow the error messages in the
-**<project_name>_propel_builder.log** after running ``make`` and you get
-a FAILED message.
-
-Then, simply go to the carrier folder and run ``make``. For now, you can try
+The build for any supported project works by ``make``, same as the others.
+Simply go to the carrier folder and run ``make``. For now, you can try
 to build the only base design we have available for
 **CertusPro-NX Evaluation Board** by entering the base design directory and
 running ``make``.
-
-Required Lattice Provided IPs to download for projects/common/lfcpnx
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-==================== ============================= =======
-IP name              Display name                  Version
-==================== ============================= =======
-riscv_rtos           RISC-V RX                      2.3.0
-gpio                 GPIO                           1.6.2
-spi_controller       SPI Controller                 2.1.0
-i2c_controller       I2C Controller                 2.0.1
-axi_interconnect     AXI4 Interconnect              1.2.2
-axi2ahb_bridge       AXI4 to AHB-Lite Bridge        1.1.1
-axi2apb_bridge       AXI4 to APB Bridge             1.1.1
-gp_timer             Timer-Counter                  1.3.1
-==================== ============================= =======
 
 .. shell:: bash
 
@@ -1036,12 +1013,17 @@ on these tools.
       * - SDK (ARM/FPGA combo)
         - :red:`Not supported or nonexistent yet.`
       * - Upgrading/Version changes (non-ADI cores)
-        - :red:`You have to update the IP versions manually in GUI and copy the config
-          from the tcl console to the '.tcl' block design file, or update directly
-          in the '.tcl' block design file. Note that first you have to download the
-          new version of IPs using the GUI. An ip_upgrade tcl command exists, but
-          still the IPs have to be downloaded manually, and it only works if the old
-          IP's name is the same as the new (sometimes it changes by version).`
+        - :red:`If the project builds that means the dependency IPs are still
+          available for download. You can Update the IPs manually by checking
+          the available upgrades for the IPs in Propel Builder GUI at the IP
+          on Server section, then edit the project scripts to download and
+          instantiate the new versions of the IPs. the ip_catalog_install
+          tcl command is for downloading the IP, the adi_ip_instance is for
+          instantiating the IP. Simply edit the -vlnv sections with
+          the new versions. Sometimes configuration parameters or the IP name
+          also can change. In that case you should instantiate the new IP version
+          in GUI first, copy the vlnv and configuration section from the tcl shell window
+          to replace the -vlnv and -cfg_value section in the tcl scripts.`
 
 .. _build_hdl tool-versions:
 
