@@ -333,24 +333,25 @@ ad_connect  $sys_cpu_resetn util_apollo_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_apollo_xcvr/up_clk
 
 # connections (adc)
-set max_lane_map {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15}
+set max_lane_map {3 2 1 0 7 6 5 4 11 10 8 9 12 13 14 15}
 set lane_map {}
 
 for {set i 0}  {$i < $RX_NUM_LINKS} {incr i} {
   for {set j 0}  {$j < $RX_JESD_L} {incr j} {
     set cur_lane [expr $i*$MAX_RX_LANES_PER_LINK+$j]
-    lappend lane_map $cur_lane
+    lappend lane_map [lindex $max_lane_map $cur_lane]
   }
 }
 ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $max_lane_map {} rx_device_clk $MAX_RX_LANES $lane_map
 
 # connections (dac)
+set max_lane_map {3 2 1 0 5 4 7 6 8 11 10 9 12 13 14 15}
 set lane_map {}
 
 for {set i 0}  {$i < $TX_NUM_LINKS} {incr i} {
   for {set j 0}  {$j < $TX_JESD_L} {incr j} {
     set cur_lane [expr $i*$MAX_TX_LANES_PER_LINK+$j]
-    lappend lane_map $cur_lane
+    lappend lane_map [lindex $max_lane_map $cur_lane]
   }
 }
 ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $max_lane_map {} tx_device_clk $MAX_TX_LANES $lane_map
