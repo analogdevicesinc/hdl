@@ -214,9 +214,6 @@
 # Code owners for fmcomms8 folder
 /projects/fmcomms8/         andrei.dragomir@analog.com  iulia.moldovan@analog.com
 
-# Code owners for imageon folder
-/projects/imageon/          alin-tudor.sferle@analog.com  adrian.costina@analog.com
-
 # Code owners for jupiter_sdr folder
 /projects/jupiter_sdr/      andrei.grozav@analog.com  alin-tudor.sferle@analog.com
 
