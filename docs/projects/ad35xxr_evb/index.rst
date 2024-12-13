@@ -1,19 +1,26 @@
-.. _ad3552r_evb:
+.. _ad35xxr_evb:
 
-AD3552R-EVB HDL project
+AD35XXR-EVB HDL project
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD3552R` is an evaluation board for the
-:adi:`AD3552R`, a dual-channel, 16-bit fast precision
-digital-to-analog converter (DAC). Each channel of the :adi:`AD3552R`
-is equipped with a different transimpedance amplifier: Channel 0 has a fast
-amplifier that achieves the optimal dynamic performance and Channel 1 has a
-precision amplifier that guarantees the optimal DC precision over temperature.
+The :adi:`EVAL-AD3542R <EVAL-AD3542R>` is an evaluation board for the
+:adi:`AD3542R <AD3542R>`, a dual-channel, 16-bit fast precision
+digital-to-analog converter (DAC). The same eval board can be used to
+evaluate the :adi:`AD3541R <AD3541R>`, the single channel part.
 
-The board allows testing all the output ranges of the DAC, waveform generation,
+The :adi:`EVAL-AD3552R <EVAL-AD3552R>` is an evaluation board for the
+:adi:`AD3552R <AD3552R>`, a dual-channel, 16-bit fast precision
+digital-to-analog converter (DAC). The same eval board can be used to evaluate
+the :adi:`AD3551R <AD3551R>`, the single channel part. Each channel of the
+:adi:`AD3552R <AD3552R>` is equipped with a different transimpedance
+amplifier: Channel 0 has a fast amplifier that achieves the optimal dynamic
+performance and Channel 1 has a precision amplifier that guarantees the
+optimal DC precision over temperature.
+
+The boards allow testing all the output ranges of the DAC, waveform generation,
 power supply and reference options.
 
 Supported boards
@@ -24,7 +31,10 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD3552R`
+-  :adi:`AD3541R`
+-  :adi:`AD3542R`
+-  :adi:`AD3551R`
+-  :adi:`AD3552R`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -52,10 +62,10 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad3552r_evb_zed_block_diagram.svg
+.. image:: ad35xxr_evb_zed_block_diagram.svg
    :width: 800
    :align: center
-   :alt: EVAL-AD3552R/ZedBoard block diagram
+   :alt: EVAL-AD35XXR/ZedBoard block diagram
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,9 +76,9 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ====================  ===============
 Instance              Zynq/Microblaze
 ====================  ===============
-axi_ad3552r_dac       0x44A7_0000
-axi_dac_dma           0x44A3_0000
-axi_clkgen            0x44B0_0000
+axi_ad35xxr_dac       0x44A7_0000
+axi_dac_dma           0x44A3_0000 
+axi_clkgen            0x44B0_0000    
 ====================  ===============
 
 GPIOs
@@ -88,37 +98,37 @@ GPIOs
      -
      - Zynq-7000
      - Zynq MP
-   * - ad3552r_resetn
+   * - ad35xxr_resetn
      - OUT
      - 38
      - 92
      - 116
-   * - ad3552r_gpio_9
+   * - ad35xxr_gpio_9
      - INOUT
      - 37
      - 91
      - 115
-   * - ad3552r_gpio_8
+   * - ad35xxr_gpio_8
      - INOUT
      - 36
      - 90
      - 114
-   * - ad3552r_gpio_7
+   * - ad35xxr_gpio_7
      - INOUT
      - 35
      - 89
      - 113
-   * - ad3552r_gpio_6
+   * - ad35xxr_gpio_6
      - INOUT
      - 34
      - 88
      - 112
-   * - ad3552r_alertn
+   * - ad35xxr_alertn
      - INOUT
      - 33
      - 87
      - 111
-   * - ad3552r_ldacn
+   * - ad35xxr_ldacn
      - INOUT
      - 32
      - 86
@@ -148,10 +158,12 @@ the HDL repository, and then build the project as follows:
 
 **Linux/Cygwin/WSL**
 
-.. shell::
+.. shell:: bash
+  :user: user
+  :group: analog
 
-   $cd hdl/projects/ad3552r_evb/zed
-   $make
+  $cd hdl/projects/ad35xxr_evb/zed
+  $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -162,21 +174,25 @@ Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] EVAL-AD3552R Evaluation Board on ZedBoard User Guide <resources/eval/user-guides/dac/ad3552r_eval_zed>`
+- :dokuwiki:`[Wiki] EVAL-AD3542R Evaluation Board on ZedBoard User Guide <resources/eval/user-guides/dac/eval-ad3542r>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Product datasheets:
 
-  - :adi:`AD3552R`
-  - :adi:`EVAL-AD3552R`
+   -  :adi:`AD3541R`
+   -  :adi:`AD3542R`
+   -  :adi:`AD3551R`
+   -  :adi:`AD3552R`
 
 - :adi:`UG-2217, User Guide | EVAL-AD3552R <media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`
+- :adi:`UG-2258, User Guide | EVAL-AD3542R <media/en/technical-documentation/user-guides/eval-ad3542r-ug-2258.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`EVAL-AD3552R HDL project source code <projects/ad3552r_evb>`
+- :git-hdl:`EVAL-AD3552R HDL project source code <projects/ad35xxr_evb>`
 
 .. list-table::
    :widths: 30 35 35
@@ -186,9 +202,9 @@ HDL related
      - Source code link
      - Documentation link
 
-   * - AXI_AD3552R
-     - :git-hdl:`library/axi_ad3552r`
-     - :ref:`axi_ad3552r`
+   * - AXI_AD35XXR
+     - :git-hdl:`library/axi_ad35xxr`
+     - :ref:`here <axi_ad35xxr>`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`
