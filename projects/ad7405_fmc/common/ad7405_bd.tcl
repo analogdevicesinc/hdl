@@ -19,12 +19,12 @@ ad_ip_parameter axi_ad7405_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ad7405_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
-# MCLK generation 50 MHz
+# MCLK generation 40 MHz
 
 ad_ip_instance axi_clkgen axi_adc_clkgen
 ad_ip_parameter axi_adc_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter axi_adc_clkgen CONFIG.VCO_MUL 10
-ad_ip_parameter axi_adc_clkgen CONFIG.CLK0_DIV 20
+ad_ip_parameter axi_adc_clkgen CONFIG.CLK0_DIV 25
 
 ad_ip_instance axi_ad7405 axi_ad7405
 
