@@ -115,9 +115,6 @@
 # Code owners for ad9783_ebz folder
 /projects/ad9783_ebz/       iulia.moldovan@analog.com  cristianmihai.popa@analog.com
 
-# Code owners for ad_fmclidar1_ebz folder
-/projects/ad_fmclidar1_ebz/ adrian.costina@analog.com andrei.grozav@analog.com
-
 # Code owners for ad_quadmxfe1_ebz folder
 /projects/ad_quadmxfe1_ebz/ filip.gherman@analog.com  iulia.moldovan@analog.com  laez.barbosa@analog.com
 
