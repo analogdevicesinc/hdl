@@ -43,7 +43,7 @@ proc adi_project_pb {project_name args} {
   set preinst_ip_mod_dir ${env(TOOLRTF)}
 
   array set opt [list -dev_select "auto" \
-    -ppath "." \
+    -ppath "./_bld" \
     -device "" \
     -board "" \
     -speed "" \
@@ -98,7 +98,7 @@ proc adi_project_pb {project_name args} {
 proc adi_project_create_pb {project_name args} {
   puts "\nadi_project_create_pb:\n"
 
-  array set opt [list -ppath "." \
+  array set opt [list -ppath "./_bld" \
     -device "" \
     -board "" \
     -speed "" \
@@ -160,6 +160,10 @@ proc adi_project_create_pb {project_name args} {
 
   set preinst_ip_mod_dir ${env(TOOLRTF)}
   set propel_builder_project_dir "$ppath/$project_name/$project_name"
+
+  if {[file exists $ppath] != 1} {
+    file mkdir $ppath
+  }
 
   sbp_create_project  -name "$project_name" \
     -path $ppath \
