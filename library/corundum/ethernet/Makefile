@@ -120,4 +120,15 @@ XILINX_DEPS  += ../interfaces/if_i2c_rtl.xml
 
 XILINX_INTERFACE_DEPS += corundum/interfaces
 
+GENERIC_DEPS += board.env
+
+.PHONY: always-rebuild
+
+all: board.env
+
+board.env : always-rebuild
+	echo $(BOARD) > board.tmp
+	diff -N board.env board.tmp 1> /dev/null || cp board.tmp board.env
+	rm -f board.tmp
+
 include ../../scripts/library.mk

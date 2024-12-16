@@ -17,4 +17,6 @@ LIB_DEPS += sysid_rom
 LIB_DEPS += corundum/corundum_core
 LIB_DEPS += corundum/ethernet
 
+export BOARD := VCU118
+
 include ../../scripts/project-xilinx.mk

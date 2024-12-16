@@ -91,7 +91,12 @@ adi_ip_files corundum_core [list \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_psdpram.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_client_axis_sink.v" \
   "$ad_hdl_dir/../ucorundum/fpga/lib/pcie/rtl/dma_client_axis_source.v" \
+  "mqnic_app_block.v" \
+  "mqnic_app_custom_ports.vh" \
+  "mqnic_app_custom_params.vh" \
 ]
+
+set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
 
 adi_ip_properties_lite corundum_core
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
@@ -105,7 +110,9 @@ set_property description "Corundum MQNIC Core AXI IP" $cc
 ipx::remove_all_bus_interface [ipx::current_core]
 ipx::remove_all_address_space [ipx::current_core]
 
-# Interface definitions
+## Interface definitions
+
+# Base IP interfaces
 
 adi_add_bus "m_axi" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -226,7 +233,6 @@ adi_add_bus "m_axil_csr" "master" \
     {"m_axil_csr_rready" "RREADY"} \
   }
 
-adi_add_bus_clock "clk" "m_axi:m_axi_dma:s_axil_app_ctrl:s_axil_ctrl:m_axil_csr" "rst"
 
 adi_add_bus "m_axi_ddr" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
@@ -277,8 +283,6 @@ adi_add_bus "m_axi_ddr" "master" \
   }
 ipx::infer_address_space [ipx::get_bus_interfaces m_axi_ddr -of_objects $cc]
 
-adi_add_bus_clock "ddr_clk" "m_axi_ddr" "ddr_rst"
-
 adi_add_bus "m_axi_hbm" "master" \
   "xilinx.com:interface:aximm_rtl:1.0" \
   "xilinx.com:interface:aximm:1.0" \
@@ -328,8 +332,6 @@ adi_add_bus "m_axi_hbm" "master" \
   }
 ipx::infer_address_space [ipx::get_bus_interfaces m_axi_hbm -of_objects $cc]
 
-adi_add_bus_clock "hbm_clk" "m_axi_hbm" "hbm_rst"
-
 adi_add_bus "m_axis_tx" "master" \
   "xilinx.com:interface:axis_rtl:1.0" \
   "xilinx.com:interface:axis:1.0" \
@@ -340,8 +342,6 @@ adi_add_bus "m_axis_tx" "master" \
     {"m_axis_tx_tready" "TREADY"} \
     {"m_axis_tx_tlast" "TLAST"} \
     {"m_axis_tx_tuser" "TUSER"} ]
-
-adi_add_bus_clock "tx_clk" "m_axis_tx" "tx_rst"
 
 adi_add_bus "s_axis_rx" "slave" \
   "xilinx.com:interface:axis_rtl:1.0" \
@@ -363,8 +363,6 @@ adi_add_bus "s_axis_stat" "slave" \
     {"s_axis_stat_tvalid" "TVALID"} \
     {"s_axis_stat_tready" "TREADY"} ]
 
-adi_add_bus_clock "rx_clk" "s_axis_rx:s_axis_stat" "rx_rst"
-
 adi_if_infer_bus analog.com:interface:if_ctrl_reg master ctrl_reg [list \
   "ctrl_reg_wr_addr ctrl_reg_wr_addr" \
   "ctrl_reg_wr_data ctrl_reg_wr_data" \
@@ -379,10 +377,7 @@ adi_if_infer_bus analog.com:interface:if_ctrl_reg master ctrl_reg [list \
   "ctrl_reg_rd_ack  ctrl_reg_rd_ack" \
 ]
 
-adi_if_infer_bus analog.com:interface:if_ptp_clock master ptp_clock [list \
-  "ptp_clk              ptp_clk" \
-  "ptp_rst              ptp_rst" \
-  "ptp_sample_clk       ptp_sample_clk" \
+adi_if_infer_bus analog.com:interface:if_ptp master ptp_clock [list \
   "ptp_td_sd            ptp_td_sd" \
   "ptp_pps              ptp_pps" \
   "ptp_pps_str          ptp_pps_str" \
@@ -452,6 +447,456 @@ adi_if_infer_bus analog.com:interface:if_gpio master gpio [list \
   "gpio_in     app_gpio_in" \
   "gpio_out    app_gpio_out" \
 ]
+
+# Application interfaces
+
+adi_add_bus "m_axi_ddr_app" "slave" \
+  "xilinx.com:interface:aximm_rtl:1.0" \
+  "xilinx.com:interface:aximm:1.0" \
+  {
+    {"m_axi_ddr_awid_app" "AWID"} \
+    {"m_axi_ddr_awaddr_app" "AWADDR"} \
+    {"m_axi_ddr_awlen_app" "AWLEN"} \
+    {"m_axi_ddr_awsize_app" "AWSIZE"} \
+    {"m_axi_ddr_awuser_app" "AWUSER"} \
+    {"m_axi_ddr_awburst_app" "AWBURST"} \
+    {"m_axi_ddr_awlock_app" "AWLOCK"} \
+    {"m_axi_ddr_awcache_app" "AWCACHE"} \
+    {"m_axi_ddr_awprot_app" "AWPROT"} \
+    {"m_axi_ddr_awqos_app" "AWQOS"} \
+    {"m_axi_ddr_awvalid_app" "AWVALID"} \
+    {"m_axi_ddr_awready_app" "AWREADY"} \
+    {"m_axi_ddr_wdata_app" "WDATA"} \
+    {"m_axi_ddr_wstrb_app" "WSTRB"} \
+    {"m_axi_ddr_wlast_app" "WLAST"} \
+    {"m_axi_ddr_wvalid_app" "WVALID"} \
+    {"m_axi_ddr_wready_app" "WREADY"} \
+    {"m_axi_ddr_wuser_app" "WUSER"} \
+    {"m_axi_ddr_bid_app" "BID"} \
+    {"m_axi_ddr_bresp_app" "BRESP"} \
+    {"m_axi_ddr_buser_app" "BUSER"} \
+    {"m_axi_ddr_bvalid_app" "BVALID"} \
+    {"m_axi_ddr_bready_app" "BREADY"} \
+    {"m_axi_ddr_arid_app" "ARID"} \
+    {"m_axi_ddr_araddr_app" "ARADDR"} \
+    {"m_axi_ddr_arlen_app" "ARLEN"} \
+    {"m_axi_ddr_arsize_app" "ARSIZE"} \
+    {"m_axi_ddr_aruser_app" "ARUSER"} \
+    {"m_axi_ddr_arburst_app" "ARBURST"} \
+    {"m_axi_ddr_arlock_app" "ARLOCK"} \
+    {"m_axi_ddr_arcache_app" "ARCACHE"} \
+    {"m_axi_ddr_arprot_app" "ARPROT"} \
+    {"m_axi_ddr_arqos_app" "ARQOS"} \
+    {"m_axi_ddr_arvalid_app" "ARVALID"} \
+    {"m_axi_ddr_arready_app" "ARREADY"} \
+    {"m_axi_ddr_rid_app" "RID"} \
+    {"m_axi_ddr_rdata_app" "RDATA"} \
+    {"m_axi_ddr_rresp_app" "RRESP"} \
+    {"m_axi_ddr_ruser_app" "RUSER"} \
+    {"m_axi_ddr_rlast_app" "RLAST"} \
+    {"m_axi_ddr_rvalid_app" "RVALID"} \
+    {"m_axi_ddr_rready_app" "RREADY"} \
+  }
+
+adi_add_bus "m_axi_hbm_app" "slave" \
+  "xilinx.com:interface:aximm_rtl:1.0" \
+  "xilinx.com:interface:aximm:1.0" \
+  {
+    {"m_axi_hbm_awid_app" "AWID"} \
+    {"m_axi_hbm_awaddr_app" "AWADDR"} \
+    {"m_axi_hbm_awlen_app" "AWLEN"} \
+    {"m_axi_hbm_awsize_app" "AWSIZE"} \
+    {"m_axi_hbm_awuser_app" "AWUSER"} \
+    {"m_axi_hbm_awburst_app" "AWBURST"} \
+    {"m_axi_hbm_awlock_app" "AWLOCK"} \
+    {"m_axi_hbm_awcache_app" "AWCACHE"} \
+    {"m_axi_hbm_awprot_app" "AWPROT"} \
+    {"m_axi_hbm_awqos_app" "AWQOS"} \
+    {"m_axi_hbm_awvalid_app" "AWVALID"} \
+    {"m_axi_hbm_awready_app" "AWREADY"} \
+    {"m_axi_hbm_wdata_app" "WDATA"} \
+    {"m_axi_hbm_wstrb_app" "WSTRB"} \
+    {"m_axi_hbm_wlast_app" "WLAST"} \
+    {"m_axi_hbm_wvalid_app" "WVALID"} \
+    {"m_axi_hbm_wready_app" "WREADY"} \
+    {"m_axi_hbm_wuser_app" "WUSER"} \
+    {"m_axi_hbm_bid_app" "BID"} \
+    {"m_axi_hbm_bresp_app" "BRESP"} \
+    {"m_axi_hbm_buser_app" "BUSER"} \
+    {"m_axi_hbm_bvalid_app" "BVALID"} \
+    {"m_axi_hbm_bready_app" "BREADY"} \
+    {"m_axi_hbm_arid_app" "ARID"} \
+    {"m_axi_hbm_araddr_app" "ARADDR"} \
+    {"m_axi_hbm_arlen_app" "ARLEN"} \
+    {"m_axi_hbm_arsize_app" "ARSIZE"} \
+    {"m_axi_hbm_aruser_app" "ARUSER"} \
+    {"m_axi_hbm_arburst_app" "ARBURST"} \
+    {"m_axi_hbm_arlock_app" "ARLOCK"} \
+    {"m_axi_hbm_arcache_app" "ARCACHE"} \
+    {"m_axi_hbm_arprot_app" "ARPROT"} \
+    {"m_axi_hbm_arqos_app" "ARQOS"} \
+    {"m_axi_hbm_arvalid_app" "ARVALID"} \
+    {"m_axi_hbm_arready_app" "ARREADY"} \
+    {"m_axi_hbm_rid_app" "RID"} \
+    {"m_axi_hbm_rdata_app" "RDATA"} \
+    {"m_axi_hbm_rresp_app" "RRESP"} \
+    {"m_axi_hbm_ruser_app" "RUSER"} \
+    {"m_axi_hbm_rlast_app" "RLAST"} \
+    {"m_axi_hbm_rvalid_app" "RVALID"} \
+    {"m_axi_hbm_rready_app" "RREADY"} \
+  }
+
+adi_add_bus "s_axis_direct_tx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_direct_tx_tdata_app" "TDATA"} \
+    {"s_axis_direct_tx_tkeep_app" "TKEEP"} \
+    {"s_axis_direct_tx_tvalid_app" "TVALID"} \
+    {"s_axis_direct_tx_tready_app" "TREADY"} \
+    {"s_axis_direct_tx_tlast_app" "TLAST"} \
+    {"s_axis_direct_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_direct_tx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_direct_tx_tdata_app" "TDATA"} \
+    {"m_axis_direct_tx_tkeep_app" "TKEEP"} \
+    {"m_axis_direct_tx_tvalid_app" "TVALID"} \
+    {"m_axis_direct_tx_tready_app" "TREADY"} \
+    {"m_axis_direct_tx_tlast_app" "TLAST"} \
+    {"m_axis_direct_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "s_axis_direct_rx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_direct_rx_tdata_app" "TDATA"} \
+    {"s_axis_direct_rx_tkeep_app" "TKEEP"} \
+    {"s_axis_direct_rx_tvalid_app" "TVALID"} \
+    {"s_axis_direct_rx_tready_app" "TREADY"} \
+    {"s_axis_direct_rx_tlast_app" "TLAST"} \
+    {"s_axis_direct_rx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_direct_rx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_direct_rx_tdata_app" "TDATA"} \
+    {"m_axis_direct_rx_tkeep_app" "TKEEP"} \
+    {"m_axis_direct_rx_tvalid_app" "TVALID"} \
+    {"m_axis_direct_rx_tready_app" "TREADY"} \
+    {"m_axis_direct_rx_tlast_app" "TLAST"} \
+    {"m_axis_direct_rx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "s_axis_sync_tx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_sync_tx_tdata_app" "TDATA"} \
+    {"s_axis_sync_tx_tkeep_app" "TKEEP"} \
+    {"s_axis_sync_tx_tvalid_app" "TVALID"} \
+    {"s_axis_sync_tx_tready_app" "TREADY"} \
+    {"s_axis_sync_tx_tlast_app" "TLAST"} \
+    {"s_axis_sync_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_sync_tx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_sync_tx_tdata_app" "TDATA"} \
+    {"m_axis_sync_tx_tkeep_app" "TKEEP"} \
+    {"m_axis_sync_tx_tvalid_app" "TVALID"} \
+    {"m_axis_sync_tx_tready_app" "TREADY"} \
+    {"m_axis_sync_tx_tlast_app" "TLAST"} \
+    {"m_axis_sync_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "s_axis_sync_rx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_sync_rx_tdata_app" "TDATA"} \
+    {"s_axis_sync_rx_tkeep_app" "TKEEP"} \
+    {"s_axis_sync_rx_tvalid_app" "TVALID"} \
+    {"s_axis_sync_rx_tready_app" "TREADY"} \
+    {"s_axis_sync_rx_tlast_app" "TLAST"} \
+    {"s_axis_sync_rx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_sync_rx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_sync_rx_tdata_app" "TDATA"} \
+    {"m_axis_sync_rx_tkeep_app" "TKEEP"} \
+    {"m_axis_sync_rx_tvalid_app" "TVALID"} \
+    {"m_axis_sync_rx_tready_app" "TREADY"} \
+    {"m_axis_sync_rx_tlast_app" "TLAST"} \
+    {"m_axis_sync_rx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "s_axis_if_tx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_if_tx_tdata_app" "TDATA"} \
+    {"s_axis_if_tx_tkeep_app" "TKEEP"} \
+    {"s_axis_if_tx_tvalid_app" "TVALID"} \
+    {"s_axis_if_tx_tready_app" "TREADY"} \
+    {"s_axis_if_tx_tlast_app" "TLAST"} \
+    {"s_axis_if_tx_tid_app" "TID"} \
+    {"s_axis_if_tx_tdest_app" "TDEST"} \
+    {"s_axis_if_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_if_tx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_if_tx_tdata_app" "TDATA"} \
+    {"m_axis_if_tx_tkeep_app" "TKEEP"} \
+    {"m_axis_if_tx_tvalid_app" "TVALID"} \
+    {"m_axis_if_tx_tready_app" "TREADY"} \
+    {"m_axis_if_tx_tlast_app" "TLAST"} \
+    {"m_axis_if_tx_tid_app" "TID"} \
+    {"m_axis_if_tx_tdest_app" "TDEST"} \
+    {"m_axis_if_tx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "s_axis_if_rx_app" "master" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"s_axis_if_rx_tdata_app" "TDATA"} \
+    {"s_axis_if_rx_tkeep_app" "TKEEP"} \
+    {"s_axis_if_rx_tvalid_app" "TVALID"} \
+    {"s_axis_if_rx_tready_app" "TREADY"} \
+    {"s_axis_if_rx_tlast_app" "TLAST"} \
+    {"s_axis_if_rx_tid_app" "TID"} \
+    {"s_axis_if_rx_tdest_app" "TDEST"} \
+    {"s_axis_if_rx_tuser_app" "TUSER"} \
+  }
+
+adi_add_bus "m_axis_if_rx_app" "slave" \
+  "xilinx.com:interface:axis_rtl:1.0" \
+  "xilinx.com:interface:axis:1.0" \
+  {
+    {"m_axis_if_rx_tdata_app" "TDATA"} \
+    {"m_axis_if_rx_tkeep_app" "TKEEP"} \
+    {"m_axis_if_rx_tvalid_app" "TVALID"} \
+    {"m_axis_if_rx_tready_app" "TREADY"} \
+    {"m_axis_if_rx_tlast_app" "TLAST"} \
+    {"m_axis_if_rx_tid_app" "TID"} \
+    {"m_axis_if_rx_tdest_app" "TDEST"} \
+    {"m_axis_if_rx_tuser_app" "TUSER"} \
+  }
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave s_axis_direct_tx_cpl_app [list \
+  "ts    s_axis_direct_tx_cpl_ts_app" \
+  "tag   s_axis_direct_tx_cpl_tag_app" \
+  "valid s_axis_direct_tx_cpl_valid_app" \
+  "ready s_axis_direct_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp master m_axis_direct_tx_cpl_app [list \
+  "ts    m_axis_direct_tx_cpl_ts_app" \
+  "tag   m_axis_direct_tx_cpl_tag_app" \
+  "valid m_axis_direct_tx_cpl_valid_app" \
+  "ready m_axis_direct_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave s_axis_sync_tx_cpl_app [list \
+  "ts    s_axis_sync_tx_cpl_ts_app" \
+  "tag   s_axis_sync_tx_cpl_tag_app" \
+  "valid s_axis_sync_tx_cpl_valid_app" \
+  "ready s_axis_sync_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp master m_axis_sync_tx_cpl_app [list \
+  "ts    m_axis_sync_tx_cpl_ts_app" \
+  "tag   m_axis_sync_tx_cpl_tag_app" \
+  "valid m_axis_sync_tx_cpl_valid_app" \
+  "ready m_axis_sync_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp slave s_axis_if_tx_cpl_app [list \
+  "ts    s_axis_if_tx_cpl_ts_app" \
+  "tag   s_axis_if_tx_cpl_tag_app" \
+  "valid s_axis_if_tx_cpl_valid_app" \
+  "ready s_axis_if_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_tx_ptp master m_axis_if_tx_cpl_app [list \
+  "ts    m_axis_if_tx_cpl_ts_app" \
+  "tag   m_axis_if_tx_cpl_tag_app" \
+  "valid m_axis_if_tx_cpl_valid_app" \
+  "ready m_axis_if_tx_cpl_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_ptp master ptp_clock_app [list \
+  "ptp_td_sd            ptp_td_sd_app" \
+  "ptp_pps              ptp_pps_app" \
+  "ptp_pps_str          ptp_pps_str_app" \
+  "ptp_sync_locked      ptp_sync_locked_app" \
+  "ptp_sync_ts_rel      ptp_sync_ts_rel_app" \
+  "ptp_sync_ts_rel_step ptp_sync_ts_rel_step_app" \
+  "ptp_sync_ts_tod      ptp_sync_ts_tod_app" \
+  "ptp_sync_ts_tod_step ptp_sync_ts_tod_step_app" \
+  "ptp_sync_pps         ptp_sync_pps_app" \
+  "ptp_sync_pps_str     ptp_sync_pps_str_app" \
+  "ptp_perout_locked    ptp_perout_locked_app" \
+  "ptp_perout_error     ptp_perout_error_app" \
+  "ptp_perout_pulse     ptp_perout_pulse_app" \
+]
+
+adi_add_bus "m_axil_ctrl_app" "slave" \
+  "xilinx.com:interface:aximm_rtl:1.0" \
+  "xilinx.com:interface:aximm:1.0" \
+  {
+    {"m_axil_ctrl_awaddr_app" "AWADDR"} \
+    {"m_axil_ctrl_awprot_app" "AWPROT"} \
+    {"m_axil_ctrl_awvalid_app" "AWVALID"} \
+    {"m_axil_ctrl_awready_app" "AWREADY"} \
+    {"m_axil_ctrl_wdata_app" "WDATA"} \
+    {"m_axil_ctrl_wstrb_app" "WSTRB"} \
+    {"m_axil_ctrl_wvalid_app" "WVALID"} \
+    {"m_axil_ctrl_wready_app" "WREADY"} \
+    {"m_axil_ctrl_bresp_app" "BRESP"} \
+    {"m_axil_ctrl_bvalid_app" "BVALID"} \
+    {"m_axil_ctrl_bready_app" "BREADY"} \
+    {"m_axil_ctrl_araddr_app" "ARADDR"} \
+    {"m_axil_ctrl_arprot_app" "ARPROT"} \
+    {"m_axil_ctrl_arvalid_app" "ARVALID"} \
+    {"m_axil_ctrl_arready_app" "ARREADY"} \
+    {"m_axil_ctrl_rdata_app" "RDATA"} \
+    {"m_axil_ctrl_rresp_app" "RRESP"} \
+    {"m_axil_ctrl_rvalid_app" "RVALID"} \
+    {"m_axil_ctrl_rready_app" "RREADY"} \
+  }
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc slave m_axis_ctrl_dma_read_desc_app [list \
+  "dma_addr m_axis_ctrl_dma_read_desc_dma_addr_app" \
+  "ram_sel  m_axis_ctrl_dma_read_desc_ram_sel_app" \
+  "ram_addr m_axis_ctrl_dma_read_desc_ram_addr_app" \
+  "len      m_axis_ctrl_dma_read_desc_len_app" \
+  "tag      m_axis_ctrl_dma_read_desc_tag_app" \
+  "valid    m_axis_ctrl_dma_read_desc_valid_app" \
+  "ready    m_axis_ctrl_dma_read_desc_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc slave m_axis_ctrl_dma_write_desc_app [list \
+  "dma_addr m_axis_ctrl_dma_write_desc_dma_addr_app" \
+  "ram_sel  m_axis_ctrl_dma_write_desc_ram_sel_app" \
+  "ram_addr m_axis_ctrl_dma_write_desc_ram_addr_app" \
+  "imm      m_axis_ctrl_dma_write_desc_imm_app" \
+  "imm_en   m_axis_ctrl_dma_write_desc_imm_en_app" \
+  "len      m_axis_ctrl_dma_write_desc_len_app" \
+  "tag      m_axis_ctrl_dma_write_desc_tag_app" \
+  "valid    m_axis_ctrl_dma_write_desc_valid_app" \
+  "ready    m_axis_ctrl_dma_write_desc_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc slave m_axis_data_dma_read_desc_app [list \
+  "dma_addr m_axis_data_dma_read_desc_dma_addr_app" \
+  "ram_sel  m_axis_data_dma_read_desc_ram_sel_app" \
+  "ram_addr m_axis_data_dma_read_desc_ram_addr_app" \
+  "len      m_axis_data_dma_read_desc_len_app" \
+  "tag      m_axis_data_dma_read_desc_tag_app" \
+  "valid    m_axis_data_dma_read_desc_valid_app" \
+  "ready    m_axis_data_dma_read_desc_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc slave m_axis_data_dma_write_desc_app [list \
+  "dma_addr m_axis_data_dma_write_desc_dma_addr_app" \
+  "ram_sel  m_axis_data_dma_write_desc_ram_sel_app" \
+  "ram_addr m_axis_data_dma_write_desc_ram_addr_app" \
+  "imm      m_axis_data_dma_write_desc_imm_app" \
+  "imm_en   m_axis_data_dma_write_desc_imm_en_app" \
+  "len      m_axis_data_dma_write_desc_len_app" \
+  "tag      m_axis_data_dma_write_desc_tag_app" \
+  "valid    m_axis_data_dma_write_desc_valid_app" \
+  "ready    m_axis_data_dma_write_desc_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc_status master s_axis_ctrl_dma_read_desc_status_app [list \
+  "tag   s_axis_ctrl_dma_read_desc_status_tag_app" \
+  "error s_axis_ctrl_dma_read_desc_status_error_app" \
+  "valid s_axis_ctrl_dma_read_desc_status_valid_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc_status master s_axis_ctrl_dma_write_desc_status_app [list \
+  "tag   s_axis_ctrl_dma_write_desc_status_tag_app" \
+  "error s_axis_ctrl_dma_write_desc_status_error_app" \
+  "valid s_axis_ctrl_dma_write_desc_status_valid_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc_status master s_axis_data_dma_read_desc_status_app [list \
+  "tag   s_axis_data_dma_read_desc_status_tag_app" \
+  "error s_axis_data_dma_read_desc_status_error_app" \
+  "valid s_axis_data_dma_read_desc_status_valid_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_dma_desc_status master s_axis_data_dma_write_desc_status_app [list \
+  "tag   s_axis_data_dma_write_desc_status_tag_app" \
+  "error s_axis_data_dma_write_desc_status_error_app" \
+  "valid s_axis_data_dma_write_desc_status_valid_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_dma_ram slave ctrl_dma_ram_app [list \
+  "wr_cmd_sel    ctrl_dma_ram_wr_cmd_sel_app" \
+  "wr_cmd_be     ctrl_dma_ram_wr_cmd_be_app" \
+  "wr_cmd_addr   ctrl_dma_ram_wr_cmd_addr_app" \
+  "wr_cmd_data   ctrl_dma_ram_wr_cmd_data_app" \
+  "wr_cmd_valid  ctrl_dma_ram_wr_cmd_valid_app" \
+  "wr_cmd_ready  ctrl_dma_ram_wr_cmd_ready_app" \
+  "wr_done       ctrl_dma_ram_wr_done_app" \
+  "rd_cmd_sel    ctrl_dma_ram_rd_cmd_sel_app" \
+  "rd_cmd_addr   ctrl_dma_ram_rd_cmd_addr_app" \
+  "rd_cmd_valid  ctrl_dma_ram_rd_cmd_valid_app" \
+  "rd_cmd_ready  ctrl_dma_ram_rd_cmd_ready_app" \
+  "rd_resp_data  ctrl_dma_ram_rd_resp_data_app" \
+  "rd_resp_valid ctrl_dma_ram_rd_resp_valid_app" \
+  "rd_resp_ready ctrl_dma_ram_rd_resp_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_dma_ram slave data_dma_ram_app [list \
+  "wr_cmd_sel    data_dma_ram_wr_cmd_sel_app" \
+  "wr_cmd_be     data_dma_ram_wr_cmd_be_app" \
+  "wr_cmd_addr   data_dma_ram_wr_cmd_addr_app" \
+  "wr_cmd_data   data_dma_ram_wr_cmd_data_app" \
+  "wr_cmd_valid  data_dma_ram_wr_cmd_valid_app" \
+  "wr_cmd_ready  data_dma_ram_wr_cmd_ready_app" \
+  "wr_done       data_dma_ram_wr_done_app" \
+  "rd_cmd_sel    data_dma_ram_rd_cmd_sel_app" \
+  "rd_cmd_addr   data_dma_ram_rd_cmd_addr_app" \
+  "rd_cmd_valid  data_dma_ram_rd_cmd_valid_app" \
+  "rd_cmd_ready  data_dma_ram_rd_cmd_ready_app" \
+  "rd_resp_data  data_dma_ram_rd_resp_data_app" \
+  "rd_resp_valid data_dma_ram_rd_resp_valid_app" \
+  "rd_resp_ready data_dma_ram_rd_resp_ready_app" \
+]
+
+adi_if_infer_bus analog.com:interface:if_axis_stat slave m_axis_stat_app [list \
+  "tdata  m_axis_stat_tdata_app" \
+  "tid    m_axis_stat_tid_app" \
+  "tvalid m_axis_stat_tvalid_app" \
+  "tready m_axis_stat_tready_app" \
+]
+
+# Bus-clock association
+
+adi_add_bus_clock "clk" "m_axi:s_axil_app_ctrl:s_axil_ctrl:m_axil_csr:s_axis_sync_tx_app:m_axis_sync_tx_app:s_axis_sync_rx_app:m_axis_sync_rx_app:s_axis_if_tx_app:m_axis_if_tx_app:s_axis_if_rx_app:m_axis_if_rx_app:m_axil_ctrl_app" "rst"
+adi_add_bus_clock "ddr_clk" "m_axi_ddr:m_axi_ddr_app" "ddr_rst"
+adi_add_bus_clock "hbm_clk" "m_axi_hbm:m_axi_hbm_app" "hbm_rst"
+adi_add_bus_clock "tx_clk" "m_axis_tx:s_axis_direct_tx_app:m_axis_direct_tx_app" "tx_rst"
+adi_add_bus_clock "rx_clk" "s_axis_rx:s_axis_stat:s_axis_direct_rx_app:m_axis_direct_rx_app" "rx_rst"
 
 ## Parameter validation
 
@@ -735,6 +1180,8 @@ ipx::add_user_parameter -name "AXIL_CSR_ENABLE" -component $cc
 set_property value_resolve_type user [ipx::get_user_parameters "AXIL_CSR_ENABLE" -of_objects $cc]
 set_property -dict [list \
   "value_resolve_type" "user" \
+  "value_format" "long" \
+  "value" "0" \
 ] \
 [ipx::get_user_parameters AXIL_CSR_ENABLE -of_objects $cc]
 
@@ -1975,16 +2422,178 @@ set_property  -dict [list \
   "tooltip" { AXIL_APP_CTRL_DATA_WIDTH/8 } \
 ] $p
 
-# Dependencies
+## Dependencies
+
+# Base IP dependencies
 
 adi_set_bus_dependency "m_axi_ddr" "m_axi_ddr" \
   "(spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)"
 
+adi_set_ports_dependency "ddr_clk" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)"
+
+adi_set_ports_dependency "ddr_rst" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)" \
+  "0"
+
+adi_set_ports_dependency "ddr_status" \
+  "(spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)" \
+  "0"
+
 adi_set_bus_dependency "m_axi_hbm" "m_axi_hbm" \
   "(spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)"
 
+adi_set_ports_dependency "hbm_clk" \
+  "(spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)"
+
+adi_set_ports_dependency "hbm_rst" \
+  "(spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)" \
+  "0"
+
+adi_set_ports_dependency "hbm_status" \
+  "(spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)" \
+  "0"
+
 adi_set_bus_dependency "m_axil_csr" "m_axil_csr" \
   "(spirit:decode(id('PARAM_VALUE.AXIL_CSR_ENABLE')) = 1)"
+
+# Application dependencies
+
+adi_set_bus_dependency "m_axi_ddr_app" "m_axi_ddr_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)"
+
+adi_set_ports_dependency "ddr_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.DDR_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axi_hbm_app" "m_axi_hbm_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)"
+
+adi_set_ports_dependency "hbm_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.HBM_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_direct_tx_app" "s_axis_direct_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_direct_tx_app" "m_axis_direct_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_direct_tx_cpl_app" "s_axis_direct_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_direct_tx_cpl_app" "m_axis_direct_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_direct_rx_app" "s_axis_direct_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_direct_rx_app" "m_axis_direct_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_DIRECT_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_sync_tx_app" "s_axis_sync_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_sync_tx_app" "m_axis_sync_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_sync_tx_cpl_app" "s_axis_sync_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_sync_tx_cpl_app" "m_axis_sync_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_sync_rx_app" "s_axis_sync_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_sync_rx_app" "m_axis_sync_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_SYNC_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_if_tx_app" "s_axis_if_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_if_tx_app" "m_axis_if_tx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_if_tx_cpl_app" "s_axis_if_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_if_tx_cpl_app" "m_axis_if_tx_cpl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_if_rx_app" "s_axis_if_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_if_rx_app" "m_axis_if_rx_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_AXIS_IF_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axil_ctrl_app" "m_axil_ctrl_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_CTRL_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_ctrl_dma_read_desc_app" "m_axis_ctrl_dma_read_desc_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_ctrl_dma_write_desc_app" "m_axis_ctrl_dma_write_desc_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_data_dma_read_desc_app" "m_axis_data_dma_read_desc_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_data_dma_write_desc_app" "m_axis_data_dma_write_desc_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_ctrl_dma_read_desc_status_app" "s_axis_ctrl_dma_read_desc_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_ctrl_dma_write_desc_status_app" "s_axis_ctrl_dma_write_desc_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_data_dma_read_desc_status_app" "s_axis_data_dma_read_desc_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "s_axis_data_dma_write_desc_status_app" "s_axis_data_dma_write_desc_status_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "ctrl_dma_ram_app" "ctrl_dma_ram_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "data_dma_ram_app" "data_dma_ram_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_DMA_ENABLE')) = 1)"
+
+adi_set_bus_dependency "m_axis_stat_app" "m_axis_stat_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
+   (spirit:decode(id('MODELPARAM_VALUE.APP_STAT_ENABLE')) = 1)"
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

@@ -106,7 +106,7 @@ ad_ip_instance corundum_core corundum_core [list \
   MAX_RX_SIZE 9214 \
   TX_RAM_SIZE 131072 \
   RX_RAM_SIZE 131072 \
-  DDR_ENABLE 1 \
+  DDR_ENABLE 0 \
   DDR_CH 2 \
   DDR_GROUP_SIZE 1 \
   AXI_DDR_DATA_WIDTH 512 \
@@ -143,8 +143,8 @@ ad_ip_instance corundum_core corundum_core [list \
   AXI_HBM_NARROW_BURST 0 \
   AXI_HBM_FIXED_BURST 0 \
   AXI_HBM_WRAP_BURST 0 \
+  APP_ENABLE 1 \
   APP_ID 0x12340001 \
-  APP_ENABLE 0 \
   APP_CTRL_ENABLE 1 \
   APP_DMA_ENABLE 1 \
   APP_AXIS_DIRECT_ENABLE 1 \
@@ -196,6 +196,22 @@ ad_ip_instance corundum_core corundum_core [list \
   STAT_AXI_ENABLE 1 \
   STAT_INC_WIDTH 24 \
   STAT_ID_WIDTH 12 \
+  DMA_ADDR_WIDTH_APP 64 \
+  RAM_SEL_WIDTH_APP 3 \
+  RAM_SEG_COUNT_APP 2 \
+  RAM_SEG_DATA_WIDTH_APP 512 \
+  RAM_SEG_BE_WIDTH_APP 64 \
+  RAM_SEG_ADDR_WIDTH_APP 10 \
+  AXIS_SYNC_KEEP_WIDTH_APP 64 \
+  AXIS_SYNC_TX_USER_WIDTH_APP 17 \
+  AXIS_SYNC_RX_USER_WIDTH_APP 49 \
+  AXIS_IF_KEEP_WIDTH_APP 64 \
+  AXIS_IF_TX_ID_WIDTH_APP 13 \
+  AXIS_IF_RX_ID_WIDTH_APP 1 \
+  AXIS_IF_TX_DEST_WIDTH_APP 4 \
+  AXIS_IF_RX_DEST_WIDTH_APP 9 \
+  AXIS_IF_TX_USER_WIDTH_APP 17 \
+  AXIS_IF_RX_USER_WIDTH_APP 49 \
 ]
 
 ad_ip_instance ethernet ethernet_core [list \
@@ -253,12 +269,6 @@ ad_connect corundum_core/ethernet_ptp_rx ethernet_core/ethernet_ptp_rx
 ad_connect corundum_core/axis_tx_ptp ethernet_core/axis_tx_ptp
 
 ad_connect corundum_core/s_axis_stat_tvalid GND
-ad_connect corundum_core/ddr_clk GND
-ad_connect corundum_core/ddr_rst GND
-ad_connect corundum_core/ddr_status GND
-ad_connect corundum_core/hbm_clk GND
-ad_connect corundum_core/hbm_rst GND
-ad_connect corundum_core/hbm_status GND
 ad_connect corundum_core/app_jtag_tdi GND
 ad_connect corundum_core/app_jtag_tms GND
 ad_connect corundum_core/app_jtag_tck GND

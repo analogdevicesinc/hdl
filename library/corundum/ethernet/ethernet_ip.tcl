@@ -12,8 +12,17 @@ adi_ip_create ethernet
 
 set_property part xcvu9p-flga2104-2L-e [current_project]
 
-source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+if [info exists ::env(BOARD)] {
+  set board $::env(BOARD)
+  if [string equal $board VCU118] {
+    source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+    source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+  } else {
+    error "$board board is not supported!"
+  }
+} else {
+  error "Missing BOARD environment variable definition from makefile!"
+}
 
 # Corundum sources
 adi_ip_files ethernet [list \

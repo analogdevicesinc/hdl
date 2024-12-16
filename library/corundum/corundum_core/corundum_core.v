@@ -12,6 +12,9 @@
 
 `timescale 1ns/100ps
 
+`include "mqnic_app_custom_params.vh"
+`include "mqnic_app_custom_ports.vh"
+
 module corundum_core #(
   // FW and board IDs
   parameter FPGA_ID = 32'hDEADBEEF,
@@ -146,9 +149,7 @@ module corundum_core #(
   parameter APP_GPIO_OUT_WIDTH = 32,
 
   // Custom application block parameters
-  `ifdef APP_CUSTOM_PARAMS_ENABLE
-      `APP_CUSTOM_PARAMS_DECL
-  `endif
+  `APP_CUSTOM_PARAMS_DECL
 
   // AXI interface configuration (DMA)
   parameter AXI_DATA_WIDTH = 128,
@@ -535,9 +536,7 @@ module corundum_core #(
   /*
   * Custom application block ports
   */
-  `ifdef APP_CUSTOM_PORTS_ENABLE
-      `APP_CUSTOM_PORTS_DECL
-  `endif
+  `APP_CUSTOM_PORTS_DECL
 
   /*
   * JTAG
@@ -560,6 +559,70 @@ begin
 end
 
 assign irq = |irq_wide;
+
+generate if (APP_ENABLE && DMA_ADDR_WIDTH_APP != AXI_ADDR_WIDTH)
+  $fatal(0, "DMA_ADDR_WIDTH_APP != AXI_ADDR_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && RAM_SEL_WIDTH_APP != $clog2(IF_COUNT+(APP_ENABLE && APP_DMA_ENABLE ? 1 : 0))+2)
+  $fatal(0, "RAM_SEL_WIDTH_APP != $clog2(IF_COUNT+(APP_ENABLE && APP_DMA_ENABLE ? 1 : 0))+2");
+endgenerate
+
+generate if (APP_ENABLE && RAM_SEG_COUNT_APP != 2)
+  $fatal(0, "RAM_SEG_COUNT_APP != 2");
+endgenerate
+
+generate if (APP_ENABLE && RAM_SEG_DATA_WIDTH_APP != AXI_DATA_WIDTH)
+  $fatal(0, "RAM_SEG_DATA_WIDTH_APP != AXI_DATA_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && RAM_SEG_BE_WIDTH_APP != RAM_SEG_DATA_WIDTH_APP/8)
+  $fatal(0, "RAM_SEG_BE_WIDTH_APP != RAM_SEG_DATA_WIDTH_APP/8");
+endgenerate
+
+generate if (APP_ENABLE && RAM_SEG_ADDR_WIDTH_APP != RAM_ADDR_WIDTH-$clog2(2*RAM_SEG_BE_WIDTH_APP))
+  $fatal(0, "RAM_SEG_ADDR_WIDTH_APP != RAM_ADDR_WIDTH-$clog2(2*RAM_SEG_BE_WIDTH_APP)");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_SYNC_KEEP_WIDTH_APP != AXIS_SYNC_DATA_WIDTH/(AXIS_DATA_WIDTH/AXIS_KEEP_WIDTH))
+  $fatal(0, "AXIS_SYNC_KEEP_WIDTH_APP != AXIS_SYNC_DATA_WIDTH/(AXIS_DATA_WIDTH/AXIS_KEEP_WIDTH)");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_SYNC_TX_USER_WIDTH_APP != AXIS_TX_USER_WIDTH)
+  $fatal(0, "AXIS_SYNC_TX_USER_WIDTH_APP != AXIS_TX_USER_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_SYNC_RX_USER_WIDTH_APP != AXIS_RX_USER_WIDTH)
+  $fatal(0, "AXIS_SYNC_RX_USER_WIDTH_APP != AXIS_RX_USER_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_KEEP_WIDTH_APP != AXIS_IF_DATA_WIDTH/(AXIS_DATA_WIDTH/AXIS_KEEP_WIDTH))
+  $fatal(0, "AXIS_IF_KEEP_WIDTH_APP != AXIS_IF_DATA_WIDTH/(AXIS_DATA_WIDTH/AXIS_KEEP_WIDTH)");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_TX_ID_WIDTH_APP != TX_QUEUE_INDEX_WIDTH)
+  $fatal(0, "AXIS_IF_TX_ID_WIDTH_APP != TX_QUEUE_INDEX_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_RX_ID_WIDTH_APP != PORTS_PER_IF > 1 ? $clog2(PORTS_PER_IF) : 1)
+  $fatal(0, "AXIS_IF_RX_ID_WIDTH_APP != PORTS_PER_IF > 1 ? $clog2(PORTS_PER_IF) : 1");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_TX_DEST_WIDTH_APP != $clog2(PORTS_PER_IF)+4)
+  $fatal(0, "AXIS_IF_TX_DEST_WIDTH_APP != $clog2(PORTS_PER_IF)+4");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_RX_DEST_WIDTH_APP != RX_QUEUE_INDEX_WIDTH+1)
+  $fatal(0, "AXIS_IF_RX_DEST_WIDTH_APP != RX_QUEUE_INDEX_WIDTH+1");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_TX_USER_WIDTH_APP != AXIS_TX_USER_WIDTH)
+  $fatal(0, "AXIS_IF_TX_USER_WIDTH_APP != AXIS_TX_USER_WIDTH");
+endgenerate
+
+generate if (APP_ENABLE && AXIS_IF_RX_USER_WIDTH_APP != AXIS_RX_USER_WIDTH)
+  $fatal(0, "AXIS_IF_RX_USER_WIDTH_APP != AXIS_RX_USER_WIDTH");
+endgenerate
 
 mqnic_core_axi #(
   // FW and board IDs
@@ -671,7 +734,7 @@ mqnic_core_axi #(
 
   // Custom application block parameters
   `ifdef APP_CUSTOM_PARAMS_ENABLE
-      `APP_CUSTOM_PARAMS_MAP
+    `APP_CUSTOM_PARAMS_MAP
   `endif
 
   // AXI interface configuration (DMA)
@@ -1054,7 +1117,7 @@ core_inst (
    * Custom application block ports
    */
   `ifdef APP_CUSTOM_PORTS_ENABLE
-      `APP_CUSTOM_PORTS_MAP
+    `APP_CUSTOM_PORTS_MAP
   `endif
 
   /*
