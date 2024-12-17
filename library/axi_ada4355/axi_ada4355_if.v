@@ -42,8 +42,7 @@
    parameter IO_DELAY_GROUP = "adc_if_delay_group",
    parameter IODELAY_CTRL = 1,
    parameter DRP_WIDTH = 5,
-   parameter NUM_LANES = 2,  // Max number of lanes is 2
-   parameter RESOLUTION = 16
+   parameter NUM_LANES = 2  // Max number of lanes is 2
  ) (
    // device interface
 
@@ -61,8 +60,6 @@
    input       sync_n,
    //input [4:0] num_lanes,
    input       bitslip_enable,
-   //input       filter_enable,
-   //input       filter_rdy_n,
 
    // delay interface(for IDELAY macros)
    input                             up_clk,
@@ -73,7 +70,7 @@
    input                             delay_rst,
    output                            delay_locked,
 
-   //frame
+   // frame
 
    output  [DRP_WIDTH*1-1:0] up_adc_drdata_frame,
    output                    delay_locked_frame,
@@ -94,18 +91,15 @@
    localparam DDR_OR_SDR_N    = 1;
    localparam CMOS_LVDS_N     = 0; // Use always LVDS mode
    localparam SEVEN_SERIES    = 1;
-   localparam ULTRASCALE      = 2;
-   localparam ULTRASCALE_PLUS = 3;
 
-   //wire                 fall_filter_ready;
    wire                 adc_clk_in_fast;
-   wire [7:0]           serdes_data_frame; 
-   wire [19:0]          packed_16_20;
+   wire [7:0]           serdes_frame;
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
    wire [ 7:0]          serdes_data_1;
-   wire [ 7:0]          pattern_value;
+   wire [19:0]          pattern_value;
    wire [ 4:0]          shift_cnt_value;
+   wire [15:0]          serdes_data;
 
    wire [NUM_LANES-1:0] serdes_in_p;
    wire [NUM_LANES-1:0] serdes_in_n;
@@ -120,22 +114,20 @@
    wire [NUM_LANES-1:0] data_s6;
    wire [NUM_LANES-1:0] data_s7;
 
-   wire [NUM_LANES-1:0] data_s0_frame;
-   wire [NUM_LANES-1:0] data_s1_frame;
-   wire [NUM_LANES-1:0] data_s2_frame;
-   wire [NUM_LANES-1:0] data_s3_frame;
-   wire [NUM_LANES-1:0] data_s4_frame;
-   wire [NUM_LANES-1:0] data_s5_frame;
-   wire [NUM_LANES-1:0] data_s6_frame;
-   wire [NUM_LANES-1:0] data_s7_frame;
+   wire  data_s0_frame;
+   wire  data_s1_frame;
+   wire  data_s2_frame;
+   wire  data_s3_frame;
+   wire  data_s4_frame;
+   wire  data_s5_frame;
+   wire  data_s6_frame;
+   wire  data_s7_frame;
 
    reg  [5:0]  serdes_reset = 6'b000110;
    reg         sync_status_int = 1'b0;
-   //reg  [1:0]  serdes_valid = 2'b00;
-   //reg  [3:0]  filter_rdy_n_d = 'b0;
    reg         packed_data_valid_d;
    reg         packed_data_valid;
-   reg  [19:0] adc_data_shifted;
+   reg  [15:0] adc_data_shifted;
    reg  [19:0] packed_data_d;
    reg  [19:0] packed_data;
    reg  [1:0]  serdes_valid = 2'b00;
@@ -144,14 +136,17 @@
    reg         slip_d;
    reg         shift_cnt_en = 1'b0;
    reg  [ 4:0] shift_cnt = 5'd0;
-   wire  [15:0] serdes_data_16;
-   //wire  [15:0] serdes_data_16_d;
+   
+   reg  [15:0] serdes_data_16;
+   reg  [15:0] serdes_data_16_d;
+   reg  [7:0]  data_frame_shifted;
+   reg  [7:0]  serdes_data_frame;
+   reg  [7:0]  serdes_data_frame_d;
 
-   //assign fall_filter_ready = filter_rdy_n_d[3] & ~filter_rdy_n_d[2];
    assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
    assign pattern_value     = 8'hF0;
-   assign shift_cnt_value   = 'd19;
+   assign shift_cnt_value   = 'd15;
 
    IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -279,7 +274,7 @@
 
   // For DDR dual lane interleave the two sedres outputs;
 
-  assign serdes_data_16 = {serdes_data_0[7],
+  assign serdes_data =    {serdes_data_0[7],
                            serdes_data_1[7],
                            serdes_data_0[6],
                            serdes_data_1[6],
@@ -296,7 +291,7 @@
                            serdes_data_0[0],
                            serdes_data_1[0]};
 
-  assign serdes_data_frame = {data_s0_frame,
+  assign serdes_frame =      {data_s0_frame,
                               data_s1_frame,
                               data_s2_frame,
                               data_s3_frame,
@@ -305,20 +300,31 @@
                               data_s6_frame,
                               data_s7_frame};
 
-//assign adc_data  = serdes_data_16;
+always @(*) begin
+  serdes_data_16 = serdes_data;
+end
 
-/*always @(posedge adc_clk_div) begin
+always @(*) begin
+  serdes_data_frame = serdes_frame;
+end
+
+always @(posedge adc_clk_div) begin
   if(serdes_valid[1]) begin
     serdes_data_16_d <= serdes_data_16;
   end
 end
-*/
+
+always @(posedge adc_clk_div) begin
+  if(serdes_valid[1]) begin
+    serdes_data_frame_d <= serdes_data_frame;
+  end
+end
 
 // enable bitslip
 always @(posedge adc_clk_div) begin
   slip_d <= bitslip_enable;
   slip_dd <= slip_d;
-  if(serdes_reset_s || serdes_data_frame == pattern_value)
+  if(serdes_reset_s || data_frame_shifted == pattern_value)
     shift_cnt_en <= 1'b0;
   else if(slip_d & ~slip_dd)
     shift_cnt_en <= 1'b1;
@@ -330,19 +336,19 @@ always @(posedge adc_clk_div) begin
     if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
       shift_cnt <= 0;
       sync_status_int <= 1'b0;
-    end else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
+    end //else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
+      else if( data_frame_shifted != pattern_value /*&&(serdes_valid)*/) begin
       shift_cnt <= shift_cnt + 1;
     end
-    if(serdes_data_frame == pattern_value) begin
+    if(data_frame_shifted == pattern_value) begin
       sync_status_int <= 1'b1;
     end
   end
 end
 
 always @(posedge adc_clk_div) begin
- // adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
- // adc_data_shifted <= {serdes_data_16_d,serdes_data_16} >> shift_cnt;
-  adc_data_shifted <= serdes_data_16 >> shift_cnt;
+  adc_data_shifted <= {serdes_data_16_d,serdes_data_16} >> shift_cnt;
+  data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
   serdes_valid_d <= serdes_valid;
   end
 
