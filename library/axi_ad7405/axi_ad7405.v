@@ -210,10 +210,10 @@ end
 
  util_dec256sinc24b #(
  ) i_util_dec256sinc24b_interface (
-    .clk (adc_clk_s),
+    .mclk1 (adc_clk_s),
     .reset (adc_reset_s),
-    .data_in (adc_data_in),
-    .data_out (adc_data_out_s),
+    .mdata1 (adc_data_in),
+    .DATA (adc_data_out_s),
     .data_en (adc_data_en),
     .dec_rate (adc_dec_rate));
 
