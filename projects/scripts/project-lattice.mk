@@ -33,10 +33,10 @@ include $(HDL_PROJECT_PATH)../quiet.mk
 
 ifeq ($(OS), Windows_NT)
 	RADIANT := pnmainc
-	PROPEL_BUILDER := propelbld
+	PROPEL_BUILDER := propelbld -console
 else
 	RADIANT := radiantc
-	PROPEL_BUILDER := propelbldwrap
+	PROPEL_BUILDER := propelbldwrap -console
 endif
 
 # Common dependencies that all projects have.
