@@ -49,13 +49,10 @@ module axi_ada4355 #(
   input                   db_p,
   input                   db_n,
 
-  //input                   clk_in_p,
-  //input                   clk_in_n,
   input                   data_frame_p,
   input                   data_frame_n,
 
   input                   sync_n,
-  //input                   filter_data_ready_n,
 
   // output data interface
 
@@ -104,7 +101,6 @@ module axi_ada4355 #(
 
   wire    [7:0]    adc_custom_control_s;
   wire             bitslip_enable;
-  //wire             filter_enable;
   wire             delay_locked;
   wire             sync_status;
   wire             adc_enable;
@@ -136,8 +132,6 @@ module axi_ada4355 #(
   assign adc_clk = adc_clk_s;
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
-  //assign filter_enable = adc_custom_control_s[0];
 
   always @(*) begin
     up_rdata_r = 'h00;
@@ -278,8 +272,6 @@ module axi_ada4355 #(
     .db_n(db_n),
     .data_frame_p(data_frame_p),
     .data_frame_n(data_frame_n),
-    //.num_lanes(adc_num_lanes),
-    //.self_sync(self_sync),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),
@@ -293,8 +285,6 @@ module axi_ada4355 #(
     .adc_valid(adc_valid),
     .bitslip_enable(bitslip_enable),
     .sync_status(sync_status),
-    //.filter_enable(filter_enable),
-    //.filter_rdy_n(filter_data_ready_n),
     .sync_n(sync_n));
 
   // adc delay control
