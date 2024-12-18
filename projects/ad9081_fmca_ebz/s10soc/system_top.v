@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,6 +37,7 @@
 
 module system_top  #(
   // Dummy parameters to workaround critical warning
+  parameter JESD_MODE          = "8B10B",
   parameter RX_LANE_RATE       = 10,
   parameter TX_LANE_RATE       = 10,
   parameter REF_CLK_RATE       = 250,

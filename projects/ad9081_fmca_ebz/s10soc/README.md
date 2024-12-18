@@ -17,12 +17,13 @@ make
 
 All of the RX/TX link modes can be found in the [AD9081 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf). We offer support for only a few of them.
 
-:warning: **Only JESD204B (8B10B) is supported for this carrier!**
-
 The overwritable parameters from the environment are:
 
+- JESD_MODE: link layer encoder mode used;
+  - 8B10B - 8b10b link layer defined in JESD204B
+  - 64B66B - 64b66b link layer defined in JESD204C
 - [RX/TX]_LANE_RATE: lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
-- REF_CLK_RATE: frequency of the reference clock in MHz used in 8B10B mode (LANE_RATE/40)
+- REF_CLK_RATE: frequency of the reference clock in MHz used in 64B66B mode (LANE_RATE/66) or 8B10B mode (LANE_RATE/40)
 - DEVICE_CLK_RATE: frequency of the device clock in MHz, usually equal to REF_CLK_RATE
 - [RX/TX]_JESD_M: [RX/TX] number of converters per link
 - [RX/TX]_JESD_L: [RX/TX] number of lanes per link
@@ -40,6 +41,28 @@ This specific command is equivalent to running `make` only:
 ```
 make RX_LANE_RATE=10 \
 TX_LANE_RATE=10 \
+REF_CLK_RATE=250 \
+DEVICE_CLK_RATE=250 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+RX_JESD_NP=16 \
+RX_NUM_LINKS=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+TX_JESD_NP=16 \
+TX_NUM_LINKS=1 \
+RX_KS_PER_CHANNEL=32 \
+TX_KS_PER_CHANNEL=32
+```
+
+#### JESD204C configuration
+
+```
+make JESD_MODE=64B66B \
+RX_LANE_RATE=16.5 \
+TX_LANE_RATE=16.5 \
 REF_CLK_RATE=250 \
 DEVICE_CLK_RATE=250 \
 RX_JESD_M=8 \
