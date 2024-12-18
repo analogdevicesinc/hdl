@@ -93,6 +93,9 @@
    localparam SEVEN_SERIES    = 1;
 
    wire                 adc_clk_in_fast;
+   wire                 out_ibufmrce_clock;
+   wire                 adc_clk_in_fast_frame;
+   wire                 adc_clk_div_frame;
    wire [7:0]           serdes_frame;
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
@@ -156,18 +159,34 @@
    generate
     if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
 
-      BUFIO i_clk_buf(
+      BUFMRCE i_bufmrce (
         .I(clk_in_s),
+        .O(out_ibufmrce_clock),
+        .CE(1'b1));
+
+      BUFIO i_clk_buf(
+        .I(out_ibufmrce_clock),
         .O(adc_clk_in_fast));
+
+      BUFIO i_clk_buf_frame(
+          .I(out_ibufmrce_clock),
+          .O(adc_clk_in_fast_frame));
 
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
         .CLR(~sync_n),
         .CE(1'b1),
-        .I(clk_in_s),
+        .I(out_ibufmrce_clock),
         .O(adc_clk_div));
 
+      BUFR #(
+        .BUFR_DIVIDE("4")
+      ) i_div_clk_buf_frame (
+        .CLR(~sync_n),
+        .CE(1'b1),
+        .I(out_ibufmrce_clock),
+        .O(adc_clk_div_frame));
     end
     endgenerate
 
@@ -233,8 +252,8 @@
     ) i_serdes_frame(
     .rst(serdes_reset_s),
     .ext_serdes_rst(serdes_reset_s),
-    .clk(adc_clk_in_fast),
-    .div_clk(adc_clk_div),
+    .clk(adc_clk_in_fast_frame),
+    .div_clk(adc_clk_div_frame),
     .data_s0(data_s0_frame),
     .data_s1(data_s1_frame),
     .data_s2(data_s2_frame),
