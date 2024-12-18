@@ -107,7 +107,7 @@ module system_top (
   wire            iic_mux_sda_t_s;
   wire    [11:0]  fmc_cs_i;
 
-  assign fmc_spi_cs_n = {fmc_cs_i[11:10],fmc_cs_i[8:0]};
+  assign fmc_spi_cs_n = fmc_cs_i;
 
   genvar i;
 
