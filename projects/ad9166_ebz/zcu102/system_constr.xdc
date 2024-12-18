@@ -34,20 +34,20 @@ set_property -dict {PACKAGE_PIN R3} [get_ports tx_data_n[6]] ; ## B37     FMC0_D
 set_property -dict {PACKAGE_PIN P6} [get_ports tx_data_p[7]] ; ## A38     FMC0_DP5_C2M_P     MGTHTXP1_228
 set_property -dict {PACKAGE_PIN P5} [get_ports tx_data_n[7]] ; ## A39     FMC0_DP5_C2M_N     MGTHTXN1_228
 
-set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVCMOS18} [get_ports spi_clk]       ; ## G9   FMC0_LA03_P IO_L22P_T3U_N6_DBC_AD0P_66
+set_property -dict {PACKAGE_PIN Y2   IOSTANDARD LVCMOS18} [get_ports spi_clk]           ; ## G9   FMC0_LA03_P IO_L22P_T3U_N6_DBC_AD0P_66
 # FMC_CS1 (AD9166)
-set_property -dict {PACKAGE_PIN AA1  IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]   ; ## H11  FMC0_LA04_N IO_L21N_T3L_N5_AD8N_66
+set_property -dict {PACKAGE_PIN AA1  IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]       ; ## H11  FMC0_LA04_N IO_L21N_T3L_N5_AD8N_66
 # FMC_CS2 (HMC7044)
 set_property -dict {PACKAGE_PIN AB3  IOSTANDARD LVCMOS18} [get_ports spi_csn_hmc7044]   ; ## D11  FMC0_LA05_P IO_L24P_T3U_N10_66
 # FMC_CS3 (ADF4372)
-set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports spi_cs_adf4372] ; ## C10  FMC_HPC0_LA06_P  IO_L19P_T3L_N0_DBC_AD9P_66_AC2
+set_property -dict {PACKAGE_PIN AC2  IOSTANDARD LVCMOS18} [get_ports spi_cs_adf4372]    ; ## C10  FMC_HPC0_LA06_P  IO_L19P_T3L_N0_DBC_AD9P_66_AC2
 # FMC_CS4 (Amplifier)
-set_property -dict {PACKAGE_PIN AC1  IOSTANDARD LVCMOS18} [get_ports spi_cs_amp] ; ## C11  FMC_HPC0_LA06_N  IO_L19N_T3L_N1_DBC_AD9N_66_AC1
+set_property -dict {PACKAGE_PIN AC1  IOSTANDARD LVCMOS18} [get_ports spi_cs_amp]    ; ## C11  FMC_HPC0_LA06_N  IO_L19N_T3L_N1_DBC_AD9N_66_AC1
 set_property -dict {PACKAGE_PIN AA2  IOSTANDARD LVCMOS18} [get_ports spi_miso]      ; ## H10  FMC0_LA04_P IO_L21P_T3L_N4_AD8P_66
 set_property -dict {PACKAGE_PIN Y1   IOSTANDARD LVCMOS18} [get_ports spi_mosi]      ; ## G10  FMC0_LA03_N IO_L22N_T3U_N7_DBC_AD0N_66
 set_property -dict {PACKAGE_PIN AC3  IOSTANDARD LVCMOS18} [get_ports spi_en]        ; ## D12  FMC0_LA05_N IO_L20N_T3L_N3_AD1N_66
 
-set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports fmc_txen] ; ## H13  FMC0_HPC_LA07_P  IO_L18P_T2U_N10_AD2P_66
+set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports fmc_txen]      ; ## H13  FMC0_HPC_LA07_P  IO_L18P_T2U_N10_AD2P_66
 
 # PL PMOD 1 header
 set_property  -dict {PACKAGE_PIN  D20 IOSTANDARD LVCMOS33} [get_ports pmod_spi_clk]  ; ## PMOD1_0   IO_L8N_HDGC_AD4N_47_D20
@@ -59,10 +59,10 @@ set_property  -dict {PACKAGE_PIN  G20 IOSTANDARD LVCMOS33} [get_ports pmod_gpio[
 set_property  -dict {PACKAGE_PIN  J20 IOSTANDARD LVCMOS33} [get_ports pmod_gpio[2]]  ; ## PMOD1_6   IO_L4N_AD8N_47_J20
 set_property  -dict {PACKAGE_PIN  J19 IOSTANDARD LVCMOS33} [get_ports pmod_gpio[3]]  ; ## PMOD1_7   IO_L4P_AD8P_47_J19
 
-# Max lane rate of 15.4 Gbps
-# ref clock lane_rate/40 or lane_rate/20
+# Max lane rate of 12.5 Gbps
+# ref clock lane_rate/40
 
-create_clock -name tx_ref_clk   -period  2.597 [get_ports tx_ref_clk_p]
+create_clock -name tx_ref_clk   -period  3.2 [get_ports tx_ref_clk_p]
 
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
 # and the SYSREF is a source synchronous Center-Aligned signal to REFCLK

@@ -9,16 +9,16 @@
 #
 # make ADI_DAC_MODE=04
 
-# only option
+# Only option for device is AD9166.
+# The default mode is 04
+
 set device AD9166
-# default mode:
-set mode   04
 puts "modul $mode"
 
-if [info exists ::env(ADI_DAC_MODE)] {
-  set mode $::env(ADI_DAC_MODE)
-} else {
-  set env(ADI_DAC_MODE) $mode
+if {[info exists ::env(ADI_DAC_MODE)]} {
+  set mode [get_env_param ADI_DAC_MODE 04]
+} elseif {![info exists ADI_DAC_MODE]} {
+  set mode 04
 }
 
 # This reference design supports the AD9166 device with modes:
@@ -28,6 +28,7 @@ set params(AD9166,02) {2 2 1 2 1 16 16}
 set params(AD9166,03) {2 3 3 4 1 16 16}
 set params(AD9166,04) {2 4 1 1 1 16 16}
 set params(AD9166,06) {2 6 3 2 1 16 16}
+# lane rate = 12.5Gbps
 set params(AD9166,08) {2 8 2 1 1 16 16}
 set params(AD9166,09) {1 8 4 1 1 16 16}
 

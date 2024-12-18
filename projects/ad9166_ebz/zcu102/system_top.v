@@ -72,8 +72,8 @@ module system_top (
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
-  wire    [ 2:0]  spi0_csn;
   wire    [ 2:0]  spi1_csn;
+  wire    [ 3:0]  spi_fmc_csn;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire            tx_sync;
@@ -81,14 +81,11 @@ module system_top (
   // active low
   assign spi_en = 1'b0;
 
-  // FMC_CS1
-  assign spi_csn_dac = spi0_csn[0];
-  // FMC_CS2
-  assign spi_csn_hmc7044 = spi0_csn[1];
-  // FMC_CS3
-  assign spi_csn_adf4372 = spi0_csn[2];
-  // FMC_CS4
-  assign spi_csn_amp = spi1_csn[1];
+  // PL SPI connected to axi_quad_spi because they share the same SPI lines
+  assign spi_csn_dac = spi_fmc_csn[0];      // FMC_CS1
+  assign spi_csn_hmc7044 = spi_fmc_csn[1];  // FMC_CS2
+  assign spi_csn_adf4372 = spi_fmc_csn[2];  // FMC_CS3
+  assign spi_csn_amp = spi_fmc_csn[3];      // FMC_CS4
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -144,14 +141,21 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .dac_fifo_bypass (dac_fifo_bypass),
-    .spi0_csn (spi0_csn),
-    .spi0_miso (spi_miso),
-    .spi0_mosi (spi_mosi),
-    .spi0_sclk (spi_clk),
+    .spi0_csn (),
+    .spi0_miso (),
+    .spi0_mosi (),
+    .spi0_sclk (),
     .spi1_csn (spi1_csn),
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
     .spi1_sclk (pmod_spi_clk),
+    .spi_fmc_csn_i (spi_fmc_csn),
+    .spi_fmc_csn_o (spi_fmc_csn),
+    .spi_fmc_clk_i (spi_clk),
+    .spi_fmc_clk_o (spi_clk),
+    .spi_fmc_sdo_i (spi_mosi),
+    .spi_fmc_sdo_o (spi_mosi),
+    .spi_fmc_sdi_i (spi_miso),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
