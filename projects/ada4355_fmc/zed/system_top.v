@@ -111,7 +111,7 @@ module system_top (
   input           gpio_1p8vd_en,
   input           gpio_1p8va_en,
 
-  output          ad9508_sync,
+  //output          ad9508_sync,
 
   // ADC SPI
 
@@ -141,7 +141,7 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  assign ad9508_sync    = ~gpio_o[38];
+  //assign ad9508_sync    = ~gpio_o[38];
 
   assign gpio_i[32]     = gain_sel0;
   assign gpio_i[33]     = gain_sel1;
@@ -149,7 +149,7 @@ module system_top (
   assign gpio_i[35]     = fsel;
   assign gpio_i[36]     = gpio_1p8vd_en;
   assign gpio_i[37]     = gpio_1p8va_en;
-  assign gpio_i[63:39]  = gpio_o[63:39];
+  assign gpio_i[63:38]  = gpio_o[63:38];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -246,5 +246,5 @@ module system_top (
     .db_n (db_n),
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
-    .sync_n (ad9508_sync));
+    .sync_n (1'b1));
 endmodule
