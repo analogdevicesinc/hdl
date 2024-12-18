@@ -20,6 +20,10 @@ source ../../scripts/adi_project_intel.tcl
 
 # Parameter description:
 #
+#   JESD_MODE : Used link layer encoder mode
+#      64B66B - 64b66b link layer defined in JESD 204C, uses Intel IP with a custom gearbox as Physical layer
+#      8B10B  - 8b10b link layer defined in JESD 204B, uses Intel IP as Physical layer
+#
 #   RX_LANE_RATE :  Lane rate of the Rx link ( MxFE to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to MxFE )
 #   REF_CLK_RATE : Frequency of reference clock in MHz used in 8B10B mode (LANE_RATE/40)
@@ -33,8 +37,9 @@ source ../../scripts/adi_project_intel.tcl
 #
 
 adi_project ad9081_fmca_ebz_s10soc [list \
-  RX_LANE_RATE       [get_env_param RX_LANE_RATE      10 ] \
-  TX_LANE_RATE       [get_env_param TX_LANE_RATE      10 ] \
+  JESD_MODE          [get_env_param JESD_MODE     64B66B ] \
+  RX_LANE_RATE       [get_env_param RX_LANE_RATE    16.5 ] \
+  TX_LANE_RATE       [get_env_param TX_LANE_RATE    16.5 ] \
   REF_CLK_RATE       [get_env_param REF_CLK_RATE     250 ] \
   DEVICE_CLK_RATE    [get_env_param DEVICE_CLK_RATE  250 ] \
   RX_JESD_M          [get_env_param RX_JESD_M          8 ] \

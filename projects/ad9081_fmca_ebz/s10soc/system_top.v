@@ -37,6 +37,7 @@
 
 module system_top  #(
   // Dummy parameters to workaround critical warning
+  parameter JESD_MODE          = "8B10B",
   parameter RX_LANE_RATE       = 10,
   parameter TX_LANE_RATE       = 10,
   parameter REF_CLK_RATE       = 250,
