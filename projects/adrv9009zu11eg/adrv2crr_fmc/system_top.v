@@ -60,10 +60,6 @@ module system_top (
   inout               gpio_3_exp_n, //RESET_HMC7044
   inout               gpio_3_exp_p, //RESET_AD9545
   inout               gpio_4_exp_n, //VCXO_SELECT
-  output              led_gpio_0,
-  output              led_gpio_1,
-  output              led_gpio_2,
-  output              led_gpio_3,
   inout               dip_gpio_0,
   inout               dip_gpio_1,
   inout               dip_gpio_2,
@@ -217,7 +213,32 @@ module system_top (
   input               ddr4_rtl_1_alert_n,
   output              spi_clk,
   inout               spi_sdio,
-  input               spi_miso
+  input               spi_miso,
+
+  input               qsfp_rx1_p,
+  input               qsfp_rx1_n,
+  input               qsfp_rx2_p,
+  input               qsfp_rx2_n,
+  input               qsfp_rx3_p,
+  input               qsfp_rx3_n,
+  input               qsfp_rx4_p,
+  input               qsfp_rx4_n,
+  output              qsfp_tx1_p,
+  output              qsfp_tx1_n,
+  output              qsfp_tx2_p,
+  output              qsfp_tx2_n,
+  output              qsfp_tx3_p,
+  output              qsfp_tx3_n,
+  output              qsfp_tx4_p,
+  output              qsfp_tx4_n,
+  input               qsfp_mgt_refclk_0_p,
+  input               qsfp_mgt_refclk_0_n,
+  output              qsfp_resetl,
+  input               qsfp_modprsl,
+  input               qsfp_intl,
+  output              qsfp_lpmode,
+  output  [3:0]       led_qsfp
+
 );
 
   // internal signals
@@ -225,6 +246,7 @@ module system_top (
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
+  wire    [ 7:0]  led;
 
   wire    [2:0]   spi_csn;
 
@@ -247,6 +269,8 @@ module system_top (
   wire            spi_miso_s;
 
   reg  [7:0]     spi_3_to_8_csn;
+
+  assign led_qsfp = led[3:0];
 
   always @(*) begin
     case (spi_csn)
@@ -542,6 +566,32 @@ module system_top (
     .spi0_csn(spi_csn),
     .spi0_miso(spi0_miso),
     .spi0_mosi(spi_mosi),
-    .spi0_sclk(spi_clk));
+    .spi0_sclk(spi_clk),
+    .qsfp_rx1_p(qsfp_rx1_p),
+    .qsfp_rx1_n(qsfp_rx1_n),
+    .qsfp_rx2_p(qsfp_rx2_p),
+    .qsfp_rx2_n(qsfp_rx2_n),
+    .qsfp_rx3_p(qsfp_rx3_p),
+    .qsfp_rx3_n(qsfp_rx3_n),
+    .qsfp_rx4_p(qsfp_rx4_p),
+    .qsfp_rx4_n(qsfp_rx4_n),
+    .qsfp_tx1_p(qsfp_tx1_p),
+    .qsfp_tx1_n(qsfp_tx1_n),
+    .qsfp_tx2_p(qsfp_tx2_p),
+    .qsfp_tx2_n(qsfp_tx2_n),
+    .qsfp_tx3_p(qsfp_tx3_p),
+    .qsfp_tx3_n(qsfp_tx3_n),
+    .qsfp_tx4_p(qsfp_tx4_p),
+    .qsfp_tx4_n(qsfp_tx4_n),
+    .qsfp_mgt_refclk_0_p(qsfp_mgt_refclk_0_p),
+    .qsfp_mgt_refclk_0_n(qsfp_mgt_refclk_0_n),
+    .qsfp_modsell(),
+    .qsfp_resetl(qsfp_resetl),
+    .qsfp_modprsl(qsfp_modprsl),
+    .qsfp_intl(qsfp_intl),
+    .qsfp_lpmode(qsfp_lpmode),
+    .led(led),
+    .iic_port_scl_io(i2c1_scl),
+    .iic_port_sda_io(i2c1_sda));
 
 endmodule

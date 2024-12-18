@@ -4,8 +4,8 @@ GENERIC_DEPS += corundum.v
 
 XILINX_DEPS += corundum_ip.tcl
 
-EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v
-EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v
+EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v
+EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/rtl/sync_signal.v
 EXTERNAL_DEPS += ../../../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v
 EXTERNAL_DEPS += ../../../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v
 EXTERNAL_DEPS += ../../../corundum/fpga/common/rtl/mqnic_core_axi.v
@@ -109,9 +109,9 @@ EXTERNAL_DEPS += ../../../corundum/fpga/common/syn/vivado/rb_drp.tcl
 EXTERNAL_DEPS += ../../../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
 EXTERNAL_DEPS += ../../../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
 EXTERNAL_DEPS += ../../../corundum/fpga/common/syn/vivado/mqnic_port.tcl
-EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl
-EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/sync_reset.tcl
-EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl
+EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl
+EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/sync_reset.tcl
+EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl
 EXTERNAL_DEPS += ../../../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
 
 include ../scripts/library.mk
