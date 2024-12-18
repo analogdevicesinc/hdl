@@ -103,28 +103,14 @@ module system_top (
 
   // GPIOs
 
-  //input           doa_fmc,
-  //input           dob_fmc,
-  //input           doc_fmc,
-  //input           dod_fmc,
-
-  //output          gp0_dir,
-  //output          gp1_dir,
-  //output          gp2_dir,
-  //output          gp3_dir,
   input           gain_sel0,
-  output          gain_sel1,
+  input           gain_sel1,
   input           gain_sel2,
 
   input           fsel,
   input           gpio_1p8vd_en,
   input           gpio_1p8va_en,
 
-  // input           pwrgd,
-  //input           adf435x_lock,
-  // output          en_psu,
-  // output          pd_v33b,
-  // output          osc_en,
   output          ad9508_sync,
 
   // ADC SPI
@@ -155,34 +141,15 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-  //wire            fpga_100_clk;
-  //wire            fpga_ref_clk;
+  assign ad9508_sync    = ~gpio_o[38];
 
-  // assign gp0_dir        = 1'b0;
-  // assign gp1_dir        = 1'b0;
-  // assign gp2_dir        = 1'b1;
-  // assign gp3_dir        = 1'b0;
-
-  //assign gpio_i[34]           = gpio3_fmc;
-  //assign gpio2_fmc            = gpio_o[33];
-
-  //assign en_psu         = 1'b1;
-  //assign osc_en         = pwrgd;
-  //assign pd_v33b        = 1'b1;
-  assign ad9508_sync    = ~gpio_o[37];
-  //assign gpio_i[35]     = adf435x_lock;
-  //assign gpio_i[36]     = pwrgd;
-  assign gpio_i[63:38]  = gpio_o[63:38];
-
-  /*IBUFDS i_fpga_clk (
-    .I (clk_p),
-    .IB (clk_n),
-    .O (fpga_ref_clk)); */
-
-  /*IBUFDS i_fpga_100_clk (
-    .I (fpgaclk_p),
-    .IB (fpgaclk_n),
-    .O (fpga_100_clk)); */
+  assign gpio_i[32]     = gain_sel0;
+  assign gpio_i[33]     = gain_sel1;
+  assign gpio_i[34]     = gain_sel2;
+  assign gpio_i[35]     = fsel;
+  assign gpio_i[36]     = gpio_1p8vd_en;
+  assign gpio_i[37]     = gpio_1p8va_en;
+  assign gpio_i[63:39]  = gpio_o[63:39];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -263,14 +230,14 @@ module system_top (
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (ada4355_mosi),
     .spi1_clk_i (1'b0),
-    .spi1_clk_o (/*ad9508_adf4350_sclk*/),
-    .spi1_csn_0_o (/*ad9508_csn*/),
-    .spi1_csn_1_o (/*adf4350_csn*/),
+    .spi1_clk_o (sclk_pot),
+    .spi1_csn_0_o ( csb_apd_pot),
+    .spi1_csn_1_o (csb_ld_pot),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (/*ad9508_adf4350_miso*/),
+    .spi1_sdi_i (miso_pot),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (/*ad9508_adf4350_mosi*/),
+    .spi1_sdo_o (mosi_pot),
     .dco_p (dco_p),
     .dco_n (dco_n),
     .da_p (da_p),
@@ -280,7 +247,4 @@ module system_top (
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
     .sync_n (ad9508_sync));
-    //.fpga_ref_clk(fpga_ref_clk),
-    //.fpga_100_clk(fpga_100_clk));
-
 endmodule
