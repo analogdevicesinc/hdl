@@ -40,8 +40,8 @@ module bsync_generator (
   logic [4:0]              bsync_alignment;
   logic                    bsync_misaligned;
   logic [4:0]              bsync_next_alignment;
-  logic                    dir_changed;
-  logic                    direction_r;
+  logic                    dir_changed = 1'b0;
+  logic                    direction_r = 1'b0;
   logic                    direction_s;
 
   logic                    setup_not_met;
@@ -99,15 +99,9 @@ module bsync_generator (
     end
   end
 
-  // setup_detector setup_i(
-  //   .clk(clk),
-  //   .data(bsync_in),
-  //   .pos_edge(bsync_edge),
-  //   .setup_violation(bsync_setup_violation)
-  // );
-
   always @(posedge clk) begin
     bsync_r <= bsync_in;
+    bsync_edge <= (bsync_in && !bsync_r);
   end
 
   /*
