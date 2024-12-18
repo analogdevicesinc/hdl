@@ -342,6 +342,13 @@ proc jesd204_get_max_lane_rate {device soft_pcs} {
   }
 }
 
+proc jesd204_get_sip_tile {device} {
+  set sip_tile ""
+  set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
+  regexp -nocase {([a-z])\-tile} $sip_tile_info -> sip_tile
+  return [string toupper $sip_tile]
+}
+
 proc jesd204_validate {{quiet false}} {
   set soft_pcs [get_parameter_value "SOFT_PCS"]
   set input_pipeline [get_parameter_value "INPUT_PIPELINE_STAGES"]
@@ -391,9 +398,45 @@ proc jesd204_validate {{quiet false}} {
       return false
     }
   } else {
-    if {$device_family != "Agilex 7" && $device_family != "Agilex 5"} {
+    if {$device_family == "Arria 10"} {
       if {!$quiet} {
-        send_message error "JESD204C is only supported on Agilex 7 / Agilex 5 devices."
+        send_message error "JESD204C is only supported on Agilex 7/Agilex 5/Stratix 10 devices."
+      }
+      return false
+    }
+
+    if {$device_family == "Stratix 10" && [jesd204_get_sip_tile $device] != "H"} {
+      if {!$quiet} {
+        send_message error "JESD204C on Stratix 10 is only supported on H-tile devices."
+      }
+      return false
+    }
+
+    if {!$external_phy && !$soft_pcs} {
+      if {!$quiet} {
+        send_message error "JESD204C requires soft PCS."
+      }
+      return false
+    }
+
+    set min_lane_rate 1000
+    if {$device_family == "Stratix 10"} {
+      # H-tile Enhanced PCS with the 64-bit PMA interface
+      set min_lane_rate 3200
+      set max_lane_rate 17400
+    } elseif {$device_family == "Agilex 7"} {
+      # F-tile FGT NRZ in PMA clocking mode, word clock limited to 906.25 MHz
+      set max_lane_rate 29000
+    } elseif {[string range $device 0 2] == "A5E" && [string index $device 7] == "B"} {
+      # Agilex 5 E-Series device group B (17G transceivers)
+      set max_lane_rate 17160
+    } else {
+      set max_lane_rate 28100
+    }
+
+    if {$lane_rate < $min_lane_rate || $lane_rate > $max_lane_rate} {
+      if {!$quiet} {
+        send_message error "Lane rate must be in the range ${min_lane_rate}-${max_lane_rate} Mbps."
       }
       return false
     }
@@ -428,10 +471,7 @@ proc jesd204_compose {} {
   set num_of_phys [get_parameter_value "NUM_OF_PHYS"]
   set reset_fsm_en [get_parameter_value "RESET_FSM_EN"]
 
-  set sip_tile ""
-  set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
-  regexp -nocase {([a-z])\-tile} $sip_tile_info -> sip_tile
-  set sip_tile [string toupper $sip_tile]
+  set sip_tile [jesd204_get_sip_tile $device]
 
   if {$link_mode == 1} {
     # jesd204b
@@ -528,7 +568,6 @@ proc jesd204_compose {} {
     add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
   } elseif {$device_family == "Stratix 10" && $sip_tile == "H"} {
-
     send_message info "Instantiate a fpll_s10_htile for link_pll."
     add_instance link_pll altera_xcvr_fpll_s10_htile
     ## Primary Use is Core mode
@@ -650,7 +689,12 @@ proc jesd204_compose {} {
       }
     }
 
-    if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+    if {$device_family == "Stratix 10"} {
+      if {$link_mode == 2} {
+        add_connection phy.clkout phy.phy_clk
+        add_connection link_reset.out_reset phy.phy_reset
+      }
+    } elseif {$device_family == "Arria 10"} {
     # add_connection ref_clock.out_clk phy.ref_clk
     } elseif {$device_family == "Agilex 7"} {
 
