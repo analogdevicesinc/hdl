@@ -214,6 +214,11 @@ proc jesd204_phy_glue_elab {} {
   } elseif {[string equal $device "Stratix 10"]} {
     set reconfig_avmm_address_width 11
     set unused_width_per_lane 40
+    if {$link_mode == 2} {
+      set parallel_data_w 64
+      # Used bits are data (64) + control (2) + data valid (1)
+      set unused_width_per_lane 13
+    }
   } elseif {[string equal $device "Agilex 7"]} {
     set parallel_data_w 80
     set reconfig_avmm_address_width [expr 18 + int(ceil((log($num_of_lanes) / log(2))))]
@@ -295,13 +300,21 @@ proc jesd204_phy_glue_elab {} {
 
     if {$soft_pcs} {
       set unused_width [expr $num_of_lanes * $unused_width_per_lane]
-
-      glue_add_const_conduit tx_enh_data_valid $num_of_lanes
-
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface tx_raw_data_${i} conduit start
       }
       glue_add_if_port_conduit $num_of_lanes tx_raw_data raw_data tx_parallel_data Input $parallel_data_w
+
+      if {$link_mode == 2} {
+        for {set i 0} {$i < $num_of_lanes} {incr i} {
+          add_interface tx_control_${i} conduit start
+          add_interface tx_enh_data_valid_${i} conduit start
+        }
+        glue_add_if_port_conduit $num_of_lanes tx_control tx_control tx_control Input 2
+        glue_add_if_port_conduit $num_of_lanes tx_enh_data_valid tx_enh_data_valid tx_enh_data_valid Input 1
+      } else {
+        glue_add_const_conduit tx_enh_data_valid $num_of_lanes
+      }
     } else {
       set unused_width [expr $num_of_lanes * 92]
 
@@ -344,6 +357,17 @@ proc jesd204_phy_glue_elab {} {
         add_interface rx_raw_data_${i} conduit start
       }
       glue_add_if_port_conduit $num_of_lanes rx_raw_data raw_data rx_parallel_data Output $parallel_data_w
+
+      if {$link_mode == 2} {
+        for {set i 0} {$i < $num_of_lanes} {incr i} {
+          add_interface rx_control_${i} conduit start
+          add_interface rx_enh_data_valid_${i} conduit start
+          add_interface rx_bitslip_${i} conduit start
+        }
+        glue_add_if_port_conduit $num_of_lanes rx_control rx_control rx_control Output 2
+        glue_add_if_port_conduit $num_of_lanes rx_enh_data_valid rx_enh_data_valid rx_enh_data_valid Output 1
+        glue_add_if_port_conduit $num_of_lanes rx_bitslip rx_bitslip rx_bitslip Input 1
+      }
     } else {
       for {set i 0} {$i < $num_of_lanes} {incr i} {
         add_interface rx_phy_${i} conduit start

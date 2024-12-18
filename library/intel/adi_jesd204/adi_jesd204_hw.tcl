@@ -312,10 +312,18 @@ proc jesd204_validate {{quiet false}} {
       return false
     }
   } else {
-    if {$device_family != "Agilex 7"} {
+    if {$device_family == "Arria 10"} {
       if {!$quiet} {
-        send_message error "JESD204C is only supported on Agilex 7 devices."
+        send_message error "JESD204C is only supported on Agilex 7/Stratix 10 devices."
         return false
+      }
+    } elseif {$device_family == "Stratix 10"} {
+      if {$lane_rate < 2000 || $lane_rate > 17400} {
+        send_message error "Lane rate must be in the range 2000-17400 Mbps."
+      }
+    } elseif {$device_family == "Agilex 7"} {
+      if {$lane_rate < 2000 || $lane_rate > 24750} {
+        send_message error "Lane rate must be in the range 2000-24750 Mbps."
       }
     }
   }
@@ -444,7 +452,6 @@ proc jesd204_compose {} {
     add_connection link_pll_reset_control.pll_powerdown link_pll.pll_powerdown
 
   } elseif {$device_family == "Stratix 10" && $sip_tile == "H"} {
-
     send_message info "Instantiate a fpll_s10_htile for link_pll."
     add_instance link_pll altera_xcvr_fpll_s10_htile
     ## Primary Use is Core mode
@@ -561,7 +568,12 @@ proc jesd204_compose {} {
     }
   }
 
-  if {$device_family == "Arria 10" || $device_family == "Stratix 10"} {
+  if {$device_family == "Stratix 10"} {
+    if {$link_mode == 2} {
+      add_connection phy.clkout phy.phy_clk
+      add_connection link_reset.out_reset phy.phy_reset
+    }
+  } elseif {$device_family == "Arria 10"} {
    # add_connection ref_clock.out_clk phy.ref_clk
 
   } elseif {$device_family == "Agilex 7"} {
