@@ -96,6 +96,13 @@ set_property -dict [list \
 ] \
 [ipx::get_user_parameters CLK_MOD -of_objects $cc]
 
+## I2C_MOD
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "0 1 2 3 4" \
+] \
+[ipx::get_user_parameters I2C_MOD -of_objects $cc]
+
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
 ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
@@ -120,6 +127,13 @@ set_property -dict [list \
 	"display_name" "Clock cycles per bit" \
   "tooltip" "\[CLK_MOD\] Adjust clock cycles required to modulate the lane bus bits. Set 8 to achieve 12.5MHz at 100Mhz input clock, and 4 at 50MHz." \
 ] [ipgui::get_guiparamspec -name "CLK_MOD" -component $cc]
+
+ipgui::add_param -name "I2C_MOD" -component $cc -parent $general_group
+set_property -dict [list \
+	"widget" "comboBox" \
+	"display_name" "I2C divider" \
+  "tooltip" "\[I2C_MOD\] Further divide (two power) open drain speed to achieve a lower I2C. Set 0 to achieve 1.56MHz at (clk=100MHz, Clock cycles per bit=8), 1 for 781kHz." \
+] [ipgui::get_guiparamspec -name "I2C_MOD" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
