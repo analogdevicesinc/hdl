@@ -15,6 +15,9 @@ set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d
 set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_p];     ## G2  FMC_CLK1_M2C_P IO_L12P_T1_MRCC_35
 set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_n];     ## G3 FMC_CLK1_M2C_N IO_L12N_T1_MRCC_35
 
+#set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_p];     ## G6  FMC_LA00_CC_P IO_L13P_T2_MRCC_34
+#set_property -dict {PACKAGE_PIN M20 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_n];     ## G7 FMC_LA00_CC_N IO_L13N_T2_MRCC_34
+
 #set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_p]; ##   CLK1_M2C_P  G2   IO_L12P_T1_MRCC_35
 #set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports fpgaclk_n]; ##   CLK1_M2C_N  G3   IO_L12N_T1_MRCC_35
 

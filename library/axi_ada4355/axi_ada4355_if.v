@@ -94,7 +94,7 @@
 
    wire                 adc_clk_in_fast;
    wire [7:0]           serdes_frame;
-   wire                 adc_clk_div;
+   wire                 adc_clk_div = 1'b1;
    wire [ 7:0]          serdes_data_0;
    wire [ 7:0]          serdes_data_1;
    wire [19:0]          pattern_value;
@@ -160,13 +160,13 @@
         .I(clk_in_s),
         .O(adc_clk_in_fast));
 
-      BUFR #(
+      /*BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
         .CLR(~sync_n),
         .CE(1'b1),
         .I(clk_in_s),
-        .O(adc_clk_div));
+        .O(adc_clk_div)); */
 
     end
     endgenerate
