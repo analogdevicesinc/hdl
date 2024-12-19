@@ -118,7 +118,7 @@ module system_top (
 
   /* PMOD GPIOs 48-51 */
   ad_iobuf #(
-    .DATA_WIDTH(4)
+    .DATA_WIDTH (4)
   ) i_iobuf_pmod (
     .dio_t (gpio_t[48+:4]),
     .dio_i (gpio_o[48+:4]),

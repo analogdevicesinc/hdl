@@ -7,19 +7,19 @@
 # Select the mode you want the project synthesised for, by setting the
 # ADI_DAC_MODE environment variable:
 #
-# make ADI_DAC_MODE=04
+# make ADI_DAC_MODE=08
 
 # Only option for device is AD9166.
-# The default mode is 04
+# The default mode is 08
 
 set device AD9166
-puts "modul $mode"
 
 if {[info exists ::env(ADI_DAC_MODE)]} {
-  set mode [get_env_param ADI_DAC_MODE 04]
+  set mode [get_env_param ADI_DAC_MODE 08]
 } elseif {![info exists ADI_DAC_MODE]} {
-  set mode 04
+  set mode 08
 }
+puts "modul $mode"
 
 # This reference design supports the AD9166 device with modes:
 #                 Mode M L S F HD N NP
