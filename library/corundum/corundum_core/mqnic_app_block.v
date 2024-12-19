@@ -9,12 +9,15 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
+`define APP_CUSTOM_PARAMS_ENABLE
+`define APP_CUSTOM_PORTS_ENABLE
+
 `ifdef APP_CUSTOM_PARAMS_ENABLE
-    `include "mqnic_app_custom_params.vh"
+  `include "mqnic_app_custom_params.vh"
 `endif
 
 `ifdef APP_CUSTOM_PORTS_ENABLE
-    `include "mqnic_app_custom_ports.vh"
+  `include "mqnic_app_custom_ports.vh"
 `endif
 
 /*
@@ -105,7 +108,7 @@ module mqnic_app_block #
 
     // Custom application block parameters
     `ifdef APP_CUSTOM_PARAMS_ENABLE
-        `APP_CUSTOM_PARAMS_DECL
+      `APP_CUSTOM_PARAMS_DECL
     `endif
 
     // DMA interface configuration
@@ -599,7 +602,7 @@ module mqnic_app_block #
      * Custom application block ports
      */
     `ifdef APP_CUSTOM_PORTS_ENABLE
-        `APP_CUSTOM_PORTS_DECL
+      `APP_CUSTOM_PORTS_DECL
     `endif
 
     /*
@@ -746,204 +749,551 @@ always @(posedge clk) begin
     end
 end
 
-/*
- * AXI-Lite master interface (control to NIC)
- */
-assign m_axil_ctrl_awaddr = 0;
-assign m_axil_ctrl_awprot = 0;
-assign m_axil_ctrl_awvalid = 1'b0;
-assign m_axil_ctrl_wdata = 0;
-assign m_axil_ctrl_wstrb = 0;
-assign m_axil_ctrl_wvalid = 1'b0;
-assign m_axil_ctrl_bready = 1'b1;
-assign m_axil_ctrl_araddr = 0;
-assign m_axil_ctrl_arprot = 0;
-assign m_axil_ctrl_arvalid = 1'b0;
-assign m_axil_ctrl_rready = 1'b1;
+generate
+  /*
+   * AXI-Lite master interface (control to NIC)
+   */
+  if (APP_CTRL_ENABLE) begin : app_NIC_control
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axil_ctrl_awaddr = m_axil_ctrl_awaddr_app;
+      assign m_axil_ctrl_awprot = m_axil_ctrl_awprot_app;
+      assign m_axil_ctrl_awvalid = m_axil_ctrl_awvalid_app;
+      assign m_axil_ctrl_awready_app = m_axil_ctrl_awready;
+      assign m_axil_ctrl_wdata = m_axil_ctrl_wdata_app;
+      assign m_axil_ctrl_wstrb = m_axil_ctrl_wstrb_app;
+      assign m_axil_ctrl_wvalid = m_axil_ctrl_wvalid_app;
+      assign m_axil_ctrl_wready_app = m_axil_ctrl_wready;
+      assign m_axil_ctrl_bresp_app = m_axil_ctrl_bresp;
+      assign m_axil_ctrl_bvalid_app = m_axil_ctrl_bvalid;
+      assign m_axil_ctrl_bready = m_axil_ctrl_bready_app;
+      assign m_axil_ctrl_araddr = m_axil_ctrl_araddr_app;
+      assign m_axil_ctrl_arprot = m_axil_ctrl_arprot_app;
+      assign m_axil_ctrl_arvalid = m_axil_ctrl_arvalid_app;
+      assign m_axil_ctrl_arready_app = m_axil_ctrl_arready;
+      assign m_axil_ctrl_rdata_app = m_axil_ctrl_rdata;
+      assign m_axil_ctrl_rresp_app = m_axil_ctrl_rresp;
+      assign m_axil_ctrl_rvalid_app = m_axil_ctrl_rvalid;
+      assign m_axil_ctrl_rready = m_axil_ctrl_rready_app;
+    `endif
+  end else begin
+    assign m_axil_ctrl_awaddr = 0;
+    assign m_axil_ctrl_awprot = 0;
+    assign m_axil_ctrl_awvalid = 1'b0;
+    assign m_axil_ctrl_wdata = 0;
+    assign m_axil_ctrl_wstrb = 0;
+    assign m_axil_ctrl_wvalid = 1'b0;
+    assign m_axil_ctrl_bready = 1'b1;
+    assign m_axil_ctrl_araddr = 0;
+    assign m_axil_ctrl_arprot = 0;
+    assign m_axil_ctrl_arvalid = 1'b0;
+    assign m_axil_ctrl_rready = 1'b1;
+  end
 
-/*
- * DMA interface (control)
- */
-assign m_axis_ctrl_dma_read_desc_dma_addr = 0;
-assign m_axis_ctrl_dma_read_desc_ram_sel = 0;
-assign m_axis_ctrl_dma_read_desc_ram_addr = 0;
-assign m_axis_ctrl_dma_read_desc_len = 0;
-assign m_axis_ctrl_dma_read_desc_tag = 0;
-assign m_axis_ctrl_dma_read_desc_valid = 1'b0;
-assign m_axis_ctrl_dma_write_desc_dma_addr = 0;
-assign m_axis_ctrl_dma_write_desc_ram_sel = 0;
-assign m_axis_ctrl_dma_write_desc_ram_addr = 0;
-assign m_axis_ctrl_dma_write_desc_imm = 0;
-assign m_axis_ctrl_dma_write_desc_imm_en = 0;
-assign m_axis_ctrl_dma_write_desc_len = 0;
-assign m_axis_ctrl_dma_write_desc_tag = 0;
-assign m_axis_ctrl_dma_write_desc_valid = 1'b0;
+  if (APP_CTRL_ENABLE) begin : app_dma_control
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      /*
+      * DMA interface (control)
+      */
+      assign m_axis_ctrl_dma_read_desc_dma_addr = m_axis_ctrl_dma_read_desc_dma_addr_app;
+      assign m_axis_ctrl_dma_read_desc_ram_sel = m_axis_ctrl_dma_read_desc_ram_sel_app;
+      assign m_axis_ctrl_dma_read_desc_ram_addr = m_axis_ctrl_dma_read_desc_ram_addr_app;
+      assign m_axis_ctrl_dma_read_desc_len = m_axis_ctrl_dma_read_desc_len_app;
+      assign m_axis_ctrl_dma_read_desc_tag = m_axis_ctrl_dma_read_desc_tag_app;
+      assign m_axis_ctrl_dma_read_desc_valid = m_axis_ctrl_dma_read_desc_valid_app;
+      assign m_axis_ctrl_dma_read_desc_ready_app = m_axis_ctrl_dma_read_desc_ready;
 
-assign ctrl_dma_ram_wr_cmd_ready = 1'b1;
-assign ctrl_dma_ram_wr_done = ctrl_dma_ram_wr_cmd_valid;
-assign ctrl_dma_ram_rd_cmd_ready = ctrl_dma_ram_rd_resp_ready;
-assign ctrl_dma_ram_rd_resp_data = 0;
-assign ctrl_dma_ram_rd_resp_valid = ctrl_dma_ram_rd_cmd_valid;
+      assign s_axis_ctrl_dma_read_desc_status_tag_app = s_axis_ctrl_dma_read_desc_status_tag;
+      assign s_axis_ctrl_dma_read_desc_status_error_app = s_axis_ctrl_dma_read_desc_status_error;
+      assign s_axis_ctrl_dma_read_desc_status_valid_app = s_axis_ctrl_dma_read_desc_status_valid;
 
-/*
- * DMA interface (data)
- */
-assign m_axis_data_dma_read_desc_dma_addr = 0;
-assign m_axis_data_dma_read_desc_ram_sel = 0;
-assign m_axis_data_dma_read_desc_ram_addr = 0;
-assign m_axis_data_dma_read_desc_len = 0;
-assign m_axis_data_dma_read_desc_tag = 0;
-assign m_axis_data_dma_read_desc_valid = 1'b0;
-assign m_axis_data_dma_write_desc_dma_addr = 0;
-assign m_axis_data_dma_write_desc_ram_sel = 0;
-assign m_axis_data_dma_write_desc_ram_addr = 0;
-assign m_axis_data_dma_write_desc_imm = 0;
-assign m_axis_data_dma_write_desc_imm_en = 0;
-assign m_axis_data_dma_write_desc_len = 0;
-assign m_axis_data_dma_write_desc_tag = 0;
-assign m_axis_data_dma_write_desc_valid = 1'b0;
+      assign m_axis_ctrl_dma_write_desc_dma_addr = m_axis_ctrl_dma_write_desc_dma_addr_app;
+      assign m_axis_ctrl_dma_write_desc_ram_sel = m_axis_ctrl_dma_write_desc_ram_sel_app;
+      assign m_axis_ctrl_dma_write_desc_ram_addr = m_axis_ctrl_dma_write_desc_ram_addr_app;
+      assign m_axis_ctrl_dma_write_desc_imm = m_axis_ctrl_dma_write_desc_imm_app;
+      assign m_axis_ctrl_dma_write_desc_imm_en = m_axis_ctrl_dma_write_desc_imm_en_app;
+      assign m_axis_ctrl_dma_write_desc_len = m_axis_ctrl_dma_write_desc_len_app;
+      assign m_axis_ctrl_dma_write_desc_tag = m_axis_ctrl_dma_write_desc_tag_app;
+      assign m_axis_ctrl_dma_write_desc_valid = m_axis_ctrl_dma_write_desc_valid_app;
+      assign m_axis_ctrl_dma_write_desc_ready_app = m_axis_ctrl_dma_write_desc_ready;
 
-assign data_dma_ram_wr_cmd_ready = 1'b1;
-assign data_dma_ram_wr_done = data_dma_ram_wr_cmd_valid;
-assign data_dma_ram_rd_cmd_ready = data_dma_ram_rd_resp_ready;
-assign data_dma_ram_rd_resp_data = 0;
-assign data_dma_ram_rd_resp_valid = data_dma_ram_rd_cmd_valid;
+      assign s_axis_ctrl_dma_write_desc_status_tag_app = s_axis_ctrl_dma_write_desc_status_tag;
+      assign s_axis_ctrl_dma_write_desc_status_error_app = s_axis_ctrl_dma_write_desc_status_error;
+      assign s_axis_ctrl_dma_write_desc_status_valid_app = s_axis_ctrl_dma_write_desc_status_valid;
 
-/*
- * Ethernet (direct MAC interface - lowest latency raw traffic)
- */
-assign m_axis_direct_tx_tdata = s_axis_direct_tx_tdata;
-assign m_axis_direct_tx_tkeep = s_axis_direct_tx_tkeep;
-assign m_axis_direct_tx_tvalid = s_axis_direct_tx_tvalid;
-assign s_axis_direct_tx_tready = m_axis_direct_tx_tready;
-assign m_axis_direct_tx_tlast = s_axis_direct_tx_tlast;
-assign m_axis_direct_tx_tuser = s_axis_direct_tx_tuser;
+      assign ctrl_dma_ram_wr_cmd_sel_app = ctrl_dma_ram_wr_cmd_sel;
+      assign ctrl_dma_ram_wr_cmd_be_app = ctrl_dma_ram_wr_cmd_be;
+      assign ctrl_dma_ram_wr_cmd_addr_app = ctrl_dma_ram_wr_cmd_addr;
+      assign ctrl_dma_ram_wr_cmd_data_app = ctrl_dma_ram_wr_cmd_data;
+      assign ctrl_dma_ram_wr_cmd_valid_app = ctrl_dma_ram_wr_cmd_valid;
+      assign ctrl_dma_ram_wr_cmd_ready = ctrl_dma_ram_wr_cmd_ready_app;
+      assign ctrl_dma_ram_wr_done = ctrl_dma_ram_wr_done_app;
+      assign ctrl_dma_ram_rd_cmd_sel_app = ctrl_dma_ram_rd_cmd_sel;
+      assign ctrl_dma_ram_rd_cmd_addr_app = ctrl_dma_ram_rd_cmd_addr;
+      assign ctrl_dma_ram_rd_cmd_valid_app = ctrl_dma_ram_rd_cmd_valid;
+      assign ctrl_dma_ram_rd_cmd_ready = ctrl_dma_ram_rd_cmd_ready_app;
+      assign ctrl_dma_ram_rd_resp_data = ctrl_dma_ram_rd_resp_data_app;
+      assign ctrl_dma_ram_rd_resp_valid = ctrl_dma_ram_rd_resp_valid_app;
+      assign ctrl_dma_ram_rd_resp_ready_app = ctrl_dma_ram_rd_resp_ready;
+      
+      /*
+      * DMA interface (data)
+      */
+      assign m_axis_data_dma_read_desc_dma_addr = m_axis_data_dma_read_desc_dma_addr_app;
+      assign m_axis_data_dma_read_desc_ram_sel = m_axis_data_dma_read_desc_ram_sel_app;
+      assign m_axis_data_dma_read_desc_ram_addr = m_axis_data_dma_read_desc_ram_addr_app;
+      assign m_axis_data_dma_read_desc_len = m_axis_data_dma_read_desc_len_app;
+      assign m_axis_data_dma_read_desc_tag = m_axis_data_dma_read_desc_tag_app;
+      assign m_axis_data_dma_read_desc_valid = m_axis_data_dma_read_desc_valid_app;
+      assign m_axis_data_dma_read_desc_ready_app = m_axis_data_dma_read_desc_ready;
 
-assign m_axis_direct_tx_cpl_ts = s_axis_direct_tx_cpl_ts;
-assign m_axis_direct_tx_cpl_tag = s_axis_direct_tx_cpl_tag;
-assign m_axis_direct_tx_cpl_valid = s_axis_direct_tx_cpl_valid;
-assign s_axis_direct_tx_cpl_ready = m_axis_direct_tx_cpl_ready;
+      assign s_axis_data_dma_read_desc_status_tag_app = s_axis_data_dma_read_desc_status_tag;
+      assign s_axis_data_dma_read_desc_status_error_app = s_axis_data_dma_read_desc_status_error;
+      assign s_axis_data_dma_read_desc_status_valid_app = s_axis_data_dma_read_desc_status_valid;
 
-assign m_axis_direct_rx_tdata = s_axis_direct_rx_tdata;
-assign m_axis_direct_rx_tkeep = s_axis_direct_rx_tkeep;
-assign m_axis_direct_rx_tvalid = s_axis_direct_rx_tvalid;
-assign s_axis_direct_rx_tready = m_axis_direct_rx_tready;
-assign m_axis_direct_rx_tlast = s_axis_direct_rx_tlast;
-assign m_axis_direct_rx_tuser = s_axis_direct_rx_tuser;
+      assign m_axis_data_dma_write_desc_dma_addr = m_axis_data_dma_write_desc_dma_addr_app;
+      assign m_axis_data_dma_write_desc_ram_sel = m_axis_data_dma_write_desc_ram_sel_app;
+      assign m_axis_data_dma_write_desc_ram_addr = m_axis_data_dma_write_desc_ram_addr_app;
+      assign m_axis_data_dma_write_desc_imm = m_axis_data_dma_write_desc_imm_app;
+      assign m_axis_data_dma_write_desc_imm_en = m_axis_data_dma_write_desc_imm_en_app;
+      assign m_axis_data_dma_write_desc_len = m_axis_data_dma_write_desc_len_app;
+      assign m_axis_data_dma_write_desc_tag = m_axis_data_dma_write_desc_tag_app;
+      assign m_axis_data_dma_write_desc_valid = m_axis_data_dma_write_desc_valid_app;
+      assign m_axis_data_dma_write_desc_ready_app = m_axis_data_dma_write_desc_ready;
 
-/*
- * Ethernet (synchronous MAC interface - low latency raw traffic)
- */
-assign m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
-assign m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
-assign m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
-assign s_axis_sync_tx_tready = m_axis_sync_tx_tready;
-assign m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
-assign m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
+      assign s_axis_data_dma_write_desc_status_tag_app = s_axis_data_dma_write_desc_status_tag;
+      assign s_axis_data_dma_write_desc_status_error_app = s_axis_data_dma_write_desc_status_error;
+      assign s_axis_data_dma_write_desc_status_valid_app = s_axis_data_dma_write_desc_status_valid;
 
-assign m_axis_sync_tx_cpl_ts = s_axis_sync_tx_cpl_ts;
-assign m_axis_sync_tx_cpl_tag = s_axis_sync_tx_cpl_tag;
-assign m_axis_sync_tx_cpl_valid = s_axis_sync_tx_cpl_valid;
-assign s_axis_sync_tx_cpl_ready = m_axis_sync_tx_cpl_ready;
+      assign data_dma_ram_wr_cmd_sel_app = data_dma_ram_wr_cmd_sel;
+      assign data_dma_ram_wr_cmd_be_app = data_dma_ram_wr_cmd_be;
+      assign data_dma_ram_wr_cmd_addr_app = data_dma_ram_wr_cmd_addr;
+      assign data_dma_ram_wr_cmd_data_app = data_dma_ram_wr_cmd_data;
+      assign data_dma_ram_wr_cmd_valid_app = data_dma_ram_wr_cmd_valid;
+      assign data_dma_ram_wr_cmd_ready = data_dma_ram_wr_cmd_ready_app;
+      assign data_dma_ram_wr_done = data_dma_ram_wr_done_app;
+      assign data_dma_ram_rd_cmd_sel_app = data_dma_ram_rd_cmd_sel;
+      assign data_dma_ram_rd_cmd_addr_app = data_dma_ram_rd_cmd_addr;
+      assign data_dma_ram_rd_cmd_valid_app = data_dma_ram_rd_cmd_valid;
+      assign data_dma_ram_rd_cmd_ready = data_dma_ram_rd_cmd_ready_app;
+      assign data_dma_ram_rd_resp_data = data_dma_ram_rd_resp_data_app;
+      assign data_dma_ram_rd_resp_valid = data_dma_ram_rd_resp_valid_app;
+      assign data_dma_ram_rd_resp_ready_app = data_dma_ram_rd_resp_ready;
+    `endif
+  end else begin
+    /*
+     * DMA interface (control)
+     */
+    assign m_axis_ctrl_dma_read_desc_dma_addr = 0;
+    assign m_axis_ctrl_dma_read_desc_ram_sel = 0;
+    assign m_axis_ctrl_dma_read_desc_ram_addr = 0;
+    assign m_axis_ctrl_dma_read_desc_len = 0;
+    assign m_axis_ctrl_dma_read_desc_tag = 0;
+    assign m_axis_ctrl_dma_read_desc_valid = 1'b0;
+    assign m_axis_ctrl_dma_write_desc_dma_addr = 0;
+    assign m_axis_ctrl_dma_write_desc_ram_sel = 0;
+    assign m_axis_ctrl_dma_write_desc_ram_addr = 0;
+    assign m_axis_ctrl_dma_write_desc_imm = 0;
+    assign m_axis_ctrl_dma_write_desc_imm_en = 0;
+    assign m_axis_ctrl_dma_write_desc_len = 0;
+    assign m_axis_ctrl_dma_write_desc_tag = 0;
+    assign m_axis_ctrl_dma_write_desc_valid = 1'b0;
 
-assign m_axis_sync_rx_tdata = s_axis_sync_rx_tdata;
-assign m_axis_sync_rx_tkeep = s_axis_sync_rx_tkeep;
-assign m_axis_sync_rx_tvalid = s_axis_sync_rx_tvalid;
-assign s_axis_sync_rx_tready = m_axis_sync_rx_tready;
-assign m_axis_sync_rx_tlast = s_axis_sync_rx_tlast;
-assign m_axis_sync_rx_tuser = s_axis_sync_rx_tuser;
+    assign ctrl_dma_ram_wr_cmd_ready = 1'b1;
+    assign ctrl_dma_ram_wr_done = ctrl_dma_ram_wr_cmd_valid;
+    assign ctrl_dma_ram_rd_cmd_ready = ctrl_dma_ram_rd_resp_ready;
+    assign ctrl_dma_ram_rd_resp_data = 0;
+    assign ctrl_dma_ram_rd_resp_valid = ctrl_dma_ram_rd_cmd_valid;
 
-/*
- * Ethernet (internal at interface module)
- */
-assign m_axis_if_tx_tdata = s_axis_if_tx_tdata;
-assign m_axis_if_tx_tkeep = s_axis_if_tx_tkeep;
-assign m_axis_if_tx_tvalid = s_axis_if_tx_tvalid;
-assign s_axis_if_tx_tready = m_axis_if_tx_tready;
-assign m_axis_if_tx_tlast = s_axis_if_tx_tlast;
-assign m_axis_if_tx_tid = s_axis_if_tx_tid;
-assign m_axis_if_tx_tdest = s_axis_if_tx_tdest;
-assign m_axis_if_tx_tuser = s_axis_if_tx_tuser;
+    /*
+     * DMA interface (data)
+     */
+    assign m_axis_data_dma_read_desc_dma_addr = 0;
+    assign m_axis_data_dma_read_desc_ram_sel = 0;
+    assign m_axis_data_dma_read_desc_ram_addr = 0;
+    assign m_axis_data_dma_read_desc_len = 0;
+    assign m_axis_data_dma_read_desc_tag = 0;
+    assign m_axis_data_dma_read_desc_valid = 1'b0;
+    assign m_axis_data_dma_write_desc_dma_addr = 0;
+    assign m_axis_data_dma_write_desc_ram_sel = 0;
+    assign m_axis_data_dma_write_desc_ram_addr = 0;
+    assign m_axis_data_dma_write_desc_imm = 0;
+    assign m_axis_data_dma_write_desc_imm_en = 0;
+    assign m_axis_data_dma_write_desc_len = 0;
+    assign m_axis_data_dma_write_desc_tag = 0;
+    assign m_axis_data_dma_write_desc_valid = 1'b0;
 
-assign m_axis_if_tx_cpl_ts = s_axis_if_tx_cpl_ts;
-assign m_axis_if_tx_cpl_tag = s_axis_if_tx_cpl_tag;
-assign m_axis_if_tx_cpl_valid = s_axis_if_tx_cpl_valid;
-assign s_axis_if_tx_cpl_ready = m_axis_if_tx_cpl_ready;
+    assign data_dma_ram_wr_cmd_ready = 1'b1;
+    assign data_dma_ram_wr_done = data_dma_ram_wr_cmd_valid;
+    assign data_dma_ram_rd_cmd_ready = data_dma_ram_rd_resp_ready;
+    assign data_dma_ram_rd_resp_data = 0;
+    assign data_dma_ram_rd_resp_valid = data_dma_ram_rd_cmd_valid;
+  end
 
-assign m_axis_if_rx_tdata = s_axis_if_rx_tdata;
-assign m_axis_if_rx_tkeep = s_axis_if_rx_tkeep;
-assign m_axis_if_rx_tvalid = s_axis_if_rx_tvalid;
-assign s_axis_if_rx_tready = m_axis_if_rx_tready;
-assign m_axis_if_rx_tlast = s_axis_if_rx_tlast;
-assign m_axis_if_rx_tid = s_axis_if_rx_tid;
-assign m_axis_if_rx_tdest = s_axis_if_rx_tdest;
-assign m_axis_if_rx_tuser = s_axis_if_rx_tuser;
+  /*
+   * Ethernet (direct MAC interface - lowest latency raw traffic)
+   */
+  if (APP_AXIS_DIRECT_ENABLE) begin : app_direct_data
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axis_direct_tx_tdata = m_axis_direct_tx_tdata_app;
+      assign m_axis_direct_tx_tkeep = m_axis_direct_tx_tkeep_app;
+      assign m_axis_direct_tx_tvalid = m_axis_direct_tx_tvalid_app;
+      assign m_axis_direct_tx_tready_app = m_axis_direct_tx_tready;
+      assign m_axis_direct_tx_tlast = m_axis_direct_tx_tlast_app;
+      assign m_axis_direct_tx_tuser = m_axis_direct_tx_tuser_app;
 
-/*
- * DDR
- */
-assign m_axi_ddr_awid = 0;
-assign m_axi_ddr_awaddr = 0;
-assign m_axi_ddr_awlen = 0;
-assign m_axi_ddr_awsize = 0;
-assign m_axi_ddr_awburst = 0;
-assign m_axi_ddr_awlock = 0;
-assign m_axi_ddr_awcache = 0;
-assign m_axi_ddr_awprot = 0;
-assign m_axi_ddr_awqos = 0;
-assign m_axi_ddr_awuser = 0;
-assign m_axi_ddr_awvalid = 0;
-assign m_axi_ddr_wdata = 0;
-assign m_axi_ddr_wstrb = 0;
-assign m_axi_ddr_wlast = 0;
-assign m_axi_ddr_wuser = 0;
-assign m_axi_ddr_wvalid = 0;
-assign m_axi_ddr_bready = 0;
-assign m_axi_ddr_arid = 0;
-assign m_axi_ddr_araddr = 0;
-assign m_axi_ddr_arlen = 0;
-assign m_axi_ddr_arsize = 0;
-assign m_axi_ddr_arburst = 0;
-assign m_axi_ddr_arlock = 0;
-assign m_axi_ddr_arcache = 0;
-assign m_axi_ddr_arprot = 0;
-assign m_axi_ddr_arqos = 0;
-assign m_axi_ddr_aruser = 0;
-assign m_axi_ddr_arvalid = 0;
-assign m_axi_ddr_rready = 0;
+      assign m_axis_direct_tx_cpl_ts = m_axis_direct_tx_cpl_ts_app;
+      assign m_axis_direct_tx_cpl_tag = m_axis_direct_tx_cpl_tag_app;
+      assign m_axis_direct_tx_cpl_valid = m_axis_direct_tx_cpl_valid_app;
+      assign m_axis_direct_tx_cpl_ready_app = m_axis_direct_tx_cpl_ready;
 
-/*
- * HBM
- */
-assign m_axi_hbm_awid = 0;
-assign m_axi_hbm_awaddr = 0;
-assign m_axi_hbm_awlen = 0;
-assign m_axi_hbm_awsize = 0;
-assign m_axi_hbm_awburst = 0;
-assign m_axi_hbm_awlock = 0;
-assign m_axi_hbm_awcache = 0;
-assign m_axi_hbm_awprot = 0;
-assign m_axi_hbm_awqos = 0;
-assign m_axi_hbm_awuser = 0;
-assign m_axi_hbm_awvalid = 0;
-assign m_axi_hbm_wdata = 0;
-assign m_axi_hbm_wstrb = 0;
-assign m_axi_hbm_wlast = 0;
-assign m_axi_hbm_wuser = 0;
-assign m_axi_hbm_wvalid = 0;
-assign m_axi_hbm_bready = 0;
-assign m_axi_hbm_arid = 0;
-assign m_axi_hbm_araddr = 0;
-assign m_axi_hbm_arlen = 0;
-assign m_axi_hbm_arsize = 0;
-assign m_axi_hbm_arburst = 0;
-assign m_axi_hbm_arlock = 0;
-assign m_axi_hbm_arcache = 0;
-assign m_axi_hbm_arprot = 0;
-assign m_axi_hbm_arqos = 0;
-assign m_axi_hbm_aruser = 0;
-assign m_axi_hbm_arvalid = 0;
-assign m_axi_hbm_rready = 0;
+      assign m_axis_direct_rx_tdata = m_axis_direct_rx_tdata_app;
+      assign m_axis_direct_rx_tkeep = m_axis_direct_rx_tkeep_app;
+      assign m_axis_direct_rx_tvalid = m_axis_direct_rx_tvalid_app;
+      assign m_axis_direct_rx_tready_app = m_axis_direct_rx_tready;
+      assign m_axis_direct_rx_tlast = m_axis_direct_rx_tlast_app;
+      assign m_axis_direct_rx_tuser = m_axis_direct_rx_tuser_app;
+
+      assign s_axis_direct_tx_tdata_app = s_axis_direct_tx_tdata;
+      assign s_axis_direct_tx_tkeep_app = s_axis_direct_tx_tkeep;
+      assign s_axis_direct_tx_tvalid_app = s_axis_direct_tx_tvalid;
+      assign s_axis_direct_tx_tready = s_axis_direct_tx_tready_app;
+      assign s_axis_direct_tx_tlast_app = s_axis_direct_tx_tlast;
+      assign s_axis_direct_tx_tuser_app = s_axis_direct_tx_tuser;
+
+      assign s_axis_direct_tx_cpl_ts_app = s_axis_direct_tx_cpl_ts;
+      assign s_axis_direct_tx_cpl_tag_app = s_axis_direct_tx_cpl_tag;
+      assign s_axis_direct_tx_cpl_valid_app = s_axis_direct_tx_cpl_valid;
+      assign s_axis_direct_tx_cpl_ready = s_axis_direct_tx_cpl_ready_app;
+
+      assign s_axis_direct_rx_tdata_app = s_axis_direct_rx_tdata;
+      assign s_axis_direct_rx_tkeep_app = s_axis_direct_rx_tkeep;
+      assign s_axis_direct_rx_tvalid_app = s_axis_direct_rx_tvalid;
+      assign s_axis_direct_rx_tready = s_axis_direct_rx_tready_app;
+      assign s_axis_direct_rx_tlast_app = s_axis_direct_rx_tlast;
+      assign s_axis_direct_rx_tuser_app = s_axis_direct_rx_tuser;
+    `endif
+  end else begin
+    assign m_axis_direct_tx_tdata = s_axis_direct_tx_tdata;
+    assign m_axis_direct_tx_tkeep = s_axis_direct_tx_tkeep;
+    assign m_axis_direct_tx_tvalid = s_axis_direct_tx_tvalid;
+    assign s_axis_direct_tx_tready = m_axis_direct_tx_tready;
+    assign m_axis_direct_tx_tlast = s_axis_direct_tx_tlast;
+    assign m_axis_direct_tx_tuser = s_axis_direct_tx_tuser;
+
+    assign m_axis_direct_tx_cpl_ts = s_axis_direct_tx_cpl_ts;
+    assign m_axis_direct_tx_cpl_tag = s_axis_direct_tx_cpl_tag;
+    assign m_axis_direct_tx_cpl_valid = s_axis_direct_tx_cpl_valid;
+    assign s_axis_direct_tx_cpl_ready = m_axis_direct_tx_cpl_ready;
+
+    assign m_axis_direct_rx_tdata = s_axis_direct_rx_tdata;
+    assign m_axis_direct_rx_tkeep = s_axis_direct_rx_tkeep;
+    assign m_axis_direct_rx_tvalid = s_axis_direct_rx_tvalid;
+    assign s_axis_direct_rx_tready = m_axis_direct_rx_tready;
+    assign m_axis_direct_rx_tlast = s_axis_direct_rx_tlast;
+    assign m_axis_direct_rx_tuser = s_axis_direct_rx_tuser;
+  end
+
+  /*
+   * Ethernet (synchronous MAC interface - low latency raw traffic)
+   */
+  if (APP_AXIS_SYNC_ENABLE) begin : app_snyc_data
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axis_sync_tx_tdata = m_axis_sync_tx_tdata_app;
+      assign m_axis_sync_tx_tkeep = m_axis_sync_tx_tkeep_app;
+      assign m_axis_sync_tx_tvalid = m_axis_sync_tx_tvalid_app;
+      assign m_axis_sync_tx_tready_app = m_axis_sync_tx_tready;
+      assign m_axis_sync_tx_tlast = m_axis_sync_tx_tlast_app;
+      assign m_axis_sync_tx_tuser = m_axis_sync_tx_tuser_app;
+
+      assign m_axis_sync_tx_cpl_ts = m_axis_sync_tx_cpl_ts_app;
+      assign m_axis_sync_tx_cpl_tag = m_axis_sync_tx_cpl_tag_app;
+      assign m_axis_sync_tx_cpl_valid = m_axis_sync_tx_cpl_valid_app;
+      assign m_axis_sync_tx_cpl_ready_app = m_axis_sync_tx_cpl_ready;
+
+      assign m_axis_sync_rx_tdata = m_axis_sync_rx_tdata_app;
+      assign m_axis_sync_rx_tkeep = m_axis_sync_rx_tkeep_app;
+      assign m_axis_sync_rx_tvalid = m_axis_sync_rx_tvalid_app;
+      assign m_axis_sync_rx_tready_app = m_axis_sync_rx_tready;
+      assign m_axis_sync_rx_tlast = m_axis_sync_rx_tlast_app;
+      assign m_axis_sync_rx_tuser = m_axis_sync_rx_tuser_app;
+
+      assign s_axis_sync_tx_tdata_app = s_axis_sync_tx_tdata;
+      assign s_axis_sync_tx_tkeep_app = s_axis_sync_tx_tkeep;
+      assign s_axis_sync_tx_tvalid_app = s_axis_sync_tx_tvalid;
+      assign s_axis_sync_tx_tready = s_axis_sync_tx_tready_app;
+      assign s_axis_sync_tx_tlast_app = s_axis_sync_tx_tlast;
+      assign s_axis_sync_tx_tuser_app = s_axis_sync_tx_tuser;
+
+      assign s_axis_sync_tx_cpl_ts_app = s_axis_sync_tx_cpl_ts;
+      assign s_axis_sync_tx_cpl_tag_app = s_axis_sync_tx_cpl_tag;
+      assign s_axis_sync_tx_cpl_valid_app = s_axis_sync_tx_cpl_valid;
+      assign s_axis_sync_tx_cpl_ready = s_axis_sync_tx_cpl_ready_app;
+
+      assign s_axis_sync_rx_tdata_app = s_axis_sync_rx_tdata;
+      assign s_axis_sync_rx_tkeep_app = s_axis_sync_rx_tkeep;
+      assign s_axis_sync_rx_tvalid_app = s_axis_sync_rx_tvalid;
+      assign s_axis_sync_rx_tready = s_axis_sync_rx_tready_app;
+      assign s_axis_sync_rx_tlast_app = s_axis_sync_rx_tlast;
+      assign s_axis_sync_rx_tuser_app = s_axis_sync_rx_tuser;
+    `endif
+  end else begin
+    assign m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
+    assign m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
+    assign m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
+    assign s_axis_sync_tx_tready = m_axis_sync_tx_tready;
+    assign m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
+    assign m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
+
+    assign m_axis_sync_tx_cpl_ts = s_axis_sync_tx_cpl_ts;
+    assign m_axis_sync_tx_cpl_tag = s_axis_sync_tx_cpl_tag;
+    assign m_axis_sync_tx_cpl_valid = s_axis_sync_tx_cpl_valid;
+    assign s_axis_sync_tx_cpl_ready = m_axis_sync_tx_cpl_ready;
+
+    assign m_axis_sync_rx_tdata = s_axis_sync_rx_tdata;
+    assign m_axis_sync_rx_tkeep = s_axis_sync_rx_tkeep;
+    assign m_axis_sync_rx_tvalid = s_axis_sync_rx_tvalid;
+    assign s_axis_sync_rx_tready = m_axis_sync_rx_tready;
+    assign m_axis_sync_rx_tlast = s_axis_sync_rx_tlast;
+    assign m_axis_sync_rx_tuser = s_axis_sync_rx_tuser;
+  end
+
+  /*
+   * Ethernet (internal at interface module)
+   */
+  if (APP_AXIS_IF_ENABLE) begin : app_if_data
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axis_if_tx_tdata = m_axis_if_tx_tdata_app;
+      assign m_axis_if_tx_tkeep = m_axis_if_tx_tkeep_app;
+      assign m_axis_if_tx_tvalid = m_axis_if_tx_tvalid_app;
+      assign m_axis_if_tx_tready_app = m_axis_if_tx_tready;
+      assign m_axis_if_tx_tlast = m_axis_if_tx_tlast_app;
+      assign m_axis_if_tx_tid = m_axis_if_tx_tid_app;
+      assign m_axis_if_tx_tdest = m_axis_if_tx_tdest_app;
+      assign m_axis_if_tx_tuser = m_axis_if_tx_tuser_app;
+
+      assign m_axis_if_tx_cpl_ts = m_axis_if_tx_cpl_ts_app;
+      assign m_axis_if_tx_cpl_tag = m_axis_if_tx_cpl_tag_app;
+      assign m_axis_if_tx_cpl_valid = m_axis_if_tx_cpl_valid_app;
+      assign m_axis_if_tx_cpl_ready_app = m_axis_if_tx_cpl_ready;
+
+      assign m_axis_if_rx_tdata = m_axis_if_rx_tdata_app;
+      assign m_axis_if_rx_tkeep = m_axis_if_rx_tkeep_app;
+      assign m_axis_if_rx_tvalid = m_axis_if_rx_tvalid_app;
+      assign m_axis_if_rx_tready_app = m_axis_if_rx_tready;
+      assign m_axis_if_rx_tlast = m_axis_if_rx_tlast_app;
+      assign m_axis_if_rx_tid = m_axis_if_rx_tid_app;
+      assign m_axis_if_rx_tdest = m_axis_if_rx_tdest_app;
+      assign m_axis_if_rx_tuser = m_axis_if_rx_tuser_app;
+
+      assign s_axis_if_tx_tdata_app = s_axis_if_tx_tdata;
+      assign s_axis_if_tx_tkeep_app = s_axis_if_tx_tkeep;
+      assign s_axis_if_tx_tvalid_app = s_axis_if_tx_tvalid;
+      assign s_axis_if_tx_tready = s_axis_if_tx_tready_app;
+      assign s_axis_if_tx_tlast_app = s_axis_if_tx_tlast;
+      assign s_axis_if_tx_tid_app = s_axis_if_tx_tid;
+      assign s_axis_if_tx_tdest_app = s_axis_if_tx_tdest;
+      assign s_axis_if_tx_tuser_app = s_axis_if_tx_tuser;
+
+      assign s_axis_if_tx_cpl_ts_app = s_axis_if_tx_cpl_ts;
+      assign s_axis_if_tx_cpl_tag_app = s_axis_if_tx_cpl_tag;
+      assign s_axis_if_tx_cpl_valid_app = s_axis_if_tx_cpl_valid;
+      assign s_axis_if_tx_cpl_ready = s_axis_if_tx_cpl_ready_app;
+
+      assign s_axis_if_rx_tdata_app = s_axis_if_rx_tdata;
+      assign s_axis_if_rx_tkeep_app = s_axis_if_rx_tkeep;
+      assign s_axis_if_rx_tvalid_app = s_axis_if_rx_tvalid;
+      assign s_axis_if_rx_tready = s_axis_if_rx_tready_app;
+      assign s_axis_if_rx_tlast_app = s_axis_if_rx_tlast;
+      assign s_axis_if_rx_tid_app = s_axis_if_rx_tid;
+      assign s_axis_if_rx_tdest_app = s_axis_if_rx_tdest;
+      assign s_axis_if_rx_tuser_app = s_axis_if_rx_tuser;
+    `endif
+  end else begin
+    assign m_axis_if_tx_tdata = s_axis_if_tx_tdata;
+    assign m_axis_if_tx_tkeep = s_axis_if_tx_tkeep;
+    assign m_axis_if_tx_tvalid = s_axis_if_tx_tvalid;
+    assign s_axis_if_tx_tready = m_axis_if_tx_tready;
+    assign m_axis_if_tx_tlast = s_axis_if_tx_tlast;
+    assign m_axis_if_tx_tid = s_axis_if_tx_tid;
+    assign m_axis_if_tx_tdest = s_axis_if_tx_tdest;
+    assign m_axis_if_tx_tuser = s_axis_if_tx_tuser;
+
+    assign m_axis_if_tx_cpl_ts = s_axis_if_tx_cpl_ts;
+    assign m_axis_if_tx_cpl_tag = s_axis_if_tx_cpl_tag;
+    assign m_axis_if_tx_cpl_valid = s_axis_if_tx_cpl_valid;
+    assign s_axis_if_tx_cpl_ready = m_axis_if_tx_cpl_ready;
+
+    assign m_axis_if_rx_tdata = s_axis_if_rx_tdata;
+    assign m_axis_if_rx_tkeep = s_axis_if_rx_tkeep;
+    assign m_axis_if_rx_tvalid = s_axis_if_rx_tvalid;
+    assign s_axis_if_rx_tready = m_axis_if_rx_tready;
+    assign m_axis_if_rx_tlast = s_axis_if_rx_tlast;
+    assign m_axis_if_rx_tid = s_axis_if_rx_tid;
+    assign m_axis_if_rx_tdest = s_axis_if_rx_tdest;
+    assign m_axis_if_rx_tuser = s_axis_if_rx_tuser;
+  end
+
+  /*
+  * DDR
+  */
+  if (DDR_ENABLE) begin : app_ddr
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axi_ddr_awid = m_axi_ddr_awid_app;
+      assign m_axi_ddr_awaddr = m_axi_ddr_awaddr_app;
+      assign m_axi_ddr_awlen = m_axi_ddr_awlen_app;
+      assign m_axi_ddr_awsize = m_axi_ddr_awsize_app;
+      assign m_axi_ddr_awburst = m_axi_ddr_awburst_app;
+      assign m_axi_ddr_awlock = m_axi_ddr_awlock_app;
+      assign m_axi_ddr_awcache = m_axi_ddr_awcache_app;
+      assign m_axi_ddr_awprot = m_axi_ddr_awprot_app;
+      assign m_axi_ddr_awqos = m_axi_ddr_awqos_app;
+      assign m_axi_ddr_awuser = m_axi_ddr_awuser_app;
+      assign m_axi_ddr_awvalid = m_axi_ddr_awvalid_app;
+      assign m_axi_ddr_awready_app = m_axi_ddr_awready;
+      assign m_axi_ddr_wdata = m_axi_ddr_wdata_app;
+      assign m_axi_ddr_wstrb = m_axi_ddr_wstrb_app;
+      assign m_axi_ddr_wlast = m_axi_ddr_wlast_app;
+      assign m_axi_ddr_wuser = m_axi_ddr_wuser_app;
+      assign m_axi_ddr_wvalid = m_axi_ddr_wvalid_app;
+      assign m_axi_ddr_wready_app = m_axi_ddr_wready;
+      assign m_axi_ddr_bid_app = m_axi_ddr_bid;
+      assign m_axi_ddr_bresp_app = m_axi_ddr_bresp;
+      assign m_axi_ddr_buser_app = m_axi_ddr_buser;
+      assign m_axi_ddr_bvalid_app = m_axi_ddr_bvalid;
+      assign m_axi_ddr_bready = m_axi_ddr_bready_app;
+      assign m_axi_ddr_arid = m_axi_ddr_arid_app;
+      assign m_axi_ddr_araddr = m_axi_ddr_araddr_app;
+      assign m_axi_ddr_arlen = m_axi_ddr_arlen_app;
+      assign m_axi_ddr_arsize = m_axi_ddr_arsize_app;
+      assign m_axi_ddr_arburst = m_axi_ddr_arburst_app;
+      assign m_axi_ddr_arlock = m_axi_ddr_arlock_app;
+      assign m_axi_ddr_arcache = m_axi_ddr_arcache_app;
+      assign m_axi_ddr_arprot = m_axi_ddr_arprot_app;
+      assign m_axi_ddr_arqos = m_axi_ddr_arqos_app;
+      assign m_axi_ddr_aruser = m_axi_ddr_aruser_app;
+      assign m_axi_ddr_arvalid = m_axi_ddr_arvalid_app;
+      assign m_axi_ddr_arready_app = m_axi_ddr_arready;
+      assign m_axi_ddr_rid_app = m_axi_ddr_rid;
+      assign m_axi_ddr_rdata_app = m_axi_ddr_rdata;
+      assign m_axi_ddr_rresp_app = m_axi_ddr_rresp;
+      assign m_axi_ddr_rlast_app = m_axi_ddr_rlast;
+      assign m_axi_ddr_ruser_app = m_axi_ddr_ruser;
+      assign m_axi_ddr_rvalid_app = m_axi_ddr_rvalid;
+      assign m_axi_ddr_rready = m_axi_ddr_rready_app;
+    `endif
+  end else begin
+    assign m_axi_ddr_awid = 0;
+    assign m_axi_ddr_awaddr = 0;
+    assign m_axi_ddr_awlen = 0;
+    assign m_axi_ddr_awsize = 0;
+    assign m_axi_ddr_awburst = 0;
+    assign m_axi_ddr_awlock = 0;
+    assign m_axi_ddr_awcache = 0;
+    assign m_axi_ddr_awprot = 0;
+    assign m_axi_ddr_awqos = 0;
+    assign m_axi_ddr_awuser = 0;
+    assign m_axi_ddr_awvalid = 0;
+    assign m_axi_ddr_wdata = 0;
+    assign m_axi_ddr_wstrb = 0;
+    assign m_axi_ddr_wlast = 0;
+    assign m_axi_ddr_wuser = 0;
+    assign m_axi_ddr_wvalid = 0;
+    assign m_axi_ddr_bready = 0;
+    assign m_axi_ddr_arid = 0;
+    assign m_axi_ddr_araddr = 0;
+    assign m_axi_ddr_arlen = 0;
+    assign m_axi_ddr_arsize = 0;
+    assign m_axi_ddr_arburst = 0;
+    assign m_axi_ddr_arlock = 0;
+    assign m_axi_ddr_arcache = 0;
+    assign m_axi_ddr_arprot = 0;
+    assign m_axi_ddr_arqos = 0;
+    assign m_axi_ddr_aruser = 0;
+    assign m_axi_ddr_arvalid = 0;
+    assign m_axi_ddr_rready = 0;
+  end
+
+  /*
+   * HBM
+   */
+  if (HBM_ENABLE) begin : app_hbm
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axi_hbm_awid = m_axi_hbm_awid_app;
+      assign m_axi_hbm_awaddr = m_axi_hbm_awaddr_app;
+      assign m_axi_hbm_awlen = m_axi_hbm_awlen_app;
+      assign m_axi_hbm_awsize = m_axi_hbm_awsize_app;
+      assign m_axi_hbm_awburst = m_axi_hbm_awburst_app;
+      assign m_axi_hbm_awlock = m_axi_hbm_awlock_app;
+      assign m_axi_hbm_awcache = m_axi_hbm_awcache_app;
+      assign m_axi_hbm_awprot = m_axi_hbm_awprot_app;
+      assign m_axi_hbm_awqos = m_axi_hbm_awqos_app;
+      assign m_axi_hbm_awuser = m_axi_hbm_awuser_app;
+      assign m_axi_hbm_awvalid = m_axi_hbm_awvalid_app;
+      assign m_axi_hbm_awready_app = m_axi_hbm_awready;
+      assign m_axi_hbm_wdata = m_axi_hbm_wdata_app;
+      assign m_axi_hbm_wstrb = m_axi_hbm_wstrb_app;
+      assign m_axi_hbm_wlast = m_axi_hbm_wlast_app;
+      assign m_axi_hbm_wuser = m_axi_hbm_wuser_app;
+      assign m_axi_hbm_wvalid = m_axi_hbm_wvalid_app;
+      assign m_axi_hbm_wready_app = m_axi_hbm_wready;
+      assign m_axi_hbm_bid_app = m_axi_hbm_bid;
+      assign m_axi_hbm_bresp_app = m_axi_hbm_bresp;
+      assign m_axi_hbm_buser_app = m_axi_hbm_buser;
+      assign m_axi_hbm_bvalid_app = m_axi_hbm_bvalid;
+      assign m_axi_hbm_bready = m_axi_hbm_bready_app;
+      assign m_axi_hbm_arid = m_axi_hbm_arid_app;
+      assign m_axi_hbm_araddr = m_axi_hbm_araddr_app;
+      assign m_axi_hbm_arlen = m_axi_hbm_arlen_app;
+      assign m_axi_hbm_arsize = m_axi_hbm_arsize_app;
+      assign m_axi_hbm_arburst = m_axi_hbm_arburst_app;
+      assign m_axi_hbm_arlock = m_axi_hbm_arlock_app;
+      assign m_axi_hbm_arcache = m_axi_hbm_arcache_app;
+      assign m_axi_hbm_arprot = m_axi_hbm_arprot_app;
+      assign m_axi_hbm_arqos = m_axi_hbm_arqos_app;
+      assign m_axi_hbm_aruser = m_axi_hbm_aruser_app;
+      assign m_axi_hbm_arvalid = m_axi_hbm_arvalid_app;
+      assign m_axi_hbm_arready_app = m_axi_hbm_arready;
+      assign m_axi_hbm_rid_app = m_axi_hbm_rid;
+      assign m_axi_hbm_rdata_app = m_axi_hbm_rdata;
+      assign m_axi_hbm_rresp_app = m_axi_hbm_rresp;
+      assign m_axi_hbm_rlast_app = m_axi_hbm_rlast;
+      assign m_axi_hbm_ruser_app = m_axi_hbm_ruser;
+      assign m_axi_hbm_rvalid_app = m_axi_hbm_rvalid;
+      assign m_axi_hbm_rready = m_axi_hbm_rready_app;
+    `endif
+  end else begin
+    assign m_axi_hbm_awid = 0;
+    assign m_axi_hbm_awaddr = 0;
+    assign m_axi_hbm_awlen = 0;
+    assign m_axi_hbm_awsize = 0;
+    assign m_axi_hbm_awburst = 0;
+    assign m_axi_hbm_awlock = 0;
+    assign m_axi_hbm_awcache = 0;
+    assign m_axi_hbm_awprot = 0;
+    assign m_axi_hbm_awqos = 0;
+    assign m_axi_hbm_awuser = 0;
+    assign m_axi_hbm_awvalid = 0;
+    assign m_axi_hbm_wdata = 0;
+    assign m_axi_hbm_wstrb = 0;
+    assign m_axi_hbm_wlast = 0;
+    assign m_axi_hbm_wuser = 0;
+    assign m_axi_hbm_wvalid = 0;
+    assign m_axi_hbm_bready = 0;
+    assign m_axi_hbm_arid = 0;
+    assign m_axi_hbm_araddr = 0;
+    assign m_axi_hbm_arlen = 0;
+    assign m_axi_hbm_arsize = 0;
+    assign m_axi_hbm_arburst = 0;
+    assign m_axi_hbm_arlock = 0;
+    assign m_axi_hbm_arcache = 0;
+    assign m_axi_hbm_arprot = 0;
+    assign m_axi_hbm_arqos = 0;
+    assign m_axi_hbm_aruser = 0;
+    assign m_axi_hbm_arvalid = 0;
+    assign m_axi_hbm_rready = 0;
+  end
+
+endgenerate
 
 /*
  * Statistics increment output

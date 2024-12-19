@@ -50,6 +50,3 @@ set_false_path -to [get_ports {qspi1_dq[*] qspi1_cs}]
 set_output_delay 0 [get_ports {qspi1_dq[*] qspi1_cs}]
 set_false_path -from [get_ports {qspi1_dq}]
 set_input_delay 0 [get_ports {qspi1_dq}]
-
-# CMACs
-set_property LOC CMACE4_X0Y7 [get_cells -hierarchical -filter {NAME =~ qsfp1_cmac_inst/cmac_inst/inst/i_cmac_usplus_top/* && REF_NAME==CMACE4}]

@@ -27,9 +27,18 @@ adi_project_files corundum_test_vcu118 [list \
   "system_constr.xdc"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" \
-  "$ad_hdl_dir/library/corundum/constraints.tcl" \
   "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
   "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
 ]
 
 ## To improve timing in DDR4 MIG

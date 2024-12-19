@@ -12,8 +12,13 @@
 
 `timescale 1ns/100ps
 
-`include "mqnic_app_custom_params.vh"
-`include "mqnic_app_custom_ports.vh"
+`ifdef APP_CUSTOM_PARAMS_ENABLE
+  `include "mqnic_app_custom_params.vh"
+`endif
+
+`ifdef APP_CUSTOM_PORTS_ENABLE
+  `include "mqnic_app_custom_ports.vh"
+`endif
 
 module corundum_core #(
   // FW and board IDs
@@ -149,7 +154,9 @@ module corundum_core #(
   parameter APP_GPIO_OUT_WIDTH = 32,
 
   // Custom application block parameters
-  `APP_CUSTOM_PARAMS_DECL
+  `ifdef APP_CUSTOM_PARAMS_ENABLE
+    `APP_CUSTOM_PARAMS_DECL
+  `endif
 
   // AXI interface configuration (DMA)
   parameter AXI_DATA_WIDTH = 128,
@@ -536,7 +543,9 @@ module corundum_core #(
   /*
   * Custom application block ports
   */
-  `APP_CUSTOM_PORTS_DECL
+  `ifdef APP_CUSTOM_PORTS_ENABLE
+    `APP_CUSTOM_PORTS_DECL
+  `endif
 
   /*
   * JTAG

@@ -2,6 +2,10 @@ LIBRARY_NAME := corundum_core
 
 XILINX_DEPS += corundum_core_ip.tcl
 
+GENERIC_DEPS += mqnic_app_block.v
+GENERIC_DEPS += mqnic_app_custom_params.vh
+GENERIC_DEPS += mqnic_app_custom_ports.vh
+
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/rtl/mqnic_core_axi.v
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/rtl/mqnic_core.v
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/rtl/mqnic_dram_if.v
@@ -105,22 +109,30 @@ EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tc
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/tdma_ber_ch.tcl
 
-XILINX_DEPS  += ../interfaces/if_ctrl_reg.xml
-XILINX_DEPS  += ../interfaces/if_ctrl_reg_rtl.xml
-XILINX_DEPS  += ../interfaces/if_ptp_clock.xml
-XILINX_DEPS  += ../interfaces/if_ptp_clock_rtl.xml
-XILINX_DEPS  += ../interfaces/if_flow_control_tx.xml
-XILINX_DEPS  += ../interfaces/if_flow_control_tx_rtl.xml
-XILINX_DEPS  += ../interfaces/if_flow_control_rx.xml
-XILINX_DEPS  += ../interfaces/if_flow_control_rx_rtl.xml
-XILINX_DEPS  += ../interfaces/if_ethernet_ptp.xml
-XILINX_DEPS  += ../interfaces/if_ethernet_ptp_rtl.xml
-XILINX_DEPS  += ../interfaces/if_axis_tx_ptp.xml
-XILINX_DEPS  += ../interfaces/if_axis_tx_ptp_rtl.xml
-XILINX_DEPS  += ../interfaces/if_jtag.xml
-XILINX_DEPS  += ../interfaces/if_jtag_rtl.xml
-XILINX_DEPS  += ../interfaces/if_gpio.xml
-XILINX_DEPS  += ../interfaces/if_gpio_rtl.xml
+XILINX_DEPS += ../interfaces/if_ctrl_reg.xml
+XILINX_DEPS += ../interfaces/if_ctrl_reg_rtl.xml
+XILINX_DEPS += ../interfaces/if_ptp.xml
+XILINX_DEPS += ../interfaces/if_ptp_rtl.xml
+XILINX_DEPS += ../interfaces/if_flow_control_tx.xml
+XILINX_DEPS += ../interfaces/if_flow_control_tx_rtl.xml
+XILINX_DEPS += ../interfaces/if_flow_control_rx.xml
+XILINX_DEPS += ../interfaces/if_flow_control_rx_rtl.xml
+XILINX_DEPS += ../interfaces/if_ethernet_ptp.xml
+XILINX_DEPS += ../interfaces/if_ethernet_ptp_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_tx_ptp.xml
+XILINX_DEPS += ../interfaces/if_axis_tx_ptp_rtl.xml
+XILINX_DEPS += ../interfaces/if_jtag.xml
+XILINX_DEPS += ../interfaces/if_jtag_rtl.xml
+XILINX_DEPS += ../interfaces/if_gpio.xml
+XILINX_DEPS += ../interfaces/if_gpio_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_status.xml
+XILINX_DEPS += ../interfaces/if_axis_dma_desc_status_rtl.xml
+XILINX_DEPS += ../interfaces/if_dma_ram.xml
+XILINX_DEPS += ../interfaces/if_dma_ram_rtl.xml
+XILINX_DEPS += ../interfaces/if_axis_stat.xml
+XILINX_DEPS += ../interfaces/if_axis_stat_rtl.xml
 
 XILINX_INTERFACE_DEPS += corundum/interfaces
 
