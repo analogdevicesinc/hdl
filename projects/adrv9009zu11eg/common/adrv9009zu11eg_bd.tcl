@@ -75,25 +75,25 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__I2C0__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__I2C0__PERIPHERAL__IO {MIO 14 .. 15}
 ad_ip_parameter sys_ps8 CONFIG.PSU__UART1__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__UART1__PERIPHERAL__IO {MIO 16 .. 17}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__SD1__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT0__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT1__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__TTC0__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__TTC1__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__TTC2__PERIPHERAL__ENABLE {1}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__TTC3__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT0__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__SWDT1__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__TTC0__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__TTC1__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__TTC2__PERIPHERAL__ENABLE {1}
+ad_ip_parameter sys_ps8 CONFIG.PSU__TTC3__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__USB0__PERIPHERAL__ENABLE {1}
 # ad_ip_parameter sys_ps8 CONFIG.PSU__USB3_0__PERIPHERAL__ENABLE {1}
 # ad_ip_parameter sys_ps8 CONFIG.PSU__USB3_0__PERIPHERAL__IO {GT Lane1}
-ad_ip_parameter sys_ps8 CONFIG.PSU__ENET0__PERIPHERAL__ENABLE {1}
-ad_ip_parameter sys_ps8 CONFIG.PSU__ENET0__PERIPHERAL__IO {GT Lane0}
+# ad_ip_parameter sys_ps8 CONFIG.PSU__ENET0__PERIPHERAL__ENABLE {1}
+# ad_ip_parameter sys_ps8 CONFIG.PSU__ENET0__PERIPHERAL__IO {GT Lane0}
 ad_ip_parameter sys_ps8 CONFIG.PSU__ENET3__PERIPHERAL__ENABLE {1}
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO0_MIO__PERIPHERAL__ENABLE {0}
 ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO1_MIO__PERIPHERAL__ENABLE {0}
 ad_ip_parameter sys_ps8 CONFIG.PSU__PMU__PERIPHERAL__ENABLE {0}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__MODE {Dual Parallel}
-# ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__DATA_MODE {x4}
+ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__MODE {Dual Parallel}
+ad_ip_parameter sys_ps8 CONFIG.PSU__QSPI__PERIPHERAL__DATA_MODE {x4}
 # ad_ip_parameter sys_ps8 CONFIG.PSU__DISPLAYPORT__PERIPHERAL__ENABLE {1}
 # ad_ip_parameter sys_ps8 CONFIG.PSU__DPAUX__PERIPHERAL__IO {MIO 27 .. 30}
 ad_ip_parameter sys_ps8 CONFIG.PSU__ENET3__GRP_MDIO__ENABLE {1}
@@ -115,7 +115,23 @@ set_property -dict [list \
   CONFIG.PSU__DDRC__CL {12} \
   CONFIG.PSU__DDRC__CWL {9} \
 ] [get_bd_cells sys_ps8]
-set_property CONFIG.PSU__CRL_APB__CPU_R5_CTRL__FREQMHZ {266.666} [get_bd_cells sys_ps8]
+
+set_property CONFIG.PSU__CRL_APB__CPU_R5_CTRL__FREQMHZ {1} [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__CRF_APB__ACPU_CTRL__FREQMHZ {666.5} \
+  CONFIG.PSU__CRF_APB__DDR_CTRL__FREQMHZ {600} \
+  CONFIG.PSU__CRF_APB__GPU_REF_CTRL__FREQMHZ {300} \
+  CONFIG.PSU__DDRC__CL {10} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__CRF_APB__ACPU_CTRL__FREQMHZ {300} \
+  CONFIG.PSU__CRF_APB__DBG_FPD_CTRL__FREQMHZ {125} \
+  CONFIG.PSU__CRF_APB__DBG_TSTMP_CTRL__FREQMHZ {125} \
+  CONFIG.PSU__CRF_APB__GPU_REF_CTRL__FREQMHZ {200} \
+  CONFIG.PSU__CRL_APB__DBG_LPD_CTRL__FREQMHZ {125} \
+] [get_bd_cells sys_ps8]
 
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
@@ -248,16 +264,20 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 
 ad_ip_instance util_adxcvr util_adrv9009_som_xcvr
-ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_LANE_RATE 2.5
-ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_LANE_RATE 2.5
+ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_LANE_RATE 5
+ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_LANE_RATE 5
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_NUM_OF_LANES 0
-ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_OUT_DIV 2
+ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_OUT_DIV 1
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.CPLL_FBDIV 4
+ad_ip_parameter util_adrv9009_som_xcvr CONFIG.CPLL_FBDIV_4_5 4
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.TX_CLK25_DIV 10
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.QPLL_FBDIV 80
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.QPLL_REFCLK_DIV 1
+# ad_ip_parameter util_adrv9009_som_xcvr CONFIG.CPLL_REFCLK_DIV 1
+
 
 ad_xcvrpll  ref_clk_a util_adrv9009_som_xcvr/qpll_ref_clk_0
 ad_xcvrpll  ref_clk_a util_adrv9009_som_xcvr/cpll_ref_clk_0

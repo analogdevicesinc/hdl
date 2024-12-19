@@ -126,11 +126,11 @@ set_property -dict {PACKAGE_PIN AH21 IOSTANDARD LVCMOS18} [get_ports hmc7044_gpi
 set_property -dict {PACKAGE_PIN AL18 IOSTANDARD LVCMOS18}  [get_ports spi_csn_adrv9009_a]
 set_property -dict {PACKAGE_PIN AU20 IOSTANDARD LVCMOS18}  [get_ports spi_csn_hmc7044]
 
-create_clock -name dev_clk        -period  16.00 [get_ports core_clk_a_p]
-create_clock -name jesd_ref_clk   -period  16.00 [get_ports ref_clk_a_p]
+create_clock -name dev_clk        -period  8  [get_ports core_clk_a_p]
+create_clock -name jesd_ref_clk   -period  8  [get_ports ref_clk_a_p]
 
-set_input_delay -clock dev_clk -max 16    [get_ports sysref_a_p];
-set_input_delay -clock dev_clk -min 16    [get_ports sysref_a_p];
+set_input_delay -clock dev_clk -max 8    [get_ports sysref_a_p];
+set_input_delay -clock dev_clk -min 8    [get_ports sysref_a_p];
 
 set_property -dict {PACKAGE_PIN AN21 IOSTANDARD LVCMOS18}  [get_ports spi_clk]
 set_property -dict {PACKAGE_PIN AP21 IOSTANDARD LVCMOS18}  [get_ports spi_sdio]
