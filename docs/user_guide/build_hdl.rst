@@ -226,8 +226,6 @@ For AMD Xilinx Vivado:
 .. shell:: bash
 
    ~/hdl
-   $source /cygdrive/path_to/Xilinx/Vivado/202x.x/settings64.sh
-
    $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
    $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
    $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
