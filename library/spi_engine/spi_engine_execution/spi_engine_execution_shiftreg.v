@@ -72,12 +72,12 @@ module spi_engine_execution_shiftreg #(
   // timing from main fsm
   input       sample_sdo,
   output reg  sdo_io_ready,
+  output      echo_last_bit,
   input       transfer_active,
   input       trigger_tx,
   input       trigger_rx,
   input       first_bit,
-  input       cs_activate,
-  output      end_of_sdi_latch
+  input       cs_activate
 );
 
   reg [             7:0] sdi_counter    = 8'b0;
@@ -156,9 +156,7 @@ module spi_engine_execution_shiftreg #(
   generate
   if (ECHO_SCLK == 1) begin : g_echo_sclk_miso_latch
 
-    reg [7:0] sdi_counter_d = 8'b0;
-    reg [7:0] sdi_transfer_counter = 8'b0;
-    reg [7:0] num_of_transfers = 8'b0;
+    reg last_sdi_bit_r;
     reg [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data_latch = {(NUM_OF_SDI * DATA_WIDTH){1'b0}};
 
     if ((DEFAULT_SPI_CFG[1:0] == 2'b01) || (DEFAULT_SPI_CFG[1:0] == 2'b10)) begin : g_echo_miso_nshift_reg
@@ -185,10 +183,10 @@ module spi_engine_execution_shiftreg #(
       always @(posedge echo_sclk or posedge cs_activate) begin
         if (cs_activate) begin
           sdi_counter <= 8'b0;
-          sdi_counter_d <= 8'b0;
+          last_sdi_bit_r <= 1'b0;
         end else begin
-          sdi_counter <= (sdi_counter == word_length-1) ? 8'b0 : sdi_counter + 1'b1;
-          sdi_counter_d <= sdi_counter;
+          last_sdi_bit_r <= (sdi_counter == word_length - 1); // FIXME: potentially unsafe path: what are the guarantees of settling time between changing word_length and first echo_sclk edge?
+          sdi_counter <= (sdi_counter == word_length - 1) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
 
@@ -214,17 +212,18 @@ module spi_engine_execution_shiftreg #(
       always @(posedge echo_sclk or posedge cs_activate) begin
         if (cs_activate) begin
           sdi_counter <= 8'b0;
-          sdi_counter_d <= 8'b0;
+          last_sdi_bit_r <= 1'b0;
         end else begin
-          sdi_counter <= (sdi_counter == word_length-1) ? 8'b0 : sdi_counter + 1'b1;
-          sdi_counter_d <= sdi_counter;
+          last_sdi_bit_r <= (sdi_counter == word_length - 1); // FIXME: potentially unsafe path: what are the guarantees of settling time between changing word_length and first echo_sclk edge?
+          sdi_counter <= (sdi_counter == word_length - 1) ? 8'b0 : sdi_counter + 1'b1;
         end
       end
 
     end
 
     assign sdi_data = sdi_data_latch;
-    assign last_sdi_bit = (sdi_counter == 0) && (sdi_counter_d == word_length-1);
+    assign last_sdi_bit = last_sdi_bit_r;
+    assign echo_last_bit =  !last_sdi_bit_m[3] && last_sdi_bit_m[2];
 
     // sdi_data_valid is synchronous to SPI clock, so synchronize the
     // last_sdi_bit to SPI clock
@@ -250,33 +249,9 @@ module spi_engine_execution_shiftreg #(
       end
     end
 
-    always @(posedge clk) begin
-      if (cs_activate) begin
-        num_of_transfers <= 8'b0;
-      end else begin
-        if (current_instr == CMD_TRANSFER) begin
-          // current_cmd contains the NUM_OF_TRANSFERS - 1
-          num_of_transfers <= current_cmd[7:0] + 1'b1;
-        end
-      end
-    end
-
-    always @(posedge clk) begin
-      if (cs_activate) begin
-        sdi_transfer_counter <= 0;
-      end else if (last_sdi_bit_m[2] == 1'b0 &&
-                   last_sdi_bit_m[1] == 1'b1) begin
-        sdi_transfer_counter <= sdi_transfer_counter + 1'b1;
-      end
-    end
-
-    assign end_of_sdi_latch = last_sdi_bit_m[2] & (sdi_transfer_counter == num_of_transfers);
-
   end /* g_echo_sclk_miso_latch */
   else
   begin : g_sclk_miso_latch
-
-    assign end_of_sdi_latch = 1'b1;
 
     for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdi_shift_reg
 
