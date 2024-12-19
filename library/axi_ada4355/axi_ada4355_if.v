@@ -146,6 +146,8 @@
    reg  [7:0]  serdes_data_frame;
    reg  [7:0]  serdes_data_frame_d;
 
+   reg  [2:0]  reg_test;
+
    assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
    assign pattern_value     = 8'hF0;
@@ -363,6 +365,12 @@ always @(posedge adc_clk_div) begin
       sync_status_int <= 1'b1;
     end
   end
+end
+
+always @(posedge adc_clk_div) begin
+  reg_test[0] <= serdes_data_0[0];
+  reg_test[1] <= serdes_data_1[0];
+  reg_test[2] <= data_s0_frame;
 end
 
 always @(posedge adc_clk_div) begin
