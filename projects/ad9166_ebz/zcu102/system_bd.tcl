@@ -52,7 +52,7 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-set ADI_DAC_MODE $::env(ADI_DAC_MODE)
+set ADI_DAC_MODE [get_env_param ADI_DAC_MODE 08]
 set sys_cstring "JESD:M=$ad_project_params(JESD_M)\
 L=$ad_project_params(JESD_L)\
 S=$ad_project_params(JESD_S)\
