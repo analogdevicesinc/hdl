@@ -751,7 +751,7 @@ i2c_controller       I2C Controller                 2.0.1
 axi_interconnect     AXI4 Interconnect              1.2.2
 axi2ahb_bridge       AXI4 to AHB-Lite Bridge        1.1.1
 axi2apb_bridge       AXI4 to APB Bridge             1.1.1
-gp_timer             Timer-Counter                  1.3.0
+gp_timer             Timer-Counter                  1.3.1
 ==================== ============================= =======
 
 .. shell:: bash
@@ -788,17 +788,17 @@ This contains the most relevant information that you need to provide.
 
    ~/hdl
    $ls -ltr <ADI_carrier_proj_dir>
-   $ls -ltr <ADI_carrier_proj_dir>/<project_name>
-   $ls -ltr <ADI_carrier_proj_dir>/<project_name>/<project_name>
-   $tail <ADI_carrier_proj_dir>/<project_name>_propel_builder.log
-   $tail <ADI_carrier_proj_dir>/<project_name>_radiant.log
+   $ls -ltr <ADI_carrier_proj_dir>/_bld/<project_name>
+   $ls -ltr <ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>
+   $tail <ADI_carrier_proj_dir>/_bld/<project_name>_propel_builder.log
+   $tail <ADI_carrier_proj_dir>/_bld/<project_name>_radiant.log
 
 Note that if the **Propel Builder** project fails to build, the
 **$(PROJECT_NAME)_radiant.log** may not exist.
 
 If the Propel Builder project was built successfully, the **sge**
 folder should appear in the **<ADI_carrier_proj_dir>/** or in the
-**<ADI_carrier_proj_dir>/<project_name>**.
+**<ADI_carrier_proj_dir>/_bld/<project_name>**.
 The **sge** folder contains the **bsp** folder (Base Support
 Package) and the SoC configuration files.
 
@@ -826,15 +826,15 @@ The **system_pb.tcl** is sourced in **adi_project_pb** procedure.
 The **system_project.tcl** runs second. This file is used to create and build
 the **HDL project** (Radiant). Here we use the output of the Propel Builder
 project as the **configured IPs** that can be found in the
-*<ADI_carrier_proj_dir>/<project_name>/<project_name>/lib* folder and the
+*<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/lib* folder and the
 **default block design wrapper** that is the
-*<ADI_carrier_proj_dir>/<project_name>/<project_name>/<project_name>.v*.
+*<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/<project_name>.v*.
 
 We add them to the Radiant project, then add our **system_top.v** wrapper,
 the **constraint files** and build the project.
 
 The output is a **.bit** file that by default will appear in the
-**<ADI_carrier_proj_dir>/<project_name>/impl_1** folder if the project was
+**<ADI_carrier_proj_dir>/_bld/<project_name>/impl_1** folder if the project was
 successfully built.
 
 Supported targets of ``make`` command

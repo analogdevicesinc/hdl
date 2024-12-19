@@ -110,3 +110,8 @@ _build
 library/**/.lock
 library/**/interfaces/*.sv
 .backstage_yaml
+.setting.ini
+MachXO3D_Template01
+ipcfg
+_bld
+radiantc.*
