@@ -285,6 +285,7 @@ module axi_ada4355 #(
     .adc_valid(adc_valid),
     .bitslip_enable(bitslip_enable),
     .sync_status(sync_status),
+    .areset(up_rstn),
     .sync_n(sync_n));
 
   // adc delay control

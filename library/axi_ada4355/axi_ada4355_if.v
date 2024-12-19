@@ -60,6 +60,7 @@
    input       sync_n,
    //input [4:0] num_lanes,
    input       bitslip_enable,
+   input       areset,
 
    // delay interface(for IDELAY macros)
    input                             up_clk,
@@ -147,6 +148,8 @@
    reg  [7:0]  serdes_data_frame_d;
 
    reg  [2:0]  reg_test;
+   reg         bufr_alignment;
+   reg         bufr_alignment_bufr;
 
    assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
@@ -164,7 +167,7 @@
       BUFMRCE i_bufmrce (
         .I(clk_in_s),
         .O(out_ibufmrce_clock),
-        .CE(1'b1));
+        .CE(bufr_alignment));
 
       BUFIO i_clk_buf(
         .I(out_ibufmrce_clock),
@@ -177,7 +180,7 @@
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf (
-        .CLR(~sync_n),
+        .CLR(bufr_alignment_bufr),
         .CE(1'b1),
         .I(out_ibufmrce_clock),
         .O(adc_clk_div));
@@ -185,7 +188,7 @@
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf_frame (
-        .CLR(~sync_n),
+        .CLR(bufr_alignment_bufr),
         .CE(1'b1),
         .I(out_ibufmrce_clock),
         .O(adc_clk_div_frame));
@@ -371,6 +374,18 @@ always @(posedge adc_clk_div) begin
   reg_test[0] <= serdes_data_0[0];
   reg_test[1] <= serdes_data_1[0];
   reg_test[2] <= data_s0_frame;
+end
+
+always @(posedge clk_in_s or negedge areset) begin
+  if (areset == 0) begin
+    bufr_alignment <= 1'b0; // reset condition
+    bufr_alignment_bufr <= 1'b1; // reset condition
+  end else begin
+    if (bufr_alignment) begin
+      bufr_alignment_bufr <=0;
+    end
+    bufr_alignment <= 1'b1;
+  end
 end
 
 always @(posedge adc_clk_div) begin
