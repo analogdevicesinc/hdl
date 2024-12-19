@@ -121,7 +121,8 @@ module system_top (
             ad77681_sync_out,
             ad77681_reset}));
 
-  assign gpio_i[63:39] = gpio_o[63:39];
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[39] = ad77681_drdy;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
