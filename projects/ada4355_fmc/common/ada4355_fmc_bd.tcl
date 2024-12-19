@@ -12,18 +12,8 @@ create_bd_port -dir I da_n
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
-#create_bd_port -dir I fpga_ref_clk
-#create_bd_port -dir I fpga_100_clk
 create_bd_port -dir I frame_clock_p
 create_bd_port -dir I frame_clock_n
-
-# ada4355_clock_monitor
-
-#ad_ip_instance axi_clock_monitor ada4355_clock_monitor
-#ad_ip_parameter ada4355_clock_monitor CONFIG.NUM_OF_CLOCKS 2
-
-#ad_connect fpga_ref_clk  ada4355_clock_monitor/clock_0
-#ad_connect fpga_100_clk  ada4355_clock_monitor/clock_1
 
 # axi_ada4355
 
@@ -69,7 +59,6 @@ ad_connect $sys_cpu_resetn axi_ada4355_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000 axi_ada4355_adc
 ad_cpu_interconnect 0x44A30000 axi_ada4355_dma
-#ad_cpu_interconnect 0x44A40000 ada4355_clock_monitor
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ada4355_dma/m_dest_axi
