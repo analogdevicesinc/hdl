@@ -59,7 +59,7 @@ ad_ip_parameter  dac_jesd204_link/tx   CONFIG.SYSREF_IOB         false
 ad_ip_parameter  dac_dma               CONFIG.DMA_DATA_WIDTH_SRC 128
 
 if { $ADI_DEVICE_CODE == 3 } {
-  ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
+  ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     0
 }
 
 #system ID
