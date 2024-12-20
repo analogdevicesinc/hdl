@@ -15,7 +15,10 @@
  */
 
 #include <ap_int.h>
-#include "hls_stream.h"
+#include "xf_security/sha3.hpp"
+#include "hls_np_channel.h"
+#include "hls_task.h"
+// #include "hls_stream.h"
 // the size of each message word in byte
 #define MSG_SIZE 8
 // the size of the digest in byte
@@ -23,7 +26,11 @@
 // the block size in words of 8bytes == (200 - (512/4))/8
 #define BLOCK_SIZE 9
 // number of blocks to be buffered
-#define NUM_BLOCKS 4
+#define NUM_BLOCKS 100
+// buffer size
+#define BUFFER_SIZE ((BLOCK_SIZE + 1) * NUM_BLOCKS)
+// number of workers
+#define NUM_WORKERS 2
 
 typedef ap_uint<8 * MSG_SIZE> sha_uint64_t;
 typedef ap_uint<128> uint128_t;

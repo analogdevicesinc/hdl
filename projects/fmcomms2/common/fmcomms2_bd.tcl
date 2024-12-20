@@ -150,15 +150,54 @@ ad_connect util_ad9361_divclk/clk_out axi_sha3_dma/fifo_wr_clk
 ad_connect $sys_cpu_resetn axi_sha3_dma/m_dest_axi_aresetn
 ad_connect $sys_cpu_resetn axi_sha3_dma/m_sg_axi_aresetn
 
+#ramp-path ramp
+ad_ip_instance ramp ramp_sha3
+ad_connect util_ad9361_divclk/clk_out ramp_sha3/clk
+ad_connect util_ad9361_divclk_reset/peripheral_reset ramp_sha3/rst
+
+
+
 # sha3-path sha3_512
 set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3_512 ]
 ad_connect util_ad9361_divclk/clk_out sha3_512/ap_clk
 ad_connect util_ad9361_divclk_reset/peripheral_reset sha3_512/ap_rst
-ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
-ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+
+# Create instance: system_ila_0, and set properties
+set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
+set_property -dict [list \
+  CONFIG.C_DATA_DEPTH {32768} \
+  CONFIG.C_MON_TYPE {NATIVE} \
+  CONFIG.C_NUM_OF_PROBES {6} \
+  CONFIG.C_PROBE0_WIDTH {64} \
+  CONFIG.C_PROBE3_WIDTH {512} \
+  CONFIG.C_PROBE_WIDTH_PROPAGATION {MANUAL} \
+] $system_ila_0
+
+
+# connections with ramp
+ad_connect sha3_512/msgStreamIn_dout ramp_sha3/ramp_data
+ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/ramp_data_valid
+ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
 ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
 ad_connect sha3_512/digestStreamOut_full_n VCC
 ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
+
+# connections with ADC CPACK2
+# ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
+# ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+# ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
+# ad_connect sha3_512/digestStreamOut_full_n VCC
+# ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
+
+#connections with ILA
+ad_connect util_ad9361_divclk/clk_out system_ila_0/clk
+ad_connect system_ila_0/probe0 ramp_sha3/ramp_data
+ad_connect system_ila_0/probe1 ramp_sha3/ramp_data_valid
+ad_connect system_ila_0/probe2 sha3_512/msgStreamIn_read
+ad_connect system_ila_0/probe3 sha3_512/digestStreamOut_din
+ad_connect system_ila_0/probe4 VCC
+ad_connect system_ila_0/probe5 sha3_512/digestStreamOut_write
+
 
 
 # adc-path dma

@@ -16,8 +16,8 @@
 
 #include "sha3_ip_512.hpp"
 
-#include <hls_stream.h>
-#include <ap_int.h>
+// #include <hls_stream.h>
+// #include <ap_int.h>
 
 #include <stdio.h>
 #include <cstdio>
@@ -28,23 +28,13 @@ using namespace std;
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unistd.h>
 
-// number of times to perform the test in different message and length
-#define NUM_TESTS 1008
-// the size of each message word in byte
-#define MSG_SIZE 8
-// the size of the digest in byte
-#define DIG_SIZE 64
-
-// table to save each message and its hash value
-struct Test {
-    string msg;
-    unsigned char hash[DIG_SIZE];
-    Test(const char* m, const void* h) : msg(m) { memcpy(hash, h, DIG_SIZE); }
-};
+#define ITERATIONS 10
+#define NUM_TESTS (BLOCK_SIZE * NUM_BLOCKS) * ITERATIONS //10 block executions
 
 // print hash value
-std::string hash2str(unsigned char* h, int len) {
+std::string hash2str(uintSizeDigest_t h, int len) {
     ostringstream oss;
     string retstr;
 
@@ -52,7 +42,7 @@ std::string hash2str(unsigned char* h, int len) {
     oss.str("");
     oss << hex;
     for (int i = 0; i < len; i++) {
-        oss << setw(2) << setfill('0') << (unsigned)h[i];
+    	oss << setw(2) << setfill('0') << (h.range(i*8 + 7, (i*8))).to_uint();
     }
     retstr = oss.str();
     return retstr;
@@ -63,71 +53,24 @@ int main() {
     std::cout << "   Testing SHA3-512 on HLS project   " << std::endl;
     std::cout << "*************************************" << std::endl;
 
-    // the original message to be digested
-    const char message[] =
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz"
-        "abcdefghijklmnopqrstuvwxyz";
-    vector<Test> tests;
-
-    unsigned char h[DIG_SIZE];
-    memcpy(h, message, DIG_SIZE);
     hls::stream<sha_uint64_t> msg_strm("msg_strm_in");
     hls::stream<uintSizeDigest_t> digest_strm("digest_strm_out");
 
-    // generate golden
+    ap_uint<64> msg = 0;
     for (unsigned int i = 0; i < NUM_TESTS; i++) {
-        unsigned int len = 8;
-        char m[8];
-        if (len != 0) {
-            memcpy(m, message, len);
-        }
-        m[len-1] = 0;
-        msg_strm.write(m);
-
-        // tests.push_back(Test(m, h));
+        msg_strm.write(msg);
+        msg++;
     }
-
-    unsigned int nerror = 0;
-    unsigned int ncorrect = 0;
-
     
-
-    // // generate input message words
-    // for (vector<Test>::const_iterator test = tests.begin(); test != tests.end(); test++) {
-    //     sha_uint64_t msg;
-    //     unsigned int n = 0;
-    //     unsigned int cnt = 0;
-    //     // write msg stream word by word
-    //     for (string::size_type i = 0; i < (*test).msg.length(); i++) {
-    //         if (n == 0) {
-    //             msg = 0;
-    //         }
-    //         msg.range(7 + 8 * n, 8 * n) = (unsigned)((*test).msg[i]);
-    //         n++;
-    //         if (n == MSG_SIZE) {
-    //             msg_strm.write(msg);
-    //             ++cnt;
-    //             n = 0;
-    //         }
-    //     }
-    // }
-    std::cout << "fulfill data" << std::endl;
-
+    sleep(10);
     // call fpga module
     sha3_ip_512(msg_strm, digest_strm);
+    sleep(10);
 
-    // check result
-    for (unsigned int i = 0; i < (NUM_TESTS / (BLOCK_SIZE * NUM_BLOCKS)); i++) {
+    std::cout << "Digests: " << std::endl;
+    while (!digest_strm.empty()) {
         uintSizeDigest_t digest = digest_strm.read();
-        if (i == 0) std::cout << "digest: " << digest << std::endl;
+        std::cout << std::setw(128) << std::setfill('0') << std::hex << digest << std::endl;
     }
-    return nerror;
+    return 0;
 }
