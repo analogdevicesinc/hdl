@@ -7,14 +7,14 @@ module bsync_generator (
   input logic        direction,
   input logic        bsync_in,
   input logic        disable_internal_bsync,
-  output            bsync_ready,
-  output     [ 4:0] bsync_delay,
-  output     [15:0] bsync_ratio,
-  // output            bsync_setup_violation,
-  output            bsync_alignment_error,
-  output            bsync_captured,
-  output     [ 2:0] bsync_state,
-  output            bsync_out
+  output             bsync_ready,
+  output     [ 4:0]  bsync_delay,
+  output     [15:0]  bsync_ratio,
+  output             bsync_alignment_error,
+  output             bsync_captured,
+  output     [ 2:0]  bsync_state,
+  output             bsync_event,
+  output             bsync_out
 );
 
   localparam                   STATE_WIDTH            = 3;
@@ -30,7 +30,6 @@ module bsync_generator (
   logic  [15:0]            bsync_counter;
   logic                    calib_done;
   logic                    b_edge;
-
   logic                    b_captured;
   logic                    bsync_buf;
   logic                    bsync_r  = 1'b0;
@@ -43,8 +42,6 @@ module bsync_generator (
   logic                    dir_changed = 1'b0;
   logic                    direction_r = 1'b0;
   logic                    direction_s;
-
-  logic                    setup_not_met;
   logic                    bsync_edge;
 
   sync_bits #(
@@ -220,5 +217,6 @@ module bsync_generator (
   assign bsync_alignment_error = bsync_misaligned;
   assign bsync_captured = b_captured;
   assign bsync_state = curr_state;
+  assign bsync_event = bsync_edge;
 
 endmodule

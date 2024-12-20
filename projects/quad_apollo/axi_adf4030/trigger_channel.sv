@@ -6,6 +6,7 @@ module trigger_channel (
   input  logic        trigger,
   input  logic        ch_en,
   input  logic [15:0] ch_phase,
+  input  logic        bsync_event,
   input  logic        bsync_ready,
   input  logic [ 4:0] bsync_delay,
   input  logic [15:0] bsync_ratio,
@@ -21,12 +22,13 @@ module trigger_channel (
 
   logic  [STATE_WIDTH-1:0] curr_state = IDLE;
   logic  [STATE_WIDTH-1:0] next_state;
-  logic  [15:0]            current_phase;
+  logic  [15:0]            current_phase = 0;
   logic  [15:0]            phase_counter;
   logic  [15:0]            trigger_duration;
   logic                    adjust_done;
   logic                    trig_edge;
   logic                    trig_r;
+  logic                    trig_event;
 
   always @* begin
     next_state = curr_state;
@@ -41,8 +43,10 @@ module trigger_channel (
         if (ch_en && bsync_ready) begin
           if (current_phase != ch_phase) begin
             next_state = PHASE_READ;
-          end else if (trig_edge) begin
+          end else if (trig_event && bsync_event) begin
             next_state = TRIG_ADJUST;
+          end else begin
+            next_state = TRIG_EDGE;
           end
         end else begin
           next_state = IDLE;
@@ -85,8 +89,17 @@ module trigger_channel (
       trigger_duration <= 0;
       current_phase <= 0;
       adjust_done <= 0;
+      trig_event <= 0;
     end else begin
-      if (curr_state == PHASE_READ) begin
+      if (curr_state == TRIG_EDGE) begin
+        trigger_duration <= 0;
+        phase_counter <= 0;
+        out <= 0;
+        adjust_done <= 0;
+        if (trig_edge) begin
+          trig_event <= 1;
+        end
+      end else if (curr_state == PHASE_READ) begin
         current_phase <= ch_phase;
         adjust_done <= 1'b0;
       end else if (curr_state == TRIG_ADJUST) begin
@@ -99,13 +112,15 @@ module trigger_channel (
           end else begin
             out <= 0;
             adjust_done <= 1;
+            trig_event <= 0;
           end
         end
       end else begin
-        trigger_duration <= 0;
-        phase_counter <= 0;
         out <= 0;
+        phase_counter <= 0;
+        trigger_duration <= 0;
         adjust_done <= 0;
+        trig_event <= 0;
       end
     end
   end

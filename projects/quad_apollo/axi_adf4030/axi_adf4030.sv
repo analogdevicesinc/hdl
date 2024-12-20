@@ -96,6 +96,7 @@ module axi_adf4030 #(
     .bsync_alignment_error  (bsync_alignment_error),
     .bsync_captured         (bsync_captured),
     .bsync_state            (bsync_state),
+    .bsync_event            (bsync_event),
     .bsync_out              (internal_bsync));
 
   ad_rst i_trig_sync (
@@ -113,6 +114,7 @@ module axi_adf4030 #(
         .trigger     (trigger_sync),
         .ch_en       (trig_channel_en[i]),
         .ch_phase    (trig_channel_phase[i]),
+        .bsync_event (bsync_event),
         .bsync_ready (bsync_ready),
         .bsync_delay (bsync_delay),
         .bsync_ratio (bsync_ratio),

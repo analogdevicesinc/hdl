@@ -103,7 +103,7 @@ module axi_adf4030_regmap #(
           up_trig_channel_phase[i] <= '0;
         end else begin
           if ((up_wreq == 1'b1) && (up_waddr == 'h06 + i * 2)) begin
-            up_trig_channel_phase[i] <= up_wdata[15:0];
+            up_trig_channel_phase[i] <= ((2 * up_bsync_ratio_s) - 2) - up_wdata[15:0];
           end
         end
       end
