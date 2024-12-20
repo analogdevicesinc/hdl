@@ -18,10 +18,23 @@ sysid_gen_sys_init_file
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk1
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
 
-# set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
-
 ad_ip_parameter axi_dp_interconnect CONFIG.NUM_CLKS 3
 ad_connect axi_dp_interconnect/aclk2 sys_250m_clk
+
+ad_ip_instance clk_wiz clk_wiz_125mhz
+
+ad_connect clk_wiz_125mhz/clk_in1 sys_250m_clk
+ad_connect clk_wiz_125mhz/reset sys_250m_reset
+
+ad_ip_instance proc_sys_reset sys_125m_rstgen
+
+ad_connect sys_125m_rstgen/slowest_sync_clk clk_wiz_125mhz/clk_out1
+ad_connect sys_125m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
+
+delete_bd_objs [get_bd_intf_ports iic_main] [get_bd_cells axi_iic_main]
+ad_connect sys_concat_intc/In9 GND
+
+###############################################################################
 
 ad_ip_instance axi_gpio axi_gpio_0 [list \
   C_ALL_OUTPUTS 1 \
@@ -37,16 +50,6 @@ ad_ip_instance axi_gpio axi_gpio_0 [list \
 
 ad_connect axi_gpio_0/gpio_io_o sys_250m_rstgen/aux_reset_in
 # ad_connect corundum_reset_gpio/gpio_io_o sys_250m_rstgen/aux_reset_in
-
-ad_ip_instance clk_wiz clk_wiz_125mhz
-
-ad_connect clk_wiz_125mhz/clk_in1 sys_250m_clk
-ad_connect clk_wiz_125mhz/reset sys_250m_reset
-
-ad_ip_instance proc_sys_reset sys_125m_rstgen
- 
-ad_connect sys_125m_rstgen/slowest_sync_clk clk_wiz_125mhz/clk_out1
-ad_connect sys_125m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
 
 ad_ip_instance corundum_core corundum_core [list \
   FPGA_ID 0x04b31093 \
@@ -304,7 +307,8 @@ ad_connect ethernet_core/qsfp qsfp
 ad_connect ethernet_core/i2c i2c
 
 ad_cpu_interconnect 0x50000000 corundum_core s_axil_ctrl
-ad_cpu_interconnect 0x51000000 corundum_core s_axil_app_ctrl
+# ad_cpu_interconnect 0x51000000 corundum_core s_axil_app_ctrl
+ad_cpu_interconnect 0x53000000 corundum_core s_axil_app_ctrl
 ad_cpu_interconnect 0x52000000 axi_gpio_0
 # ad_cpu_interconnect 0x52000000 corundum_reset_gpio/s_axi
 
@@ -312,173 +316,170 @@ ad_mem_hp1_interconnect sys_250m_clk corundum_core/m_axi
 
 ad_cpu_interrupt "ps-5" "mb-5" corundum_core/irq
 
-delete_bd_objs [get_bd_intf_ports iic_main] [get_bd_cells axi_iic_main]
-ad_connect sys_concat_intc/In9 GND
-
 ## Internal App
 
-ad_ip_instance xlconstant VCC_1 [list \
-  CONST_WIDTH 1 \
-  CONST_VAL b1 \
-]
+# ad_ip_instance xlconstant VCC_1 [list \
+#   CONST_WIDTH 1 \
+#   CONST_VAL b1 \
+# ]
 
-ad_ip_instance xlconstant VCC_2 [list \
-  CONST_WIDTH 2 \
-  CONST_VAL b11 \
-]
+# ad_ip_instance xlconstant VCC_2 [list \
+#   CONST_WIDTH 2 \
+#   CONST_VAL b11 \
+# ]
 
-# data direct
-ad_connect corundum_core/s_axis_direct_tx_app corundum_core/m_axis_direct_tx_app
-ad_connect corundum_core/s_axis_direct_rx_app corundum_core/m_axis_direct_rx_app
-ad_connect corundum_core/s_axis_direct_tx_cpl_app corundum_core/m_axis_direct_tx_cpl_app
+# # data direct
+# ad_connect corundum_core/s_axis_direct_tx_app corundum_core/m_axis_direct_tx_app
+# ad_connect corundum_core/s_axis_direct_rx_app corundum_core/m_axis_direct_rx_app
+# ad_connect corundum_core/s_axis_direct_tx_cpl_app corundum_core/m_axis_direct_tx_cpl_app
 
-# data sync
-ad_connect corundum_core/s_axis_sync_tx_app corundum_core/m_axis_sync_tx_app
-ad_connect corundum_core/s_axis_sync_rx_app corundum_core/m_axis_sync_rx_app
-ad_connect corundum_core/s_axis_sync_tx_cpl_app corundum_core/m_axis_sync_tx_cpl_app
+# # data sync
+# ad_connect corundum_core/s_axis_sync_tx_app corundum_core/m_axis_sync_tx_app
+# ad_connect corundum_core/s_axis_sync_rx_app corundum_core/m_axis_sync_rx_app
+# ad_connect corundum_core/s_axis_sync_tx_cpl_app corundum_core/m_axis_sync_tx_cpl_app
 
-# data if
-ad_connect corundum_core/s_axis_if_tx_app corundum_core/m_axis_if_tx_app
-ad_connect corundum_core/s_axis_if_rx_app corundum_core/m_axis_if_rx_app
-ad_connect corundum_core/s_axis_if_tx_cpl_app corundum_core/m_axis_if_tx_cpl_app
+# # data if
+# ad_connect corundum_core/s_axis_if_tx_app corundum_core/m_axis_if_tx_app
+# ad_connect corundum_core/s_axis_if_rx_app corundum_core/m_axis_if_rx_app
+# ad_connect corundum_core/s_axis_if_tx_cpl_app corundum_core/m_axis_if_tx_cpl_app
 
-# dma ctrl
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_dma_addr_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_ram_sel_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_ram_addr_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_len_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_tag_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_read_desc_valid_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_dma_addr_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_ram_sel_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_ram_addr_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_imm_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_imm_en_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_len_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_tag_app GND
-ad_connect corundum_core/m_axis_ctrl_dma_write_desc_valid_app GND
+# # dma ctrl
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_dma_addr_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_ram_sel_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_ram_addr_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_len_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_tag_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_read_desc_valid_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_dma_addr_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_ram_sel_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_ram_addr_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_imm_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_imm_en_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_len_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_tag_app GND
+# ad_connect corundum_core/m_axis_ctrl_dma_write_desc_valid_app GND
 
-ad_connect corundum_core/ctrl_dma_ram_wr_cmd_ready_app VCC_2/dout
-ad_connect corundum_core/ctrl_dma_ram_wr_done_app corundum_core/ctrl_dma_ram_wr_cmd_valid_app
-ad_connect corundum_core/ctrl_dma_ram_rd_cmd_ready_app corundum_core/ctrl_dma_ram_rd_resp_ready_app
-ad_connect corundum_core/ctrl_dma_ram_rd_resp_valid_app corundum_core/ctrl_dma_ram_rd_cmd_valid_app
-ad_connect corundum_core/ctrl_dma_ram_rd_resp_data_app GND
+# ad_connect corundum_core/ctrl_dma_ram_wr_cmd_ready_app VCC_2/dout
+# ad_connect corundum_core/ctrl_dma_ram_wr_done_app corundum_core/ctrl_dma_ram_wr_cmd_valid_app
+# ad_connect corundum_core/ctrl_dma_ram_rd_cmd_ready_app corundum_core/ctrl_dma_ram_rd_resp_ready_app
+# ad_connect corundum_core/ctrl_dma_ram_rd_resp_valid_app corundum_core/ctrl_dma_ram_rd_cmd_valid_app
+# ad_connect corundum_core/ctrl_dma_ram_rd_resp_data_app GND
 
-# dma data
-ad_connect corundum_core/m_axis_data_dma_read_desc_dma_addr_app GND
-ad_connect corundum_core/m_axis_data_dma_read_desc_ram_sel_app GND
-ad_connect corundum_core/m_axis_data_dma_read_desc_ram_addr_app GND
-ad_connect corundum_core/m_axis_data_dma_read_desc_len_app GND
-ad_connect corundum_core/m_axis_data_dma_read_desc_tag_app GND
-ad_connect corundum_core/m_axis_data_dma_read_desc_valid_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_dma_addr_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_ram_sel_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_ram_addr_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_imm_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_imm_en_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_len_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_tag_app GND
-ad_connect corundum_core/m_axis_data_dma_write_desc_valid_app GND
+# # dma data
+# ad_connect corundum_core/m_axis_data_dma_read_desc_dma_addr_app GND
+# ad_connect corundum_core/m_axis_data_dma_read_desc_ram_sel_app GND
+# ad_connect corundum_core/m_axis_data_dma_read_desc_ram_addr_app GND
+# ad_connect corundum_core/m_axis_data_dma_read_desc_len_app GND
+# ad_connect corundum_core/m_axis_data_dma_read_desc_tag_app GND
+# ad_connect corundum_core/m_axis_data_dma_read_desc_valid_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_dma_addr_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_ram_sel_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_ram_addr_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_imm_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_imm_en_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_len_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_tag_app GND
+# ad_connect corundum_core/m_axis_data_dma_write_desc_valid_app GND
 
-ad_connect corundum_core/data_dma_ram_wr_cmd_ready_app VCC_2/dout
-ad_connect corundum_core/data_dma_ram_wr_done_app corundum_core/data_dma_ram_wr_cmd_valid_app
-ad_connect corundum_core/data_dma_ram_rd_cmd_ready_app corundum_core/data_dma_ram_rd_resp_ready_app
-ad_connect corundum_core/data_dma_ram_rd_resp_valid_app corundum_core/data_dma_ram_rd_cmd_valid_app
-ad_connect corundum_core/data_dma_ram_rd_resp_data_app GND
+# ad_connect corundum_core/data_dma_ram_wr_cmd_ready_app VCC_2/dout
+# ad_connect corundum_core/data_dma_ram_wr_done_app corundum_core/data_dma_ram_wr_cmd_valid_app
+# ad_connect corundum_core/data_dma_ram_rd_cmd_ready_app corundum_core/data_dma_ram_rd_resp_ready_app
+# ad_connect corundum_core/data_dma_ram_rd_resp_valid_app corundum_core/data_dma_ram_rd_cmd_valid_app
+# ad_connect corundum_core/data_dma_ram_rd_resp_data_app GND
 
-# NIC control
-ad_connect corundum_core/m_axil_ctrl_awaddr_app GND
-ad_connect corundum_core/m_axil_ctrl_awprot_app GND
-ad_connect corundum_core/m_axil_ctrl_awvalid_app GND
-ad_connect corundum_core/m_axil_ctrl_wdata_app GND
-ad_connect corundum_core/m_axil_ctrl_wstrb_app GND
-ad_connect corundum_core/m_axil_ctrl_wvalid_app GND
-ad_connect corundum_core/m_axil_ctrl_bready_app VCC_1/dout
-ad_connect corundum_core/m_axil_ctrl_araddr_app GND
-ad_connect corundum_core/m_axil_ctrl_arprot_app GND
-ad_connect corundum_core/m_axil_ctrl_arvalid_app GND
-ad_connect corundum_core/m_axil_ctrl_rready_app VCC_1/dout
+# # NIC control
+# ad_connect corundum_core/m_axil_ctrl_awaddr_app GND
+# ad_connect corundum_core/m_axil_ctrl_awprot_app GND
+# ad_connect corundum_core/m_axil_ctrl_awvalid_app GND
+# ad_connect corundum_core/m_axil_ctrl_wdata_app GND
+# ad_connect corundum_core/m_axil_ctrl_wstrb_app GND
+# ad_connect corundum_core/m_axil_ctrl_wvalid_app GND
+# ad_connect corundum_core/m_axil_ctrl_bready_app VCC_1/dout
+# ad_connect corundum_core/m_axil_ctrl_araddr_app GND
+# ad_connect corundum_core/m_axil_ctrl_arprot_app GND
+# ad_connect corundum_core/m_axil_ctrl_arvalid_app GND
+# ad_connect corundum_core/m_axil_ctrl_rready_app VCC_1/dout
 
 # External App
 
-# ad_ip_instance application_core application_core [list \
-#   IF_COUNT 1 \
-#   PORTS_PER_IF 1 \
-#   PTP_PEROUT_COUNT 1 \
-#   PTP_TS_ENABLE 1 \
-#   PTP_TS_FMT_TOD 0 \
-#   PTP_TS_WIDTH 48 \
-#   TX_TAG_WIDTH 16 \
-#   DDR_CH 1 \
-#   AXI_DDR_DATA_WIDTH 256 \
-#   AXI_DDR_ADDR_WIDTH 32 \
-#   AXI_DDR_STRB_WIDTH 32 \
-#   AXI_DDR_ID_WIDTH 8 \
-#   AXI_DDR_AWUSER_ENABLE 0 \
-#   AXI_DDR_WUSER_ENABLE 0 \
-#   AXI_DDR_BUSER_ENABLE 0 \
-#   AXI_DDR_ARUSER_ENABLE 0 \
-#   AXI_DDR_RUSER_ENABLE 0 \
-#   HBM_CH 1 \
-#   AXI_HBM_DATA_WIDTH 256 \
-#   AXI_HBM_ADDR_WIDTH 32 \
-#   AXI_HBM_STRB_WIDTH 32 \
-#   AXI_HBM_ID_WIDTH 8 \
-#   AXI_HBM_AWUSER_ENABLE 0 \
-#   AXI_HBM_AWUSER_WIDTH 1 \
-#   AXI_HBM_WUSER_ENABLE 0 \
-#   AXI_HBM_WUSER_WIDTH 1 \
-#   AXI_HBM_BUSER_ENABLE 0 \
-#   AXI_HBM_BUSER_WIDTH 1 \
-#   AXI_HBM_ARUSER_ENABLE 0 \
-#   AXI_HBM_ARUSER_WIDTH 1 \
-#   AXI_HBM_RUSER_ENABLE 0 \
-#   AXI_HBM_RUSER_WIDTH 1 \
-#   APP_ID 0x12340001 \
-#   APP_GPIO_IN_WIDTH 32 \
-#   APP_GPIO_OUT_WIDTH 32 \
-#   DMA_IMM_ENABLE 0 \
-#   DMA_IMM_WIDTH 32 \
-#   DMA_LEN_WIDTH 16 \
-#   DMA_TAG_WIDTH 16 \
-#   RAM_SEL_WIDTH 3 \
-#   RAM_ADDR_WIDTH 17 \
-#   RAM_SEG_COUNT 2 \
-#   RAM_SEG_DATA_WIDTH 512 \
-#   RAM_SEG_BE_WIDTH 64 \
-#   RAM_SEG_ADDR_WIDTH 10 \
-#   AXIL_CTRL_DATA_WIDTH 32 \
-#   AXIL_CTRL_ADDR_WIDTH 24 \
-#   AXIL_CTRL_STRB_WIDTH 4 \
-#   AXIS_DATA_WIDTH 512 \
-#   AXIS_KEEP_WIDTH 64 \
-#   AXIS_TX_USER_WIDTH 17 \
-#   AXIS_RX_USER_WIDTH 49\
-#   AXIS_SYNC_DATA_WIDTH 512 \
-#   AXIS_SYNC_KEEP_WIDTH 64 \
-#   AXIS_SYNC_TX_USER_WIDTH 17 \
-#   AXIS_SYNC_RX_USER_WIDTH 49 \
-#   AXIS_IF_DATA_WIDTH 512 \
-#   AXIS_IF_KEEP_WIDTH 64 \
-#   AXIS_IF_TX_ID_WIDTH 13 \
-#   AXIS_IF_RX_ID_WIDTH 1 \
-#   AXIS_IF_TX_DEST_WIDTH 4 \
-#   AXIS_IF_RX_DEST_WIDTH 9 \
-#   AXIS_IF_TX_USER_WIDTH 17 \
-#   AXIS_IF_RX_USER_WIDTH 49 \
-#   STAT_INC_WIDTH 24 \
-#   STAT_ID_WIDTH 12 \
-# ]
+ad_ip_instance application_core application_core [list \
+  IF_COUNT 1 \
+  PORTS_PER_IF 1 \
+  PTP_PEROUT_COUNT 1 \
+  PTP_TS_ENABLE 1 \
+  PTP_TS_FMT_TOD 0 \
+  PTP_TS_WIDTH 48 \
+  TX_TAG_WIDTH 16 \
+  DDR_CH 1 \
+  AXI_DDR_DATA_WIDTH 256 \
+  AXI_DDR_ADDR_WIDTH 32 \
+  AXI_DDR_STRB_WIDTH 32 \
+  AXI_DDR_ID_WIDTH 8 \
+  AXI_DDR_AWUSER_ENABLE 0 \
+  AXI_DDR_WUSER_ENABLE 0 \
+  AXI_DDR_BUSER_ENABLE 0 \
+  AXI_DDR_ARUSER_ENABLE 0 \
+  AXI_DDR_RUSER_ENABLE 0 \
+  HBM_CH 1 \
+  AXI_HBM_DATA_WIDTH 256 \
+  AXI_HBM_ADDR_WIDTH 32 \
+  AXI_HBM_STRB_WIDTH 32 \
+  AXI_HBM_ID_WIDTH 8 \
+  AXI_HBM_AWUSER_ENABLE 0 \
+  AXI_HBM_AWUSER_WIDTH 1 \
+  AXI_HBM_WUSER_ENABLE 0 \
+  AXI_HBM_WUSER_WIDTH 1 \
+  AXI_HBM_BUSER_ENABLE 0 \
+  AXI_HBM_BUSER_WIDTH 1 \
+  AXI_HBM_ARUSER_ENABLE 0 \
+  AXI_HBM_ARUSER_WIDTH 1 \
+  AXI_HBM_RUSER_ENABLE 0 \
+  AXI_HBM_RUSER_WIDTH 1 \
+  APP_ID 0x12340001 \
+  APP_GPIO_IN_WIDTH 32 \
+  APP_GPIO_OUT_WIDTH 32 \
+  DMA_ADDR_WIDTH 64 \
+  DMA_IMM_WIDTH 32 \
+  DMA_LEN_WIDTH 16 \
+  DMA_TAG_WIDTH 16 \
+  RAM_SEL_WIDTH 3 \
+  RAM_ADDR_WIDTH 17 \
+  RAM_SEG_COUNT 2 \
+  RAM_SEG_DATA_WIDTH 512 \
+  RAM_SEG_BE_WIDTH 64 \
+  RAM_SEG_ADDR_WIDTH 10 \
+  AXIL_CTRL_DATA_WIDTH 32 \
+  AXIL_CTRL_ADDR_WIDTH 24 \
+  AXIL_CTRL_STRB_WIDTH 4 \
+  AXIS_DATA_WIDTH 512 \
+  AXIS_KEEP_WIDTH 64 \
+  AXIS_TX_USER_WIDTH 17 \
+  AXIS_RX_USER_WIDTH 49\
+  AXIS_SYNC_DATA_WIDTH 512 \
+  AXIS_SYNC_KEEP_WIDTH 64 \
+  AXIS_SYNC_TX_USER_WIDTH 17 \
+  AXIS_SYNC_RX_USER_WIDTH 49 \
+  AXIS_IF_DATA_WIDTH 512 \
+  AXIS_IF_KEEP_WIDTH 64 \
+  AXIS_IF_TX_ID_WIDTH 13 \
+  AXIS_IF_RX_ID_WIDTH 1 \
+  AXIS_IF_TX_DEST_WIDTH 4 \
+  AXIS_IF_RX_DEST_WIDTH 9 \
+  AXIS_IF_TX_USER_WIDTH 17 \
+  AXIS_IF_RX_USER_WIDTH 49 \
+  STAT_INC_WIDTH 24 \
+  STAT_ID_WIDTH 12 \
+]
 
-# ad_connect application_core/clk corundum_core/clk
-# ad_connect application_core/rst corundum_core/rst
-# ad_connect application_core/ptp_clk corundum_core/ptp_clk
-# ad_connect application_core/ptp_rst corundum_core/ptp_rst
-# ad_connect application_core/ptp_sample_clk corundum_core/ptp_sample_clk
-# ad_connect application_core/direct_tx_clk corundum_core/tx_clk
-# ad_connect application_core/direct_tx_rst corundum_core/tx_rst
-# ad_connect application_core/direct_rx_clk corundum_core/rx_clk
-# ad_connect application_core/direct_rx_rst corundum_core/rx_rst
+ad_connect application_core/clk corundum_core/clk
+ad_connect application_core/rst corundum_core/rst
+ad_connect application_core/ptp_clk corundum_core/ptp_clk
+ad_connect application_core/ptp_rst corundum_core/ptp_rst
+ad_connect application_core/ptp_sample_clk corundum_core/ptp_sample_clk
+ad_connect application_core/direct_tx_clk corundum_core/tx_clk
+ad_connect application_core/direct_tx_rst corundum_core/tx_rst
+ad_connect application_core/direct_rx_clk corundum_core/rx_clk
+ad_connect application_core/direct_rx_rst corundum_core/rx_rst
 # ad_connect application_core/ddr_clk corundum_core/ddr_clk
 # ad_connect application_core/ddr_rst corundum_core/ddr_rst
 # ad_connect application_core/ddr_status corundum_core/ddr_status
@@ -486,44 +487,59 @@ ad_connect corundum_core/m_axil_ctrl_rready_app VCC_1/dout
 # ad_connect application_core/hbm_rst corundum_core/hbm_rst
 # ad_connect application_core/hbm_status corundum_core/hbm_status
 
-# ad_cpu_interconnect 0x53000000 application_core s_axil_ctrl
+ad_connect application_core/ddr_clk GND
+ad_connect application_core/ddr_rst GND
+ad_connect application_core/ddr_status GND
+ad_connect application_core/hbm_clk GND
+ad_connect application_core/hbm_rst GND
+ad_connect application_core/hbm_status GND
 
-# ad_connect application_core/s_axis_direct_tx corundum_core/s_axis_direct_tx_app
-# ad_connect application_core/s_axis_direct_rx corundum_core/s_axis_direct_rx_app
-# ad_connect application_core/s_axis_sync_tx corundum_core/s_axis_sync_tx_app
-# ad_connect application_core/s_axis_sync_rx corundum_core/s_axis_sync_rx_app
-# ad_connect application_core/s_axis_if_tx corundum_core/s_axis_if_tx_app
-# ad_connect application_core/s_axis_if_rx corundum_core/s_axis_if_rx_app
-# ad_connect application_core/m_axis_direct_tx_cpl corundum_core/m_axis_direct_tx_cpl_app
-# ad_connect application_core/m_axis_sync_tx_cpl corundum_core/m_axis_sync_tx_cpl_app
-# ad_connect application_core/m_axis_if_tx_cpl corundum_core/m_axis_if_tx_cpl_app
-# ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
-# ad_connect application_core/s_axis_ctrl_dma_read_desc_status corundum_core/s_axis_ctrl_dma_read_desc_status_app
-# ad_connect application_core/s_axis_ctrl_dma_write_desc_status corundum_core/s_axis_ctrl_dma_write_desc_status_app
-# ad_connect application_core/s_axis_data_dma_read_desc_status corundum_core/s_axis_data_dma_read_desc_status_app
-# ad_connect application_core/s_axis_data_dma_write_desc_status corundum_core/s_axis_data_dma_write_desc_status_app
+# ad_cpu_interconnect 0x53000000 application_core s_axil_ctrl
+ad_cpu_interconnect 0x51000000 application_core s_axil_ctrl
+
+ad_connect application_core/s_axis_direct_tx corundum_core/s_axis_direct_tx_app
+ad_connect application_core/s_axis_direct_rx corundum_core/s_axis_direct_rx_app
+ad_connect application_core/s_axis_sync_tx corundum_core/s_axis_sync_tx_app
+ad_connect application_core/s_axis_sync_rx corundum_core/s_axis_sync_rx_app
+ad_connect application_core/s_axis_if_tx corundum_core/s_axis_if_tx_app
+ad_connect application_core/s_axis_if_rx corundum_core/s_axis_if_rx_app
+ad_connect application_core/m_axis_direct_tx_cpl corundum_core/m_axis_direct_tx_cpl_app
+ad_connect application_core/m_axis_sync_tx_cpl corundum_core/m_axis_sync_tx_cpl_app
+ad_connect application_core/m_axis_if_tx_cpl corundum_core/m_axis_if_tx_cpl_app
+ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
+ad_connect application_core/s_axis_ctrl_dma_read_desc_status corundum_core/s_axis_ctrl_dma_read_desc_status_app
+ad_connect application_core/s_axis_ctrl_dma_write_desc_status corundum_core/s_axis_ctrl_dma_write_desc_status_app
+ad_connect application_core/s_axis_data_dma_read_desc_status corundum_core/s_axis_data_dma_read_desc_status_app
+ad_connect application_core/s_axis_data_dma_write_desc_status corundum_core/s_axis_data_dma_write_desc_status_app
 
 # ad_connect application_core/m_axi_ddr corundum_core/m_axi_ddr_app
 # ad_connect application_core/m_axi_hbm corundum_core/m_axi_hbm_app
-# ad_connect application_core/m_axis_direct_tx corundum_core/m_axis_direct_tx_app
-# ad_connect application_core/m_axis_direct_rx corundum_core/m_axis_direct_rx_app
-# ad_connect application_core/m_axis_sync_tx corundum_core/m_axis_sync_tx_app
-# ad_connect application_core/m_axis_sync_rx corundum_core/m_axis_sync_rx_app
-# ad_connect application_core/m_axis_if_tx corundum_core/m_axis_if_tx_app
-# ad_connect application_core/m_axis_if_rx corundum_core/m_axis_if_rx_app
-# ad_connect application_core/s_axis_direct_tx_cpl corundum_core/s_axis_direct_tx_cpl_app
-# ad_connect application_core/s_axis_sync_tx_cpl corundum_core/s_axis_sync_tx_cpl_app
-# ad_connect application_core/s_axis_if_tx_cpl corundum_core/s_axis_if_tx_cpl_app
-# ad_connect application_core/m_axil_ctrl corundum_core/m_axil_ctrl_app
-# ad_connect application_core/m_axis_ctrl_dma_read_desc corundum_core/m_axis_ctrl_dma_read_desc_app
-# ad_connect application_core/m_axis_ctrl_dma_write_desc corundum_core/m_axis_ctrl_dma_write_desc_app
-# ad_connect application_core/m_axis_data_dma_read_desc corundum_core/m_axis_data_dma_read_desc_app
-# ad_connect application_core/m_axis_data_dma_write_desc corundum_core/m_axis_data_dma_write_desc_app
-# ad_connect application_core/ctrl_dma_ram corundum_core/ctrl_dma_ram_app
-# ad_connect application_core/data_dma_ram corundum_core/data_dma_ram_app
-# ad_connect application_core/m_axis_stat corundum_core/m_axis_stat_app
+ad_connect application_core/m_axis_direct_tx corundum_core/m_axis_direct_tx_app
+ad_connect application_core/m_axis_direct_rx corundum_core/m_axis_direct_rx_app
+ad_connect application_core/m_axis_sync_tx corundum_core/m_axis_sync_tx_app
+ad_connect application_core/m_axis_sync_rx corundum_core/m_axis_sync_rx_app
+ad_connect application_core/m_axis_if_tx corundum_core/m_axis_if_tx_app
+ad_connect application_core/m_axis_if_rx corundum_core/m_axis_if_rx_app
+ad_connect application_core/s_axis_direct_tx_cpl corundum_core/s_axis_direct_tx_cpl_app
+ad_connect application_core/s_axis_sync_tx_cpl corundum_core/s_axis_sync_tx_cpl_app
+ad_connect application_core/s_axis_if_tx_cpl corundum_core/s_axis_if_tx_cpl_app
+ad_connect application_core/m_axil_ctrl corundum_core/m_axil_ctrl_app
+ad_connect application_core/m_axis_ctrl_dma_read_desc corundum_core/m_axis_ctrl_dma_read_desc_app
+ad_connect application_core/m_axis_ctrl_dma_write_desc corundum_core/m_axis_ctrl_dma_write_desc_app
+ad_connect application_core/m_axis_data_dma_read_desc corundum_core/m_axis_data_dma_read_desc_app
+ad_connect application_core/m_axis_data_dma_write_desc corundum_core/m_axis_data_dma_write_desc_app
+ad_connect application_core/ctrl_dma_ram corundum_core/ctrl_dma_ram_app
+ad_connect application_core/data_dma_ram corundum_core/data_dma_ram_app
+ad_connect application_core/m_axis_stat corundum_core/m_axis_stat_app
 
-# ad_connect application_core/jtag_tdi GND
-# ad_connect application_core/jtag_tms GND
-# ad_connect application_core/jtag_tck GND
-# ad_connect application_core/gpio_in GND
+ad_connect application_core/jtag_tdi GND
+ad_connect application_core/jtag_tms GND
+ad_connect application_core/jtag_tck GND
+ad_connect application_core/gpio_in GND
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+# source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
+# source $ad_hdl_dir/library/corundum/scripts/corundum.tcl

@@ -2726,6 +2726,9 @@ adi_set_bus_dependency "m_axis_stat_app" "m_axis_stat_app" \
   "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1) and \
    (spirit:decode(id('MODELPARAM_VALUE.APP_STAT_ENABLE')) = 1)"
 
+adi_set_bus_dependency "ptp_clock_app" "ptp_clock_app" \
+  "(spirit:decode(id('MODELPARAM_VALUE.APP_ENABLE')) = 1)"
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 ipx::save_core $cc
