@@ -35,4 +35,7 @@ set_property -dict {PACKAGE_PIN P18 IOSTANDARD LVCMOS25} [get_ports ada4355_miso
 
 # clocks
 
-create_clock -period 2.000 -name dco_clk  [get_ports dco_p]
+create_clock -period 2.000 -name dco_clk [get_ports dco_p]
+
+set_false_path -to [get_pins i_system_wrapper/system_i/axi_ada4355_adc/inst/i_ada4355_interface/bufr_alignment_reg/CLR]
+set_false_path -to [get_pins i_system_wrapper/system_i/axi_ada4355_adc/inst/i_ada4355_interface/bufr_alignment_bufr_reg/PRE]
