@@ -48,6 +48,10 @@ module axi_adf4030 #(
   logic        bsync_alignment_error;
   logic        bsync_captured;
   logic [ 2:0] bsync_state;
+  logic        bsync_event;
+  logic        manual_trig;
+  logic        select_trig;
+  logic        trig;
 
   // Internal up bus, translated by up_axi
   logic        up_rstn;
@@ -105,13 +109,15 @@ module axi_adf4030 #(
     .rstn      (),
     .rst       (trigger_sync));
 
+  assign trig = select_trig ? trigger_sync : manual_trig;
+
   genvar i;
   generate
     for (i = 0; i < CHANNEL_COUNT; i = i + 1) begin
       trigger_channel i_channel (
         .clk         (clk),
         .rstn        (rstn),
-        .trigger     (trigger_sync),
+        .trigger     (trig),
         .ch_en       (trig_channel_en[i]),
         .ch_phase    (trig_channel_phase[i]),
         .bsync_event (bsync_event),
@@ -132,9 +138,10 @@ module axi_adf4030 #(
 
     .trig_channel_en        (trig_channel_en),
     .trig_channel_phase     (trig_channel_phase),
-
     .direction              (direction),
     .disable_internal_bsync (disable_internal_bsync),
+    .manual_trig            (manual_trig),
+    .select_trig            (select_trig),
 
     .bsync_ready            (bsync_ready),
     .bsync_delay            (bsync_delay),

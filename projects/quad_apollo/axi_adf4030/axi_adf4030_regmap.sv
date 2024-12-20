@@ -6,11 +6,13 @@ module axi_adf4030_regmap #(
   input  logic                       clk,
   output logic                       rstn,
 
-  // adf4030 interface control
+  // adf4030 control interface
   output logic [CHANNEL_COUNT - 1:0] trig_channel_en,
   output logic [15:0]                trig_channel_phase [CHANNEL_COUNT - 1:0],
   output logic                       direction,
   output logic                       disable_internal_bsync,
+  output logic                       manual_trig,
+  output logic                       select_trig,
 
   // adf4030 debug interface
   input  logic                       bsync_ready,
@@ -40,6 +42,8 @@ module axi_adf4030_regmap #(
 
   // internal registers
   logic [31:0]                up_scratch;
+  logic                       up_manual_trig;
+  logic                       up_select_trig;
   logic                       up_sw_reset;
   logic                       up_direction;
   logic                       up_disable_internal_bsync;
@@ -62,6 +66,8 @@ module axi_adf4030_regmap #(
     up_wack = 1'b0;
     up_rack = 1'b0;
     up_scratch = 32'b0;
+    up_manual_trig = 1'b0;
+    up_select_trig = 1'b0;
     up_sw_reset = 1'b0;
     up_direction = 1'b1;
     up_disable_internal_bsync = 1'b0;
@@ -74,6 +80,7 @@ module axi_adf4030_regmap #(
     if (up_rstn == 1'b0 || up_sw_reset == 1'b1) begin
       up_wack <= 1'b0;
       up_scratch <= 32'b0;
+      up_select_trig <= 1'b0;
       up_sw_reset <= 1'b0;
       up_direction <= 1'b1;
       up_disable_internal_bsync <= 1'b0;
@@ -86,10 +93,22 @@ module axi_adf4030_regmap #(
       end
       /* Control Register */
       if ((up_wreq == 1'b1) && (up_waddr == 'h04)) begin
+        up_select_trig <= up_wdata[11];
         up_sw_reset <= up_wdata[10];
         up_trig_channel_en <= up_wdata[(CHANNEL_COUNT-1)+2:2];
         up_disable_internal_bsync <= up_wdata[1];
         up_direction <= up_wdata[0];
+      end
+    end
+  end
+
+  always @(posedge up_clk) begin
+    if (up_manual_trig == 1'b1) begin
+      up_manual_trig <= 1'b0;
+    end else begin
+      /* Manual Trigger Register */
+      if ((up_wreq == 1'b1) && (up_waddr == 'h06)) begin
+        up_manual_trig <= up_wdata[0];
       end
     end
   end
@@ -102,7 +121,7 @@ module axi_adf4030_regmap #(
         if (up_rstn == 0 || up_sw_reset == 1'b1) begin
           up_trig_channel_phase[i] <= '0;
         end else begin
-          if ((up_wreq == 1'b1) && (up_waddr == 'h06 + i * 2)) begin
+          if ((up_wreq == 1'b1) && (up_waddr == 'h07 + i) && up_trig_channel_en[i]) begin
             up_trig_channel_phase[i] <= ((2 * up_bsync_ratio_s) - 2) - up_wdata[15:0];
           end
         end
@@ -160,7 +179,8 @@ module axi_adf4030_regmap #(
 
           /* Control Register */
           'h04:  up_rdata <= {
-            21'b0,
+            20'b0,
+            up_select_trig,
             up_sw_reset,
             {(8-CHANNEL_COUNT){1'b0}},
             up_trig_channel_en,
@@ -179,14 +199,20 @@ module axi_adf4030_regmap #(
             up_bsync_ready_s
           };
 
-          'h06: up_rdata <= up_trig_channel_s[0];
-          'h07: up_rdata <= up_trig_channel_s[1];
-          'h08: up_rdata <= up_trig_channel_s[2];
-          'h09: up_rdata <= up_trig_channel_s[3];
-          'h0A: up_rdata <= up_trig_channel_s[4];
-          'h0B: up_rdata <= up_trig_channel_s[5];
-          'h0C: up_rdata <= up_trig_channel_s[6];
-          'h0D: up_rdata <= up_trig_channel_s[7];
+          /* Manual Trigger Register*/
+          'h06: up_rdata <= {
+            31'b0,
+            up_manual_trig
+          };
+
+          'h07: up_rdata <= up_trig_channel_s[0];
+          'h08: up_rdata <= up_trig_channel_s[1];
+          'h09: up_rdata <= up_trig_channel_s[2];
+          'h0A: up_rdata <= up_trig_channel_s[3];
+          'h0B: up_rdata <= up_trig_channel_s[4];
+          'h0C: up_rdata <= up_trig_channel_s[5];
+          'h0D: up_rdata <= up_trig_channel_s[6];
+          'h0E: up_rdata <= up_trig_channel_s[7];
           default: up_rdata <= 32'b0;
         endcase
       end else begin
@@ -208,13 +234,22 @@ module axi_adf4030_regmap #(
     .out_data (trig_channel_en));
 
   sync_bits #(
-    .NUM_OF_BITS (2),
+    .NUM_OF_BITS (3),
     .ASYNC_CLK (1)
   ) i_control_signals (
-    .in_bits ({~up_sw_reset, up_disable_internal_bsync}),
+    .in_bits ({up_select_trig, ~up_sw_reset, up_disable_internal_bsync}),
     .out_clk (clk),
     .out_resetn (1'b1),
-    .out_bits ({rstn, disable_internal_bsync}));
+    .out_bits ({select_trig, rstn, disable_internal_bsync}));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_manual_trig (
+    .in_bits (up_manual_trig),
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .out_bits (manual_trig));
 
   sync_data #(
     .NUM_OF_BITS (3),
