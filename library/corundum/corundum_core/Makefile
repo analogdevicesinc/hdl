@@ -2,6 +2,7 @@ LIBRARY_NAME := corundum_core
 
 XILINX_DEPS += corundum_core_ip.tcl
 
+GENERIC_DEPS += corundum_core.v
 GENERIC_DEPS += mqnic_app_block.v
 GENERIC_DEPS += mqnic_app_custom_params.vh
 GENERIC_DEPS += mqnic_app_custom_ports.vh

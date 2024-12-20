@@ -614,141 +614,6 @@ module mqnic_app_block #
     input  wire                                           jtag_tck
 );
 
-// check configuration
-initial begin
-    if (APP_ID != 32'h12340001) begin
-        $error("Error: Invalid APP_ID (expected 32'h12340001, got 32'h%x) (instance %m)", APP_ID);
-        $finish;
-    end
-end
-
-// control registers
-wire [AXIL_APP_CTRL_ADDR_WIDTH-1:0] ctrl_reg_wr_addr;
-wire [AXIL_APP_CTRL_DATA_WIDTH-1:0] ctrl_reg_wr_data;
-wire [AXIL_APP_CTRL_STRB_WIDTH-1:0] ctrl_reg_wr_strb;
-wire                                ctrl_reg_wr_en;
-reg                                 ctrl_reg_wr_wait;
-reg                                 ctrl_reg_wr_ack;
-wire [AXIL_APP_CTRL_ADDR_WIDTH-1:0] ctrl_reg_rd_addr;
-wire                                ctrl_reg_rd_en;
-reg  [AXIL_APP_CTRL_DATA_WIDTH-1:0] ctrl_reg_rd_data;
-reg                                 ctrl_reg_rd_wait;
-reg                                 ctrl_reg_rd_ack;
-
-reg [31:0] version_reg = 'h1234ABCD;
-reg [31:0] scratch_reg;
-reg start_counter_reg;
-reg stop_counter_reg;
-reg clear_counter_reg;
-reg [31:0] counter_reg;
-
-/*
- * AXI-Lite slave interface (control from host)
- */
-axil_reg_if #(
-    .DATA_WIDTH(AXIL_APP_CTRL_DATA_WIDTH),
-    .ADDR_WIDTH(AXIL_APP_CTRL_ADDR_WIDTH),
-    .STRB_WIDTH(AXIL_APP_CTRL_STRB_WIDTH),
-    .TIMEOUT(4)
-)
-axil_reg_if_inst (
-    .clk(clk),
-    .rst(rst),
-
-    /*
-     * AXI-Lite slave interface
-     */
-    .s_axil_awaddr(s_axil_app_ctrl_awaddr),
-    .s_axil_awprot(s_axil_app_ctrl_awprot),
-    .s_axil_awvalid(s_axil_app_ctrl_awvalid),
-    .s_axil_awready(s_axil_app_ctrl_awready),
-    .s_axil_wdata(s_axil_app_ctrl_wdata),
-    .s_axil_wstrb(s_axil_app_ctrl_wstrb),
-    .s_axil_wvalid(s_axil_app_ctrl_wvalid),
-    .s_axil_wready(s_axil_app_ctrl_wready),
-    .s_axil_bresp(s_axil_app_ctrl_bresp),
-    .s_axil_bvalid(s_axil_app_ctrl_bvalid),
-    .s_axil_bready(s_axil_app_ctrl_bready),
-    .s_axil_araddr(s_axil_app_ctrl_araddr),
-    .s_axil_arprot(s_axil_app_ctrl_arprot),
-    .s_axil_arvalid(s_axil_app_ctrl_arvalid),
-    .s_axil_arready(s_axil_app_ctrl_arready),
-    .s_axil_rdata(s_axil_app_ctrl_rdata),
-    .s_axil_rresp(s_axil_app_ctrl_rresp),
-    .s_axil_rvalid(s_axil_app_ctrl_rvalid),
-    .s_axil_rready(s_axil_app_ctrl_rready),
-
-    /*
-     * Register interface
-     */
-    .reg_wr_addr(ctrl_reg_wr_addr),
-    .reg_wr_data(ctrl_reg_wr_data),
-    .reg_wr_strb(ctrl_reg_wr_strb),
-    .reg_wr_en(ctrl_reg_wr_en),
-    .reg_wr_wait(ctrl_reg_wr_wait),
-    .reg_wr_ack(ctrl_reg_wr_ack),
-    .reg_rd_addr(ctrl_reg_rd_addr),
-    .reg_rd_en(ctrl_reg_rd_en),
-    .reg_rd_data(ctrl_reg_rd_data),
-    .reg_rd_wait(ctrl_reg_rd_wait),
-    .reg_rd_ack(ctrl_reg_rd_ack)
-);
-
-always @(posedge clk) begin
-    if (rst) begin
-        ctrl_reg_wr_ack <= 1'b0;
-        ctrl_reg_rd_ack <= 1'b0;
-        ctrl_reg_rd_data <= {AXIL_CTRL_DATA_WIDTH{1'b0}};
-
-        scratch_reg <= 'h0;
-        clear_counter_reg <= 1'b0;
-    end else begin
-        if (ctrl_reg_wr_en && !ctrl_reg_wr_ack) begin
-            // write operation
-            ctrl_reg_wr_ack <= 1'b1;
-            case ({ctrl_reg_wr_addr >> 2, 2'b00})
-                8'h04: scratch_reg <= ctrl_reg_wr_data;
-                8'h08: begin
-                    start_counter_reg <= ctrl_reg_wr_data[0];
-                    stop_counter_reg <= ctrl_reg_wr_data[1];
-                end
-                8'h0C: clear_counter_reg <= ctrl_reg_wr_data[0];
-                default: ;
-            endcase
-        end
-        else begin
-            ctrl_reg_wr_ack <= 1'b0;
-            clear_counter_reg <= 1'b0;
-        end
-
-        if (ctrl_reg_rd_en && !ctrl_reg_rd_ack) begin
-            // read operation
-            ctrl_reg_rd_ack <= 1'b1;
-            case ({ctrl_reg_rd_addr >> 2, 2'b00})
-                8'h00: ctrl_reg_rd_data <= version_reg;
-                8'h04: ctrl_reg_rd_data <= scratch_reg;
-                8'h08: ctrl_reg_rd_data <= {{30{1'b0}}, stop_counter_reg, start_counter_reg};
-                8'h0C: ctrl_reg_rd_data <= {{31{1'b0}}, clear_counter_reg};
-                8'h10: ctrl_reg_rd_data <= counter_reg;
-                default: ;
-            endcase
-        end
-        else
-            ctrl_reg_rd_ack <= 1'b0;
-    end
-end
-
-always @(posedge clk) begin
-    if (rst || clear_counter_reg) begin
-        counter_reg <= 'h0;
-    end
-    else
-    begin
-        if (start_counter_reg && !stop_counter_reg && m_axis_if_tx_tvalid && m_axis_if_tx_tready && m_axis_if_tx_tlast)
-            counter_reg <= counter_reg + 1'b1;
-    end
-end
-
 generate
   /*
    * AXI-Lite master interface (control to NIC)
@@ -1293,14 +1158,23 @@ generate
     assign m_axi_hbm_rready = 0;
   end
 
-endgenerate
+  /*
+   * Statistics increment output
+   */
+  if (APP_STAT_ENABLE) begin: app_stat
+    `ifdef APP_CUSTOM_PORTS_ENABLE
+      assign m_axis_stat_tdata = m_axis_stat_tdata_app;
+      assign m_axis_stat_tid = m_axis_stat_tid_app;
+      assign m_axis_stat_tvalid = m_axis_stat_tvalid_app;
+      assign m_axis_stat_tready_app = m_axis_stat_tready;
+    `endif
+  end else begin
+    assign m_axis_stat_tdata = 0;
+    assign m_axis_stat_tid = 0;
+    assign m_axis_stat_tvalid = 1'b0;
+  end
 
-/*
- * Statistics increment output
- */
-assign m_axis_stat_tdata = 0;
-assign m_axis_stat_tid = 0;
-assign m_axis_stat_tvalid = 1'b0;
+endgenerate
 
 /*
  * GPIO

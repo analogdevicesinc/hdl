@@ -11,6 +11,9 @@ M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
 M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
+M_DEPS += ../../../library/corundum/scripts/corundum_vcu118_cfg.tcl
+M_DEPS += ../../../library/corundum/scripts/corundum.tcl
+
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/rb_drp.tcl
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl
 EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl

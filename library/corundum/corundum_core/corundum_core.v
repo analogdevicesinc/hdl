@@ -150,8 +150,6 @@ module corundum_core #(
   parameter APP_AXIS_SYNC_ENABLE = 1,
   parameter APP_AXIS_IF_ENABLE = 1,
   parameter APP_STAT_ENABLE = 1,
-  parameter APP_GPIO_IN_WIDTH = 32,
-  parameter APP_GPIO_OUT_WIDTH = 32,
 
   // Custom application block parameters
   `ifdef APP_CUSTOM_PARAMS_ENABLE
@@ -280,29 +278,6 @@ module corundum_core #(
   output wire [1:0]                                 s_axil_ctrl_rresp,
   output wire                                       s_axil_ctrl_rvalid,
   input  wire                                       s_axil_ctrl_rready,
-
-  /*
-  * AXI-Lite slave interface (application control)
-  */
-  input  wire [AXIL_APP_CTRL_ADDR_WIDTH-1:0]        s_axil_app_ctrl_awaddr,
-  input  wire [2:0]                                 s_axil_app_ctrl_awprot,
-  input  wire                                       s_axil_app_ctrl_awvalid,
-  output wire                                       s_axil_app_ctrl_awready,
-  input  wire [AXIL_APP_CTRL_DATA_WIDTH-1:0]        s_axil_app_ctrl_wdata,
-  input  wire [AXIL_APP_CTRL_STRB_WIDTH-1:0]        s_axil_app_ctrl_wstrb,
-  input  wire                                       s_axil_app_ctrl_wvalid,
-  output wire                                       s_axil_app_ctrl_wready,
-  output wire [1:0]                                 s_axil_app_ctrl_bresp,
-  output wire                                       s_axil_app_ctrl_bvalid,
-  input  wire                                       s_axil_app_ctrl_bready,
-  input  wire [AXIL_APP_CTRL_ADDR_WIDTH-1:0]        s_axil_app_ctrl_araddr,
-  input  wire [2:0]                                 s_axil_app_ctrl_arprot,
-  input  wire                                       s_axil_app_ctrl_arvalid,
-  output wire                                       s_axil_app_ctrl_arready,
-  output wire [AXIL_APP_CTRL_DATA_WIDTH-1:0]        s_axil_app_ctrl_rdata,
-  output wire [1:0]                                 s_axil_app_ctrl_rresp,
-  output wire                                       s_axil_app_ctrl_rvalid,
-  input  wire                                       s_axil_app_ctrl_rready,
 
   /*
   * AXI-Lite master interface (passthrough for NIC control and status)
@@ -527,33 +502,19 @@ module corundum_core #(
   input  wire [HBM_CH-1:0]                          hbm_status,
 
   /*
-  * Statistics increment input
-  */
-  input  wire [STAT_INC_WIDTH-1:0]                  s_axis_stat_tdata,
-  input  wire [STAT_ID_WIDTH-1:0]                   s_axis_stat_tid,
-  input  wire                                       s_axis_stat_tvalid,
-  output wire                                       s_axis_stat_tready,
-
-  /*
-  * GPIO
-  */
-  input  wire [APP_GPIO_IN_WIDTH-1:0]               app_gpio_in,
-  output wire [APP_GPIO_OUT_WIDTH-1:0]              app_gpio_out,
-
-  /*
   * Custom application block ports
   */
   `ifdef APP_CUSTOM_PORTS_ENABLE
     `APP_CUSTOM_PORTS_DECL
   `endif
-
+  
   /*
-  * JTAG
+  * Statistics increment input
   */
-  input  wire                                       app_jtag_tdi,
-  output wire                                       app_jtag_tdo,
-  input  wire                                       app_jtag_tms,
-  input  wire                                       app_jtag_tck
+  input  wire [STAT_INC_WIDTH-1:0]                  s_axis_stat_tdata,
+  input  wire [STAT_ID_WIDTH-1:0]                   s_axis_stat_tid,
+  input  wire                                       s_axis_stat_tvalid,
+  output wire                                       s_axis_stat_tready
 );
 
 wire [IRQ_COUNT-1:0] irq_bus;
@@ -738,8 +699,8 @@ mqnic_core_axi #(
   .APP_AXIS_SYNC_ENABLE(APP_AXIS_SYNC_ENABLE),
   .APP_AXIS_IF_ENABLE(APP_AXIS_IF_ENABLE),
   .APP_STAT_ENABLE(APP_STAT_ENABLE),
-  .APP_GPIO_IN_WIDTH(APP_GPIO_IN_WIDTH),
-  .APP_GPIO_OUT_WIDTH(APP_GPIO_OUT_WIDTH),
+  .APP_GPIO_IN_WIDTH(32),
+  .APP_GPIO_OUT_WIDTH(32),
 
   // Custom application block parameters
   `ifdef APP_CUSTOM_PARAMS_ENABLE
@@ -872,25 +833,25 @@ core_inst (
   /*
    * AXI-Lite slave interface (application control)
    */
-  .s_axil_app_ctrl_awaddr(s_axil_app_ctrl_awaddr),
-  .s_axil_app_ctrl_awprot(s_axil_app_ctrl_awprot),
-  .s_axil_app_ctrl_awvalid(s_axil_app_ctrl_awvalid),
-  .s_axil_app_ctrl_awready(s_axil_app_ctrl_awready),
-  .s_axil_app_ctrl_wdata(s_axil_app_ctrl_wdata),
-  .s_axil_app_ctrl_wstrb(s_axil_app_ctrl_wstrb),
-  .s_axil_app_ctrl_wvalid(s_axil_app_ctrl_wvalid),
-  .s_axil_app_ctrl_wready(s_axil_app_ctrl_wready),
-  .s_axil_app_ctrl_bresp(s_axil_app_ctrl_bresp),
-  .s_axil_app_ctrl_bvalid(s_axil_app_ctrl_bvalid),
-  .s_axil_app_ctrl_bready(s_axil_app_ctrl_bready),
-  .s_axil_app_ctrl_araddr(s_axil_app_ctrl_araddr),
-  .s_axil_app_ctrl_arprot(s_axil_app_ctrl_arprot),
-  .s_axil_app_ctrl_arvalid(s_axil_app_ctrl_arvalid),
-  .s_axil_app_ctrl_arready(s_axil_app_ctrl_arready),
-  .s_axil_app_ctrl_rdata(s_axil_app_ctrl_rdata),
-  .s_axil_app_ctrl_rresp(s_axil_app_ctrl_rresp),
-  .s_axil_app_ctrl_rvalid(s_axil_app_ctrl_rvalid),
-  .s_axil_app_ctrl_rready(s_axil_app_ctrl_rready),
+  .s_axil_app_ctrl_awaddr(),
+  .s_axil_app_ctrl_awprot(),
+  .s_axil_app_ctrl_awvalid(),
+  .s_axil_app_ctrl_awready(),
+  .s_axil_app_ctrl_wdata(),
+  .s_axil_app_ctrl_wstrb(),
+  .s_axil_app_ctrl_wvalid(),
+  .s_axil_app_ctrl_wready(),
+  .s_axil_app_ctrl_bresp(),
+  .s_axil_app_ctrl_bvalid(),
+  .s_axil_app_ctrl_bready(),
+  .s_axil_app_ctrl_araddr(),
+  .s_axil_app_ctrl_arprot(),
+  .s_axil_app_ctrl_arvalid(),
+  .s_axil_app_ctrl_arready(),
+  .s_axil_app_ctrl_rdata(),
+  .s_axil_app_ctrl_rresp(),
+  .s_axil_app_ctrl_rvalid(),
+  .s_axil_app_ctrl_rready(),
 
   /*
    * AXI-Lite master interface (passthrough for NIC control and status)
@@ -1119,8 +1080,8 @@ core_inst (
   /*
    * GPIO
    */
-  .app_gpio_in(app_gpio_in),
-  .app_gpio_out(app_gpio_out),
+  .app_gpio_in(),
+  .app_gpio_out(),
 
   /*
    * Custom application block ports
@@ -1132,10 +1093,10 @@ core_inst (
   /*
    * JTAG
    */
-  .app_jtag_tdi(app_jtag_tdi),
-  .app_jtag_tdo(app_jtag_tdo),
-  .app_jtag_tms(app_jtag_tms),
-  .app_jtag_tck(app_jtag_tck)
+  .app_jtag_tdi(),
+  .app_jtag_tdo(),
+  .app_jtag_tms(),
+  .app_jtag_tck()
 );
 
 endmodule

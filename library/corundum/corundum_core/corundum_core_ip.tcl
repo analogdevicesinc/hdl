@@ -158,31 +158,6 @@ ipx::infer_address_space [ipx::get_bus_interfaces m_axi -of_objects $cc]
 
 # ipx::infer_bus_interface rst xilinx.com:signal:reset_rtl:1.0 $cc
 
-adi_add_bus "s_axil_app_ctrl" "slave" \
-  "xilinx.com:interface:aximm_rtl:1.0" \
-  "xilinx.com:interface:aximm:1.0" \
-  {
-    {"s_axil_app_ctrl_awaddr" "AWADDR"} \
-    {"s_axil_app_ctrl_awprot" "AWPROT"} \
-    {"s_axil_app_ctrl_awvalid" "AWVALID"} \
-    {"s_axil_app_ctrl_awready" "AWREADY"} \
-    {"s_axil_app_ctrl_wdata" "WDATA"} \
-    {"s_axil_app_ctrl_wstrb" "WSTRB"} \
-    {"s_axil_app_ctrl_wvalid" "WVALID"} \
-    {"s_axil_app_ctrl_wready" "WREADY"} \
-    {"s_axil_app_ctrl_bresp" "BRESP"} \
-    {"s_axil_app_ctrl_bvalid" "BVALID"} \
-    {"s_axil_app_ctrl_bready" "BREADY"} \
-    {"s_axil_app_ctrl_araddr" "ARADDR"} \
-    {"s_axil_app_ctrl_arprot" "ARPROT"} \
-    {"s_axil_app_ctrl_arvalid" "ARVALID"} \
-    {"s_axil_app_ctrl_arready" "ARREADY"} \
-    {"s_axil_app_ctrl_rdata" "RDATA"} \
-    {"s_axil_app_ctrl_rresp" "RRESP"} \
-    {"s_axil_app_ctrl_rvalid" "RVALID"} \
-    {"s_axil_app_ctrl_rready" "RREADY"} \
-  }
-
 adi_add_bus "s_axil_ctrl" "slave" \
   "xilinx.com:interface:aximm_rtl:1.0" \
   "xilinx.com:interface:aximm:1.0" \
@@ -434,18 +409,6 @@ adi_if_infer_bus analog.com:interface:if_axis_tx_ptp master axis_tx_ptp [list \
   "tag   s_axis_tx_cpl_tag" \
   "valid s_axis_tx_cpl_valid" \
   "ready s_axis_tx_cpl_ready" \
-]
-
-adi_if_infer_bus analog.com:interface:if_jtag master jtag [list \
-  "tdi app_jtag_tdi" \
-  "tdo app_jtag_tdo" \
-  "tms app_jtag_tms" \
-  "tck app_jtag_tck" \
-]
-
-adi_if_infer_bus analog.com:interface:if_gpio master gpio [list \
-  "gpio_in     app_gpio_in" \
-  "gpio_out    app_gpio_out" \
 ]
 
 # Application interfaces
@@ -1138,16 +1101,6 @@ set_property -dict [list \
   "enablement_tcl_expr" "\$APP_ENABLE == 1" \
 ] \
 [ipx::get_user_parameters APP_STAT_ENABLE -of_objects $cc]
-
-set_property -dict [list \
-  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
-] \
-[ipx::get_user_parameters APP_GPIO_IN_WIDTH -of_objects $cc]
-
-set_property -dict [list \
-  "enablement_tcl_expr" "\$APP_ENABLE == 1" \
-] \
-[ipx::get_user_parameters APP_GPIO_OUT_WIDTH -of_objects $cc]
 
 set_property -dict [list \
   "enablement_tcl_expr" "\$DMA_IMM_ENABLE == 1" \
@@ -2380,20 +2333,6 @@ ipgui::move_param -component $cc -order 7 $p -parent $group
 set_property  -dict [list \
   "widget" "checkBox" \
   "display_name" "Application statistics enable" \
-] $p
-
-ipgui::add_param -name "APP_GPIO_IN_WIDTH" -component $cc -parent $page4
-set p [ipgui::get_guiparamspec -name "APP_GPIO_IN_WIDTH" -component $cc]
-ipgui::move_param -component $cc -order 8 $p -parent $group
-set_property  -dict [list \
-  "display_name" "Application GPIO input width" \
-] $p
-
-ipgui::add_param -name "APP_GPIO_OUT_WIDTH" -component $cc -parent $page4
-set p [ipgui::get_guiparamspec -name "APP_GPIO_OUT_WIDTH" -component $cc]
-ipgui::move_param -component $cc -order 9 $p -parent $group
-set_property  -dict [list \
-  "display_name" "Application GPIO output width" \
 ] $p
 
 set group [ipgui::add_group -name "AXI lite interface configuration (application control)" -component $cc \
