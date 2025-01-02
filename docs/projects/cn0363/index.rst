@@ -211,7 +211,7 @@ HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :git-hdl:`CN0363_PMDZ HDL project source code <projects/cn0363>`
--  :dokuwiki:`[Wiki] CN0540 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>`
+-  :dokuwiki:`[Wiki] CN0363 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>`
 
 .. list-table::
    :widths: 30 35 35
@@ -240,10 +240,10 @@ HDL related
      - :ref:`axi_sysid`
    * - CN0363_DMA_SEQUENCER
      - :git-hdl:`library/cn0363/cn0363_dma_sequencer`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/cn0363/sequencer>`
+     - :ref:`cn0363_dma_sequencer`
    * - CN0363_PHASE_DATA_SYNC
      - :git-hdl:`library/cn0363/cn0363_phase_data_sync`
-     - :dokuwiki:`[Wiki] <resources/fpga/peripherals/cn0363/phase_data_sync>`
+     - :ref:`cn0363_phase_data_sync`
    * - CORDIC_DEMOD
      - :git-hdl:`library/cordic_demod`
      - ---
