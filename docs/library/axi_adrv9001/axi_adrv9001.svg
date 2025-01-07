@@ -7,7 +7,7 @@
    id="svg5441"
    version="1.1"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
-   sodipodi:docname="adrv9002_v3.svg"
+   sodipodi:docname="axi_adrv9001.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2464,7 +2464,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="1.1624275"
      inkscape:cx="-93.769289"
-     inkscape:cy="260.23128"
+     inkscape:cy="259.37101"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -2507,7 +2507,7 @@
        transform="scale(0.99282988,1.0072219)"
        id="text8257"
        y="244.77402"
-       x="428.49408"
+       x="396.26312"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;enable-background:new"
        xml:space="preserve"
        inkscape:transform-center-x="10"
@@ -2516,9 +2516,9 @@
        inkscape:export-ydpi="96"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.0625px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold'"
          y="244.77402"
-         x="428.49408"
+         x="396.26312"
          id="tspan8259"
-         sodipodi:role="line">AXI_9001</tspan></text>
+         sodipodi:role="line">AXI_ADRV9001</tspan></text>
     <rect
        y="273.80304"
        x="427.80255"

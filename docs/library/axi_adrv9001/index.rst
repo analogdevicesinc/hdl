@@ -1,7 +1,13 @@
 .. _axi_adrv9001:
 
-AXI_ADRV9001/AXI_ADRV9002 Interface Core
+AXI ADRV9001/2
 ================================================================================
+
+The AXI ADRV9001/2 IP Core can be used to interface the 
+:adi:`ADRV9001`\/:adi:`ADRV9002`. More about the generic framework interfacing 
+ADCs that contains the up_adc_channel and up_adc_common modules can be read in
+:ref:`axi_adc`. Regarding the DAC, more information related to its generic 
+framework can be found at :ref:`axi_dac`.
 
 Block diagram
 --------------------------------------------------------------------------------
@@ -18,46 +24,46 @@ Parameters
    
    * - CMOS_LVDS_N
      - Source synchronous interface type;
-      0 - LVDS ; 1 - CMOS
+       0 - LVDS ; 1 - CMOS
    * - TDD_DISABLE
      - Controls the insertion of the TDD core. If set the TDD controller won't
-      be part of the implementation.
+       be part of the implementation.
    * - DDS_DISABLE
      - If resource utilization is a concern, by setting this parameter you can
-      remove the dual tone DDS logic from the Tx channels. This will reduce
-      resource utilization significantly but loosing the ability to generate
-      a test tone.
+       remove the dual tone DDS logic from the Tx channels. This will reduce
+       resource utilization significantly but loosing the ability to generate
+       a test tone.
    * - INDEPENDENT_1R1T_SUPPORT
      - 0 - Rx2 (adc_2\_\*) and Tx2 (dac_2\_\*) data channels will be disabled;
-      RX2 TPL, TX2 TPL cores are disabled.
-      1 - Allows independent control of Rx2/Tx2 PHY either from Rx12/Tx12 TPL
-      or Rx2/Tx2 TPL blocks;
+       RX2 TPL, TX2 TPL cores are disabled.
+       1 - Allows independent control of Rx2/Tx2 PHY either from Rx12/Tx12 TPL
+       or Rx2/Tx2 TPL blocks;
    * - COMMON_2R2T_SUPPORT
      - 0 - puts the Rx12/Tx12 TPL in R1_MODE, having access only to Rx1/Tx1
-      PHYs;
-      1 - Allows Rx12/Tx12 TPL to operate in 2R 2T mode having control over
-      Rx2/Tx2 PHY
+       PHYs;
+       1 - Allows Rx12/Tx12 TPL to operate in 2R 2T mode having control over
+       Rx2/Tx2 PHY
    * - RX_USE_BUFG
      - Used in case of Xilinx 7 series devices; If set, will insert a global
-      clock buffer on the Rx clock path. Useful if user logic does not fits
-      in a clock region.
+       clock buffer on the Rx clock path. Useful if user logic does not fits
+       in a clock region.
    * - TX_USE_BUFG
      - Used in case of Xilinx 7 series devices; If set, will insert a global
-      clock buffer on the Tx clock path. Useful if user logic does not fits
-      in a clock region.
+       clock buffer on the Tx clock path. Useful if user logic does not fits
+       in a clock region.
    * - USE_RX_CLK_FOR_TX1
      - In case the received clock on the Tx source synchronous interface is not
-      routed to clock capable pins, when setting this to 1 the Rx clock will
-      be used to drive the Tx interface
+       routed to clock capable pins, when setting this to 1 the Rx clock will
+       be used to drive the Tx interface
    * - USE_RX_CLK_FOR_TX2
      - In case the received clock on the Tx source synchronous interface is not
-      routed to clock capable pins, when setting this to 1 the Rx clock will
-      be used to drive the Tx interface
+       routed to clock capable pins, when setting this to 1 the Rx clock will
+       be used to drive the Tx interface
    * - IODELAY_CTRL
      - IODELAY_CTRL parameter can have the values 0 or 1, conditioning the
-      instantiation of the IODELAY_CTRL primitive. You can place only one
-      IODELAY_CTRL per I/O bank, and need to set the same IO_DELAY_GROUP for
-      the interfaces placed in that I/O bank.
+       instantiation of the IODELAY_CTRL primitive. You can place only one
+       IODELAY_CTRL per I/O bank, and need to set the same IO_DELAY_GROUP for
+       the interfaces placed in that I/O bank.
    * - IO_DELAY_GROUP
      - "dev_if_delay_group"
      - Used in case of Xilinx devices. Identifier of the IODELAYCTRL cell.
@@ -334,19 +340,19 @@ qualifier which is not active on every clock cycle.
 Configure DAC common interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| Register **0x0048 REG_CNTRL_2**
+- Register **0x0048 REG_CNTRL_2**
 
--  [12:8] - NUM_LANES (**new**) - number of active lanes (1 : CSSI 1-lane, LSSI
-   1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)
--  [14] - SYMB_8_16B (**new**) - select number of bits for symbol format mode (1
-   represents 8b, 0 represents 16b)
--  [15] - SYMB_OP (**new**) - select symbol data format mode
--  [16] - SDR_DDR_N (**new**) - interface type (1 represents SDR, 0 represents
-   DDR)
+  - [12:8] - NUM_LANES (**new**) - number of active lanes (1 : CSSI 1-lane, LSSI
+    1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)
+  - [14] - SYMB_8_16B (**new**) - select number of bits for symbol format mode (1
+    represents 8b, 0 represents 16b)
+  - [15] - SYMB_OP (**new**) - select symbol data format mode
+  - [16] - SDR_DDR_N (**new**) - interface type (1 represents SDR, 0 represents
+    DDR)
 
-| Register **0x04c REG_RATECNTRL**
+- Register **0x04c REG_RATECNTRL**
 
--  [7:0] RATE - must be set according to column H of the table
+  - [7:0] RATE - must be set according to column H of the table
 
 .. _axi_adrv9001_adc_config:
 
