@@ -86,7 +86,7 @@ detailed description of each generic register map. The absolute address of a
 register should be calculated by adding the instance base address to the
 registers relative address.
 
-Register Map base addresses for axi_ad9001
+Register Map base addresses for axi_adrv9001
 --------------------------------------------------------------------------------
 
 .. list-table::
@@ -134,11 +134,11 @@ Register Map base addresses for axi_ad9001
    * - 0x0800
      - 0x2000
      - TX1 COMMON
-     - See the `ADC Common <#hdl-regmap-DAC_COMMON>`__ table for more details.
+     - See the `DAC Common <#hdl-regmap-DAC_COMMON>`__ table for more details.
    * - 0x0800
      - 0x2000
      - TX1 CHANNELS
-     - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
+     - See the `DAC Channel <#hdl-regmap-DAC_CHANNEL>`__ table for more details.
    * - 0x1000
      - 0x4000
      - TX2 BASE
@@ -146,11 +146,11 @@ Register Map base addresses for axi_ad9001
    * - 0x1000
      - 0x4000
      - TX2 COMMON
-     - See the `ADC Common <#hdl-regmap-DAC_COMMON>`__ table for more details.
+     - See the `DAC Common <#hdl-regmap-DAC_COMMON>`__ table for more details.
    * - 0x1000
      - 0x4000
      - TX2 CHANNELS
-     - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
+     - See the `DAC Channel <#hdl-regmap-DAC_CHANNEL>`__ table for more details.
    * - 0x1200
      - 0x4800
      - TDD1
