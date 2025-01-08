@@ -5,10 +5,10 @@ CN0363 Phase Data Sync FPGA Peripheral
 
 .. hdl-component-diagram::
 
-The CN0363 Phase Data Sync FPGA Peripheral is part of the :ref:`EVAL-CN0363-PMDZ HDL
-reference design <cn0363>` and is responsible for preparing the ADC conversion 
-result data and aligning it with the phase and feeding both to the processing 
-pipeline.
+The CN0363 Phase Data Sync FPGA Peripheral is part of the 
+:ref:`EVAL-CN0363-PMDZ HDL reference design <cn0363>` and is responsible for 
+preparing the ADC conversion result data and aligning it with the phase and 
+feeding both to the processing pipeline.
 
 Files
 --------------------------------------------------------------------------------
