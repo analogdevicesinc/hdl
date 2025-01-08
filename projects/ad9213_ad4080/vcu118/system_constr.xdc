@@ -148,7 +148,7 @@ create_clock -name rx_ref_clk_replica   -period  1.6 [get_ports rx_ref_clk_repli
 
 create_clock -name global_clk_0   -period  3.2 [get_ports glbl_clk_0_p]
 
-create_clock -period 2.50 -name dco_clk [get_ports dco_p]
+create_clock -period 2.500 -name dco_clk  [get_ports dco_p]
 
 # Constraint SYSREFs
 # Assumption is that REFCLK and SYSREF have similar propagation delay,
