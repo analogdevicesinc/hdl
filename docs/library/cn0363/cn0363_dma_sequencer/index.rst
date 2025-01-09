@@ -1,12 +1,12 @@
-.. _cn0363_dma_sequencer:
+.. _cn0363 dma_sequencer:
 
-CN0363 DMA Sequencer FPGA Peripheral
+CN0363 DMA Sequencer
 ================================================================================
 
 .. hdl-component-diagram::
 
-The CN0363 Sequencer FPGA Peripheral is part of the 
-:dokuwiki:`CN0363 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>` 
+The CN0363 Sequencer FPGA Peripheral is part of the
+:ref:`cn0363`
 and is responsible to sequence the various data channels to the DMA.
 
 Files
@@ -14,13 +14,13 @@ Files
 
 .. list-table::
     :header-rows: 1
-    
+
     * - Name
       - Description
-    * - :git-hdl:`/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v`
+    * - :git-hdl:`library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer.v`
       - Verilog source for the peripheral.
-    * - :git-hdl:`/library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer_ip.tcl`
-      - TCL script to generate the Vivado IP-integrator project for the 
+    * - :git-hdl:`library/cn0363/cn0363_dma_sequencer/cn0363_dma_sequencer_ip.tcl`
+      - TCL script to generate the Vivado IP-integrator project for the
         peripheral.
 
 Signal and Interface Pins
@@ -101,4 +101,4 @@ capture.
 More Information
 --------------------------------------------------------------------------------
 
--  :dokuwiki:`[Wiki] CN0363 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>`
+-  :ref:`cn0363`
