@@ -4,9 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad4170_asdz_coraz7s
+PROJECT_NAME := ad41xx_asdz_coraz7s
 
-M_DEPS += ../common/ad4170_asdz_bd.tcl
+M_DEPS += ../common/ad41xx_asdz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_ps7.tcl
 M_DEPS += ../../common/coraz7s/coraz7s_system_constr.xdc

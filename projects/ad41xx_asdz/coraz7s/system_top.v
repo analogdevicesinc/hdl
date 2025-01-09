@@ -66,12 +66,12 @@ module system_top (
   inout         iic_ard_scl,
   inout         iic_ard_sda,
 
-  // ad4170
-  input         ad4170_spi_miso,
-  output        ad4170_spi_mosi,
-  output        ad4170_spi_sclk,
-  output        ad4170_spi_csn,
-  inout  [1:0]  ad4170_dig_aux
+  // ad41xx
+  input         ad41xx_spi_miso,
+  output        ad41xx_spi_mosi,
+  output        ad41xx_spi_sclk,
+  output        ad41xx_spi_csn,
+  inout  [1:0]  ad41xx_dig_aux
 );
 
   // internal signals
@@ -102,11 +102,11 @@ module system_top (
 
   ad_iobuf #(
     .DATA_WIDTH(2)
-  ) i_iobuf_ad4170_gpio (
+  ) i_iobuf_ad41xx_gpio (
     .dio_t(gpio_t[33:32]),
     .dio_i(gpio_o[33:32]),
     .dio_o(gpio_i[33:32]),
-    .dio_p({ad4170_dig_aux})); // 33:32
+    .dio_p({ad41xx_dig_aux})); // 33:32
 
   assign gpio_i[63:34] = gpio_o[63:34];
 
@@ -135,12 +135,12 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .adc_spi_sdo (ad4170_spi_mosi),
+    .adc_spi_sdo (ad41xx_spi_mosi),
     .adc_spi_sdo_t (),
-    .adc_spi_sdi (ad4170_spi_miso),
-    .adc_spi_cs (ad4170_spi_csn),
-    .adc_spi_sclk (ad4170_spi_sclk),
-    .adc_data_ready (ad4170_dig_aux[0]),
+    .adc_spi_sdi (ad41xx_spi_miso),
+    .adc_spi_cs (ad41xx_spi_csn),
+    .adc_spi_sclk (ad41xx_spi_sclk),
+    .adc_data_ready (ad41xx_dig_aux[0]),
     .spi0_clk_i (1'b0),
     .spi0_clk_o (),
     .spi0_csn_0_o (),
