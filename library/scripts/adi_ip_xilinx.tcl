@@ -305,12 +305,20 @@ proc adi_ip_create {ip_name} {
 #
 proc adi_ip_files {ip_name ip_files} {
   set proj_fileset [get_filesets sources_1]
+  set design_source_files [list]
+  set constraint_files [list]
   foreach m_file $ip_files {
     if {[file extension $m_file] eq ".xdc"} {
-      add_files -norecurse -fileset constrs_1 $m_file
+      lappend constraint_files $m_file
     } else {
-      add_files -norecurse -scan_for_includes -fileset $proj_fileset $m_file
+      lappend design_source_files $m_file
     }
+  }
+  if {$design_source_files != {}} {
+    add_files -norecurse -scan_for_includes -fileset $proj_fileset $design_source_files
+  }
+  if {$constraint_files != {}} {
+    add_files -norecurse -fileset constrs_1 $constraint_files
   }
   set_property "top" "$ip_name" $proj_fileset
 }
