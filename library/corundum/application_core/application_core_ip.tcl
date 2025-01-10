@@ -13,9 +13,16 @@ adi_ip_create application_core
 # Corundum sources
 adi_ip_files application_core [list \
   "application_core.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/axi/rtl/axil_reg_if.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/axi/rtl/axil_reg_if_rd.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/axi/rtl/axil_reg_if_wr.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
+  "application_core_constr.ttcl" \
+  "$ad_hdl_dir/library/common/ad_mem.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_gray.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "$ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v" \
+  "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v" \
+  "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v" \
 ]
 
 set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
