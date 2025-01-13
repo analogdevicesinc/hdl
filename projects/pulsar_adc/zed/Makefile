@@ -1,10 +1,10 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := pulsar_adc_pmdz_zed
+PROJECT_NAME := pulsar_adc_zed
 
 M_DEPS += system_constr_pmod.xdc
 M_DEPS += system_constr_fmc.xdc
