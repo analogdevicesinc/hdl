@@ -8,7 +8,7 @@ set QUARTUS_PRO_ISUSED 0
 source ../../../scripts/adi_env.tcl
 source ../../scripts/adi_project_intel.tcl
 
-adi_project ad411x_de10nano
+adi_project ad411x_ad717x_de10nano
 
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_assign.tcl
 
