@@ -227,11 +227,12 @@ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 dd
 ad_ip_instance ip:ddr4 ddr4_1
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_DataWidth {32}
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiDataWidth {256}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_TimePeriod {833}
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_AxiAddressWidth {31}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3334}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_InputClockPeriod {3332}
 ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_MemoryPart {MT40A512M16LY-075}
 ad_ip_parameter ddr4_1 CONFIG.C0.BANK_GROUP_WIDTH {1}
-ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {19}
+ad_ip_parameter ddr4_1 CONFIG.C0.DDR4_CasLatency {17}
 
 ad_connect ddr4_rtl_1 ddr4_1/C0_DDR4
 
@@ -317,7 +318,7 @@ ad_ip_instance axi_dmac axi_adrv9009_som_rx_dma
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
+# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
@@ -647,7 +648,7 @@ ad_connect  core_clk_a tx_adrv9009_som_tpl_core/link_clk
 ad_connect  axi_adrv9009_som_tx_jesd/tx_data tx_adrv9009_som_tpl_core/link
 
 ad_connect  core_clk_a util_som_tx_upack/clk
-ad_connect  tx_adrv9009_som_tpl_core/dac_tpl_core/dac_rst util_som_tx_upack/reset
+# ad_connect  tx_adrv9009_som_tpl_core/dac_tpl_core/dac_rst util_som_tx_upack/reset
 
 ad_connect  tx_adrv9009_som_tpl_core/dac_valid_0 util_som_tx_upack/fifo_rd_en
 for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
@@ -701,7 +702,20 @@ ad_connect  util_som_obs_cpack/packed_sync axi_adrv9009_som_obs_dma/sync
 ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
-ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
+# ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
+
+# Reset upack cores
+ad_ip_instance util_reduced_logic upack_rst_logic
+ad_ip_parameter upack_rst_logic config.c_operation {or}
+ad_ip_parameter upack_rst_logic config.c_size {2}
+
+ad_ip_instance xlconcat upack_reset_sources
+ad_ip_parameter upack_reset_sources config.num_ports {2}
+ad_connect core_clk_a_rstgen/peripheral_reset upack_reset_sources/in0
+ad_connect tx_adrv9009_som_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
+
+ad_connect upack_reset_sources/dout upack_rst_logic/op1
+ad_connect upack_rst_logic/res util_som_tx_upack/reset
 
 ad_connect ddr4_1/c0_ddr4_aresetn ddr4_1_rstgen/peripheral_aresetn
 ad_connect util_som_tx_upack/s_axis $dac_data_offload_name/m_axis
@@ -783,5 +797,11 @@ ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
 
-create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
+create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
+    [get_bd_addr_spaces axi_adrv9009_som_obs_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW] SEG_sys_ps8_HP1_DDR_LOW
+create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
+    [get_bd_addr_spaces axi_adrv9009_som_rx_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP4/HP2_DDR_LOW] SEG_sys_ps8_HP2_DDR_LOW
+create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
+    [get_bd_addr_spaces axi_adrv9009_som_tx_dma/m_src_axi] [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_LOW] SEG_sys_ps8_HP3_DDR_LOW
+create_bd_addr_seg -range 0x40000000 -offset 0x80000000 \
     [get_bd_addr_spaces $dac_data_offload_name/storage_unit/MAXI_0] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
