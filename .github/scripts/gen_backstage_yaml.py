@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 from os import path, mkdir, walk, chdir
 from glob import glob
+import sys
 import yaml
 import re
 import argparse
@@ -93,7 +94,8 @@ def get_description_parts(
 
 
 def get_description(
-    data: List[str]
+    data: List[str],
+    file: str
 ) -> List[str]:
     desc = []
     directive_lock = False
@@ -109,6 +111,10 @@ def get_description(
             else:
                 continue
         desc.append(d)
+
+    if len(desc) < 3:
+        sys.exit(f"{file}: Missing overview/short-description.")
+
     desc.pop()
     desc.pop()
     return desc
@@ -139,7 +145,7 @@ def get_description_library(
 
     title = data[index-3][:-1]
     data = data[index:]
-    desc = get_description(data)
+    desc = get_description(data, file)
 
     return *get_description_parts(desc), title
 
@@ -182,7 +188,7 @@ def get_description_project(
         index = index+1 if data[index] == '\n' else index
 
     data = data[index:]
-    desc = get_description(data)
+    desc = get_description(data, file)
 
     return *get_description_parts(desc), title
 
