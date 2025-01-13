@@ -3,4 +3,3 @@ sphinx
 matplotlib
 rst2pdf
 svglib
-sphinxcontrib.wavedrom
