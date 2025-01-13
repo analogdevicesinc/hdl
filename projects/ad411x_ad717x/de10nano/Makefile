@@ -1,10 +1,10 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad411x_de10nano
+PROJECT_NAME := ad411x_ad717x_de10nano
 
 M_DEPS += ../common/ad411x_ad717x_asdz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
