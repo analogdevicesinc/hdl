@@ -12,8 +12,6 @@
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
@@ -2848,27 +2846,7 @@ a reduced AXI4-Stream interface and only features the TVALID flow control
 signal, but not the TREADY flow control signal. The behavior of the interface is
 as if the TREADY signal was always asserted. This means as soon as <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code>
 is asserted, a continuous stream of user data must be accepted from <code class="docutils literal notranslate"><span class="pre">rx_data</span></code>.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{
-   signal: [
-      ['RX_DATA',
-         { name: "device_clk", wave: 'P.........' },
-         { name: "rx_data",  wave: "x...======", data: ["D0", "D1", "D2",
-         "D3", "D4", "..."] },
-         { name: 'rx_valid', wave: '0...1.....' },
-      ]
-   ],
-   foot: {
-      text:
-         ['tspan',{dx:'-45'}, 'Link Initialization', ['tspan', {dx:'60'},
-         'User Data Phase'],],
-      }
-}
-</script>
-</div>
-<p>After reset and during link initialization, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal is
+<img alt="../../../_images/wavedrom-13.svg" src="../../../_images/wavedrom-13.svg" /><p>After reset and during link initialization, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal is
 deasserted. As soon as the User Data Phase is entered, the <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> will be
 asserted to indicate that the peripheral is now providing the processed data
 at the <code class="docutils literal notranslate"><span class="pre">rx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">rx_valid</span></code> signal stays asserted until the link
@@ -3058,20 +3036,7 @@ opportunity point relative to the local-multi frame-clock (LMFC)/
 local-multiblock-clock (LEMC). A setting of 0 indicates that the release
 opportunity is aligned to the LMFC/LEMC edge. A setting of X indicates that it
 trails the LMFC/LEMC edge by X octets.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{
-   signal: [
-      { name: "device_clk", wave: 'P.........' },
-      { name: "LMFC edge",  wave: "l..10.....", node:"...a"},
-      { name: 'Release Opportunity', wave: '0.....10..', node:"......b"},
-   ],
-   edge: ['a~>b BUFFER DELAY/4']
-}
-</script>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must be set to a multiple of 4. Writing a value that
+<img alt="../../../_images/wavedrom-23.svg" src="../../../_images/wavedrom-23.svg" /><p>The <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must be set to a multiple of 4. Writing a value that
 is not a multiple of 4 will be rounded down to the next multiple of 4. For
 correct operation, the <code class="docutils literal notranslate"><span class="pre">BUFFER_DELAY</span></code> field must also be set to a value
 smaller than the number of octets per multi-frame (<code class="docutils literal notranslate"><span class="pre">F</span></code>x<code class="docutils literal notranslate"><span class="pre">K</span></code>).</p>
@@ -3606,12 +3571,6 @@ encounter.</p>
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">

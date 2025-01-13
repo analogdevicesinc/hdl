@@ -12,8 +12,6 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -425,37 +423,11 @@ perspective.</p>
 <h2>Timing diagram<a class="headerlink" href="#timing-diagram" title="Permalink to this heading"></a></h2>
 <p>The following timing diagram illustrates the signals and functionality of the
 interface. It show a register write access and two consecutive register read access.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{signal: [
-  {name: 'up_clk',   wave:'P............|.......'},
-  {name: 'up_rstn',  wave:'0.1..........|.......'},
-  {name: 'up_wreq',  wave:'x.0.1.0......|.......',
-                     node:'....a................'},
-  {name: 'up_wack',  wave:'x.0..10......|.......',
-                     node:'.....b...............'},
-  {name: 'up_waddr', wave:'x...2.x......|.......', data: ['ADDR0']},
-  {name: 'up_wdata', wave:'x...2.x......|.......', data: ['DATA0']},
-
-  {name: 'up_rreq',  wave:'x.0......1.0.|...1.0.',
-                     node:'.........c...........'},
-  {name: 'up_rack',  wave:'x.0.......10.|....10.',
-                     node:'..........d..........'},
-  {name: 'up_raddr', wave:'x........2.x.|...2.x.', data: ['ADDR0', 'ADDR1']},
-  {name: 'up_rdata', wave:'x.........2..|....2..', data: ['DATA0', 'DATA1'],
-                     node:'..........e..........'},
-
-  ],
-  edge: [
-     'a->b', 'c->d', 'd->e'
-  ],
- head: {text:
-    ['tspan', {class:'info h3'}, 'UP interface']
- }
-}
-</script>
-</div>
+<figure class="align-default" id="id5">
+<img alt="../../_images/wavedrom1.svg" src="../../_images/wavedrom1.svg" /><figcaption>
+<p><span class="caption-text">UP interface timing diagram</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
@@ -475,12 +447,6 @@ interface. It show a register write access and two consecutive register read acc
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">

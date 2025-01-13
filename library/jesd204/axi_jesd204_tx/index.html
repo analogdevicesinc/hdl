@@ -12,8 +12,6 @@
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -2537,27 +2535,7 @@ control signal, but not the TVALID flow control signal. The behavior of the
 interface is as if the TVALID signal was always asserted. This means as soon as
 tx_ready is asserted a continuous stream of user data must be provided on
 tx_data.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{signal:
-   [
-      ['TX_DATA',
-         { name: "device_clk", wave: 'P.........' },
-         { name: "tx_data",  wave: "x...======",
-         data: ["D0", "D1", "D2", "D3", "D4", "..."] },
-         { name: 'tx_ready', wave: '0...1.....' },
-      ]
-   ],
-   foot:
-   {text:
-      ['tspan',{dx:'-45'}, 'Link Initialization', ['tspan', {dx:'60'},
-      'User Data Phase'],],
-   }
-}
-</script>
-</div>
-<p>After reset and during link initialization the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> signal is
+<img alt="../../../_images/wavedrom-14.svg" src="../../../_images/wavedrom-14.svg" /><p>After reset and during link initialization the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> signal is
 de-asserted. As soon as the <a class="reference internal" href="#axi-jesd204-tx-user-data-phase"><span class="std std-ref">User Data Phase</span></a> is
 entered the <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code> will be asserted to indicate that the peripheral is now
 accepting and processing the data from the <code class="docutils literal notranslate"><span class="pre">tx_data</span></code> signal. The <code class="docutils literal notranslate"><span class="pre">tx_ready</span></code>
@@ -2916,22 +2894,7 @@ configuration interface.</p>
 <p>All other octets of the ILAS sequence will contain the numerical value
 corresponding to the position of the octet in the ILAS sequence (E.g. the fifth
 octet of the first multi-frame contains the value 4).</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{
-   signal:
-   [
-      { name: "ILAS",  wave: "x35x|.54378x|x5435x|.5435x|x54", data: ["/R/",
-      "D", "D", "/A/", "/R/", "/Q/", "C", "D", "/A/", "/R/", "D", "D",
-      "/A/", "/R/", "D", "D", "A"] },
-      { name: "LMFC", wave: 'pH..|l..H...|l..H..|l..H..|l..' },
-   ],
-   config: { skin: 'narrow' }
-}
-</script>
-</div>
-<p>By default the ILAS is transmitted for a duration of 4 multi-frames. After the
+<img alt="../../../_images/wavedrom-24.svg" src="../../../_images/wavedrom-24.svg" /><p>By default the ILAS is transmitted for a duration of 4 multi-frames. After the
 last ILAS multi-frame the peripheral switches to the DATA phase.</p>
 <p>If the peripheral is configured for continuous ILAS operation it will instead
 remain in the ILAS phase indefinitely. In continuous ILAS mode the peripheral
@@ -3187,12 +3150,6 @@ encounter.</p>
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">

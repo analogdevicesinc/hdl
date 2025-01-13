@@ -12,8 +12,6 @@
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../../_static/app.umd.js?v=689b8755"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
@@ -1144,31 +1142,11 @@ summed outputs of each DDS stage.</p>
 <p>There is a minimum synchronization pulse width (delay) of <strong>n</strong> clock cycles,
 that is required to synchronize all phase accumulator stages, where <strong>n</strong> is
 equal to the CLOCK_RATIO.</p>
-<img alt="../../../_images/fw_sync_basics.svg" src="../../../_images/fw_sync_basics.svg" />
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{
-  "signal" : [
-    { "name": "clk",        "wave": "P....................."},
-    { "name": "external sync","wave": "0.1..|..0............."},
-    { "name": "phase init",  "wave": "0.......1...0........."},
-    { "name": "tone 1 gen0",  "wave": "=.......4=..44|4444444","data":["","i0","","i0+","i0+","i0+","..."]},
-    { "name": "tone 1 gen1",  "wave": "=........4=.44|4444444","data":["","i1","","i1+","i1+","i1+","..."]},
-    { "name": "tone 1 gen2",  "wave": "=.........4=44|4444444","data":["","i2","","i2+","i2+","i2+","..."]},
-    { "name": "tone 1 gen3",  "wave": "=..........444|4444444","data":["","i3","i3+","i3+","i3+","..."]},
-    { "name": "tone 1",     "wave": "=.......======|4444444","data":["","0","0","0","0","0","...","s0-3","s4-8","s8-C","..."]},
-    { "name": "tone 2 gen0",  "wave": "=.......5=..55|5555555","data":["","i0","","i0+","i0+","i0+","..."]},
-    { "name": "tone 2 gen1",  "wave": "=........5=.55|5555555","data":["","i1","","i1+","i1+","i1+","..."]},
-    { "name": "tone 2 gen2",  "wave": "=.........5=55|5555555","data":["","i2","","i2+","i2+","i2+","..."]},
-    { "name": "tone 2 gen3",  "wave": "=..........555|5555555","data":["","i3","i3+","i3+","i3+","..."]},
-    { "name": "tone 2",     "wave": "=.......======|5555555","data":["","0","0","0","0","0","...","s0-3","s4-8","s8-C","..."]},
-    ],
-  foot: {
-    text: ['tspan', 'Frequency word sync at CLK_RATIO=4'],
-  }
-}
-</script>
-</div>
+<img alt="../../../_images/fw_sync_basics.svg" src="../../../_images/fw_sync_basics.svg" /><figure class="align-default" id="id2">
+<img alt="../../../_images/wavedrom.svg" src="../../../_images/wavedrom.svg" /><figcaption>
+<p><span class="caption-text">text: [‘tspan’, ‘Frequency word sync at CLK_RATIO=4’],</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 <p>In the above diagram example:</p>
 <ul class="simple">
 <li><p>CLOCK_RATIO = 4</p></li>
@@ -1194,12 +1172,6 @@ and <a class="icon git reference external" href="https://github.com/analogdevice
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">

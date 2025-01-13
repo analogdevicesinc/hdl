@@ -12,8 +12,6 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -982,64 +980,16 @@ Blue represents the second received data packet.</p>
 <p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">CMOS</span> <span class="pre">interface</span></code> functionality with
 all of the 8 channels and lanes enabled.</p>
 <p>There are no extra definitions for the LVDS interface compared to the datasheet.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "cnvs",    "wave": "010.................................."},
-  { "name": "busy",    "wave": "01...0..............................."},
-  { "name": "scki",    "wave": "1............lHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlH...........",period: 0.5,phase: 0.2},
-  { "name": "scko",    "wave": "1............lHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlHlH...........",period: 0.5},
-  { "name": "lane 0",  "wave": "z.....3....................=0.......",phase: -0.5},
-  { "name": "lane 1",  "wave": "z.....3....................=0.1.....",phase: -0.5},
-  { "name": "lane 2",  "wave": "z.....3....................=010.....",phase: -0.5},
-  { "name": "lane 3",  "wave": "z.....3....................=01......",phase: -0.5},
-  { "name": "lane 4",  "wave": "z.....3....................=10......",phase: -0.5},
-  { "name": "lane 5",  "wave": "z.....3....................=101.....",phase: -0.5},
-  { "name": "lane 6",  "wave": "z.....3....................=1.0.....",phase: -0.5},
-  { "name": "lane 7",  "wave": "z.....3....................=1.......",phase: -0.5},
-  { "name": "adc_valid", "wave": "l...............................10..."},
-  { "name": "data 0",  "wave": "z...............................4....","data":["ch 0"]},
-  { "name": "data 1",  "wave": "z...............................4....","data":["ch 1"]},
-  { "name": "data 2",  "wave": "z...............................4....","data":["ch 2"]},
-  { "name": "data 3",  "wave": "z...............................4....","data":["ch 3"]},
-  { "name": "data 4",  "wave": "z...............................4....","data":["ch 4"]},
-  { "name": "data 5",  "wave": "z...............................4....","data":["ch 5"]},
-  { "name": "data 6",  "wave": "z...............................4....","data":["ch 6"]},
-  { "name": "data 7",  "wave": "z...............................4....","data":["ch 7"]},
-],
-foot: {text: ['tspan', 'all lanesi(8) all channels(8) active']}}
-</script>
-</div>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "cnvs",    "wave": "010.......|.................10......."},
-  { "name": "busy",    "wave": "01...0....|.................1...0...."},
-  { "name": "scki",    "wave": "1............lHlHlHlHlH|lHlHlHlHlHlHlHlH|lHlHlHlHlHlH..............lHlHlHlH",period: 0.5,phase: 1},
-  { "name": "scko",    "wave": "1............lHlHlHlH|lHlHlHlHlHlHlHlHlH|lHlHlHlHlHlH..............lHlHlHl",period: 0.5,phase: 0.2},
-  { "name": "lane 0",  "wave": "z....3...|..30..5..|..50.1z.....3...",phase: -0.5},
-  { "name": "lane 1",  "wave": "z........|.........|................",phase: -0.5},
-  { "name": "lane 2",  "wave": "z....3...|..30105..|..501.z.....3...",phase: -0.5},
-  { "name": "lane 3",  "wave": "z........|.........|................",phase: -0.5},
-  { "name": "lane 4",  "wave": "z....3...|..310.5..|..5101z.....3...",phase: -0.5},
-  { "name": "lane 5",  "wave": "z........|.........|................",phase: -0.5},
-  { "name": "lane 6",  "wave": "z....3...|..31.05..|..51..z.....3...",phase: -0.5},
-  { "name": "lane 7",  "wave": "z........|.........|................",phase: -0.5},
-  { "name": "adc_valid", "wave": "l.........|.........|......10........"},
-  { "name": "data 0",  "wave": "z..........................4.........","data":["ch 0"]},
-  { "name": "data 1",  "wave": "z..........................4.........","data":["ch 1"]},
-  { "name": "data 2",  "wave": "z..........................4.........","data":["ch 2"]},
-  { "name": "data 3",  "wave": "z..........................4.........","data":["ch 3"]},
-  { "name": "data 4",  "wave": "z..........................4.........","data":["ch 4"]},
-  { "name": "data 5",  "wave": "z..........................4.........","data":["ch 5"]},
-  { "name": "data 6",  "wave": "z..........................4.........","data":["ch 6"]},
-  { "name": "data 7",  "wave": "z..........................4.........","data":["ch 7"]},
-],
-foot: {text: ['tspan', 'all lanesi(8) all channels(8) active']}}
-</script>
-</div>
+<figure class="align-default" id="id2">
+<img alt="../../_images/wavedrom-1.svg" src="../../_images/wavedrom-1.svg" /><figcaption>
+<p><span class="caption-text">all lanesi(8) all channels(8) active.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<img alt="../../_images/wavedrom-2.svg" src="../../_images/wavedrom-2.svg" /><figcaption>
+<p><span class="caption-text">All lanesi(8) all channels(8) active.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 <section id="register-map">
@@ -1050,9 +1000,9 @@ The following table presents the base addresses of each instance, after it you
 can find the detailed description of each generic register map.
 The absolute address of a register should be calculated by adding the instance
 base address to the registers relative address.</p>
-<div class="table-wrapper docutils container" id="id2">
-<table class="docutils align-default" id="id2">
-<caption><span class="caption-text">Register Map base addresses for axi_ad485x</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<div class="table-wrapper docutils container" id="id4">
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Register Map base addresses for axi_ad485x</span><a class="headerlink" href="#id4" title="Permalink to this table"></a></caption>
 <thead>
 <tr class="row-odd"><th class="head"><p>DWORD</p></th>
 <th class="head"><p>BYTE</p></th>
@@ -2732,12 +2682,6 @@ Linux drivers can be found in <a class="icon git reference external" href="https
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">

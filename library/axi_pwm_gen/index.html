@@ -12,8 +12,6 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -1030,115 +1028,21 @@ simulate the IP.</p>
 </div>
 <p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
 force align and start at sync disabled.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "clk", "wave": "P................................"},
-  { "name": "pwm_1 period", "wave": "9...........9....................","data":["8","10"]},
-  { "name": "pwm_1 pulse",  "wave": "9...........9....................","data":["3","5"]},
-  { "name": "pwm_1 offset", "wave": "9...........9....................","data":["1","1"]},
-  { "name": "pwm_2 period", "wave": "6...........6....................","data":["8","10"]},
-  { "name": "pwm_2 pulse",  "wave": "6...........6....................","data":["3","5"]},
-  { "name": "pwm_2 offset", "wave": "6...........6....................","data":["5","4"]},
-  { "name": "load_config", "wave": "0..........10....................",phase: 0,},
-  { "name": "offset counter", "wave": "777777777777=.....777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"]},
-  { "name": "counter 0", "wave": "45555555544444444=666666666633333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
-  { "name": "pwm 0", "wave": "lh..l....h...l..............h...."},
-  { "name": "counter 1", "wave": "4444455555555=.......666666666633","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2"]},
-  { "name": "pwm 1", "wave": "l....h..l......................h."},
-]}
-</script>
-</div>
-<p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
+<img alt="../../_images/wavedrom-load_config.svg" src="../../_images/wavedrom-load_config.svg" /><p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
 force align disabled and start at sync enabled.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "clk", "wave": "P.............................."},
-  { "name": "pwm_1 period", "wave": "9...........9..................","data":["8","10"]},
-  { "name": "pwm_1 pulse",  "wave": "9...........9..................","data":["3","5"]},
-  { "name": "pwm_1 offset", "wave": "9...........9..................","data":["1","1"]},
-  { "name": "pwm_2 period", "wave": "6...........6..................","data":["8","10"]},
-  { "name": "pwm_2 pulse",  "wave": "6...........6..................","data":["3","5"]},
-  { "name": "pwm_2 offset", "wave": "6...........6..................","data":["5","4"]},
-  { "name": "load_config", "wave": "0..........10..................",phase: 0,},
-  { "name": "offset counter", "wave": "777777777777=.....7777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","0","1","2","3","4","5","6","7","8","9","10","11","12","13"]},
-  { "name": "counter 0", "wave": "45555555544444444=6666666666333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10","1","2","3"]},
-  { "name": "pwm 0", "wave": "lh..l....h...l....h....l....h.."},
-  { "name": "counter 1", "wave": "4444455555555=.......6666666666","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","2","3","4","5","6","7","8","9","10"]},
-  { "name": "pwm 1", "wave": "l....h..l............h....l...."},
-]}
-</script>
-</div>
-<p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
+<img alt="../../_images/wavedrom-load_config-start_at_sync.svg" src="../../_images/wavedrom-load_config-start_at_sync.svg" /><p>The timing diagram below, shows the <code class="docutils literal notranslate"><span class="pre">load_config</span></code> functionality with
 force align and start at sync enabled.</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "clk", "wave": "P.............................."},
-  { "name": "pwm_1 period", "wave": "9.............9................","data":["8","10"]},
-  { "name": "pwm_1 pulse",  "wave": "9.............9................","data":["3","5"]},
-  { "name": "pwm_1 offset", "wave": "9.............9................","data":["1","1"]},
-  { "name": "pwm_2 period", "wave": "6.............6................","data":["8","10"]},
-  { "name": "pwm_2 pulse",  "wave": "6.............6................","data":["3","5"]},
-  { "name": "pwm_2 offset", "wave": "6.............6................","data":["5","4"]},
-  { "name": "load_config", "wave": "0............10................",phase: 0,},
-  { "name": "offset counter", "wave": "7777777777777777777777777777777","data":["55","56","57","58","59","60","61","62","63","64","65","66","67","68","0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"]},
-  { "name": "counter 0", "wave": "45555555544444=6666666666333333","data":["8","1","2","3","4","5","6","7","8","1","2","3","4","5","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6"]},
-  { "name": "pwm 0", "wave": "lh..l....h...l.h....l....h....l"},
-  { "name": "counter 1", "wave": "44444555555554=...6666666666333","data":["4","5","6","7","8","1","2","3","4","5","6","7","8","1","1","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5"]},
-  { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
-]}
-</script>
-</div>
-<p>The below timing diagrams, shows the <code class="docutils literal notranslate"><span class="pre">external_sync</span></code> functionality:</p>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "clk", "wave": "P............................"},
-  { "name": "pwm_1 period", "wave": "9............................","data":["8"]},
-  { "name": "pwm_1 pulse", "wave": "9............................","data":["3"]},
-  { "name": "pwm_1 offset", "wave": "9............................","data":["1"]},
-  { "name": "pwm_2 period", "wave": "6............................","data":["8"]},
-  { "name": "pwm_2 pulse", "wave": "6............................","data":["3"]},
-  { "name": "pwm_2 offset", "wave": "6............................","data":["5"]},
-  { "name": "external_sync", "wave": "1....0.......................",phase: 0.5,},
-  { "name": "offset counter", "wave": "=.....7777777777777777777777=","data":["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"]},
-  { "name": "counter 0", "wave": "=......444444455555555444444=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2","3","4","5","6"]},
-  { "name": "pwm 0", "wave": "l......h..l....h..l....h..l.."},
-  { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
-  { "name": "pwm 1", "wave": "l..........h..l....h..l....h."},
-],
-foot: {text: ['tspan', 'External sync, start at sync (default) e.g.'],
-}}
-</script>
-</div>
-
-<div style="overflow-x:auto">
-<script type="WaveDrom">
-{ "signal" : [
-  { "name": "clk", "wave": "P............................"},
-  { "name": "pwm_1 period", "wave": "9............................","data":["8"]},
-  { "name": "pwm_1 pulse", "wave": "9............................","data":["3"]},
-  { "name": "pwm_1 offset", "wave": "9............................","data":["1"]},
-  { "name": "pwm_2 period", "wave": "6............................","data":["8"]},
-  { "name": "pwm_2 pulse", "wave": "6............................","data":["3"]},
-  { "name": "pwm_2 offset", "wave": "6............................","data":["5"]},
-  { "name": "external_sync", "wave": "1....0.......................",phase: 0.5,},
-  { "name": "offset counter", "wave": "=.....7777777777777777777777=","data":["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22"]},
-  { "name": "counter 0", "wave": "=......444444455555555444444=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2","3","4","5","6"]},
-  { "name": "pwm 0", "wave": "l.............h..l....h..l..."},
-  { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
-  { "name": "pwm 1", "wave": "l.................h..l....h.."},
-],
-foot: {text: ['tspan', 'External sync without start at sync e.g.'],
-}}
-</script>
-</div>
+<img alt="../../_images/wavedrom-load_config-force_align-start_at_sync.svg" src="../../_images/wavedrom-load_config-force_align-start_at_sync.svg" /><p>The below timing diagrams, shows the <code class="docutils literal notranslate"><span class="pre">external_sync</span></code> functionality:</p>
+<figure class="align-default" id="id1">
+<img alt="../../_images/wavedrom-external_sync-start_at_sync.svg" src="../../_images/wavedrom-external_sync-start_at_sync.svg" /><figcaption>
+<p><span class="caption-text">External sync, start at sync (default).</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<img alt="../../_images/wavedrom-external_sync.svg" src="../../_images/wavedrom-external_sync.svg" /><figcaption>
+<p><span class="caption-text">External sync without start at sync.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>
@@ -1424,12 +1328,6 @@ Where n is from 0 to 15.</p>
 </section>
 </section>
 
-    <script type="text/javascript">
-        function init() {
-            WaveDrom.ProcessAll();
-        }
-        window.onload = init;
-    </script>
 
           </div>
               <div class="related">
