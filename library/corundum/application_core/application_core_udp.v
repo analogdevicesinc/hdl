@@ -349,16 +349,16 @@ module application_core_udp #
     input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     s_axis_sync_tx_tdata,
     input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     s_axis_sync_tx_tkeep,
     input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tvalid,
-    output wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tready,
+    output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tready,
     input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tlast,
     input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  s_axis_sync_tx_tuser,
 
-    output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     m_axis_sync_tx_tdata,
-    output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     m_axis_sync_tx_tkeep,
-    output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tvalid,
+    output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     m_axis_sync_tx_tdata,
+    output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     m_axis_sync_tx_tkeep,
+    output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tvalid,
     input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tready,
-    output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tlast,
-    output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  m_axis_sync_tx_tuser,
+    output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tlast,
+    output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  m_axis_sync_tx_tuser,
 
     input  wire [IF_COUNT*PORTS_PER_IF*PTP_TS_WIDTH-1:0]             s_axis_sync_tx_cpl_ts,
     input  wire [IF_COUNT*PORTS_PER_IF*TX_TAG_WIDTH-1:0]             s_axis_sync_tx_cpl_tag,
@@ -580,14 +580,16 @@ module application_core_udp #
 
   ////----------------------------------------Data generation---------------//
   //////////////////////////////////////////////////
-  reg             start_generator;
-  reg             start_generator_reg;
-  wire            start_generator_reg_cdc;
-  reg  [7:0]      gen_data;
+  localparam             INPUT_WIDTH = 2048;
 
-  reg  [2048-1:0] input_axis_tdata;
-  reg             input_axis_tvalid;
-  wire            input_axis_tready;
+  reg                    start_generator;
+  reg                    start_generator_reg;
+  wire                   start_generator_reg_cdc;
+  reg  [7:0]             gen_data;
+
+  reg  [INPUT_WIDTH-1:0] input_axis_tdata;
+  reg                    input_axis_tvalid;
+  wire                   input_axis_tready;
 
   sync_bits #(
     .NUM_OF_BITS(1)
@@ -629,10 +631,10 @@ module application_core_udp #
   always @(posedge input_clk)
   begin
     if (!input_rstn) begin
-      input_axis_tdata <= 2048'd0;
+      input_axis_tdata <= {INPUT_WIDTH{1'b0}};
       input_axis_tvalid <= 1'b0;
     end else begin
-      input_axis_tdata <= {2048/8{gen_data}};
+      input_axis_tdata <= {INPUT_WIDTH/8{gen_data}};
       input_axis_tvalid <= start_generator;
     end
   end
@@ -640,8 +642,18 @@ module application_core_udp #
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
   reg  [7:0] sample_counter;
-  reg  [7:0] counter_limit;
+  reg  [7:0] packet_size;
+  wire [7:0] packet_size_cdc;
   reg        packet_tlast;
+
+  sync_bits #(
+    .NUM_OF_BITS(8)
+  ) sync_bits_packet_size (
+    .in_bits(packet_size),
+    .out_resetn(input_rstn),
+    .out_clk(input_clk),
+    .out_bits(packet_size_cdc)
+  );
 
   always @(posedge input_clk)
   begin
@@ -650,7 +662,7 @@ module application_core_udp #
       packet_tlast <= 1'b0;
     end else begin
       if (input_axis_tvalid) begin
-        if (sample_counter < counter_limit-1) begin
+        if (sample_counter < packet_size_cdc-1) begin
           sample_counter <= sample_counter + 1;
           packet_tlast <= 1'b0;
         end else begin
@@ -670,7 +682,7 @@ module application_core_udp #
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
-    .S_DATA_WIDTH(2048),
+    .S_DATA_WIDTH(INPUT_WIDTH),
     .ADDRESS_WIDTH(4),
     .M_DATA_WIDTH(AXIS_DATA_WIDTH),
     .M_AXIS_REGISTERED(1),
@@ -725,13 +737,18 @@ module application_core_udp #
   reg [32-1:0] ip_source_IP_address;
   reg [32-1:0] ip_destination_IP_address;
 
+  reg [32-1:0] ip_header_checksum_reg0;
+  reg [32-1:0] ip_header_checksum_reg1;
+
   // UDP header
   reg [16-1:0] udp_source;
   reg [16-1:0] udp_destination;
   reg [16-1:0] udp_length;
   reg [16-1:0] udp_checksum;
 
-  reg  [31:0]                  header;
+  localparam HEADER_LENGTH = 336;
+
+  wire [HEADER_LENGTH-1:0]     header;
 
   reg  [31:0]                  cdc_axis_tdata_reg;
 
@@ -743,7 +760,7 @@ module application_core_udp #
   reg  [AXIS_DATA_WIDTH/8-1:0] packet_axis_tkeep;
   reg                          packet_axis_tlast;
 
-  wire                         output_axis_tready;
+  reg                          output_axis_tready;
   reg                          output_axis_tvalid;
   reg  [AXIS_DATA_WIDTH-1:0]   output_axis_tdata;
   reg                          output_axis_tlast;
@@ -761,9 +778,89 @@ module application_core_udp #
     end
   end
 
-  // header insertion
+  // ready signal generation
   assign cdc_axis_tready = ~tlast_sig && output_axis_tready;
 
+  // hton implementation for dynamic byte range
+  `define HTOND(length) \
+    function [length-1:0] htond_``length``(input [length-1:0] data_in); \
+      integer i; \
+      begin \
+        for (i=0; i<length/8; i=i+1) \
+        begin \
+          htond_``length``[i*8+:8] = data_in[(length/8-1-i)*8+:8]; \
+        end \
+      end \
+    endfunction \
+
+  `HTOND(16)
+  `HTOND(32)
+  `HTOND(48)
+
+  // header concatenation
+  assign header = {
+    htond_48(ethernet_destination_MAC),
+    htond_48(ethernet_source_MAC),
+    htond_16(ethernet_type),
+    htond_16({ip_version, ip_header_length, ip_type_of_service}),
+    htond_16(ip_total_length),
+    htond_16(ip_identification),
+    htond_16({ip_flags, ip_fragment_offset}),
+    htond_16({ip_time_to_live, ip_protocol}),
+    htond_16(ip_header_checksum),
+    htond_32(ip_source_IP_address),
+    htond_32(ip_destination_IP_address),
+    htond_16(udp_source),
+    htond_16(udp_destination),
+    htond_16(udp_length),
+    htond_16(udp_checksum)
+  };
+
+  // ip header checksum calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      ip_header_checksum_reg0 <= 'd0;
+      ip_header_checksum_reg1 <= 'd0;
+      ip_header_checksum <= 'd0;
+    end else begin
+      ip_header_checksum_reg0 <= {16'h0000, {ip_version, ip_header_length, ip_type_of_service}} + 
+        {16'h0000, ip_total_length} + 
+        {16'h0000, ip_identification} + 
+        {16'h0000, {ip_flags, ip_fragment_offset}} + 
+        {16'h0000, {ip_time_to_live, ip_protocol}} + 
+        {16'h0000, ip_source_IP_address[31:16]} + 
+        {16'h0000, ip_source_IP_address[15:0]} + 
+        {16'h0000, ip_destination_IP_address[31:16]} + 
+        {16'h0000, ip_destination_IP_address[15:0]};
+
+      ip_header_checksum_reg1 <= ip_header_checksum_reg0[31:16] + ip_header_checksum_reg0[15:0];
+
+      ip_header_checksum <= ~ip_header_checksum_reg1;
+    end
+  end
+
+  // ip total length calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      ip_total_length <= 16'h0;
+    end else begin
+      ip_total_length <= ip_header_length + udp_length;
+    end
+  end
+  
+  // udp total length calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      udp_length <= 'd0;
+    end else begin
+      udp_length <= 16'h8 + INPUT_WIDTH*packet_size;
+    end
+  end
+
+  // tlast signal generation
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -779,6 +876,7 @@ module application_core_udp #
     end
   end
 
+  // new packet marking
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -794,6 +892,7 @@ module application_core_udp #
     end
   end
 
+  // header insertion
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -814,15 +913,15 @@ module application_core_udp #
         // data and keep
         if (cdc_axis_tvalid) begin
           if (new_packet) begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-32:0], header};
+            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], header};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
           end else begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-32:0], cdc_axis_tdata_reg};
+            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], cdc_axis_tdata_reg};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
           end
         end else if (tlast_sig) begin
-          packet_axis_tdata <= {{AXIS_DATA_WIDTH-32{1'b0}}, cdc_axis_tdata_reg};
-          packet_axis_tkeep <= {{AXIS_DATA_WIDTH-32{1'b0}}, {32/8{1'b1}}};
+          packet_axis_tdata <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, cdc_axis_tdata_reg};
+          packet_axis_tkeep <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, {32/8{1'b1}}};
         end
       end
     end
@@ -849,12 +948,15 @@ module application_core_udp #
   reg  [31:0]                       up_rdata;
   reg                               up_rack;
 
+  // Generic
   reg [31:0] version_reg = 'h1234ABCD;
   reg [31:0] scratch_reg;
   reg start_counter_reg;
   reg stop_counter_reg;
   reg clear_counter_reg;
   reg [31:0] counter_reg;
+  // Switch
+  reg switch;
 
   always @(posedge clk)
   begin
@@ -863,46 +965,74 @@ module application_core_udp #
       up_wack <= 1'b0;
       up_rack <= 1'b0;
 
+      // Generic
       scratch_reg <= 'h0;
       clear_counter_reg <= 1'b0;
+      // Data generator
       start_generator_reg <= 1'b0;
-      counter_limit <= 8'd4;
-      header <= 32'h1234dead;
+      // Packetizer
+      packet_size <= 8'd4;
+      // Ethernet header
+      ethernet_destination_MAC <= 48'h000A35000102;
+      ethernet_source_MAC <= 48'h000A35000102;
+      ethernet_type <= 16'h0800;
+      // IPv4 header
+      ip_version <= 4'h4;
+      ip_header_length <= 4'h5;
+      ip_type_of_service <= 8'h00;
+      ip_identification <= 16'h0000;
+      ip_flags <= 3'h0;
+      ip_fragment_offset <= 13'h0000;
+      ip_time_to_live <= 8'h80;
+      ip_protocol <= 8'h11;
+      ip_source_IP_address <= 32'hC0A8010A;
+      ip_destination_IP_address <= 32'hC0A8010B;
+      // UDP header
+      udp_source <= 16'h0EBA;
+      udp_destination <= 16'h000E;
+      udp_checksum <= 16'h0000;
+      // output data stream switch
+      switch <= 1'b0;
     end else begin
       up_wack <= up_wreq;
       up_rack <= up_rreq;
 
       if (up_wreq == 1'b1) begin
         case (up_waddr)
+          // Generic
           'h1: scratch_reg <= up_wdata;
           'h2: begin
             start_counter_reg <= up_wdata[0];
             stop_counter_reg <= up_wdata[1];
           end
           'h3: clear_counter_reg <= up_wdata[0];
+          // Data generator
           'h5: start_generator_reg <= up_wdata[0];
-          'h6: counter_limit <= up_wdata[7:0];
+          // Packetizer
+          'h6: packet_size <= up_wdata[7:0];
+          // Ethernet header
           'h7: ethernet_destination_MAC[48-1:32] <= up_wdata[16-1:0];
           'h8: ethernet_destination_MAC[31:0] <= up_wdata;
           'h9: ethernet_source_MAC[48-1:32] <= up_wdata[16-1:0];
           'hA: ethernet_source_MAC[31:0] <= up_wdata;
           'hB: ethernet_type <= up_wdata[16-1:0];
+          // IPv4 header
           'hC: ip_version <= up_wdata[4-1:0];
           'hD: ip_header_length <= up_wdata[4-1:0];
           'hE: ip_type_of_service <= up_wdata[8-1:0];
-          'hF: ip_total_length <= up_wdata[16-1:0];
           'h10: ip_identification <= up_wdata[16-1:0];
           'h11: ip_flags <= up_wdata[3-1:0];
           'h12: ip_fragment_offset <= up_wdata[13-1:0];
           'h13: ip_time_to_live <= up_wdata[8-1:0];
           'h14: ip_protocol <= up_wdata[8-1:0];
-          'h15: ip_header_checksum <= up_wdata[16-1:0];
           'h16: ip_source_IP_address <= up_wdata[32-1:0];
           'h17: ip_destination_IP_address <= up_wdata[32-1:0];
+          // UDP header
           'h18: udp_source <= up_wdata[16-1:0];
           'h19: udp_destination <= up_wdata[16-1:0];
-          'h1A: udp_length <= up_wdata[16-1:0];
           'h1B: udp_checksum <= up_wdata[16-1:0];
+          // Switch
+          'h1C: switch <= up_wdata[0];
           default: ;
         endcase
       end else begin
@@ -911,6 +1041,7 @@ module application_core_udp #
 
       if (up_rreq == 1'b1) begin
         case (up_raddr)
+          // Generic
           'h0: up_rdata <= version_reg;
           'h1: up_rdata <= scratch_reg;
           'h2: up_rdata <= {{30{1'b0}}, stop_counter_reg, start_counter_reg};
@@ -919,13 +1050,13 @@ module application_core_udp #
           // Data generator
           'h5: up_rdata <= {{31{1'b0}}, start_generator_reg};
           // Packetizer
-          'h6: up_rdata <= {{24{1'b0}}, counter_limit};
+          'h6: up_rdata <= {{24{1'b0}}, packet_size};
           // Ethernet header
           'h7: up_rdata <= {{16{1'b0}}, ethernet_destination_MAC[48-1:32]};
           'h8: up_rdata <= ethernet_destination_MAC[31:0];
           'h9: up_rdata <= {{16{1'b0}}, ethernet_source_MAC[48-1:32]};
           'hA: up_rdata <= ethernet_source_MAC[31:0];
-          'hB: up_rdata <= {{16,{1'b0}}, ethernet_type};
+          'hB: up_rdata <= {{16{1'b0}}, ethernet_type};
           // IPv4 header
           'hC: up_rdata <= {{28{1'b0}}, ip_version};
           'hD: up_rdata <= {{28{1'b0}}, ip_header_length};
@@ -944,6 +1075,8 @@ module application_core_udp #
           'h19: up_rdata <= {{16{1'b0}}, udp_destination};
           'h1A: up_rdata <= {{16{1'b0}}, udp_length};
           'h1B: up_rdata <= {{16{1'b0}}, udp_checksum};
+          // Switch
+          'h1C: up_rdata <= {{31{1'b0}}, switch};
           default: up_rdata <= 32'd0;
         endcase
       end else begin
@@ -1083,22 +1216,29 @@ module application_core_udp #
   /*
   * Ethernet (synchronous MAC interface - low latency raw traffic)
   */
-  // assign m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
-  // assign m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
-  // assign m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
-  // assign s_axis_sync_tx_tready = m_axis_sync_tx_tready;
-  // assign m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
-  // assign m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
+  always @(*)
+  begin
+    if (switch) begin
+      m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
+      m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
+      m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
+      s_axis_sync_tx_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
+      m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
 
-  assign s_axis_sync_tx_tready = 1'b0;
+      output_axis_tready = 1'b0;
+    end else begin
+      m_axis_sync_tx_tdata = output_axis_tdata;
+      m_axis_sync_tx_tkeep = output_axis_tkeep;
+      m_axis_sync_tx_tvalid = output_axis_tvalid;
+      output_axis_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = output_axis_tlast;
+      m_axis_sync_tx_tuser = 1'b0;
 
-  assign m_axis_sync_tx_tdata = output_axis_tdata;
-  assign m_axis_sync_tx_tkeep = output_axis_tkeep;
-  assign m_axis_sync_tx_tvalid = output_axis_tvalid;
-  assign output_axis_tready = m_axis_sync_tx_tready;
-  assign m_axis_sync_tx_tlast = output_axis_tlast;
-  assign m_axis_sync_tx_tuser = 1'b0;
-
+      s_axis_sync_tx_tready = 1'b0;
+    end
+  end
+  
   assign m_axis_sync_tx_cpl_ts = s_axis_sync_tx_cpl_ts;
   assign m_axis_sync_tx_cpl_tag = s_axis_sync_tx_cpl_tag;
   assign m_axis_sync_tx_cpl_valid = s_axis_sync_tx_cpl_valid;

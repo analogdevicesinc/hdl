@@ -28,6 +28,8 @@ adi_ip_files application_core [list \
 set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
 
 adi_ip_properties_lite application_core
+adi_ip_ttcl application_core "application_core_constr.ttcl"
+
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
 set cc [ipx::current_core]
@@ -525,6 +527,7 @@ adi_add_bus_clock "ddr_clk" "m_axi_ddr" "ddr_rst"
 adi_add_bus_clock "hbm_clk" "m_axi_hbm" "hbm_rst"
 adi_add_bus_clock "direct_tx_clk" "s_axis_direct_tx:m_axis_direct_tx" "direct_tx_rst"
 adi_add_bus_clock "direct_rx_clk" "s_axis_direct_rx:m_axis_direct_rx" "direct_rx_rst"
+adi_add_bus_clock "input_clk" "" "input_rstn"
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

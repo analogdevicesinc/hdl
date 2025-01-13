@@ -19,7 +19,7 @@
 /*
  * Application block
  */
-module application_core_demo #
+module application_core #
 (
   // Structural configuration
   parameter IF_COUNT = 1,
@@ -641,7 +641,17 @@ module application_core_demo #
   //////////////////////////////////////////////////
   reg  [7:0] sample_counter;
   reg  [7:0] counter_limit;
+  wire [7:0] counter_limit_cdc;
   reg        packet_tlast;
+
+  sync_bits #(
+    .NUM_OF_BITS(8)
+  ) sync_bits_counter_limit (
+    .in_bits(counter_limit),
+    .out_resetn(input_rstn),
+    .out_clk(input_clk),
+    .out_bits(counter_limit_cdc)
+  );
 
   always @(posedge input_clk)
   begin
@@ -650,7 +660,7 @@ module application_core_demo #
       packet_tlast <= 1'b0;
     end else begin
       if (input_axis_tvalid) begin
-        if (sample_counter < counter_limit-1) begin
+        if (sample_counter < counter_limit_cdc-1) begin
           sample_counter <= sample_counter + 1;
           packet_tlast <= 1'b0;
         end else begin

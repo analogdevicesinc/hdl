@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -28,13 +28,20 @@ set in_out_clk_port "$clk_ports_base $input_clk_ports_base"
 set in_out_clk [get_clocks -of_objects [get_ports $in_out_clk_port]]
 
 ###########################################
-# tx_buffer constraints 
+# constraints 
 ###########################################
 
 # false paths
 
 set_false_path \
   -to [get_cells -hier -filter {NAME =~ *sync_bits_start_generator_reg/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+
+# max delay, limit delay
+
+set_max_delay -datapath_only \
+  -from $clk \
+  -to [get_cells -hier -filter {NAME =~ *sync_bits_counter_limit/cdc_sync_stage1_reg* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD $clk]
 
 # gray coding constraints
 
