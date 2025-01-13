@@ -135,7 +135,7 @@ operation followed by a write operation.
    :adi:`AD7606C-18` chip can be obtained from the page 12 of the
    :adi:`AD7606C-18 Datasheet <media/en/technical-documentation/data-sheets/ad7606c-18.pdf>`.
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CS_N', wave:'1.0......|......1..'},
@@ -148,13 +148,15 @@ operation followed by a write operation.
    ]
    }
 
+.. image:: wavedrom-1.svg
+
 The following timing diagrams illustrate available ADC read modes using the
 AD7606x family devices.
 
 ADC Read Mode (AD7606B/C-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -166,10 +168,12 @@ ADC Read Mode (AD7606B/C-16)
    ]
    }
 
+.. image:: wavedrom-2.svg
+
 ADC Read Mode (AD7606C-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -181,10 +185,12 @@ ADC Read Mode (AD7606C-18)
    ]
    }
 
+.. image:: wavedrom-3.svg
+
 ADC Read Mode with CRC enabled (AD7606B/C-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -196,11 +202,12 @@ ADC Read Mode with CRC enabled (AD7606B/C-16)
    ]
    }
 
+.. image:: wavedrom-4.svg
 
 ADC Read Mode with CRC enabled (AD7606C-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -212,10 +219,12 @@ ADC Read Mode with CRC enabled (AD7606C-18)
    ]
    }
 
+.. image:: wavedrom-5.svg
+
 ADC Read Mode with Status enabled (AD7606B/C-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -228,10 +237,12 @@ ADC Read Mode with Status enabled (AD7606B/C-16)
    ]
    }
 
+.. image:: wavedrom-6.svg
+
 ADC Read Mode with Status enabled (AD7606C-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|......01.'},
@@ -258,10 +269,12 @@ ADC Read Mode with Status enabled (AD7606C-18)
    ]
    }
 
+.. image:: wavedrom-7.svg
+
 ADC Read Mode with Status and CRC enabled (AD7606B/C-16)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|..........01.'},
@@ -274,10 +287,12 @@ ADC Read Mode with Status and CRC enabled (AD7606B/C-16)
    ]
    }
 
+.. image:: wavedrom-8.svg
+
 ADC Read Mode with Status and CRC enabled (AD7606C-18)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. wavedrom::
+.. wavedrom
 
    {signal: [
      {name: 'CNVST_N', wave: '1..01...........|..........01.'},
@@ -303,6 +318,8 @@ ADC Read Mode with Status and CRC enabled (AD7606C-18)
      {name: 'FIRST_DATA', wave:'z....1.0........|..........z..'}
    ]
    }
+
+.. image:: wavedrom-9.svg
 
 Software Support
 -------------------------------------------------------------------------------

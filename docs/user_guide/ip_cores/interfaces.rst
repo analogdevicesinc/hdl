@@ -81,8 +81,7 @@ Timing diagram
 The following timing diagram illustrates the signals and functionality of the
 interface. It show a register write access and two consecutive register read access.
 
-.. wavedrom::
-   :caption: UP interface timing diagram
+.. wavedrom
 
    {signal: [
      {name: 'up_clk',   wave:'P............|.......'},
@@ -110,6 +109,10 @@ interface. It show a register write access and two consecutive register read acc
        ['tspan', {class:'info h3'}, 'UP interface']
     }
    }
+
+.. figure:: wavedrom.svg
+
+   UP interface timing diagram
 
 References
 --------------------------------------------------------------------------------

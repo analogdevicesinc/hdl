@@ -277,8 +277,7 @@ signal, but not the TREADY flow control signal. The behavior of the interface is
 as if the TREADY signal was always asserted. This means as soon as ``rx_valid``
 is asserted, a continuous stream of user data must be accepted from ``rx_data``.
 
-.. wavedrom::
-   :align: center
+.. wavedrom
 
    {
       signal: [
@@ -295,6 +294,8 @@ is asserted, a continuous stream of user data must be accepted from ``rx_data``.
             'User Data Phase'],],
          }
    }
+
+.. image:: wavedrom-1.svg
 
 After reset and during link initialization, the ``rx_valid`` signal is
 deasserted. As soon as the User Data Phase is entered, the ``rx_valid`` will be
@@ -525,10 +526,7 @@ local-multiblock-clock (LEMC). A setting of 0 indicates that the release
 opportunity is aligned to the LMFC/LEMC edge. A setting of X indicates that it
 trails the LMFC/LEMC edge by X octets.
 
-.. wavedrom::
-   :scale: 100%
-   :align: center
-
+.. wavedrom
    {
       signal: [
          { name: "device_clk", wave: 'P.........' },
@@ -537,6 +535,8 @@ trails the LMFC/LEMC edge by X octets.
       ],
       edge: ['a~>b BUFFER DELAY/4']
    }
+
+.. image:: wavedrom-2.svg
 
 The ``BUFFER_DELAY`` field must be set to a multiple of 4. Writing a value that
 is not a multiple of 4 will be rounded down to the next multiple of 4. For

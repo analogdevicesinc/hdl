@@ -235,7 +235,7 @@ all of the 8 channels and lanes enabled.
 
 There are no extra definitions for the LVDS interface compared to the datasheet.
 
-.. wavedrom::
+.. wavedrom
 
   { "signal" : [
     { "name": "cnvs",    "wave": "010.................................."},
@@ -259,10 +259,13 @@ There are no extra definitions for the LVDS interface compared to the datasheet.
     { "name": "data 5",  "wave": "z...............................4....","data":["ch 5"]},
     { "name": "data 6",  "wave": "z...............................4....","data":["ch 6"]},
     { "name": "data 7",  "wave": "z...............................4....","data":["ch 7"]},
-  ],
-  foot: {text: ['tspan', 'all lanesi(8) all channels(8) active']}}
+  ]}
 
-.. wavedrom::
+.. figure:: wavedrom-1.svg
+
+   all lanesi(8) all channels(8) active.
+
+.. wavedrom
 
   { "signal" : [
     { "name": "cnvs",    "wave": "010.......|.................10......."},
@@ -286,8 +289,11 @@ There are no extra definitions for the LVDS interface compared to the datasheet.
     { "name": "data 5",  "wave": "z..........................4.........","data":["ch 5"]},
     { "name": "data 6",  "wave": "z..........................4.........","data":["ch 6"]},
     { "name": "data 7",  "wave": "z..........................4.........","data":["ch 7"]},
-  ],
-  foot: {text: ['tspan', 'all lanesi(8) all channels(8) active']}}
+  ]}
+
+.. figure:: wavedrom-2.svg
+
+   All lanesi(8) all channels(8) active.
 
 Register Map
 --------------------------------------------------------------------------------
