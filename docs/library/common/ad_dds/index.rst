@@ -285,7 +285,7 @@ equal to the CLOCK_RATIO.
 
 .. image:: fw_sync_basics.svg
 
-.. wavedrom::
+.. wavedrom
 
    {
      "signal" : [
@@ -302,12 +302,12 @@ equal to the CLOCK_RATIO.
        { "name": "tone 2 gen2",  "wave": "=.........5=55|5555555","data":["","i2","","i2+","i2+","i2+","..."]},
        { "name": "tone 2 gen3",  "wave": "=..........555|5555555","data":["","i3","i3+","i3+","i3+","..."]},
        { "name": "tone 2",     "wave": "=.......======|5555555","data":["","0","0","0","0","0","...","s0-3","s4-8","s8-C","..."]},
-       ],
-     foot: {
-       text: ['tspan', 'Frequency word sync at CLK_RATIO=4'],
-     }
+       ]
    }
 
+.. figure:: wavedrom.svg
+
+   text: ['tspan', 'Frequency word sync at CLK_RATIO=4'],
 
 In the above diagram example:
 

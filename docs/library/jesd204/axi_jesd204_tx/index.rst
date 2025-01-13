@@ -270,8 +270,7 @@ interface is as if the TVALID signal was always asserted. This means as soon as
 tx_ready is asserted a continuous stream of user data must be provided on
 tx_data.
 
-.. wavedrom::
-   :align: center
+.. wavedrom
 
    {signal:
       [
@@ -288,6 +287,8 @@ tx_data.
          'User Data Phase'],],
       }
    }
+
+.. image:: wavedrom-1.svg
 
 After reset and during link initialization the ``tx_ready`` signal is
 de-asserted. As soon as the :ref:`User Data Phase <axi_jesd204_tx_user_data_phase>` is
@@ -729,7 +730,7 @@ All other octets of the ILAS sequence will contain the numerical value
 corresponding to the position of the octet in the ILAS sequence (E.g. the fifth
 octet of the first multi-frame contains the value 4).
 
-.. wavedrom::
+.. wavedrom
 
    {
       signal:
@@ -741,6 +742,8 @@ octet of the first multi-frame contains the value 4).
       ],
       config: { skin: 'narrow' }
    }
+
+.. image:: wavedrom-2.svg
 
 By default the ILAS is transmitted for a duration of 4 multi-frames. After the
 last ILAS multi-frame the peripheral switches to the DATA phase.

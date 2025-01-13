@@ -173,7 +173,7 @@ Timing Diagrams and examples
 The timing diagram below, shows the ``load_config`` functionality with
 force align and start at sync disabled.
 
-.. wavedrom::
+.. wavedrom
 
   { "signal" : [
     { "name": "clk", "wave": "P................................"},
@@ -191,10 +191,12 @@ force align and start at sync disabled.
     { "name": "pwm 1", "wave": "l....h..l......................h."},
   ]}
 
+.. image:: wavedrom-load_config.svg
+
 The timing diagram below, shows the ``load_config`` functionality with
 force align disabled and start at sync enabled.
 
-.. wavedrom::
+.. wavedrom
 
   { "signal" : [
     { "name": "clk", "wave": "P.............................."},
@@ -212,10 +214,12 @@ force align disabled and start at sync enabled.
     { "name": "pwm 1", "wave": "l....h..l............h....l...."},
   ]}
 
+.. image:: wavedrom-load_config-start_at_sync.svg
+
 The timing diagram below, shows the ``load_config`` functionality with
 force align and start at sync enabled.
 
-.. wavedrom::
+.. wavedrom
 
   { "signal" : [
     { "name": "clk", "wave": "P.............................."},
@@ -233,9 +237,11 @@ force align and start at sync enabled.
     { "name": "pwm 1", "wave": "l....h..l....hl...h....l....h.."},
   ]}
 
+.. image:: wavedrom-load_config-force_align-start_at_sync.svg
+
 The below timing diagrams, shows the ``external_sync`` functionality:
 
-.. wavedrom::
+.. wavedrom
 
   { "signal" : [
     { "name": "clk", "wave": "P............................"},
@@ -251,11 +257,13 @@ The below timing diagrams, shows the ``external_sync`` functionality:
     { "name": "pwm 0", "wave": "l......h..l....h..l....h..l.."},
     { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
     { "name": "pwm 1", "wave": "l..........h..l....h..l....h."},
-  ],
-  foot: {text: ['tspan', 'External sync, start at sync (default) e.g.'],
-  }}
+  ]}
 
-.. wavedrom::
+.. figure:: wavedrom-external_sync-start_at_sync.svg
+
+   External sync, start at sync (default).
+
+.. wavedrom
 
   { "signal" : [
     { "name": "clk", "wave": "P............................"},
@@ -271,9 +279,11 @@ The below timing diagrams, shows the ``external_sync`` functionality:
     { "name": "pwm 0", "wave": "l.............h..l....h..l..."},
     { "name": "counter 1", "wave": "=..........44444445555555544=","data":["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8","1","2"]},
     { "name": "pwm 1", "wave": "l.................h..l....h.."},
-  ],
-  foot: {text: ['tspan', 'External sync without start at sync e.g.'],
-  }}
+  ]}
+
+.. figure:: wavedrom-external_sync.svg
+
+   External sync without start at sync.
 
 Register Map
 --------------------------------------------------------------------------------
