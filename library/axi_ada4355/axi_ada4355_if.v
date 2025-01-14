@@ -127,6 +127,9 @@
    wire  data_s6_frame;
    wire  data_s7_frame;
 
+   wire  data_out;
+   wire  data_out_frame;
+
    reg  [5:0]  serdes_reset = 6'b000110;
    reg         sync_status_int = 1'b0;
    reg         packed_data_valid_d;
@@ -224,6 +227,7 @@
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast),
     .div_clk(adc_clk_div),
+    .data_out(data_out),
     .data_s0(data_s0),
     .data_s1(data_s1),
     .data_s2(data_s2),
@@ -259,6 +263,7 @@
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast_frame),
     .div_clk(adc_clk_div_frame),
+    .data_out(data_out_frame),
     .data_s0(data_s0_frame),
     .data_s1(data_s1_frame),
     .data_s2(data_s2_frame),
@@ -394,6 +399,7 @@ always @(posedge adc_clk_div) begin
   serdes_valid_d <= serdes_valid;
   end
 
+  assign adc_valid = !adc_rst;
   assign adc_data = adc_data_shifted;
 
 endmodule

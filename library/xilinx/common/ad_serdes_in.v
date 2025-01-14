@@ -68,6 +68,7 @@ module ad_serdes_in #(
   output  [(DATA_WIDTH-1):0]      data_s5,
   output  [(DATA_WIDTH-1):0]      data_s6,
   output  [(DATA_WIDTH-1):0]      data_s7,  // 1st bit received
+  output  [(DATA_WIDTH-1):0]      data_out,
   input   [(DATA_WIDTH-1):0]      data_in_p,
   input   [(DATA_WIDTH-1):0]      data_in_n,
 
@@ -217,7 +218,7 @@ module ad_serdes_in #(
         .SRVAL_Q3 (1'b0),
         .SRVAL_Q4 (1'b0)
       ) i_iserdes (
-        .O (),
+        .O (data_out[l_inst]),
         .Q1 (data_s0[l_inst]),
         .Q2 (data_s1[l_inst]),
         .Q3 (data_s2[l_inst]),
