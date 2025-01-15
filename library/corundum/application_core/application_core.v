@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: BSD-2-Clause-Views
-/*
- * Copyright (c) 2023 The Regents of the University of California
- * Copyright (c) 2024 - 2025 Analog Devices, Inc. All rights reserved
- */
-/*
- * This file repackages Corundum MQNIC Core AXI with the sole purpose of
- * providing it as an IP Core.
- * The original file can be refereed at:
- * https://github.com/ucsdsysnet/corundum/blob/master/fpga/common/rtl/mqnic_core_axi.v
- */
+
+ // Copyright (c) 2023 The Regents of the University of California
+ // Copyright (c) 2024 - 2025 Analog Devices, Inc. All rights reserved
+ 
+
+ // This file repackages Corundum MQNIC Core AXI with the sole purpose of
+ // providing it as an IP Core.
+ // The original file can be refereed at:
+ // https://github.com/ucsdsysnet/corundum/blob/master/fpga/common/rtl/mqnic_core_axi.v
+ 
 
 // Language: Verilog 2001
 
@@ -16,9 +16,9 @@
 `timescale 1ns / 1ps
 `default_nettype none
 
-/*
- * Application block
- */
+
+ // Application block
+ 
 module application_core #
 (
   // Structural configuration
@@ -118,9 +118,7 @@ module application_core #
   input  wire                                           clk,
   input  wire                                           rst,
 
-  /*
-   * AXI-Lite slave interface (control from host)
-   */
+  // AXI-Lite slave interface (control from host)
   input  wire [AXIL_CTRL_ADDR_WIDTH-1:0]                s_axil_ctrl_awaddr,
   input  wire [2:0]                                     s_axil_ctrl_awprot,
   input  wire                                           s_axil_ctrl_awvalid,
@@ -141,9 +139,7 @@ module application_core #
   output wire                                           s_axil_ctrl_rvalid,
   input  wire                                           s_axil_ctrl_rready,
 
-  /*
-   * AXI-Lite master interface (control to NIC)
-   */
+  // AXI-Lite master interface (control to NIC)
   output wire [AXIL_CTRL_ADDR_WIDTH-1:0]                m_axil_ctrl_awaddr,
   output wire [2:0]                                     m_axil_ctrl_awprot,
   output wire                                           m_axil_ctrl_awvalid,
@@ -164,9 +160,7 @@ module application_core #
   input  wire                                           m_axil_ctrl_rvalid,
   output wire                                           m_axil_ctrl_rready,
 
-  /*
-   * DMA read descriptor output (control)
-   */
+  // DMA read descriptor output (control)
   output wire [DMA_ADDR_WIDTH-1:0]                      m_axis_ctrl_dma_read_desc_dma_addr,
   output wire [RAM_SEL_WIDTH-1:0]                       m_axis_ctrl_dma_read_desc_ram_sel,
   output wire [RAM_ADDR_WIDTH-1:0]                      m_axis_ctrl_dma_read_desc_ram_addr,
@@ -175,16 +169,12 @@ module application_core #
   output wire                                           m_axis_ctrl_dma_read_desc_valid,
   input  wire                                           m_axis_ctrl_dma_read_desc_ready,
 
-  /*
-   * DMA read descriptor status input (control)
-   */
+  // DMA read descriptor status input (control)
   input  wire [DMA_TAG_WIDTH-1:0]                       s_axis_ctrl_dma_read_desc_status_tag,
   input  wire [3:0]                                     s_axis_ctrl_dma_read_desc_status_error,
   input  wire                                           s_axis_ctrl_dma_read_desc_status_valid,
 
-  /*
-   * DMA write descriptor output (control)
-   */
+  // DMA write descriptor output (control)
   output wire [DMA_ADDR_WIDTH-1:0]                      m_axis_ctrl_dma_write_desc_dma_addr,
   output wire [RAM_SEL_WIDTH-1:0]                       m_axis_ctrl_dma_write_desc_ram_sel,
   output wire [RAM_ADDR_WIDTH-1:0]                      m_axis_ctrl_dma_write_desc_ram_addr,
@@ -195,16 +185,12 @@ module application_core #
   output wire                                           m_axis_ctrl_dma_write_desc_valid,
   input  wire                                           m_axis_ctrl_dma_write_desc_ready,
 
-  /*
-   * DMA write descriptor status input (control)
-   */
+  // DMA write descriptor status input (control)
   input  wire [DMA_TAG_WIDTH-1:0]                       s_axis_ctrl_dma_write_desc_status_tag,
   input  wire [3:0]                                     s_axis_ctrl_dma_write_desc_status_error,
   input  wire                                           s_axis_ctrl_dma_write_desc_status_valid,
 
-  /*
-   * DMA read descriptor output (data)
-   */
+  // DMA read descriptor output (data)
   output wire [DMA_ADDR_WIDTH-1:0]                      m_axis_data_dma_read_desc_dma_addr,
   output wire [RAM_SEL_WIDTH-1:0]                       m_axis_data_dma_read_desc_ram_sel,
   output wire [RAM_ADDR_WIDTH-1:0]                      m_axis_data_dma_read_desc_ram_addr,
@@ -213,16 +199,12 @@ module application_core #
   output wire                                           m_axis_data_dma_read_desc_valid,
   input  wire                                           m_axis_data_dma_read_desc_ready,
 
-  /*
-   * DMA read descriptor status input (data)
-   */
+  // DMA read descriptor status input (data)
   input  wire [DMA_TAG_WIDTH-1:0]                       s_axis_data_dma_read_desc_status_tag,
   input  wire [3:0]                                     s_axis_data_dma_read_desc_status_error,
   input  wire                                           s_axis_data_dma_read_desc_status_valid,
 
-  /*
-   * DMA write descriptor output (data)
-   */
+  // DMA write descriptor output (data)
   output wire [DMA_ADDR_WIDTH-1:0]                      m_axis_data_dma_write_desc_dma_addr,
   output wire [RAM_SEL_WIDTH-1:0]                       m_axis_data_dma_write_desc_ram_sel,
   output wire [RAM_ADDR_WIDTH-1:0]                      m_axis_data_dma_write_desc_ram_addr,
@@ -233,16 +215,12 @@ module application_core #
   output wire                                           m_axis_data_dma_write_desc_valid,
   input  wire                                           m_axis_data_dma_write_desc_ready,
 
-  /*
-   * DMA write descriptor status input (data)
-   */
+  // DMA write descriptor status input (data)
   input  wire [DMA_TAG_WIDTH-1:0]                       s_axis_data_dma_write_desc_status_tag,
   input  wire [3:0]                                     s_axis_data_dma_write_desc_status_error,
   input  wire                                           s_axis_data_dma_write_desc_status_valid,
 
-  /*
-   * DMA RAM interface (control)
-   */
+  // DMA RAM interface (control)
   input  wire [RAM_SEG_COUNT*RAM_SEL_WIDTH-1:0]         ctrl_dma_ram_wr_cmd_sel,
   input  wire [RAM_SEG_COUNT*RAM_SEG_BE_WIDTH-1:0]      ctrl_dma_ram_wr_cmd_be,
   input  wire [RAM_SEG_COUNT*RAM_SEG_ADDR_WIDTH-1:0]    ctrl_dma_ram_wr_cmd_addr,
@@ -258,9 +236,7 @@ module application_core #
   output wire [RAM_SEG_COUNT-1:0]                       ctrl_dma_ram_rd_resp_valid,
   input  wire [RAM_SEG_COUNT-1:0]                       ctrl_dma_ram_rd_resp_ready,
 
-  /*
-   * DMA RAM interface (data)
-   */
+  // DMA RAM interface (data)
   input  wire [RAM_SEG_COUNT*RAM_SEL_WIDTH-1:0]         data_dma_ram_wr_cmd_sel,
   input  wire [RAM_SEG_COUNT*RAM_SEG_BE_WIDTH-1:0]      data_dma_ram_wr_cmd_be,
   input  wire [RAM_SEG_COUNT*RAM_SEG_ADDR_WIDTH-1:0]    data_dma_ram_wr_cmd_addr,
@@ -276,9 +252,7 @@ module application_core #
   output wire [RAM_SEG_COUNT-1:0]                       data_dma_ram_rd_resp_valid,
   input  wire [RAM_SEG_COUNT-1:0]                       data_dma_ram_rd_resp_ready,
 
-  /*
-   * PTP clock
-   */
+  // PTP clock
   input  wire                                           ptp_clk,
   input  wire                                           ptp_rst,
   input  wire                                           ptp_sample_clk,
@@ -296,9 +270,7 @@ module application_core #
   input  wire [PTP_PEROUT_COUNT-1:0]                    ptp_perout_error,
   input  wire [PTP_PEROUT_COUNT-1:0]                    ptp_perout_pulse,
 
-  /*
-   * Ethernet (direct MAC interface - lowest latency raw traffic)
-   */
+  // Ethernet (direct MAC interface - lowest latency raw traffic)
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          direct_tx_clk,
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          direct_tx_rst,
 
@@ -343,22 +315,20 @@ module application_core #
   output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_direct_rx_tlast,
   output wire [IF_COUNT*PORTS_PER_IF*AXIS_RX_USER_WIDTH-1:0]       m_axis_direct_rx_tuser,
 
-  /*
-   * Ethernet (synchronous MAC interface - low latency raw traffic)
-   */
+  // Ethernet (synchronous MAC interface - low latency raw traffic)
   input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     s_axis_sync_tx_tdata,
   input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     s_axis_sync_tx_tkeep,
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tvalid,
-  output wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tready,
+  output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tready,
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          s_axis_sync_tx_tlast,
   input  wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  s_axis_sync_tx_tuser,
 
-  output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     m_axis_sync_tx_tdata,
-  output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     m_axis_sync_tx_tkeep,
-  output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tvalid,
+  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_DATA_WIDTH-1:0]     m_axis_sync_tx_tdata,
+  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_KEEP_WIDTH-1:0]     m_axis_sync_tx_tkeep,
+  output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tvalid,
   input  wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tready,
-  output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tlast,
-  output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  m_axis_sync_tx_tuser,
+  output reg  [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_tx_tlast,
+  output reg  [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_TX_USER_WIDTH-1:0]  m_axis_sync_tx_tuser,
 
   input  wire [IF_COUNT*PORTS_PER_IF*PTP_TS_WIDTH-1:0]             s_axis_sync_tx_cpl_ts,
   input  wire [IF_COUNT*PORTS_PER_IF*TX_TAG_WIDTH-1:0]             s_axis_sync_tx_cpl_tag,
@@ -384,9 +354,7 @@ module application_core #
   output wire [IF_COUNT*PORTS_PER_IF-1:0]                          m_axis_sync_rx_tlast,
   output wire [IF_COUNT*PORTS_PER_IF*AXIS_SYNC_RX_USER_WIDTH-1:0]  m_axis_sync_rx_tuser,
 
-  /*
-   * Ethernet (internal at interface module)
-   */
+  // Ethernet (internal at interface module)
   input  wire [IF_COUNT*AXIS_IF_DATA_WIDTH-1:0]         s_axis_if_tx_tdata,
   input  wire [IF_COUNT*AXIS_IF_KEEP_WIDTH-1:0]         s_axis_if_tx_tkeep,
   input  wire [IF_COUNT-1:0]                            s_axis_if_tx_tvalid,
@@ -433,9 +401,7 @@ module application_core #
   output wire [IF_COUNT*AXIS_IF_RX_DEST_WIDTH-1:0]      m_axis_if_rx_tdest,
   output wire [IF_COUNT*AXIS_IF_RX_USER_WIDTH-1:0]      m_axis_if_rx_tuser,
 
-  /*
-   * DDR
-   */
+  // DDR
   input  wire [DDR_CH-1:0]                              ddr_clk,
   input  wire [DDR_CH-1:0]                              ddr_rst,
 
@@ -484,9 +450,7 @@ module application_core #
 
   input  wire [DDR_CH-1:0]                              ddr_status,
 
-  /*
-   * HBM
-   */
+  // HBM
   input  wire [HBM_CH-1:0]                              hbm_clk,
   input  wire [HBM_CH-1:0]                              hbm_rst,
 
@@ -535,23 +499,17 @@ module application_core #
 
   input  wire [HBM_CH-1:0]                              hbm_status,
 
-  /*
-   * Statistics increment output
-   */
+  // Statistics increment output
   output wire [STAT_INC_WIDTH-1:0]                      m_axis_stat_tdata,
   output wire [STAT_ID_WIDTH-1:0]                       m_axis_stat_tid,
   output wire                                           m_axis_stat_tvalid,
   input  wire                                           m_axis_stat_tready,
 
-  /*
-   * GPIO
-   */
+  // GPIO
   input  wire [APP_GPIO_IN_WIDTH-1:0]                   gpio_in,
   output wire [APP_GPIO_OUT_WIDTH-1:0]                  gpio_out,
 
-  /*
-   * JTAG
-   */
+  // JTAG
   input  wire                                           jtag_tdi,
   output wire                                           jtag_tdo,
   input  wire                                           jtag_tms,
@@ -580,14 +538,16 @@ module application_core #
 
   ////----------------------------------------Data generation---------------//
   //////////////////////////////////////////////////
-  reg             start_generator;
-  reg             start_generator_reg;
-  wire            start_generator_reg_cdc;
-  reg  [7:0]      gen_data;
+  localparam             INPUT_WIDTH = 2048;
 
-  reg  [2048-1:0] input_axis_tdata;
-  reg             input_axis_tvalid;
-  wire            input_axis_tready;
+  reg                    start_generator;
+  reg                    start_generator_reg;
+  wire                   start_generator_reg_cdc;
+  reg  [7:0]             gen_data;
+
+  reg  [INPUT_WIDTH-1:0] input_axis_tdata;
+  reg                    input_axis_tvalid;
+  wire                   input_axis_tready;
 
   sync_bits #(
     .NUM_OF_BITS(1)
@@ -605,7 +565,7 @@ module application_core #
     end else begin
       if (start_generator_reg_cdc) begin
         start_generator <= 1'b1;
-      end else if (gen_data == 8'h0F) begin
+      end else if (gen_data[3:0] == 4'hF) begin
         start_generator <= 1'b0;
       end
     end
@@ -629,10 +589,10 @@ module application_core #
   always @(posedge input_clk)
   begin
     if (!input_rstn) begin
-      input_axis_tdata <= 2048'd0;
+      input_axis_tdata <= {INPUT_WIDTH{1'b0}};
       input_axis_tvalid <= 1'b0;
     end else begin
-      input_axis_tdata <= {2048/8{gen_data}};
+      input_axis_tdata <= {INPUT_WIDTH/8{gen_data}};
       input_axis_tvalid <= start_generator;
     end
   end
@@ -640,17 +600,17 @@ module application_core #
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
   reg  [7:0] sample_counter;
-  reg  [7:0] counter_limit;
-  wire [7:0] counter_limit_cdc;
+  reg  [7:0] packet_size;
+  wire [7:0] packet_size_cdc;
   reg        packet_tlast;
 
   sync_bits #(
     .NUM_OF_BITS(8)
-  ) sync_bits_counter_limit (
-    .in_bits(counter_limit),
+  ) sync_bits_packet_size (
+    .in_bits(packet_size),
     .out_resetn(input_rstn),
     .out_clk(input_clk),
-    .out_bits(counter_limit_cdc)
+    .out_bits(packet_size_cdc)
   );
 
   always @(posedge input_clk)
@@ -660,7 +620,7 @@ module application_core #
       packet_tlast <= 1'b0;
     end else begin
       if (input_axis_tvalid) begin
-        if (sample_counter < counter_limit_cdc-1) begin
+        if (sample_counter < packet_size_cdc-1) begin
           sample_counter <= sample_counter + 1;
           packet_tlast <= 1'b0;
         end else begin
@@ -680,7 +640,7 @@ module application_core #
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
-    .S_DATA_WIDTH(2048),
+    .S_DATA_WIDTH(INPUT_WIDTH),
     .ADDRESS_WIDTH(4),
     .M_DATA_WIDTH(AXIS_DATA_WIDTH),
     .M_AXIS_REGISTERED(1),
@@ -689,7 +649,7 @@ module application_core #
     .TLAST_EN(1),
     .TKEEP_EN(0),
     .FIFO_LIMITED(0),
-    .ADDRESS_WIDTH_PERSPECTIVE(0)
+    .ADDRESS_WIDTH_PERSPECTIVE(1)
   ) cdc_scale_fifo (
     .m_axis_aclk(clk),
     .m_axis_aresetn(rstn),
@@ -716,8 +676,39 @@ module application_core #
   
   ////----------------------------------------Header Inserter---------------//
   //////////////////////////////////////////////////
-  reg  [31:0]                  header;
-  reg  [31:0]                  cdc_axis_tdata_reg;
+  // Ethernet header
+  reg [48-1:0] ethernet_destination_MAC;
+  reg [48-1:0] ethernet_source_MAC;
+  reg [16-1:0] ethernet_type;
+
+  // IPv4 header
+  reg [4-1:0]  ip_version;
+  reg [4-1:0]  ip_header_length;
+  reg [8-1:0]  ip_type_of_service;
+  reg [16-1:0] ip_total_length;
+  reg [16-1:0] ip_identification;
+  reg [3-1:0]  ip_flags;
+  reg [13-1:0] ip_fragment_offset;
+  reg [8-1:0]  ip_time_to_live;
+  reg [8-1:0]  ip_protocol;
+  reg [16-1:0] ip_header_checksum;
+  reg [32-1:0] ip_source_IP_address;
+  reg [32-1:0] ip_destination_IP_address;
+
+  reg [32-1:0] ip_header_checksum_reg0;
+  reg [32-1:0] ip_header_checksum_reg1;
+
+  // UDP header
+  reg [16-1:0] udp_source;
+  reg [16-1:0] udp_destination;
+  reg [16-1:0] udp_length;
+  reg [16-1:0] udp_checksum;
+
+  localparam HEADER_LENGTH = 336;
+
+  wire [HEADER_LENGTH-1:0]     header;
+
+  reg  [HEADER_LENGTH-1:0]     cdc_axis_tdata_reg;
 
   reg                          new_packet;
   reg                          tlast_sig;
@@ -727,7 +718,7 @@ module application_core #
   reg  [AXIS_DATA_WIDTH/8-1:0] packet_axis_tkeep;
   reg                          packet_axis_tlast;
 
-  wire                         output_axis_tready;
+  reg                          output_axis_tready;
   reg                          output_axis_tvalid;
   reg  [AXIS_DATA_WIDTH-1:0]   output_axis_tdata;
   reg                          output_axis_tlast;
@@ -737,25 +728,105 @@ module application_core #
   always @(posedge clk)
   begin
     if (!rstn) begin
-      cdc_axis_tdata_reg <= 32'b0;
+      cdc_axis_tdata_reg <= {HEADER_LENGTH{1'b0}};
     end else begin
       if (cdc_axis_tvalid && output_axis_tready) begin
-        cdc_axis_tdata_reg <= cdc_axis_tdata[AXIS_DATA_WIDTH-1:AXIS_DATA_WIDTH-32];
+        cdc_axis_tdata_reg <= cdc_axis_tdata[AXIS_DATA_WIDTH-1:AXIS_DATA_WIDTH-HEADER_LENGTH];
       end
     end
   end
 
-  // header insertion
+  // ready signal generation
   assign cdc_axis_tready = ~tlast_sig && output_axis_tready;
 
+  // hton implementation for dynamic byte range
+  `define HTOND(length) \
+    function [length-1:0] htond_``length``(input [length-1:0] data_in); \
+      integer i; \
+      begin \
+        for (i=0; i<length/8; i=i+1) \
+        begin \
+          htond_``length``[i*8+:8] = data_in[(length/8-1-i)*8+:8]; \
+        end \
+      end \
+    endfunction \
+
+  `HTOND(16)
+  `HTOND(32)
+  `HTOND(48)
+
+  // header concatenation
+  assign header = {
+    htond_16(udp_checksum),
+    htond_16(udp_length),
+    htond_16(udp_destination),
+    htond_16(udp_source),
+    htond_32(ip_destination_IP_address),
+    htond_32(ip_source_IP_address),
+    htond_16(ip_header_checksum),
+    htond_16({ip_time_to_live, ip_protocol}),
+    htond_16({ip_flags, ip_fragment_offset}),
+    htond_16(ip_identification),
+    htond_16(ip_total_length),
+    htond_16({ip_version, ip_header_length, ip_type_of_service}),
+    htond_16(ethernet_type),
+    htond_48(ethernet_source_MAC),
+    htond_48(ethernet_destination_MAC)
+  };
+
+  // ip header checksum calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      ip_header_checksum_reg0 <= 'd0;
+      ip_header_checksum_reg1 <= 'd0;
+      ip_header_checksum <= 'd0;
+    end else begin
+      ip_header_checksum_reg0 <= {16'h0000, {ip_version, ip_header_length, ip_type_of_service}} + 
+        {16'h0000, ip_total_length} + 
+        {16'h0000, ip_identification} + 
+        {16'h0000, {ip_flags, ip_fragment_offset}} + 
+        {16'h0000, {ip_time_to_live, ip_protocol}} + 
+        {16'h0000, ip_source_IP_address[31:16]} + 
+        {16'h0000, ip_source_IP_address[15:0]} + 
+        {16'h0000, ip_destination_IP_address[31:16]} + 
+        {16'h0000, ip_destination_IP_address[15:0]};
+
+      ip_header_checksum_reg1 <= ip_header_checksum_reg0[31:16] + ip_header_checksum_reg0[15:0];
+
+      ip_header_checksum <= ~ip_header_checksum_reg1;
+    end
+  end
+
+  // ip total length calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      ip_total_length <= 16'h0;
+    end else begin
+      ip_total_length <= 4*ip_header_length + udp_length;
+    end
+  end
+  
+  // udp total length calculation
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      udp_length <= 16'd0;
+    end else begin
+      udp_length <= 16'h8 + INPUT_WIDTH*packet_size/8;
+    end
+  end
+
+  // tlast signal generation
   always @(posedge clk)
   begin
     if (!rstn) begin
       tlast_sig <= 1'b0;
     end else begin
       if (output_axis_tready) begin
-        if (cdc_axis_tvalid) begin
-          tlast_sig <= cdc_axis_tlast;
+        if (cdc_axis_tvalid && cdc_axis_tlast && cdc_axis_tready) begin
+          tlast_sig <= 1'b1;
         end else begin
           tlast_sig <= 1'b0;
         end
@@ -763,6 +834,7 @@ module application_core #
     end
   end
 
+  // new packet marking
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -778,6 +850,7 @@ module application_core #
     end
   end
 
+  // header insertion
   always @(posedge clk)
   begin
     if (!rstn) begin
@@ -798,15 +871,15 @@ module application_core #
         // data and keep
         if (cdc_axis_tvalid) begin
           if (new_packet) begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-32:0], header};
+            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], header};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
           end else begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-32:0], cdc_axis_tdata_reg};
+            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], cdc_axis_tdata_reg};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
           end
         end else if (tlast_sig) begin
-          packet_axis_tdata <= {{AXIS_DATA_WIDTH-32{1'b0}}, cdc_axis_tdata_reg};
-          packet_axis_tkeep <= {{AXIS_DATA_WIDTH-32{1'b0}}, {32/8{1'b1}}};
+          packet_axis_tdata <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, cdc_axis_tdata_reg};
+          packet_axis_tkeep <= {{(AXIS_DATA_WIDTH-HEADER_LENGTH)/8{1'b0}}, {HEADER_LENGTH/8{1'b1}}};
         end
       end
     end
@@ -833,12 +906,15 @@ module application_core #
   reg  [31:0]                       up_rdata;
   reg                               up_rack;
 
+  // Generic
   reg [31:0] version_reg = 'h1234ABCD;
   reg [31:0] scratch_reg;
   reg start_counter_reg;
   reg stop_counter_reg;
   reg clear_counter_reg;
   reg [31:0] counter_reg;
+  // Switch
+  reg switch;
 
   always @(posedge clk)
   begin
@@ -847,26 +923,76 @@ module application_core #
       up_wack <= 1'b0;
       up_rack <= 1'b0;
 
+      // Generic
       scratch_reg <= 'h0;
       clear_counter_reg <= 1'b0;
+      // Data generator
       start_generator_reg <= 1'b0;
-      counter_limit <= 8'd4;
-      header <= 32'h1234dead;
+      // Packetizer
+      packet_size <= 8'd4;
+      // Ethernet header
+      ethernet_destination_MAC <= 48'hB83FD22A0BF1;
+      ethernet_source_MAC <= 48'h000A35000102;
+      ethernet_type <= 16'h0800;
+      // IPv4 header
+      ip_version <= 4'h4;
+      ip_header_length <= 4'h5;
+      ip_type_of_service <= 8'h00;
+      ip_identification <= 16'h0000;
+      ip_flags <= 3'h0;
+      ip_fragment_offset <= 13'h0000;
+      ip_time_to_live <= 8'h80;
+      ip_protocol <= 8'h11;
+      // ip_source_IP_address <= 32'hC0A80045;
+      // ip_destination_IP_address <= 32'hC0A8000A;
+      ip_source_IP_address <= {8'd192, 8'd168, 8'd0, 8'd69};
+      ip_destination_IP_address <= {8'd192, 8'd168, 8'd0, 8'd10};
+      // UDP header
+      udp_source <= 16'h1234;
+      udp_destination <= 16'h5678;
+      udp_checksum <= 16'h0000;
+      // output data stream switch
+      switch <= 1'b0;
     end else begin
       up_wack <= up_wreq;
       up_rack <= up_rreq;
 
       if (up_wreq == 1'b1) begin
         case (up_waddr)
+          // Generic
           'h1: scratch_reg <= up_wdata;
           'h2: begin
             start_counter_reg <= up_wdata[0];
             stop_counter_reg <= up_wdata[1];
           end
           'h3: clear_counter_reg <= up_wdata[0];
+          // Data generator
           'h5: start_generator_reg <= up_wdata[0];
-          'h6: counter_limit <= up_wdata[7:0];
-          'h7: header <= up_wdata;
+          // Packetizer
+          'h6: packet_size <= up_wdata[7:0];
+          // Ethernet header
+          'h7: ethernet_destination_MAC[48-1:32] <= up_wdata[16-1:0];
+          'h8: ethernet_destination_MAC[31:0] <= up_wdata;
+          'h9: ethernet_source_MAC[48-1:32] <= up_wdata[16-1:0];
+          'hA: ethernet_source_MAC[31:0] <= up_wdata;
+          'hB: ethernet_type <= up_wdata[16-1:0];
+          // IPv4 header
+          'hC: ip_version <= up_wdata[4-1:0];
+          'hD: ip_header_length <= up_wdata[4-1:0];
+          'hE: ip_type_of_service <= up_wdata[8-1:0];
+          'h10: ip_identification <= up_wdata[16-1:0];
+          'h11: ip_flags <= up_wdata[3-1:0];
+          'h12: ip_fragment_offset <= up_wdata[13-1:0];
+          'h13: ip_time_to_live <= up_wdata[8-1:0];
+          'h14: ip_protocol <= up_wdata[8-1:0];
+          'h16: ip_source_IP_address <= up_wdata[32-1:0];
+          'h17: ip_destination_IP_address <= up_wdata[32-1:0];
+          // UDP header
+          'h18: udp_source <= up_wdata[16-1:0];
+          'h19: udp_destination <= up_wdata[16-1:0];
+          'h1B: udp_checksum <= up_wdata[16-1:0];
+          // Switch
+          'h1C: switch <= up_wdata[0];
           default: ;
         endcase
       end else begin
@@ -875,14 +1001,42 @@ module application_core #
 
       if (up_rreq == 1'b1) begin
         case (up_raddr)
+          // Generic
           'h0: up_rdata <= version_reg;
           'h1: up_rdata <= scratch_reg;
           'h2: up_rdata <= {{30{1'b0}}, stop_counter_reg, start_counter_reg};
           'h3: up_rdata <= {{31{1'b0}}, clear_counter_reg};
           'h4: up_rdata <= counter_reg;
+          // Data generator
           'h5: up_rdata <= {{31{1'b0}}, start_generator_reg};
-          'h6: up_rdata <= {{24{1'b0}}, counter_limit};
-          'h7: up_rdata <= header;
+          // Packetizer
+          'h6: up_rdata <= {{24{1'b0}}, packet_size};
+          // Ethernet header
+          'h7: up_rdata <= {{16{1'b0}}, ethernet_destination_MAC[48-1:32]};
+          'h8: up_rdata <= ethernet_destination_MAC[31:0];
+          'h9: up_rdata <= {{16{1'b0}}, ethernet_source_MAC[48-1:32]};
+          'hA: up_rdata <= ethernet_source_MAC[31:0];
+          'hB: up_rdata <= {{16{1'b0}}, ethernet_type};
+          // IPv4 header
+          'hC: up_rdata <= {{28{1'b0}}, ip_version};
+          'hD: up_rdata <= {{28{1'b0}}, ip_header_length};
+          'hE: up_rdata <= {{24{1'b0}}, ip_type_of_service};
+          'hF: up_rdata <= {{16{1'b0}}, ip_total_length};
+          'h10: up_rdata <= {{16{1'b0}}, ip_identification};
+          'h11: up_rdata <= {{29{1'b0}}, ip_flags};
+          'h12: up_rdata <= {{19{1'b0}}, ip_fragment_offset};
+          'h13: up_rdata <= {{24{1'b0}}, ip_time_to_live};
+          'h14: up_rdata <= {{24{1'b0}}, ip_protocol};
+          'h15: up_rdata <= {{16{1'b0}}, ip_header_checksum};
+          'h16: up_rdata <= ip_source_IP_address;
+          'h17: up_rdata <= ip_destination_IP_address;
+          // UDP header
+          'h18: up_rdata <= {{16{1'b0}}, udp_source};
+          'h19: up_rdata <= {{16{1'b0}}, udp_destination};
+          'h1A: up_rdata <= {{16{1'b0}}, udp_length};
+          'h1B: up_rdata <= {{16{1'b0}}, udp_checksum};
+          // Switch
+          'h1C: up_rdata <= {{31{1'b0}}, switch};
           default: up_rdata <= 32'd0;
         endcase
       end else begin
@@ -934,9 +1088,7 @@ module application_core #
     end
   end
 
-  /*
-   * AXI-Lite master interface (control to NIC)
-   */
+  // AXI-Lite master interface (control to NIC)
   assign m_axil_ctrl_awaddr = 0;
   assign m_axil_ctrl_awprot = 0;
   assign m_axil_ctrl_awvalid = 1'b0;
@@ -948,10 +1100,8 @@ module application_core #
   assign m_axil_ctrl_arprot = 0;
   assign m_axil_ctrl_arvalid = 1'b0;
   assign m_axil_ctrl_rready = 1'b1;
-
-  /*
-   * DMA interface (control)
-   */
+  
+  // DMA interface (control)
   assign m_axis_ctrl_dma_read_desc_dma_addr = 0;
   assign m_axis_ctrl_dma_read_desc_ram_sel = 0;
   assign m_axis_ctrl_dma_read_desc_ram_addr = 0;
@@ -973,9 +1123,7 @@ module application_core #
   assign ctrl_dma_ram_rd_resp_data = 0;
   assign ctrl_dma_ram_rd_resp_valid = ctrl_dma_ram_rd_cmd_valid;
 
-  /*
-   * DMA interface (data)
-   */
+  // DMA interface (data)
   assign m_axis_data_dma_read_desc_dma_addr = 0;
   assign m_axis_data_dma_read_desc_ram_sel = 0;
   assign m_axis_data_dma_read_desc_ram_addr = 0;
@@ -997,9 +1145,7 @@ module application_core #
   assign data_dma_ram_rd_resp_data = 0;
   assign data_dma_ram_rd_resp_valid = data_dma_ram_rd_cmd_valid;
 
-  /*
-   * Ethernet (direct MAC interface - lowest latency raw traffic)
-   */
+  // Ethernet (direct MAC interface - lowest latency raw traffic)
   assign m_axis_direct_tx_tdata = s_axis_direct_tx_tdata;
   assign m_axis_direct_tx_tkeep = s_axis_direct_tx_tkeep;
   assign m_axis_direct_tx_tvalid = s_axis_direct_tx_tvalid;
@@ -1019,25 +1165,30 @@ module application_core #
   assign m_axis_direct_rx_tlast = s_axis_direct_rx_tlast;
   assign m_axis_direct_rx_tuser = s_axis_direct_rx_tuser;
 
-  /*
-   * Ethernet (synchronous MAC interface - low latency raw traffic)
-   */
-  // assign m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
-  // assign m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
-  // assign m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
-  // assign s_axis_sync_tx_tready = m_axis_sync_tx_tready;
-  // assign m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
-  // assign m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
+  // Ethernet (synchronous MAC interface - low latency raw traffic)
+  always @(*)
+  begin
+    if (!switch) begin
+      m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
+      m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
+      m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
+      s_axis_sync_tx_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
+      m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
 
-  assign s_axis_sync_tx_tready = 1'b0;
+      output_axis_tready = 1'b0;
+    end else begin
+      m_axis_sync_tx_tdata = output_axis_tdata;
+      m_axis_sync_tx_tkeep = output_axis_tkeep;
+      m_axis_sync_tx_tvalid = output_axis_tvalid;
+      output_axis_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = output_axis_tlast;
+      m_axis_sync_tx_tuser = 1'b0;
 
-  assign m_axis_sync_tx_tdata = output_axis_tdata;
-  assign m_axis_sync_tx_tkeep = output_axis_tkeep;
-  assign m_axis_sync_tx_tvalid = output_axis_tvalid;
-  assign output_axis_tready = m_axis_sync_tx_tready;
-  assign m_axis_sync_tx_tlast = output_axis_tlast;
-  assign m_axis_sync_tx_tuser = 1'b0;
-
+      s_axis_sync_tx_tready = 1'b0;
+    end
+  end
+  
   assign m_axis_sync_tx_cpl_ts = s_axis_sync_tx_cpl_ts;
   assign m_axis_sync_tx_cpl_tag = s_axis_sync_tx_cpl_tag;
   assign m_axis_sync_tx_cpl_valid = s_axis_sync_tx_cpl_valid;
@@ -1050,9 +1201,7 @@ module application_core #
   assign m_axis_sync_rx_tlast = s_axis_sync_rx_tlast;
   assign m_axis_sync_rx_tuser = s_axis_sync_rx_tuser;
 
-  /*
-   * Ethernet (internal at interface module)
-   */
+  // Ethernet (internal at interface module)
   assign m_axis_if_tx_tdata = s_axis_if_tx_tdata;
   assign m_axis_if_tx_tkeep = s_axis_if_tx_tkeep;
   assign m_axis_if_tx_tvalid = s_axis_if_tx_tvalid;
@@ -1076,9 +1225,7 @@ module application_core #
   assign m_axis_if_rx_tdest = s_axis_if_rx_tdest;
   assign m_axis_if_rx_tuser = s_axis_if_rx_tuser;
 
-  /*
-   * DDR
-   */
+  // DDR
   assign m_axi_ddr_awid = 0;
   assign m_axi_ddr_awaddr = 0;
   assign m_axi_ddr_awlen = 0;
@@ -1109,9 +1256,7 @@ module application_core #
   assign m_axi_ddr_arvalid = 0;
   assign m_axi_ddr_rready = 0;
 
-  /*
-   * HBM
-   */
+  // HBM
   assign m_axi_hbm_awid = 0;
   assign m_axi_hbm_awaddr = 0;
   assign m_axi_hbm_awlen = 0;
@@ -1142,21 +1287,15 @@ module application_core #
   assign m_axi_hbm_arvalid = 0;
   assign m_axi_hbm_rready = 0;
 
-  /*
-   * Statistics increment output
-   */
+  // Statistics increment output
   assign m_axis_stat_tdata = 0;
   assign m_axis_stat_tid = 0;
   assign m_axis_stat_tvalid = 1'b0;
 
-  /*
-   * GPIO
-   */
+  // GPIO
   assign gpio_out = 0;
 
-  /*
-   * JTAG
-   */
+  // JTAG
   assign jtag_tdo = jtag_tdi;
 
 endmodule
