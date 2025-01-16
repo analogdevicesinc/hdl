@@ -51,6 +51,7 @@ Contents
    AD9081-FMCA-EBZ-X-BAND <ad9081_fmca_ebz_x_band/index>
    AD9083-EVB <ad9083_evb/index>
    AD9084-EBZ <ad9084_ebz/index>
+   AD9084 <ad9084_fmc/index>
    AD916x-FMC <ad916x_fmc/index>
    AD9208-DUAL-EBZ <ad9208_dual_ebz/index>
    AD9209-FMCA-EBZ <ad9209_fmca_ebz/index>
