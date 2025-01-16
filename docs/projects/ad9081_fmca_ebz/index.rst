@@ -165,8 +165,6 @@ Supported carriers
    - R1231, R1234: 1k ohm
    - R1230, R1233: 1k ohm
 
-   :red:`This project requires Quartus Pro 24.1!`
-
 Block design
 -------------------------------------------------------------------------------
 
@@ -255,15 +253,15 @@ Example block design for Single link; M=2; L=8; JESD204C
    .. shell:: bash
 
       $make JESD_MODE=64B66B \
-      $     RX_RATE=16.5     \
-      $     TX_RATE=16.5     \
-      $     RX_JESD_M=2      \
-      $     RX_JESD_L=8      \
-      $     RX_JESD_S=2      \
-      $     RX_JESD_NP=16    \
-      $     TX_JESD_M=2      \
-      $     TX_JESD_L=8      \
-      $     TX_JESD_S=4      \
+      $     RX_LANE_RATE=16.5 \
+      $     TX_LANE_RATE=16.5 \
+      $     RX_JESD_M=2       \
+      $     RX_JESD_L=8       \
+      $     RX_JESD_S=2       \
+      $     RX_JESD_NP=16     \
+      $     TX_JESD_M=2       \
+      $     TX_JESD_L=8       \
+      $     TX_JESD_S=4       \
       $     TX_JESD_NP=8
 
 The Rx link is operating with the following parameters:
@@ -301,9 +299,19 @@ for each project.
    **system_project.tcl** file, located in
    hdl/projects/ad9081_fmca_ebz/$CARRIER/system_project.tcl
 
-.. warning::
+.. important::
 
-   ``Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L``
+   For JESD204B:
+
+   .. math::
+
+      Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L}
+
+   For JESD204C:
+
+   .. math::
+
+      Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{66}{64}}{L}
 
 The following are the parameters of this project that can be configured:
 
@@ -545,8 +553,8 @@ Example for building the project with parameters:
 .. shell::
 
    $cd hdl/projects/ad9081_fmca_ebz/zcu102
-   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5     \
-   $     RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1   \
+   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 \
+   $     RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 \
    $     RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 \
    $     TX_JESD_S=1 TX_JESD_NP=16
 
