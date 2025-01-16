@@ -13,6 +13,7 @@
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script defer="" src="../../_static/app.umd.js?v=689b8755"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -544,7 +545,6 @@ the following reworks are required:</p>
 <li><p>R1231, R1234: 1k ohm</p></li>
 <li><p>R1230, R1233: 1k ohm</p></li>
 </ul>
-<p><span class="red">This project requires Quartus Pro 24.1!</span></p>
 </div>
 </section>
 <section id="block-design">
@@ -618,15 +618,15 @@ however in newer versions it is replaced with ADI’s util_adxcvr IP core.</p>
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>64B66B<span class="w"> </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w">     </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">TX_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w">     </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">      </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">    </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">      </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">      </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">4</span><span class="w">      </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">2</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w">     </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">2</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w">       </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">4</span><span class="w">       </span><span class="se">\</span>
 <span class="w">     </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">8</span>
 </pre></div>
 </div>
@@ -665,9 +665,18 @@ for each project.</p>
 <strong>system_project.tcl</strong> file, located in
 hdl/projects/ad9081_fmca_ebz/$CARRIER/system_project.tcl</p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">Lane</span> <span class="pre">Rate</span> <span class="pre">=</span> <span class="pre">I/Q</span> <span class="pre">Sample</span> <span class="pre">Rate</span> <span class="pre">x</span> <span class="pre">M</span> <span class="pre">x</span> <span class="pre">N'</span> <span class="pre">x</span> <span class="pre">(10</span> <span class="pre">\</span> <span class="pre">8)</span> <span class="pre">\</span> <span class="pre">L</span></code></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>For JESD204B:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{10}{8}}{L}\]</div>
+</div>
+<p>For JESD204C:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[Lane Rate = \frac{IQ Sample Rate * M * NP * \frac{66}{64}}{L}\]</div>
+</div>
 </div>
 <p>The following are the parameters of this project that can be configured:</p>
 <ul class="simple">
@@ -1058,8 +1067,8 @@ location and run the make command by typing in you command prompt:</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9081_fmca_ebz/zcu102$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w">     </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w">   </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="nv">TX_LANE_RATE</span><span class="o">=</span><span class="m">2</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
 <span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
 <span class="w">     </span><span class="nv">TX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span>
 </pre></div>
