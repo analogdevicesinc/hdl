@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -210,10 +210,10 @@ end
 
  util_dec256sinc24b #(
  ) i_util_dec256sinc24b_interface (
-    .mclk1 (adc_clk_s),
+    .clk (adc_clk_s),
     .reset (adc_reset_s),
-    .mdata1 (adc_data_in),
-    .DATA (adc_data_out_s),
+    .data_in (adc_data_in),
+    .data_out (adc_data_out_s),
     .data_en (adc_data_en),
     .dec_rate (adc_dec_rate));
 
