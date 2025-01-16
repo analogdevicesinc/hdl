@@ -70,29 +70,19 @@ ad_ip_instance axi_ad408x axi_ad4080_adc_a
 
 ad_ip_instance axi_ad408x axi_ad4080_adc_b
 ad_ip_parameter axi_ad4080_adc_b CONFIG.IO_DELAY_GROUP adc_if_delay_group2
+
 # dma for rx data
 
-ad_ip_instance axi_dmac axi_ad4080_dma_adca
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.DMA_DATA_WIDTH_SRC 32
-ad_ip_parameter axi_ad4080_dma_adca CONFIG.DMA_DATA_WIDTH_DEST 64
-
-ad_ip_instance axi_dmac axi_ad4080_dma_adcb
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.DMA_DATA_WIDTH_SRC 32
-ad_ip_parameter axi_ad4080_dma_adcb CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_instance axi_dmac axi_ad4880_dma
+ad_ip_parameter axi_ad4880_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_ad4880_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_ad4880_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_ad4880_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad4880_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad4880_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad4880_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad4880_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4080_adc
 
@@ -122,37 +112,42 @@ ad_connect adcb_cnv_in_n             axi_ad4080_adc_b/cnv_in_n
 ad_connect adcb_filter_data_ready_n  axi_ad4080_adc_b/filter_data_ready_n
 ad_connect $sys_iodelay_clk          axi_ad4080_adc_b/delay_clk
 
+ad_ip_instance util_cpack2 util_ad4880_adc_pack { \
+  NUM_OF_CHANNELS 2 \
+  SAMPLE_DATA_WIDTH 32 \
+}
+
 # connect datapath
 
-ad_connect axi_ad4080_adc_a/adc_data  axi_ad4080_dma_adca/fifo_wr_din
-ad_connect axi_ad4080_adc_a/adc_valid axi_ad4080_dma_adca/fifo_wr_en
-ad_connect axi_ad4080_adc_a/adc_dovf  axi_ad4080_dma_adca/fifo_wr_overflow
+ad_connect axi_ad4080_adc_a/adc_clk    util_ad4880_adc_pack/clk
+ad_connect axi_ad4080_adc_a/adc_rst    util_ad4880_adc_pack/reset
+ad_connect axi_ad4080_adc_a/adc_valid  util_ad4880_adc_pack/fifo_wr_en
+ad_connect axi_ad4080_adc_a/adc_data   util_ad4880_adc_pack/fifo_wr_data_0
+ad_connect axi_ad4080_adc_b/adc_data   util_ad4880_adc_pack/fifo_wr_data_1
+ad_connect axi_ad4080_adc_a/adc_enable util_ad4880_adc_pack/enable_0
+ad_connect axi_ad4080_adc_b/adc_enable util_ad4880_adc_pack/enable_1
+ad_connect axi_ad4080_adc_a/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
+ad_connect axi_ad4080_adc_b/adc_dovf   util_ad4880_adc_pack/fifo_wr_overflow
 
-ad_connect axi_ad4080_adc_b/adc_data  axi_ad4080_dma_adcb/fifo_wr_din
-ad_connect axi_ad4080_adc_b/adc_valid axi_ad4080_dma_adcb/fifo_wr_en
-ad_connect axi_ad4080_adc_b/adc_dovf  axi_ad4080_dma_adcb/fifo_wr_overflow
-
+ad_connect util_ad4880_adc_pack/packed_fifo_wr   axi_ad4880_dma/fifo_wr
+ad_connect util_ad4880_adc_pack/packed_sync      axi_ad4880_dma/sync
 
 # system runs on phy's received clock
 
-ad_connect axi_ad4080_adc_a/adc_clk axi_ad4080_dma_adca/fifo_wr_clk
-ad_connect axi_ad4080_adc_b/adc_clk axi_ad4080_dma_adcb/fifo_wr_clk
+ad_connect axi_ad4080_adc_a/adc_clk axi_ad4880_dma/fifo_wr_clk
 
-
-ad_connect $sys_cpu_resetn axi_ad4080_dma_adca/m_dest_axi_aresetn
-ad_connect $sys_cpu_resetn axi_ad4080_dma_adcb/m_dest_axi_aresetn
+ad_connect $sys_cpu_resetn axi_ad4880_dma/m_dest_axi_aresetn
 
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc_a
 ad_cpu_interconnect 0x44A10000 axi_ad4080_adc_b
-ad_cpu_interconnect 0x44A30000 axi_ad4080_dma_adca
-ad_cpu_interconnect 0x44A50000 axi_ad4080_dma_adcb
+ad_cpu_interconnect 0x44A30000 axi_ad4880_dma
+
 ad_cpu_interconnect 0x44a70000 ad4080_b_spi
 ad_cpu_interconnect 0x44A80000 ad408x_clock_monitor
 
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma_adca/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4080_dma_adcb/m_dest_axi
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad4880_dma/m_dest_axi
 
-ad_cpu_interrupt ps-13 mb-12 axi_ad4080_dma_adca/irq
-ad_cpu_interrupt ps-12 mb-11 axi_ad4080_dma_adcb/irq
+
+ad_cpu_interrupt ps-13 mb-12 axi_ad4880_dma/irq
 ad_cpu_interrupt ps-10 mb-9 ad4080_b_spi/ip2intc_irpt

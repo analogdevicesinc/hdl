@@ -76,5 +76,5 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p]
 create_clock -period 25.00 -name ref_clk  [get_ports adca_clk_p]
-create_clock -period 2.500 -name dco_clk  [get_ports adcb_dco_p]
-create_clock -period 25.00 -name ref_clk  [get_ports adcb_clk_p]
+create_clock -period 2.500 -name dco_clk1  [get_ports adcb_dco_p]
+create_clock -period 25.00 -name ref_clk1  [get_ports adcb_clk_p]

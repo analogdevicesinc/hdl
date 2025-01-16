@@ -63,7 +63,8 @@ module axi_ad408x #(
   output      [ 31:0]     adc_data,
   output                  adc_valid,
   input                   adc_dovf,
-
+  output                  adc_enable,
+  output                  adc_rst,
   // delay interface
 
   input                   delay_clk,
@@ -108,7 +109,6 @@ module axi_ad408x #(
   wire             filter_enable;
   wire             delay_locked;
   wire             sync_status;
-  wire             adc_enable;
   wire             adc_clk_s;
   wire             adc_rst_s;
   wire             delay_rst;
@@ -138,7 +138,7 @@ module axi_ad408x #(
   assign adc_clk = adc_clk_s;
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
+  assign adc_rst = adc_rst_s;
   assign self_sync     = adc_custom_control_s[1];
   assign filter_enable = adc_custom_control_s[0];
 
