@@ -667,7 +667,7 @@ module application_core #
   always @(posedge input_clk)
   begin
     if (!input_rstn) begin
-      packet_size_cdc <= 8'h0;
+      packet_size_cdc <= packet_size;
     end else begin
       if (new_packet_size_ff_cdc) begin
         packet_size_cdc <= packet_size;
