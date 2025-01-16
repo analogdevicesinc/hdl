@@ -34,14 +34,23 @@ set in_out_clk [get_clocks -of_objects [get_ports $in_out_clk_port]]
 # false paths
 
 set_false_path \
-  -to [get_cells -hier -filter {NAME =~ *sync_bits_start_generator_reg/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
+  -to [get_cells -hier -filter {NAME =~ *sync_bits_start_app_reg/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
 
 # max delay, limit delay
 
 set_max_delay -datapath_only \
   -from $clk \
-  -to [get_cells -hier -filter {NAME =~ *sync_bits_packet_size/cdc_sync_stage1_reg* && IS_SEQUENTIAL}] \
+  -to [get_cells -hier -filter {NAME =~ *sync_bits_new_packet_size_ff/cdc_sync_stage1_reg* && IS_SEQUENTIAL}] \
   [get_property -min PERIOD $clk]
+
+set_max_delay -datapath_only \
+  -from $clk \
+  -to [get_cells -hier -filter {NAME =~ *packet_size_cdc* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD $clk]
+set_bus_skew \
+  -from [get_cells -hier -filter {NAME =~ *packet_size* && IS_SEQUENTIAL}] \
+  -to [get_cells -hier -filter {NAME =~ *packet_size_cdc* && IS_SEQUENTIAL}] \
+  [get_property -min PERIOD $in_out_clk]
 
 # gray coding constraints
 
@@ -61,11 +70,3 @@ set_bus_skew \
   -from [get_cells -hier -filter {NAME =~ *cdc_scale_fifo/*i_raddr_sync_gray/cdc_sync_stage0_reg* && IS_SEQUENTIAL}] \
   -to [get_cells -hier -filter {NAME =~ *cdc_scale_fifo/*i_raddr_sync_gray/cdc_sync_stage1_reg* && IS_SEQUENTIAL}] \
   [get_property -min PERIOD $in_out_clk]
-
-# multicycle path
-
-# set_multicycle_path 2 -setup -from [get_pins data0_reg/C] -to [get_pins ip_header_checksum_reg0_reg/D]
-# set_multicycle_path 1 -hold -end -from [get_pins data0_reg/C] -to [get_pins ip_header_checksum_reg0_reg/D]
-
-# set_multicycle_path 3 -setup -to [get_pins ip_header_checksum_reg0_reg/D]
-# set_multicycle_path 1 -hold -end -to [get_pins ip_header_checksum_reg0_reg/D]

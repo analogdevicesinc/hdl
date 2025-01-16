@@ -320,7 +320,7 @@ module corundum_core #(
   /*
   * Interrupt outputs
   */
-  output wire                                       irq,
+  output reg                                        irq,
 
   /*
   * PTP clock
@@ -522,13 +522,14 @@ reg  [IRQ_COUNT-1:0] irq_wide;
 
 always @(posedge clk)
 begin
-    if (rst)
+    if (rst) begin
         irq_wide <= 'h0;
-    else
+        irq <= 1'b0;
+    end else begin
         irq_wide <= {irq_wide[IRQ_COUNT-2:0], |irq_bus};
+        irq <= |irq_wide;
+    end
 end
-
-assign irq = |irq_wide;
 
 generate if (APP_ENABLE && DMA_ADDR_WIDTH_APP != AXI_ADDR_WIDTH)
   $fatal(0, "DMA_ADDR_WIDTH_APP != AXI_ADDR_WIDTH");

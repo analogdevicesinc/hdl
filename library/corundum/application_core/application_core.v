@@ -112,7 +112,10 @@ module application_core #
 
   // Statistics counter subsystem
   parameter STAT_INC_WIDTH = 24,
-  parameter STAT_ID_WIDTH = 12
+  parameter STAT_ID_WIDTH = 12,
+  
+  // Input stream
+  parameter INPUT_WIDTH = 2048
 )
 (
   input  wire                                           clk,
@@ -538,50 +541,19 @@ module application_core #
 
   ////----------------------------------------Data generation---------------//
   //////////////////////////////////////////////////
-  localparam             INPUT_WIDTH = 2048;
-
-  reg                    start_generator;
-  reg                    start_generator_reg;
-  wire                   start_generator_reg_cdc;
   reg  [7:0]             gen_data;
 
   reg  [INPUT_WIDTH-1:0] input_axis_tdata;
   reg                    input_axis_tvalid;
   wire                   input_axis_tready;
 
-  sync_bits #(
-    .NUM_OF_BITS(1)
-  ) sync_bits_start_generator_reg (
-    .in_bits(start_generator_reg),
-    .out_resetn(input_rstn),
-    .out_clk(input_clk),
-    .out_bits(start_generator_reg_cdc)
-  );
-
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      start_generator <= 1'b0;
-    end else begin
-      if (start_generator_reg_cdc) begin
-        start_generator <= 1'b1;
-      end else if (gen_data[3:0] == 4'hF) begin
-        start_generator <= 1'b0;
-      end
-    end
-  end
-
   always @(posedge input_clk)
   begin
     if (!input_rstn) begin
       gen_data <= 8'd0;
     end else begin
-      if (start_generator) begin
-        if (input_axis_tready) begin
-          gen_data <= gen_data + 1;
-        end
-      end else begin
-        gen_data <= 8'd0;
+      if (input_axis_tready) begin
+        gen_data <= gen_data + 1;
       end
     end
   end
@@ -593,25 +565,124 @@ module application_core #
       input_axis_tvalid <= 1'b0;
     end else begin
       input_axis_tdata <= {INPUT_WIDTH/8{gen_data}};
-      input_axis_tvalid <= start_generator;
+      input_axis_tvalid <= 1'b1;
     end
   end
+
+  ////----------------------------------------Start application---------------//
+  //////////////////////////////////////////////////
+  reg  start_app_reg;
+  wire start_app_reg_cdc;
+  reg  start_app;
+
+  reg  packet_tlast;
+
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) sync_bits_start_app_reg (
+    .in_bits(start_app_reg),
+    .out_resetn(input_rstn),
+    .out_clk(input_clk),
+    .out_bits(start_app_reg_cdc)
+  );
+
+  always @(posedge input_clk)
+  begin
+    if (!input_rstn) begin
+      start_app <= 1'b0;
+    end else begin
+      if (start_app_reg_cdc) begin
+        start_app <= 1'b1;
+      end else if(!start_app_reg_cdc && packet_tlast) begin
+        start_app <= 1'b0;
+      end
+    end
+  end
+
+  ////----------------------------------------CDC and Scaling FIFO----------//
+  //////////////////////////////////////////////////
+  wire [INPUT_WIDTH-1:0] input_axis_tdata_buffered;
+  wire                   input_axis_tvalid_buffered;
+  wire                   input_axis_tready_buffered;
+
+  wire                   input_rstn_gated;
+
+  wire                   input_axis_tvalid_gated;
+
+  assign input_rstn_gated = input_rstn && start_app;
+
+  util_axis_fifo #(
+    .DATA_WIDTH(INPUT_WIDTH),
+    .ADDRESS_WIDTH($clog2(8192/INPUT_WIDTH)+1),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(1),
+    .ALMOST_EMPTY_THRESHOLD(0),
+    .ALMOST_FULL_THRESHOLD(0),
+    .TLAST_EN(0),
+    .TKEEP_EN(0),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) buffer_fifo (
+    .m_axis_aclk(input_clk),
+    .m_axis_aresetn(input_rstn_gated),
+    .m_axis_ready(input_axis_tready_buffered),
+    .m_axis_valid(input_axis_tvalid_buffered),
+    .m_axis_data(input_axis_tdata_buffered),
+    .m_axis_tkeep(),
+    .m_axis_tlast(),
+    .m_axis_empty(),
+    .m_axis_almost_empty(),
+    .m_axis_level(),
+  
+    .s_axis_aclk(input_clk),
+    .s_axis_aresetn(input_rstn_gated),
+    .s_axis_ready(input_axis_tready),
+    .s_axis_valid(input_axis_tvalid),
+    .s_axis_data(input_axis_tdata),
+    .s_axis_tkeep(),
+    .s_axis_tlast(),
+    .s_axis_full(),
+    .s_axis_almost_full(),
+    .s_axis_room()
+  );
+
+  assign input_axis_tvalid_gated = input_axis_tvalid_buffered && start_app;
 
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
   reg  [7:0] sample_counter;
   reg  [7:0] packet_size;
-  wire [7:0] packet_size_cdc;
-  reg        packet_tlast;
+  reg  [7:0] packet_size_cdc;
+  reg        new_packet_size_ff;
+  wire       new_packet_size_ff_cdc;
 
   sync_bits #(
-    .NUM_OF_BITS(8)
-  ) sync_bits_packet_size (
-    .in_bits(packet_size),
+    .NUM_OF_BITS(1)
+  ) sync_bits_new_packet_size_ff (
+    .in_bits(new_packet_size_ff),
     .out_resetn(input_rstn),
     .out_clk(input_clk),
-    .out_bits(packet_size_cdc)
+    .out_bits(new_packet_size_ff_cdc)
   );
+
+  always @(posedge input_clk)
+  begin
+    if (!input_rstn) begin
+      packet_size_cdc <= 8'h0;
+    end else begin
+      if (new_packet_size_ff_cdc) begin
+        packet_size_cdc <= packet_size;
+      end
+    end
+  end
+
+  // sync_bits #(
+  //   .NUM_OF_BITS(8)
+  // ) sync_bits_packet_size (
+  //   .in_bits(packet_size),
+  //   .out_resetn(input_rstn),
+  //   .out_clk(input_clk),
+  //   .out_bits(packet_size_cdc)
+  // );
 
   always @(posedge input_clk)
   begin
@@ -619,7 +690,7 @@ module application_core #
       sample_counter <= 8'd1;
       packet_tlast <= 1'b0;
     end else begin
-      if (input_axis_tvalid) begin
+      if (input_axis_tvalid_gated) begin
         if (sample_counter < packet_size_cdc-1) begin
           sample_counter <= sample_counter + 1;
           packet_tlast <= 1'b0;
@@ -641,7 +712,7 @@ module application_core #
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
     .S_DATA_WIDTH(INPUT_WIDTH),
-    .ADDRESS_WIDTH(4),
+    .ADDRESS_WIDTH($clog2(8192/INPUT_WIDTH)+1),
     .M_DATA_WIDTH(AXIS_DATA_WIDTH),
     .M_AXIS_REGISTERED(1),
     .ALMOST_EMPTY_THRESHOLD(0),
@@ -664,9 +735,9 @@ module application_core #
   
     .s_axis_aclk(input_clk),
     .s_axis_aresetn(input_rstn),
-    .s_axis_ready(input_axis_tready),
-    .s_axis_valid(input_axis_tvalid),
-    .s_axis_data(input_axis_tdata),
+    .s_axis_ready(input_axis_tready_buffered),
+    .s_axis_valid(input_axis_tvalid_gated),
+    .s_axis_data(input_axis_tdata_buffered),
     .s_axis_tkeep(),
     .s_axis_tlast(packet_tlast),
     .s_axis_full(),
@@ -927,9 +998,10 @@ module application_core #
       scratch_reg <= 'h0;
       clear_counter_reg <= 1'b0;
       // Data generator
-      start_generator_reg <= 1'b0;
+      start_app_reg <= 1'b0;
       // Packetizer
       packet_size <= 8'd4;
+      new_packet_size_ff <= 1'b0;
       // Ethernet header
       ethernet_destination_MAC <= 48'hB83FD22A0BF1;
       ethernet_source_MAC <= 48'h000A35000102;
@@ -967,9 +1039,12 @@ module application_core #
           end
           'h3: clear_counter_reg <= up_wdata[0];
           // Data generator
-          'h5: start_generator_reg <= up_wdata[0];
+          'h5: start_app_reg <= up_wdata[0];
           // Packetizer
-          'h6: packet_size <= up_wdata[7:0];
+          'h6: begin
+            packet_size <= up_wdata[7:0];
+            new_packet_size_ff <= ~new_packet_size_ff;
+          end
           // Ethernet header
           'h7: ethernet_destination_MAC[48-1:32] <= up_wdata[16-1:0];
           'h8: ethernet_destination_MAC[31:0] <= up_wdata;
@@ -1008,7 +1083,7 @@ module application_core #
           'h3: up_rdata <= {{31{1'b0}}, clear_counter_reg};
           'h4: up_rdata <= counter_reg;
           // Data generator
-          'h5: up_rdata <= {{31{1'b0}}, start_generator_reg};
+          'h5: up_rdata <= {{31{1'b0}}, start_app_reg};
           // Packetizer
           'h6: up_rdata <= {{24{1'b0}}, packet_size};
           // Ethernet header
