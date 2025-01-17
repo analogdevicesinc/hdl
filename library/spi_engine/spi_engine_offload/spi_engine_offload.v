@@ -88,14 +88,16 @@ module spi_engine_offload #(
 
   output offload_sdi_valid,
   input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data
+  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
+
+  output interconnect_dir
 );
 
   localparam SDO_SOURCE_STREAM = 1'b1;
   localparam SDO_SOURCE_MEM    = 1'b0;
 
   reg spi_active = 1'b0;
-  reg sdo_source_select = SDO_SOURCE_MEM;
+  wire sdo_source_select;
 
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] ctrl_cmd_wr_addr = 'h00;
   reg [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr = 'h00;
@@ -111,10 +113,12 @@ module spi_engine_offload #(
   wire [CMD_MEM_ADDRESS_WIDTH-1:0] spi_cmd_rd_addr_next;
   wire spi_enable;
   wire trigger_posedge;
+  reg sdo_mem_valid;
 
+  assign sdo_source_select = SDO_STREAMING;
   assign cmd_valid = spi_active;
   assign sdo_data_valid = (sdo_source_select == SDO_SOURCE_STREAM) ?
-                           s_axis_sdo_valid : spi_active;
+                           s_axis_sdo_valid : (spi_active && sdo_mem_valid);
   assign s_axis_sdo_ready = (sdo_source_select == SDO_SOURCE_STREAM) ?
                              sdo_data_ready : 1'b0;
   assign offload_sdi_valid = sdi_data_valid;
@@ -212,6 +216,8 @@ module spi_engine_offload #(
   wire ctrl_is_enabled;
   reg spi_enabled = 1'b0;
 
+  assign interconnect_dir = spi_enabled;
+
   always @(posedge ctrl_clk) begin
     if (ctrl_enable) begin
       ctrl_do_enable <= 1'b1;
@@ -247,6 +253,7 @@ module spi_engine_offload #(
   end else begin
   assign spi_enable = ctrl_enable;
   assign ctrl_enabled = spi_enable | spi_active;
+  assign interconnect_dir = ctrl_enabled;
   end endgenerate
 
   assign spi_cmd_rd_addr_next = spi_cmd_rd_addr + 1;
@@ -278,30 +285,10 @@ module spi_engine_offload #(
       if (!spi_active) begin
         // start offload when we have a valid trigger, offload is enabled and
         // the DMA is enabled
-        if (trigger_posedge && spi_enable && (offload_sdi_ready || (SDO_STREAMING && s_axis_sdo_valid)))
+        if (trigger_posedge && spi_enable)
           spi_active <= 1'b1;
       end else if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
         spi_active <= 1'b0;
-      end
-    end
-  end
-
-  always @(posedge spi_clk ) begin
-    if (!spi_resetn) begin
-      sdo_source_select <= SDO_SOURCE_MEM;
-    end else begin
-      if (SDO_STREAMING) begin
-        if (sdo_source_select == SDO_SOURCE_MEM) begin
-          // switch to streaming sdo after we're done with reading the sdo memory
-          if (sdo_data_valid && sdo_data_ready && (spi_sdo_rd_addr+1 == ctrl_sdo_wr_addr)|| (ctrl_sdo_wr_addr==0 && spi_active) ) begin
-            sdo_source_select <= SDO_SOURCE_STREAM;
-          end
-        end else begin
-          // switch back to sdo memory after last command accepted
-          if (cmd_ready && (spi_cmd_rd_addr_next == ctrl_cmd_wr_addr)) begin
-            sdo_source_select <= SDO_SOURCE_MEM;
-          end
-        end
       end
     end
   end
@@ -319,6 +306,18 @@ module spi_engine_offload #(
       spi_sdo_rd_addr <= 'h00;
     end else if (sdo_data_ready && (sdo_source_select == SDO_SOURCE_MEM)) begin
       spi_sdo_rd_addr <= spi_sdo_rd_addr + 1'b1;
+    end
+  end
+
+  always @(posedge spi_clk ) begin
+    if (!spi_resetn) begin
+      sdo_mem_valid <= 1'b0;
+    end else begin
+      if (!spi_active && trigger_posedge && spi_enable) begin
+        sdo_mem_valid <= (ctrl_sdo_wr_addr != 'h00); // if ctrl_sdo_wr_addr is 0, mem is empty
+      end else if (sdo_data_ready && spi_active && sdo_mem_valid && (spi_sdo_rd_addr + 1'b1 == ctrl_sdo_wr_addr))  begin
+        sdo_mem_valid <= 1'b0;
+      end
     end
   end
 

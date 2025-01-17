@@ -18,6 +18,8 @@ XML_FLIST += spi_engine_ctrl.xml
 XML_FLIST += spi_engine_ctrl_rtl.xml
 XML_FLIST += spi_engine_offload_ctrl.xml
 XML_FLIST += spi_engine_offload_ctrl_rtl.xml
+XML_FLIST += spi_engine_interconnect_ctrl.xml
+XML_FLIST += spi_engine_interconnect_ctrl_rtl.xml
 
 M_FLIST := *.log
 M_FLIST += *.jou

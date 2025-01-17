@@ -63,6 +63,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_ip_parameter $interconnect CONFIG.NUM_OF_SDI $num_sdi
 
   ad_connect $axi_regmap/spi_engine_offload_ctrl0 $offload/spi_engine_offload_ctrl
+  ad_connect $offload/m_interconnect_ctrl $interconnect/s_interconnect_ctrl
   ad_connect $offload/spi_engine_ctrl $interconnect/s0_ctrl
   ad_connect $axi_regmap/spi_engine_ctrl $interconnect/s1_ctrl
   ad_connect $interconnect/m_ctrl $execution/ctrl
