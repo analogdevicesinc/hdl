@@ -97,7 +97,7 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL0_REF_CTRL__FREQMHZ 100
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL1_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__SRCSEL {IOPLL}
-ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 200
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 250
 ad_ip_parameter sys_ps8 CONFIG.PSU__FPGA_PL2_ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__SRCSEL {IOPLL}
 ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL2_REF_CTRL__FREQMHZ 12.288
@@ -155,12 +155,19 @@ ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 # system reset/clock definitions
 
 ad_connect  sys_cpu_clk sys_ps8/pl_clk0
-ad_connect  sys_200m_clk sys_ps8/pl_clk1
+ad_connect  corundum_clk sys_ps8/pl_clk1
 ad_connect  i2s_m_clk sys_ps8/pl_clk2
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_ps8/pl_resetn0 sys_rstgen/ext_reset_in
+
+ad_ip_instance proc_sys_reset corundum_reset
+ad_ip_parameter corundum_reset CONFIG.C_EXT_RST_WIDTH 1
+ad_connect  corundum_rst       corundum_reset/peripheral_reset
+ad_connect  corundum_rstn      corundum_reset/peripheral_aresetn
+ad_connect  corundum_clk       corundum_reset/slowest_sync_clk
+ad_connect  sys_ps8/pl_resetn0 corundum_reset/ext_reset_in
 
 # gpio
 
@@ -714,7 +721,7 @@ ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 250
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 ad_connect sys_cpu_clk dma_clk_wiz/clk_in1

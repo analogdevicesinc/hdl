@@ -150,6 +150,9 @@ create_bd_port -dir O  qsfp_lpmode
 
 create_bd_port -dir O -from 7 -to 0 led
 
+
+
+
 # Corundum NIC
 
 ad_ip_instance corundum corundum
@@ -305,8 +308,8 @@ ad_ip_parameter corundum CONFIG.STAT_ID_WIDTH "12"
 
 set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [get_filesets sources_1]
 
-ad_connect corundum/clk sys_dma_clk
-ad_connect corundum/rst sys_dma_rstgen/peripheral_reset
+ad_connect corundum/clk corundum_clk
+ad_connect corundum/rst corundum_rst
 
 
 ad_connect corundum/qsfp_rx1_p            qsfp_rx1_p
@@ -347,18 +350,18 @@ ad_ip_instance axi_interconnect smartconnect_corundum
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_MI 2
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_SI 1
 
-ad_connect  sys_250m_interconnect_resetn sys_dma_rstgen/interconnect_aresetn
-set  sys_dma_interconnect_resetn     [get_bd_nets sys_250m_interconnect_resetn]
 
-ad_connect smartconnect_corundum/ARESETN $sys_dma_interconnect_resetn
-ad_connect smartconnect_corundum/S00_ARESETN $sys_dma_interconnect_resetn
-ad_connect smartconnect_corundum/M00_ARESETN $sys_dma_interconnect_resetn
-ad_connect smartconnect_corundum/M01_ARESETN $sys_dma_interconnect_resetn
 
-ad_connect smartconnect_corundum/ACLK sys_dma_clk
-ad_connect smartconnect_corundum/S00_ACLK sys_dma_clk
-ad_connect smartconnect_corundum/M00_ACLK sys_dma_clk
-ad_connect smartconnect_corundum/M01_ACLK sys_dma_clk
+
+ad_connect smartconnect_corundum/ARESETN     corundum_rstn
+ad_connect smartconnect_corundum/S00_ARESETN corundum_rstn
+ad_connect smartconnect_corundum/M00_ARESETN corundum_rstn
+ad_connect smartconnect_corundum/M01_ARESETN corundum_rstn
+
+ad_connect smartconnect_corundum/ACLK     corundum_clk
+ad_connect smartconnect_corundum/S00_ACLK corundum_clk
+ad_connect smartconnect_corundum/M00_ACLK corundum_clk
+ad_connect smartconnect_corundum/M01_ACLK corundum_clk
 
 ad_connect smartconnect_corundum/M00_AXI corundum/s_axil_ctrl
 ad_connect smartconnect_corundum/M01_AXI corundum/s_axil_app_ctrl
@@ -366,7 +369,7 @@ ad_connect smartconnect_corundum/M01_AXI corundum/s_axil_app_ctrl
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__MAXIGP0__DATA_WIDTH 32
 ad_connect smartconnect_corundum/S00_AXI sys_ps8/M_AXI_HPM0_FPD
-ad_connect sys_ps8/maxihpm0_fpd_aclk sys_dma_clk
+ad_connect sys_ps8/maxihpm0_fpd_aclk corundum_clk
 
 assign_bd_address -offset 0xA000_0000 [get_bd_addr_segs \
   corundum/s_axil_ctrl/Reg
@@ -383,8 +386,8 @@ ad_connect util_reduced_logic_0/Op1 corundum/core_irq
 
 ad_cpu_interrupt ps-4 mb-4 util_reduced_logic_0/Res
 
-ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0_FPD
-ad_mem_hpc0_interconnect sys_dma_clk corundum/m_axi_dma
+ad_mem_hpc0_interconnect corundum_clk sys_ps8/S_AXI_HPC0_FPD
+ad_mem_hpc0_interconnect corundum_clk corundum/m_axi_dma
 
 assign_bd_address [get_bd_addr_segs { \
   sys_ps8/SAXIGP0/HPC0_LPS_OCM \
