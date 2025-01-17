@@ -6,12 +6,14 @@ AD3552R-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD3552R` is an evaluation board for the
-:adi:`AD3552R`, a dual-channel, 16-bit fast precision
-digital-to-analog converter (DAC). Each channel of the :adi:`AD3552R`
-is equipped with a different transimpedance amplifier: Channel 0 has a fast
-amplifier that achieves the optimal dynamic performance and Channel 1 has a
-precision amplifier that guarantees the optimal DC precision over temperature.
+The :adi:`EVAL-AD3552R <EVAL-AD3552R>` is an evaluation board for the 
+:adi:`AD3552R <AD3552R>`, a dual-channel, 16-bit fast precision 
+digital-to-analog converter (DAC). The same eval board can be used to evaluate
+the :adi:`AD3551R <AD3551R>`, the single channel part. Each channel of the 
+:adi:`AD3552R <AD3552R>` is equipped with a different transimpedance 
+amplifier: Channel 0 has a fast amplifier that achieves the optimal dynamic 
+performance and Channel 1 has a precision amplifier that guarantees the 
+optimal DC precision over temperature.
 
 The board allows testing all the output ranges of the DAC, waveform generation,
 power supply and reference options.
@@ -24,7 +26,8 @@ Supported boards
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD3552R`
+-  :adi:`AD3552R`
+-  :adi:`AD3551R`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -66,9 +69,9 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ====================  ===============
 Instance              Zynq/Microblaze
 ====================  ===============
-axi_ad3552r_dac       0x44A7_0000
-axi_dac_dma           0x44A3_0000
-axi_clkgen            0x44B0_0000
+axi_ad35xxr_dac       0x44A7_0000
+axi_dac_dma           0x44A3_0000 
+axi_clkgen            0x44B0_0000    
 ====================  ===============
 
 GPIOs
@@ -88,37 +91,37 @@ GPIOs
      -
      - Zynq-7000
      - Zynq MP
-   * - ad3552r_resetn
+   * - ad35xxr_resetn
      - OUT
      - 38
      - 92
      - 116
-   * - ad3552r_gpio_9
+   * - ad35xxr_gpio_9
      - INOUT
      - 37
      - 91
      - 115
-   * - ad3552r_gpio_8
+   * - ad35xxr_gpio_8
      - INOUT
      - 36
      - 90
      - 114
-   * - ad3552r_gpio_7
+   * - ad35xxr_gpio_7
      - INOUT
      - 35
      - 89
      - 113
-   * - ad3552r_gpio_6
+   * - ad35xxr_gpio_6
      - INOUT
      - 34
      - 88
      - 112
-   * - ad3552r_alertn
+   * - ad35xxr_alertn
      - INOUT
      - 33
      - 87
      - 111
-   * - ad3552r_ldacn
+   * - ad35xxr_ldacn
      - INOUT
      - 32
      - 86
@@ -150,8 +153,8 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $cd hdl/projects/ad3552r_evb/zed
-   $make
+   user@analog:~$ cd hdl/projects/ad35xxr_evb/zed
+   user@analog:~/hdl/projects/ad35xxr_evb/zed$ make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -168,8 +171,8 @@ Hardware related
 
 - Product datasheets:
 
-  - :adi:`AD3552R`
-  - :adi:`EVAL-AD3552R`
+   -  :adi:`AD3552R`
+   -  :adi:`AD3551R`
 
 - :adi:`UG-2217, User Guide | EVAL-AD3552R <media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf>`
 
@@ -186,9 +189,9 @@ HDL related
      - Source code link
      - Documentation link
 
-   * - AXI_AD3552R
-     - :git-hdl:`library/axi_ad3552r`
-     - :ref:`axi_ad3552r`
+   * - AXI_AD35XXR
+     - :git-hdl:`dev_ad3542r:library/axi_ad35xxr`
+     - :ref:`here <axi_ad3552r>`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`

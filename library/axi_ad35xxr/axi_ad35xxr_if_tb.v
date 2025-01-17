@@ -35,8 +35,8 @@
 
 `timescale 1ns/100ps
 
-module axi_ad3552r_if_tb;
-  parameter VCD_FILE = "axi_ad3552r_if_tb.vcd";
+module axi_ad35xxr_if_tb;
+  parameter VCD_FILE = "axi_ad35xxr_if_tb.vcd";
 
   `define TIMEOUT 9000
   `include "../common/tb/tb_base.v"
@@ -47,16 +47,17 @@ module axi_ad3552r_if_tb;
   wire             dac_data_ready;
   wire   [ 3:0]    sdio_i;
   wire   [ 3:0]    sdio_o;
-  wire             sdio_t;
+  wire   [ 3:0]    sdio_t;
   wire   [31:0]    dac_data_final;
   wire   [ 3:0]    readback_data_shift;
-  wire   [ 4:0]    data_increment_valid;
+  wire   [ 5:0]    data_increment_valid;
   wire             if_busy;
 
   reg    [ 7:0]    address_write  = 8'b0;
   reg              dac_clk        = 1'b0;
   reg              reset_in       = 1'b1;
   reg              transfer_data  = 1'b0;
+  reg    [ 1:0]    multi_io_mode  = 2'h1;
   reg              sdr_ddr_n      = 1'b1;
   reg              reg_8b_16bn    = 1'b0;
   reg              stream         = 1'b0;
@@ -64,119 +65,291 @@ module axi_ad3552r_if_tb;
   reg              dac_data_valid = 1'b0;
   reg    [ 3:0]    shift_count    = 4'b0;
   reg    [31:0]    transfer_reg   = 32'h89abcdef;
-  reg    [ 4:0]    valid_counter  = 5'b0;
+  reg    [ 5:0]    valid_counter  = 6'b0;
   reg    [31:0]    dac_data       = 32'b0;
 
-  always #4 dac_clk <= ~dac_clk;
+  always #3.8 dac_clk <= ~dac_clk;
 
   initial begin
 
     #100 reset_in = 1'b0;
 
     // Write 8 bit SDR
+    // Classic SPI
 
-    address_write = 8'h2c;
-    data_write = 24'hab0000;
-    sdr_ddr_n = 1'b1;
-    reg_8b_16bn = 1'b1;
-    stream = 1'b0;
-    #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // data_write = 24'hab0000;
+    // multi_io_mode = 2'h0;
+    // sdr_ddr_n = 1'b1;
+    // reg_8b_16bn = 1'b1;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
 
     // Read 8 bit SDR
+    // Dual SPI
 
-    address_write = 8'hac;
-    data_write = 24'h000000;
+    // wait (if_busy == 1'b0);
+    // address_write = 8'hac;
+    // data_write = 24'h000000;
+    // multi_io_mode = 2'h1;
+    // sdr_ddr_n = 1'b1;
+    // reg_8b_16bn = 1'b1;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Write 8 bit SDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
+    address_write = 8'h2c;
+    data_write = 24'hab0000;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
-    // Write 16 bit SDR
+    // Read 8 bit SDR
+    // Quad SPI
 
-    address_write = 8'h2c;
-    data_write = 24'h123400;
-    sdr_ddr_n = 1'b1;
-    reg_8b_16bn = 1'b0;
-    stream = 1'b0;
-    #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
-
-    // Read 16 bit SDR
-
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
+    multi_io_mode = 2'h2;
+    sdr_ddr_n = 1'b1;
+    reg_8b_16bn = 1'b1;
+    stream = 1'b0;
+    #500 transfer_data = 1'b1;
+    #40 transfer_data = 1'b0;
+
+    // Write 16 bit SDR
+    // Dual SPI
+
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // data_write = 24'h123400;
+    // multi_io_mode = 2'h1;
+    // sdr_ddr_n = 1'b1;
+    // reg_8b_16bn = 1'b0;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Read 16 bit SDR
+    // Classic SPI
+
+    // wait (if_busy == 1'b0);
+    // address_write = 8'hac;
+    // data_write = 24'h000000;
+    // multi_io_mode = 2'h0;
+    // sdr_ddr_n = 1'b1;
+    // reg_8b_16bn = 1'b0;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Write 16 bit SDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
+    address_write = 8'h2c;
+    data_write = 24'h123400;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
+
+    // Read 16 bit SDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
+    address_write = 8'hac;
+    data_write = 24'h000000;
+    multi_io_mode = 2'h2;
+    sdr_ddr_n = 1'b1;
+    reg_8b_16bn = 1'b0;
+    stream = 1'b0;
+    #500 transfer_data = 1'b1;
+    #40 transfer_data = 1'b0;
     
     #500;
 
-    // Write 8 bit DDR
+    // Write 8 bit 
+    // Classic SPI
 
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // multi_io_mode = 2'h0;
+    // data_write = 24'h120000;
+    // sdr_ddr_n = 1'b0;
+    // reg_8b_16bn = 1'b1;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Read 8 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
+    // Dual SPI
+
+    // wait (if_busy == 1'b0);
+    // address_write = 8'hac;
+    // data_write = 24'h000000;
+    // multi_io_mode = 2'h1;
+    // sdr_ddr_n = 1'b0;
+    // reg_8b_16bn = 1'b1;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Write 8 bit DDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
+    multi_io_mode = 2'h2;
     data_write = 24'h120000;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 8 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
+    // Quad SPI
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b1;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Write 16 bit DDR
+    // Classic SPI
 
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // data_write = 24'h123400;
+    // multi_io_mode = 2'h0;
+    // sdr_ddr_n = 1'b0;
+    // reg_8b_16bn = 1'b0;
+    // stream = 1'b0;
+    // transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Read 16 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
+    // Dual SPI
+
+    // wait (if_busy == 1'b0);
+    // address_write = 8'hac;
+    // data_write = 24'h000000;
+    // multi_io_mode = 2'h1;
+    // sdr_ddr_n = 1'b0;
+    // reg_8b_16bn = 1'b0;
+    // stream = 1'b0;
+    // #500 transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+
+    // Write 16 bit DDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
     data_write = 24'h123400;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     // Read 16 bit DDR
+    // it must ignore the sdr_ddr_n bit
+    // and work as SDR
+    // Quad SPI
 
+    wait (if_busy == 1'b0);
     address_write = 8'hac;
     data_write = 24'h000000;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b0;
     reg_8b_16bn = 1'b0;
     stream = 1'b0;
     #500 transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
 
     #500;
 
     // Stream SDR
+    // Dual SPI
 
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // multi_io_mode = 2'h1;
+    // sdr_ddr_n = 1'b1;
+    // reg_8b_16bn = 1'b0;
+    // stream = 1'b1;
+    // transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+    // #1000 stream = 1'b0;
+
+    // #500;
+
+    // Stream SDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
+    multi_io_mode = 2'h2;
     sdr_ddr_n = 1'b1;
     reg_8b_16bn = 1'b0;
     stream = 1'b1;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
     #1000 stream = 1'b0;
 
     #500;
 
     // Stream DDR
+    // Dual SPI
 
+    // wait (if_busy == 1'b0);
+    // address_write = 8'h2c;
+    // multi_io_mode = 2'h1;
+    // reg_8b_16bn = 1'b1;
+    // sdr_ddr_n = 1'b0;
+    // stream = 1'b1;
+    // transfer_data = 1'b1;
+    // #40 transfer_data = 1'b0;
+    // #1000 stream = 1'b0;
+
+    // #500;
+
+    // Stream DDR
+    // Quad SPI
+
+    wait (if_busy == 1'b0);
     address_write = 8'h2c;
+    multi_io_mode = 2'h2;
     reg_8b_16bn = 1'b1;
     sdr_ddr_n = 1'b0;
     stream = 1'b1;
     transfer_data = 1'b1;
-    #100 transfer_data = 1'b0;
+    #40 transfer_data = 1'b0;
     #1000 stream = 1'b0;
 
   end
@@ -184,39 +357,39 @@ module axi_ad3552r_if_tb;
   // data is incremented at each complete cycle 
 
   assign dac_data_final       = (stream == 1'b1) ? dac_data : data_write;
-  assign data_increment_valid = (sdr_ddr_n ) ? 5'd16: 5'h8;
+  assign data_increment_valid = (sdr_ddr_n ) ? 6'd32: 6'd16;
   
   always @(posedge dac_clk) begin 
     if (valid_counter == data_increment_valid) begin
       dac_data <= dac_data + 32'h00010002;
-      valid_counter <= 3'b0;
+      valid_counter <= 6'b0;
       dac_data_valid <= 1'b1;
     end else begin 
       dac_data <= dac_data;
-      valid_counter <= valid_counter + 3'b1;
+      valid_counter <= valid_counter + 6'b1;
       dac_data_valid <= 1'b0;
     end 
   end
 
   // data is circullary shifted at every sampling edge 
 
-  assign readback_data_shift = (sdr_ddr_n ) ? 4'h8 : 4'h4;
-  assign sdio_i = (sdio_t === 1'b1) ? transfer_reg[31:28] : 4'b0;
+  assign readback_data_shift = (sdr_ddr_n | address_write[7]) ? 4'h1 : 4'h0;
+  assign sdio_i = (sdio_t[1] === 1'b1) ? transfer_reg[31:28] : 2'h0;//transfer_reg[31:30] : 2'h0;
 
   always @(posedge dac_clk) begin 
     if (shift_count == readback_data_shift) begin 
-      transfer_reg <= {transfer_reg[27:0],transfer_reg[31:28]};
-    end else if (sdio_t === 1'b1) begin 
+      transfer_reg <= (~(|multi_io_mode)) ? {transfer_reg[30:0],transfer_reg[31]} : {transfer_reg[27:0],transfer_reg[31:28]};//{transfer_reg[29:0],transfer_reg[31:30]};
+    end else if (sdio_t[1] === 1'b1) begin 
       transfer_reg <= transfer_reg;
     end
     if (shift_count == readback_data_shift || dac_csn == 1'b1) begin 
       shift_count <= 3'b0;
-    end else if (sdio_t === 1'b1) begin
+    end else if (sdio_t[1] === 1'b1) begin
       shift_count <= shift_count + 3'b1;
     end
   end
 
-  axi_ad3552r_if axi_ad3552r_interface (
+  axi_ad35xxr_if axi_ad35xxr_interface (
     .clk_in(dac_clk),
     .reset_in(reset_in),
     .dac_data(dac_data_final),
@@ -224,6 +397,7 @@ module axi_ad3552r_if_tb;
     .address(address_write),
     .data_read(data_read),
     .data_write(data_write),
+    .multi_io_mode(multi_io_mode),
     .sdr_ddr_n(sdr_ddr_n),
     .symb_8_16b(reg_8b_16bn),
     .transfer_data(transfer_data),
