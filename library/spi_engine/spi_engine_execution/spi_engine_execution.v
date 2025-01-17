@@ -114,9 +114,11 @@ module spi_engine_execution #(
   reg trigger_next = 1'b0;
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
+  reg transfer_done = 1'b0;
 
   reg last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
+  reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
@@ -136,6 +138,7 @@ module spi_engine_execution #(
   wire sdo_int_s;
 
   wire last_bit;
+  wire echo_last_bit;
   wire first_bit;
   wire end_of_word;
 
@@ -162,8 +165,6 @@ module spi_engine_execution #(
 
   wire io_ready1;
   wire io_ready2;
-
-  wire end_of_sdi_latch;
 
   wire sample_sdo;
 
@@ -196,12 +197,12 @@ module spi_engine_execution #(
     .word_length(word_length),
     .sample_sdo(sample_sdo),
     .sdo_io_ready(sdo_io_ready),
+    .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),
     .trigger_tx(trigger_tx),
     .trigger_rx(trigger_rx),
     .first_bit(first_bit),
-    .cs_activate(cs_activate),
-    .end_of_sdi_latch(end_of_sdi_latch));
+    .cs_activate(cs_activate));
 
   assign sample_sdo = sdo_data_valid && ((trigger_tx && last_bit) || (wait_for_io || exec_transfer_cmd));
 
@@ -244,6 +245,7 @@ module spi_engine_execution #(
       sdo_idle_state <= SDO_DEFAULT;
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
+      last_bit_count <= DATA_WIDTH-1;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
       if (cmd[9:8] == REG_CONFIG) begin
@@ -256,6 +258,7 @@ module spi_engine_execution #(
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0];
+        last_bit_count <= cmd[7:0] - 1;
         left_aligned <= DATA_WIDTH - cmd[7:0];
       end
     end
@@ -331,7 +334,7 @@ module spi_engine_execution #(
       end else begin
         case (inst_d1)
         CMD_TRANSFER: begin
-          if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
+          if (transfer_done)
             idle <= 1'b1;
         end
         CMD_CHIPSELECT: begin
@@ -426,6 +429,18 @@ module spi_engine_execution #(
     end
   end
 
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      transfer_done <= 1'b0;
+    end else begin
+       if (ECHO_SCLK) begin
+        transfer_done <= echo_last_bit && last_transfer;
+       end else begin
+        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && last_transfer ); // same conditions that make (!transfer_active && !wait_for_io)
+       end
+    end
+  end
+
   always @(posedge clk) begin
     if (transfer_active == 1'b1 || wait_for_io == 1'b1)
     begin
@@ -446,7 +461,7 @@ module spi_engine_execution #(
   // end_of_word will signal the end of a transaction, pushing the command
   // stream execution to the next command. end_of_word in normal mode can be
   // generated using the global bit_counter
-  assign last_bit = bit_counter == word_length - 1;
+  assign last_bit = (bit_counter == last_bit_count);
   assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
   always @(posedge clk) begin
