@@ -343,7 +343,7 @@ CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The addresses are dependent on the architecture of the FPGA, having an offset
-added to the base address from HDL (see more at :ref:`architecture`).
+added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ===================================  ===============  ===========
 Instance                             Zynq/Microblaze  ZynqMP
@@ -494,7 +494,7 @@ The **default configuration**, regardless of the carrier, is
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
    user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make
 
-Example: if the AD9164 device is needed and the mode should be 08, the following
+Example: if the AD9164 device is used and the mode should be 08, the following
 command should be run:
 
 .. code-block::
@@ -502,8 +502,8 @@ command should be run:
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
    user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=08
 
-Example: if the AD9164 device is needed and there is a need for a custom mode
-, the following commands should be run:
+Example: if the AD9164 device is used and there is a need for a custom mode,
+the following commands should be run:
 
 .. code-block::
 
@@ -513,12 +513,12 @@ or:
 
 .. code-block::
 
-   make ADI_DAC_DEVICE=AD9164  ADI_LANE_RATE=12.5 ADI_DAC_MODE= 08 M=1 S=4
+   make ADI_DAC_DEVICE=AD9164  ADI_LANE_RATE=12.5 ADI_DAC_MODE=08 M=1 S=4
 
-With either of these two options, the design will be built in the same
+With either of these two options, the design will be built with the same
 configuration:
 
-**ADI_DAC_DEVICE=AD9164 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16**
+**ADI_DAC_DEVICE=AD9164 LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16** (12.5GHz)
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
@@ -636,5 +636,3 @@ Software related
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _A10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
