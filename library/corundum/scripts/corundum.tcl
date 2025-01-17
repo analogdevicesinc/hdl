@@ -3,20 +3,64 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+create_bd_cell -type hier corundum_hierarchy
+current_bd_instance /corundum_hierarchy
+
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_corundum
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_application
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 s_axil_gpio_reset
+
+create_bd_intf_pin -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 m_axi
+
+create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
+create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
+create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
+create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+
+create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
+create_bd_pin -dir O fpga_boot
+create_bd_pin -dir O -type clk qspi_clk
+create_bd_pin -dir I -type rst ptp_rst
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins ptp_rst]
+create_bd_pin -dir O -type rst aux_reset_in
+set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins aux_reset_in]
+create_bd_pin -dir I -type clk qsfp_mgt_refclk
+create_bd_pin -dir I -type clk qsfp_mgt_refclk_bufg
+
+create_bd_pin -dir I -type clk clk_125mhz
+create_bd_pin -dir I -type clk clk_250mhz
+create_bd_pin -dir I -type clk clk_100mhz
+
+create_bd_pin -dir I -type rst rst_125mhz
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_125mhz]
+create_bd_pin -dir I -type rst rst_250mhz
+set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_250mhz]
+create_bd_pin -dir I -type rst rst_100mhz
+set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins rst_100mhz]
+
+create_bd_pin -dir O -type intr irq
+
 ad_ip_instance axi_gpio axi_gpio_0 [list \
   C_ALL_OUTPUTS 1 \
   C_DOUT_DEFAULT 0x00000001 \
   C_GPIO_WIDTH 1 \
 ]
 
-# ad_ip_instance axi_gpio corundum_reset_gpio [list \
+# ad_ip_instance axi_gpio corundum_gpio_reset [list \
 #   C_ALL_OUTPUTS 1 \
 #   C_DOUT_DEFAULT 0x00000001 \
 #   C_GPIO_WIDTH 1 \
 # ]
 
-ad_connect axi_gpio_0/gpio_io_o sys_250m_rstgen/aux_reset_in
-# ad_connect corundum_reset_gpio/gpio_io_o sys_250m_rstgen/aux_reset_in
+ad_connect axi_gpio_0/gpio_io_o aux_reset_in
+ad_connect axi_gpio_0/s_axi_aclk clk_100mhz
+ad_connect axi_gpio_0/s_axi_aresetn rst_100mhz
+
+# ad_connect corundum_gpio_reset/gpio_io_o aux_reset_in
+# ad_connect corundum_gpio_reset/s_axi_aclk clk_100mhz
+# ad_connect corundum_gpio_reset/s_axi_aresetn rst_100mhz
+
+ad_connect axi_gpio_0/S_AXI s_axil_gpio_reset
 
 ad_ip_instance corundum_core corundum_core [list \
   FPGA_ID $FPGA_ID \
@@ -210,25 +254,7 @@ ad_ip_instance ethernet ethernet_core [list \
   AXIS_RX_USER_WIDTH $AXIS_RX_USER_WIDTH \
 ]
 
-create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
-create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
-create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-create_bd_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
-
-create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
-create_bd_port -dir O fpga_boot
-create_bd_port -dir O -type clk qspi_clk
-create_bd_port -dir I -type rst ptp_rst
-set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_ports ptp_rst]
-create_bd_port -dir I -type clk qsfp_mgt_refclk
-create_bd_port -dir I -type clk qsfp_mgt_refclk_bufg
-
-create_bd_port -dir O -type clk clk_125mhz
-create_bd_port -dir O -type clk clk_250mhz
-
-ad_connect clk_wiz_125mhz/clk_out1 clk_125mhz
-ad_connect sys_250m_clk clk_250mhz
-
+ad_connect corundum_core/s_axil_ctrl s_axil_corundum
 ad_connect corundum_core/m_axis_tx ethernet_core/axis_eth_tx
 ad_connect corundum_core/s_axis_rx ethernet_core/axis_eth_rx
 ad_connect corundum_core/ctrl_reg ethernet_core/ctrl_reg
@@ -240,22 +266,24 @@ ad_connect corundum_core/axis_tx_ptp ethernet_core/axis_tx_ptp
 
 ad_connect corundum_core/s_axis_stat_tvalid GND
 
-ad_connect corundum_core/clk sys_250m_clk
-ad_connect corundum_core/rst sys_250m_reset
+ad_connect corundum_core/clk clk_250mhz
+ad_connect corundum_core/rst rst_250mhz
 ad_connect corundum_core/tx_clk ethernet_core/eth_tx_clk
 ad_connect corundum_core/tx_rst ethernet_core/eth_tx_rst
 ad_connect corundum_core/rx_clk ethernet_core/eth_rx_clk
 ad_connect corundum_core/rx_rst ethernet_core/eth_rx_rst
 ad_connect corundum_core/ptp_clk qsfp_mgt_refclk_bufg
 ad_connect corundum_core/ptp_rst ptp_rst
-ad_connect corundum_core/ptp_sample_clk clk_wiz_125mhz/clk_out1
+ad_connect corundum_core/ptp_sample_clk clk_125mhz
 
-ad_connect ethernet_core/clk sys_250m_clk
-ad_connect ethernet_core/rst sys_250m_reset
-ad_connect ethernet_core/clk_125mhz clk_wiz_125mhz/clk_out1
-ad_connect ethernet_core/rst_125mhz sys_125m_rstgen/peripheral_reset
-ad_connect ethernet_core/qsfp_drp_clk clk_wiz_125mhz/clk_out1
-ad_connect ethernet_core/qsfp_drp_rst sys_125m_rstgen/peripheral_reset
+ad_connect corundum_core/irq irq
+
+ad_connect ethernet_core/clk clk_250mhz
+ad_connect ethernet_core/rst rst_250mhz
+ad_connect ethernet_core/clk_125mhz clk_125mhz
+ad_connect ethernet_core/rst_125mhz rst_125mhz
+ad_connect ethernet_core/qsfp_drp_clk clk_125mhz
+ad_connect ethernet_core/qsfp_drp_rst rst_125mhz
 ad_connect ethernet_core/qsfp_mgt_refclk qsfp_mgt_refclk
 ad_connect ethernet_core/qsfp_mgt_refclk_bufg qsfp_mgt_refclk_bufg
 ad_connect ethernet_core/qsfp_rst qsfp_rst
@@ -266,14 +294,6 @@ ad_connect ethernet_core/qspi0 qspi0
 ad_connect ethernet_core/qspi1 qspi1
 ad_connect ethernet_core/qsfp qsfp
 ad_connect ethernet_core/i2c i2c
-
-ad_cpu_interconnect 0x50000000 corundum_core s_axil_ctrl
-ad_cpu_interconnect 0x52000000 axi_gpio_0
-# ad_cpu_interconnect 0x52000000 corundum_reset_gpio/s_axi
-
-ad_mem_hp1_interconnect sys_250m_clk corundum_core/m_axi
-
-ad_cpu_interrupt "ps-5" "mb-5" corundum_core/irq
 
 if {$APP_ENABLE == 1} {
   ad_ip_instance application_core application_core [list \
@@ -356,6 +376,7 @@ if {$APP_ENABLE == 1} {
   ad_connect application_core/direct_rx_rst corundum_core/rx_rst
   
   ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
+  ad_connect application_core/s_axil_ctrl s_axil_application
 
   ad_connect application_core/jtag_tdi GND
   ad_connect application_core/jtag_tms GND
@@ -441,10 +462,6 @@ if {$APP_ENABLE == 1} {
   if {$APP_STAT_ENABLE} {
     ad_connect application_core/m_axis_stat corundum_core/m_axis_stat_app
   }
-
-  ad_cpu_interconnect 0x51000000 application_core s_axil_ctrl
-
-  group_bd_cells corundum_hierarchy [get_bd_cells corundum_core] [get_bd_cells ethernet_core] [get_bd_cells application_core] 
-} else {
-  group_bd_cells corundum_hierarchy [get_bd_cells corundum_core] [get_bd_cells ethernet_core] 
 }
+
+current_bd_instance /
