@@ -379,13 +379,19 @@ low-level I3C bus transactions.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CLK_MOD</span></code></td>
 <td class="description"><section>
-<p>Clock cycles per bus bit at maximun speed (12.5MHz), set to:
-* 8 clock cycles at 100MHz input clock.
-* 4 clock cycles at 50MHz input clock.</p>
+<p>Clock cycles per bus bit at maximun speed (12.5MHz), set to:  * 0: 8 clock cycles at 100MHz input clock. * 1: 4 clock cycles at 50MHz input clock.</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p>8 (0), 4 (1)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">I2C_MOD</span></code></td>
+<td class="description"><section>
+<p>Further divide open drain speed by power of two, to support slow I2C devices.  For example, with input clock 100MHz and CLK_MOD=0:  * 0: 1.5626MHz (no division). * 2 390.6kHz. * 4 97.6kHz.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>0, 1, 2, 3, 4</p></td>
 </tr>
 </tbody>
 </table>

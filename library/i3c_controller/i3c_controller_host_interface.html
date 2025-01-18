@@ -1528,7 +1528,18 @@ To read an address, write the address with DEV_CHAR_0_WEN 0 and then read.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEV_CHAR_IS_I2C</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Indicates if the device is I²C.
+0 is I3C device, 1 is I²C device.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2c0</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD_n</span></code></td>
 <td class="description bold"><section>
@@ -1538,7 +1549,7 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_CMD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
@@ -1548,7 +1559,7 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span> <span class="pre">+</span> <span class="pre">0x1*n</span></code></td>
 <td class="bold"><code class="docutils literal notranslate"><span class="pre">0x300</span> <span class="pre">+</span> <span class="pre">0x4*n</span></code></td>
 <td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_n</span></code></td>
 <td class="description bold"><section>
@@ -1564,28 +1575,28 @@ Where n is from 0 to 15.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_3</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_2</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><p></p></td>
+<tr class="row-even"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_1</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td colspan="2"><p></p></td>
+<tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SDO_BYTE_0</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
