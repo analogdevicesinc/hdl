@@ -29,9 +29,11 @@ adi_ip_files axi_ad7405 [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/util_dec256sinc24b.v" \
+  "axi_ad7405_constr.ttcl" \
   "axi_ad7405.v" ]
 
 adi_ip_properties axi_ad7405
+adi_ip_ttcl axi_ad7405 "axi_ad7405_constr.ttcl"
 
 set cc [ipx::current_core]
 
