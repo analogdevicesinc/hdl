@@ -98,9 +98,6 @@ Utilities
 Obsolete IPs
 -------------------------------------------------------------------------------
 
-The following IPs are obsolete and **not maintained anymore**. The latest
-available sources can be found in the same archive.
-
 .. toctree::
    :maxdepth: 1
 
@@ -108,3 +105,21 @@ available sources can be found in the same archive.
    axi_ad9371/index
    axi_ad9643/index
    axi_ad9671/index
+
+The following IPs are obsolete and **not maintained anymore**. The latest
+available sources can be found in the following release branches:
+
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
+
+   * - IP name
+     - Code link
+   * - axi_ad9144
+     - :git-hdl:`hdl_2019_r2 <hdl_2019_r2:library/axi_ad9144>`
+   * - axi_ad9371
+     - :git-hdl:`hdl_2019_r2 <hdl_2019_r2:library/axi_ad9371>`
+   * - axi_ad9643
+     - :git-hdl:`hdl_2016_r1 <hdl_2016_r1:library/axi_ad9643>`
+   * - axi_ad9671
+     - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:library/axi_ad9671>`
