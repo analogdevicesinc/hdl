@@ -24,9 +24,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.0938813"
-     inkscape:cx="357.23133"
-     inkscape:cy="289.41469"
+     inkscape:zoom="1.4805977"
+     inkscape:cx="275.9021"
+     inkscape:cy="301.90511"
      inkscape:window-width="1920"
      inkscape:window-height="1122"
      inkscape:window-x="-8"
@@ -1302,7 +1302,7 @@
          id="tspan41770-8"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="70.483963"
-         y="165.88783">ADC clock=50MHz</tspan></text>
+         y="165.88783">ADC clock=40MHz</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.15251px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#3f4b55;stroke-width:0.439999;stroke-dasharray:0.0439999, 0.0439999;stroke-dashoffset:0"
@@ -1313,6 +1313,6 @@
          id="tspan6"
          style="stroke-width:0.44"
          x="159.85123"
-         y="141.97137"></tspan></text>
+         y="141.97137" /></text>
   </g>
 </svg>
