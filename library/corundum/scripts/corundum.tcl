@@ -462,6 +462,13 @@ if {$APP_ENABLE == 1} {
   if {$APP_STAT_ENABLE} {
     ad_connect application_core/m_axis_stat corundum_core/m_axis_stat_app
   }
+
+  create_bd_pin -dir I -type clk input_clk
+  create_bd_pin -dir I -type rst input_rstn
+  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins input_rstn]
+
+  ad_connect application_core/input_clk input_clk
+  ad_connect application_core/input_rstn input_rstn
 }
 
 current_bd_instance /

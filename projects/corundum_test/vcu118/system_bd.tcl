@@ -33,7 +33,6 @@ ad_connect clk_wiz_125mhz/clk_in1 sys_250m_clk
 ad_connect clk_wiz_125mhz/reset sys_250m_reset
 
 ad_ip_instance proc_sys_reset sys_125m_rstgen
-
 ad_connect sys_125m_rstgen/slowest_sync_clk clk_wiz_125mhz/clk_out1
 ad_connect sys_125m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
 
@@ -85,3 +84,23 @@ ad_cpu_interrupt "ps-5" "mb-5" corundum_hierarchy/irq
 if {$APP_ENABLE == 1} {
   ad_cpu_interconnect 0x51000000 corundum_hierarchy s_axil_application
 }
+
+set_property -dict [list \
+  CONFIG.CLKOUT1_JITTER {130.958} \
+  CONFIG.CLKOUT1_PHASE_ERROR {95.575} \
+  CONFIG.CLKOUT2_JITTER {156.407} \
+  CONFIG.CLKOUT2_PHASE_ERROR {95.575} \
+  CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {43.48} \
+  CONFIG.CLKOUT2_USED {true} \
+  CONFIG.MMCM_CLKFBOUT_MULT_F {10.000} \
+  CONFIG.MMCM_CLKOUT0_DIVIDE_F {10.000} \
+  CONFIG.MMCM_CLKOUT1_DIVIDE {23} \
+  CONFIG.NUM_OUT_CLKS {2} \
+] [get_bd_cells clk_wiz_125mhz]
+
+ad_ip_instance proc_sys_reset sys_43m_rstgen
+ad_connect sys_43m_rstgen/slowest_sync_clk clk_wiz_125mhz/clk_out2
+ad_connect sys_43m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
+
+ad_connect corundum_hierarchy/input_clk clk_wiz_125mhz/clk_out2
+ad_connect corundum_hierarchy/input_rstn sys_43m_rstgen/peripheral_aresetn
