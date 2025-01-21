@@ -50,6 +50,13 @@ files:
   - ``<boot_mountpoint>/zImage``
   - ``<boot_mountpoint>/u-boot-with-spl.sfp`` (preloader image)
 
+- For Agilex 7 SoC projects (:ref:`build example <build_intel_boot_image fm87>`):
+
+  - ``<boot_mountpoint>/agilex.core.rbf``
+  - ``<boot_mountpoint>/u-boot.itb``
+  - ``<boot_mountpoint>/socfpga_agilex_socdk.dtb``
+  - ``<boot_mountpoint>/Image``
+
 .. note::
 
    Some files, like **fit_spl_fpga.itb** or **extlinux**, were introduced
@@ -854,3 +861,197 @@ Flash the preloader boot partition:
     1697+1 records out
     868996 bytes (869 kB, 849 KiB) copied, 0.21262 s, 4.1 MB/s
    $sync
+
+.. _build_intel_boot_image fm87:
+
+AD9081/Agilex 7
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- HDL Project: :git-hdl:`projects/ad9081_fmca_ebz/fm87`
+- ADI's Linux kernel: :git-linux:`../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
+
+Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables
+```````````````````````````````````````````````````````````````````````````````
+
+.. shell:: bash
+   :no-path:
+
+   $mkdir tools
+   $cd tools
+   $wget https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+   $tar xvf gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+   $export CROSS_COMPILE=`pwd`/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+   $export ARCH=arm64
+   $cd ..
+
+Building the Linux Kernel image and the Devicetree
+```````````````````````````````````````````````````````````````````````````````
+
+.. shell:: bash
+   :no-path:
+
+   $git clone -b agilex https://github.com/analogdevicesinc/linux
+   $cd linux
+   $make adi_zynqmp_defconfig
+   $make Image
+   $make intel/socfpga_agilex_socdk_ad9081_jesd204c.dtb
+   $cd ..
+
+Build the ARM Trusted Firmware
+```````````````````````````````````````````````````````````````````````````````
+
+.. shell:: bash
+   :no-path:
+
+   $git clone -b QPDS24.1_REL_GSRD_PR https://github.com/altera-opensource/arm-trusted-firmware
+   $cd arm-trusted-firmware
+   $make bl31 PLAT=agilex DEPRECATED=1
+   $cd ..
+
+Build U-Boot
+```````````````````````````````````````````````````````````````````````````````
+
+.. shell:: bash
+   :no-path:
+
+   $git clone -b QPDS24.1_REL_GSRD_PR https://github.com/altera-opensource/u-boot-socfpga
+   $cd u-boot-socfpga
+   $ln -sf ../arm-trusted-firmware/build/agilex/release/bl31.bin .
+   $sed -i 's/earlycon panic=-1/earlycon panic=-1 console=ttyS0,115200 root=\/dev\/mmcblk0p2 rw rootwait/g' configs/socfpga_agilex_defconfig
+   $sed -i '/^CONFIG_NAND_BOOT=y/d' configs/socfpga_agilex_defconfig
+   $sed -i '/^CONFIG_SPL_NAND_SUPPORT=y/d' configs/socfpga_agilex_defconfig
+   $sed -i '/^CONFIG_CMD_UBI=y/d' configs/socfpga_agilex_defconfig
+   $echo 'CONFIG_USE_BOOTCOMMAND=y' >> configs/socfpga_agilex_defconfig
+   $echo 'CONFIG_BOOTCOMMAND="load mmc 0:1 \${loadaddr} agilex.core.rbf; bridge disable; fpga load 0 \${loadaddr} \${filesize}; bridge enable; load mmc 0:1 ${kernel_addr_r} Image; load mmc 0:1 ${fdt_addr_r} socfpga_agilex_socdk.dtb; booti ${kernel_addr_r} - ${fdt_addr_r}"' >> configs/socfpga_agilex_defconfig
+   $make socfpga_agilex_defconfig
+   $make
+   $cd ..
+
+Building the Hardware Design
+```````````````````````````````````````````````````````````````````````````````
+
+Clone the HDL repository, then build the project:
+
+.. shell:: bash
+   :no-path:
+
+   $git clone https://github.com/analogdevicesinc/hdl.git
+   $cd projects/ad9081_fmca_ebz/fm87
+   $make
+   Building ad9081_fmca_ebz_fm87 [/home/analog/hdl/projects/ad9081_fmca_ebz/fm87/ad9081_fmca_ebz_fm87_quartus.log] ... OK
+
+After the design is built, the resulting SRAM Object File (.sof) file shall be converted to a Raw Binary File (.rbf)
+and a Jtag Indirect Configuration (.jic) file.
+
+If you skipped the last section, ensure to set the architecture and cross compiler environment variables and have the U-boot files built.
+
+.. shell:: bash
+   :no-path:
+
+   $quartus_pfg -c ad9081_fmca_ebz_fm87.sof ad9081_fmca_ebz_fm87.jic \
+   $  -o hps_path=../../../../u-boot-socfpga/spl/u-boot-spl-dtb.hex \
+   $  -o device=MT25QU02G \
+   $  -o flash_loader=AGIB027R31B1E1V \
+   $  -o mode=ASX4 \
+   $  -o hps=1
+
+Configuring the SD Card
+```````````````````````````````````````````````````````````````````````````````
+
+Below are the commands to create the preloader and bootloader partition using
+the Kuiper Linux image as a starting point.
+Please check every command before running, especially configuring target
+device mountpoints accordingly
+(here as ``/dev/sdz`` with partition 1 mounted at ``/media/BOOT/``).
+
+Flash the SD Card with the Kuiper Linux image:
+
+.. shell:: bash
+
+   $time sudo dd if=./2023-12-13-ADI-Kuiper-full.img of=/dev/sdz status=progress bs=4194304
+    2952+0 records in
+    2952+0 records out
+    12381585408 bytes (12 GB, 12 GiB) copied, 838.353 s, 14.8 MB/s
+
+    real	14m7.938s
+    user	0m0.006s
+    sys	0m0.009s
+   $sync
+
+Mount the /BOOT partition:
+
+.. shell:: bash
+   :no-path:
+
+   $lsblk
+    NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+    sdz           8:48   1  29.1G  0 disk
+    ├─sdz1        8:49   1     2G  0 part
+    ├─sdz2        8:50   1  27.1G  0 part
+    └─sdz3        8:51   1     8M  0 part
+
+   $mkdir -p /media/BOOT/
+   $sudo mount /dev/sdz1 /media/BOOT/
+   $lsblk
+    NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+    sdz           8:48   1  29.1G  0 disk
+    ├─sdz1        8:49   1     2G  0 part /media/BOOT
+    ├─sdz2        8:50   1  27.1G  0 part
+    └─sdz3        8:51   1     8M  0 part
+
+Copy the built files to the /BOOT partition:
+
+.. shell:: bash
+   :no-path:
+
+   $cp u-boot-socfpga/u-boot.itb /media/BOOT/
+   $cp linux/arch/arm64/boot/Image /media/BOOT/
+   $cp linux/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dtb /media/BOOT/socfpga_agilex_socdk.dtb
+   $cp hdl/projects/ad9081_fmca_ebz/fm87/ad9081_fmca_ebz_fm87.core.rbf /media/BOOT/agilex.core.rbf
+
+Unmount the /BOOT partition:
+
+.. shell:: bash
+   :no-path:
+
+   $sudo umount /dev/sdz1
+   $lsblk
+    NAME        MAJ:MIN RM  SIZE  RO TYPE MOUNTPOINT
+    sdz           8:48  1   29.1G  0 disk
+    ├─sdz1        8:49  1      2G  0 part
+    ├─sdz2        8:50  1   27.1G  0 part
+    └─sdz3        8:51  1      8M  0 part
+
+Programming steps
+```````````````````````````````````````````````````````````````````````````````
+
+- Set **S9** to JTAG
+- Power on the FPGA
+- Open the Quartus Programmer and flash the ad9081_fmca_ebz_fm87.jic
+- Power off the FPGA
+- Set **S9** to QSPI
+- Insert the SD-card and power up the board
+
+**S9** 4-bit DIP Switch
+
+========== =====  =====  =====  =====
+Switch Bit 1      2      3      4
+Name       MSEL0  MSEL1  MSEL2  MSEL3
+JTAG Mode  ON     ON     ON     OFF
+QSPI Mode  ON     OFF    OFF    OFF
+========== =====  =====  =====  =====
+
+Default Switch Positions for the AD9081 project
+
+================ =====  =====  =====  =====
+4-bit DIP Switch 1      2      3      4
+S4               ON     ON     ON     ON
+S15              ON     ON     ON     OFF
+S10              ON     ON     ON     ON
+S23              ON     ON     ON     ON
+S6               OFF    OFF    OFF    OFF
+S1               OFF    OFF    OFF    OFF
+S22              OFF    ON     ON     ON
+S19              OFF    OFF    ON     ON
+S20              ON     ON     ON     ON
+================ =====  =====  =====  =====
