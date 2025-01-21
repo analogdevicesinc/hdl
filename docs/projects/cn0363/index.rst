@@ -211,7 +211,7 @@ HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -  :git-hdl:`CN0363_PMDZ HDL project source code <projects/cn0363>`
--  :dokuwiki:`[Wiki] CN0540 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>`
+-  :dokuwiki:`[Wiki] CN0363 HDL project documentation <resources/eval/user-guides/eval-cn0363-pmdz/reference_hdl>`
 
 .. list-table::
    :widths: 30 35 35
