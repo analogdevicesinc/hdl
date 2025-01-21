@@ -15,4 +15,6 @@ adi_project_files ad4052_ardz_coraz7s [list \
     "system_constr.xdc" \
     "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"]
 
+set_property strategy Performance_Retiming [get_runs impl_1]
+
 adi_project_run ad4052_ardz_coraz7s
