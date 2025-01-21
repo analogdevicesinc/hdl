@@ -23,14 +23,14 @@ puts "modul $mode"
 
 # This reference design supports the AD9166 device with modes:
 #                 Mode M L S F HD N NP
-set params(AD9166,01) {2 1 1 4 1 16 16}
-set params(AD9166,02) {2 2 1 2 1 16 16}
-set params(AD9166,03) {2 3 3 4 1 16 16}
-set params(AD9166,04) {2 4 1 1 1 16 16}
-set params(AD9166,06) {2 6 3 2 1 16 16}
+#set params(AD9166,01) {2 1 1 4 1 16 16}
+#set params(AD9166,02) {2 2 1 2 1 16 16}
+#set params(AD9166,03) {2 3 3 4 1 16 16}
+#set params(AD9166,04) {2 4 1 1 1 16 16}
+#set params(AD9166,06) {2 6 3 2 1 16 16}
 # lane rate = 12.5Gbps
 set params(AD9166,08) {2 8 2 1 1 16 16}
-set params(AD9166,09) {1 8 4 1 1 16 16}
+#set params(AD9166,09) {1 8 4 1 1 16 16}
 
 # Internal procedures
 proc get_config_param {param} {
