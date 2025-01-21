@@ -245,9 +245,9 @@ Below are the Programmable Logic interrupts used in this project.
 ================= === ========== =========== ============ =============
 Instance name     HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP
 ================= === ========== =========== ============ =============
-axi_ad9208_dma    12  56         88          108          140          
-axi_ad9208_0_jesd 11  55         87          107          139          
-axi_ad9208_1_jesd 10  54         86          106          138          
+axi_ad9208_dma    12  56         88          108          140
+axi_ad9208_0_jesd 11  55         87          107          139
+axi_ad9208_1_jesd 10  54         86          106          138
 ================= === ========== =========== ============ =============
 
 Building the HDL project
@@ -339,6 +339,9 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD9208-DUAL-EBZ/VCU118 Linux device tree <arch/microblaze/boot/dts/vcu118_dual_ad9208.dts>`
+- :git-linux:`AD9208-DUAL-EBZ Linux driver <drivers/iio/adc/ad9208.c>`
+- :git-no-os:`AD9208-DUAL-EBZ no-OS project <projects/ad9208>`
+- :git-no-os:`AD9208-DUAL-EBZ no-OS driver <drivers/adc/ad9208>`
 
 .. include:: ../common/more_information.rst
 

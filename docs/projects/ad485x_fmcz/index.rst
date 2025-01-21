@@ -179,10 +179,19 @@ make command by typing in your command prompt (this example is for
 
 **Linux/Cygwin/WSL**
 
-.. shell::
+The default version of the interface is CMOS:
+
+.. shell:: bash
 
    $cd hdl/projects/ad485x_fmc/zed
    $make
+
+To build the LVDS version of the interface, run:
+
+.. shell:: bash
+
+   $cd hdl/projects/ad485x_fmc/zed
+   $make LVDS_CMOS_N=1
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
@@ -207,7 +216,7 @@ Here you can find the quick start guides available for these evaluation boards:
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD485x_FMCZ HDL project source code <projects/ad485x_fmc>`
+- :git-hdl:`AD485x_FMCZ HDL project source code <projects/ad485x_fmcz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -218,7 +227,7 @@ HDL related
      - Documentation link
    * - AXI_AD485x
      - :git-hdl:`library/axi_ad485x`
-     - ---
+     - :ref:`axi_ad485x`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
