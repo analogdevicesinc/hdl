@@ -519,7 +519,11 @@ module application_core #
   input  wire                                           jtag_tck,
 
   input  wire                                           input_clk,
-  input  wire                                           input_rstn
+  input  wire                                           input_rstn,
+
+  input  wire [INPUT_WIDTH-1:0]                         input_axis_tdata,
+  input  wire                                           input_axis_tvalid,
+  output wire                                           input_axis_tready
 );
 
   // check configuration
@@ -543,9 +547,9 @@ module application_core #
   //////////////////////////////////////////////////
   reg  [7:0]             gen_data;
 
-  reg  [INPUT_WIDTH-1:0] input_axis_tdata;
-  reg                    input_axis_tvalid;
-  wire                   input_axis_tready;
+  // reg  [INPUT_WIDTH-1:0] input_axis_tdata;
+  // reg                    input_axis_tvalid;
+  // wire                   input_axis_tready;
 
   always @(posedge input_clk)
   begin
@@ -558,16 +562,16 @@ module application_core #
     end
   end
 
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      input_axis_tdata <= {INPUT_WIDTH{1'b0}};
-      input_axis_tvalid <= 1'b0;
-    end else begin
-      input_axis_tdata <= {INPUT_WIDTH/8{gen_data}};
-      input_axis_tvalid <= 1'b1;
-    end
-  end
+  // always @(posedge input_clk)
+  // begin
+  //   if (!input_rstn) begin
+  //     input_axis_tdata <= {INPUT_WIDTH{1'b0}};
+  //     input_axis_tvalid <= 1'b0;
+  //   end else begin
+  //     input_axis_tdata <= {INPUT_WIDTH/8{gen_data}};
+  //     input_axis_tvalid <= 1'b1;
+  //   end
+  // end
 
   ////----------------------------------------Start application---------------//
   //////////////////////////////////////////////////

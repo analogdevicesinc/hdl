@@ -17,6 +17,8 @@ create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
 create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
 create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
 
+create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 input_axis
+
 create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_pin -dir O fpga_boot
 create_bd_pin -dir O -type clk qspi_clk
@@ -264,6 +266,8 @@ ad_connect corundum_core/ethernet_ptp_tx ethernet_core/ethernet_ptp_tx
 ad_connect corundum_core/ethernet_ptp_rx ethernet_core/ethernet_ptp_rx
 ad_connect corundum_core/axis_tx_ptp ethernet_core/axis_tx_ptp
 
+ad_connect corundum_core/m_axi m_axi
+
 ad_connect corundum_core/s_axis_stat_tvalid GND
 
 ad_connect corundum_core/clk clk_250mhz
@@ -363,6 +367,7 @@ if {$APP_ENABLE == 1} {
     AXIS_IF_RX_USER_WIDTH $AXIS_IF_RX_USER_WIDTH \
     STAT_INC_WIDTH $STAT_INC_WIDTH \
     STAT_ID_WIDTH $STAT_ID_WIDTH \
+    INPUT_WIDTH $INPUT_WIDTH \
   ]
 
   ad_connect application_core/clk corundum_core/clk
@@ -377,6 +382,8 @@ if {$APP_ENABLE == 1} {
   
   ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
   ad_connect application_core/s_axil_ctrl s_axil_application
+  
+  ad_connect application_core/input_axis input_axis
 
   ad_connect application_core/jtag_tdi GND
   ad_connect application_core/jtag_tms GND

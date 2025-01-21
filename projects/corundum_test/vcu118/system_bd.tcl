@@ -39,7 +39,7 @@ ad_connect sys_125m_rstgen/ext_reset_in axi_ddr_cntrl/c0_ddr4_ui_clk_sync_rst
 create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi0
 create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
 create_bd_intf_port -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
-create_bd_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
+# create_bd_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
 
 create_bd_port -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_port -dir O fpga_boot
@@ -66,7 +66,7 @@ ad_connect corundum_hierarchy/rst_250mhz sys_250m_reset
 ad_connect corundum_hierarchy/qspi0 qspi0
 ad_connect corundum_hierarchy/qspi1 qspi1
 ad_connect corundum_hierarchy/qsfp qsfp
-ad_connect corundum_hierarchy/i2c i2c
+# ad_connect corundum_hierarchy/i2c i2c
 ad_connect corundum_hierarchy/qsfp_rst qsfp_rst
 ad_connect corundum_hierarchy/fpga_boot fpga_boot
 ad_connect corundum_hierarchy/qspi_clk qspi_clk
