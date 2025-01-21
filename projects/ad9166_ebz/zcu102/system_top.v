@@ -55,8 +55,8 @@ module system_top (
 
   output          spi_csn_dac,
   output          spi_csn_hmc7044,
-  output          spi_cs_adf4372,
-  output          spi_cs_amp,
+  output          spi_csn_adf4372,
+  output          spi_csn_amp,
 
   output          fmc_txen,
 

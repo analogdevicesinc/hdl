@@ -40,9 +40,9 @@ set_property -dict {PACKAGE_PIN AA1 IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]
 # FMC_CS2 (HMC7044)
 set_property -dict {PACKAGE_PIN AB3 IOSTANDARD LVCMOS18} [get_ports spi_csb_hmc7044]            ; ## D11  FMC0_LA05_P           IO_L20P_T3L_N2_AD1P_66
 # FMC_CS3 (ADF4372)
-set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVCMOS18} [get_ports spi_cs_adf4372]             ; ## C10  FMC0_LA06_P           IO_L19P_T3L_N0_DBC_AD9P_66
+set_property -dict {PACKAGE_PIN AC2 IOSTANDARD LVCMOS18} [get_ports spi_csn_adf4372]            ; ## C10  FMC0_LA06_P           IO_L19P_T3L_N0_DBC_AD9P_66
 # FMC_CS4 (Amplifier)
-set_property -dict {PACKAGE_PIN AC1 IOSTANDARD LVCMOS18} [get_ports spi_cs_amp]                 ; ## C11  FMC0_LA06_N           IO_L19N_T3L_N1_DBC_AD9N_66
+set_property -dict {PACKAGE_PIN AC1 IOSTANDARD LVCMOS18} [get_ports spi_csn_amp]                ; ## C11  FMC0_LA06_N           IO_L19N_T3L_N1_DBC_AD9N_66
 set_property -dict {PACKAGE_PIN AA2 IOSTANDARD LVCMOS18} [get_ports spi_miso]                   ; ## H10  FMC0_LA04_P           IO_L21P_T3L_N4_AD8P_66
 set_property -dict {PACKAGE_PIN Y1  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                   ; ## G10  FMC0_LA03_N           IO_L22N_T3U_N7_DBC_AD0N_66
 set_property -dict {PACKAGE_PIN AC3 IOSTANDARD LVCMOS18} [get_ports spi_en]                     ; ## D12  FMC0_LA05_N           IO_L20N_T3L_N3_AD1N_66
