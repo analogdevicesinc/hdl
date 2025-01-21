@@ -109,9 +109,6 @@
 # Code owners for ad9695_fmc folder
 /projects/ad9695_fmc/       andrei.dragomir@analog.com  iulia.moldovan@analog.com
 
-# Code owners for ad9739a_fmc folder
-/projects/ad9739a_fmc/      iulia.moldovan@analog.com  cristianmihai.popa@analog.com
-
 # Code owners for ad9783_ebz folder
 /projects/ad9783_ebz/       iulia.moldovan@analog.com  cristianmihai.popa@analog.com
 
@@ -189,15 +186,6 @@
 
 # Code owners for dc2677a folder
 /projects/dc2677a/          andrei.grozav@analog.com  adrian.costina@analog.com
-
-# Code owners for fmcadc2 folder
-/projects/fmcadc2/          iulia.moldovan@analog.com  andrei.dragomir@analog.com
-
-# Code owners for fmcadc5 folder
-/projects/fmcadc5/          adrian.costina@analog.com  iulia.moldovan@analog.com
-
-# Code owners for fmcjesdadc1 folder
-/projects/fmcjesdadc1/      adrian.costina@analog.com  andrei.grozav@analog.com
 
 # Code owners for fmcomms11 folder
 /projects/fmcomms11/        adrian.costina@analog.com  iulia.moldovan@analog.com

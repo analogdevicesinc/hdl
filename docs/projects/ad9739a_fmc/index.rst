@@ -1,7 +1,13 @@
 .. _ad9739a_fmc:
 
-AD9739A-FMC HDL project
+AD9739A-FMC HDL project (OBSOLETE)
 ================================================================================
+
+.. warning::
+
+   The support for :git-hdl:`AD9739A_FMC <hdl_2021_r2:projects/ad9739a_fmc>` HDL
+   project has been discontinued, the latest release branch where it can be found
+   is ``hdl_2021_r2``. This page is left for legacy purposes only.
 
 Overview
 -------------------------------------------------------------------------------
@@ -132,16 +138,25 @@ Building the HDL project
 -------------------------------------------------------------------------------
 
 The design is built upon ADI's generic HDL reference design framework.
-ADI distributes the bit/elf files of these projects as part of the
-:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
-If you want to build the sources, ADI makes them available on the :git-hdl:`HDL repository </>`.
-To get the source you must
+ADI distributed the bit/elf files of this project as part of the
+:dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`
+until the 2021_R2 release. The prebuilt files can be found in the previous link.
+Afterwards, it was discontinued.
+
+But, if you want to build the sources, ADI makes them available on the
+:git-hdl:`HDL repository </>`. To get the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
-the HDL repository.
+the HDL repository and checkout the last release branch where this project
+still exists, ``hdl_2021_r2``.
+
+Then go to the hdl/projects/ad9739a_fmc/$zc706 location and run the make
+command.
 
 .. shell::
 
-   $cd hdl/projects/ad9739a_fmc/zc706
+   /hdl
+   $git checkout hdl_2021_r2
+   $cd projects/ad9739a_fmc/zc706
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
@@ -165,7 +180,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD9739A-FMC HDL project source code <projects/ad9739a_fmc>`
+- :git-hdl:`AD9739A-FMC HDL project source code <hdl_2021_r2:projects/ad9739a_fmc>`
 
 .. list-table::
    :widths: 30 35 35
@@ -175,34 +190,34 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_AD9739A
-     - :git-hdl:`library/axi_ad9739a`
+     - :git-hdl:`hdl_2021_r2:library/axi_ad9739a`
      - —
    * - AXI_DMAC
-     - :git-hdl:`library/axi_dmac`
+     - :git-hdl:`hdl_2021_r2:library/axi_dmac`
      - :ref:`axi_dmac`
    * - AXI_CLKGEN
-     - :git-hdl:`library/axi_clkgen`
+     - :git-hdl:`hdl_2021_r2:library/axi_clkgen`
      - :ref:`axi_clkgen`
    * - AXI_SYSID
-     - :git-hdl:`library/axi_sysid`
+     - :git-hdl:`hdl_2021_r2:library/axi_sysid`
      - :ref:`axi_sysid`
    * - AXI_HDMI_TX
-     - :git-hdl:`library/axi_hdmi_tx`
+     - :git-hdl:`hdl_2021_r2:library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
    * - AXI_SPDIF_TX
-     - :git-hdl:`library/axi_spdif_tx`
+     - :git-hdl:`hdl_2021_r2:library/axi_spdif_tx`
      - 	—
    * - SYSID_ROM
-     - :git-hdl:`library/sysid_rom`
+     - :git-hdl:`hdl_2021_r2:library/sysid_rom`
      - :ref:`axi_sysid`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD9739A-FMC Linux driver <drivers/iio/frequency/ad9739a.c>`
-- :git-linux:`AD9739A-FMC Linux device tree <arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
-- :git-no-os:`AD9739A-FMC No-Os project <drivers/dac/ad9739a>`
-- :git-no-os:`AD9739A-FMC No-Os driver <drivers/dac/ad9739a/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux driver <hdl_2021_r2:drivers/iio/frequency/ad9739a.c>`
+- :git-linux:`AD9739A-FMC Linux device tree <hdl_2021_r2:arch/arm/boot/dts/zynq-zc706-adv7511-ad9739a-fmc.dts>`
+- :git-no-os:`AD9739A-FMC No-Os project <hdl_2021_r2:drivers/dac/ad9739a>`
+- :git-no-os:`AD9739A-FMC No-Os driver <hdl_2021_r2:drivers/dac/ad9739a/ad9739a.c>`
 
 .. include:: ../common/more_information.rst
 

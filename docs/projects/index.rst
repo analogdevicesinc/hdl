@@ -51,7 +51,6 @@ Contents
    AD9467-FMC <ad9467_fmc/index>
    AD9656-FMC <ad9656_fmc/index>
    AD9695-FMC <ad9695_fmc/index>
-   AD9739A-FMC <ad9739a_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
@@ -76,14 +75,35 @@ Obsolete projects
 .. toctree::
    :maxdepth: 1
 
-   IMAGEON <imageon/index>
+   AD9739A-FMC (OBSOLETE) <ad9739a_fmc/index>
+   FMCADC2 (OBSOLETE) <fmcadc2/index>
+   FMCADC5 (OBSOLETE) <fmcadc5/index>
+   FMCJESDADC1 (OBSOLETE) <fmcjesdadc1/index>
+   IMAGEON (OBSOLETE) <imageon/index>
 
 .. toctree::
    :maxdepth: 1
 
 The following projects are obsolete and **not maintained anymore**.
-Support is limited. The latest available sources for these projects can be
-found in the same archive.
+Support is limited. The latest tested sources for these projects can be
+found in the following release branches, or in their corresponding ADI Kuiper
+Linux images (the already built files):
 
-   imageon - hdl_2019_r1
-   ad_fmclidar1_ebz 
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
+
+   * - Project name
+     - Code link
+   * - ad9739a_fmc
+     - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/ad9739a_fmc>`
+   * - ad_fmclidar1_ebz
+     - :git-hdl:`hdl_2019_r1 <hdl_2019_r1:projects/ad_fmclidar1_ebz>`
+   * - fmcadc2
+     - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/fmcadc2>`
+   * - fmcadc5
+     - :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/fmcadc5>`
+   * - fmcjesdadc1
+     - :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/fmcjesdadc1>`
+   * - imageon
+     - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:projects/imageon>`
