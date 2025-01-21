@@ -28,7 +28,7 @@ from system_top.xsa and u-boot.elf.
 
 .. _build_boot_bin zynq:
 
-For Zynq carriers
+For Zynq
 -------------------------------------------------------------------------------
 
 This section applies to the Zynq-based carriers from
@@ -68,7 +68,7 @@ There is also a version of script that works in Windows Powershell:
 
 .. _build_boot_bin zynqmp:
 
-For ZynqMP carriers
+For ZynqMP
 -------------------------------------------------------------------------------
 
 This section applies to the ZynqMP-based carriers, usually :xilinx:`ZCU102`
@@ -117,3 +117,41 @@ where you ran the command. The folder follows the pattern:
 
    See the beginning of :external+documentation:ref:`kuiper sdcard` for
    instructions on how to obtain the image.
+
+For Versal
+-------------------------------------------------------------------------------
+This section applies only to the Versal carriers: :xilinx:`VCK190` and
+:xilinx:`VPK180`.
+
+Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
+cross-compiler for ``arm64`` exists before running the script.
+For more information about cross compilers, see
+:dokuwiki:`Building the ZynqMP / MPSoC Linux kernel and devicetrees from source <resources/tools-software/linux-build/generic/zynqmp>`.
+
+The ``build_versal_boot_bin.sh`` script can be downloaded from
+`here <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh>`__
+
+The script can take 4 parameters:
+
+- the path to the ``system_top.xsa`` file (**mandatory**)
+- the second parameter is either:
+
+  - ``download`` (will git clone the U-boot repository) (**default**)
+  - or ``u-boot.elf``
+
+- the third parameter is either:
+
+  - ``download`` (will git clone the ATF repository) (**default**)
+  - or ``bl31.elf``
+  - or ``<path-to-arm-trusted-firmware-source>`` (the file system path to the
+    ATF source code repository)
+
+- the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**)
+
+.. shell:: bash
+
+   $build_versal_boot_bin.sh system_top.xsa (download | u-boot.elf) (download | bl31.elf | <path-to-arm-trusted-firmware-source>) [output-archive]
+
+The build output can be found in the local directory ``output_boot_bin``
+where you ran the command. The folder follows the pattern:
+*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
