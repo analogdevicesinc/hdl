@@ -21,18 +21,18 @@ Contents
    AD-GMSL2ETH-SL <ad_gmsl2eth_sl/index>
    AD353XR <ad353xr/index>
    AD35XXR-EVB <ad35xxr_evb/index>
+   AD4052-ARDZ <ad4052_ardz/index>
    AD408X-FMC-EVB <ad408x_fmc_evb/index>
    AD4110-SDZ <ad4110/index>
    AD411x-AD717x <ad411x_ad717x/index>
    AD4134-FMC <ad4134_fmc/index>
    AD4170-ASDZ <ad4170_asdz/index>
-   AD4052-ARDZ <ad4052_ardz/index>
    AD4630-FMC/AD4030-FMC/ADAQ4224-FMC <ad4630_fmc/index>
    AD469X-EVB <ad469x_evb/index>
    AD485X-FMCZ <ad485x_fmcz/index>
-   AD57XX-ARDZ <ad57xx_ardz/index>
    AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
+   AD57XX-ARDZ <ad57xx_ardz/index>
    AD6676EVB <ad6676evb/index>
    AD7124-4-ASDZ/AD7124-8-ASDZ <ad7124_asdz/index>
    AD7134-FMC <ad7134_fmc/index>
@@ -41,8 +41,8 @@ Contents
    AD7405-FMC <ad7405_fmc/index>
    AD7606X-FMC <ad7606x_fmc/index>
    AD7616-SDZ <ad7616_sdz/index>
-   AD7768-EVB <ad7768evb/index>
    AD7768-1-EVB <ad77681evb/index>
+   AD7768-EVB <ad7768evb/index>
    AD777X-ARDZ <ad777x_ardz/index>
    AD9081/AD9082/AD9986/AD9988 <ad9081_fmca_ebz/index>
    AD9081-FMCA-EBZ-X-BAND <ad9081_fmca_ebz_x_band/index>

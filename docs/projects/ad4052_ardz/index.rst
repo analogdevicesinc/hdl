@@ -55,6 +55,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The data path and clock domains are depicted in the below diagram:
 
 .. image:: ad4052_hdl.svg
