@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -133,7 +133,7 @@ module axi_spi_engine #(
   input [7:0] offload_sync_data
 );
 
-  localparam PCORE_VERSION = 'h010301;
+  localparam PCORE_VERSION = 'h010400;
   localparam S_AXI = 0;
   localparam UP_FIFO = 1;
 
