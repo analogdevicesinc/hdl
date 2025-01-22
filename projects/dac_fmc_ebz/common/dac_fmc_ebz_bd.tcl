@@ -90,7 +90,7 @@ ad_xcvrpll dac_jesd204_xcvr/up_pll_rst util_dac_jesd204_xcvr/up_cpll_rst_*
 
 # connections (dac)
 
-ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link {} {} {} $MAX_NUM_OF_LANES
+ad_xcvrcon util_dac_jesd204_xcvr dac_jesd204_xcvr dac_jesd204_link {0 1 2 3 7 4 6 5} {} {} $MAX_NUM_OF_LANES
 
 
 ad_connect util_dac_jesd204_xcvr/tx_out_clk_0 dac_jesd204_transport/link_clk
