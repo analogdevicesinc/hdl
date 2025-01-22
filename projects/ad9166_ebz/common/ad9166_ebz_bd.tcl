@@ -121,12 +121,12 @@ ad_connect axi_dac_fifo/dma_valid dac_dma/m_axis_valid
 ad_connect axi_dac_fifo/dma_xfer_last dac_dma/m_axis_last
 
 # SPI for FMC interposer
-# spi_fmc_csn [0] - FMC_CS1 (AD9166)
-# spi_fmc_csn [1] - FMC_CS2 (HMC7044)
-# spi_fmc_csn [2] - FMC_CS3 (ADF4372)
-# spi_fmc_csn [3] - FMC_CS4 (Amplifier)
-create_bd_port -dir O -from 3 -to 0 spi_fmc_csn_o
+# spi_csn [0] - FMC_CS1 (AD9166)
+# spi_csn [1] - FMC_CS2 (HMC7044)
+# spi_csn [2] - FMC_CS3 (ADF4372)
+# spi_csn [3] - FMC_CS4 (Amplifier)
 create_bd_port -dir I -from 3 -to 0 spi_fmc_csn_i
+create_bd_port -dir O -from 3 -to 0 spi_fmc_csn_o
 create_bd_port -dir I spi_fmc_clk_i
 create_bd_port -dir O spi_fmc_clk_o
 create_bd_port -dir I spi_fmc_sdo_i

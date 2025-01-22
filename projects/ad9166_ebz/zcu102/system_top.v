@@ -48,10 +48,11 @@ module system_top (
   output  [ 7:0]  tx_data_p,
   output  [ 7:0]  tx_data_n,
 
-  input           spi_miso,
-  output          spi_mosi,
-  output          spi_clk,
-  output          spi_en,
+  // sdo
+  //input           spi_ mosi,
+  inout           spi_fmc_sdio,
+  output          spi_fmc_clk,
+  output          spi_fmc_en,
 
   output          spi_csn_dac,
   output          spi_csn_hmc7044,
@@ -73,19 +74,31 @@ module system_top (
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
   wire    [ 2:0]  spi1_csn;
-  wire    [ 3:0]  spi_fmc_csn;
+  wire    [ 3:0]  spi_csn;
+  wire            spi_mosi_s;
+  wire            spi_miso_s;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire            tx_sync;
 
   // active low
-  assign spi_en = 1'b0;
+  assign spi_fmc_en = 1'b0;
 
   // PL SPI connected to axi_quad_spi because they share the same SPI lines
-  assign spi_csn_dac = spi_fmc_csn[0];      // FMC_CS1
-  assign spi_csn_hmc7044 = spi_fmc_csn[1];  // FMC_CS2
-  assign spi_csn_adf4372 = spi_fmc_csn[2];  // FMC_CS3
-  assign spi_csn_amp = spi_fmc_csn[3];      // FMC_CS4
+  assign spi_fmc_dac = spi_csn[0];      // FMC_CS1
+  assign spi_fmc_hmc7044 = spi_csn[1];  // FMC_CS2
+  assign spi_fmc_adf4372 = spi_csn[2];  // FMC_CS3
+  assign spi_fmc_amp = spi_csn[3];      // FMC_CS4
+
+  ad_3w_spi #(
+    .NUM_OF_SLAVES (1)
+  ) i_3w_spi (
+    .spi_csn (spi_csn[0]),
+    .spi_clk (spi_fmc_clk),
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_sdio (spi_fmc_sdio),
+    .spi_dir ());
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -149,13 +162,13 @@ module system_top (
     .spi1_miso (pmod_spi_miso),
     .spi1_mosi (pmod_spi_mosi),
     .spi1_sclk (pmod_spi_clk),
-    .spi_fmc_csn_i (spi_fmc_csn),
-    .spi_fmc_csn_o (spi_fmc_csn),
-    .spi_fmc_clk_i (spi_clk),
-    .spi_fmc_clk_o (spi_clk),
-    .spi_fmc_sdo_i (spi_mosi),
-    .spi_fmc_sdo_o (spi_mosi),
-    .spi_fmc_sdi_i (spi_miso),
+    .spi_fmc_csn_i (spi_csn),
+    .spi_fmc_csn_o (spi_csn),
+    .spi_fmc_clk_i (spi_fmc_clk),
+    .spi_fmc_clk_o (spi_fmc_clk),
+    .spi_fmc_sdo_i (spi_mosi_s),
+    .spi_fmc_sdo_o (spi_mosi_s),
+    .spi_fmc_sdi_i (spi_miso_s),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
