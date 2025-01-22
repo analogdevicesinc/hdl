@@ -9,15 +9,13 @@ Overview
 The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4415`/ :adi:`AD4116` is
 a low power, low noise, 24-bit, sigma-delta (Σ-Δ) analog-to-digital converter
 (ADC), high impedance (≥1 MΩ) bipolar, ±10 V voltage inputs, and 0 mA to 20 mA
-current inputs. The :adi:`AD4113` differ from device above, in that it is 16-bit
-resultion. The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4113` /:adi:`AD4114` /
-:adi:`AD4415` /:adi:`AD4116` also integrates key analog and digital signal
-conditioning blocks to configure eight individual setups for each analog input
-channel in use.
+current inputs. The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4415` /
+:adi:`AD4116` also integrates key analog and digital signal conditioning blocks
+to configure eight individual setups for each analog input channel in use.
 
-The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4113` /:adi:`AD4114` features a maximum
-output data rate of 31.25 kSPS, :adi:`AD4115` features a maximum output data rate
-of 125 kSPS and :adi:`AD4116` features a maximum output data rate of 62.5 kSPS.
+The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` features a maximum output data
+rate of 31.25 kSPS, :adi:`AD4115` features a maximum output data rate of 125
+kSPS and :adi:`AD4116` features a maximum output data rate of 62.5 kSPS.
 
 The :adi:`AD7172-2` /:adi:`AD7172-4` /:adi:`AD7173-8` /:adi:`AD7175-2`/
 :adi:`AD7175-8` /:adi:`AD7176-2` /:adi:`AD7177-2` is a low noise, low power,
@@ -57,7 +55,6 @@ Supported devices
 
 - :adi:`AD4111`
 - :adi:`AD4112`
-- :adi:`AD4113`
 - :adi:`AD4114`
 - :adi:`AD4115`
 - :adi:`AD4116`
@@ -209,7 +206,6 @@ Hardware related
 
   - :adi:`AD4111`
   - :adi:`AD4112`
-  - :adi:`AD4113`
   - :adi:`AD4114`
   - :adi:`AD4115`
   - :adi:`AD4116`
