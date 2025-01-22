@@ -5,6 +5,31 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
+create_bd_port -dir I -from 2 -to 0 spi0_probe_csn
+create_bd_port -dir I spi0_probe_sclk
+create_bd_port -dir I spi0_probe_mosi
+create_bd_port -dir I spi0_probe_miso
+
+set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0]
+set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $my_ila
+set_property -dict [list CONFIG.C_NUM_OF_PROBES {4}] $my_ila
+set_property -dict [list CONFIG.C_DATA_DEPTH {8192}] $my_ila
+set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $my_ila
+set_property -dict [list CONFIG.C_EN_STRG_QUAL {1}] $my_ila
+set_property -dict [list CONFIG.C_PROBE1_MU_CNT {2} ] $my_ila
+set_property -dict [list CONFIG.C_PROBE0_MU_CNT {2} ] $my_ila
+set_property -dict [list CONFIG.ALL_PROBE_SAME_MU_CNT {2}] $my_ila
+set_property -dict [list CONFIG.C_PROBE0_WIDTH {3}] $my_ila
+set_property -dict [list CONFIG.C_PROBE1_WIDTH {1}] $my_ila
+set_property -dict [list CONFIG.C_PROBE2_WIDTH {1}] $my_ila
+set_property -dict [list CONFIG.C_PROBE3_WIDTH {1}] $my_ila
+
+ad_connect $my_ila/clk     sys_ps8/pl_clk0
+ad_connect $my_ila/probe0  spi0_probe_csn
+ad_connect $my_ila/probe1  spi0_probe_sclk
+ad_connect $my_ila/probe2  spi0_probe_mosi
+ad_connect $my_ila/probe3  spi0_probe_miso
+
 set JESD_M    $ad_project_params(JESD_M)
 set JESD_L    $ad_project_params(JESD_L)
 set NUM_LINKS $ad_project_params(NUM_LINKS)

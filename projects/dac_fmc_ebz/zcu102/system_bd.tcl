@@ -8,12 +8,13 @@ set dac_fifo_address_width 13
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+
 source ../common/dac_fmc_ebz_bd.tcl
 
 if {[info exists ::env(ADI_LANE_RATE)]} {
-  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 15.4]
+  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 12.5]
 } elseif {![info exists ADI_LANE_RATE]} {
-  set ADI_LANE_RATE 15.4
+  set ADI_LANE_RATE 12.5
 }
 
 # Common for both 12.5 and 15.4 GHz Lane Rate
@@ -49,8 +50,53 @@ if { $ADI_LANE_RATE == 15.4 } {
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF0_CFG        0x800
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PPF1_CFG        0x600
     ad_ip_parameter util_dac_jesd204_xcvr CONFIG.QPLL_LPF        0x37F
+} elseif { $ADI_LANE_RATE == 4.16 } {
+
+  # channel
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RX_WIDEMODE_CDR           0x0
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXPI_CFG0                 0x3300
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXPI_CFG1                 0xFD
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG3_GEN4           0x12
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_CFG3                 0x0
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXDFE_PWR_SAVING          0x1
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXBUF_EN                  "TRUE"
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TX_DATA_WIDTH             40
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.ALIGN_MCOMMA_DET          "TRUE"
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.ALIGN_PCOMMA_DET          "TRUE"
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RX_DATA_WIDTH             40
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG3                0x12
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TXBUF_EN                  "TRUE"
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CH_HSPMUX                 0x3C3C
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG3_GEN3           0x12
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG3_GEN2           0x12
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.DEC_MCOMMA_DETECT         "TRUE"
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXGEARBOX_EN              "FALSE"
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG0                0x3
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_CFG2                 0x2
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.GEARBOX_MODE              0x0
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXBUF_THRESH_UNDFLW       3
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG2_GEN2           0x256
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.DEC_PCOMMA_DETECT         "TRUE"
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_CFG0                 0x1FA
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_CFG1                 0x23
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.c                         "FALSE"
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXCDR_CFG2_GEN4           0x164
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXGBOX_FIFO_INIT_RD_ADDR  4
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.PREIQ_FREQ_BST            0x0
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CBCC_DATA_SOURCE_SEL      "DECODED"
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.ALIGN_COMMA_ENABLE        0x3FF
+
+  # pll_dividers
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_FBDIV_4_5            5
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TX_CLK25_DIV              9
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RXOUT_DIV                 1
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.RX_CLK25_DIV              5
+    #ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_REFCLK_DIV           1
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.TX_OUT_DIV                1
+    ad_ip_parameter util_dac_jesd204_xcvr CONFIG.CPLL_FBDIV                2
+
 } else {
-    error "ADI_LANE_RATE must be either 12.5 GHz or 15.4GHz"
+    error "ADI_LANE_RATE must be either 4.16, 12.5 GHz or 15.4GHz"
 }
 
 ad_ip_parameter  dac_jesd204_link/tx   CONFIG.SYSREF_IOB         false
