@@ -571,7 +571,7 @@ module system_top (
     .adf4030_bsync_p      (sysref_m2c_p),
     .adf4030_bsync_n      (sysref_m2c_n),
     .adf4030_clk          (rx_device_clk),
-    .adf4030_trigger      (ext_trig),
+    .adf4030_trigger      (gp4[0]),
     .adf4030_sysref       (sysref),
     .adf4030_trig_channel (trig_channel),
 

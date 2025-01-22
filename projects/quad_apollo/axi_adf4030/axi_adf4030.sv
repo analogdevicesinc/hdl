@@ -51,6 +51,8 @@ module axi_adf4030 #(
   logic        bsync_event;
   logic        manual_trig;
   logic        select_trig;
+  logic        enable_debug_trig;
+  logic        debug_trig;
   logic        trig;
 
   // Internal up bus, translated by up_axi
@@ -73,6 +75,7 @@ module axi_adf4030 #(
   logic [ 2:0]              trig_state         [CHANNEL_COUNT - 1:0];
   logic                     direction;
   logic                     disable_internal_bsync;
+  logic [CHANNEL_COUNT-1:0] trig_channel_s;
 
   IOBUFDS_DCIEN #( 
     .SIM_DEVICE      ("ULTRASCALE"),
@@ -109,13 +112,13 @@ module axi_adf4030 #(
     .rstn      (),
     .rst       (trigger_sync));
 
-  assign trig = select_trig ? trigger_sync : manual_trig;
+  assign trig = enable_debug_trig ? 1'b0 : (select_trig ? trigger_sync : manual_trig);
 
   genvar i;
   generate
     for (i = 0; i < CHANNEL_COUNT; i = i + 1) begin
       trigger_channel i_channel (
-        .clk         (clk),
+        .clk         (device_clk),
         .rstn        (rstn),
         .trigger     (trig),
         .ch_en       (trig_channel_en[i]),
@@ -125,7 +128,9 @@ module axi_adf4030 #(
         .bsync_delay (bsync_delay),
         .bsync_ratio (bsync_ratio),
         .trig_state  (trig_state[i]),
-        .out         (trig_channel[i]));
+        .trig_out    (trig_channel_s[i]));
+
+      assign trig_channel[i] = enable_debug_trig ? debug_trig : trig_channel_s[i];
     end
   endgenerate
 
@@ -142,6 +147,8 @@ module axi_adf4030 #(
     .disable_internal_bsync (disable_internal_bsync),
     .manual_trig            (manual_trig),
     .select_trig            (select_trig),
+    .enable_debug_trig      (enable_debug_trig),
+    .debug_trig             (debug_trig),
 
     .bsync_ready            (bsync_ready),
     .bsync_delay            (bsync_delay),

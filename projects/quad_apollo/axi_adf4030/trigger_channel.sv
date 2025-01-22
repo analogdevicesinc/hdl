@@ -11,7 +11,7 @@ module trigger_channel (
   input  logic [ 4:0] bsync_delay,
   input  logic [15:0] bsync_ratio,
   output logic [ 2:0] trig_state,
-  output logic        out
+  output logic        trig_out
 );
 
   localparam                   STATE_WIDTH = 3;
@@ -29,6 +29,7 @@ module trigger_channel (
   logic                    trig_edge;
   logic                    trig_r;
   logic                    trig_event;
+  logic                    out;
 
   always @* begin
     next_state = curr_state;
@@ -125,6 +126,7 @@ module trigger_channel (
     end
   end
 
+  assign trig_out = out;
   assign trig_state = curr_state;
 
 endmodule
