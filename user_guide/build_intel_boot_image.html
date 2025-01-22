@@ -125,6 +125,16 @@
 <li><a class="reference internal" href="#id8">Configuring the SD Card</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#ad9081-agilex-7">AD9081/Agilex 7</a><ul>
+<li><a class="reference internal" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables">Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables</a></li>
+<li><a class="reference internal" href="#id9">Building the Linux Kernel image and the Devicetree</a></li>
+<li><a class="reference internal" href="#build-the-arm-trusted-firmware">Build the ARM Trusted Firmware</a></li>
+<li><a class="reference internal" href="#build-u-boot">Build U-Boot</a></li>
+<li><a class="reference internal" href="#id10">Building the Hardware Design</a></li>
+<li><a class="reference internal" href="#id11">Configuring the SD Card</a></li>
+<li><a class="reference internal" href="#programming-steps">Programming steps</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -389,6 +399,14 @@ files:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/socfpga_arria10-common/socfpga.dtb</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/zImage</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot-with-spl.sfp</span></code> (preloader image)</p></li>
+</ul>
+</li>
+<li><p>For Agilex 7 SoC projects (<a class="reference internal" href="#build-intel-boot-image-fm87"><span class="std std-ref">build example</span></a>):</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/agilex.core.rbf</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/u-boot.itb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/socfpga_agilex_socdk.dtb</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;boot_mountpoint&gt;/Image</span></code></p></li>
 </ul>
 </li>
 </ul>
@@ -1952,6 +1970,461 @@ sdz           8:48  1   29.1G  0 disk
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
+</section>
+<section id="ad9081-agilex-7">
+<span id="build-intel-boot-image-fm87"></span><h3>AD9081/Agilex 7<a class="headerlink" href="#ad9081-agilex-7" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>HDL Project: <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/fm87">projects/ad9081_fmca_ebz/fm87</a></p></li>
+<li><p>ADI’s Linux kernel: <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts">../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts</a></p></li>
+</ul>
+<section id="get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables">
+<h4>Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables<a class="headerlink" href="#get-aarch64-none-linux-gnu-and-set-cross-compile-and-arch-variables" title="Permalink to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>tools
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tools
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tar<span class="w"> </span>xvf<span class="w"> </span>gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>..
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="id9">
+<h4>Building the Linux Kernel image and the Devicetree<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>agilex<span class="w"> </span>https://github.com/analogdevicesinc/linux
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>linux
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>adi_zynqmp_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>Image
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>intel/socfpga_agilex_socdk_ad9081_jesd204c.dtb
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>..
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="build-the-arm-trusted-firmware">
+<h4>Build the ARM Trusted Firmware<a class="headerlink" href="#build-the-arm-trusted-firmware" title="Permalink to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>QPDS24.1_REL_GSRD_PR<span class="w"> </span>https://github.com/altera-opensource/arm-trusted-firmware
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>arm-trusted-firmware
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>bl31<span class="w"> </span><span class="nv">PLAT</span><span class="o">=</span>agilex<span class="w"> </span><span class="nv">DEPRECATED</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>..
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="build-u-boot">
+<h4>Build U-Boot<a class="headerlink" href="#build-u-boot" title="Permalink to this heading"></a></h4>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>QPDS24.1_REL_GSRD_PR<span class="w"> </span>https://github.com/altera-opensource/u-boot-socfpga
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>u-boot-socfpga
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ln<span class="w"> </span>-sf<span class="w"> </span>../arm-trusted-firmware/build/agilex/release/bl31.bin<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/earlycon panic=-1/earlycon panic=-1 console=ttyS0,115200 root=\/dev\/mmcblk0p2 rw rootwait/g&#39;</span><span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/^CONFIG_NAND_BOOT=y/d&#39;</span><span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/^CONFIG_SPL_NAND_SUPPORT=y/d&#39;</span><span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/^CONFIG_CMD_UBI=y/d&#39;</span><span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;CONFIG_USE_BOOTCOMMAND=y&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;CONFIG_BOOTCOMMAND=&quot;load mmc 0:1 \${loadaddr} agilex.core.rbf; bridge disable; fpga load 0 \${loadaddr} \${filesize}; bridge enable; load mmc 0:1 ${kernel_addr_r} Image; load mmc 0:1 ${fdt_addr_r} socfpga_agilex_socdk.dtb; booti ${kernel_addr_r} - ${fdt_addr_r}&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>configs/socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>socfpga_agilex_defconfig
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>..
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="id10">
+<h4>Building the Hardware Design<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h4>
+<p>Clone the HDL repository, then build the project:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>projects/ad9081_fmca_ebz/fm87
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>Building ad9081_fmca_ebz_fm87 [/home/analog/hdl/projects/ad9081_fmca_ebz/fm87/ad9081_fmca_ebz_fm87_quartus.log] ... OK
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>After the design is built, the resulting SRAM Object File (.sof) file shall be converted to a Raw Binary File (.rbf)
+and a Jtag Indirect Configuration (.jic) file.</p>
+<p>If you skipped the last section, ensure to set the architecture and cross compiler environment variables and have the U-boot files built.</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>quartus_pfg<span class="w"> </span>-c<span class="w"> </span>ad9081_fmca_ebz_fm87.sof<span class="w"> </span>ad9081_fmca_ebz_fm87.jic<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">hps_path</span><span class="o">=</span>../../../../u-boot-socfpga/spl/u-boot-spl-dtb.hex<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">device</span><span class="o">=</span>MT25QU02G<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">flash_loader</span><span class="o">=</span>AGIB027R31B1E1V<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">mode</span><span class="o">=</span>ASX4<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span><span class="nv">hps</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="id11">
+<h4>Configuring the SD Card<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h4>
+<p>Below are the commands to create the preloader and bootloader partition using
+the Kuiper Linux image as a starting point.
+Please check every command before running, especially configuring target
+device mountpoints accordingly
+(here as <code class="docutils literal notranslate"><span class="pre">/dev/sdz</span></code> with partition 1 mounted at <code class="docutils literal notranslate"><span class="pre">/media/BOOT/</span></code>).</p>
+<p>Flash the SD Card with the Kuiper Linux image:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">time</span><span class="w"> </span>sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>./2023-12-13-ADI-Kuiper-full.img<span class="w"> </span><span class="nv">of</span><span class="o">=</span>/dev/sdz<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span><span class="m">4194304</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>2952+0 records in
+2952+0 records out
+12381585408 bytes (12 GB, 12 GiB) copied, 838.353 s, 14.8 MB/s
+
+real        14m7.938s
+user        0m0.006s
+sys 0m0.009s
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sync
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Mount the /BOOT partition:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsblk
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sdz           8:48   1  29.1G  0 disk
+├─sdz1        8:49   1     2G  0 part
+├─sdz2        8:50   1  27.1G  0 part
+└─sdz3        8:51   1     8M  0 part
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>/media/BOOT/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>mount<span class="w"> </span>/dev/sdz1<span class="w"> </span>/media/BOOT/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsblk
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sdz           8:48   1  29.1G  0 disk
+├─sdz1        8:49   1     2G  0 part /media/BOOT
+├─sdz2        8:50   1  27.1G  0 part
+└─sdz3        8:51   1     8M  0 part
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Copy the built files to the /BOOT partition:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>u-boot-socfpga/u-boot.itb<span class="w"> </span>/media/BOOT/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>linux/arch/arm64/boot/Image<span class="w"> </span>/media/BOOT/
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>linux/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dtb<span class="w"> </span>/media/BOOT/socfpga_agilex_socdk.dtb
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>hdl/projects/ad9081_fmca_ebz/fm87/ad9081_fmca_ebz_fm87.core.rbf<span class="w"> </span>/media/BOOT/agilex.core.rbf
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Unmount the /BOOT partition:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>umount<span class="w"> </span>/dev/sdz1
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsblk
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>NAME        MAJ:MIN RM  SIZE  RO TYPE MOUNTPOINT
+sdz           8:48  1   29.1G  0 disk
+├─sdz1        8:49  1      2G  0 part
+├─sdz2        8:50  1   27.1G  0 part
+└─sdz3        8:51  1      8M  0 part
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></section>
+<section id="programming-steps">
+<h4>Programming steps<a class="headerlink" href="#programming-steps" title="Permalink to this heading"></a></h4>
+<ul class="simple">
+<li><p>Set <strong>S9</strong> to JTAG</p></li>
+<li><p>Power on the FPGA</p></li>
+<li><p>Open the Quartus Programmer and flash the ad9081_fmca_ebz_fm87.jic</p></li>
+<li><p>Power off the FPGA</p></li>
+<li><p>Set <strong>S9</strong> to QSPI</p></li>
+<li><p>Insert the SD-card and power up the board</p></li>
+</ul>
+<p><strong>S9</strong> 4-bit DIP Switch</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>Switch Bit</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>Name</p></td>
+<td><p>MSEL0</p></td>
+<td><p>MSEL1</p></td>
+<td><p>MSEL2</p></td>
+<td><p>MSEL3</p></td>
+</tr>
+<tr class="row-odd"><td><p>JTAG Mode</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>OFF</p></td>
+</tr>
+<tr class="row-even"><td><p>QSPI Mode</p></td>
+<td><p>ON</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Default Switch Positions for the AD9081 project</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>4-bit DIP Switch</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>S4</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+<tr class="row-odd"><td><p>S15</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>OFF</p></td>
+</tr>
+<tr class="row-even"><td><p>S10</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+<tr class="row-odd"><td><p>S23</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+<tr class="row-even"><td><p>S6</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+</tr>
+<tr class="row-odd"><td><p>S1</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+</tr>
+<tr class="row-even"><td><p>S22</p></td>
+<td><p>OFF</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+<tr class="row-odd"><td><p>S19</p></td>
+<td><p>OFF</p></td>
+<td><p>OFF</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+<tr class="row-even"><td><p>S20</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+<td><p>ON</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 </section>
 </section>
