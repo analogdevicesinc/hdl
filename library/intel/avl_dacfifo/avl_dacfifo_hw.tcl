@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -22,6 +22,7 @@ ad_ip_files avl_dacfifo [list\
 # parameters
 
 ad_ip_parameter DEVICE_FAMILY STRING {Arria 10}
+ad_ip_parameter ACTIVE_LOW_RESET INTEGER 0
 ad_ip_parameter DAC_DATA_WIDTH INTEGER 64
 ad_ip_parameter DAC_MEM_ADDRESS_WIDTH INTEGER 8
 ad_ip_parameter DMA_DATA_WIDTH INTEGER 64
@@ -30,7 +31,7 @@ ad_ip_parameter AVL_DATA_WIDTH INTEGER 512
 ad_ip_parameter AVL_ADDRESS_WIDTH INTEGER 25
 ad_ip_parameter AVL_BURST_LENGTH INTEGER 127
 ad_ip_parameter AVL_BASE_ADDRESS INTEGER 0
-ad_ip_parameter AVL_ADDRESS_LIMIT INTEGER 0x800000
+ad_ip_parameter AVL_ADDRESS_LIMIT INTEGER 0x80000000
 
 # interfaces
 
@@ -63,15 +64,15 @@ set_interface_property avl_reset associatedclock avl_clock
 add_interface_port avl_reset avl_reset reset input 1
 
 add_interface amm_ddr avalon master
-add_interface_port amm_ddr avl_address address output 25
-add_interface_port amm_ddr avl_burstcount burstcount output 7
-add_interface_port amm_ddr avl_byteenable byteenable output 64
-add_interface_port amm_ddr avl_read read output 1
-add_interface_port amm_ddr avl_readdata readdata input 512
+add_interface_port amm_ddr avl_address        address       output AVL_ADDRESS_WIDTH
+add_interface_port amm_ddr avl_burstcount     burstcount    output 7
+add_interface_port amm_ddr avl_byteenable     byteenable    output AVL_DATA_WIDTH/8
+add_interface_port amm_ddr avl_read           read          output 1
+add_interface_port amm_ddr avl_readdata       readdata      input AVL_DATA_WIDTH
 add_interface_port amm_ddr avl_readdata_valid readdatavalid input 1
-add_interface_port amm_ddr avl_ready waitrequest_n input 1
-add_interface_port amm_ddr avl_write write output 1
-add_interface_port amm_ddr avl_writedata writedata output 512
+add_interface_port amm_ddr avl_ready          waitrequest_n input 1
+add_interface_port amm_ddr avl_write          write         output 1
+add_interface_port amm_ddr avl_writedata      writedata     output AVL_DATA_WIDTH
 
 set_interface_property amm_ddr associatedClock avl_clock
 set_interface_property amm_ddr associatedReset avl_reset
@@ -140,4 +141,3 @@ proc p_avl_dacfifo_elab {} {
   set_instance_parameter_value ad_mem_asym_bypass B_DATA_WIDTH $m_dac_data_width
 
 }
-
