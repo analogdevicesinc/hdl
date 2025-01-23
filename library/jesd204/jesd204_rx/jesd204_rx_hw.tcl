@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2022, 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2022, 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -35,7 +35,7 @@ ad_ip_files jesd204_rx [list \
   ../jesd204_common/jesd204_frame_align_replace.v \
   ../jesd204_common/jesd204_lmfc.v \
   ../jesd204_common/jesd204_scrambler.v \
-  ../jesd204_common/pipeline_stage.v \
+  ../../common/util_pipeline_stage.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/util_cdc/sync_data.v \
   $ad_hdl_dir/library/util_cdc/sync_event.v \

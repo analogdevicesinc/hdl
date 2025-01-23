@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -13,7 +13,7 @@ GENERIC_DEPS += jesd204_frame_mark.v
 GENERIC_DEPS += jesd204_lmfc.v
 GENERIC_DEPS += jesd204_scrambler.v
 GENERIC_DEPS += jesd204_scrambler_64b.v
-GENERIC_DEPS += pipeline_stage.v
+GENERIC_DEPS += ../../common/util_pipeline_stage.v
 
 XILINX_DEPS += jesd204_common_ip.tcl
 
