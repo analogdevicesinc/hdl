@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -55,7 +55,7 @@ module jesd204_tx_lane #(
     .data_in (tx_data),
     .data_out (scrambled_data));
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH ((DATA_PATH_WIDTH*19) + 2),
     .REGISTERED (1)
   ) i_lane_pipeline_stage (
