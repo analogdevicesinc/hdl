@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad3552r #(
+module axi_ad35xxr #(
 
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
@@ -50,90 +50,93 @@ module axi_ad3552r #(
 
   // DAC INTERFACE
 
-  input                   dac_clk,
+  input         dac_clk,
 
-  input       [31:0]      dma_data,
-  input                   valid_in_dma,
-  input                   valid_in_dma_sec,
-  output                  dac_data_ready,
+  input  [31:0] dma_data,
+  input         valid_in_dma,
+  input         valid_in_dma_sec,
+  output        dac_data_ready,
 
-  input       [15:0]      data_in_a,
-  input       [15:0]      data_in_b,
-  input                   valid_in_a,
-  input                   valid_in_b,
+  input  [15:0] data_in_a,
+  input  [15:0] data_in_b,
+  input         valid_in_a,
+  input         valid_in_b,
 
-  output                  dac_sclk,
-  output                  dac_csn,
-  input       [ 3:0]      sdio_i,
-  output      [ 3:0]      sdio_o,
-  output                  sdio_t,
+  output        dac_sclk,
+  output        dac_csn,
+  input  [ 3:0] sdio_i,
+  output [ 3:0] sdio_o,
+  output [ 3:0] sdio_t,
+  output        qspi_sel,
 
   // sync transfer between 2 DAC'S
 
-  input                   external_sync,
-  output                  sync_ext_device,
+  input  external_sync,
+  output sync_ext_device,
 
   // axi interface
 
-  input                   s_axi_aclk,
-  input                   s_axi_aresetn,
-  input                   s_axi_awvalid,
-  input       [15:0]      s_axi_awaddr,
-  input       [ 2:0]      s_axi_awprot,
-  output                  s_axi_awready,
-  input                   s_axi_wvalid,
-  input       [31:0]      s_axi_wdata,
-  input       [ 3:0]      s_axi_wstrb,
-  output                  s_axi_wready,
-  output                  s_axi_bvalid,
-  output      [ 1:0]      s_axi_bresp,
-  input                   s_axi_bready,
-  input                   s_axi_arvalid,
-  input       [15:0]      s_axi_araddr,
-  input       [ 2:0]      s_axi_arprot,
-  output                  s_axi_arready,
-  output                  s_axi_rvalid,
-  output      [ 1:0]      s_axi_rresp,
-  output      [31:0]      s_axi_rdata,
-  input                   s_axi_rready
+  input         s_axi_aclk,
+  input         s_axi_aresetn,
+  input         s_axi_awvalid,
+  input  [15:0] s_axi_awaddr,
+  input  [ 2:0] s_axi_awprot,
+  output        s_axi_awready,
+  input         s_axi_wvalid,
+  input  [31:0] s_axi_wdata,
+  input  [ 3:0] s_axi_wstrb,
+  output        s_axi_wready,
+  output        s_axi_bvalid,
+  output [ 1:0] s_axi_bresp,
+  input         s_axi_bready,
+  input         s_axi_arvalid,
+  input  [15:0] s_axi_araddr,
+  input  [ 2:0] s_axi_arprot,
+  output        s_axi_arready,
+  output        s_axi_rvalid,
+  output [ 1:0] s_axi_rresp,
+  output [31:0] s_axi_rdata,
+  input         s_axi_rready
 );
 
   // internal clocks and resets
 
-  wire              dac_rst_s;
-  wire              up_clk;
-  wire              up_rstn;
+  wire dac_rst_s;
+  wire up_clk;
+  wire up_rstn;
 
   // internal signals
 
-  wire              up_wreq_s;
-  wire    [13:0]    up_waddr_s;
-  wire    [31:0]    up_wdata_s;
-  wire              up_wack_s;
-  wire              up_rreq_s;
-  wire    [13:0]    up_raddr_s;
-  wire    [31:0]    up_rdata_s;
-  wire              up_rack_s;
+  wire        up_wreq_s;
+  wire [13:0] up_waddr_s;
+  wire [31:0] up_wdata_s;
+  wire        up_wack_s;
+  wire        up_rreq_s;
+  wire [13:0] up_raddr_s;
+  wire [31:0] up_rdata_s;
+  wire        up_rack_s;
 
-  wire    [ 7:0]    address;
-  wire    [23:0]    data_read;
-  wire    [23:0]    data_write;
-  wire              ddr_sdr_n;
-  wire              symb_8_16b;
-  wire              transfer_data;
-  wire              stream;
-  wire    [31:0]    dac_data;
-  wire              dac_valid;
-  wire              if_busy;
-  wire              dac_ext_sync_arm;
+  wire [ 7:0] address;
+  wire [23:0] data_read;
+  wire [23:0] data_write;
+  wire [ 1:0] multi_io_mode;
+  wire        sdr_ddr_n;
+  wire        symb_8_16b;
+  wire        transfer_data;
+  wire        stream;
+  wire [31:0] dac_data;
+  wire        dac_valid;
+  wire        if_busy;
+  wire        dac_ext_sync_arm;
 
   // signal name changes
 
-  assign up_clk  = s_axi_aclk;
-  assign up_rstn = s_axi_aresetn;
+  assign up_clk   = s_axi_aclk;
+  assign up_rstn  = s_axi_aresetn;
+  assign qspi_sel = (multi_io_mode == 2'd2);
 
   // device interface
-  axi_ad3552r_if axi_ad3552r_interface (
+  axi_ad35xxr_if axi_ad35xxr_interface (
     .clk_in(dac_clk),
     .reset_in(dac_rst_s),
     .dac_data(dac_data),
@@ -143,6 +146,7 @@ module axi_ad3552r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
+    .multi_io_mode(multi_io_mode),
     .sdr_ddr_n(sdr_ddr_n),
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
@@ -158,7 +162,7 @@ module axi_ad3552r #(
     .sdio_t(sdio_t));
 
   // core
-  axi_ad3552r_core #(
+  axi_ad35xxr_core #(
     .ID(ID),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .FPGA_FAMILY(FPGA_FAMILY),
@@ -168,7 +172,7 @@ module axi_ad3552r #(
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
-  ) axi_ad3552r_up_core (
+  ) axi_ad35xxr_up_core (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .adc_data_in_a(data_in_a),
@@ -183,6 +187,7 @@ module axi_ad3552r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
+    .multi_io_mode(multi_io_mode),
     .sdr_ddr_n(sdr_ddr_n),
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
