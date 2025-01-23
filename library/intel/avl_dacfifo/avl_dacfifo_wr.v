@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -39,6 +39,7 @@ module avl_dacfifo_wr #(
 
   parameter     AVL_DATA_WIDTH = 512,
   parameter     DMA_DATA_WIDTH = 64,
+  parameter     AVL_ADDRESS_WIDTH = 25,
   parameter     AVL_BURST_LENGTH = 128,
   parameter     AVL_DDR_BASE_ADDRESS = 0,
   parameter     AVL_DDR_ADDRESS_LIMIT = 33554432,
@@ -56,14 +57,14 @@ module avl_dacfifo_wr #(
 
   input                                 avl_clk,
   input                                 avl_reset,
-  output  reg [24:0]                    avl_address,
+  output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_address,
   output  reg [ 6:0]                    avl_burstcount,
   output      [63:0]                    avl_byteenable,
   input                                 avl_waitrequest,
   output  reg                           avl_write,
   output  reg [AVL_DATA_WIDTH-1:0]      avl_data,
 
-  output  reg [24:0]                    avl_last_address,
+  output  reg [(AVL_ADDRESS_WIDTH-1):0] avl_last_address,
   output  reg [ 6:0]                    avl_last_burstcount,
   output  reg                           avl_xfer_req_out,
   input                                 avl_xfer_req_in
