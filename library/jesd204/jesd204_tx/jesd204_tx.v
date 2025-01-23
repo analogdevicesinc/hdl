@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022, 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2024-2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -464,7 +464,7 @@ module jesd204_tx #(
 
   endgenerate
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(CW + DW + HW),
     .REGISTERED(NUM_OUTPUT_PIPELINE)
   ) i_output_pipeline_stage (
