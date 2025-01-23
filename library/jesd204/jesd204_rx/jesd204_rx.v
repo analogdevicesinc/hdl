@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -200,7 +200,7 @@ module jesd204_rx #(
     eof_reset <= buffer_release_n;
   end
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(NUM_LANES + (3 * CW) + HW + DW),
     .REGISTERED(NUM_INPUT_PIPELINE)
   ) i_input_pipeline_stage (
@@ -222,7 +222,7 @@ module jesd204_rx #(
       phy_block_sync_r
     }));
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(ODW+2),
     .REGISTERED(NUM_OUTPUT_PIPELINE)
   ) i_output_pipeline_stage (

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017, 2018, 2020-2022 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017, 2018, 2020-2022, 2025 Analog Devices, Inc. All rights reserved.
 // SPDX short identifier: ADIJESD204
 // ***************************************************************************
 // ***************************************************************************
@@ -182,7 +182,7 @@ module jesd204_rx_lane #(
     end
   end
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(DATA_PATH_WIDTH*8),
     .REGISTERED(CHAR_INFO_REGISTERED)
   ) i_pipeline_stage0 (
@@ -202,7 +202,7 @@ module jesd204_rx_lane #(
 
   assign ilas_monitor_reset_s = ~ifs_ready;
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(1 + DATA_PATH_WIDTH * (8 + 1)),
     .REGISTERED(ALIGN_MUX_REGISTERED)
   ) i_pipeline_stage1 (
@@ -251,7 +251,7 @@ module jesd204_rx_lane #(
     .data_in(data_replaced),
     .data_out(data_scrambled_s));
 
-  pipeline_stage #(
+  util_pipeline_stage #(
     .WIDTH(1 + DATA_PATH_WIDTH * 8),
     .REGISTERED(SCRAMBLER_REGISTERED)
   ) i_pipeline_stage2 (

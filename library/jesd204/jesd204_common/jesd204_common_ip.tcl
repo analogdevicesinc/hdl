@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -16,7 +16,7 @@ add_files -fileset [get_filesets sources_1] [list \
   "jesd204_eof_generator.v" \
   "jesd204_frame_mark.v" \
   "jesd204_frame_align_replace.v" \
-  "pipeline_stage.v" \
+  "../../common/util_pipeline_stage.v" \
 ]
 
 set_property source_mgmt_mode DisplayOnly [current_project]

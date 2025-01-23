@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -9,13 +9,14 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_do_ram
 adi_ip_files util_do_ram [list \
   "../common/ad_mem_asym.v" \
+  "../common/util_pipeline_stage.v" \
   "util_do_ram_constr.xdc" \
   "util_do_ram_ooc.ttcl" \
   "util_do_ram.v" \
 ]
 
 adi_ip_properties_lite util_do_ram
-adi_ip_ttcl util_dacfifo "util_do_ram_ooc.ttcl"
+adi_ip_ttcl util_do_ram "util_do_ram_ooc.ttcl"
 
 set_property PROCESSING_ORDER LATE [ipx::get_files util_do_ram_constr.xdc \
   -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
