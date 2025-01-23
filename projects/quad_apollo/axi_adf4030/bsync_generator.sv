@@ -7,6 +7,7 @@ module bsync_generator (
   input logic        direction,
   input logic        bsync_in,
   input logic        disable_internal_bsync,
+  input logic        enable_misalign_check,
   output             bsync_ready,
   output     [ 4:0]  bsync_delay,
   output     [15:0]  bsync_ratio,
@@ -75,7 +76,7 @@ module bsync_generator (
       end
  
       BSYNC_GEN : begin
-        if (bsync_misaligned) begin
+        if (enable_misalign_check && bsync_misaligned) begin
           next_state = BSYNC_ALIGNMENT_ERROR;
         end
       end
@@ -192,7 +193,7 @@ module bsync_generator (
       bsync_alignment <= 'h000;
       bsync_next_alignment <= 'h000;
     end else begin
-      if (curr_state == BSYNC_GEN && bsync_edge) begin
+      if (curr_state == BSYNC_GEN && enable_misalign_check && bsync_edge) begin
         if (dir_changed) begin
           bsync_alignment <= bsync_counter[4:0];
           bsync_next_alignment <= bsync_counter[4:0];
@@ -207,7 +208,7 @@ module bsync_generator (
     if (rstn == 1'b0) begin
       bsync_misaligned <= 1'b0;
     end else begin
-      if (bsync_alignment != bsync_next_alignment) begin
+      if (enable_misalign_check && bsync_alignment != bsync_next_alignment) begin
         bsync_misaligned <= 1'b1;
       end
     end

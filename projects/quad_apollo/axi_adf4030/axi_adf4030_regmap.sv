@@ -15,6 +15,7 @@ module axi_adf4030_regmap #(
   output logic                       select_trig,
   output logic                       enable_debug_trig,
   output logic                       debug_trig,
+  output logic                       enable_misalign_check,
 
   // adf4030 debug interface
   input  logic                       bsync_ready,
@@ -50,6 +51,7 @@ module axi_adf4030_regmap #(
   logic                       up_debug_trig;
   logic                       up_sw_reset;
   logic                       up_direction;
+  logic                       up_enable_misalign_check;
   logic                       up_disable_internal_bsync;
   logic [CHANNEL_COUNT - 1:0] up_trig_channel_en;
   logic [15:0]                up_trig_channel_phase [CHANNEL_COUNT - 1:0];
@@ -74,6 +76,7 @@ module axi_adf4030_regmap #(
     up_select_trig = 1'b0;
     up_enable_debug_trig = 1'b0;
     up_debug_trig = 1'b0;
+    up_enable_misalign_check = 1'b0;
     up_sw_reset = 1'b0;
     up_direction = 1'b1;
     up_disable_internal_bsync = 1'b0;
@@ -89,6 +92,7 @@ module axi_adf4030_regmap #(
       up_select_trig <= 1'b0;
       up_enable_debug_trig <= 1'b0;
       up_debug_trig <= 1'b0;
+      up_enable_misalign_check <= 1'b0;
       up_sw_reset <= 1'b0;
       up_direction <= 1'b1;
       up_disable_internal_bsync <= 1'b0;
@@ -101,6 +105,7 @@ module axi_adf4030_regmap #(
       end
       /* Control Register */
       if ((up_wreq == 1'b1) && (up_waddr == 'h04)) begin
+        up_enable_misalign_check <= up_wdata[14];
         up_debug_trig <= up_wdata[13];
         up_enable_debug_trig <= up_wdata[12];
         up_select_trig <= up_wdata[11];
@@ -189,7 +194,8 @@ module axi_adf4030_regmap #(
 
           /* Control Register */
           'h04:  up_rdata <= {
-            18'b0,
+            17'b0,
+            up_enable_misalign_check,
             up_debug_trig,
             up_enable_debug_trig,
             up_select_trig,
@@ -246,13 +252,13 @@ module axi_adf4030_regmap #(
     .out_data (trig_channel_en));
 
   sync_bits #(
-    .NUM_OF_BITS (5),
+    .NUM_OF_BITS (6),
     .ASYNC_CLK (1)
   ) i_control_signals (
-    .in_bits ({up_debug_trig, up_enable_debug_trig, up_select_trig, ~up_sw_reset, up_disable_internal_bsync}),
+    .in_bits ({up_enable_misalign_check, up_debug_trig, up_enable_debug_trig, up_select_trig, ~up_sw_reset, up_disable_internal_bsync}),
     .out_clk (clk),
     .out_resetn (1'b1),
-    .out_bits ({debug_trig, enable_debug_trig, select_trig, rstn, disable_internal_bsync}));
+    .out_bits ({enable_misalign_check, debug_trig, enable_debug_trig, select_trig, rstn, disable_internal_bsync}));
 
   sync_bits #(
     .NUM_OF_BITS (1),

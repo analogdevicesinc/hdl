@@ -53,6 +53,7 @@ module axi_adf4030 #(
   logic        select_trig;
   logic        enable_debug_trig;
   logic        debug_trig;
+  logic        enable_misalign_check;
   logic        trig;
 
   // Internal up bus, translated by up_axi
@@ -97,6 +98,7 @@ module axi_adf4030 #(
     .direction              (direction),
     .bsync_in               (external_bsync),
     .disable_internal_bsync (disable_internal_bsync),
+    .enable_misalign_check  (enable_misalign_check),
     .bsync_ready            (bsync_ready),
     .bsync_delay            (bsync_delay),
     .bsync_ratio            (bsync_ratio),
@@ -149,6 +151,7 @@ module axi_adf4030 #(
     .select_trig            (select_trig),
     .enable_debug_trig      (enable_debug_trig),
     .debug_trig             (debug_trig),
+    .enable_misalign_check  (enable_misalign_check),
 
     .bsync_ready            (bsync_ready),
     .bsync_delay            (bsync_delay),
