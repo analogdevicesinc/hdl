@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -345,6 +345,7 @@ proc jesd204_compose {} {
   set data_path_width [get_parameter_value "DATA_PATH_WIDTH"]
   set link_mode [get_parameter_value "LINK_MODE"]
 
+  set sip_tile ""
   set sip_tile_info [quartus::device::get_part_info -sip_tile $device]
   regexp -nocase {([a-z])\-tile} $sip_tile_info -> sip_tile
   set sip_tile [string toupper $sip_tile]
