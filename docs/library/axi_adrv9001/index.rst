@@ -3,25 +3,77 @@
 AXI ADRV9001/2
 ================================================================================
 
-The AXI ADRV9001/2 IP Core can be used to interface the 
-:adi:`ADRV9001`\/:adi:`ADRV9002`. More about the generic framework interfacing 
+.. hdl-component-diagram::
+
+The AXI ADRV9001/2 IP Core can be used to interface the
+:adi:`ADRV9001`/:adi:`ADRV9002`. More about the generic framework interfacing
 ADCs that contains the up_adc_channel and up_adc_common modules can be read in
-:ref:`axi_adc`. Regarding the DAC, more information related to its generic 
+:ref:`axi_adc`. Regarding the DAC, more information related to its generic
 framework can be found at :ref:`axi_dac`.
+
+Features
+--------------------------------------------------------------------------------
+
+* AXI-based configuration
+* Vivado and Quartus compatible
+* Transmitter and receiver bandwidth from 12 kHz to 40 MHz
+* CMOS can operate in SDR or DDR mode
+* Selectable input source: DMA/ADC/TEST_RAMP
+* LVDS and CMOS synchronous serial data interface options
+
+Files
+--------------------------------------------------------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Description
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_aligner4.v`
+     - Verilog source for 4-port aligner.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_aligner8.v`
+     - Verilog source for 8-port aligner.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_pack.v`
+     - Verilog source packing two input beats into one.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_rx_link.v`
+     - Verilog source for the RX Link.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_rx.v`
+     - Verilog source for the RX Serdes Interface.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_tx_link.v`
+     - Verilog source for the TX Link.
+   * - :git-hdl:`library/axi_adrv9001/adrv9001_tx.v`
+     - Verilog source for the TX Serdes Interface.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_core.v`
+     - Verilog source for the AXI ADRV9001 core.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_if.v`
+     - Verilog source for the ADRV9001 interface module.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_rx_channel.v`
+     - Verilog source for the ADRV9001 RX channel.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_rx.v`
+     - Verilog source for the AXI ADRV9001 RX Interface.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_tdd.v`
+     - Verilog source for the Transceiver TDD Control.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_tx_channel.v`
+     -  Verilog source for the ADRV9001 TX channel.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_tx.v`
+     - Verilog source for the AXI ADRV9001 TX Interface.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001.v`
+     - Verilog source for the AXI ADRV9001.
+   * - :git-hdl:`library/axi_adrv9001/axi_adrv9001_ip.tcl`
+     - TCL script to generate the Vivado IP-integrator project.
 
 Block diagram
 --------------------------------------------------------------------------------
 
 .. image:: axi_adrv9001.svg
    :width: 400
-   :align: center
-   :alt: Block diagram
+   :alt: AXI ADRV9001 block diagram
 
-Parameters
+Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   
+
    * - CMOS_LVDS_N
      - Source synchronous interface type;
        0 - LVDS ; 1 - CMOS
@@ -159,7 +211,7 @@ Register Map base addresses for axi_adrv9001
      - 0x4C00
      - TDD2
      - See the `Transceiver TDD Control <#hdl-regmap-TDD_CNTRL>`__ table for more details.
-   
+
 .. hdl-regmap::
    :name: COMMON
    :no-type-info:
@@ -197,7 +249,7 @@ and LVDS (LSSI) selection is done through synthesis parameter. Other parameter
 
 .. list-table::
    :header-rows: 1
-   
+
    * - A
      - B
      - C
@@ -294,15 +346,15 @@ and 2-bit data symbols we'll use aligned MSBs
 
 Columns description:
 
--  A - SSI Modes
--  B - Data Lanes Per Channel
--  C - Serialization factor Per data lane
--  D - Max data lane rate(MHz)
--  E - Max Clock rate (MHz)
--  F - Max Sample Rate for I/Q (MHz)
--  G - Data Type
--  H - User Interface Clock to Sample Clock ratio (aka DDS Rate) for Xilinx
-   devices
+- A - SSI Modes
+- B - Data Lanes Per Channel
+- C - Serialization factor Per data lane
+- D - Max data lane rate(MHz)
+- E - Max Clock rate (MHz)
+- F - Max Sample Rate for I/Q (MHz)
+- G - Data Type
+- H - User Interface Clock to Sample Clock ratio (aka DDS Rate) for Xilinx
+  devices
 
 The following equations apply:
 
@@ -321,21 +373,21 @@ The following equations apply:
 .. math::
    DDS rate = \frac{32}{DataLanesPerChannel*(1+(DataType=DDR))*InternalDivider}
 
-where :
+Where :
 
--  *MaxDataLaneRate* - number of bits transferred in a second per active lane
--  *MaxClockRate* - represents the source synchronous interface clock frequency
--  *UserInterfaceClock* - represents the frequency of the clock the user
-   interface logic is connected
--  *InternalDivider* - represents the division factor the source synchronous 
-   interface clock is divided to get the user interface clock. This is 
-   implementation specific. **Xilinx CMOS and LVDS = 4; Intel CMOS = 1**
+- *MaxDataLaneRate* - number of bits transferred in a second per active lane
+- *MaxClockRate* - represents the source synchronous interface clock frequency
+- *UserInterfaceClock* - represents the frequency of the clock the user
+  interface logic is connected
+- *InternalDivider* - represents the division factor the source synchronous
+  interface clock is divided to get the user interface clock. This is
+  implementation specific. **Xilinx CMOS and LVDS = 4; Intel CMOS = 1**
 
 Since the *UserInterfaceClock* is an integer multiple (column H) of the
 *MaxSampleRateForIQ* the interface toward the user logic has a valid
 qualifier which is not active on every clock cycle.
 
-.. _axi_adrv9001_dac_config:
+.. _axi_adrv9001 dac_config:
 
 Configure DAC common interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -354,26 +406,26 @@ Configure DAC common interface
 
   - [7:0] RATE - must be set according to column H of the table
 
-.. _axi_adrv9001_adc_config:
+.. _axi_adrv9001 adc_config:
 
 Configure ADC common interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-| Register **0x0044 REG_CNTRL**
+Register **0x0044 REG_CNTRL**
 
--  [12:8] - NUM_LANES (**new**) - number of active lanes (1 : CSSI 1-lane, LSSI
-   1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)
--  [14] - SYMB_8_16B (**new**) - select number of bits for symbol format mode (1
-   represents 8b, 0 represents 16b)
--  [15] - SYMB_OP (**new**) - select symbol data format mode
--  [16] - SDR_DDR_N (**new**) - interface type ( 1 represents SDR, 0 represents
-   DDR)
+- [12:8] - NUM_LANES (**new**) - number of active lanes (1 : CSSI 1-lane, LSSI
+  1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)
+- [14] - SYMB_8_16B (**new**) - select number of bits for symbol format mode (1
+  represents 8b, 0 represents 16b)
+- [15] - SYMB_OP (**new**) - select symbol data format mode
+- [16] - SDR_DDR_N (**new**) - interface type ( 1 represents SDR, 0 represents
+  DDR)
 
 Requirements
 --------------------------------------------------------------------------------
 
--  Rx1 clock and Rx2 clock should be length matched
--  Clock and data in SSI interface must be length matched
+- Rx1 clock and Rx2 clock should be length matched
+- Clock and data in SSI interface must be length matched
 
 Xilinx Physical interface
 --------------------------------------------------------------------------------
@@ -382,45 +434,37 @@ RX Component mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For Rx interfaces the source synchronous associated clock is used to sample the
-input data. Software configuration is required described in :ref:`axi_adrv9001_adc_config`
+input data. Software configuration is required described in :ref:`axi_adrv9001 adc_config`
 section. Input delays of the FPGA or output delays of the ADRV9001 can be tuned
 by software for optimize sampling.
 
 .. image:: rxcomponentmodephy.svg
    :width: 500
-   :align: center
 
 TX Using dedicated clock
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For Tx interfaces the clock received from the transceiver is used to drive the
 output data. Software configuration is required for clock rate selection
-described in :ref:`axi_adrv9001_dac_config` section. Input delays of the
+described in :ref:`axi_adrv9001 dac_config` section. Input delays of the
 ADRV9001 can be tuned by software for optimize sampling.
 
 .. image:: txcomponentmodephy.svg
    :width: 500
-   :align: center
-   
-More Information
+
+References
 --------------------------------------------------------------------------------
 
 - :dokuwiki:`ADRV9001/2 Quick Start Guides <resources/eval/user-guides/adrv9002/quickstart>`
- 
+
   - :dokuwiki:`ADRV9002 Zynq UltraScale+ MPSoC ZCU102 Quick Start Guide <resources/eval/user-guides/adrv9002/quickstart/zynqmp>`
   - :dokuwiki:`ADRV9002 Zynq SoC ZC706 Quick Start Guide <resources/eval/user-guides/adrv9002/quickstart/zynq>`
   - :dokuwiki:`ADRV9002 Zynq ZedBoard Quick Start Guide <resources/eval/user-guides/adrv9002/quickstart/zed>`
   - :dokuwiki:`ADRV9002 Arria10 SoC Quick Start Guide <resources/eval/user-guides/adrv9002/quickstart/a10soc>`
-  
+
 - :dokuwiki:`ADRV9001/ADRV9002 HDL Reference Design <resources/eval/user-guides/adrv9002/reference_hdl>`
-  
-  - :ref:`HDL User Guide <user_guide>`
+
+  - :ref:`user_guide`
   - :dokuwiki:`ADRV9002 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization>`
   - :dokuwiki:`ADRV9002 Integrated Dual RF Transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9002>`
 
-Technical Support
---------------------------------------------------------------------------------
-
-Analog Devices will provide limited online support for anyone using the core
-with Analog Devices components (ADC, DAC, Video, Audio, etc) via the
-:ez:`EngineerZone <fpga>`.
