@@ -5,7 +5,7 @@ CN0363 Phase Data Sync
 
 .. hdl-component-diagram::
 
-The CN0363 Phase Data Sync FPGA Peripheral is part of the
+The :adi:`CN0363` Phase Data Sync FPGA Peripheral is part of the
 :ref:`EVAL-CN0363-PMDZ HDL reference design <cn0363>` and is responsible for
 preparing the ADC conversion result data and aligning it with the phase and
 feeding both to the processing pipeline.
@@ -24,7 +24,7 @@ Files
       - TCL script to generate the Vivado IP-integrator project for the
         peripheral.
 
-Signal and Interface Pins
+Interface
 --------------------------------------------------------------------------------
 
 .. hdl-interfaces::
@@ -62,12 +62,13 @@ Signal and Interface Pins
       - The overflow signal is asserted if a new sample arrives before the
         previous one has been consumed.
 
-Theory of Operation
+Detailed Description
 --------------------------------------------------------------------------------
 
-The CN0363 Phase Data Sync FPGA Peripheral takes the raw ADC sample data read by
-a SPI controller from the ADC on the S_AXIS_SAMPLE stream. The data is assembled
-into 24-bit word and converted from offset binary to two's complement signed.
+The :adi:`CN0363` Phase Data Sync FPGA Peripheral takes the raw ADC sample data
+read by a SPI controller from the ADC on the S_AXIS_SAMPLE stream. The data is
+assembled into 24-bit word and converted from offset binary to two's complement
+signed.
 
 When a rising edge is detected on the ``conv_done signal`` the core takes a
 snapshot of the phase input signal. This data will be assumed to the phase
@@ -91,7 +92,21 @@ resets the channel swap detection logic and makes sure that the next sample that
 is inserted into the processing pipeline after the reset belongs to the first
 channel.
 
-More Information
+Software Support
 --------------------------------------------------------------------------------
 
-- :ref:`cn0363`
+* Linux device driver at :git-linux:`drivers/iio/adc/ad7173.c`
+* Linux device driver documentation at :dokuwiki:`Linux Device Drivers <resources/eval/user-guides/eval-cn0363-pmdz/software/linux/drivers>`
+* No-OS device driver at :git-no-os:`drivers/adc/ad717x`
+* No-OS device driver documentation at :dokuwiki:`AD717X No-OS Software Drivers <resources/tools-software/uc-drivers/ad717x>`
+
+References
+--------------------------------------------------------------------------------
+
+* HDL IP Core at :git-hdl:`library/cn0363/cn0363_phase_data_sync`
+* HDL project at :git-hdl:`projects/cn0363`
+* HDL project documentation at :ref:`cn0363`
+* :adi:`CN0363`
+* :adi:`AD7175-2`
+* :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
+* :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`
