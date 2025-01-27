@@ -1,12 +1,12 @@
-.. _ad9084_fmc:
+.. _ad9084_fmca_ebz:
 
-Apollo (AD9084) HDL project
+AD9084 (Apollo) HDL project
 ===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9084-EBZ <EVAL-AD9084>` reference design
+The :adi:`AD9084-FMCA-EBZ <EVAL-AD9084>` reference design
 (also known as Apollo) is a processor based
 (e.g. Microblaze) embedded system.
 This reference design works with :adi:`EVAL-AD9084`.
@@ -41,7 +41,7 @@ but must share the same reference clock.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD9084-EBZ <EVAL-AD9084>`
+- :adi:`AD9084-FMCA-EBZ <EVAL-AD9084>` evaluation board
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ Supported carriers
      - Carrier
      - FMC slot
      - Maximum number of lanes
-   * - :adi:`AD9084-EBZ <EVAL-AD9084>`
+   * - :adi:`AD9084-FMCA-EBZ <EVAL-AD9084>`
      - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
      - FMCB
      - 16 (8 per Apollo side)
@@ -256,7 +256,7 @@ for each project.
 
    The parameters for Rx or Tx links can be changed from the
    **system_project.tcl** file, located in
-   hdl/projects/ad9084_fmc/$CARRIER/system_project.tcl
+   hdl/projects/ad9084_fmca_ebz/$CARRIER/system_project.tcl
 
 .. important::
 
@@ -369,7 +369,7 @@ axi_spi_2                                                            0x44A8_0000
 
 For the Intel carriers, only a part of the CPU interrupts are specified,
 as the rest depend on the values of $TX_NUM_OF_LANES
-(see :git-hdl:`projects/ad9084_fmc/common/ad9084_fmcb_ebz_qsys.tcl`
+(see :git-hdl:`projects/ad9084_fmca_ebz/common/ad9084_fmca_ebz_qsys.tcl`
 for more details).
 
 ==================================  ===========
@@ -596,7 +596,7 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/ad9084_fmc`
+Then go to the :git-hdl:`projects/ad9084_fmca_ebz`
 location and run the make command by typing in you command prompt:
 
 Example for building the project with parameters:
@@ -606,7 +606,7 @@ Example for building the project with parameters:
 .. shell::
   :show-user:
 
-  $cd hdl/projects/ad9084_fmc/vck190
+  $cd hdl/projects/ad9084_fmca_ebz/vck190
   $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5     \
   $     RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1   \
   $     RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 \
@@ -615,7 +615,7 @@ Example for building the project with parameters:
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (ad9084_fmc/$carrier).
+for that project (ad9084_fmca_ebz/$carrier).
 
 .. warning::
 
@@ -628,7 +628,7 @@ for that project (ad9084_fmc/$carrier).
 
    ``NP`` notation is equivalent with ``N'``
 
-.. collapsible:: Default values of the make parameters for AD9084-EBZ
+.. collapsible:: Default values of the make parameters for AD9084-FMCA-EBZ
 
    +---------------------+----------+--------+--------+--------+-------+
    | Parameter           | Default value of the parameters             |
@@ -822,9 +822,9 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9084 Prototyping Platform User Guide <resources/eval/user-guides/ad9084_fmc>`
+- :dokuwiki:`[Wiki] AD9084 Prototyping Platform User Guide <resources/eval/user-guides/ad9084_fmca_ebz>`
 - Here you can find all the quick start guides on wiki documentation
-  :dokuwiki:`[Wiki] AD9084 Quick Start Guides <resources/eval/user-guides/ad9084_fmc/quickstart>`
+  :dokuwiki:`[Wiki] AD9084 Quick Start Guides <resources/eval/user-guides/ad9084_fmca_ebz/quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -839,7 +839,7 @@ Here you can find the quick start guides available for these evaluation boards:
    * - AD9084
      - :dokuwiki:`VCU118 <resources/eval/user-guides/ad9084_fmca_ebz/quickstart/microblaze>`
      - :dokuwiki:`VCK190/VMK180/VPK180 <resources/eval/user-guides/ad9084_fmca_ebz/quickstart/versal>`
-     - :dokuwiki:`FM87 <resources/eval/user-guides/ad9084/quickstart/fm87>`
+     - :dokuwiki:`FM87 <resources/eval/user-guides/ad9084_fmca_ebz/quickstart/fm87>`
 
 
 Hardware related
@@ -854,7 +854,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ad9084_fmc HDL project source code <projects/ad9084_fmc>`
+- :git-hdl:`ad9084_fmca_ebz HDL project source code <projects/ad9084_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -906,7 +906,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD9084-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/ad9084>`
+- :dokuwiki:`[Wiki] AD9084-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/ad9084>`
 - Python support:
 
   - `AD9084 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9084.html>`__
