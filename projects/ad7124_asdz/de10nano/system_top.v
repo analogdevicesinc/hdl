@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024 - 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -114,10 +114,15 @@ module system_top (
   inout         hdmi_i2c_scl,
   inout         hdmi_i2c_sda,
 
-  output        spi_csn,
-  output        spi_clk,
-  output        spi_mosi,
-  input         spi_miso,
+  inout         i2c_sda,
+  inout         i2c_scl,
+
+  //
+
+  output        ad7124_spi_csn,
+  output        ad7124_spi_clk,
+  output        ad7124_spi_mosi,
+  input         ad7124_spi_miso,
   input         sync_err
 );
 
@@ -137,6 +142,11 @@ module system_top (
   wire          i2c0_out_clk;
   wire          i2c0_scl_in_clk;
 
+  wire          spi_trigger;
+  wire          spi_clk_s;
+  wire          spi_resetn;
+  wire          spi_trigger_ed;
+  
   // adc control gpio assign
 
   assign gpio_i[63:34] = gpio_o[63:34];
@@ -148,7 +158,7 @@ module system_top (
   assign gpio_bd_o[7:0] = gpio_o[7:0];
 
   assign gpio_i[32] = sync_err;
-  assign gpio_i[33] = spi_miso;
+  assign gpio_i[33] = ad7124_spi_miso;
 
   // IO Buffers for I2C
 
@@ -163,6 +173,22 @@ module system_top (
     .oe(i2c0_out_data),
     .o(i2c0_sda),
     .io(hdmi_i2c_sda));
+
+  sync_bits #(
+    .ASYNC_CLK(1)
+  ) i_sync_bits (
+    .in_bits (gpio_i[32]),
+    .out_resetn (~spi_resetn),
+    .out_clk (spi_clk_s),
+    .out_bits (spi_trigger_ed));
+
+  ad_edge_detect#(
+    .EDGE(1)
+  ) i_ad_edge_detect (
+    .clk (spi_clk_s),
+    .rst (1'b0),
+    .signal_in (spi_trigger_ed),
+    .signal_out (spi_trigger));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -235,10 +261,17 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .sys_spi_MISO (spi_miso),
-    .sys_spi_MOSI (spi_mosi),
-    .sys_spi_SCLK (spi_clk),
-    .sys_spi_SS_n (spi_csn),
+    .ad7124_spi_cs_cs (ad7124_spi_csn),
+    .ad7124_spi_sclk_clk (ad7124_spi_clk),
+    .ad7124_spi_sdi_sdi (ad7124_spi_miso),
+    .ad7124_spi_sdo_sdo (ad7124_spi_mosi),
+    .ad7124_spi_trigger_if_pwm (spi_trigger),
+    .ad7124_spi_resetn_reset_n (spi_resetn),
+    .ad7124_spi_clk_clk (spi_clk_s),
+    .sys_spi_MISO (1'b0),
+    .sys_spi_MOSI (),
+    .sys_spi_SCLK (),
+    .sys_spi_SS_n (),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
