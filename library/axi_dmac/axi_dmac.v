@@ -119,7 +119,7 @@ module axi_dmac #(
   output irq,
 
   // Transfer Start Sync Signal
-  input sync,
+  (* MARK_DEBUG="TRUE" *)  input sync,
 
   // Master AXI interface
   input                                    m_dest_axi_aclk,
@@ -138,10 +138,10 @@ module axi_dmac #(
   output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
 
   // Write data
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
+  (* MARK_DEBUG="TRUE" *) output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
   output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
-  input                                    m_dest_axi_wready,
-  output                                   m_dest_axi_wvalid,
+  (* MARK_DEBUG="TRUE" *) input                                    m_dest_axi_wready,
+  (* MARK_DEBUG="TRUE" *) output                                   m_dest_axi_wvalid,
   output                                   m_dest_axi_wlast,
   output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
 
@@ -289,10 +289,10 @@ module axi_dmac #(
 
   // Input FIFO interface
   input                                    fifo_wr_clk,
-  input                                    fifo_wr_en,
-  input  [DMA_DATA_WIDTH_SRC-1:0]          fifo_wr_din,
+  (* MARK_DEBUG="TRUE" *)  input                                    fifo_wr_en,
+  (* MARK_DEBUG="TRUE" *)  input  [DMA_DATA_WIDTH_SRC-1:0]          fifo_wr_din,
   output                                   fifo_wr_overflow,
-  output                                   fifo_wr_xfer_req,
+  (* MARK_DEBUG="TRUE" *)  output                                   fifo_wr_xfer_req,
 
   // Output FIFO interface
   input                                    fifo_rd_clk,

@@ -8,7 +8,7 @@ set adc_fifo_address_width 13
 
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
-source ../common/ad9213_ad4080_bd.tcl
+source $ad_hdl_dir/projects/ad9213_ad4080/common/ad9213_ad4080_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 # Set SPI clock to 100/16 =  6.25 MHz
@@ -18,9 +18,8 @@ ad_ip_parameter ad4080_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter adl5580_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter ltc2664_spi CONFIG.C_SCK_RATIO 16
 
-#ad_ip_parameter spi1 CONFIG.C_SCK_RATIO 16
-
 #system ID
+
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9

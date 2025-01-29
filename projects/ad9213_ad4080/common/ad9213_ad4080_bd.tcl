@@ -12,10 +12,13 @@ set RX_SAMPLE_WIDTH 16     ; # N/NP
 set RX_SAMPLES_PER_CHANNEL 32 ; # L * 32 / (M * N)
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
-set adc_fifo_name axi_ad9213_fifo
+set adc_data_offload_name axi_ad9213_do
 set adc_data_width 512
 set adc_dma_data_width 512
+set adc_do_mem_type 0
+set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
 
 create_bd_port -dir I glbl_clk_0
 
@@ -58,11 +61,8 @@ create_bd_port -dir I da_n
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
-create_bd_port -dir I cnv_in_p
-create_bd_port -dir I cnv_in_n
 create_bd_port -dir I filter_data_ready_n
-create_bd_port -dir O sys_cpu_out_clk
-
+create_bd_port -dir I sync_capture
 # adc peripherals
 
 ad_ip_instance util_adxcvr util_adc_xcvr
@@ -89,7 +89,15 @@ adi_tpl_jesd204_rx_create rx_ad9213_tpl_core $RX_NUM_OF_LANES \
                                              $RX_SAMPLES_PER_FRAME \
                                              $RX_SAMPLE_WIDTH
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_data_offload_create $adc_data_offload_name \
+                       0 \
+                       $adc_do_mem_type \
+                       $adc_data_offload_size \
+                       $adc_data_width \
+                       $adc_data_width \
+                       $$adc_dma_data_width \
+                       1
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
 
 ad_ip_instance axi_dmac axi_ad9213_dma
 ad_ip_parameter axi_ad9213_dma CONFIG.DMA_TYPE_SRC 1
@@ -115,10 +123,13 @@ ad_ip_instance axi_dmac axi_ad4080_dma
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad4080_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ad4080_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter axi_ad4080_dma CONFIG.ID 1
+ad_ip_parameter axi_ad4080_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter axi_ad4080_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad4080_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_ad4080_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_SRC 32
 ad_ip_parameter axi_ad4080_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
@@ -165,31 +176,33 @@ delete_bd_objs [get_bd_nets util_adc_xcvr_rx_out_clk_0]
 # connect clocks
 # device clock domain
 ad_connect  glbl_clk_0 rx_ad9213_tpl_core/link_clk
+ad_connect  glbl_clk_0 $adc_data_offload_name/s_axis_aclk
 
-ad_connect  glbl_clk_0 axi_ad9213_fifo/adc_clk
 
 # dma clock domain
-ad_connect  $sys_dma_clk axi_ad9213_fifo/dma_clk
+
+ad_connect  $sys_dma_clk $adc_data_offload_name/m_axis_aclk
 ad_connect  $sys_dma_clk axi_ad9213_dma/s_axis_aclk
 
 # connect resets
-ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9213_fifo/adc_rst
-ad_connect  $sys_cpu_resetn axi_ad9213_dma/m_dest_axi_aresetn
+ad_connect  glbl_clk_0_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
+ad_connect  $sys_dma_resetn                      $adc_data_offload_name/m_axis_aresetn
+ad_connect  $sys_cpu_resetn                      $adc_data_offload_name/s_axi_aresetn
+ad_connect  $sys_dma_resetn                      axi_ad9213_dma/m_dest_axi_aresetn
 
 # connect dataflow
 ad_connect  axi_ad9213_jesd/rx_sof rx_ad9213_tpl_core/link_sof
 ad_connect  axi_ad9213_jesd/rx_data_tdata rx_ad9213_tpl_core/link_data
 ad_connect  axi_ad9213_jesd/rx_data_tvalid rx_ad9213_tpl_core/link_valid
 
-ad_connect rx_ad9213_tpl_core/adc_valid_0 axi_ad9213_fifo/adc_wr
-ad_connect rx_ad9213_tpl_core/adc_data_0 axi_ad9213_fifo/adc_wdata
+ad_connect rx_ad9213_tpl_core/adc_valid_0 $adc_data_offload_name/s_axis_tvalid
+ad_connect rx_ad9213_tpl_core/adc_data_0  $adc_data_offload_name/s_axis_tdata
 
-ad_connect rx_ad9213_tpl_core/adc_dovf axi_ad9213_fifo/adc_wovf
+ad_connect  $adc_data_offload_name/s_axis_tlast GND
+ad_connect  $adc_data_offload_name/s_axis_tkeep VCC
 
-ad_connect  axi_ad9213_fifo/dma_wr axi_ad9213_dma/s_axis_valid
-ad_connect  axi_ad9213_fifo/dma_wdata axi_ad9213_dma/s_axis_data
-ad_connect  axi_ad9213_fifo/dma_wready axi_ad9213_dma/s_axis_ready
-ad_connect  axi_ad9213_fifo/dma_xfer_req axi_ad9213_dma/s_axis_xfer_req
+ad_connect $adc_data_offload_name/m_axis   axi_ad9213_dma/s_axis
+ad_connect $adc_data_offload_name/init_req axi_ad9213_dma/s_axis_xfer_req
 
 ad_ip_instance axi_quad_spi hmc7044_spi
 ad_ip_parameter hmc7044_spi CONFIG.C_USE_STARTUP 0
@@ -258,10 +271,13 @@ ad_connect da_n                 axi_ad4080_adc/data_a_in_n
 ad_connect db_p                 axi_ad4080_adc/data_b_in_p
 ad_connect db_n                 axi_ad4080_adc/data_b_in_n
 ad_connect sync_n               axi_ad4080_adc/sync_n
-ad_connect cnv_in_p             axi_ad4080_adc/cnv_in_p
-ad_connect cnv_in_n             axi_ad4080_adc/cnv_in_n
 ad_connect filter_data_ready_n  axi_ad4080_adc/filter_data_ready_n
 ad_connect $sys_iodelay_clk     axi_ad4080_adc/delay_clk
+
+# connect syncs
+ad_connect sync_capture axi_ad4080_dma/sync
+ad_connect sync_capture $adc_data_offload_name/sync_ext
+
 
 # connect datapath
 
@@ -271,8 +287,6 @@ ad_connect axi_ad4080_adc/adc_valid axi_ad4080_dma/fifo_wr_en
 # system runs on phy's received clock
 
 ad_connect axi_ad4080_adc/adc_clk axi_ad4080_dma/fifo_wr_clk
-ad_connect $sys_cpu_clk sys_cpu_out_clk
-
 ad_connect $sys_cpu_resetn axi_ad4080_dma/m_dest_axi_aresetn
 
 # interconnect (cpu)
@@ -286,10 +300,11 @@ ad_cpu_interconnect 0x44A74000 ltc2664_spi
 ad_cpu_interconnect 0x44A00000 axi_ad4080_adc
 ad_cpu_interconnect 0x44A30000 axi_ad4080_dma
 ad_cpu_interconnect 0x44B00000 axi_ad9213_dma
+ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
 
 # interconnect (gt/adc)
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_xcvr/m_axi
-ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9213_dma/m_dest_axi
+ad_mem_hp0_interconnect $sys_dma_clk axi_ad9213_dma/m_dest_axi
 ad_mem_hp0_interconnect $sys_cpu_clk axi_ad4080_dma/m_dest_axi
 
 # interrupts

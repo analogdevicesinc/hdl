@@ -104,7 +104,7 @@ module system_top (
   input                   db_p,
   input                   db_n,
   input                   cnv_in_p,
-  input                   cnv_in_n,
+
 
   // GPIOs
 
@@ -453,9 +453,8 @@ module system_top (
     .da_n (da_n),
     .db_p (db_p),
     .db_n (db_n),
-    .cnv_in_p(cnv_in_p),
-    .cnv_in_n(cnv_in_n),
     .sync_n(ad4080_sync_n),
-    .filter_data_ready_n(filter_data_ready_n));
+    .filter_data_ready_n(filter_data_ready_n),
+    .sync_capture(~cnv_in_p));
 
 endmodule

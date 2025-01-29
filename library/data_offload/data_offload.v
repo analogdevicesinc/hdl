@@ -81,9 +81,9 @@ module data_offload #(
   input                                       s_axis_aclk,
   input                                       s_axis_aresetn,
 
-  output                                      s_axis_ready,
-  input                                       s_axis_valid,
-  input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
+  (* MARK_DEBUG="TRUE" *) output                                      s_axis_ready,
+  (* MARK_DEBUG="TRUE" *) input                                       s_axis_valid,
+  (* MARK_DEBUG="TRUE" *) input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
   input                                       s_axis_last,
   input  [SRC_DATA_WIDTH/8-1:0]               s_axis_tkeep,
 
@@ -93,9 +93,9 @@ module data_offload #(
   input                                       m_axis_aclk,
   input                                       m_axis_aresetn,
 
-  input                                       m_axis_ready,
-  output                                      m_axis_valid,
-  output  [DST_DATA_WIDTH-1:0]                m_axis_data,
+  (* MARK_DEBUG="TRUE" *) input                                       m_axis_ready,
+  (* MARK_DEBUG="TRUE" *) output                                      m_axis_valid,
+  (* MARK_DEBUG="TRUE" *) output  [DST_DATA_WIDTH-1:0]                m_axis_data,
   output                                      m_axis_last,
   output  [DST_DATA_WIDTH/8-1:0]              m_axis_tkeep,
 
@@ -103,7 +103,7 @@ module data_offload #(
 
   input                                       init_req,
 
-  input                                       sync_ext,
+  (* MARK_DEBUG="TRUE" *)  input                                       sync_ext,
 
   // AXIS - Memory UI to storage
 
