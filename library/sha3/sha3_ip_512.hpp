@@ -30,7 +30,7 @@
 // buffer size
 #define BUFFER_SIZE ((BLOCK_SIZE + 1) * NUM_BLOCKS)
 // number of workers
-#define NUM_WORKERS 2
+#define NUM_WORKERS 5
 
 typedef ap_uint<8 * MSG_SIZE> sha_uint64_t;
 typedef ap_uint<128> uint128_t;

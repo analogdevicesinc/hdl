@@ -21,9 +21,9 @@ set XF_PROJ_ROOT "$ad_hdl_dir/library/sha3"
 # ------------------------------------------------------------------------------
 # Vitis HLS Project Information
 # ------------------------------------------------------------------------------
-set CSIM 1
+set CSIM 0
 set CSYNTH 1
-set COSIM 1
+set COSIM 0
 set VIVADO_SYN 1
 set VIVADO_IMPL 1
 set PROJ_NAME "sha3.hls"
