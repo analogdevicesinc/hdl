@@ -1,14 +1,10 @@
 .. _fmcomms2:
 
-FMCOMMS2/3/4/5 HDL Project
+FMCOMMS2/3/4 HDL Project
 ===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
-
-This documentation covers 2 HDL reference designs, which have sections that are
-common to both, but also specific to each project. That is, because all of
-these evaluation boards are :adi:`AD9361`-based and one is:adi:`AD9364`-based.
 
 The digital interface consists of 12 bits of DDR data and supports full duplex
 operation in all configurations up to 2×2. The transmit and receive data paths
@@ -39,21 +35,15 @@ AD9361 features on transmit path:
 Supported boards
 -------------------------------------------------------------------------------
 
-- Working with :git-hdl:`fmcomms2 <projects/fmcomms2>` HDL project:
-
-  - :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`
-  - :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
-  - :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
-
-- Working with :git-hdl:`fmcomms5 <projects/fmcomms5>` HDL project:
-
-  - :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>`
+- :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`
+- :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
+- :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD9361`, in :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`,
-  :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`, :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>`
+  :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
 - :adi:`AD9364`, in :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported carriers
@@ -88,28 +78,8 @@ Supported carriers
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC LPC
 
-.. list-table::
-   :widths: 35 35 30
-   :header-rows: 1
-
-   * - Evaluation board
-     - Carrier
-     - FMC slot
-   * - FMCOMMS5
-     - :xilinx:`ZC702`
-     - FMC LPC
-   * -
-     - :xilinx:`ZC706`
-     - FMC HPC
-   * -
-     - :xilinx:`ZCU102`
-     - FMC HPC0
-
 Block design
 -------------------------------------------------------------------------------
-
-Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the **receive** direction, each component of the delineated data is passed
 to a PN monitor. The monitors validates the digital interface signal capture
@@ -121,24 +91,15 @@ In the **transmit** direction, complex I and Q signals are generated for each
 RF. The digital source could either be an internal DDS or from the external
 DDR via VDMA. The internal DDS phase and frequency are programmable.
 
+Block diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in the below diagrams.
-
-FMCOMMS2/3/4 block diagram
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The data path and clock domains are depicted in the below diagram.
 
 .. image:: fmcomms234_block_diagram.svg
    :width: 800
    :align: center
    :alt: FMCOMMS2/3/4 block diagram
-
-FMCOMMS5 block diagram
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. image:: fmcomms5_block_diagram.svg
-   :width: 800
-   :align: center
-   :alt: FMCOMMS5 block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,16 +107,7 @@ Clock scheme
 The clocks are managed by the device and are software programmable. Please
 refer to the device data sheet for the various clocks within the device.
 
-The board provides a 40MHz crystal for the AD9361.
-
-Multi-cores operation (FMCOMMS5)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The core supports multiple instances of the same synchronized to a common
-clock. The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` uses two instances of this
-core synchronized to a common clock. The data is recovered in each individual
-clock domain and transfers the data to a single clock domain. The multiple
-cores must all be using the same clock.
+The board provides a 40MHz crystal for the :adi:`AD9361`.
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,29 +115,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-=================================== =============== ===========
-Instance                            Zynq/Microblaze ZynqMP
-=================================== =============== ===========
-axi_ad9361_adc_dma                  0x7C40_0000     0x9C40_0000
-axi_ad9361_dac_dma                  0x7C42_0000     0x9C42_0000
-axi_ad9361 / :green:`axi_ad9361_0*` 0x7902_0000     0x9902_0000
-:green:`axi_ad9361_1*`              0x7904_0000     0x9904_0000
-=================================== =============== ===========
-
-.. note::
-
-  **\*** - used only in the case of FMCOMMS5 project:
-  
-  - :green:`axi_ad9361_0` - first instance of :adi:`AD9361`
-  - :green:`axi_ad9361_1` - second instance of :adi:`AD9361`
+================== =============== ===========
+Instance           Zynq/Microblaze ZynqMP
+================== =============== ===========
+axi_ad9361_adc_dma 0x7C40_0000     0x9C40_0000
+axi_ad9361_dac_dma 0x7C42_0000     0x9C42_0000
+axi_ad9361         0x7902_0000     0x9902_0000
+================== =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The SPI signals are controlled by a separate AXI based SPI core.
-
-..
-   THESE ARE JUST EXAMPLES!
 
 .. list-table::
    :widths: 25 25 25 25
@@ -197,15 +138,11 @@ The SPI signals are controlled by a separate AXI based SPI core.
      - CS
    * - PS
      - SPI 0
-     - ADXYZT
+     - AD9361
      - 0
-   * - PS
+   * - PMOD
      - SPI 1
-     - AD0000
-     - 0
-   * - PL
-     - axi_spi_bus_1
-     - AD23456
+     - spi_udc
      - 0
 
 GPIOs
@@ -227,48 +164,66 @@ The device control and monitor signals are interfaced to a GPIO module.
      -
      - Zynq-7000
      - Zynq MP
-   * - gpio_muxout_tx
+   * - gpio_muxout_tx*
      - INOUT
      - 50
      - 104
      - 128
-   * - gpio_muxout_rx
+   * - gpio_muxout_rx*
      - INOUT
      - 49
      - 103
      - 127
+   * - up_txnrx
+     - IN
+     - 48
+     - 102
+     - 126
+   * - up_enable
+     - IN
+     - 47
+     - 101
+     - 125
    * - gpio_resetb
-     - INOUT
+     - OUT
      - 46
      - 100
      - 124
    * - gpio_sync
-     - INOUT
+     - OUT
      - 45
      - 99
      - 123
    * - gpio_en_agc
-     - INOUT
+     - OUT
      - 44
      - 98
      - 122
    * - gpio_ctl[3:0]
-     - INOUT
+     - OUT
      - 43:40
      - 97:94
      - 121:118
    * - gpio_status[7:0]
-     - INOUT
+     - IN
      - 39:32
      - 93:86
      - 117:110
 
+.. note::
+
+  **\*** - used only in
+  :git-hdl:`Zed <projects/fmcomms2/zed/system_top.v>` and
+  :git-hdl:`ZC702 <projects/fmcomms2/zc702/system_top.v>` projects.
+
+  ``gpio_muxout_tx`` is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
+  and ``gpio_muxout_rx`` is connected to PMOD JA1.9, used for LO PLL0 RX at
+  ADF4351.
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Below are the Programmable Logic interrupts used both in
-:git-hdl:`fmcomms2 <projects/fmcomms2/common/fmcomms2_bd.tcl>` and in
-:git-hdl:`fmcomms5 <projects/fmcomms2/common/fmcomms5_bd.tcl>` project.
+Below are the Programmable Logic interrupts used in the project.
 
 =================== === ========== =========== ============ =============
 Instance name       HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP
@@ -298,17 +253,6 @@ command.
 .. shell::
 
    $cd hdl/projects/fmcomms2/zcu102
-   $make
-
-When using the FMCOMMS5 evaluation board, you need to go to a different folder,
-as it is a different project: hdl/projects/**fmcomms5**/$carrier and then run
-the make command.
-
-**Linux/Cygwin/WSL**
-
-.. shell::
-
-   $cd hdl/projects/fmcomms5/zc706
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -351,7 +295,6 @@ HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-hdl:`FMCOMMS2/3/4 HDL project source code <projects/fmcomms2>`
-- :git-hdl:`FMCOMMS5 HDL project source code <projects/fmcomms5>`
 
 .. list-table::
    :widths: 30 35 35
@@ -415,11 +358,6 @@ Software related
    - :git-linux:`FMCOMMS4 ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9364-fmcomms4.dts>`
    - :git-linux:`FMCOMMS4 ZCU102 (revB) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9364-fmcomms4.dts>`
    - :git-linux:`FMCOMMS4 ZCU102 (rev10) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9364-fmcomms4.dts>`
-   - :git-linux:`FMCOMMS5 ZC702 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc702-adv7511-ad9361-fmcomms5.dts>`
-   - :git-linux:`FMCOMMS5 ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9361-fmcomms5.dts>`
-   - :git-linux:`FMCOMMS5 ZC706 with ext. LO ADF4355Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9361-fmcomms5-ext-lo-adf5355.dts>`
-   - :git-linux:`FMCOMMS5 ZCU102 Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms5.dts>`
-   - :git-linux:`FMCOMMS5 ZCU102 with ext. LO ADF4355 Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms5-ext-lo-adf5355.dts>`
 
 - :dokuwiki:`[Wiki] AD9361 no-OS software documentation <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
 - :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
