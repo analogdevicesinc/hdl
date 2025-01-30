@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -15,7 +15,7 @@ if [info exists ::env(ADI_GHDL_DIR)] {
 }
 
 # Define the supported tool version
-set required_vivado_version "2023.2"
+set required_vivado_version "2024.2"
 if {[info exists ::env(REQUIRED_VIVADO_VERSION)]} {
   set required_vivado_version $::env(REQUIRED_VIVADO_VERSION)
 } elseif {[info exists REQUIRED_VIVADO_VERSION]} {
