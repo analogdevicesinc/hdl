@@ -110,3 +110,8 @@ _build
 library/**/.lock
 library/**/interfaces/*.sv
 .backstage_yaml
+bin/
+lib/
+lib64
+pyvenv.cfg
+share/
