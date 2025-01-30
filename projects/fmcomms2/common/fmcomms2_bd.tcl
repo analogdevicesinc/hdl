@@ -89,6 +89,16 @@ ad_ip_instance proc_sys_reset util_ad9361_divclk_reset
 ad_connect sys_rstgen/peripheral_aresetn util_ad9361_divclk_reset/ext_reset_in
 ad_connect util_ad9361_divclk/clk_out util_ad9361_divclk_reset/slowest_sync_clk
 
+# system reset for sha3
+ad_ip_instance proc_sys_reset sys_rstgen_sha3
+ad_connect sys_rstgen_sha3/ext_reset_in sys_ps8/pl_resetn1
+ad_connect $sys_cpu_clk sys_rstgen_sha3/slowest_sync_clk
+
+# resets at divided clock sha3
+ad_ip_instance proc_sys_reset util_ad9361_divclk_reset_sha3
+ad_connect sys_rstgen_sha3/peripheral_aresetn util_ad9361_divclk_reset_sha3/ext_reset_in
+ad_connect util_ad9361_divclk/clk_out util_ad9361_divclk_reset_sha3/slowest_sync_clk
+
 # adc-path wfifo
 
 ad_ip_instance util_wfifo util_ad9361_adc_fifo
@@ -147,25 +157,27 @@ ad_ip_parameter axi_sha3_dma CONFIG.DMA_DATA_WIDTH_SRC 512
 ad_ip_parameter axi_sha3_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
 ad_connect util_ad9361_divclk/clk_out axi_sha3_dma/fifo_wr_clk
-ad_connect $sys_cpu_resetn axi_sha3_dma/m_dest_axi_aresetn
-ad_connect $sys_cpu_resetn axi_sha3_dma/m_sg_axi_aresetn
+ad_connect util_ad9361_adc_pack/packed_sync axi_sha3_dma/sync
+ad_connect sys_rstgen_sha3/peripheral_aresetn axi_sha3_dma/s_axi_aresetn
+ad_connect sys_rstgen_sha3/peripheral_aresetn axi_sha3_dma/m_dest_axi_aresetn
+ad_connect sys_rstgen_sha3/peripheral_aresetn axi_sha3_dma/m_sg_axi_aresetn
+# ad_connect $sys_cpu_resetn axi_sha3_dma/m_dest_axi_aresetn
+# ad_connect $sys_cpu_resetn axi_sha3_dma/m_sg_axi_aresetn
 
 #ramp-path ramp
-ad_ip_instance ramp ramp_sha3
-ad_connect util_ad9361_divclk/clk_out ramp_sha3/clk
-ad_connect util_ad9361_divclk_reset/peripheral_reset ramp_sha3/rst
-
-
+# ad_ip_instance ramp ramp_sha3
+# ad_connect util_ad9361_divclk/clk_out ramp_sha3/clk
+# ad_connect util_ad9361_divclk_reset/peripheral_reset ramp_sha3/rst
 
 # sha3-path sha3_512
 set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3_512 ]
 ad_connect util_ad9361_divclk/clk_out sha3_512/ap_clk
-ad_connect util_ad9361_divclk_reset/peripheral_reset sha3_512/ap_rst
+ad_connect util_ad9361_divclk_reset_sha3/peripheral_reset sha3_512/ap_rst
 
 # Create instance: system_ila_0, and set properties
 set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
 set_property -dict [list \
-  CONFIG.C_DATA_DEPTH {32768} \
+  CONFIG.C_DATA_DEPTH {16384} \
   CONFIG.C_MON_TYPE {NATIVE} \
   CONFIG.C_NUM_OF_PROBES {6} \
   CONFIG.C_PROBE0_WIDTH {64} \
@@ -175,30 +187,30 @@ set_property -dict [list \
 
 
 # connections with ramp
-ad_connect sha3_512/msgStreamIn_dout ramp_sha3/ramp_data
-ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/ramp_data_valid
-ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
-ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
-ad_connect sha3_512/digestStreamOut_full_n VCC
-ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
-
-# connections with ADC CPACK2
-# ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
-# ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+# ad_connect sha3_512/msgStreamIn_dout ramp_sha3/ramp_data
+# ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/ramp_data_valid
+# ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
 # ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
 # ad_connect sha3_512/digestStreamOut_full_n VCC
 # ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
 
+# connections with ADC CPACK2
+ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
+ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
+ad_connect sha3_512/digestStreamOut_full_n VCC
+ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
+
 #connections with ILA
 ad_connect util_ad9361_divclk/clk_out system_ila_0/clk
-ad_connect system_ila_0/probe0 ramp_sha3/ramp_data
-ad_connect system_ila_0/probe1 ramp_sha3/ramp_data_valid
+ad_connect system_ila_0/probe0 util_ad9361_adc_pack/packed_fifo_wr_data
+#ad_connect system_ila_0/probe0 ramp_sha3/ramp_data
+ad_connect system_ila_0/probe1 util_ad9361_adc_pack/packed_fifo_wr_en
+#ad_connect system_ila_0/probe1 ramp_sha3/ramp_data_valid
 ad_connect system_ila_0/probe2 sha3_512/msgStreamIn_read
 ad_connect system_ila_0/probe3 sha3_512/digestStreamOut_din
-ad_connect system_ila_0/probe4 VCC
+ad_connect system_ila_0/probe4 util_ad9361_divclk_reset_sha3/peripheral_reset
 ad_connect system_ila_0/probe5 sha3_512/digestStreamOut_write
-
-
 
 # adc-path dma
 
@@ -304,5 +316,6 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_sg_axi
 # interrupts
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
+ad_cpu_interrupt ps-14 mb-14 axi_sha3_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
 
