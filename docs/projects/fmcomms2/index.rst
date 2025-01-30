@@ -163,53 +163,21 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-..
-   If there are any PL SPI connections, they must be added in this table too
+=================================== =============== ===========
+Instance                            Zynq/Microblaze ZynqMP
+=================================== =============== ===========
+axi_ad9361_adc_dma                  0x7C40_0000     0x9C40_0000
+axi_ad9361_dac_dma                  0x7C42_0000     0x9C42_0000
+axi_ad9361 / :green:`axi_ad9361_0*` 0x7902_0000     0x9902_0000
+:green:`axi_ad9361_1*`              0x7904_0000     0x9904_0000
+=================================== =============== ===========
 
-..
-   THIS IS JUST AN EXAMPLE
+.. note::
 
-Depending on the values of parameters $INTF_CFG, $ADI_PHY_SEL and $TDD_SUPPORT,
-some IPs are instantiated and some are not.
-
-Check-out the table below to find out the conditions.
-
-..
-   MUST: Hexadecimal addresses are written in caps and separated by an underscore.
-
-==================== ================================= =============== =========== ============
-Instance             Depends on parameter              Zynq/Microblaze ZynqMP      Versal
-==================== ================================= =============== =========== ============
-axi_mxfe_rx_xcvr     $INTF_CFG!="TX" & $ADI_PHY_SEL==1 0x44A6_0000     0x84A6_0000 0xA4A6_00000
-rx_mxfe_tpl_core     $INTF_CFG!="TX"                   0x44A1_0000     0x84A1_0000 0xA4A1_00000
-axi_mxfe_rx_jesd     $INTF_CFG!="TX"                   0x44A9_0000     0x84A9_0000 0xA4A9_00000
-axi_mxfe_rx_dma      $INTF_CFG!="TX"                   0x7C42_0000     0x9C42_0000 0xBC42_00000
-mxfe_rx_data_offload $INTF_CFG!="TX"                   0x7C45_0000     0x9C45_0000 0xBC45_00000
-axi_mxfe_tx_xcvr     $INTF_CFG!="RX" & $ADI_PHY_SEL==1 0x44B6_0000     0x84B6_0000 0xA4B6_00000
-tx_mxfe_tpl_core     $INTF_CFG!="RX"                   0x44B1_0000     0x84B1_0000 0xA4B1_00000
-axi_mxfe_tx_jesd     $INTF_CFG!="RX"                   0x44B9_0000     0x84B9_0000 0xA4B9_00000
-axi_mxfe_tx_dma      $INTF_CFG!="RX"                   0x7C43_0000     0x9C43_0000 0xBC43_00000
-mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_0000 0xBC44_00000
-axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
-==================== ================================= =============== =========== ============
-
-I2C connections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 20 20 20 20 20
-   :header-rows: 1
-
-   * - I2C type
-     - I2C manager instance
-     - Alias
-     - Address
-     - I2C subordinate
-   * -
-     -
-     -
-     -
-     -
+  **\*** - used only in the case of FMCOMMS5 project:
+  
+  - :green:`axi_ad9361_0` - first instance of :adi:`AD9361`
+  - :green:`axi_ad9361_1` - second instance of :adi:`AD9361`
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,25 +227,41 @@ The device control and monitor signals are interfaced to a GPIO module.
      -
      - Zynq-7000
      - Zynq MP
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 127:96
-     - 181:150
-     - 205:174
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 95:64
-     - 149:118
-     - 173:142
-   * - signal_name[31:0]
-     - IN/OUT/INOUT
-     - 63:32
-     - 117:86
-     - 141:110
-
-..
-   MUST: GPIOs should be listed in descending order and should have the number
-   of bits specified next to their name
+   * - gpio_muxout_tx
+     - INOUT
+     - 50
+     - 104
+     - 128
+   * - gpio_muxout_rx
+     - INOUT
+     - 49
+     - 103
+     - 127
+   * - gpio_resetb
+     - INOUT
+     - 46
+     - 100
+     - 124
+   * - gpio_sync
+     - INOUT
+     - 45
+     - 99
+     - 123
+   * - gpio_en_agc
+     - INOUT
+     - 44
+     - 98
+     - 122
+   * - gpio_ctl[3:0]
+     - INOUT
+     - 43:40
+     - 97:94
+     - 121:118
+   * - gpio_status[7:0]
+     - INOUT
+     - 39:32
+     - 93:86
+     - 117:110
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -292,7 +276,6 @@ Instance name       HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP
 axi_ad9361_adc_dma  13  57         89          109          141
 axi_ad9361_dac_dma  12  56         88          108          140
 =================== === ========== =========== ============ =============
-
 
 Building the HDL project
 -------------------------------------------------------------------------------
