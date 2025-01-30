@@ -88,12 +88,7 @@ ad_dacfifo_create axi_dac_fifo \
 
 ad_ip_instance util_adxcvr util_dac_jesd204_xcvr [list \
   RX_NUM_OF_LANES 0 \
-  TX_NUM_OF_LANES $MAX_NUM_OF_LANES \
-  TX_LANE_INVERT [expr 0x0F] \
-  QPLL_REFCLK_DIV 1 \
-  QPLL_FBDIV_RATIO 1 \
-  QPLL_FBDIV 0x80 \
-  TX_OUT_DIV 1 \
+  TX_NUM_OF_LANES $MAX_NUM_OF_LANES
 ]
 
 ad_connect sys_cpu_resetn util_dac_jesd204_xcvr/up_rstn

@@ -12,9 +12,9 @@ source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/dac_fmc_ebz_bd.tcl
 
 if {[info exists ::env(ADI_LANE_RATE)]} {
-  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 12.5]
+  set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 4.16]
 } elseif {![info exists ADI_LANE_RATE]} {
-  set ADI_LANE_RATE 12.5
+  set ADI_LANE_RATE 4.16
 }
 
 # Common for both 12.5 and 15.4 GHz Lane Rate
