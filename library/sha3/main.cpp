@@ -42,7 +42,7 @@ std::string hash2str(uintSizeDigest_t h, int len) {
     oss.str("");
     oss << hex;
     for (int i = 0; i < len; i++) {
-    	oss << setw(2) << setfill('0') << (h.range(i*8 + 7, (i*8))).to_uint();
+        oss << setw(2) << setfill('0') << (h.range(i*8 + 7, (i*8))).to_uint();
     }
     retstr = oss.str();
     return retstr;
@@ -62,15 +62,19 @@ int main() {
         msg++;
     }
     
-    sleep(10);
     // call fpga module
-    sha3_ip_512(msg_strm, digest_strm);
-    sleep(10);
+    for (int i = 0; i < ITERATIONS/NUM_WORKERS; i++){
+        sha3_ip_512(msg_strm, digest_strm);
+    }
 
     std::cout << "Digests: " << std::endl;
-    while (!digest_strm.empty()) {
+    std::cout << "size: " << msg_strm.size() << std::endl;
+    std::cout << "size: " << digest_strm.size() << std::endl;
+    for (int j = 0; j < ITERATIONS; j++){
         uintSizeDigest_t digest = digest_strm.read();
+        if (digest < 0) return -1;
         std::cout << std::setw(128) << std::setfill('0') << std::hex << digest << std::endl;
     }
+
     return 0;
 }

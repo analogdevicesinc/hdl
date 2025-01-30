@@ -16,9 +16,7 @@
 
 #include <ap_int.h>
 #include "xf_security/sha3.hpp"
-#include "hls_np_channel.h"
 #include "hls_task.h"
-// #include "hls_stream.h"
 // the size of each message word in byte
 #define MSG_SIZE 8
 // the size of the digest in byte
