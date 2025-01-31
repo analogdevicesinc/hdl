@@ -24,6 +24,8 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
 #
 
+set QSFP_ENABLE [get_env_param QSFP_ENABLE 0]
+
 adi_project_create adrv9009zu11eg 0 [list \
   RX_JESD_M       [get_env_param RX_JESD_M     8] \
   RX_JESD_L       [get_env_param RX_JESD_L     4] \
@@ -34,13 +36,32 @@ adi_project_create adrv9009zu11eg 0 [list \
   RX_OS_JESD_M    [get_env_param RX_OS_JESD_M  4] \
   RX_OS_JESD_L    [get_env_param RX_OS_JESD_L  4] \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S  1] \
+  QSFP_ENABLE     [get_env_param QSFP_ENABLE   0] \
 ] "xczu11eg-ffvf1517-2-i"
 
 adi_project_files adrv9009zu11eg [list \
-  "system_top.v" \
   "../common/adrv9009zu11eg_spi.v" \
   "../common/adrv9009zu11eg_constr.xdc" \
   "../common/adrv2crr_fmc_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
+
+  if {$QSFP_ENABLE == 0} {
+    adi_project_files adrv9009zu11eg [list \
+      "system_top.v" ]
+
+  } else {
+    adi_project_files adrv9009zu11eg [list \
+      "system_top_qsfp.v" \
+      "qsfp_constr.xdc" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/sync_reset.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+      "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" ]
+  }
 
 adi_project_run adrv9009zu11eg
