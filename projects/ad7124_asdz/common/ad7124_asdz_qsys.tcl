@@ -56,6 +56,11 @@ set_instance_parameter_value spi_engine_offload_0 {ASYNC_SPI_CLK} {0}
 set_instance_parameter_value spi_engine_offload_0 {DATA_WIDTH}    {32}
 set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI}    {1}
 
+# util_sigma_delta_spi
+
+add_instance util_sigma_delta_spi util_sigma_delta_spi
+set_instance_parameter_value util_sigma_delta_spi {NUM_OF_CS} {1}
+
 # exported interface
 
 add_interface ad7124_spi_sclk       clock source
@@ -65,11 +70,11 @@ add_interface ad7124_spi_sdo        conduit end
 add_interface ad7124_spi_trigger    conduit end
 add_interface ad7124_spi_resetn     reset source
 
-set_interface_property ad7124_spi_cs      EXPORT_OF spi_engine_execution_0.if_cs
-set_interface_property ad7124_spi_sclk    EXPORT_OF spi_engine_execution_0.if_sclk
-set_interface_property ad7124_spi_sdi     EXPORT_OF spi_engine_execution_0.if_sdi
-set_interface_property ad7124_spi_sdo     EXPORT_OF spi_engine_execution_0.if_sdo
-set_interface_property ad7124_spi_trigger EXPORT_OF spi_engine_offload_0.if_trigger
+set_interface_property ad7124_spi_cs      EXPORT_OF util_sigma_delta_spi.if_m_cs
+set_interface_property ad7124_spi_sclk    EXPORT_OF util_sigma_delta_spi.if_m_sclk
+set_interface_property ad7124_spi_sdi     EXPORT_OF util_sigma_delta_spi.if_m_sdi
+set_interface_property ad7124_spi_sdo     EXPORT_OF util_sigma_delta_spi.if_m_sdo
+set_interface_property ad7124_spi_trigger EXPORT_OF util_sigma_delta_spi.if_data_ready
 set_interface_property ad7124_spi_resetn  EXPORT_OF reset_bridge_0.out_reset
 
 add_connection axi_spi_engine_0.if_spi_resetn reset_bridge_0.in_reset
@@ -90,11 +95,13 @@ add_connection sys_dma_clk.clk spi_engine_offload_0.if_spi_clk
 add_connection sys_dma_clk.clk axi_dmac_0.if_s_axis_aclk
 add_connection sys_dma_clk.clk axi_dmac_0.m_dest_axi_clock
 add_connection sys_dma_clk.clk clock_bridge_0.in_clk
+add_connection sys_dma_clk.clk util_sigma_delta_spi.if_clk
 
 # resets
 
 add_connection sys_clk.clk_reset axi_spi_engine_0.s_axi_reset
 add_connection sys_clk.clk_reset axi_dmac_0.s_axi_reset
+add_connection sys_clk.clk_reset util_sigma_delta_spi.if_resetn
 
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_execution_0.if_resetn
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_interconnect_0.if_resetn
@@ -127,6 +134,14 @@ add_connection spi_engine_offload_0.if_ctrl_mem_reset axi_spi_engine_0.if_offloa
 add_connection spi_engine_offload_0.status_sync       axi_spi_engine_0.offload_sync
 
 add_connection spi_engine_offload_0.offload_sdi axi_dmac_0.s_axis
+add_connection spi_engine_offload_0.if_trigger  util_sigma_delta_spi.if_data_ready
+
+add_connection spi_engine_execution_0.if_cs     util_sigma_delta_spi.if_s_cs
+add_connection spi_engine_execution_0.if_sclk   util_sigma_delta_spi.if_s_sclk
+add_connection spi_engine_execution_0.if_sdi    util_sigma_delta_spi.if_s_sdi
+add_connection spi_engine_execution_0.if_sdo    util_sigma_delta_spi.if_s_sdo
+add_connection spi_engine_execution_0.if_sdo_t  util_sigma_delta_spi.if_s_sdo_t
+add_connection spi_engine_execution_0.if_active util_sigma_delta_spi.if_spi_active
 
 # cpu interconnects
 
