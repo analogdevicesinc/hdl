@@ -115,10 +115,10 @@ module system_top (
 
   // ADC SPI
 
-  input           ada4355_miso,
-  output          ada4355_sclk,
-  output          ada4355_csn,
-  output          ada4355_mosi,
+(* mark_debug = "true" *)  input           ada4355_miso,
+(* mark_debug = "true" *)  output          ada4355_sclk,
+(* mark_debug = "true" *)  output          ada4355_csn,
+(* mark_debug = "true" *)  output          ada4355_mosi,
 
   input           miso_pot,
   output          sclk_pot,

@@ -57,9 +57,9 @@
    input       clk_in_p,
    input       clk_in_n,
 
-   input       sync_n,
+   (* mark_debug = "true" *) input       sync_n,
    //input [4:0] num_lanes,
-   input       bitslip_enable,
+   (* mark_debug = "true" *) input       bitslip_enable,
    input       areset,
 
    // delay interface(for IDELAY macros)
@@ -77,12 +77,13 @@
    output                    delay_locked_frame,
 
    // internal reset and clocks
-   input                             adc_rst,
+   (* mark_debug = "true" *) input                             adc_rst,
    output                            adc_clk,
 
    // Output data
-   output      [31:0]                adc_data,
-   output                            adc_valid,
+   //(* mark_debug = "true" *) output      [31:0]                adc_data,
+   (* mark_debug = "true" *) output      [15:0]                adc_data,
+   (* mark_debug = "true" *) output                            adc_valid,
 
    // Synchronization signals used when CNV signal is not present
    output                            sync_status
@@ -101,9 +102,9 @@
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
    wire [ 7:0]          serdes_data_1;
-   wire [19:0]          pattern_value;
+   wire [15:0]          pattern_value;
    wire [ 4:0]          shift_cnt_value;
-   wire [15:0]          serdes_data;
+   (* mark_debug = "true" *) wire [15:0]          serdes_data;
 
    wire [NUM_LANES-1:0] serdes_in_p;
    wire [NUM_LANES-1:0] serdes_in_n;
@@ -130,31 +131,31 @@
    wire  data_out;
    wire  data_out_frame;
 
-   reg  [5:0]  serdes_reset = 6'b000110;
-   reg         sync_status_int = 1'b0;
-   reg         packed_data_valid_d;
-   reg         packed_data_valid;
+   (* mark_debug = "true" *) reg  [5:0]  serdes_reset = 6'b000110;
+   (* mark_debug = "true" *) reg         sync_status_int = 1'b0;
+   //reg         packed_data_valid_d;
+   //reg         packed_data_valid;
    reg  [15:0] adc_data_shifted;
-   reg  [19:0] packed_data_d;
-   reg  [19:0] packed_data;
-   reg  [1:0]  serdes_valid = 2'b00;
-   reg  [1:0]  serdes_valid_d = 2'b00;
+   //reg  [19:0] packed_data_d;
+   //reg  [19:0] packed_data;
+   (* mark_debug = "true" *) reg  [1:0]  serdes_valid = 2'b00;
+   (* mark_debug = "true" *) reg  [1:0]  serdes_valid_d = 2'b00;
    reg         slip_dd;
    reg         slip_d;
-   reg         shift_cnt_en = 1'b0;
-   reg  [ 4:0] shift_cnt = 5'd0;
+   (* mark_debug = "true" *) reg         shift_cnt_en = 1'b0;
+   (* mark_debug = "true" *) reg  [ 4:0] shift_cnt = 5'd0;
    
-   reg  [15:0] serdes_data_16;
-   reg  [15:0] serdes_data_16_d;
-   reg  [7:0]  data_frame_shifted;
-   reg  [7:0]  serdes_data_frame;
-   reg  [7:0]  serdes_data_frame_d;
+   (* mark_debug = "true" *) reg  [15:0] serdes_data_16;
+   (* mark_debug = "true" *) reg  [15:0] serdes_data_16_d;
+   (* mark_debug = "true" *) reg  [7:0]  data_frame_shifted;
+   (* mark_debug = "true" *) reg  [7:0]  serdes_data_frame;
+   (* mark_debug = "true" *) reg  [7:0]  serdes_data_frame_d;
 
    reg  [2:0]  reg_test;
    reg         bufr_alignment;
    reg         bufr_alignment_bufr;
 
-   assign sync_status       = sync_status_int;
+   (* mark_debug = "true" *)  assign sync_status       = sync_status_int;
    assign adc_clk           = adc_clk_div;
    assign pattern_value     = 8'hF0;
    assign shift_cnt_value   = 'd15;
@@ -353,23 +354,23 @@ end
 always @(posedge adc_clk_div) begin
   slip_d <= bitslip_enable;
   slip_dd <= slip_d;
-  if(serdes_reset_s || data_frame_shifted == pattern_value)
+  if (serdes_reset_s || (data_frame_shifted == 8'hE1))
     shift_cnt_en <= 1'b0;
-  else if(slip_d & ~slip_dd)
+  else if (slip_d & ~slip_dd)
     shift_cnt_en <= 1'b1;
 end
 
 // find offset
 always @(posedge adc_clk_div) begin
   if(shift_cnt_en) begin
-    if(shift_cnt == shift_cnt_value || serdes_reset_s) begin
+    if ((shift_cnt == shift_cnt_value) || serdes_reset_s) begin
       shift_cnt <= 0;
       sync_status_int <= 1'b0;
     end //else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
-      else if( data_frame_shifted != pattern_value /*&&(serdes_valid)*/) begin
+      else if (data_frame_shifted != 8'hE1 /*&&(serdes_valid)*/) begin
       shift_cnt <= shift_cnt + 1;
     end
-    if(data_frame_shifted == pattern_value) begin
+    if (data_frame_shifted == 8'hE1) begin
       sync_status_int <= 1'b1;
     end
   end

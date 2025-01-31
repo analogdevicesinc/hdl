@@ -29,7 +29,7 @@ ad_ip_parameter axi_ada4355_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ada4355_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ada4355_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_SRC 16
 ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # connect interface to axi_ad4355_adc
