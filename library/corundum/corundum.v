@@ -13,6 +13,8 @@
 `timescale 1ns/100ps
 
 module corundum #(
+  // choose between SFP=0 or QSFP=1
+  parameter TRANSCEIVERS_TYPE = 0,
   // FW and board IDs
   parameter FPGA_ID = 32'h4A49093,
   parameter FW_ID = 32'h00000000,
@@ -222,33 +224,60 @@ module corundum #(
   input                       m_axi_dma_wready,
   output [AXI_STRB_WIDTH-1:0] m_axi_dma_wstrb,
   output                      m_axi_dma_wvalid,
-  /*
-   * GPIO
-   */
-  output     [1:0] led,
-  output     [1:0] sfp_led,
 
   /*
-   * Ether net: SFP+
-   */
-  input            sfp_rx_p,
-  input            sfp_rx_n,
-  output           sfp_tx_p,
-  output           sfp_tx_n,
-  input            sfp_mgt_refclk_p,
-  input            sfp_mgt_refclk_n,
+  * Ethernet common
+  */
 
-  output           sfp_tx_disable,
-  input            sfp_tx_fault,
-  input            sfp_rx_los,
-  input            sfp_mod_abs,
+  input            mgt_refclk_p,
+  input            mgt_refclk_n,
+  output     [7:0] led,
 
   input            scl_i,
   output reg       scl_o,
   output reg       scl_t,
   input            sda_i,
   output reg       sda_o,
-  output reg       sda_t
+  output reg       sda_t,
+
+  /*
+  * Ethernet: SFP+
+  */
+  input            sfp_rx_p,
+  input            sfp_rx_n,
+  output           sfp_tx_p,
+  output           sfp_tx_n,
+
+  output           sfp_tx_disable,
+  input            sfp_tx_fault,
+  input            sfp_rx_los,
+  input            sfp_mod_abs,
+
+  /*
+  * Ethernet: QSFP28
+  */
+
+  input            qsfp_rx1_p,
+  input            qsfp_rx1_n,
+  input            qsfp_rx2_p,
+  input            qsfp_rx2_n,
+  input            qsfp_rx3_p,
+  input            qsfp_rx3_n,
+  input            qsfp_rx4_p,
+  input            qsfp_rx4_n,
+  output           qsfp_tx1_p,
+  output           qsfp_tx1_n,
+  output           qsfp_tx2_p,
+  output           qsfp_tx2_n,
+  output           qsfp_tx3_p,
+  output           qsfp_tx3_n,
+  output           qsfp_tx4_p,
+  output           qsfp_tx4_n,
+  output           qsfp_modsell,
+  output           qsfp_resetl,
+  input            qsfp_modprsl,
+  input            qsfp_intl,
+  output           qsfp_lpmode
 );
 
   // PTP configuration
@@ -304,6 +333,9 @@ module corundum #(
   wire sfp_rx_los_int;
   wire sfp_mod_abs_int;
 
+  wire qsfp_modprsl_int;
+  wire qsfp_intl_int;
+
   wire [IRQ_COUNT-1:0] irq;
 
   // XGMII 10G PHY
@@ -319,28 +351,105 @@ module corundum #(
   wire                         sfp_rx_prbs31_enable_int;
   wire [6:0]                   sfp_rx_error_count_int;
 
-  wire        sfp_drp_clk = clk_125mhz_int;
-  wire        sfp_drp_rst = rst_125mhz_int;
-  wire [23:0] sfp_drp_addr;
-  wire [15:0] sfp_drp_di;
-  wire        sfp_drp_en;
-  wire        sfp_drp_we;
-  wire [15:0] sfp_drp_do;
-  wire        sfp_drp_rdy;
+  wire        drp_clk = clk_125mhz_int;
+  wire        drp_rst = rst_125mhz_int;
+  wire [23:0] drp_addr;
+  wire [15:0] drp_di;
+  wire        drp_en;
+  wire        drp_we;
+  wire [15:0] drp_do;
+  wire        drp_rdy;
 
   wire sfp_rx_block_lock;
   wire sfp_rx_status;
   wire sfp_gtpowergood;
 
-  wire sfp_mgt_refclk;
-  wire sfp_mgt_refclk_int;
-  wire sfp_mgt_refclk_bufg;
+  wire mgt_refclk;
+  wire mgt_refclk_int;
+  wire mgt_refclk_bufg;
 
-  wire sfp_rst;
+  wire sfp_qsfp_rst;
 
+
+// XGMII 10G PHY
+  wire                         qsfp_tx_clk_1_int;
+  wire                         qsfp_tx_rst_1_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_txd_1_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_txc_1_int;
+  wire                         qsfp_tx_prbs31_enable_1_int;
+  wire                         qsfp_rx_clk_1_int;
+  wire                         qsfp_rx_rst_1_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_rxd_1_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_rxc_1_int;
+  wire                         qsfp_rx_prbs31_enable_1_int;
+  wire [6:0]                   qsfp_rx_error_count_1_int;
+
+  wire                         qsfp_tx_clk_2_int;
+  wire                         qsfp_tx_rst_2_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_txd_2_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_txc_2_int;
+  wire                         qsfp_tx_prbs31_enable_2_int;
+  wire                         qsfp_rx_clk_2_int;
+  wire                         qsfp_rx_rst_2_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_rxd_2_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_rxc_2_int;
+  wire                         qsfp_rx_prbs31_enable_2_int;
+  wire [6:0]                   qsfp_rx_error_count_2_int;
+
+  wire                         qsfp_tx_clk_3_int;
+  wire                         qsfp_tx_rst_3_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_txd_3_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_txc_3_int;
+  wire                         qsfp_tx_prbs31_enable_3_int;
+  wire                         qsfp_rx_clk_3_int;
+  wire                         qsfp_rx_rst_3_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_rxd_3_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_rxc_3_int;
+  wire                         qsfp_rx_prbs31_enable_3_int;
+  wire [6:0]                   qsfp_rx_error_count_3_int;
+
+  wire                         qsfp_tx_clk_4_int;
+  wire                         qsfp_tx_rst_4_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_txd_4_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_txc_4_int;
+  wire                         qsfp_tx_prbs31_enable_4_int;
+  wire                         qsfp_rx_clk_4_int;
+  wire                         qsfp_rx_rst_4_int;
+  wire [XGMII_DATA_WIDTH-1:0]  qsfp_rxd_4_int;
+  wire [XGMII_CTRL_WIDTH-1:0]  qsfp_rxc_4_int;
+  wire                         qsfp_rx_prbs31_enable_4_int;
+  wire [6:0]                   qsfp_rx_error_count_4_int;
+
+  wire qsfp_rx_block_lock_1;
+  wire qsfp_rx_status_1;
+  wire qsfp_rx_block_lock_2;
+  wire qsfp_rx_status_2;
+  wire qsfp_rx_block_lock_3;
+  wire qsfp_rx_status_3;
+  wire qsfp_rx_block_lock_4;
+  wire qsfp_rx_status_4;
+
+  wire gtpowergood;
+
+  wire rst;
   wire ptp_clk;
   wire ptp_rst;
   wire ptp_sample_clk;
+
+
+
+  assign clk_156mhz_int = mgt_refclk_bufg;
+
+  assign ptp_clk = mgt_refclk_bufg;
+  assign ptp_rst = sfp_qsfp_rst;
+  assign ptp_sample_clk = clk_125mhz_int;
+
+  assign led[0] = (TRANSCEIVERS_TYPE == 0)? sfp_rx_status : qsfp_rx_block_lock_1;
+  assign led[1] = (TRANSCEIVERS_TYPE == 0)? 1'b0          : qsfp_rx_block_lock_2;
+  assign led[2] = (TRANSCEIVERS_TYPE == 0)? 1'b0          : qsfp_rx_block_lock_3;
+  assign led[3] = (TRANSCEIVERS_TYPE == 0)? 1'b0          : qsfp_rx_block_lock_4;
+  assign led[7:4] = led[7:4];
+
 
   sync_signal #(
     .WIDTH(5),
@@ -349,6 +458,16 @@ module corundum #(
     .clk(clk),
     .in({sfp_tx_fault,      sfp_rx_los,     sfp_mod_abs,     scl_i,   sda_i}),
     .out({sfp_tx_fault_int, sfp_rx_los_int, sfp_mod_abs_int, sfp_iic_scl_i_w, sfp_iic_sda_i_w})
+  );
+
+
+  sync_signal #(
+    .WIDTH(2),
+    .N(2)
+  ) sync_signal_inst_qsfp (
+    .clk(clk),
+    .in({qsfp_modprsl,      qsfp_intl}),
+    .out({qsfp_modprsl_int, qsfp_intl_int})
   );
 
   always @(posedge clk) begin
@@ -442,376 +561,786 @@ module corundum #(
   );
 
   IBUFDS_GTE4 #(
-  ) ibufds_gte4_sfp_mgt_refclk_inst (
-    .I     (sfp_mgt_refclk_p),
-    .IB    (sfp_mgt_refclk_n),
+  ) ibufds_gte4_mgt_refclk_inst (
+    .I     (mgt_refclk_p),
+    .IB    (mgt_refclk_n),
     .CEB   (1'b0),
-    .O     (sfp_mgt_refclk),
-    .ODIV2 (sfp_mgt_refclk_int)
+    .O     (mgt_refclk),
+    .ODIV2 (mgt_refclk_int)
   );
 
   BUFG_GT #(
-  ) bufg_gt_sfp_mgt_refclk_inst (
-    .CE      (sfp_gtpowergood),
+  ) bufg_gt_mgt_refclk_inst (
+    .CE      (gtpowergood),
     .CEMASK  (1'b1),
     .CLR     (1'b0),
     .CLRMASK (1'b1),
     .DIV     (3'd0),
-    .I       (sfp_mgt_refclk_int),
-    .O       (sfp_mgt_refclk_bufg)
+    .I       (mgt_refclk_int),
+    .O       (mgt_refclk_bufg)
   );
-
 
   sync_reset #(
     .N(4)
-  )
-  sfp_sync_reset_inst (
-    .clk(sfp_mgt_refclk_bufg),
+  ) sync_reset_inst (
+    .clk(mgt_refclk_bufg),
     .rst(rst_125mhz_int),
-    .out(sfp_rst)
+    .out(sfp_qsfp_rst)
+  );
+generate if (TRANSCEIVERS_TYPE ==0 ) begin
+    // TODO move out of the IP
+    eth_xcvr_phy_10g_gty_quad_wrapper #(
+      .COUNT(1),
+      .GT_GTH(1),
+      .PRBS31_ENABLE(1)
+    ) sfp_phy_quad_inst (
+      .xcvr_ctrl_clk(clk_125mhz_int),
+      .xcvr_ctrl_rst(sfp_qsfp_rst),
+
+      /*
+       * Common
+       */
+      .xcvr_gtpowergood_out(gtpowergood),
+      .xcvr_ref_clk(mgt_refclk),
+
+      /*
+       * DRP
+       */
+      .drp_clk(drp_clk),
+      .drp_rst(drp_rst),
+      .drp_addr(drp_addr),
+      .drp_di(drp_di),
+      .drp_en(drp_en),
+      .drp_we(drp_we),
+      .drp_do(drp_do),
+      .drp_rdy(drp_rdy),
+
+      /*
+       * Serial data
+       */
+      .xcvr_txp({sfp_tx_p}),
+      .xcvr_txn({sfp_tx_n}),
+      .xcvr_rxp({sfp_rx_p}),
+      .xcvr_rxn({sfp_rx_n}),
+
+      /*
+       * PHY connections
+       */
+      .phy_1_tx_clk(sfp_tx_clk_int),
+      .phy_1_tx_rst(sfp_tx_rst_int),
+      .phy_1_xgmii_txd(sfp_txd_int),
+      .phy_1_xgmii_txc(sfp_txc_int),
+      .phy_1_rx_clk(sfp_rx_clk_int),
+      .phy_1_rx_rst(sfp_rx_rst_int),
+      .phy_1_xgmii_rxd(sfp_rxd_int),
+      .phy_1_xgmii_rxc(sfp_rxc_int),
+      .phy_1_tx_bad_block(),
+      .phy_1_rx_error_count(sfp_rx_error_count_int),
+      .phy_1_rx_bad_block(),
+      .phy_1_rx_sequence_error(),
+      .phy_1_rx_block_lock(sfp_rx_block_lock),
+      .phy_1_rx_high_ber(),
+      .phy_1_rx_status(sfp_rx_status),
+      .phy_1_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
+      .phy_1_rx_prbs31_enable(sfp_rx_prbs31_enable_int)
+    );
+
+    fpga_core #(
+       // FW and board IDs
+      .FPGA_ID(FPGA_ID),
+      .FW_ID(FW_ID),
+      .FW_VER(FW_VER),
+      .BOARD_ID(BOARD_ID),
+      .BOARD_VER(BOARD_VER),
+      .BUILD_DATE(BUILD_DATE),
+      .GIT_HASH(GIT_HASH),
+      .RELEASE_INFO(RELEASE_INFO),
+
+      // Board configuration
+      .TDMA_BER_ENABLE(TDMA_BER_ENABLE),
+
+      // Structural configuration
+      .IF_COUNT(IF_COUNT),
+      .PORTS_PER_IF(PORTS_PER_IF),
+      .SCHED_PER_IF(SCHED_PER_IF),
+      .PORT_MASK(PORT_MASK),
+
+      // Clock configuration
+      .CLK_PERIOD_NS_NUM(CLK_PERIOD_NS_NUM),
+      .CLK_PERIOD_NS_DENOM(CLK_PERIOD_NS_DENOM),
+
+      // PTP configuration
+      .PTP_CLK_PERIOD_NS_NUM(PTP_CLK_PERIOD_NS_NUM),
+      .PTP_CLK_PERIOD_NS_DENOM(PTP_CLK_PERIOD_NS_DENOM),
+      .PTP_TS_WIDTH(PTP_TS_WIDTH),
+      .PTP_CLOCK_PIPELINE(PTP_CLOCK_PIPELINE),
+      .PTP_CLOCK_CDC_PIPELINE(PTP_CLOCK_CDC_PIPELINE),
+      .PTP_USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK),
+      .PTP_PORT_CDC_PIPELINE(PTP_PORT_CDC_PIPELINE),
+      .PTP_PEROUT_ENABLE(PTP_PEROUT_ENABLE),
+      .PTP_PEROUT_COUNT(PTP_PEROUT_COUNT),
+
+      // Queue manager configuration
+      .EVENT_QUEUE_OP_TABLE_SIZE(EVENT_QUEUE_OP_TABLE_SIZE),
+      .TX_QUEUE_OP_TABLE_SIZE(TX_QUEUE_OP_TABLE_SIZE),
+      .RX_QUEUE_OP_TABLE_SIZE(RX_QUEUE_OP_TABLE_SIZE),
+      .CQ_OP_TABLE_SIZE(CQ_OP_TABLE_SIZE),
+      .EQN_WIDTH(EQN_WIDTH),
+      .TX_QUEUE_INDEX_WIDTH(TX_QUEUE_INDEX_WIDTH),
+      .RX_QUEUE_INDEX_WIDTH(RX_QUEUE_INDEX_WIDTH),
+      .CQN_WIDTH(CQN_WIDTH),
+      .EQ_PIPELINE(EQ_PIPELINE),
+      .TX_QUEUE_PIPELINE(TX_QUEUE_PIPELINE),
+      .RX_QUEUE_PIPELINE(RX_QUEUE_PIPELINE),
+      .CQ_PIPELINE(CQ_PIPELINE),
+
+      // TX and RX engine configuration
+      .TX_DESC_TABLE_SIZE(TX_DESC_TABLE_SIZE),
+      .RX_DESC_TABLE_SIZE(RX_DESC_TABLE_SIZE),
+      .RX_INDIR_TBL_ADDR_WIDTH(RX_INDIR_TBL_ADDR_WIDTH),
+
+      // Scheduler configuration
+      .TX_SCHEDULER_OP_TABLE_SIZE(TX_SCHEDULER_OP_TABLE_SIZE),
+      .TX_SCHEDULER_PIPELINE(TX_SCHEDULER_PIPELINE),
+      .TDMA_INDEX_WIDTH(TDMA_INDEX_WIDTH),
+
+      // Interface configuration
+      .PTP_TS_ENABLE(PTP_TS_ENABLE),
+      .TX_CPL_FIFO_DEPTH(TX_CPL_FIFO_DEPTH),
+      .TX_TAG_WIDTH(TX_TAG_WIDTH),
+      .TX_CHECKSUM_ENABLE(TX_CHECKSUM_ENABLE),
+      .RX_HASH_ENABLE(RX_HASH_ENABLE),
+      .RX_CHECKSUM_ENABLE(RX_CHECKSUM_ENABLE),
+      .TX_FIFO_DEPTH(TX_FIFO_DEPTH),
+      .RX_FIFO_DEPTH(RX_FIFO_DEPTH),
+      .MAX_TX_SIZE(MAX_TX_SIZE),
+      .MAX_RX_SIZE(MAX_RX_SIZE),
+      .TX_RAM_SIZE(TX_RAM_SIZE),
+      .RX_RAM_SIZE(RX_RAM_SIZE),
+
+      // Application block configuration
+      .APP_ID(APP_ID),
+      .APP_ENABLE(APP_ENABLE),
+      .APP_CTRL_ENABLE(APP_CTRL_ENABLE),
+      .APP_DMA_ENABLE(APP_DMA_ENABLE),
+      .APP_AXIS_DIRECT_ENABLE(APP_AXIS_DIRECT_ENABLE),
+      .APP_AXIS_SYNC_ENABLE(APP_AXIS_SYNC_ENABLE),
+      .APP_AXIS_IF_ENABLE(APP_AXIS_IF_ENABLE),
+      .APP_STAT_ENABLE(APP_STAT_ENABLE),
+
+      // AXI interface configuration (DMA)
+      .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+      .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+      .AXI_STRB_WIDTH(AXI_STRB_WIDTH),
+      .AXI_ID_WIDTH(AXI_ID_WIDTH),
+
+      // DMA interface configuration
+      .DMA_IMM_ENABLE(DMA_IMM_ENABLE),
+      .DMA_IMM_WIDTH(DMA_IMM_WIDTH),
+      .DMA_LEN_WIDTH(DMA_LEN_WIDTH),
+      .DMA_TAG_WIDTH(DMA_TAG_WIDTH),
+      .RAM_ADDR_WIDTH(RAM_ADDR_WIDTH),
+      .RAM_PIPELINE(RAM_PIPELINE),
+      .AXI_DMA_MAX_BURST_LEN(AXI_DMA_MAX_BURST_LEN),
+
+      // Interrupts
+      .IRQ_COUNT(IRQ_COUNT),
+
+      // AXI lite interface configuration (control)
+      .AXIL_CTRL_DATA_WIDTH(AXIL_CTRL_DATA_WIDTH),
+      .AXIL_CTRL_ADDR_WIDTH(AXIL_CTRL_ADDR_WIDTH),
+      .AXIL_CTRL_STRB_WIDTH(AXIL_CTRL_STRB_WIDTH),
+
+      // AXI lite interface configuration (application control)
+      .AXIL_APP_CTRL_DATA_WIDTH(AXIL_APP_CTRL_DATA_WIDTH),
+      .AXIL_APP_CTRL_ADDR_WIDTH(AXIL_APP_CTRL_ADDR_WIDTH),
+      .AXIL_APP_CTRL_STRB_WIDTH(AXIL_APP_CTRL_STRB_WIDTH),
+
+      // Ethernet interface configuration
+      .AXIS_ETH_DATA_WIDTH(AXIS_ETH_DATA_WIDTH),
+      .AXIS_ETH_KEEP_WIDTH(AXIS_ETH_KEEP_WIDTH),
+      .AXIS_ETH_SYNC_DATA_WIDTH(AXIS_ETH_SYNC_DATA_WIDTH),
+      .AXIS_ETH_TX_USER_WIDTH(AXIS_ETH_TX_USER_WIDTH),
+      .AXIS_ETH_RX_USER_WIDTH(AXIS_ETH_RX_USER_WIDTH),
+      .AXIS_ETH_TX_PIPELINE(AXIS_ETH_TX_PIPELINE),
+      .AXIS_ETH_TX_FIFO_PIPELINE(AXIS_ETH_TX_FIFO_PIPELINE),
+      .AXIS_ETH_TX_TS_PIPELINE(AXIS_ETH_TX_TS_PIPELINE),
+      .AXIS_ETH_RX_PIPELINE(AXIS_ETH_RX_PIPELINE),
+      .AXIS_ETH_RX_FIFO_PIPELINE(AXIS_ETH_RX_FIFO_PIPELINE),
+
+      // Statistics counter subsystem
+      .STAT_ENABLE(STAT_ENABLE),
+      .STAT_DMA_ENABLE(STAT_DMA_ENABLE),
+      .STAT_AXI_ENABLE(STAT_AXI_ENABLE),
+      .STAT_INC_WIDTH(STAT_INC_WIDTH),
+      .STAT_ID_WIDTH(STAT_ID_WIDTH)
+    ) core_inst (
+      /*
+       * Clock: 250 MHz
+       * Synchronous reset
+       */
+      .clk_250mhz(clk),
+      .rst_250mhz(rst),
+
+      /*
+       * PTP clock
+       */
+      .ptp_clk(ptp_clk),
+      .ptp_rst(ptp_rst),
+      .ptp_sample_clk(ptp_sample_clk),
+
+      /*
+       * GPIO
+       */
+      .led(),
+
+      /*
+       * Interrupt outputs
+       */
+      .irq(irq),
+
+      /*
+       * AXI master interface (DMA)
+       */
+      .m_axi_awid(m_axi_dma_awid),
+      .m_axi_awaddr(m_axi_dma_awaddr),
+      .m_axi_awlen(m_axi_dma_awlen),
+      .m_axi_awsize(m_axi_dma_awsize),
+      .m_axi_awburst(m_axi_dma_awburst),
+      .m_axi_awlock(m_axi_dma_awlock),
+      .m_axi_awcache(m_axi_dma_awcache),
+      .m_axi_awprot(m_axi_dma_awprot),
+      .m_axi_awvalid(m_axi_dma_awvalid),
+      .m_axi_awready(m_axi_dma_awready),
+      .m_axi_wdata(m_axi_dma_wdata),
+      .m_axi_wstrb(m_axi_dma_wstrb),
+      .m_axi_wlast(m_axi_dma_wlast),
+      .m_axi_wvalid(m_axi_dma_wvalid),
+      .m_axi_wready(m_axi_dma_wready),
+      .m_axi_bid(m_axi_dma_bid),
+      .m_axi_bresp(m_axi_dma_bresp),
+      .m_axi_bvalid(m_axi_dma_bvalid),
+      .m_axi_bready(m_axi_dma_bready),
+      .m_axi_arid(m_axi_dma_arid),
+      .m_axi_araddr(m_axi_dma_araddr),
+      .m_axi_arlen(m_axi_dma_arlen),
+      .m_axi_arsize(m_axi_dma_arsize),
+      .m_axi_arburst(m_axi_dma_arburst),
+      .m_axi_arlock(m_axi_dma_arlock),
+      .m_axi_arcache(m_axi_dma_arcache),
+      .m_axi_arprot(m_axi_dma_arprot),
+      .m_axi_arvalid(m_axi_dma_arvalid),
+      .m_axi_arready(m_axi_dma_arready),
+      .m_axi_rid(m_axi_dma_rid),
+      .m_axi_rdata(m_axi_dma_rdata),
+      .m_axi_rresp(m_axi_dma_rresp),
+      .m_axi_rlast(m_axi_dma_rlast),
+      .m_axi_rvalid(m_axi_dma_rvalid),
+      .m_axi_rready(m_axi_dma_rready),
+
+      /*
+       * AXI lite interface configuration (control)
+       */
+      .s_axil_ctrl_awaddr(s_axil_ctrl_awaddr),
+      .s_axil_ctrl_awprot(s_axil_ctrl_awprot),
+      .s_axil_ctrl_awvalid(s_axil_ctrl_awvalid),
+      .s_axil_ctrl_awready(s_axil_ctrl_awready),
+      .s_axil_ctrl_wdata(s_axil_ctrl_wdata),
+      .s_axil_ctrl_wstrb(s_axil_ctrl_wstrb),
+      .s_axil_ctrl_wvalid(s_axil_ctrl_wvalid),
+      .s_axil_ctrl_wready(s_axil_ctrl_wready),
+      .s_axil_ctrl_bresp(s_axil_ctrl_bresp),
+      .s_axil_ctrl_bvalid(s_axil_ctrl_bvalid),
+      .s_axil_ctrl_bready(s_axil_ctrl_bready),
+      .s_axil_ctrl_araddr(s_axil_ctrl_araddr),
+      .s_axil_ctrl_arprot(s_axil_ctrl_arprot),
+      .s_axil_ctrl_arvalid(s_axil_ctrl_arvalid),
+      .s_axil_ctrl_arready(s_axil_ctrl_arready),
+      .s_axil_ctrl_rdata(s_axil_ctrl_rdata),
+      .s_axil_ctrl_rresp(s_axil_ctrl_rresp),
+      .s_axil_ctrl_rvalid(s_axil_ctrl_rvalid),
+      .s_axil_ctrl_rready(s_axil_ctrl_rready),
+
+      /*
+       * AXI lite interface configuration (application control)
+       */
+      .s_axil_app_ctrl_awaddr(s_axil_app_ctrl_awaddr),
+      .s_axil_app_ctrl_awprot(s_axil_app_ctrl_awprot),
+      .s_axil_app_ctrl_awvalid(s_axil_app_ctrl_awvalid),
+      .s_axil_app_ctrl_awready(s_axil_app_ctrl_awready),
+      .s_axil_app_ctrl_wdata(s_axil_app_ctrl_wdata),
+      .s_axil_app_ctrl_wstrb(s_axil_app_ctrl_wstrb),
+      .s_axil_app_ctrl_wvalid(s_axil_app_ctrl_wvalid),
+      .s_axil_app_ctrl_wready(s_axil_app_ctrl_wready),
+      .s_axil_app_ctrl_bresp(s_axil_app_ctrl_bresp),
+      .s_axil_app_ctrl_bvalid(s_axil_app_ctrl_bvalid),
+      .s_axil_app_ctrl_bready(s_axil_app_ctrl_bready),
+      .s_axil_app_ctrl_araddr(s_axil_app_ctrl_araddr),
+      .s_axil_app_ctrl_arprot(s_axil_app_ctrl_arprot),
+      .s_axil_app_ctrl_arvalid(s_axil_app_ctrl_arvalid),
+      .s_axil_app_ctrl_arready(s_axil_app_ctrl_arready),
+      .s_axil_app_ctrl_rdata(s_axil_app_ctrl_rdata),
+      .s_axil_app_ctrl_rresp(s_axil_app_ctrl_rresp),
+      .s_axil_app_ctrl_rvalid(s_axil_app_ctrl_rvalid),
+      .s_axil_app_ctrl_rready(s_axil_app_ctrl_rready),
+
+      /*
+       * Ethernet: SFP+
+       */
+      .sfp_tx_clk(sfp_tx_clk_int),
+      .sfp_tx_rst(sfp_tx_rst_int),
+      .sfp_txd(sfp_txd_int),
+      .sfp_txc(sfp_txc_int),
+      .sfp_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
+      .sfp_rx_clk(sfp_rx_clk_int),
+      .sfp_rx_rst(sfp_rx_rst_int),
+      .sfp_rxd(sfp_rxd_int),
+      .sfp_rxc(sfp_rxc_int),
+      .sfp_rx_prbs31_enable(sfp_rx_prbs31_enable_int),
+      .sfp_rx_error_count(sfp_rx_error_count_int),
+      .sfp_rx_status(sfp_rx_status),
+
+      .sfp_tx_disable(sfp_tx_disable),
+      .sfp_tx_fault(sfp_tx_fault_int),
+      .sfp_rx_los(sfp_rx_los_int),
+      .sfp_mod_abs(sfp_mod_abs_int),
+      .sfp_i2c_scl_i(sfp_iic_scl_i_w),
+      .sfp_i2c_scl_o(sfp_iic_scl_o_w),
+      .sfp_i2c_scl_t(sfp_iic_scl_t_w),
+      .sfp_i2c_sda_i(sfp_iic_sda_i_w),
+      .sfp_i2c_sda_o(sfp_iic_sda_o_w),
+      .sfp_i2c_sda_t(sfp_iic_sda_t_w),
+
+      .sfp_drp_clk(drp_clk),
+      .sfp_drp_rst(drp_rst),
+      .sfp_drp_addr(drp_addr),
+      .sfp_drp_di(drp_di),
+      .sfp_drp_en(drp_en),
+      .sfp_drp_we(drp_we),
+      .sfp_drp_do(drp_do),
+      .sfp_drp_rdy(drp_rdy)
   );
 
-  // TODO move out of the IP
-  eth_xcvr_phy_10g_gty_quad_wrapper #(
-    .COUNT(1),
-    .GT_GTH(1),
-    .PRBS31_ENABLE(1)
-  ) sfp_phy_quad_inst (
-    .xcvr_ctrl_clk(clk_125mhz_int),
-    .xcvr_ctrl_rst(sfp_rst),
+end else begin
 
-    /*
-     * Common
-     */
-    .xcvr_gtpowergood_out(sfp_gtpowergood),
-    .xcvr_ref_clk(sfp_mgt_refclk),
+    eth_xcvr_phy_10g_gty_quad_wrapper #(
+      .PRBS31_ENABLE(1),
+      .GT_GTH(1),
+      .TX_SERDES_PIPELINE(1),
+      .RX_SERDES_PIPELINE(1),
+      .COUNT_125US(125000/2.56)
+    ) qsfp_phy_quad_inst (
+      .xcvr_ctrl_clk(clk_125mhz_int),
+      .xcvr_ctrl_rst(rst),
 
-    /*
-     * DRP
-     */
-    .drp_clk(sfp_drp_clk),
-    .drp_rst(sfp_drp_rst),
-    .drp_addr(sfp_drp_addr),
-    .drp_di(sfp_drp_di),
-    .drp_en(sfp_drp_en),
-    .drp_we(sfp_drp_we),
-    .drp_do(sfp_drp_do),
-    .drp_rdy(sfp_drp_rdy),
+      /*
+       * Common
+       */
+      .xcvr_gtpowergood_out(gtpowergood),
+      .xcvr_ref_clk(mgt_refclk),
 
-    /*
-     * Serial data
-     */
-    .xcvr_txp({sfp_tx_p}),
-    .xcvr_txn({sfp_tx_n}),
-    .xcvr_rxp({sfp_rx_p}),
-    .xcvr_rxn({sfp_rx_n}),
+      /*
+       * DRP
+       */
+      .drp_clk(drp_clk),
+      .drp_rst(drp_rst),
+      .drp_addr(drp_addr),
+      .drp_di(drp_di),
+      .drp_en(drp_en),
+      .drp_we(drp_we),
+      .drp_do(drp_do),
+      .drp_rdy(drp_rdy),
 
-    /*
-     * PHY connections
-     */
-    .phy_1_tx_clk(sfp_tx_clk_int),
-    .phy_1_tx_rst(sfp_tx_rst_int),
-    .phy_1_xgmii_txd(sfp_txd_int),
-    .phy_1_xgmii_txc(sfp_txc_int),
-    .phy_1_rx_clk(sfp_rx_clk_int),
-    .phy_1_rx_rst(sfp_rx_rst_int),
-    .phy_1_xgmii_rxd(sfp_rxd_int),
-    .phy_1_xgmii_rxc(sfp_rxc_int),
-    .phy_1_tx_bad_block(),
-    .phy_1_rx_error_count(sfp_rx_error_count_int),
-    .phy_1_rx_bad_block(),
-    .phy_1_rx_sequence_error(),
-    .phy_1_rx_block_lock(sfp_rx_block_lock),
-    .phy_1_rx_high_ber(),
-    .phy_1_rx_status(sfp_rx_status),
-    .phy_1_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
-    .phy_1_rx_prbs31_enable(sfp_rx_prbs31_enable_int)
-  );
+      /*
+       * Serial data
+       */
+      .xcvr_txp({qsfp_tx4_p, qsfp_tx3_p, qsfp_tx2_p, qsfp_tx1_p}),
+      .xcvr_txn({qsfp_tx4_n, qsfp_tx3_n, qsfp_tx2_n, qsfp_tx1_n}),
+      .xcvr_rxp({qsfp_rx4_p, qsfp_rx3_p, qsfp_rx2_p, qsfp_rx1_p}),
+      .xcvr_rxn({qsfp_rx4_n, qsfp_rx3_n, qsfp_rx2_n, qsfp_rx1_n}),
 
-  fpga_core #(
-    // FW and board IDs
-    .FPGA_ID(FPGA_ID),
-    .FW_ID(FW_ID),
-    .FW_VER(FW_VER),
-    .BOARD_ID(BOARD_ID),
-    .BOARD_VER(BOARD_VER),
-    .BUILD_DATE(BUILD_DATE),
-    .GIT_HASH(GIT_HASH),
-    .RELEASE_INFO(RELEASE_INFO),
+      /*
+       * PHY connections
+       */
+      .phy_1_tx_clk(qsfp_tx_clk_1_int),
+      .phy_1_tx_rst(qsfp_tx_rst_1_int),
+      .phy_1_xgmii_txd(qsfp_txd_1_int),
+      .phy_1_xgmii_txc(qsfp_txc_1_int),
+      .phy_1_rx_clk(qsfp_rx_clk_1_int),
+      .phy_1_rx_rst(qsfp_rx_rst_1_int),
+      .phy_1_xgmii_rxd(qsfp_rxd_1_int),
+      .phy_1_xgmii_rxc(qsfp_rxc_1_int),
+      .phy_1_tx_bad_block(),
+      .phy_1_rx_error_count(qsfp_rx_error_count_1_int),
+      .phy_1_rx_bad_block(),
+      .phy_1_rx_sequence_error(),
+      .phy_1_rx_block_lock(qsfp_rx_block_lock_1),
+      .phy_1_rx_high_ber(),
+      .phy_1_rx_status(qsfp_rx_status_1),
+      .phy_1_tx_prbs31_enable(qsfp_tx_prbs31_enable_1_int),
+      .phy_1_rx_prbs31_enable(qsfp_rx_prbs31_enable_1_int),
 
-    // Board configuration
-    .TDMA_BER_ENABLE(TDMA_BER_ENABLE),
+      .phy_2_tx_clk(qsfp_tx_clk_2_int),
+      .phy_2_tx_rst(qsfp_tx_rst_2_int),
+      .phy_2_xgmii_txd(qsfp_txd_2_int),
+      .phy_2_xgmii_txc(qsfp_txc_2_int),
+      .phy_2_rx_clk(qsfp_rx_clk_2_int),
+      .phy_2_rx_rst(qsfp_rx_rst_2_int),
+      .phy_2_xgmii_rxd(qsfp_rxd_2_int),
+      .phy_2_xgmii_rxc(qsfp_rxc_2_int),
+      .phy_2_tx_bad_block(),
+      .phy_2_rx_error_count(qsfp_rx_error_count_2_int),
+      .phy_2_rx_bad_block(),
+      .phy_2_rx_sequence_error(),
+      .phy_2_rx_block_lock(qsfp_rx_block_lock_2),
+      .phy_2_rx_high_ber(),
+      .phy_2_rx_status(qsfp_rx_status_2),
+      .phy_2_tx_prbs31_enable(qsfp_tx_prbs31_enable_2_int),
+      .phy_2_rx_prbs31_enable(qsfp_rx_prbs31_enable_2_int),
 
-    // Structural configuration
-    .IF_COUNT(IF_COUNT),
-    .PORTS_PER_IF(PORTS_PER_IF),
-    .SCHED_PER_IF(SCHED_PER_IF),
-    .PORT_MASK(PORT_MASK),
+      .phy_3_tx_clk(qsfp_tx_clk_3_int),
+      .phy_3_tx_rst(qsfp_tx_rst_3_int),
+      .phy_3_xgmii_txd(qsfp_txd_3_int),
+      .phy_3_xgmii_txc(qsfp_txc_3_int),
+      .phy_3_rx_clk(qsfp_rx_clk_3_int),
+      .phy_3_rx_rst(qsfp_rx_rst_3_int),
+      .phy_3_xgmii_rxd(qsfp_rxd_3_int),
+      .phy_3_xgmii_rxc(qsfp_rxc_3_int),
+      .phy_3_tx_bad_block(),
+      .phy_3_rx_error_count(qsfp_rx_error_count_3_int),
+      .phy_3_rx_bad_block(),
+      .phy_3_rx_sequence_error(),
+      .phy_3_rx_block_lock(qsfp_rx_block_lock_3),
+      .phy_3_rx_high_ber(),
+      .phy_3_rx_status(qsfp_rx_status_3),
+      .phy_3_tx_prbs31_enable(qsfp_tx_prbs31_enable_3_int),
+      .phy_3_rx_prbs31_enable(qsfp_rx_prbs31_enable_3_int),
 
-    // Clock configuration
-    .CLK_PERIOD_NS_NUM(CLK_PERIOD_NS_NUM),
-    .CLK_PERIOD_NS_DENOM(CLK_PERIOD_NS_DENOM),
+      .phy_4_tx_clk(qsfp_tx_clk_4_int),
+      .phy_4_tx_rst(qsfp_tx_rst_4_int),
+      .phy_4_xgmii_txd(qsfp_txd_4_int),
+      .phy_4_xgmii_txc(qsfp_txc_4_int),
+      .phy_4_rx_clk(qsfp_rx_clk_4_int),
+      .phy_4_rx_rst(qsfp_rx_rst_4_int),
+      .phy_4_xgmii_rxd(qsfp_rxd_4_int),
+      .phy_4_xgmii_rxc(qsfp_rxc_4_int),
+      .phy_4_tx_bad_block(),
+      .phy_4_rx_error_count(qsfp_rx_error_count_4_int),
+      .phy_4_rx_bad_block(),
+      .phy_4_rx_sequence_error(),
+      .phy_4_rx_block_lock(qsfp_rx_block_lock_4),
+      .phy_4_rx_high_ber(),
+      .phy_4_rx_status(qsfp_rx_status_4),
+      .phy_4_tx_prbs31_enable(qsfp_tx_prbs31_enable_4_int),
+      .phy_4_rx_prbs31_enable(qsfp_rx_prbs31_enable_4_int));
 
-    // PTP configuration
-    .PTP_CLK_PERIOD_NS_NUM(PTP_CLK_PERIOD_NS_NUM),
-    .PTP_CLK_PERIOD_NS_DENOM(PTP_CLK_PERIOD_NS_DENOM),
-    .PTP_TS_WIDTH(PTP_TS_WIDTH),
-    .PTP_CLOCK_PIPELINE(PTP_CLOCK_PIPELINE),
-    .PTP_CLOCK_CDC_PIPELINE(PTP_CLOCK_CDC_PIPELINE),
-    .PTP_USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK),
-    .PTP_PORT_CDC_PIPELINE(PTP_PORT_CDC_PIPELINE),
-    .PTP_PEROUT_ENABLE(PTP_PEROUT_ENABLE),
-    .PTP_PEROUT_COUNT(PTP_PEROUT_COUNT),
+    fpga_core #(
+      // FW and board IDs
+      .FPGA_ID(FPGA_ID),
+      .FW_ID(FW_ID),
+      .FW_VER(FW_VER),
+      .BOARD_ID(BOARD_ID),
+      .BOARD_VER(BOARD_VER),
+      .BUILD_DATE(BUILD_DATE),
+      .GIT_HASH(GIT_HASH),
+      .RELEASE_INFO(RELEASE_INFO),
 
-    // Queue manager configuration
-    .EVENT_QUEUE_OP_TABLE_SIZE(EVENT_QUEUE_OP_TABLE_SIZE),
-    .TX_QUEUE_OP_TABLE_SIZE(TX_QUEUE_OP_TABLE_SIZE),
-    .RX_QUEUE_OP_TABLE_SIZE(RX_QUEUE_OP_TABLE_SIZE),
-    .CQ_OP_TABLE_SIZE(CQ_OP_TABLE_SIZE),
-    .EQN_WIDTH(EQN_WIDTH),
-    .TX_QUEUE_INDEX_WIDTH(TX_QUEUE_INDEX_WIDTH),
-    .RX_QUEUE_INDEX_WIDTH(RX_QUEUE_INDEX_WIDTH),
-    .CQN_WIDTH(CQN_WIDTH),
-    .EQ_PIPELINE(EQ_PIPELINE),
-    .TX_QUEUE_PIPELINE(TX_QUEUE_PIPELINE),
-    .RX_QUEUE_PIPELINE(RX_QUEUE_PIPELINE),
-    .CQ_PIPELINE(CQ_PIPELINE),
+      // Board configuration
+      .TDMA_BER_ENABLE(TDMA_BER_ENABLE),
 
-    // TX and RX engine configuration
-    .TX_DESC_TABLE_SIZE(TX_DESC_TABLE_SIZE),
-    .RX_DESC_TABLE_SIZE(RX_DESC_TABLE_SIZE),
-    .RX_INDIR_TBL_ADDR_WIDTH(RX_INDIR_TBL_ADDR_WIDTH),
+      // Structural configuration
+      .IF_COUNT(IF_COUNT),
+      .PORTS_PER_IF(PORTS_PER_IF),
+      .SCHED_PER_IF(SCHED_PER_IF),
+      .PORT_MASK(PORT_MASK),
 
-    // Scheduler configuration
-    .TX_SCHEDULER_OP_TABLE_SIZE(TX_SCHEDULER_OP_TABLE_SIZE),
-    .TX_SCHEDULER_PIPELINE(TX_SCHEDULER_PIPELINE),
-    .TDMA_INDEX_WIDTH(TDMA_INDEX_WIDTH),
+      // Clock configuration
+      .CLK_PERIOD_NS_NUM(CLK_PERIOD_NS_NUM),
+      .CLK_PERIOD_NS_DENOM(CLK_PERIOD_NS_DENOM),
 
-    // Interface configuration
-    .PTP_TS_ENABLE(PTP_TS_ENABLE),
-    .TX_CPL_FIFO_DEPTH(TX_CPL_FIFO_DEPTH),
-    .TX_TAG_WIDTH(TX_TAG_WIDTH),
-    .TX_CHECKSUM_ENABLE(TX_CHECKSUM_ENABLE),
-    .RX_HASH_ENABLE(RX_HASH_ENABLE),
-    .RX_CHECKSUM_ENABLE(RX_CHECKSUM_ENABLE),
-    .TX_FIFO_DEPTH(TX_FIFO_DEPTH),
-    .RX_FIFO_DEPTH(RX_FIFO_DEPTH),
-    .MAX_TX_SIZE(MAX_TX_SIZE),
-    .MAX_RX_SIZE(MAX_RX_SIZE),
-    .TX_RAM_SIZE(TX_RAM_SIZE),
-    .RX_RAM_SIZE(RX_RAM_SIZE),
+      // PTP configuration
+      .PTP_CLK_PERIOD_NS_NUM(PTP_CLK_PERIOD_NS_NUM),
+      .PTP_CLK_PERIOD_NS_DENOM(PTP_CLK_PERIOD_NS_DENOM),
+      .PTP_TS_WIDTH(PTP_TS_WIDTH),
+      .PTP_CLOCK_PIPELINE(PTP_CLOCK_PIPELINE),
+      .PTP_CLOCK_CDC_PIPELINE(PTP_CLOCK_CDC_PIPELINE),
+      .PTP_USE_SAMPLE_CLOCK(PTP_USE_SAMPLE_CLOCK),
+      .PTP_PORT_CDC_PIPELINE(PTP_PORT_CDC_PIPELINE),
+      .PTP_PEROUT_ENABLE(PTP_PEROUT_ENABLE),
+      .PTP_PEROUT_COUNT(PTP_PEROUT_COUNT),
 
-    // Application block configuration
-    .APP_ID(APP_ID),
-    .APP_ENABLE(APP_ENABLE),
-    .APP_CTRL_ENABLE(APP_CTRL_ENABLE),
-    .APP_DMA_ENABLE(APP_DMA_ENABLE),
-    .APP_AXIS_DIRECT_ENABLE(APP_AXIS_DIRECT_ENABLE),
-    .APP_AXIS_SYNC_ENABLE(APP_AXIS_SYNC_ENABLE),
-    .APP_AXIS_IF_ENABLE(APP_AXIS_IF_ENABLE),
-    .APP_STAT_ENABLE(APP_STAT_ENABLE),
+      // Queue manager configuration
+      .EVENT_QUEUE_OP_TABLE_SIZE(EVENT_QUEUE_OP_TABLE_SIZE),
+      .TX_QUEUE_OP_TABLE_SIZE(TX_QUEUE_OP_TABLE_SIZE),
+      .RX_QUEUE_OP_TABLE_SIZE(RX_QUEUE_OP_TABLE_SIZE),
+      .CQ_OP_TABLE_SIZE(CQ_OP_TABLE_SIZE),
+      .EQN_WIDTH(EQN_WIDTH),
+      .TX_QUEUE_INDEX_WIDTH(TX_QUEUE_INDEX_WIDTH),
+      .RX_QUEUE_INDEX_WIDTH(RX_QUEUE_INDEX_WIDTH),
+      .CQN_WIDTH(CQN_WIDTH),
+      .EQ_PIPELINE(EQ_PIPELINE),
+      .TX_QUEUE_PIPELINE(TX_QUEUE_PIPELINE),
+      .RX_QUEUE_PIPELINE(RX_QUEUE_PIPELINE),
+      .CQ_PIPELINE(CQ_PIPELINE),
 
-    // AXI interface configuration (DMA)
-    .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
-    .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
-    .AXI_STRB_WIDTH(AXI_STRB_WIDTH),
-    .AXI_ID_WIDTH(AXI_ID_WIDTH),
+      // TX and RX engine configuration
+      .TX_DESC_TABLE_SIZE(TX_DESC_TABLE_SIZE),
+      .RX_DESC_TABLE_SIZE(RX_DESC_TABLE_SIZE),
+      .RX_INDIR_TBL_ADDR_WIDTH(RX_INDIR_TBL_ADDR_WIDTH),
 
-    // DMA interface configuration
-    .DMA_IMM_ENABLE(DMA_IMM_ENABLE),
-    .DMA_IMM_WIDTH(DMA_IMM_WIDTH),
-    .DMA_LEN_WIDTH(DMA_LEN_WIDTH),
-    .DMA_TAG_WIDTH(DMA_TAG_WIDTH),
-    .RAM_ADDR_WIDTH(RAM_ADDR_WIDTH),
-    .RAM_PIPELINE(RAM_PIPELINE),
-    .AXI_DMA_MAX_BURST_LEN(AXI_DMA_MAX_BURST_LEN),
+      // Scheduler configuration
+      .TX_SCHEDULER_OP_TABLE_SIZE(TX_SCHEDULER_OP_TABLE_SIZE),
+      .TX_SCHEDULER_PIPELINE(TX_SCHEDULER_PIPELINE),
+      .TDMA_INDEX_WIDTH(TDMA_INDEX_WIDTH),
 
-    // Interrupts
-    .IRQ_COUNT(IRQ_COUNT),
+      // Interface configuration
+      .PTP_TS_ENABLE(PTP_TS_ENABLE),
+      .TX_CPL_FIFO_DEPTH(TX_CPL_FIFO_DEPTH),
+      .TX_TAG_WIDTH(TX_TAG_WIDTH),
+      .TX_CHECKSUM_ENABLE(TX_CHECKSUM_ENABLE),
+      .RX_HASH_ENABLE(RX_HASH_ENABLE),
+      .RX_CHECKSUM_ENABLE(RX_CHECKSUM_ENABLE),
+      .TX_FIFO_DEPTH(TX_FIFO_DEPTH),
+      .RX_FIFO_DEPTH(RX_FIFO_DEPTH),
+      .MAX_TX_SIZE(MAX_TX_SIZE),
+      .MAX_RX_SIZE(MAX_RX_SIZE),
+      .TX_RAM_SIZE(TX_RAM_SIZE),
+      .RX_RAM_SIZE(RX_RAM_SIZE),
 
-    // AXI lite interface configuration (control)
-    .AXIL_CTRL_DATA_WIDTH(AXIL_CTRL_DATA_WIDTH),
-    .AXIL_CTRL_ADDR_WIDTH(AXIL_CTRL_ADDR_WIDTH),
-    .AXIL_CTRL_STRB_WIDTH(AXIL_CTRL_STRB_WIDTH),
+      // Application block configuration
+      .APP_ID(APP_ID),
+      .APP_ENABLE(APP_ENABLE),
+      .APP_CTRL_ENABLE(APP_CTRL_ENABLE),
+      .APP_DMA_ENABLE(APP_DMA_ENABLE),
+      .APP_AXIS_DIRECT_ENABLE(APP_AXIS_DIRECT_ENABLE),
+      .APP_AXIS_SYNC_ENABLE(APP_AXIS_SYNC_ENABLE),
+      .APP_AXIS_IF_ENABLE(APP_AXIS_IF_ENABLE),
+      .APP_STAT_ENABLE(APP_STAT_ENABLE),
 
-    // AXI lite interface configuration (application control)
-    .AXIL_APP_CTRL_DATA_WIDTH(AXIL_APP_CTRL_DATA_WIDTH),
-    .AXIL_APP_CTRL_ADDR_WIDTH(AXIL_APP_CTRL_ADDR_WIDTH),
-    .AXIL_APP_CTRL_STRB_WIDTH(AXIL_APP_CTRL_STRB_WIDTH),
+      // AXI interface configuration (DMA)
+      .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+      .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+      .AXI_STRB_WIDTH(AXI_STRB_WIDTH),
+      .AXI_ID_WIDTH(AXI_ID_WIDTH),
 
-    // Ethernet interface configuration
-    .AXIS_ETH_DATA_WIDTH(AXIS_ETH_DATA_WIDTH),
-    .AXIS_ETH_KEEP_WIDTH(AXIS_ETH_KEEP_WIDTH),
-    .AXIS_ETH_SYNC_DATA_WIDTH(AXIS_ETH_SYNC_DATA_WIDTH),
-    .AXIS_ETH_TX_USER_WIDTH(AXIS_ETH_TX_USER_WIDTH),
-    .AXIS_ETH_RX_USER_WIDTH(AXIS_ETH_RX_USER_WIDTH),
-    .AXIS_ETH_TX_PIPELINE(AXIS_ETH_TX_PIPELINE),
-    .AXIS_ETH_TX_FIFO_PIPELINE(AXIS_ETH_TX_FIFO_PIPELINE),
-    .AXIS_ETH_TX_TS_PIPELINE(AXIS_ETH_TX_TS_PIPELINE),
-    .AXIS_ETH_RX_PIPELINE(AXIS_ETH_RX_PIPELINE),
-    .AXIS_ETH_RX_FIFO_PIPELINE(AXIS_ETH_RX_FIFO_PIPELINE),
+      // DMA interface configuration
+      .DMA_IMM_ENABLE(DMA_IMM_ENABLE),
+      .DMA_IMM_WIDTH(DMA_IMM_WIDTH),
+      .DMA_LEN_WIDTH(DMA_LEN_WIDTH),
+      .DMA_TAG_WIDTH(DMA_TAG_WIDTH),
+      .RAM_ADDR_WIDTH(RAM_ADDR_WIDTH),
+      .RAM_PIPELINE(RAM_PIPELINE),
+      .AXI_DMA_MAX_BURST_LEN(AXI_DMA_MAX_BURST_LEN),
 
-    // Statistics counter subsystem
-    .STAT_ENABLE(STAT_ENABLE),
-    .STAT_DMA_ENABLE(STAT_DMA_ENABLE),
-    .STAT_AXI_ENABLE(STAT_AXI_ENABLE),
-    .STAT_INC_WIDTH(STAT_INC_WIDTH),
-    .STAT_ID_WIDTH(STAT_ID_WIDTH)
-  ) core_inst (
-    /*
-     * Clock: 250 MHz
-     * Synchronous reset
-     */
-    .clk_250mhz(clk),
-    .rst_250mhz(rst),
+      // Interrupts
+      .IRQ_COUNT(IRQ_COUNT),
 
-    /*
-     * PTP clock
-     */
-    .ptp_clk(ptp_clk),
-    .ptp_rst(ptp_rst),
-    .ptp_sample_clk(ptp_sample_clk),
+      // AXI lite interface configuration (control)
+      .AXIL_CTRL_DATA_WIDTH(AXIL_CTRL_DATA_WIDTH),
+      .AXIL_CTRL_ADDR_WIDTH(AXIL_CTRL_ADDR_WIDTH),
+      .AXIL_CTRL_STRB_WIDTH(AXIL_CTRL_STRB_WIDTH),
 
-    /*
-     * GPIO
-     */
-    .led(led),
-    // .sfp_led(sfp_led),
+      // AXI lite interface configuration (application control)
+      .AXIL_APP_CTRL_DATA_WIDTH(AXIL_APP_CTRL_DATA_WIDTH),
+      .AXIL_APP_CTRL_ADDR_WIDTH(AXIL_APP_CTRL_ADDR_WIDTH),
+      .AXIL_APP_CTRL_STRB_WIDTH(AXIL_APP_CTRL_STRB_WIDTH),
 
-    /*
-     * Interrupt outputs
-     */
-    .irq(irq),
+      // Ethernet interface configuration
+      .AXIS_ETH_DATA_WIDTH(AXIS_ETH_DATA_WIDTH),
+      .AXIS_ETH_KEEP_WIDTH(AXIS_ETH_KEEP_WIDTH),
+      .AXIS_ETH_SYNC_DATA_WIDTH(AXIS_ETH_SYNC_DATA_WIDTH),
+      .AXIS_ETH_TX_USER_WIDTH(AXIS_ETH_TX_USER_WIDTH),
+      .AXIS_ETH_RX_USER_WIDTH(AXIS_ETH_RX_USER_WIDTH),
+      .AXIS_ETH_TX_PIPELINE(AXIS_ETH_TX_PIPELINE),
+      .AXIS_ETH_TX_FIFO_PIPELINE(AXIS_ETH_TX_FIFO_PIPELINE),
+      .AXIS_ETH_TX_TS_PIPELINE(AXIS_ETH_TX_TS_PIPELINE),
+      .AXIS_ETH_RX_PIPELINE(AXIS_ETH_RX_PIPELINE),
+      .AXIS_ETH_RX_FIFO_PIPELINE(AXIS_ETH_RX_FIFO_PIPELINE),
 
-    /*
-     * AXI master interface (DMA)
-     */
-    .m_axi_awid(m_axi_dma_awid),
-    .m_axi_awaddr(m_axi_dma_awaddr),
-    .m_axi_awlen(m_axi_dma_awlen),
-    .m_axi_awsize(m_axi_dma_awsize),
-    .m_axi_awburst(m_axi_dma_awburst),
-    .m_axi_awlock(m_axi_dma_awlock),
-    .m_axi_awcache(m_axi_dma_awcache),
-    .m_axi_awprot(m_axi_dma_awprot),
-    .m_axi_awvalid(m_axi_dma_awvalid),
-    .m_axi_awready(m_axi_dma_awready),
-    .m_axi_wdata(m_axi_dma_wdata),
-    .m_axi_wstrb(m_axi_dma_wstrb),
-    .m_axi_wlast(m_axi_dma_wlast),
-    .m_axi_wvalid(m_axi_dma_wvalid),
-    .m_axi_wready(m_axi_dma_wready),
-    .m_axi_bid(m_axi_dma_bid),
-    .m_axi_bresp(m_axi_dma_bresp),
-    .m_axi_bvalid(m_axi_dma_bvalid),
-    .m_axi_bready(m_axi_dma_bready),
-    .m_axi_arid(m_axi_dma_arid),
-    .m_axi_araddr(m_axi_dma_araddr),
-    .m_axi_arlen(m_axi_dma_arlen),
-    .m_axi_arsize(m_axi_dma_arsize),
-    .m_axi_arburst(m_axi_dma_arburst),
-    .m_axi_arlock(m_axi_dma_arlock),
-    .m_axi_arcache(m_axi_dma_arcache),
-    .m_axi_arprot(m_axi_dma_arprot),
-    .m_axi_arvalid(m_axi_dma_arvalid),
-    .m_axi_arready(m_axi_dma_arready),
-    .m_axi_rid(m_axi_dma_rid),
-    .m_axi_rdata(m_axi_dma_rdata),
-    .m_axi_rresp(m_axi_dma_rresp),
-    .m_axi_rlast(m_axi_dma_rlast),
-    .m_axi_rvalid(m_axi_dma_rvalid),
-    .m_axi_rready(m_axi_dma_rready),
+      // Statistics counter subsystem
+      .STAT_ENABLE(STAT_ENABLE),
+      .STAT_DMA_ENABLE(STAT_DMA_ENABLE),
+      .STAT_AXI_ENABLE(STAT_AXI_ENABLE),
+      .STAT_INC_WIDTH(STAT_INC_WIDTH),
+      .STAT_ID_WIDTH(STAT_ID_WIDTH)
+    ) qsfp_core_inst (
+      /*
+       * Clock: 250 MHz
+       * Synchronous reset
+       */
+      .clk_250mhz(clk),
+      .rst_250mhz(rst),
 
-    /*
-     * AXI lite interface configuration (control)
-     */
-    .s_axil_ctrl_awaddr(s_axil_ctrl_awaddr),
-    .s_axil_ctrl_awprot(s_axil_ctrl_awprot),
-    .s_axil_ctrl_awvalid(s_axil_ctrl_awvalid),
-    .s_axil_ctrl_awready(s_axil_ctrl_awready),
-    .s_axil_ctrl_wdata(s_axil_ctrl_wdata),
-    .s_axil_ctrl_wstrb(s_axil_ctrl_wstrb),
-    .s_axil_ctrl_wvalid(s_axil_ctrl_wvalid),
-    .s_axil_ctrl_wready(s_axil_ctrl_wready),
-    .s_axil_ctrl_bresp(s_axil_ctrl_bresp),
-    .s_axil_ctrl_bvalid(s_axil_ctrl_bvalid),
-    .s_axil_ctrl_bready(s_axil_ctrl_bready),
-    .s_axil_ctrl_araddr(s_axil_ctrl_araddr),
-    .s_axil_ctrl_arprot(s_axil_ctrl_arprot),
-    .s_axil_ctrl_arvalid(s_axil_ctrl_arvalid),
-    .s_axil_ctrl_arready(s_axil_ctrl_arready),
-    .s_axil_ctrl_rdata(s_axil_ctrl_rdata),
-    .s_axil_ctrl_rresp(s_axil_ctrl_rresp),
-    .s_axil_ctrl_rvalid(s_axil_ctrl_rvalid),
-    .s_axil_ctrl_rready(s_axil_ctrl_rready),
+      /*
+       * PTP clock
+       */
+      .ptp_clk(ptp_clk),
+      .ptp_rst(ptp_rst),
+      .ptp_sample_clk(ptp_sample_clk),
 
-    /*
-     * AXI lite interface configuration (application control)
-     */
-    .s_axil_app_ctrl_awaddr(s_axil_app_ctrl_awaddr),
-    .s_axil_app_ctrl_awprot(s_axil_app_ctrl_awprot),
-    .s_axil_app_ctrl_awvalid(s_axil_app_ctrl_awvalid),
-    .s_axil_app_ctrl_awready(s_axil_app_ctrl_awready),
-    .s_axil_app_ctrl_wdata(s_axil_app_ctrl_wdata),
-    .s_axil_app_ctrl_wstrb(s_axil_app_ctrl_wstrb),
-    .s_axil_app_ctrl_wvalid(s_axil_app_ctrl_wvalid),
-    .s_axil_app_ctrl_wready(s_axil_app_ctrl_wready),
-    .s_axil_app_ctrl_bresp(s_axil_app_ctrl_bresp),
-    .s_axil_app_ctrl_bvalid(s_axil_app_ctrl_bvalid),
-    .s_axil_app_ctrl_bready(s_axil_app_ctrl_bready),
-    .s_axil_app_ctrl_araddr(s_axil_app_ctrl_araddr),
-    .s_axil_app_ctrl_arprot(s_axil_app_ctrl_arprot),
-    .s_axil_app_ctrl_arvalid(s_axil_app_ctrl_arvalid),
-    .s_axil_app_ctrl_arready(s_axil_app_ctrl_arready),
-    .s_axil_app_ctrl_rdata(s_axil_app_ctrl_rdata),
-    .s_axil_app_ctrl_rresp(s_axil_app_ctrl_rresp),
-    .s_axil_app_ctrl_rvalid(s_axil_app_ctrl_rvalid),
-    .s_axil_app_ctrl_rready(s_axil_app_ctrl_rready),
+      /*
+       * GPIO
+       */
+      .led(),
 
-    /*
-     * Ethernet: SFP+
-     */
-    .sfp_tx_clk(sfp_tx_clk_int),
-    .sfp_tx_rst(sfp_tx_rst_int),
-    .sfp_txd(sfp_txd_int),
-    .sfp_txc(sfp_txc_int),
-    .sfp_tx_prbs31_enable(sfp_tx_prbs31_enable_int),
-    .sfp_rx_clk(sfp_rx_clk_int),
-    .sfp_rx_rst(sfp_rx_rst_int),
-    .sfp_rxd(sfp_rxd_int),
-    .sfp_rxc(sfp_rxc_int),
-    .sfp_rx_prbs31_enable(sfp_rx_prbs31_enable_int),
-    .sfp_rx_error_count(sfp_rx_error_count_int),
-    .sfp_rx_status(sfp_rx_status),
+      /*
+       * Interrupt outputs
+       */
+      .irq(irq),
 
-    .sfp_tx_disable(sfp_tx_disable),
-    .sfp_tx_fault(sfp_tx_fault_int),
-    .sfp_rx_los(sfp_rx_los_int),
-    .sfp_mod_abs(sfp_mod_abs_int),
-    .sfp_i2c_scl_i(sfp_iic_scl_i_w),
-    .sfp_i2c_scl_o(sfp_iic_scl_o_w),
-    .sfp_i2c_scl_t(sfp_iic_scl_t_w),
-    .sfp_i2c_sda_i(sfp_iic_sda_i_w),
-    .sfp_i2c_sda_o(sfp_iic_sda_o_w),
-    .sfp_i2c_sda_t(sfp_iic_sda_t_w),
+      /*
+       * AXI master interface (DMA)
+       */
+      .m_axi_awid(m_axi_dma_awid),
+      .m_axi_awaddr(m_axi_dma_awaddr),
+      .m_axi_awlen(m_axi_dma_awlen),
+      .m_axi_awsize(m_axi_dma_awsize),
+      .m_axi_awburst(m_axi_dma_awburst),
+      .m_axi_awlock(m_axi_dma_awlock),
+      .m_axi_awcache(m_axi_dma_awcache),
+      .m_axi_awprot(m_axi_dma_awprot),
+      .m_axi_awvalid(m_axi_dma_awvalid),
+      .m_axi_awready(m_axi_dma_awready),
+      .m_axi_wdata(m_axi_dma_wdata),
+      .m_axi_wstrb(m_axi_dma_wstrb),
+      .m_axi_wlast(m_axi_dma_wlast),
+      .m_axi_wvalid(m_axi_dma_wvalid),
+      .m_axi_wready(m_axi_dma_wready),
+      .m_axi_bid(m_axi_dma_bid),
+      .m_axi_bresp(m_axi_dma_bresp),
+      .m_axi_bvalid(m_axi_dma_bvalid),
+      .m_axi_bready(m_axi_dma_bready),
+      .m_axi_arid(m_axi_dma_arid),
+      .m_axi_araddr(m_axi_dma_araddr),
+      .m_axi_arlen(m_axi_dma_arlen),
+      .m_axi_arsize(m_axi_dma_arsize),
+      .m_axi_arburst(m_axi_dma_arburst),
+      .m_axi_arlock(m_axi_dma_arlock),
+      .m_axi_arcache(m_axi_dma_arcache),
+      .m_axi_arprot(m_axi_dma_arprot),
+      .m_axi_arvalid(m_axi_dma_arvalid),
+      .m_axi_arready(m_axi_dma_arready),
+      .m_axi_rid(m_axi_dma_rid),
+      .m_axi_rdata(m_axi_dma_rdata),
+      .m_axi_rresp(m_axi_dma_rresp),
+      .m_axi_rlast(m_axi_dma_rlast),
+      .m_axi_rvalid(m_axi_dma_rvalid),
+      .m_axi_rready(m_axi_dma_rready),
 
-    .sfp_drp_clk(sfp_drp_clk),
-    .sfp_drp_rst(sfp_drp_rst),
-    .sfp_drp_addr(sfp_drp_addr),
-    .sfp_drp_di(sfp_drp_di),
-    .sfp_drp_en(sfp_drp_en),
-    .sfp_drp_we(sfp_drp_we),
-    .sfp_drp_do(sfp_drp_do),
-    .sfp_drp_rdy(sfp_drp_rdy)
-  );
+      /*
+       * AXI lite interface configuration (control)
+       */
+      .s_axil_ctrl_awaddr(s_axil_ctrl_awaddr),
+      .s_axil_ctrl_awprot(s_axil_ctrl_awprot),
+      .s_axil_ctrl_awvalid(s_axil_ctrl_awvalid),
+      .s_axil_ctrl_awready(s_axil_ctrl_awready),
+      .s_axil_ctrl_wdata(s_axil_ctrl_wdata),
+      .s_axil_ctrl_wstrb(s_axil_ctrl_wstrb),
+      .s_axil_ctrl_wvalid(s_axil_ctrl_wvalid),
+      .s_axil_ctrl_wready(s_axil_ctrl_wready),
+      .s_axil_ctrl_bresp(s_axil_ctrl_bresp),
+      .s_axil_ctrl_bvalid(s_axil_ctrl_bvalid),
+      .s_axil_ctrl_bready(s_axil_ctrl_bready),
+      .s_axil_ctrl_araddr(s_axil_ctrl_araddr),
+      .s_axil_ctrl_arprot(s_axil_ctrl_arprot),
+      .s_axil_ctrl_arvalid(s_axil_ctrl_arvalid),
+      .s_axil_ctrl_arready(s_axil_ctrl_arready),
+      .s_axil_ctrl_rdata(s_axil_ctrl_rdata),
+      .s_axil_ctrl_rresp(s_axil_ctrl_rresp),
+      .s_axil_ctrl_rvalid(s_axil_ctrl_rvalid),
+      .s_axil_ctrl_rready(s_axil_ctrl_rready),
 
-  assign clk_156mhz_int = sfp_mgt_refclk_bufg;
+      /*
+       * AXI lite interface configuration (application control)
+       */
+      .s_axil_app_ctrl_awaddr(s_axil_app_ctrl_awaddr),
+      .s_axil_app_ctrl_awprot(s_axil_app_ctrl_awprot),
+      .s_axil_app_ctrl_awvalid(s_axil_app_ctrl_awvalid),
+      .s_axil_app_ctrl_awready(s_axil_app_ctrl_awready),
+      .s_axil_app_ctrl_wdata(s_axil_app_ctrl_wdata),
+      .s_axil_app_ctrl_wstrb(s_axil_app_ctrl_wstrb),
+      .s_axil_app_ctrl_wvalid(s_axil_app_ctrl_wvalid),
+      .s_axil_app_ctrl_wready(s_axil_app_ctrl_wready),
+      .s_axil_app_ctrl_bresp(s_axil_app_ctrl_bresp),
+      .s_axil_app_ctrl_bvalid(s_axil_app_ctrl_bvalid),
+      .s_axil_app_ctrl_bready(s_axil_app_ctrl_bready),
+      .s_axil_app_ctrl_araddr(s_axil_app_ctrl_araddr),
+      .s_axil_app_ctrl_arprot(s_axil_app_ctrl_arprot),
+      .s_axil_app_ctrl_arvalid(s_axil_app_ctrl_arvalid),
+      .s_axil_app_ctrl_arready(s_axil_app_ctrl_arready),
+      .s_axil_app_ctrl_rdata(s_axil_app_ctrl_rdata),
+      .s_axil_app_ctrl_rresp(s_axil_app_ctrl_rresp),
+      .s_axil_app_ctrl_rvalid(s_axil_app_ctrl_rvalid),
+      .s_axil_app_ctrl_rready(s_axil_app_ctrl_rready),
 
-  assign ptp_clk = sfp_mgt_refclk_bufg;
-  assign ptp_rst = sfp_rst;
-  assign ptp_sample_clk = clk_125mhz_int;
+      /*
+       * Ethernet: QSFP28
+       */
+       .qsfp_tx_clk_1(qsfp_tx_clk_1_int),
+       .qsfp_tx_rst_1(qsfp_tx_rst_1_int),
+       .qsfp_txd_1(qsfp_txd_1_int),
+       .qsfp_txc_1(qsfp_txc_1_int),
+       .qsfp_tx_prbs31_enable_1(qsfp_tx_prbs31_enable_1_int),
+       .qsfp_rx_clk_1(qsfp_rx_clk_1_int),
+       .qsfp_rx_rst_1(qsfp_rx_rst_1_int),
+       .qsfp_rxd_1(qsfp_rxd_1_int),
+       .qsfp_rxc_1(qsfp_rxc_1_int),
+       .qsfp_rx_prbs31_enable_1(qsfp_rx_prbs31_enable_1_int),
+       .qsfp_rx_error_count_1(qsfp_rx_error_count_1_int),
+       .qsfp_rx_status_1(qsfp_rx_status_1),
+       .qsfp_tx_clk_2(qsfp_tx_clk_2_int),
+       .qsfp_tx_rst_2(qsfp_tx_rst_2_int),
+       .qsfp_txd_2(qsfp_txd_2_int),
+       .qsfp_txc_2(qsfp_txc_2_int),
+       .qsfp_tx_prbs31_enable_2(qsfp_tx_prbs31_enable_2_int),
+       .qsfp_rx_clk_2(qsfp_rx_clk_2_int),
+       .qsfp_rx_rst_2(qsfp_rx_rst_2_int),
+       .qsfp_rxd_2(qsfp_rxd_2_int),
+       .qsfp_rxc_2(qsfp_rxc_2_int),
+       .qsfp_rx_prbs31_enable_2(qsfp_rx_prbs31_enable_2_int),
+       .qsfp_rx_error_count_2(qsfp_rx_error_count_2_int),
+       .qsfp_rx_status_2(qsfp_rx_status_2),
+       .qsfp_tx_clk_3(qsfp_tx_clk_3_int),
+       .qsfp_tx_rst_3(qsfp_tx_rst_3_int),
+       .qsfp_txd_3(qsfp_txd_3_int),
+       .qsfp_txc_3(qsfp_txc_3_int),
+       .qsfp_tx_prbs31_enable_3(qsfp_tx_prbs31_enable_3_int),
+       .qsfp_rx_clk_3(qsfp_rx_clk_3_int),
+       .qsfp_rx_rst_3(qsfp_rx_rst_3_int),
+       .qsfp_rxd_3(qsfp_rxd_3_int),
+       .qsfp_rxc_3(qsfp_rxc_3_int),
+       .qsfp_rx_prbs31_enable_3(qsfp_rx_prbs31_enable_3_int),
+       .qsfp_rx_error_count_3(qsfp_rx_error_count_3_int),
+       .qsfp_rx_status_3(qsfp_rx_status_3),
+       .qsfp_tx_clk_4(qsfp_tx_clk_4_int),
+       .qsfp_tx_rst_4(qsfp_tx_rst_4_int),
+       .qsfp_txd_4(qsfp_txd_4_int),
+       .qsfp_txc_4(qsfp_txc_4_int),
+       .qsfp_tx_prbs31_enable_4(qsfp_tx_prbs31_enable_4_int),
+       .qsfp_rx_clk_4(qsfp_rx_clk_4_int),
+       .qsfp_rx_rst_4(qsfp_rx_rst_4_int),
+       .qsfp_rxd_4(qsfp_rxd_4_int),
+       .qsfp_rxc_4(qsfp_rxc_4_int),
+       .qsfp_rx_prbs31_enable_4(qsfp_rx_prbs31_enable_4_int),
+       .qsfp_rx_error_count_4(qsfp_rx_error_count_4_int),
+       .qsfp_rx_status_4(qsfp_rx_status_4),
 
-  assign sfp_led[0] = sfp_rx_status;
-  assign sfp_led[1] = 1'b0;
+       .qsfp_drp_clk(drp_clk),
+       .qsfp_drp_rst(drp_rst),
+       .qsfp_drp_addr(drp_addr),
+       .qsfp_drp_di(drp_di),
+       .qsfp_drp_en(drp_en),
+       .qsfp_drp_we(drp_we),
+       .qsfp_drp_do(drp_do),
+       .qsfp_drp_rdy(drp_rdy),
+
+       .qsfp_modprsl(qsfp_modprsl_int),
+       .qsfp_modsell(qsfp_modsell),
+       .qsfp_resetl(qsfp_resetl),
+       .qsfp_intl(qsfp_intl_int),
+       .qsfp_lpmode(qsfp_lpmode));
+
+  end
+  endgenerate
 
 endmodule

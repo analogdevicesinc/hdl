@@ -7,26 +7,50 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 global VIVADO_IP_LIBRARY
+global fpga
 
 adi_ip_create corundum
 
-set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
+set QSFP_ENABLE [get_env_param QSFP_ENABLE 0]
 
-# Corundum instantiates both eth_xcvr_gth_full and eth_xcvr_gth_channel,
-# but only the latter is used at our target configuration
-source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
-set rm_gth_chn eth_xcvr_gth_channel
-set rm_gth_chn [ \
-  get_files "[pwd]/corundum.srcs/sources_1/ip/$rm_gth_chn/$rm_gth_chn.xci"
-]
-if {$rm_gth_chn ne ""} {
-  export_ip_user_files -of_objects $rm_gth_chn -no_script -reset -force -quiet
-  remove_files $rm_gth_chn
+if { $QSFP_ENABLE == 0 } {
+
+  puts "Using KR260 configuration"
+
+  add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v"
+  ]
+
+  set_property board_part xilinx.com:k26i:part0:1.4 [current_project]
+
+  # Corundum instantiates both eth_xcvr_gth_full and eth_xcvr_gth_channel,
+  # but only the latter is used at our target configuration
+  source $ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/ip/eth_xcvr_gth.tcl
+  set rm_gth_chn eth_xcvr_gth_channel
+  set rm_gth_chn [ \
+    get_files "[pwd]/corundum.srcs/sources_1/ip/$rm_gth_chn/$rm_gth_chn.xci"
+  ]
+  if {$rm_gth_chn ne ""} {
+    export_ip_user_files -of_objects $rm_gth_chn -no_script -reset -force -quiet
+    remove_files $rm_gth_chn
+  }
+
+} else {
+
+  puts "Using ZCU102 configuration"
+
+  add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v"
+  ]
+
+  set_property part xczu11eg-ffvf1517-2-i [current_project]
+
+  source $ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/ip/eth_xcvr_gth.tcl
 }
 
 # Corundum sources
 add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v" \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
@@ -142,9 +166,15 @@ adi_ip_files corundum [list \
 ]
 
 adi_ip_properties_lite corundum
+
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
 set cc [ipx::current_core]
+
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TRANSCEIVERS_TYPE')) == "0"} \
+  [ipx::get_ports *sfp* -of_objects [ipx::current_core]]
+set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.TRANSCEIVERS_TYPE')) == "1"} \
+  [ipx::get_ports *qsfp* -of_objects [ipx::current_core]]
 
 set_property display_name "Corundum" $cc
 set_property description "Corundum NIC IP Core" $cc
