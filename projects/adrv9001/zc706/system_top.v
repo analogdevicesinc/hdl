@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2021-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -142,6 +142,13 @@ module system_top (
   output                  tx2_strobe_out_n,
   output                  tx2_strobe_out_p,
 
+  output                  dev_mcs_fpga_out_n,
+  output                  dev_mcs_fpga_out_p,
+  input                   fpga_mcs_in_n,
+  input                   fpga_mcs_in_p,
+  input                   fpga_ref_clk_p,
+  input                   fpga_ref_clk_n,
+
   inout                   sm_fan_tach,
   input                   vadj_err,
   output                  platform_status,
@@ -167,11 +174,29 @@ module system_top (
   wire          tdd_sync_i;
   wire          tdd_sync_cntr;
   wire          mssi_sync;
+  wire          fpga_ref_clk;
+  wire          fpga_mcs_in;
+  wire          mcs_out;
 
   // instantiations
 
+  OBUFDS i_obufds_dev_mcs_fpga_in (
+    .I (mcs_out),
+    .O (dev_mcs_fpga_out_p),
+    .OB (dev_mcs_fpga_out_n));
+
+  IBUFDS i_ibufgs_fpga_ref_clk (
+    .I (fpga_ref_clk_p),
+    .IB (fpga_ref_clk_n),
+    .O (fpga_ref_clk));
+
+  IBUFDS i_ibufgs_fpga_mcs_in (
+    .I (fpga_mcs_in_p),
+    .IB (fpga_mcs_in_n),
+    .O (fpga_mcs_in));
+
   // multi-ssi synchronization
-  //
+
   assign mssi_sync = gpio_o[54];
 
   assign platform_status = vadj_err;
@@ -275,8 +300,11 @@ module system_top (
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
 
-    //FMC connections
     .mssi_sync (mssi_sync),
+    //FMC connections
+    .ref_clk (fpga_ref_clk),
+    .mcs_in (fpga_mcs_in),
+    .mcs_out (mcs_out),
 
     .tx_output_enable (~vadj_err),
 
