@@ -81,6 +81,7 @@ Utilities
    axi_pwm_gen/index
    axi_sysid/index
    axi_tdd/index
+   cn0363/index
    common/ad_dds/index
    corundum/index
    util_axis_fifo/index
