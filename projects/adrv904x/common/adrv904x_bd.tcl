@@ -3,18 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-if {![info exists ADI_PHY_SEL]} {
-  set ADI_PHY_SEL 1
-}
-
-if {![info exists INTF_CFG]} {
-  set INTF_CFG RXTX
-}
-
-if {![info exists TRANSCEIVER_TYPE]} {
-  set TRANSCEIVER_TYPE GTY
-}
-
 set JESD_MODE  $ad_project_params(JESD_MODE)
 set TX_LANE_RATE $ad_project_params(TX_LANE_RATE)
 set RX_LANE_RATE $ad_project_params(RX_LANE_RATE)
@@ -92,15 +80,14 @@ set do_axi_data_width 512
 create_bd_port -dir I core_clk
 
 # dac peripherals
-if {$ADI_PHY_SEL == 1} {
-  ad_ip_instance axi_adxcvr axi_adrv904x_tx_xcvr
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.QPLL_ENABLE 1
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.TX_OR_RX_N 1
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.SYS_CLK_SEL 3
-  ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.OUT_CLK_SEL 3
-}
+
+ad_ip_instance axi_adxcvr axi_adrv904x_tx_xcvr
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.NUM_OF_LANES $TX_NUM_OF_LANES
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.QPLL_ENABLE 1
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.TX_OR_RX_N 1
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.SYS_CLK_SEL 3
+ad_ip_parameter axi_adrv904x_tx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_tx_create axi_adrv904x_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
 ad_ip_parameter axi_adrv904x_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH $TX_DATAPATH_WIDTH
@@ -144,24 +131,17 @@ ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $da
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
 
 # adc peripherals
-if {$ADI_PHY_SEL == 1} {
-  ad_ip_instance axi_adxcvr axi_adrv904x_rx_xcvr
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.QPLL_ENABLE 0
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.TX_OR_RX_N 0
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.SYS_CLK_SEL 3
-  ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.OUT_CLK_SEL 3
-}
+
+ad_ip_instance axi_adxcvr axi_adrv904x_rx_xcvr
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.QPLL_ENABLE 0
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.TX_OR_RX_N 0
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.SYS_CLK_SEL 3
+ad_ip_parameter axi_adrv904x_rx_xcvr CONFIG.OUT_CLK_SEL 3
+
 adi_axi_jesd204_rx_create axi_adrv904x_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
 ad_ip_parameter axi_adrv904x_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_DATAPATH_WIDTH
-
-if {$ADI_PHY_SEL == 0} {
-  # reset generator
-  ad_ip_instance proc_sys_reset core_clk_rstgen
-  ad_connect  core_clk core_clk_rstgen/slowest_sync_clk
-  ad_connect  $sys_cpu_resetn core_clk_rstgen/ext_reset_in
-}
 
 ad_ip_instance util_cpack2 util_adrv904x_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -210,176 +190,80 @@ create_bd_port -dir I $tx_ref_clk_1
 create_bd_port -dir I $rx_ref_clk_1
 
 # common cores
-if {$ADI_PHY_SEL == 1} {
-  ad_ip_instance util_adxcvr util_adrv904x_xcvr
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_OUT_DIV 1
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_OUT_DIV 1
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV 2
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV_4_5 5
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CLK25_DIV 20
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_CLK25_DIV 20
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_PMA_CFG 0x280A
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_FBDIV 33
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_REFCLK_DIV 1
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_INVERT 15
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_LANE_INVERT 255
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG0 0x1fa
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG1 0x23
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG2 0x2
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.A_TXDIFFCTRL 0xC
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG0 0x3
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN2 0x269
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN4 0x164
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3 0x12
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN4 0x12
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.CH_HSPMUX 0x6868
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.PREIQ_FREQ_BST 1
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG0 0x4
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG1 0x0
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG 0x0
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_PI_BIASSET 3
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.POR_CFG 0x0
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG0 0x333c
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG4 0x45
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.PPF0_CFG 0xF00
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP 0xFF
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP_G3 0xF
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_LPF 0x31D
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG2 {0x2631} 
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG3 {0x411C} 
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_WIDEMODE_CDR {"01"} 
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_XMODE_SEL {"0"} 
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG0 {0x0000} 
-  ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG1 {0x0000} 
-} else {
-  source ../common/versal_transceiver.tcl
 
-  set REF_CLK_RATE [ expr { [info exists ad_project_params(REF_CLK_RATE)] \
-                            ? $ad_project_params(REF_CLK_RATE) : 245.76 } ]
+ad_ip_instance util_adxcvr util_adrv904x_xcvr
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
+ad_ip_parameter util_adrv904x_xcvr CONFIG.LINK_MODE $ENCODER_SEL
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_OUT_DIV 1
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV 2
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_FBDIV_4_5 5
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CLK25_DIV 20
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_CLK25_DIV 20
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_PMA_CFG 0x280A
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_FBDIV 33
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_REFCLK_DIV 1
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_LANE_INVERT 15
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_LANE_INVERT 255
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG0 0x1fa
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG1 0x23
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CPLL_CFG2 0x2
+ad_ip_parameter util_adrv904x_xcvr CONFIG.A_TXDIFFCTRL 0xC
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG0 0x3
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN2 0x269
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG2_GEN4 0x164
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3 0x12
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN2 0x12
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN3 0x12
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXCDR_CFG3_GEN4 0x12
+ad_ip_parameter util_adrv904x_xcvr CONFIG.CH_HSPMUX 0x6868
+ad_ip_parameter util_adrv904x_xcvr CONFIG.PREIQ_FREQ_BST 1
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG0 0x4
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXPI_CFG1 0x0
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG 0x0
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TX_PI_BIASSET 3
+ad_ip_parameter util_adrv904x_xcvr CONFIG.POR_CFG 0x0
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG0 0x333c
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CFG4 0x45
+ad_ip_parameter util_adrv904x_xcvr CONFIG.PPF0_CFG 0xF00
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP 0xFF
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_CP_G3 0xF
+ad_ip_parameter util_adrv904x_xcvr CONFIG.QPLL_LPF 0x31D
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG2 {0x2631} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RXDFE_KH_CFG3 {0x411C} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_WIDEMODE_CDR {"01"} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.RX_XMODE_SEL {"0"} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG0 {0x0000} 
+ad_ip_parameter util_adrv904x_xcvr CONFIG.TXPI_CFG1 {0x0000} 
 
-  create_bd_port -dir I gt_reset
-  create_bd_port -dir O gt_powergood
-  create_bd_port -dir O tx_resetdone
-  create_bd_port -dir O rx_resetdone
-  create_bd_port -dir I gt_reset_rx_pll_and_datapath
-  create_bd_port -dir I gt_reset_tx_pll_and_datapath
-  create_bd_port -dir I gt_reset_rx_datapath
-  create_bd_port -dir I gt_reset_tx_datapath
-
-  switch $INTF_CFG {
-    "RXTX" {
-      create_versal_phy jesd204_phy_rxtx $JESD_MODE $RX_NUM_OF_LANES $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
-      set rx_phy jesd204_phy_rxtx
-      set tx_phy jesd204_phy_rxtx
-      ad_connect $rx_ref_clk     ${rx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${rx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${rx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${rx_phy}/s_axi_resetn
-      ad_connect ${rx_phy}/gtpowergood gt_powergood
-      ad_connect ${rx_phy}/gtreset_rx_datapath gt_reset_rx_datapath
-      ad_connect ${rx_phy}/gtreset_tx_datapath gt_reset_tx_datapath
-      ad_connect ${rx_phy}/gtreset_rx_pll_and_datapath gt_reset_rx_pll_and_datapath
-      ad_connect ${rx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
-      ad_connect ${rx_phy}/rx_resetdone rx_resetdone
-      ad_connect ${tx_phy}/tx_resetdone tx_resetdone
-    }
-    "RX" {
-      create_versal_phy jesd204_phy_rx $JESD_MODE $RX_NUM_OF_LANES $RX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
-      set rx_phy jesd204_phy_rx
-      ad_connect $tx_ref_clk     ${rx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${rx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${rx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${rx_phy}/s_axi_resetn
-      ad_connect ${rx_phy}/gtpowergood gt_powergood
-      ad_connect ${rx_phy}/gtreset_rx_datapath gt_reset_rx_datapath
-      ad_connect ${rx_phy}/gtreset_rx_pll_and_datapath gt_reset_rx_pll_and_datapath
-      ad_connect ${rx_phy}/rx_resetdone rx_resetdone
-    }
-    "TX" {
-      create_versal_phy jesd204_phy_tx $JESD_MODE $TX_NUM_OF_LANES $TX_NUM_OF_LANES $RX_LANE_RATE $TX_LANE_RATE $REF_CLK_RATE $TRANSCEIVER_TYPE $INTF_CFG
-      set tx_phy jesd204_phy_tx
-      ad_connect $ref_clock      ${tx_phy}/GT_REFCLK
-      ad_connect gt_reset        ${tx_phy}/gtreset_in
-      ad_connect $sys_cpu_clk    ${tx_phy}/s_axi_clk
-      ad_connect $sys_cpu_resetn ${tx_phy}/s_axi_resetn
-      ad_connect ${tx_phy}/gtpowergood gt_powergood
-      ad_connect ${tx_phy}/gtreset_tx_datapath gt_reset_tx_datapath
-      ad_connect ${tx_phy}/gtreset_tx_pll_and_datapath gt_reset_tx_pll_and_datapath
-      ad_connect ${tx_phy}/tx_resetdone tx_resetdone
-    }
-  }
-}
 # xcvr interfaces
 
-if {$ADI_PHY_SEL == 1} {
-  ad_connect  $sys_cpu_resetn util_adrv904x_xcvr/up_rstn
-  ad_connect  $sys_cpu_clk util_adrv904x_xcvr/up_clk
+ad_connect  $sys_cpu_resetn util_adrv904x_xcvr/up_rstn
+ad_connect  $sys_cpu_clk util_adrv904x_xcvr/up_clk
 
-  # Tx
-  ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_tx_xcvr axi_adrv904x_tx_jesd {} {} core_clk
+# Tx
+ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_tx_xcvr axi_adrv904x_tx_jesd {} {} core_clk
 
-  ad_xcvrpll $tx_ref_clk util_adrv904x_xcvr/qpll_ref_clk_0
-  ad_xcvrpll axi_adrv904x_tx_xcvr/up_pll_rst util_adrv904x_xcvr/up_qpll_rst_0
-  ad_xcvrpll $tx_ref_clk_1 util_adrv904x_xcvr/qpll_ref_clk_4
-  ad_xcvrpll axi_adrv904x_tx_xcvr/up_pll_rst util_adrv904x_xcvr/up_qpll_rst_4
+ad_xcvrpll $tx_ref_clk util_adrv904x_xcvr/qpll_ref_clk_0
+ad_xcvrpll axi_adrv904x_tx_xcvr/up_pll_rst util_adrv904x_xcvr/up_qpll_rst_0
+ad_xcvrpll $tx_ref_clk_1 util_adrv904x_xcvr/qpll_ref_clk_4
+ad_xcvrpll axi_adrv904x_tx_xcvr/up_pll_rst util_adrv904x_xcvr/up_qpll_rst_4
 
-  # Rx
-  ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_rx_xcvr axi_adrv904x_rx_jesd {} {} core_clk
+# Rx
+ad_xcvrcon util_adrv904x_xcvr axi_adrv904x_rx_xcvr axi_adrv904x_rx_jesd {} {} core_clk
 
-  for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
-    if {$i < [expr $RX_NUM_OF_LANES/2]} {
-      ad_xcvrpll  $rx_ref_clk util_adrv904x_xcvr/cpll_ref_clk_$i
-      ad_xcvrpll  axi_adrv904x_rx_xcvr/up_pll_rst util_adrv904x_xcvr/up_cpll_rst_$i
-    } else {
-      ad_xcvrpll  $rx_ref_clk_1 util_adrv904x_xcvr/cpll_ref_clk_$i
-      ad_xcvrpll  axi_adrv904x_rx_xcvr/up_pll_rst util_adrv904x_xcvr/up_cpll_rst_$i
-    }
+for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
+  if {$i < [expr $RX_NUM_OF_LANES/2]} {
+    ad_xcvrpll  $rx_ref_clk util_adrv904x_xcvr/cpll_ref_clk_$i
+    ad_xcvrpll  axi_adrv904x_rx_xcvr/up_pll_rst util_adrv904x_xcvr/up_cpll_rst_$i
+  } else {
+    ad_xcvrpll  $rx_ref_clk_1 util_adrv904x_xcvr/cpll_ref_clk_$i
+    ad_xcvrpll  axi_adrv904x_rx_xcvr/up_pll_rst util_adrv904x_xcvr/up_cpll_rst_$i
   }
-} else {
-    set rx_link_clock  ${rx_phy}/rxusrclk_out
-    # Connect PHY to Link Layer
-    for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
-      ad_connect  axi_adrv904x_rx_jesd/rx_phy${i} ${rx_phy}/rx${i}
-    }
-
-    ad_connect  $rx_link_clock /axi_adrv904x_rx_jesd/link_clk
-    ad_connect  core_clk /axi_adrv904x_rx_jesd/device_clk
-
-    if {$JESD_MODE == "8B10B"} {
-      create_bd_port -dir O rx_sync_0
-      ad_connect axi_adrv904x_rx_jesd/phy_en_char_align ${rx_phy}/en_char_align
-      ad_connect axi_adrv904x_rx_jesd/sync rx_sync_0
-    } else {
-      ad_connect GND ${rx_phy}/en_char_align
-    }
-
-    create_bd_port -dir I rx_sysref_0
-    ad_connect axi_adrv904x_rx_jesd/sysref rx_sysref_0
-  
-    set tx_link_clock ${tx_phy}/txusrclk_out
-    # Connect PHY to Link Layer
-    for {set i 0} {$i < $TX_NUM_OF_LANES} {incr i} {
-      ad_connect  axi_adrv904x_tx_jesd/tx_phy${i} ${tx_phy}/tx${i}
-    }
-
-    ad_connect  $tx_link_clock /axi_adrv904x_tx_jesd/link_clk
-    ad_connect  core_clk /axi_adrv904x_tx_jesd/device_clk
-
-    create_bd_port -dir I tx_sysref_0
-    ad_connect axi_adrv904x_tx_jesd/sysref tx_sysref_0
-    
-    if {$JESD_MODE == "8B10B"} {
-      create_bd_port -dir O tx_sync_0
-      ad_connect axi_adrv904x_tx_jesd/sync tx_sync_0
-    }
 }
 
 # connections (dac)
@@ -467,10 +351,8 @@ ad_connect manual_sync_or/Res tx_adrv904x_tpl_core/dac_tpl_core/dac_sync_manual_
 
 ad_cpu_interconnect 0x44A00000 rx_adrv904x_tpl_core
 ad_cpu_interconnect 0x44A04000 tx_adrv904x_tpl_core
-if {$ADI_PHY_SEL == 1} {
-  ad_cpu_interconnect 0x44A80000 axi_adrv904x_tx_xcvr
-  ad_cpu_interconnect 0x44A60000 axi_adrv904x_rx_xcvr
-}
+ad_cpu_interconnect 0x44A80000 axi_adrv904x_tx_xcvr
+ad_cpu_interconnect 0x44A60000 axi_adrv904x_rx_xcvr
 ad_cpu_interconnect 0x44A90000 axi_adrv904x_tx_jesd
 ad_cpu_interconnect 0x7c420000 axi_adrv904x_tx_dma
 ad_cpu_interconnect 0x44AA0000 axi_adrv904x_rx_jesd
@@ -479,9 +361,8 @@ ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
 ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
 
 ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
-if {$ADI_PHY_SEL == 1} {
-  ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv904x_rx_xcvr/m_axi
-}
+ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv904x_rx_xcvr/m_axi
+
 # interconnect (mem/dac)
 
 ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
@@ -495,44 +376,3 @@ ad_cpu_interrupt ps-10 mb-15 axi_adrv904x_tx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_adrv904x_rx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv904x_tx_dma/irq
 ad_cpu_interrupt ps-14 mb-11 axi_adrv904x_rx_dma/irq
-
-# Dummy outputs for unused lanes
-if {$ADI_PHY_SEL == 1} {
-  if {$INTF_CFG != "TX"} {
-    # Unused Rx lanes
-    for {set i $RX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir I rx_data_${i}_n
-      create_bd_port -dir I rx_data_${i}_p
-    }
-  }
-  if {$INTF_CFG != "RX"} {
-    # Unused Tx lanes
-    for {set i $TX_NUM_OF_LANES} {$i < 8} {incr i} {
-      create_bd_port -dir O tx_data_${i}_n
-      create_bd_port -dir O tx_data_${i}_p
-    }
-  }
-} else {
-    if {$INTF_CFG != "TX"} {
-      create_bd_port -dir I -from 3 -to 0 rx_0_p
-      create_bd_port -dir I -from 3 -to 0 rx_0_n
-      ad_connect rx_0_p ${rx_phy}/rx_0_p
-      ad_connect rx_0_n ${rx_phy}/rx_0_n
-
-      create_bd_port -dir I -from 3 -to 0 rx_1_p
-      create_bd_port -dir I -from 3 -to 0 rx_1_n
-      ad_connect rx_1_p ${rx_phy}/rx_1_p
-      ad_connect rx_1_n ${rx_phy}/rx_1_n
-    }
-    if {$INTF_CFG != "RX"} {
-      create_bd_port -dir O -from 3 -to 0 tx_0_p
-      create_bd_port -dir O -from 3 -to 0 tx_0_n
-      ad_connect tx_0_p ${rx_phy}/tx_0_p
-      ad_connect tx_0_n ${rx_phy}/tx_0_n
-
-      create_bd_port -dir O -from 3 -to 0 tx_1_p
-      create_bd_port -dir O -from 3 -to 0 tx_1_n
-      ad_connect tx_1_p ${rx_phy}/tx_1_p
-      ad_connect tx_1_n ${rx_phy}/tx_1_n
-    }
-}
