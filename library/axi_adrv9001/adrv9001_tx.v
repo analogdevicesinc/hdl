@@ -187,12 +187,12 @@ module adrv9001_tx #(
 
   // reset logic
 
-  always @(posedge tx_dclk_in_s) begin
+  always @(posedge dac_fast_clk) begin
     mssi_sync_d1 <= mssi_sync;
     mssi_sync_d2 <= mssi_sync_d1;
   end
 
-  always @(posedge tx_dclk_in_s, posedge mssi_sync_d2) begin
+  always @(posedge dac_fast_clk, posedge mssi_sync_d2) begin
     if (mssi_sync_d2 == 1'b1) begin
       bufdiv_clr <= 1'b1;
     end else begin
