@@ -35,9 +35,6 @@ Supported carriers
    * - EVAL-ADRV904x
      - :xilinx:`ZCU102`
      - FMC HPC0
-   * -
-     - :xilinx:`VCK190`
-     - FMCP1
 
 Block design
 -------------------------------------------------------------------------------
@@ -122,18 +119,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== =========== ===========
-Instance             ZynqMP      Versal
-==================== =========== ===========
-axi_adrv904x_tx_jesd 0x84A9_0000 0xA4A9_0000
-axi_adrv904x_rx_jesd 0x84AA_0000 0xA4AA_0000
-axi_adrv904x_tx_dma  0x9C42_0000 0xBC42_0000
-axi_adrv904x_rx_dma  0x9C40_0000 0xBC40_0000
-tx_adrv904x_tpl_core 0x84A0_4000 0xA4A0_4000
-rx_adrv904x_tpl_core 0x84A0_0000 0xA4A0_0000
-axi_adrv904x_tx_xcvr 0x84A8_0000 0xA4A8_0000
-axi_adrv904x_rx_xcvr 0x84A6_0000 0xA4A6_0000
-==================== =========== ===========
+==================== ===========
+Instance             ZynqMP     
+==================== ===========
+axi_adrv904x_tx_jesd 0x84A9_0000
+axi_adrv904x_rx_jesd 0x84AA_0000
+axi_adrv904x_tx_dma  0x9C42_0000
+axi_adrv904x_rx_dma  0x9C40_0000
+tx_adrv904x_tpl_core 0x84A0_4000
+rx_adrv904x_tpl_core 0x84A0_0000
+axi_adrv904x_tx_xcvr 0x84A8_0000
+axi_adrv904x_rx_xcvr 0x84A6_0000
+==================== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,7 +273,7 @@ for that project (adrv904x/carrier or adrv904x/carrier).
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
    +-------------------+---------------------------+--------------------------+
-   |                   |                     ZCU102/VCK190                    |
+   |                   |                         ZCU102                       |
    +===================+===========================+==========================+
    | JESD_MODE         |                         64B66B                       |
    +-------------------+---------------------------+--------------------------+
