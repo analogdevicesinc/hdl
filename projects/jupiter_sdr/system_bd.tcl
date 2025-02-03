@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ################################################################################
 
@@ -650,19 +650,3 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "USE_RX_CLK_FOR_TX1=$USE_RX_CLK_FOR_TX1,\
 USE_RX_CLK_FOR_TX2=$USE_RX_CLK_FOR_TX2"
 sysid_gen_sys_init_file $sys_cstring
-
-### CRITICAL WARNING. Downgrade this critical warning to a simple warning.
-## rx1/rx2/tx1/tx2 dclk_out and ref_clk are input ports, there is no FPGA common node
-## between ref_clk and the other clocks, where one clock is sourced from the other.
-## Even though we describe the relationship, between this clocks in the design constraints.
-## Vivado tools(report_clock_interaction) cannot guarantee that the clocks are related.
-## We know the interactions between these clocks and can consider them safe so we will denote the CRITICAL WARNING.
-#set_msg_config -id {Timing 38-249} -string "Generated clock rx1_dclk_out has no logical paths from master clock ref_clk." -new_severity WARNING
-#set_msg_config -id {Timing 38-249} -string "Generated clock rx2_dclk_out has no logical paths from master clock ref_clk." -new_severity WARNING
-#set_msg_config -id {Timing 38-249} -string "Generated clock tx1_dclk_out has no logical paths from master clock ref_clk." -new_severity WARNING
-#set_msg_config -id {Timing 38-249} -string "Generated clock tx2_dclk_out has no logical paths from master clock ref_clk." -new_severity WARNING
-#set_msg_config -id {Timing 38-285} -string "Generated clock rx1_dclk_out has no logical paths from master clock fpga_ref_clk_p." -new_severity WARNING
-#set_msg_config -id {Timing 38-285} -string "Generated clock rx2_dclk_out has no logical paths from master clock fpga_ref_clk_p." -new_severity WARNING
-#set_msg_config -id {Timing 38-285} -string "Generated clock tx1_dclk_out has no logical paths from master clock fpga_ref_clk_p." -new_severity WARNING
-#set_msg_config -id {Timing 38-285} -string "Generated clock tx2_dclk_out has no logical paths from master clock fpga_ref_clk_p." -new_severity WARNING
-#
