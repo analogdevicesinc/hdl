@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -48,16 +48,4 @@ set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports tx1_strobe_out_p]
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports tx2_idata_out_p]
 
 set_property  -dict {PACKAGE_PIN A20   IOSTANDARD LVCMOS33} [get_ports tdd_sync]   ;#PMOD0_0 J55.1
-
-# Debug port (Proto header)
-set_property -dict {PACKAGE_PIN H13 IOSTANDARD LVCMOS33} [get_ports proto_hdr[0]]  ;# J3 24 L8P_HDGC_50_P
-set_property -dict {PACKAGE_PIN G13 IOSTANDARD LVCMOS33} [get_ports proto_hdr[1]]  ;# J3 22 L8N_HDGC_50_N
-set_property -dict {PACKAGE_PIN H16 IOSTANDARD LVCMOS33} [get_ports proto_hdr[2]]  ;# J3 20 L11P_AD9P_50_P
-set_property -dict {PACKAGE_PIN G16 IOSTANDARD LVCMOS33} [get_ports proto_hdr[3]]  ;# J3 18 L11N_AD9N_50_N
-set_property -dict {PACKAGE_PIN J16 IOSTANDARD LVCMOS33} [get_ports proto_hdr[4]]  ;# J3 16 L12P_AD8P_50_P
-set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports proto_hdr[5]]  ;# J3 14 L12N_AD8N_50_N
-set_property -dict {PACKAGE_PIN G15 IOSTANDARD LVCMOS33} [get_ports proto_hdr[6]]  ;# J3 12 L9P_AD11P_50_P
-set_property -dict {PACKAGE_PIN G14 IOSTANDARD LVCMOS33} [get_ports proto_hdr[7]]  ;# J3 10 L9N_AD11N_50_N
-set_property -dict {PACKAGE_PIN J14 IOSTANDARD LVCMOS33} [get_ports proto_hdr[8]]  ;# J3  8 L10P_AD10P_50_P
-set_property -dict {PACKAGE_PIN H14 IOSTANDARD LVCMOS33} [get_ports proto_hdr[9]]  ;# J3  6 L10N_AD10N_50_N
 

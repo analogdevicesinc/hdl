@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -21,35 +21,6 @@ set_property  -dict {PACKAGE_PIN A17  IOSTANDARD LVCMOS18}  [get_ports dgpio_9] 
 set_property  -dict {PACKAGE_PIN N17  IOSTANDARD LVCMOS18}  [get_ports dgpio_10]          ; # H16 FMC_HPC0_LA11_P      IO_L5P_T0_34
 set_property  -dict {PACKAGE_PIN D21  IOSTANDARD LVCMOS18}  [get_ports dgpio_11]          ; # C27 FMC_HPC0_LA27_N      IO_L17N_T2_AD5N_35
 
-set_property  -dict {PACKAGE_PIN K19  IOSTANDARD DIFF_SSTL18_II} [get_ports fpga_mcs_out_p] ; ## C18  FMC_LPC_LA14_P
-set_property  -dict {PACKAGE_PIN K20  IOSTANDARD DIFF_SSTL18_II} [get_ports fpga_mcs_out_n] ; ## C19  FMC_LPC_LA14_N
-
-set_property OFFCHIP_TERM NONE [get_ports [list dev_mcs_fpga_out_p]]
-set_property is_loc_fixed true [get_ports [list dev_mcs_fpga_out_p]]
-set_property is_loc_fixed true [get_ports [list dev_mcs_fpga_out_n]]
-
-set_property  -dict {PACKAGE_PIN A21  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_p]  ; ## H37  FMC_LPC_LA32_P
-set_property  -dict {PACKAGE_PIN A22  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_n]  ; ## H38  FMC_LPC_LA32_N
-set_property  -dict {PACKAGE_PIN D18  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_p] ; ## G02  FMC_LPC_CLK1_M2C_P
-set_property  -dict {PACKAGE_PIN C19  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_n] ; ## G03  FMC_LPC_CLK1_M2C_N
-
-
-# set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports [list fpga_mcs_in_p]]
-# set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports [list fpga_ref_clk_p]]
-# set_property IOSTANDARD DIFF_HSTL_I_18 [get_ports [list dev_mcs_fpga_out_p]]
-# set_property SLEW {} [get_ports [list dev_mcs_fpga_out_p]]
-# set_property OFFCHIP_TERM NONE [get_ports [list dev_mcs_fpga_out_p]]
-# set_property OFFCHIP_TERM NONE [get_ports [list fpga_mcs_in_p]]
-# set_property in_term UNTUNED_SPLIT_50 [get_ports [list fpga_mcs_in_p]]
-# set_property in_term UNTUNED_SPLIT_50 [get_ports [list fpga_ref_clk_p]]
-
-# set_property in_term UNTUNED_SPLIT_50 [get_ports [list fpga_mcs_in_p]]
-# set_property in_term UNTUNED_SPLIT_50 [get_ports [list fpga_ref_clk_p]]
-# set_property IOSTANDARD DIFF_HSTL_II_18 [get_ports [list fpga_ref_clk_p]]
-# set_property IOSTANDARD DIFF_HSTL_II_18 [get_ports [list fpga_mcs_in_p]]
-# set_property IOSTANDARD DIFF_HSTL_II_18 [get_ports [list dev_mcs_fpga_out_p]]
-
-
 set_property  -dict {PACKAGE_PIN C15  IOSTANDARD LVCMOS18}  [get_ports gp_int]            ; # H34 FMC_HPC0_LA30_P      IO_L7P_T1_AD2P_35
 set_property  -dict {PACKAGE_PIN L17  IOSTANDARD LVCMOS18}  [get_ports mode]              ; # D17 FMC_HPC0_LA13_P      IO_L4P_T0_34
 set_property  -dict {PACKAGE_PIN M17  IOSTANDARD LVCMOS18}  [get_ports reset_trx]         ; # D18 FMC_HPC0_LA13_N      IO_L4N_T0_34
@@ -69,6 +40,14 @@ set_property  -dict {PACKAGE_PIN C17  IOSTANDARD LVCMOS18}  [get_ports tx2_enabl
 
 set_property  -dict {PACKAGE_PIN B16  IOSTANDARD LVCMOS18}  [get_ports vadj_err]          ; # G33 FMC_HPC0_LA31_P      IO_L8P_T1_AD10P_35
 set_property  -dict {PACKAGE_PIN B17  IOSTANDARD LVCMOS18}  [get_ports platform_status]   ; # G34 FMC_HPC0_LA31_N      IO_L8N_T1_AD10N_35
+
+set_property  -dict {PACKAGE_PIN K19  IOSTANDARD DIFF_SSTL18_II} [get_ports dev_mcs_fpga_out_p] ; ## C18  FMC_LPC_LA14_P
+set_property  -dict {PACKAGE_PIN K20  IOSTANDARD DIFF_SSTL18_II} [get_ports dev_mcs_fpga_out_n] ; ## C19  FMC_LPC_LA14_N
+
+set_property  -dict {PACKAGE_PIN A21  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_p]  ; ## H37  FMC_LPC_LA32_P
+set_property  -dict {PACKAGE_PIN A22  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_n]  ; ## H38  FMC_LPC_LA32_N
+set_property  -dict {PACKAGE_PIN D18  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_p] ; ## G02  FMC_LPC_CLK1_M2C_P
+set_property  -dict {PACKAGE_PIN C19  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_n] ; ## G03  FMC_LPC_CLK1_M2C_N
 
 # redefine contraints from common file for VADJ 1.8V
 set_property  -dict {PACKAGE_PIN  L16   IOSTANDARD LVCMOS18} [get_ports otg_vbusoc]

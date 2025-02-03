@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -47,10 +47,10 @@ set_property  -dict {PACKAGE_PIN L12    IOSTANDARD LVDS}                        
 
 create_clock -name ref_clk        -period  8.00 [get_ports fpga_ref_clk_p]
 
-create_clock -name rx1_dclk_out   -period  2.034 [get_ports rx1_dclk_in_p]
-create_clock -name rx2_dclk_out   -period  2.034 [get_ports rx2_dclk_in_p]
-create_clock -name tx1_dclk_out   -period  2.034 [get_ports tx1_dclk_in_p]
-create_clock -name tx2_dclk_out   -period  2.034 [get_ports tx2_dclk_in_p]
+create_clock -name rx1_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports rx1_dclk_in_p]
+create_clock -name rx2_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports rx2_dclk_in_p]
+create_clock -name tx1_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports tx1_dclk_in_p]
+create_clock -name tx2_dclk_out   -period  2.0  -waveform {0.0 1.0} [get_ports tx2_dclk_in_p]
 
 # Allow max skew of 0.2 ns between input clocks
 set_clock_latency -source -early -0.1 [get_clocks rx1_dclk_out]
@@ -69,3 +69,17 @@ set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_2 \
         [get_nets -of [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_rx_2_phy/i_clk_buf_fast/O]] \
   ]
 
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_3 \
+  [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_div_clk_buf/O}]] \
+        [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_1_phy/i_clk_buf_fast/O}]] \
+  ]
+
+set_property CLOCK_DELAY_GROUP BALANCE_CLOCKS_4 \
+  [list [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_div_clk_buf/O}]] \
+        [get_nets -of [get_pins {i_system_wrapper/system_i/axi_adrv9001/inst/i_if/i_tx_2_phy/i_clk_buf_fast/O}]] \
+  ]
+
+set_input_delay -clock [get_clocks {ref_clk}] -min -add_delay 2.0 [get_ports {fpga_mcs_in_p}]
+set_input_delay -clock [get_clocks {ref_clk}] -max -add_delay 3.0 [get_ports {fpga_mcs_in_p}]
+
+set_false_path -to [get_pins i_system_wrapper/system_i/axi_adrv9001/inst/i_sync/mssi_sync_in_d_reg/D]
