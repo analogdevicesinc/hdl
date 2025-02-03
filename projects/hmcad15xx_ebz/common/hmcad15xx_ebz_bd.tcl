@@ -42,13 +42,14 @@ for {set i 0} {$i < 4} {incr i} {
   ad_connect axi_hmcad15xx_adc/adc_data_$i    util_hmcad15xx_adc_pack/fifo_wr_data_$i
 }
 
-ad_connect axi_hmcad15xx_adc/s_axi_aclk    sys_ps7/FCLK_CLK0
+ad_connect axi_hmcad15xx_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_adc/clk_in_p      clk_in_p
 ad_connect axi_hmcad15xx_adc/clk_in_n      clk_in_n
 ad_connect axi_hmcad15xx_adc/fclk_p        fclk_p
 ad_connect axi_hmcad15xx_adc/fclk_n        fclk_n
 ad_connect axi_hmcad15xx_adc/data_in_p     data_in_p
 ad_connect axi_hmcad15xx_adc/data_in_n     data_in_n
+ad_connect axi_hmcad15xx_adc/delay_clk     $sys_iodelay_clk
 
 ad_connect axi_hmcad15xx_adc/adc_valid     util_hmcad15xx_adc_pack/fifo_wr_en
 ad_connect axi_hmcad15xx_adc/adc_clk       util_hmcad15xx_adc_pack/clk
@@ -74,4 +75,3 @@ ad_cpu_interconnect 0x43c00000 axi_hmcad15xx_adc
 
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_cpu_clk hmcad15xx_dma/m_dest_axi
-

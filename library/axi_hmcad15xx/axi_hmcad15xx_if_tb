@@ -1,7 +1,0 @@
-#!/bin/bash
-
-SOURCE="$0.v"
-SOURCE+=" axi_hmcad15xx_if.v"
-
-cd `dirname $0`
-source ../common/tb/run_tb.sh

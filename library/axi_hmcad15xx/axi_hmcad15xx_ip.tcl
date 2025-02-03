@@ -10,10 +10,11 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create axi_hmcad15xx
 
 adi_ip_files axi_hmcad15xx [list \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_clk.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_serdes_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_datafmt.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
@@ -26,6 +27,7 @@ adi_ip_files axi_hmcad15xx [list \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "sample_assembly.v"  \
   "axi_hmcad15xx_if.v" \
   "axi_hmcad15xx.v" ]
 

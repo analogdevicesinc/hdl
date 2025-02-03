@@ -13,6 +13,7 @@ GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += sample_assembly.v
 GENERIC_DEPS += axi_hmcad15xx.v
 GENERIC_DEPS += axi_hmcad15xx_if.v
 
@@ -21,12 +22,11 @@ XILINX_DEPS += ../common/up_delay_cntrl.v
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
+XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_hmcad15xx_ip.tcl
-
-INTEL_DEPS += axi_hmcad15xx_hw.tcl
 
 include ../scripts/library.mk

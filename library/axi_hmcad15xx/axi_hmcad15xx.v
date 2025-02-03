@@ -62,17 +62,17 @@ module axi_hmcad15xx #(
 
   output          adc_valid,
 
-
-
-
-  output  [7:0]  adc_data_0,
-  output  [7:0]  adc_data_1,
-  output  [7:0]  adc_data_2,
-  output  [7:0]  adc_data_3,
-  output  [7:0]  adc_data_4,
+  output  [7:0]   adc_data_0,
+  output  [7:0]   adc_data_1,
+  output  [7:0]   adc_data_2,
+  output  [7:0]   adc_data_3,
 
   output          adc_clk,
   output          adc_reset,
+
+  // delay interface
+
+  input           delay_clk,
 
   input           s_axi_aclk,
   input           s_axi_aresetn,
@@ -97,6 +97,16 @@ module axi_hmcad15xx #(
   input           s_axi_rready
 );
 
+localparam DELAY_CTRL_NUM_LANES = 9;
+localparam DELAY_CTRL_DRP_WIDTH = 5;
+
+// internal signals
+
+wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
+wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
+wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
+
+
   // internal registers
 
   reg  [31:0] up_rdata = 'd0;
@@ -118,14 +128,18 @@ module axi_hmcad15xx #(
   wire        up_rreq_s;
   wire [13:0] up_addr_s;
   wire [31:0] up_wdata_s;
-  wire [31:0] up_rdata_s[0:8];
-  wire  [8:0] up_rack_s;
-  wire  [8:0] up_wack_s;
+
+  wire [31:0] up_rdata_s[0:4];
+
+  wire  [4:0] up_rack_s;
+  wire  [4:0] up_wack_s;
+
   wire  [7:0] adc_enable;
   wire  [4:0] adc_num_lanes;
   wire        adc_crc_enable;
-  wire  [7:0] adc_status_header[0:7];
-  wire  [7:0] adc_crc_err;
+
+  wire        delay_rst;
+
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -137,18 +151,13 @@ module axi_hmcad15xx #(
   assign adc_enable_2 = adc_enable[2];
   assign adc_enable_3 = adc_enable[3];
 
-
-
-
-  assign adc_crc_ch_mismatch = adc_crc_err;
-
   integer j;
 
   always @(*) begin
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
-    for (j = 0; j <= 8; j=j+1) begin
+    for (j = 0; j <= 5; j=j+1) begin
       up_rack_r = up_rack_r | up_rack_s[j];
       up_wack_r = up_wack_r | up_wack_s[j];
       up_rdata_r = up_rdata_r | up_rdata_s[j];
@@ -193,8 +202,8 @@ module axi_hmcad15xx #(
         .adc_pn_oos (1'b0),
         .adc_or (1'b0),
         .adc_read_data ('d0),
-        .adc_status_header(adc_status_header[i]),
-        .adc_crc_err(adc_crc_err[i]),
+        .adc_status_header(),
+        .adc_crc_err(),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
         .up_adc_or (),
@@ -227,12 +236,17 @@ module axi_hmcad15xx #(
 
   // adc interface
 
+  wire             delay_locked;
+
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
-    .DELAY_REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY),
-    .NUM_CHANNELS(NUM_CHANNELS)
+    .DELAY_REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
   ) i_axi_hmcad15xx_if (
+    .up_clk(up_clk),
+    .adc_rst(adc_rst_s),
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
     .clk_in_p(clk_in_p),
     .clk_in_n(clk_in_n),
     .fclk_p(fclk_p),
@@ -244,7 +258,11 @@ module axi_hmcad15xx #(
     .adc_data_0 (adc_data_0),
     .adc_data_1 (adc_data_1),
     .adc_data_2 (adc_data_2),
-    .adc_data_3 (adc_data_3));
+    .adc_data_3 (adc_data_3),
+    .up_dld(up_dld),
+    .up_dwdata(up_dwdata),
+    .up_drdata(up_drdata),
+    .delay_locked(delay_locked));
 
   // adc up common
 
@@ -301,11 +319,36 @@ module axi_hmcad15xx #(
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s[NUM_CHANNELS]),
+    .up_wack (up_wack_s[4]),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s[NUM_CHANNELS]),
-    .up_rack (up_rack_s[NUM_CHANNELS]));
+    .up_rdata (up_rdata_s[4]),
+    .up_rack (up_rack_s[4]));
+
+
+ // adc delay control
+
+  up_delay_cntrl #(
+    .DATA_WIDTH(DELAY_CTRL_NUM_LANES),
+    .DRP_WIDTH(DELAY_CTRL_DRP_WIDTH),
+    .BASE_ADDRESS(6'h02)
+  ) i_delay_cntrl (
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
+    .delay_locked(delay_locked),
+    .up_dld(up_dld),
+    .up_dwdata(up_dwdata),
+    .up_drdata(up_drdata),
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_s[5]),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_s[5]),
+    .up_rack(up_rack_s[5]));
 
   // up bus interface
 
