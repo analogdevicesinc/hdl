@@ -3,12 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# create debug ports
-create_bd_port -dir O adc1_div_clk
-create_bd_port -dir O adc2_div_clk
-create_bd_port -dir O dac1_div_clk
-create_bd_port -dir O dac2_div_clk
-
 create_bd_port -dir I tx_output_enable
 
 create_bd_port -dir I ref_clk
@@ -313,11 +307,3 @@ ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
 ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
 ad_cpu_interrupt ps-9  mb-6 axi_adrv9001_tx1_dma/irq
 ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
-
-
-# Connect debug ports
-ad_connect  axi_adrv9001/adc_1_clk adc1_div_clk
-ad_connect  axi_adrv9001/adc_2_clk adc2_div_clk
-ad_connect  axi_adrv9001/dac_1_clk dac1_div_clk
-ad_connect  axi_adrv9001/dac_2_clk dac2_div_clk
-
