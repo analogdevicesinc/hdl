@@ -48,6 +48,14 @@ set_property  -dict {PACKAGE_PIN AD29	 IOSTANDARD LVCMOS18}  [get_ports platform
 
 set_property  -dict {PACKAGE_PIN AJ21  IOSTANDARD LVCMOS18}  [get_ports  tdd_sync]      ;#PMOD1_0 J58.1
 
+set_property  -dict {PACKAGE_PIN AF18 IOSTANDARD DIFF_SSTL18_II} [get_ports dev_mcs_fpga_out_p]
+set_property  -dict {PACKAGE_PIN AF17 IOSTANDARD DIFF_SSTL18_II} [get_ports dev_mcs_fpga_out_n]
+
+set_property  -dict {PACKAGE_PIN Y26  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_p]
+set_property  -dict {PACKAGE_PIN Y27  IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_mcs_in_n]
+set_property  -dict {PACKAGE_PIN AC28 IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_p]
+set_property  -dict {PACKAGE_PIN AD28 IOSTANDARD DIFF_HSTL_II_18} [get_ports fpga_ref_clk_n]
+
 # set IOSTANDARD according to VADJ 1.8V
 
 # hdmi

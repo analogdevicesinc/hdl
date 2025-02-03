@@ -194,6 +194,7 @@ module system_top (
   wire            tdd_sync_loc;
   wire            tdd_sync_i;
   wire            tdd_sync_cntr;
+  wire            mssi_sync;
   wire            fpga_ref_clk;
   wire            fpga_mcs_in;
   wire            mcs_out;
@@ -329,11 +330,11 @@ module system_top (
     .iic_mux_sda_t (iic_mux_sda_t_s),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
+    .mssi_sync (mssi_sync),
     //FMC connections
     .ref_clk (fpga_ref_clk),
     .mcs_in (fpga_mcs_in),
     .mcs_out (mcs_out),
-    .mssi_sync (mssi_sync),
 
     .tx_output_enable (~vadj_err),
 
