@@ -79,12 +79,12 @@ wire clk_in_s;
 wire adc_clk_in_fast;
 wire delay_locked_2;
 
-IBUFGDS i_clk_in_ibuf(
+IBUFDS i_clk_in_ibuf(
   .I (clk_in_p),
   .IB(clk_in_n),
   .O(clk_in_s));
 
-BUFIO i_clk_buf(
+BUFH i_clk_buf(
   .I(clk_in_s),
   .O(adc_clk_in_fast));
 
@@ -99,14 +99,14 @@ BUFIO i_clk_buf(
 
   assign adc_clk = adc_clk_div;
 
-wire [7:0] data_s0;
-wire [7:0] data_s1;
-wire [7:0] data_s2;
-wire [7:0] data_s3;
-wire [7:0] data_s4;
-wire [7:0] data_s5;
-wire [7:0] data_s6;
-wire [7:0] data_s7;
+wire [8:0] data_s0;
+wire [8:0] data_s1;
+wire [8:0] data_s2;
+wire [8:0] data_s3;
+wire [8:0] data_s4;
+wire [8:0] data_s5;
+wire [8:0] data_s6;
+wire [8:0] data_s7;
 
 
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
@@ -158,54 +158,21 @@ ad_serdes_in # (
   .data_s5(data_s5),
   .data_s6(data_s6),
   .data_s7(data_s7),
-  .data_in_p(data_in_p),
-  .data_in_n(data_in_n),
+  .data_in_p({fclk_p, data_in_p}),
+  .data_in_n({fclk_n, data_in_n}),
   .up_clk(up_clk),
-  .up_dld(up_dld[7:0]),
-  .up_dwdata(up_dwdata[39:0]),
-  .up_drdata(up_drdata[39:0]),
+  .up_dld(up_dld),
+  .up_dwdata(up_dwdata),
+  .up_drdata(up_drdata),
   .delay_clk(delay_clk),
   .delay_rst(delay_rst),
   .delay_locked(delay_locked)
 );
 
-wire [7:0] frame_data;
-
-ad_serdes_in # (
-  .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-  .IODELAY_GROUP(IO_DELAY_GROUP),
-  .IODELAY_CTRL(0),
-  .DATA_WIDTH(1),
-  .DRP_WIDTH(DRP_WIDTH),
-  .EXT_SERDES_RESET(1),
-  .SERDES_FACTOR(8),
-  .DDR_OR_SDR_N(1),
-  .CMOS_LVDS_N(0)
-) ad_serdes_frame_inst (
-  .rst(serdes_reset_s),
-  .ext_serdes_rst(serdes_reset_s),
-  .clk(adc_clk_in_fast),
-  .div_clk(adc_clk_div),
-  .data_s0(frame_data[0]),
-  .data_s1(frame_data[1]),
-  .data_s2(frame_data[2]),
-  .data_s3(frame_data[3]),
-  .data_s4(frame_data[4]),
-  .data_s5(frame_data[5]),
-  .data_s6(frame_data[6]),
-  .data_s7(frame_data[7]),
-  .data_in_p(fclk_p),
-  .data_in_n(fclk_n),
-  .up_clk(up_clk),
-  .up_dld(up_dld[8]),
-  .up_dwdata(up_dwdata[44:40]),
-  .up_drdata(up_drdata[44:40]),
-  .delay_clk(delay_clk),
-  .delay_rst(delay_rst),
-  .delay_locked(delay_locked_2)
-);
 
 
+
+  wire [7:0] frame_data;
   wire [7:0] serdes_data_7;
   wire [7:0] serdes_data_6;
   wire [7:0] serdes_data_5;
@@ -215,21 +182,21 @@ ad_serdes_in # (
   wire [7:0] serdes_data_1;
   wire [7:0] serdes_data_0;
 
-  assign {serdes_data_7[0],serdes_data_6[0],serdes_data_5[0],serdes_data_4[0],
+  assign {frame_data[0],serdes_data_7[0],serdes_data_6[0],serdes_data_5[0],serdes_data_4[0],
           serdes_data_3[0],serdes_data_2[0],serdes_data_1[0],serdes_data_0[0]} = data_s0;  //latest bit received
-  assign {serdes_data_7[1],serdes_data_6[1],serdes_data_5[1],serdes_data_4[1],
+  assign {frame_data[1],serdes_data_7[1],serdes_data_6[1],serdes_data_5[1],serdes_data_4[1],
           serdes_data_3[1],serdes_data_2[1],serdes_data_1[1],serdes_data_0[1]} = data_s1;  //
-  assign {serdes_data_7[2],serdes_data_6[2],serdes_data_5[2],serdes_data_4[2],
+  assign {frame_data[2],serdes_data_7[2],serdes_data_6[2],serdes_data_5[2],serdes_data_4[2],
           serdes_data_3[2],serdes_data_2[2],serdes_data_1[2],serdes_data_0[2]} = data_s2;  //
-  assign {serdes_data_7[3],serdes_data_6[3],serdes_data_5[3],serdes_data_4[3],
+  assign {frame_data[3],serdes_data_7[3],serdes_data_6[3],serdes_data_5[3],serdes_data_4[3],
           serdes_data_3[3],serdes_data_2[3],serdes_data_1[3],serdes_data_0[3]} = data_s3;  //
-  assign {serdes_data_7[4],serdes_data_6[4],serdes_data_5[4],serdes_data_4[4],
+  assign {frame_data[4],serdes_data_7[4],serdes_data_6[4],serdes_data_5[4],serdes_data_4[4],
           serdes_data_3[4],serdes_data_2[4],serdes_data_1[4],serdes_data_0[4]} = data_s4;  //
-  assign {serdes_data_7[5],serdes_data_6[5],serdes_data_5[5],serdes_data_4[5],
+  assign {frame_data[5],serdes_data_7[5],serdes_data_6[5],serdes_data_5[5],serdes_data_4[5],
           serdes_data_3[5],serdes_data_2[5],serdes_data_1[5],serdes_data_0[5]} = data_s5;  //
-  assign {serdes_data_7[6],serdes_data_6[6],serdes_data_5[6],serdes_data_4[6],
+  assign {frame_data[6],serdes_data_7[6],serdes_data_6[6],serdes_data_5[6],serdes_data_4[6],
           serdes_data_3[6],serdes_data_2[6],serdes_data_1[6],serdes_data_0[6]} = data_s6;  //
-  assign {serdes_data_7[7],serdes_data_6[7],serdes_data_5[7],serdes_data_4[7],
+  assign {frame_data[7],serdes_data_7[7],serdes_data_6[7],serdes_data_5[7],serdes_data_4[7],
           serdes_data_3[7],serdes_data_2[7],serdes_data_1[7],serdes_data_0[7]} = data_s7;  // oldest bit received
 
 wire [15:0] data_out;
