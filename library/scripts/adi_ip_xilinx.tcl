@@ -435,11 +435,12 @@ proc adi_init_bd_tcl {} {
   foreach i $auto_set_param_list {
     if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
       append auto_set_param "    $i \\\n"
+      set j $i
     }
   }
   if { $auto_set_param ne "" } {
     puts $bd_tcl "  bd::mark_propagate_only \$ip \" \\"
-    regsub "${i} \\\\" $auto_set_param "$i\"" auto_set_param
+    regsub "${j} \\\\" $auto_set_param "$j\"" auto_set_param
     puts $bd_tcl $auto_set_param
   }
 
@@ -447,11 +448,12 @@ proc adi_init_bd_tcl {} {
   foreach i $auto_set_param_list_overwritable {
     if { [ipx::get_user_parameters $i -of_objects $cc -quiet] ne "" } {
       append auto_set_overwritable_param "    $i \\\n"
+      set j $i
     }
   }
   if { $auto_set_overwritable_param ne "" } {
     puts $bd_tcl "  bd::mark_propagate_override \$ip \" \\"
-    regsub "${i} \\\\" $auto_set_overwritable_param "$i\"" auto_set_overwritable_param
+    regsub "${j} \\\\" $auto_set_overwritable_param "$j\"" auto_set_overwritable_param
     puts $bd_tcl $auto_set_overwritable_param
   }
   puts $bd_tcl "  adi_auto_assign_device_spec \$cellpath"
