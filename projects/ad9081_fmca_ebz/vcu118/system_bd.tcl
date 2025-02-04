@@ -219,7 +219,7 @@ ad_ip_instance util_cpack2 util_corundum_cpack [list \
 ]
 
 ad_connect util_corundum_cpack/clk rx_device_clk
-ad_connect util_corundum_cpack/reset rx_device_clk_rstgen/peripheral_reset
+# ad_connect util_corundum_cpack/reset rx_device_clk_rstgen/peripheral_reset
 ad_connect util_corundum_cpack/fifo_wr_en rx_mxfe_tpl_core/adc_valid_0
 for {set i 0} {$i<8} {incr i} {
   ad_connect util_corundum_cpack/enable_${i} rx_mxfe_tpl_core/adc_enable_${i}
