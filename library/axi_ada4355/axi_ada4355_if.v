@@ -102,7 +102,7 @@
    wire                 adc_clk_div;
    wire [ 7:0]          serdes_data_0;
    wire [ 7:0]          serdes_data_1;
-   wire [15:0]          pattern_value;
+   wire [7:0]          pattern_value;
    wire [ 4:0]          shift_cnt_value;
    (* mark_debug = "true" *) wire [15:0]          serdes_data;
 
@@ -128,8 +128,8 @@
    wire  data_s6_frame;
    wire  data_s7_frame;
 
-   wire  data_out;
-   wire  data_out_frame;
+   //wire  data_out;
+   //wire  data_out_frame;
 
    (* mark_debug = "true" *) reg  [5:0]  serdes_reset = 6'b000110;
    (* mark_debug = "true" *) reg         sync_status_int = 1'b0;
@@ -228,7 +228,7 @@
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast),
     .div_clk(adc_clk_div),
-    .data_out(data_out),
+    //.data_out(data_out),
     .data_s0(data_s0),
     .data_s1(data_s1),
     .data_s2(data_s2),
@@ -264,7 +264,7 @@
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast_frame),
     .div_clk(adc_clk_div_frame),
-    .data_out(data_out_frame),
+    //.data_out(data_out_frame),
     .data_s0(data_s0_frame),
     .data_s1(data_s1_frame),
     .data_s2(data_s2_frame),
@@ -351,30 +351,75 @@ always @(posedge adc_clk_div) begin
 end
 
 // enable bitslip
-always @(posedge adc_clk_div) begin
+/*always @(posedge adc_clk_div) begin
   slip_d <= bitslip_enable;
   slip_dd <= slip_d;
-  if (serdes_reset_s || (data_frame_shifted == 8'hE1))
+  if (serdes_reset_s || (data_frame_shifted == pattern_value))
     shift_cnt_en <= 1'b0;
   else if (slip_d & ~slip_dd)
     shift_cnt_en <= 1'b1;
 end
+*/
+//// find offset
+//always @(posedge adc_clk_div) begin
+//  if(shift_cnt_en) begin
+//    if ((shift_cnt == shift_cnt_value) || serdes_reset_s) begin
+//      shift_cnt <= 0;
+//      sync_status_int <= 1'b0;
+//    end //else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
+//      else if (data_frame_shifted != pattern_value /*&&(serdes_valid)*/) begin
+//        data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
+//        shift_cnt <= shift_cnt + 1;
+//    end
+//    if (data_frame_shifted == pattern_value) begin
+//      sync_status_int <= 1'b1;
+//    end
+//  end
+//end
 
-// find offset
+
+reg [ 2:0] state = 3'h0;
+
+  localparam [ 2:0] INIT = 3'h0,
+                    CNT_UPDATE = 3'h1,
+                    FRAME_SHIFTED = 3'h2,
+                    RESET = 3'h3;
+
 always @(posedge adc_clk_div) begin
-  if(shift_cnt_en) begin
-    if ((shift_cnt == shift_cnt_value) || serdes_reset_s) begin
-      shift_cnt <= 0;
-      sync_status_int <= 1'b0;
-    end //else if( serdes_data_frame != pattern_value &&(serdes_valid_d & ~serdes_valid) ) begin
-      else if (data_frame_shifted != 8'hE1 /*&&(serdes_valid)*/) begin
-      shift_cnt <= shift_cnt + 1;
+  if (serdes_reset_s) begin
+    state <= INIT;
+    shift_cnt <= 0;
+  end else begin
+
+    case (state)
+        INIT : begin
+          if (data_frame_shifted != pattern_value) begin
+            state <= CNT_UPDATE;          
+          end else begin
+            state <= INIT;
+          end
+        end
+        
+        CNT_UPDATE : begin
+          shift_cnt <= shift_cnt + 1;
+          state <= FRAME_SHIFTED;
+        end
+        
+        FRAME_SHIFTED : begin
+           data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
+           state <= INIT;
+        end
+        
+        RESET : begin 
+            shift_cnt <= 0;
+            state <= INIT;
+        end
+        
+        default :
+          state <= INIT;
+      endcase
     end
-    if (data_frame_shifted == 8'hE1) begin
-      sync_status_int <= 1'b1;
-    end
-  end
-end
+   end
 
 always @(posedge adc_clk_div) begin
   reg_test[0] <= serdes_data_0[0];
@@ -388,7 +433,7 @@ always @(posedge clk_in_s or negedge areset) begin
     bufr_alignment_bufr <= 1'b1; // reset condition
   end else begin
     if (bufr_alignment) begin
-      bufr_alignment_bufr <=0;
+      bufr_alignment_bufr <=0 ;
     end
     bufr_alignment <= 1'b1;
   end
@@ -396,9 +441,9 @@ end
 
 always @(posedge adc_clk_div) begin
   adc_data_shifted <= {serdes_data_16_d,serdes_data_16} >> shift_cnt;
-  data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
+//  data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
   serdes_valid_d <= serdes_valid;
-  end
+end
 
   assign adc_valid = !adc_rst;
   assign adc_data = adc_data_shifted;

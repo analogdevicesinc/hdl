@@ -47,8 +47,8 @@ module ad_serdes_in #(
   parameter   IODELAY_CTRL = 0,
   parameter   IODELAY_GROUP = "dev_if_delay_group",
   parameter   REFCLK_FREQUENCY = 200,
-  parameter   EXT_SERDES_RESET = 0,
-  parameter   DATA_FRAME = 0
+  parameter   EXT_SERDES_RESET = 0
+  //parameter   DATA_FRAME = 0
 ) (
 
   // reset and clocks
@@ -68,7 +68,7 @@ module ad_serdes_in #(
   output  [(DATA_WIDTH-1):0]      data_s5,
   output  [(DATA_WIDTH-1):0]      data_s6,
   output  [(DATA_WIDTH-1):0]      data_s7,  // 1st bit received
-  output  [(DATA_WIDTH-1):0]      data_out,
+  //output  [(DATA_WIDTH-1):0]      data_out,
   input   [(DATA_WIDTH-1):0]      data_in_p,
   input   [(DATA_WIDTH-1):0]      data_in_n,
 
@@ -151,7 +151,7 @@ module ad_serdes_in #(
   end
   endgenerate
 
-    // bypass IDELAY
+  // bypass IDELAY
  
   generate
   if (IODELAY_ENABLE == 0) begin
@@ -218,7 +218,7 @@ module ad_serdes_in #(
         .SRVAL_Q3 (1'b0),
         .SRVAL_Q4 (1'b0)
       ) i_iserdes (
-        .O (data_out[l_inst]),
+        .O (),
         .Q1 (data_s0[l_inst]),
         .Q2 (data_s1[l_inst]),
         .Q3 (data_s2[l_inst]),
@@ -247,7 +247,7 @@ module ad_serdes_in #(
         .SHIFTIN1 (1'b0),
         .SHIFTIN2 (1'b0));
     end /* g_data */
-    end 
+  end
   endgenerate
 
   generate
