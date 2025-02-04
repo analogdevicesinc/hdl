@@ -115,7 +115,8 @@ module application_core #
   parameter STAT_ID_WIDTH = 12,
   
   // Input stream
-  parameter INPUT_WIDTH = 2048
+  parameter INPUT_WIDTH = 2048,
+  parameter JESD_M = 4
 )
 (
   input  wire                                           clk,
@@ -523,8 +524,25 @@ module application_core #
 
   input  wire [INPUT_WIDTH-1:0]                         input_axis_tdata,
   input  wire                                           input_axis_tvalid,
-  output wire                                           input_axis_tready
+  output wire                                           input_axis_tready,
+
+  input  wire [JESD_M-1:0]                              input_enable
 );
+
+  // hton implementation for dynamic byte range
+  `define HTOND(length) \
+    function [length-1:0] htond_``length``(input [length-1:0] data_in); \
+      integer i; \
+      begin \
+        for (i=0; i<length/8; i=i+1) begin \
+          htond_``length``[i*8+:8] = data_in[(length/8-1-i)*8+:8]; \
+        end \
+      end \
+    endfunction
+
+  `HTOND(16)
+  `HTOND(32)
+  `HTOND(48)
 
   // check configuration
   initial begin
@@ -545,22 +563,22 @@ module application_core #
 
   ////----------------------------------------Data generation---------------//
   //////////////////////////////////////////////////
-  reg  [7:0]             gen_data;
+  // reg  [7:0]             gen_data;
 
   // reg  [INPUT_WIDTH-1:0] input_axis_tdata;
   // reg                    input_axis_tvalid;
   // wire                   input_axis_tready;
 
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      gen_data <= 8'd0;
-    end else begin
-      if (input_axis_tready) begin
-        gen_data <= gen_data + 1;
-      end
-    end
-  end
+  // always @(posedge input_clk)
+  // begin
+  //   if (!input_rstn) begin
+  //     gen_data <= 8'd0;
+  //   end else begin
+  //     if (input_axis_tready) begin
+  //       gen_data <= gen_data + 1;
+  //     end
+  //   end
+  // end
 
   // always @(posedge input_clk)
   // begin
@@ -575,143 +593,49 @@ module application_core #
 
   ////----------------------------------------Start application---------------//
   //////////////////////////////////////////////////
-  reg  start_app_reg;
-  wire start_app_reg_cdc;
   reg  start_app;
+  reg  run_packetizer;
+  wire run_packetizer_cdc;
+
+  wire input_rstn_gated;
+  wire rstn_gated;
+
+  wire input_axis_tready_buffered;
 
   reg  packet_tlast;
 
-  sync_bits #(
-    .NUM_OF_BITS(1)
-  ) sync_bits_start_app_reg (
-    .in_bits(start_app_reg),
-    .out_resetn(input_rstn),
-    .out_clk(input_clk),
-    .out_bits(start_app_reg_cdc)
-  );
-
-  always @(posedge input_clk)
+  always @(posedge clk)
   begin
-    if (!input_rstn) begin
-      start_app <= 1'b0;
+    if (rst) begin
+      run_packetizer <= 1'b0;
     end else begin
-      if (start_app_reg_cdc) begin
-        start_app <= 1'b1;
-      end else if(!start_app_reg_cdc && packet_tlast) begin
-        start_app <= 1'b0;
-      end
-    end
-  end
-
-  ////----------------------------------------CDC and Scaling FIFO----------//
-  //////////////////////////////////////////////////
-  wire [INPUT_WIDTH-1:0] input_axis_tdata_buffered;
-  wire                   input_axis_tvalid_buffered;
-  wire                   input_axis_tready_buffered;
-
-  wire                   input_rstn_gated;
-
-  wire                   input_axis_tvalid_gated;
-
-  assign input_rstn_gated = input_rstn && start_app;
-
-  util_axis_fifo #(
-    .DATA_WIDTH(INPUT_WIDTH),
-    .ADDRESS_WIDTH($clog2(8192/INPUT_WIDTH)+1),
-    .ASYNC_CLK(0),
-    .M_AXIS_REGISTERED(1),
-    .ALMOST_EMPTY_THRESHOLD(0),
-    .ALMOST_FULL_THRESHOLD(0),
-    .TLAST_EN(0),
-    .TKEEP_EN(0),
-    .REMOVE_NULL_BEAT_EN(0)
-  ) buffer_fifo (
-    .m_axis_aclk(input_clk),
-    .m_axis_aresetn(input_rstn_gated),
-    .m_axis_ready(input_axis_tready_buffered),
-    .m_axis_valid(input_axis_tvalid_buffered),
-    .m_axis_data(input_axis_tdata_buffered),
-    .m_axis_tkeep(),
-    .m_axis_tlast(),
-    .m_axis_empty(),
-    .m_axis_almost_empty(),
-    .m_axis_level(),
-  
-    .s_axis_aclk(input_clk),
-    .s_axis_aresetn(input_rstn_gated),
-    .s_axis_ready(input_axis_tready),
-    .s_axis_valid(input_axis_tvalid),
-    .s_axis_data(input_axis_tdata),
-    .s_axis_tkeep(),
-    .s_axis_tlast(),
-    .s_axis_full(),
-    .s_axis_almost_full(),
-    .s_axis_room()
-  );
-
-  assign input_axis_tvalid_gated = input_axis_tvalid_buffered && start_app;
-
-  ////----------------------------------------Packetizer--------------------//
-  //////////////////////////////////////////////////
-  reg  [7:0] sample_counter;
-  reg  [7:0] packet_size;
-  reg  [7:0] packet_size_cdc;
-  reg        new_packet_size_ff;
-  wire       new_packet_size_ff_cdc;
-
-  sync_bits #(
-    .NUM_OF_BITS(1)
-  ) sync_bits_new_packet_size_ff (
-    .in_bits(new_packet_size_ff),
-    .out_resetn(input_rstn),
-    .out_clk(input_clk),
-    .out_bits(new_packet_size_ff_cdc)
-  );
-
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      packet_size_cdc <= packet_size;
-    end else begin
-      if (new_packet_size_ff_cdc) begin
-        packet_size_cdc <= packet_size;
-      end
-    end
-  end
-
-  // sync_bits #(
-  //   .NUM_OF_BITS(8)
-  // ) sync_bits_packet_size (
-  //   .in_bits(packet_size),
-  //   .out_resetn(input_rstn),
-  //   .out_clk(input_clk),
-  //   .out_bits(packet_size_cdc)
-  // );
-
-  always @(posedge input_clk)
-  begin
-    if (!input_rstn) begin
-      sample_counter <= 8'd1;
-      packet_tlast <= 1'b0;
-    end else begin
-      if (input_axis_tvalid_gated) begin
-        if (sample_counter < packet_size_cdc-1) begin
-          sample_counter <= sample_counter + 1;
-          packet_tlast <= 1'b0;
-        end else begin
-          sample_counter <= 8'd0;
-          packet_tlast <= 1'b1;
-        end
+      if (start_app) begin
+        run_packetizer <= 1'b1;
+      end else if (packet_tlast) begin
+        run_packetizer <= 1'b0;
       end
     end
   end
   
-  ////----------------------------------------CDC and Scaling FIFO----------//
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) sync_bits_run_packetizer (
+    .in_bits(run_packetizer),
+    .out_resetn(input_rstn),
+    .out_clk(input_clk),
+    .out_bits(run_packetizer_cdc)
+  );
+
+  assign input_rstn_gated = input_rstn && run_packetizer_cdc;
+  assign rstn_gated = rstn && run_packetizer;
+
+  assign input_axis_tready = input_axis_tready_buffered && run_packetizer_cdc;
+
+  ////----------------------------------------Buffer, CDC and Scaling FIFO----//
   //////////////////////////////////////////////////
   wire                       cdc_axis_tvalid;
   wire                       cdc_axis_tready;
   wire [AXIS_DATA_WIDTH-1:0] cdc_axis_tdata;
-  wire                       cdc_axis_tlast;
 
   util_axis_fifo_asym #(
     .ASYNC_CLK(1),
@@ -721,33 +645,123 @@ module application_core #
     .M_AXIS_REGISTERED(1),
     .ALMOST_EMPTY_THRESHOLD(0),
     .ALMOST_FULL_THRESHOLD(0),
-    .TLAST_EN(1),
+    .TLAST_EN(0),
     .TKEEP_EN(0),
     .FIFO_LIMITED(0),
     .ADDRESS_WIDTH_PERSPECTIVE(1)
   ) cdc_scale_fifo (
     .m_axis_aclk(clk),
-    .m_axis_aresetn(rstn),
+    .m_axis_aresetn(rstn_gated),
     .m_axis_ready(cdc_axis_tready),
     .m_axis_valid(cdc_axis_tvalid),
     .m_axis_data(cdc_axis_tdata),
     .m_axis_tkeep(),
-    .m_axis_tlast(cdc_axis_tlast),
+    .m_axis_tlast(),
     .m_axis_empty(),
     .m_axis_almost_empty(),
     .m_axis_level(),
   
     .s_axis_aclk(input_clk),
-    .s_axis_aresetn(input_rstn),
+    .s_axis_aresetn(input_rstn_gated),
     .s_axis_ready(input_axis_tready_buffered),
-    .s_axis_valid(input_axis_tvalid_gated),
-    .s_axis_data(input_axis_tdata_buffered),
+    .s_axis_valid(input_axis_tvalid),
+    .s_axis_data(input_axis_tdata),
     .s_axis_tkeep(),
-    .s_axis_tlast(packet_tlast),
+    .s_axis_tlast(),
     .s_axis_full(),
     .s_axis_almost_full(),
     .s_axis_room()
   );
+  
+  ////----------------------------------------Packetizer--------------------//
+  //////////////////////////////////////////////////
+  reg  [7:0] sample_counter;
+  reg  [7:0] packet_size;
+  reg  [7:0] packet_size_dynamic;
+
+  reg  [JESD_M-1:0] input_enable_old;
+  reg               input_enable_ff;
+  wire              input_enable_ff_cdc;
+  reg               input_enable_ff_cdc2;
+  reg  [JESD_M-1:0] input_enable_cdc;
+
+  always @(posedge input_clk)
+  begin
+    if (!input_rstn) begin
+      input_enable_ff <= 1'b0;
+    end else begin
+      input_enable_old <= input_enable;
+      if (input_enable_old != input_enable) begin
+        input_enable_ff <= ~input_enable_ff;
+      end
+    end
+  end
+  
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) sync_bits_input_enable_ff (
+    .in_bits(input_enable_ff),
+    .out_resetn(rstn),
+    .out_clk(clk),
+    .out_bits(input_enable_ff_cdc)
+  );
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      input_enable_ff_cdc2 <= 1'b0;
+    end else begin
+      input_enable_ff_cdc2 <= input_enable_ff_cdc;
+    end
+  end
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      input_enable_cdc <= {JESD_M{1'b0}};
+    end else begin
+      if (input_enable_ff_cdc2 ^ input_enable_ff_cdc) begin
+        input_enable_cdc <= input_enable;
+      end
+    end
+  end
+
+  function [$clog2(JESD_M)-1:0] converters(input [JESD_M-1:0] input_enable);
+    integer i;
+    begin
+      converters = {$clog2(JESD_M){1'b0}};
+      for (i=0; i<JESD_M; i=i+1) begin
+        converters = converters + input_enable[i];
+      end
+    end
+  endfunction
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      packet_size_dynamic <= packet_size;
+    end else begin
+      packet_size_dynamic <= packet_size/2**$clog2(JESD_M)*converters(input_enable_cdc);
+    end
+  end
+
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      sample_counter <= 8'd1;
+      packet_tlast <= 1'b0;
+    end else begin
+      if (cdc_axis_tvalid && cdc_axis_tready) begin
+        if (sample_counter < packet_size_dynamic-1) begin
+          sample_counter <= sample_counter + 1;
+          packet_tlast <= 1'b0;
+        end else begin
+          sample_counter <= 8'd0;
+          packet_tlast <= 1'b1;
+        end
+      end
+    end
+  end
   
   ////----------------------------------------Header Inserter---------------//
   //////////////////////////////////////////////////
@@ -812,23 +826,7 @@ module application_core #
   end
 
   // ready signal generation
-  assign cdc_axis_tready = ~tlast_sig && output_axis_tready;
-
-  // hton implementation for dynamic byte range
-  `define HTOND(length) \
-    function [length-1:0] htond_``length``(input [length-1:0] data_in); \
-      integer i; \
-      begin \
-        for (i=0; i<length/8; i=i+1) \
-        begin \
-          htond_``length``[i*8+:8] = data_in[(length/8-1-i)*8+:8]; \
-        end \
-      end \
-    endfunction \
-
-  `HTOND(16)
-  `HTOND(32)
-  `HTOND(48)
+  assign cdc_axis_tready = ~packet_tlast && output_axis_tready;
 
   // header concatenation
   assign header = {
@@ -889,23 +887,7 @@ module application_core #
     if (!rstn) begin
       udp_length <= 16'd0;
     end else begin
-      udp_length <= 16'h8 + INPUT_WIDTH*packet_size/8;
-    end
-  end
-
-  // tlast signal generation
-  always @(posedge clk)
-  begin
-    if (!rstn) begin
-      tlast_sig <= 1'b0;
-    end else begin
-      if (output_axis_tready) begin
-        if (cdc_axis_tvalid && cdc_axis_tlast && cdc_axis_tready) begin
-          tlast_sig <= 1'b1;
-        end else begin
-          tlast_sig <= 1'b0;
-        end
-      end
+      udp_length <= 16'h8 + INPUT_WIDTH*packet_size_dynamic/8;
     end
   end
 
@@ -915,13 +897,28 @@ module application_core #
     if (!rstn) begin
       new_packet <= 1'b1;
     end else begin
-      if (output_axis_tready) begin
-        if (tlast_sig) begin
+      if (output_axis_tready && run_packetizer) begin
+        if (packet_tlast) begin
           new_packet <= 1'b1;
         end else if (cdc_axis_tvalid) begin
           new_packet <= 1'b0;
         end
       end
+    end
+  end
+
+  integer j;
+  reg [HEADER_LENGTH-1:0] reg_part1;
+  reg [AXIS_DATA_WIDTH-1-HEADER_LENGTH:0] reg_part2;
+
+  // raw data to network byte order
+  always @(*)
+  begin
+    for (j=0; j<HEADER_LENGTH/16; j=j+1) begin
+      reg_part1[j*16+:16] = htond_16(cdc_axis_tdata_reg[j*16+:16]);
+    end
+    for (j=0; j<(AXIS_DATA_WIDTH-HEADER_LENGTH)/16; j=j+1) begin
+      reg_part2[j*16+:16] = htond_16(cdc_axis_tdata[j*16+:16]);
     end
   end
 
@@ -934,27 +931,28 @@ module application_core #
       packet_axis_tkeep <= {AXIS_DATA_WIDTH/8-1{1'b0}};
       packet_axis_tlast <= 1'b0;
     end else begin
-      if (output_axis_tready) begin
+      if (output_axis_tready && run_packetizer) begin
         // valid
-        if (cdc_axis_tvalid || tlast_sig) begin
+        if (cdc_axis_tvalid || packet_tlast) begin
           packet_axis_tvalid <= 1'b1;
         end else begin
           packet_axis_tvalid <= 1'b0;
         end
-        // last
-        packet_axis_tlast <= tlast_sig;
-        // data and keep
+        // data, keep and last
         if (cdc_axis_tvalid) begin
           if (new_packet) begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], header};
+            packet_axis_tdata <= {reg_part2, header};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
+            packet_axis_tlast <= 1'b0;
           end else begin
-            packet_axis_tdata <= {cdc_axis_tdata[AXIS_DATA_WIDTH-1-HEADER_LENGTH:0], cdc_axis_tdata_reg};
+            packet_axis_tdata <= {reg_part2, reg_part1};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
+            packet_axis_tlast <= 1'b0;
           end
-        end else if (tlast_sig) begin
-          packet_axis_tdata <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, cdc_axis_tdata_reg};
+        end else if (packet_tlast) begin
+          packet_axis_tdata <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, reg_part1};
           packet_axis_tkeep <= {{(AXIS_DATA_WIDTH-HEADER_LENGTH)/8{1'b0}}, {HEADER_LENGTH/8{1'b1}}};
+          packet_axis_tlast <= 1'b1;
         end
       end
     end
@@ -988,6 +986,7 @@ module application_core #
   reg stop_counter_reg;
   reg clear_counter_reg;
   reg [31:0] counter_reg;
+  reg [31:0] timer;
   // Switch
   reg switch;
 
@@ -1002,10 +1001,9 @@ module application_core #
       scratch_reg <= 'h0;
       clear_counter_reg <= 1'b0;
       // Data generator
-      start_app_reg <= 1'b0;
+      start_app <= 1'b0;
       // Packetizer
       packet_size <= 8'd4;
-      new_packet_size_ff <= 1'b0;
       // Ethernet header
       ethernet_destination_MAC <= 48'hB83FD22A0BF1;
       ethernet_source_MAC <= 48'h000A35000102;
@@ -1043,12 +1041,9 @@ module application_core #
           end
           'h3: clear_counter_reg <= up_wdata[0];
           // Data generator
-          'h5: start_app_reg <= up_wdata[0];
+          'h5: start_app <= up_wdata[0];
           // Packetizer
-          'h6: begin
-            packet_size <= up_wdata[7:0];
-            new_packet_size_ff <= ~new_packet_size_ff;
-          end
+          'h6: packet_size <= up_wdata[7:0];
           // Ethernet header
           'h7: ethernet_destination_MAC[48-1:32] <= up_wdata[16-1:0];
           'h8: ethernet_destination_MAC[31:0] <= up_wdata;
@@ -1087,7 +1082,7 @@ module application_core #
           'h3: up_rdata <= {{31{1'b0}}, clear_counter_reg};
           'h4: up_rdata <= counter_reg;
           // Data generator
-          'h5: up_rdata <= {{31{1'b0}}, start_app_reg};
+          'h5: up_rdata <= {{31{1'b0}}, start_app};
           // Packetizer
           'h6: up_rdata <= {{24{1'b0}}, packet_size};
           // Ethernet header
@@ -1156,14 +1151,25 @@ module application_core #
     .up_rack            (up_rack)
   );
 
+  reg m_axis_sync_tx_tlast_reg;
+
+  always @(posedge clk) begin
+    m_axis_sync_tx_tlast_reg <= m_axis_sync_tx_tlast;
+  end
+
   always @(posedge clk) begin
     if (rst || clear_counter_reg) begin
-      counter_reg <= 'h0;
-    end
-    else
-    begin
-      if (start_counter_reg && !stop_counter_reg && m_axis_if_tx_tvalid && m_axis_if_tx_tready && m_axis_if_tx_tlast)
-        counter_reg <= counter_reg + 1'b1;
+      counter_reg <= 32'd0;
+      timer <= 32'd0;
+    end else begin
+      if (start_counter_reg || timer != 32'd0) begin
+        if (m_axis_sync_tx_tvalid && m_axis_sync_tx_tready && (!m_axis_sync_tx_tlast_reg && m_axis_sync_tx_tlast)) begin
+          counter_reg <= counter_reg + 1'b1;
+        end
+        if (timer == 32'd250000000) begin
+          timer <= 32'd0;
+        end
+      end
     end
   end
 

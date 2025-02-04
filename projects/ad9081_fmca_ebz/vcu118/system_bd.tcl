@@ -148,6 +148,7 @@ ad_ip_parameter axi_ddr_cntrl CONFIG.C0_CLOCK_BOARD_INTERFACE default_250mhz_clk
 ad_ip_parameter axi_ddr_cntrl CONFIG.C0_DDR4_BOARD_INTERFACE ddr4_sdram_c1_062
 
 set INPUT_WIDTH 128
+set JESD_M 8
 
 source $ad_hdl_dir/library/corundum/scripts/corundum_vcu118_cfg.tcl
 source $ad_hdl_dir/library/corundum/scripts/corundum.tcl
@@ -211,8 +212,59 @@ if {$APP_ENABLE == 1} {
   ad_cpu_interconnect 0x51000000 corundum_hierarchy s_axil_application
 }
 
+ad_ip_instance util_cpack2 util_corundum_cpack [list \
+  NUM_OF_CHANNELS 8 \
+  SAMPLES_PER_CHANNEL 1 \
+  SAMPLE_DATA_WIDTH 16 \
+]
+
+ad_connect util_corundum_cpack/clk rx_device_clk
+ad_connect util_corundum_cpack/reset rx_device_clk_rstgen/peripheral_reset
+ad_connect util_corundum_cpack/fifo_wr_en rx_mxfe_tpl_core/adc_valid_0
+for {set i 0} {$i<8} {incr i} {
+  ad_connect util_corundum_cpack/enable_${i} rx_mxfe_tpl_core/adc_enable_${i}
+}
+for {set i 0} {$i<8} {incr i} {
+  ad_connect util_corundum_cpack/fifo_wr_data_${i} rx_mxfe_tpl_core/adc_data_${i}
+}
+
 ad_connect corundum_hierarchy/input_clk axi_mxfe_rx_jesd/device_clk
 ad_connect corundum_hierarchy/input_rstn rx_device_clk_rstgen/peripheral_aresetn
 
-ad_connect corundum_hierarchy/input_axis_tvalid util_mxfe_cpack/packed_fifo_wr_data
-ad_connect corundum_hierarchy/input_axis_tdata util_mxfe_cpack/packed_fifo_wr_en
+ad_connect corundum_hierarchy/input_axis_tvalid util_corundum_cpack/packed_fifo_wr_data
+ad_connect corundum_hierarchy/input_axis_tdata util_corundum_cpack/packed_fifo_wr_en
+ad_connect corundum_hierarchy/input_axis_tready util_corundum_cpack/packed_fifo_wr_overflow
+
+ad_ip_instance util_reduced_logic cpack_rst_logic_corundum
+ad_ip_parameter cpack_rst_logic_corundum config.c_operation {or}
+ad_ip_parameter cpack_rst_logic_corundum config.c_size {3}
+
+ad_ip_instance util_vector_logic rx_do_rstout_logic_corundum
+ad_ip_parameter rx_do_rstout_logic_corundum config.c_operation {not}
+ad_ip_parameter rx_do_rstout_logic_corundum config.c_size {1}
+
+ad_ip_instance xlconcat cpack_reset_sources_corundum
+ad_ip_parameter cpack_reset_sources_corundum config.num_ports {3}
+
+ad_connect corundum_hierarchy/input_axis_tready rx_do_rstout_logic_corundum/Op1
+
+ad_connect rx_device_clk_rstgen/peripheral_reset cpack_reset_sources_corundum/in0
+ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_rst cpack_reset_sources_corundum/in1
+ad_connect rx_do_rstout_logic_corundum/res cpack_reset_sources_corundum/in2
+
+ad_connect cpack_reset_sources_corundum/dout cpack_rst_logic_corundum/op1
+ad_connect cpack_rst_logic_corundum/res util_corundum_cpack/reset
+
+ad_ip_instance xlconcat enable_concat_corundum
+ad_ip_parameter enable_concat_corundum config.num_ports {8}
+
+ad_connect enable_concat_corundum/In0 rx_mxfe_tpl_core/adc_enable_0
+ad_connect enable_concat_corundum/In1 rx_mxfe_tpl_core/adc_enable_1
+ad_connect enable_concat_corundum/In2 rx_mxfe_tpl_core/adc_enable_2
+ad_connect enable_concat_corundum/In3 rx_mxfe_tpl_core/adc_enable_3
+ad_connect enable_concat_corundum/In4 rx_mxfe_tpl_core/adc_enable_4
+ad_connect enable_concat_corundum/In5 rx_mxfe_tpl_core/adc_enable_5
+ad_connect enable_concat_corundum/In6 rx_mxfe_tpl_core/adc_enable_6
+ad_connect enable_concat_corundum/In7 rx_mxfe_tpl_core/adc_enable_7
+
+ad_connect enable_concat_corundum/dout corundum_hierarchy/input_enable

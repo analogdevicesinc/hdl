@@ -56,5 +56,10 @@ LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr
+LIB_DEPS += corundum/corundum_core
+LIB_DEPS += corundum/ethernet
+LIB_DEPS += corundum/application_core
+
+export BOARD := VCU118
 
 include ../../scripts/project-xilinx.mk

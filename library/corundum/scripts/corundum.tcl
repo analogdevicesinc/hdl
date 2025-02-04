@@ -17,8 +17,6 @@ create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qspi_rtl:1.0 qspi1
 create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_qsfp_rtl:1.0 qsfp
 create_bd_intf_pin -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 i2c
 
-create_bd_intf_pin -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 input_axis
-
 create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_pin -dir O fpga_boot
 create_bd_pin -dir O -type clk qspi_clk
@@ -37,10 +35,16 @@ create_bd_pin -dir I -type rst rst_125mhz
 set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_125mhz]
 create_bd_pin -dir I -type rst rst_250mhz
 set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_250mhz]
-create_bd_pin -dir I -type rst rst_100mhz
-set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins rst_100mhz]
+create_bd_pin -dir I -type rst rstn_100mhz
+set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins rstn_100mhz]
 
 create_bd_pin -dir O -type intr irq
+
+create_bd_pin -dir I input_axis_tvalid
+create_bd_pin -dir O input_axis_tready
+create_bd_pin -dir I -from [expr {$INPUT_WIDTH-1}] -to 0 input_axis_tdata
+
+create_bd_pin -dir I -from [expr {$JESD_M-1}] -to 0 input_enable
 
 ad_ip_instance axi_gpio axi_gpio_0 [list \
   C_ALL_OUTPUTS 1 \
@@ -56,11 +60,11 @@ ad_ip_instance axi_gpio axi_gpio_0 [list \
 
 ad_connect axi_gpio_0/gpio_io_o aux_reset_in
 ad_connect axi_gpio_0/s_axi_aclk clk_100mhz
-ad_connect axi_gpio_0/s_axi_aresetn rst_100mhz
+ad_connect axi_gpio_0/s_axi_aresetn rstn_100mhz
 
 # ad_connect corundum_gpio_reset/gpio_io_o aux_reset_in
 # ad_connect corundum_gpio_reset/s_axi_aclk clk_100mhz
-# ad_connect corundum_gpio_reset/s_axi_aresetn rst_100mhz
+# ad_connect corundum_gpio_reset/s_axi_aresetn rstn_100mhz
 
 ad_connect axi_gpio_0/S_AXI s_axil_gpio_reset
 
@@ -368,6 +372,7 @@ if {$APP_ENABLE == 1} {
     STAT_INC_WIDTH $STAT_INC_WIDTH \
     STAT_ID_WIDTH $STAT_ID_WIDTH \
     INPUT_WIDTH $INPUT_WIDTH \
+    JESD_M $JESD_M \
   ]
 
   ad_connect application_core/clk corundum_core/clk
@@ -383,7 +388,10 @@ if {$APP_ENABLE == 1} {
   ad_connect application_core/ptp_clock corundum_core/ptp_clock_app
   ad_connect application_core/s_axil_ctrl s_axil_application
   
-  ad_connect application_core/input_axis input_axis
+  ad_connect application_core/input_axis_tvalid input_axis_tvalid
+  ad_connect application_core/input_axis_tdata input_axis_tdata
+
+  ad_connect application_core/input_enable input_enable
 
   ad_connect application_core/jtag_tdi GND
   ad_connect application_core/jtag_tms GND
