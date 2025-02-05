@@ -745,9 +745,12 @@ The make script for Lattice projects is ``projects/scripts/project-lattice.mk``
 which is included in **Makefile** after setting the project dependencies.
 If you check this make script, you can note that we have two rules we run by the
 ``all:`` rule:
+
 - Rule ``pb:`` which runs the **Propel Builder** targets (for the block design)
 - Rule ``rd:`` Which runs the  **Radiant** targets (for HDL build).
+
 For this reason, we have two log files as well:
+
 - **$(PROJECT_NAME)_propel_builder.log**
 - **$(PROJECT_NAME)_radiant.log**
 
