@@ -57,6 +57,7 @@ Contents
    AD9783-EBZ <ad9783_ebz/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
+   ADRV9371x <adrv9371x/index>
    ADRV9009 <adrv9009/index>
    ADRV9026 <adrv9026/index>
    ADRV904x <adrv904x/index>
