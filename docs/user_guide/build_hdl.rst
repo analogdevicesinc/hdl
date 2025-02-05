@@ -723,9 +723,8 @@ Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
 
-The build for any supported project works by ``make``, same as the others.
-Simply go to the carrier folder and run ``make``. For now, you can try
-to build the only base design we have available for
+To build a project, go to the carrier folder and run ``make``. For now, you can
+try to build the only base design we have available for
 **CertusPro-NX Evaluation Board** by entering the base design directory and
 running ``make``.
 
@@ -735,24 +734,24 @@ running ``make``.
    $cd projects/common/lfcpnx
    $make
 
-This, assuming that you have the tools and licenses set up correctly. If
-you don't get to the last line, the make failed to build the project.
+This assumes that you have the tools and licenses set up correctly.
 There is nothing you can gather from the ``make`` output (other than if the
 build failed or not); the actual failure message is in a log file.
 
 Checking the build and analyzing results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The make script for Lattice projects is the **projects/scripts/project-lattice.mk**
-that is included in **Makefile** after setting the project dependencies.
+The make script for Lattice projects is ``projects/scripts/project-lattice.mk``
+which is included in ``Makefile`` after setting the project dependencies.
 If you check this make script, you can note that we have two rules we run by the
-**all:** rule: one that runs the **Propel Builder** targets (for the block
-design) and one that runs the  **Radiant** targets (for HDL build).
-For this reason, we have two log files as well, the first one
-**$(PROJECT_NAME)_propel_builder.log**, and the second one is
-**$(PROJECT_NAME)_radiant.log**.
+``all:`` rule:
+   - Roule ``pb:`` which runs the **Propel Builder** targets (for the block design)
+   - Roule ``rd:`` Which runs the  **Radiant** targets (for HDL build).
+For this reason, we have two log files as well:
+   - ``$(PROJECT_NAME)_propel_builder.log``
+   - ``$(PROJECT_NAME)_radiant.log``
 
-If you are seeking support from us, do a quick (or detailed) check on files.
+Before seeking support from us, do a quick (or detailed) check on files.
 This contains the most relevant information that you need to provide.
 
 .. warning::
@@ -769,20 +768,20 @@ This contains the most relevant information that you need to provide.
    $tail <ADI_carrier_proj_dir>/_bld/<project_name>_radiant.log
 
 Note that if the **Propel Builder** project fails to build, the
-**$(PROJECT_NAME)_radiant.log** may not exist.
+``$(PROJECT_NAME)_radiant.log`` may not exist.
 
-If the Propel Builder project was built successfully, the **sge**
-folder should appear in the **<ADI_carrier_proj_dir>/** or in the
-**<ADI_carrier_proj_dir>/_bld/<project_name>**.
-The **sge** folder contains the **bsp** folder (Base Support
+If the Propel Builder project was built successfully, the ``sge/``
+folder should appear in the ``<ADI_carrier_proj_dir>/`` or in the
+``<ADI_carrier_proj_dir>/_bld/<project_name>``.
+The ``sge/`` folder contains the ``bsp/`` folder (Base Support
 Package) and the SoC configuration files.
 
-The **bsp** folder contains the
+The ``bsp/`` folder contains the
 available Lattice-provided drivers for the IPs used in the design (sometimes
 these drivers are more like some basic examples to modify for your specific
-application) and the **sys_platform.h** file.
+application) and the ``sys_platform.h`` file.
 
-You should find a **sys_env.xml** file in the same **sge** folder. This file is
+You should find a ``sys_env.xml`` file in the same ``sge/`` folder. This file is
 used to create a **no-OS** project with the current **bsp**.
 
 When running the Propel Builder targets, we call ``propelbld system_project_pb.tcl``
@@ -792,24 +791,24 @@ After running the Propel Builder targets we call ``pnmainc system_project.tcl``
 on Windows or ``radiantc system_project.tcl``
 on Linux.
 
-The **system_project_pb.tcl** runs first. This file is used to create the
-**block design project** (Propel Builder) and source the **system_pb.tcl**
-which is used for linking one or more corelated block design '.tcl' scripts.
+The ``system_project_pb.tcl`` runs first. This file is used to create the
+**block design project** (Propel Builder) and source the ``system_pb.tcl``
+which is used for linking one or more corelated block design (``.tcl``) scripts.
 
-The **system_pb.tcl** is sourced in **adi_project_pb** procedure.
+The ``system_pb.tcl`` is sourced in ``adi_project_pb`` procedure.
 
-The **system_project.tcl** runs second. This file is used to create and build
+The ``system_project.tcl`` runs second. This file is used to create and build
 the **HDL project** (Radiant). Here we use the output of the Propel Builder
 project as the **configured IPs** that can be found in the
-*<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/lib* folder and the
+``<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/lib`` folder and the
 **default block design wrapper** that is the
-*<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/<project_name>.v*.
+``<ADI_carrier_proj_dir>/_bld/<project_name>/<project_name>/<project_name>.v``.
 
-We add them to the Radiant project, then add our **system_top.v** wrapper,
+We add them to the Radiant project, then add our ``system_top.v`` wrapper,
 the **constraint files** and build the project.
 
-The output is a **.bit** file that by default will appear in the
-**<ADI_carrier_proj_dir>/_bld/<project_name>/impl_1** folder if the project was
+The output is a ``.bit`` file that by default will appear in the
+``<ADI_carrier_proj_dir>/_bld/<project_name>/impl_1`` folder if the project was
 successfully built.
 
 Supported targets of ``make`` command
