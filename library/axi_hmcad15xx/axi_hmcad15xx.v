@@ -43,8 +43,7 @@ module axi_hmcad15xx #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
-  parameter   IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter   DELAY_REFCLK_FREQUENCY = 200
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group"
 ) (
 
   input           adc_dovf,
@@ -237,11 +236,16 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   // adc interface
 
   wire             delay_locked;
+  wire [7:0]       adc_custom_control;
+  wire [1:0]       resolution;
+  wire [1:0]       mode;
+
+assign resolution = adc_custom_control[1:0];
+assign mode       = adc_custom_control[3:2];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP(IO_DELAY_GROUP),
-    .DELAY_REFCLK_FREQUENCY(DELAY_REFCLK_FREQUENCY)
+    .IO_DELAY_GROUP(IO_DELAY_GROUP)
   ) i_axi_hmcad15xx_if (
     .up_clk(up_clk),
     .adc_rst(adc_rst_s),
@@ -256,12 +260,16 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
     .adc_clk (adc_clk_s),
     .adc_valid (adc_valid),
     .adc_data (adc_data),
+    .resolution(resolution),
+    .mode(mode),
     .up_dld(up_dld),
     .up_dwdata(up_dwdata),
     .up_drdata(up_drdata),
     .delay_locked(delay_locked));
 
   // adc up common
+
+
 
   up_adc_common #(
     .ID(ID)
@@ -282,7 +290,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
     .adc_ext_sync_arm(),
     .adc_ext_sync_disarm(),
     .adc_ext_sync_manual_req(),
-    .adc_custom_control(),
+    .adc_custom_control(adc_custom_control),
     .adc_sdr_ddr_n(),
     .adc_symb_op(),
     .adc_symb_8_16b(),

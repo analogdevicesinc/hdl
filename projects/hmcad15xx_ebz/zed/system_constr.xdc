@@ -32,11 +32,10 @@ set_property  -dict {PACKAGE_PIN L21  IOSTANDARD LVDS_25 DIFF_TERM 1}  [get_port
 
 set_property  -dict {PACKAGE_PIN P22  IOSTANDARD LVCMOS25}  [get_ports spi_csn]      ; ## G10  FMC_LA03_N       IO_L16N_T2_34
 set_property  -dict {PACKAGE_PIN P17  IOSTANDARD LVCMOS25}  [get_ports spi_clk]      ; ## H7   FMC_LA02_P       IO_L20P_T3_34
-set_property  -dict {PACKAGE_PIN P18  IOSTANDARD LVCMOS25}  [get_ports spi_sdio]     ; ## H8   FMC_LA02_N       IO_L20N_T3_34
+set_property  -dict {PACKAGE_PIN P18  IOSTANDARD LVCMOS25}  [get_ports spi_sdata]    ; ## H8   FMC_LA02_N       IO_L20N_T3_34
 
 set_property  -dict {PACKAGE_PIN P20  IOSTANDARD LVCMOS25}  [get_ports fmc_pd]       ; ##G15   FMC_LA12_P       IO_L18P_T2_34
 set_property  -dict {PACKAGE_PIN P21  IOSTANDARD LVCMOS25}  [get_ports fmc_rstn]     ; ##G16   FMC_LA12_N       IO_L18N_T2_34
 
 
 create_clock -name adc_clk   -period 2 [get_ports clk_in_p]
-create_clock -name frame_clk -period 8 [get_ports fclk_p]

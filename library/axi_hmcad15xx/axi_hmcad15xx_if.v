@@ -54,6 +54,9 @@ module axi_hmcad15xx_if #(
 
   input                  adc_rst,
 
+  input   [ 1:0]         resolution,
+  input   [ 1:0]         mode,
+
   // data path interface
 
   output                 adc_clk,
@@ -81,7 +84,7 @@ IBUFDS i_clk_in_ibuf(
   .IB(clk_in_n),
   .O(clk_in_s));
 
-BUFH i_clk_buf(
+BUFIO i_clk_buf(
   .I(clk_in_s),
   .O(adc_clk_in_fast));
 
@@ -183,11 +186,7 @@ ad_serdes_in # (
 
 wire [15:0] data_out [0:7];
 wire [ 7:0] data_en;
-wire [1:0] resolution;
-wire [1:0] mode;
 
-assign resolution = 2'b0;
-assign mode = 2'b00;
 generate
   genvar i;
     for (i = 0; i < NUM_LANES-1; i=i+1) begin: sample_assembly_lanes

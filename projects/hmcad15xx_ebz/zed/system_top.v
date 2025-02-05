@@ -97,7 +97,7 @@ module system_top (
 
   output                  spi_csn,
   output                  spi_clk,
-  output                  spi_sdio,
+  output                  spi_sdata,
 
   output                  fmc_pd,
   output                  fmc_rstn
@@ -120,15 +120,6 @@ module system_top (
   wire            spi_mosi;
   wire            spi_miso;
 
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(1)
-  ) i_spi (
-    .spi_csn (spi_csn),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi),
-    .spi_miso (spi_miso),
-    .spi_sdio (spi_sdio),
-    .spi_dir ());
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -216,9 +207,9 @@ module system_top (
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso),
+    .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi),
+    .spi0_sdo_o (spi_sdata),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
