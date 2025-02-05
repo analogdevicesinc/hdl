@@ -62,10 +62,10 @@ module axi_hmcad15xx #(
 
   output          adc_valid,
 
-  output  [7:0]   adc_data_0,
-  output  [7:0]   adc_data_1,
-  output  [7:0]   adc_data_2,
-  output  [7:0]   adc_data_3,
+  output  [127:0] adc_data,
+
+
+
 
   output          adc_clk,
   output          adc_reset,
@@ -255,10 +255,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
     .data_in_n (data_in_n),
     .adc_clk (adc_clk_s),
     .adc_valid (adc_valid),
-    .adc_data_0 (adc_data_0),
-    .adc_data_1 (adc_data_1),
-    .adc_data_2 (adc_data_2),
-    .adc_data_3 (adc_data_3),
+    .adc_data (adc_data),
     .up_dld(up_dld),
     .up_dwdata(up_dwdata),
     .up_drdata(up_drdata),

@@ -58,10 +58,7 @@ module axi_hmcad15xx_if #(
 
   output                 adc_clk,
   output                 adc_valid,
-  output reg  [7:0]      adc_data_0,
-  output reg  [7:0]      adc_data_1,
-  output reg  [7:0]      adc_data_2,
-  output reg  [7:0]      adc_data_3,
+  output    [127:0]      adc_data,
 
   // delay control signals
   input                                     up_clk,
@@ -173,52 +170,89 @@ ad_serdes_in # (
 
 
   wire [7:0] frame_data;
-  wire [7:0] serdes_data_7;
-  wire [7:0] serdes_data_6;
-  wire [7:0] serdes_data_5;
-  wire [7:0] serdes_data_4;
-  wire [7:0] serdes_data_3;
-  wire [7:0] serdes_data_2;
-  wire [7:0] serdes_data_1;
-  wire [7:0] serdes_data_0;
+  wire [7:0] serdes_data [0:7];
 
-  assign {frame_data[0],serdes_data_7[0],serdes_data_6[0],serdes_data_5[0],serdes_data_4[0],
-          serdes_data_3[0],serdes_data_2[0],serdes_data_1[0],serdes_data_0[0]} = data_s0;  //latest bit received
-  assign {frame_data[1],serdes_data_7[1],serdes_data_6[1],serdes_data_5[1],serdes_data_4[1],
-          serdes_data_3[1],serdes_data_2[1],serdes_data_1[1],serdes_data_0[1]} = data_s1;  //
-  assign {frame_data[2],serdes_data_7[2],serdes_data_6[2],serdes_data_5[2],serdes_data_4[2],
-          serdes_data_3[2],serdes_data_2[2],serdes_data_1[2],serdes_data_0[2]} = data_s2;  //
-  assign {frame_data[3],serdes_data_7[3],serdes_data_6[3],serdes_data_5[3],serdes_data_4[3],
-          serdes_data_3[3],serdes_data_2[3],serdes_data_1[3],serdes_data_0[3]} = data_s3;  //
-  assign {frame_data[4],serdes_data_7[4],serdes_data_6[4],serdes_data_5[4],serdes_data_4[4],
-          serdes_data_3[4],serdes_data_2[4],serdes_data_1[4],serdes_data_0[4]} = data_s4;  //
-  assign {frame_data[5],serdes_data_7[5],serdes_data_6[5],serdes_data_5[5],serdes_data_4[5],
-          serdes_data_3[5],serdes_data_2[5],serdes_data_1[5],serdes_data_0[5]} = data_s5;  //
-  assign {frame_data[6],serdes_data_7[6],serdes_data_6[6],serdes_data_5[6],serdes_data_4[6],
-          serdes_data_3[6],serdes_data_2[6],serdes_data_1[6],serdes_data_0[6]} = data_s6;  //
-  assign {frame_data[7],serdes_data_7[7],serdes_data_6[7],serdes_data_5[7],serdes_data_4[7],
-          serdes_data_3[7],serdes_data_2[7],serdes_data_1[7],serdes_data_0[7]} = data_s7;  // oldest bit received
+  assign {frame_data[7],serdes_data[7][7],serdes_data[6][7],serdes_data[5][7],serdes_data[4][7],serdes_data[3][7],serdes_data[2][7],serdes_data[1][7],serdes_data[0][7]} = data_s0;  //latest bit received
+  assign {frame_data[6],serdes_data[7][6],serdes_data[6][6],serdes_data[5][6],serdes_data[4][6],serdes_data[3][6],serdes_data[2][6],serdes_data[1][6],serdes_data[0][6]} = data_s1;  //
+  assign {frame_data[5],serdes_data[7][5],serdes_data[6][5],serdes_data[5][5],serdes_data[4][5],serdes_data[3][5],serdes_data[2][5],serdes_data[1][5],serdes_data[0][5]} = data_s2;  //
+  assign {frame_data[4],serdes_data[7][4],serdes_data[6][4],serdes_data[5][4],serdes_data[4][4],serdes_data[3][4],serdes_data[2][4],serdes_data[1][4],serdes_data[0][4]} = data_s3;  //
+  assign {frame_data[3],serdes_data[7][3],serdes_data[6][3],serdes_data[5][3],serdes_data[4][3],serdes_data[3][3],serdes_data[2][3],serdes_data[1][3],serdes_data[0][3]} = data_s4;  //
+  assign {frame_data[2],serdes_data[7][2],serdes_data[6][2],serdes_data[5][2],serdes_data[4][2],serdes_data[3][2],serdes_data[2][2],serdes_data[1][2],serdes_data[0][2]} = data_s5;  //
+  assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
+  assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
 
-wire [15:0] data_out;
-wire        data_en;
+wire [15:0] data_out [0:7];
+wire [ 7:0] data_en;
+wire [1:0] resolution;
+wire [1:0] mode;
 
-  sample_assembly  sample_assembly_inst (
-    .clk(adc_clk_div),
-    .frame(frame_data),
-    .data_in(serdes_data_7),
-    .resolution(2'b00),
-    .data_en(data_en),
-    .data_out(data_out)
-  );
+assign resolution = 2'b0;
+assign mode = 2'b00;
+generate
+  genvar i;
+    for (i = 0; i < NUM_LANES-1; i=i+1) begin: sample_assembly_lanes
+      sample_assembly  sample_assembly_inst (
+        .clk(adc_clk_div),
+        .frame(frame_data),
+        .data_in(serdes_data[i]),
+        .resolution(resolution),
+        .data_en(data_en[i]),
+        .data_out(data_out[i])
+      );
+    end
+  endgenerate
 
+ //==========================================================================
+ // Arrange samples in capture format
+ //==========================================================================
 
-
-
-  always @(posedge adc_clk_div) begin
-    adc_data_0 <= {serdes_data_7};
-    adc_data_1 <= {serdes_data_6};
-    adc_data_2 <= {serdes_data_5};
-    adc_data_3 <= {serdes_data_4};
+always @(posedge adc_clk_div) begin
+if((resolution == 2'b00) && (mode == 2'b11)) begin  //  8-bit quad channel
+     wr_data_int <= {data_out[2][15:8], data_out[0][15:8], data_out[6][15:8], data_out[4][15:8],
+                     data_out[3][15:8], data_out[1][15:8], data_out[7][15:8], data_out[5][15:8],
+                     data_out[2][ 7:0], data_out[0][ 7:0], data_out[6][ 7:0], data_out[4][ 7:0],
+                     data_out[3][ 7:0], data_out[1][ 7:0], data_out[7][ 7:0], data_out[5][ 7:0]};
+  end else if((resolution == 2'b00) && (mode == 2'b01)) begin  //  8-bit dual channel
+     wr_data_int <= {data_out[4][15:8], data_out[0][15:8], data_out[5][15:8], data_out[1][15:8],
+                     data_out[6][15:8], data_out[2][15:8], data_out[7][15:8], data_out[3][15:8],
+                     data_out[4][ 7:0], data_out[0][ 7:0], data_out[5][ 7:0], data_out[1][ 7:0],
+                     data_out[6][ 7:0], data_out[2][ 7:0], data_out[7][ 7:0], data_out[3][ 7:0]};
+  end else if((resolution == 2'b00) && (mode == 2'b00)) begin  //  8-bit single channel
+     wr_data_int <= {data_out[1][15:8], data_out[0][15:8], data_out[3][15:8], data_out[2][15:8],
+                     data_out[5][15:8], data_out[4][15:8], data_out[7][15:8], data_out[6][15:8],
+                     data_out[1][ 7:0], data_out[0][ 7:0], data_out[3][ 7:0], data_out[2][ 7:0],
+                     data_out[5][ 7:0], data_out[4][ 7:0], data_out[7][ 7:0], data_out[6][ 7:0]};
   end
+end
+
+reg               wr_en8_reg;
+reg               wr_en14_reg;
+reg  [127:0]      wr_data14_reg;
+reg               wr_en_reg;
+reg  [127:0]      wr_data_int;
+reg  [127:0]      wr_data_reg;
+
+ always @(posedge adc_clk_div) begin
+    if(adc_rst) begin
+       wr_en8_reg    <= 1'b0;
+       wr_en14_reg   <= 1'b0;
+       wr_data14_reg <= 128'b0;
+    end else if(data_en[0]) begin
+       wr_en8_reg    <= ~wr_en8_reg;
+       wr_en14_reg   <= ~wr_en14_reg;
+       wr_data14_reg <= {wr_data14_reg[63:0], wr_data_int[127:64]};
+    end
+ end
+
+ always @(posedge adc_clk_div) begin
+    wr_en_reg   <= data_en[0];
+    wr_data_reg <= wr_data_int;
+ end
+
+ assign wr_clk      = adc_clk_div;
+ assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
+ assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
+
+
 
 endmodule
