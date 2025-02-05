@@ -72,6 +72,7 @@ Contents
    CN0579 <cn0579/index>
    CN0585 <cn0585/index>
    DAC-FMC-EBZ <dac_fmc_ebz/index>
+   FMCOMMS8 <fmcomms8/index>
    MAX96724 <max96724/index>
    PULSAR-ADC <pulsar_adc/index>
    PULSAR-LVDS <pulsar_lvds/index>
