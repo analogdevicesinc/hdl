@@ -44,7 +44,7 @@ proc adi_project {project_name args} {
   puts "\nadi_project:\n"
 
   array set opt [list -dev_select "auto" \
-    -ppath "./$project_name" \
+    -ppath "./_bld/$project_name" \
     -device "" \
     -speed "" \
     -board "" \
@@ -94,7 +94,7 @@ proc adi_project {project_name args} {
 proc adi_project_create {project_name args}  {
   puts "\nadi_project_create:\n"
 
-  array set opt [list -ppath "./$project_name" \
+  array set opt [list -ppath "./_bld/$project_name" \
     -device "" \
     -performance "" \
     -board "" \
@@ -195,8 +195,8 @@ proc adi_project_files_auto {project_name args} {
   puts "\nadi_project_files_auto:\n"
 
   array set opt [list -exts {*.ipx} \
-    -spath ./$project_name/$project_name/lib \
-    -ppath "./$project_name" \
+    -spath ./_bld/$project_name/$project_name/lib \
+    -ppath "./_bld/$project_name" \
     -sdepth "6" \
     -opt_args "" \
     {*}$args]
@@ -287,7 +287,7 @@ proc adi_project_files_auto {project_name args} {
 proc adi_project_files {project_name args} {
   puts "\nadi_project_files:\n"
 
-  array set opt [list -ppath "./$project_name" \
+  array set opt [list -ppath "./_bld/$project_name" \
     -flist "" \
     -opt_args "" \
     {*}$args]
@@ -374,11 +374,11 @@ proc add_update_constraint_file {pfile project_dir ext radiant_project opt_args}
 # Adds the default project files to the Radiant project ($project_name.rdf)
 proc adi_project_files_default {project_name} {
   adi_project_files_auto $project_name -exts {*.ipx} \
-    -spath "./$project_name/$project_name/lib" \
-    -ppath "./$project_name" \
+    -spath "./_bld/$project_name/$project_name/lib" \
+    -ppath "./_bld/$project_name" \
     -sdepth "6"
   adi_project_files $project_name \
-    -flist [list ./$project_name/$project_name/$project_name.v]
+    -flist [list ./_bld/$project_name/$project_name/$project_name.v]
 }
 
 ###############################################################################
@@ -447,7 +447,7 @@ proc adopt_path {full_path_flist base_to_cut {base_to_add ""}} {
 proc adi_project_run {project_name args} {
   puts "\nadi_project_run:\n"
 
-  array set opt [list -ppath "./$project_name" \
+  array set opt [list -ppath "./_bld/$project_name" \
     -mode "export" \
     -impl "impl_1" \
     -top "system_top" \
@@ -516,7 +516,7 @@ proc adi_project_run_cmd {project_name args} {
   puts "\nadi_project_run_cmd:\n"
   set dir [pwd]
 
-  array set opt [list -ppath "./$project_name" -cmd_list "" {*}$args]
+  array set opt [list -ppath "./_bld/$project_name" -cmd_list "" {*}$args]
   set ppath $opt(-ppath)
   set cmd_list $opt(-cmd_list)
 

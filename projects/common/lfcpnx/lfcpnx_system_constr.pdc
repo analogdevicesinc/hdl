@@ -5,6 +5,8 @@
 
 ldc_set_sysconfig {JTAG_PORT=ENABLE MASTER_SPI_PORT=SERIAL DONE_PORT=ENABLE INITN_PORT=ENABLE PROGRAMN_PORT=ENABLE MCCLK_FREQ=112.5 CONFIG_IOSLEW=FAST BOOTMODE=SINGLE CONFIGIO_VOLTAGE_BANK0=1.8 CONFIGIO_VOLTAGE_BANK1=3.3}
 
+set_clock_uncertainty 0.002 [all_clocks]
+
 #gpio LEDs 0-7
 ldc_set_location -site {N5} [get_ports {leds_0_to_23[0]}]
 ldc_set_location -site {N6} [get_ports {leds_0_to_23[1]}]
