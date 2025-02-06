@@ -21,9 +21,7 @@ create_bd_pin -dir O -from 0 -to 0 -type rst qsfp_rst
 create_bd_pin -dir O fpga_boot
 create_bd_pin -dir O -type clk qspi_clk
 create_bd_pin -dir I -type rst ptp_rst
-set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins ptp_rst]
 create_bd_pin -dir O -type rst aux_reset_in
-set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins aux_reset_in]
 create_bd_pin -dir I -type clk qsfp_mgt_refclk
 create_bd_pin -dir I -type clk qsfp_mgt_refclk_bufg
 
@@ -32,11 +30,8 @@ create_bd_pin -dir I -type clk clk_250mhz
 create_bd_pin -dir I -type clk clk_100mhz
 
 create_bd_pin -dir I -type rst rst_125mhz
-set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_125mhz]
 create_bd_pin -dir I -type rst rst_250mhz
-set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_pins rst_250mhz]
 create_bd_pin -dir I -type rst rstn_100mhz
-set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins rstn_100mhz]
 
 create_bd_pin -dir O -type intr irq
 
@@ -480,7 +475,6 @@ if {$APP_ENABLE == 1} {
 
   create_bd_pin -dir I -type clk input_clk
   create_bd_pin -dir I -type rst input_rstn
-  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_pins input_rstn]
 
   ad_connect application_core/input_clk input_clk
   ad_connect application_core/input_rstn input_rstn
