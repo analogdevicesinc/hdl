@@ -41,27 +41,17 @@ create_bd_pin -dir I -from [expr {$INPUT_WIDTH-1}] -to 0 input_axis_tdata
 
 create_bd_pin -dir I -from [expr {$JESD_M-1}] -to 0 input_enable
 
-ad_ip_instance axi_gpio axi_gpio_0 [list \
+ad_ip_instance axi_gpio corundum_gpio_reset [list \
   C_ALL_OUTPUTS 1 \
   C_DOUT_DEFAULT 0x00000001 \
   C_GPIO_WIDTH 1 \
 ]
 
-# ad_ip_instance axi_gpio corundum_gpio_reset [list \
-#   C_ALL_OUTPUTS 1 \
-#   C_DOUT_DEFAULT 0x00000001 \
-#   C_GPIO_WIDTH 1 \
-# ]
+ad_connect corundum_gpio_reset/gpio_io_o aux_reset_in
+ad_connect corundum_gpio_reset/s_axi_aclk clk_100mhz
+ad_connect corundum_gpio_reset/s_axi_aresetn rstn_100mhz
 
-ad_connect axi_gpio_0/gpio_io_o aux_reset_in
-ad_connect axi_gpio_0/s_axi_aclk clk_100mhz
-ad_connect axi_gpio_0/s_axi_aresetn rstn_100mhz
-
-# ad_connect corundum_gpio_reset/gpio_io_o aux_reset_in
-# ad_connect corundum_gpio_reset/s_axi_aclk clk_100mhz
-# ad_connect corundum_gpio_reset/s_axi_aresetn rstn_100mhz
-
-ad_connect axi_gpio_0/S_AXI s_axil_gpio_reset
+ad_connect corundum_gpio_reset/S_AXI s_axil_gpio_reset
 
 ad_ip_instance corundum_core corundum_core [list \
   FPGA_ID $FPGA_ID \
