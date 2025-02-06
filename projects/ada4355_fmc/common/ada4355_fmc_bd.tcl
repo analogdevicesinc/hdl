@@ -12,6 +12,7 @@ create_bd_port -dir I da_n
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
 create_bd_port -dir I sync_n
+create_bd_port -dir I frame_control
 create_bd_port -dir I frame_clock_p
 create_bd_port -dir I frame_clock_n
 
@@ -41,6 +42,7 @@ ad_connect da_n                 axi_ada4355_adc/da_n
 ad_connect db_p                 axi_ada4355_adc/db_p
 ad_connect db_n                 axi_ada4355_adc/db_n
 ad_connect sync_n               axi_ada4355_adc/sync_n
+ad_connect frame_control        axi_ada4355_adc/frame_control
 ad_connect frame_clock_p        axi_ada4355_adc/data_frame_p
 ad_connect frame_clock_n        axi_ada4355_adc/data_frame_n
 ad_connect $sys_iodelay_clk     axi_ada4355_adc/delay_clk

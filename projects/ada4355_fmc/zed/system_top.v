@@ -94,6 +94,7 @@ module system_top (
   input           db_n,
   input           frame_clock_p,
   input           frame_clock_n,
+  input           frame_control,
 
   input           fpgaclk_p,
   input           fpgaclk_n,
@@ -246,5 +247,6 @@ module system_top (
     .db_n (db_n),
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
-    .sync_n (1'b1));
+    .sync_n (1'b1),
+    .frame_control(frame_control));
 endmodule
