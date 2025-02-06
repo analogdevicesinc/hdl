@@ -95,12 +95,15 @@ module system_top (
   input       [ 7:0]      data_in_p,
   input       [ 7:0]      data_in_n,
 
-  output                  spi_csn,
-  output                  spi_clk,
-  output                  spi_sdata,
+  (* MARK_DEBUG = "TRUE" *) output                  spi_csn,
+  (* MARK_DEBUG = "TRUE" *) output                  spi_clk,
+  (* MARK_DEBUG = "TRUE" *) output                  spi_sdata,
+  output                  debug_spi_csn,
+  output                  debug_spi_clk,
+  output                  debug_spi_sdata,
 
-  output                  fmc_pd,
-  output                  fmc_rstn
+  (* MARK_DEBUG = "TRUE" *) output                  fmc_pd,
+  (* MARK_DEBUG = "TRUE" *) output                  fmc_rstn
 );
 
   // internal signals
@@ -131,7 +134,9 @@ module system_top (
 
   assign fmc_pd   = gpio_o[32];
   assign fmc_rstn = gpio_o[33];
-
+  assign debug_spi_csn   = spi_csn;
+  assign debug_spi_clk   = spi_clk;
+  assign debug_spi_sdata = spi_sdata;
   assign gpio_i[63:34] = gpio_o[63:34];
 
   ad_iobuf #(
