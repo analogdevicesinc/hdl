@@ -3,10 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-if {![info exists CACHE_COHERENCY]} {
-  set CACHE_COHERENCY false
-}
-
 # fmcomms2
 
 create_bd_port -dir I rx_clk_in_p
@@ -149,7 +145,6 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SG 64
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
 ad_connect util_ad9361_adc_pack/packed_fifo_wr axi_ad9361_adc_dma/fifo_wr
@@ -212,7 +207,6 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SG 64
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/m_axis_aclk
 ad_connect axi_ad9361_dac_dma/m_axis util_ad9361_dac_upack/s_axis
@@ -225,13 +219,13 @@ ad_connect $sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
 ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
+ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
+ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1 $CACHE_COHERENCY
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi $CACHE_COHERENCY
-ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi $CACHE_COHERENCY
-ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi $CACHE_COHERENCY
-ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
+ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
 
 # interrupts
 

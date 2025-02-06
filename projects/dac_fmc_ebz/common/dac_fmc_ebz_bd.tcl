@@ -1,13 +1,9 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
-
-if {![info exists CACHE_COHERENCY]} {
-  set CACHE_COHERENCY false
-}
 
 set JESD_M    $ad_project_params(JESD_M)
 set JESD_L    $ad_project_params(JESD_L)
@@ -56,7 +52,6 @@ ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_DEST 1 \
   DMA_DATA_WIDTH_SRC 64 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
-  CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
 ad_dacfifo_create axi_dac_fifo \
@@ -135,8 +130,8 @@ ad_cpu_interconnect 0x7c420000 dac_dma
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1 $CACHE_COHERENCY
-ad_mem_hp1_interconnect sys_cpu_clk dac_dma/m_src_axi $CACHE_COHERENCY
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_cpu_clk dac_dma/m_src_axi
 
 # interrupts
 

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -591,7 +591,7 @@ proc ad_xcvrpll {m_src m_dst} {
 ###################################################################################################
 ###################################################################################################
 
-## Create a memory mapped interface connection to PS8 IP, using an
+## Create an memory mapped interface connection to PS8 IP, using a
 #  HPC0 high speed interface.
 #
 #  \param[p_clk]  - name of the clock or reset source
@@ -604,7 +604,7 @@ proc ad_mem_hpc0_interconnect {p_clk p_name} {
   if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC0" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to PS8 IP, using an
+## Create an memory mapped interface connection to PS8 IP, using a
 #  HPC1 high speed interface.
 #
 #  \param[p_clk]  - name of the clock or reset source
@@ -617,91 +617,79 @@ proc ad_mem_hpc1_interconnect {p_clk p_name} {
   if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HPC1" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to a MIG or PS7/8 IP, using an
-#  HP0 high speed interface in case of PSx. On UltraScale, if cache coherency
-#  is enabled, an HPC0 high performance coherent interface will be used instead.
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP0 high speed interface in case of PSx.
 #
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
-#  \param[p_cc]   - cache coherency support
 #
-proc ad_mem_hp0_interconnect {p_clk p_name {p_cc false}} {
+proc ad_mem_hp0_interconnect {p_clk p_name} {
 
   global sys_zynq
-  global sys_hpc0_interconnect_index
 
-  if {(($sys_zynq != 1 && $sys_zynq != 2) || ($p_cc && $sys_hpc0_interconnect_index != -1)) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP0")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
-  if {$sys_zynq == 2} {ad_mem_hpx_interconnect [expr {$p_cc ? "HPC0" : "HP0"}] $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP0" $p_clk $p_name}
   if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to a MIG or PS7/8 IP, using an
-#  HP1 high speed interface in case of PSx. On UltraScale, if cache coherency
-#  is enabled, an HPC0 high performance coherent interface will be used instead.
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP1 high speed interface in case of PSx.
 #
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
-#  \param[p_cc]   - cache coherency support
 #
-proc ad_mem_hp1_interconnect {p_clk p_name {p_cc false}} {
+proc ad_mem_hp1_interconnect {p_clk p_name} {
 
   global sys_zynq
-  global sys_hpc0_interconnect_index
 
-  if {(($sys_zynq != 1 && $sys_zynq != 2) || ($p_cc && $sys_hpc0_interconnect_index != -1)) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP1")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
-  if {$sys_zynq == 2} {ad_mem_hpx_interconnect [expr {$p_cc ? "HPC0" : "HP1"}] $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP1" $p_clk $p_name}
   if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to a MIG or PS7/8 IP, using an
-#  HP2 high speed interface in case of PSx. On UltraScale, if cache coherency
-#  is enabled, an HPC1 high performance coherent interface will be used instead.
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP2 high speed interface in case of PSx.
 #
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
-#  \param[p_cc]   - cache coherency support
 #
-proc ad_mem_hp2_interconnect {p_clk p_name {p_cc false}} {
+proc ad_mem_hp2_interconnect {p_clk p_name} {
 
   global sys_zynq
-  global sys_hpc1_interconnect_index
 
-  if {(($sys_zynq != 1 && $sys_zynq != 2) || ($p_cc && $sys_hpc1_interconnect_index != -1)) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP2")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
-  if {$sys_zynq == 2} {ad_mem_hpx_interconnect [expr {$p_cc ? "HPC1" : "HP2"}] $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP2" $p_clk $p_name}
   if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to a MIG or PS7/8 IP, using an
-#  HP3 high speed interface in case of PSx. On UltraScale, if cache coherency
-#  is enabled, an HPC1 high performance coherent interface will be used instead.
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, using a
+#  HP3 high speed interface in case of PSx.
 #
 #  \param[p_clk]  - name of the clock or reset source
 #  \param[p_name] - name or list of names of the clock or reset sink
-#  \param[p_cc]   - cache coherency support
 #
-proc ad_mem_hp3_interconnect {p_clk p_name {p_cc false}} {
+proc ad_mem_hp3_interconnect {p_clk p_name} {
 
   global sys_zynq
-  global sys_hpc1_interconnect_index
 
-  if {(($sys_zynq != 1 && $sys_zynq != 2) || ($p_cc && $sys_hpc1_interconnect_index != -1)) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
+  if {($sys_zynq != 1 && $sys_zynq != 2) && ($p_name eq "sys_ps7/S_AXI_HP3")} {return}
   if {$sys_zynq == -1} {ad_mem_hpx_interconnect "SIM" $p_clk $p_name}
   if {$sys_zynq == 0} {ad_mem_hpx_interconnect "MEM" $p_clk $p_name}
   if {$sys_zynq == 1} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
-  if {$sys_zynq == 2} {ad_mem_hpx_interconnect [expr {$p_cc ? "HPC1" : "HP3"}] $p_clk $p_name}
+  if {$sys_zynq == 2} {ad_mem_hpx_interconnect "HP3" $p_clk $p_name}
   if {$sys_zynq == 3} {ad_mem_hpx_interconnect "NOC" $p_clk $p_name}
 }
 
-## Create a memory mapped interface connection to a MIG or PS7/8 IP, proc is
+## Create an memory mapped interface connection to a MIG or PS7/8 IP, proc is
 #  called in the ad_mem_hp[0|1|2|3]_interconnect processes, should never be
 #  directly called in block designs.
 #

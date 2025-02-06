@@ -3,10 +3,6 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-if {![info exists CACHE_COHERENCY]} {
-  set CACHE_COHERENCY false
-}
-
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # RX parameters
@@ -61,7 +57,6 @@ ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
   DMA_LENGTH_WIDTH 31 \
   DMA_DATA_WIDTH_DEST 128 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
-  CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
 # common cores
@@ -176,8 +171,8 @@ ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9083_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2 $CACHE_COHERENCY
-ad_mem_hp2_interconnect $sys_dma_clk axi_ad9083_rx_dma/m_dest_axi $CACHE_COHERENCY
+ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+ad_mem_hp2_interconnect $sys_dma_clk axi_ad9083_rx_dma/m_dest_axi
 
 # interrupts
 
