@@ -238,10 +238,10 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire             delay_locked;
   wire [7:0]       adc_custom_control;
   wire [1:0]       resolution;
-  wire [1:0]       mode;
+  wire [2:0]       mode;
 
 assign resolution = adc_custom_control[1:0];
-assign mode       = adc_custom_control[3:2];
+assign mode       = adc_custom_control[4:2];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),

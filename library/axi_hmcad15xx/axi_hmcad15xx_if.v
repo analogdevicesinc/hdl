@@ -52,16 +52,16 @@ module axi_hmcad15xx_if #(
   input   [ 7:0]         data_in_p,
   input   [ 7:0]         data_in_n,
 
-  input                  adc_rst,
+  (* MARK_DEBUG = "TRUE" *) input                  adc_rst,
 
-  input   [ 1:0]         resolution,
-  input   [ 1:0]         mode,
+ (* MARK_DEBUG = "TRUE" *) input   [ 1:0]         resolution,
+ (* MARK_DEBUG = "TRUE" *) input   [ 2:0]         mode,
 
   // data path interface
 
   output                 adc_clk,
-  output                 adc_valid,
-  output    [127:0]      adc_data,
+ (* MARK_DEBUG = "TRUE" *) output                 adc_valid,
+ (* MARK_DEBUG = "TRUE" *) output    [127:0]      adc_data,
 
   // delay control signals
   input                                     up_clk,
@@ -99,14 +99,14 @@ BUFIO i_clk_buf(
 
   assign adc_clk = adc_clk_div;
 
-wire [8:0] data_s0;
-wire [8:0] data_s1;
-wire [8:0] data_s2;
-wire [8:0] data_s3;
-wire [8:0] data_s4;
-wire [8:0] data_s5;
-wire [8:0] data_s6;
-wire [8:0] data_s7;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s0;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s1;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s2;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s3;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s4;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s5;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s6;
+(* MARK_DEBUG = "TRUE" *) wire [8:0] data_s7;
 
 
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
@@ -172,8 +172,8 @@ ad_serdes_in # (
 
 
 
-  wire [7:0] frame_data;
-  wire [7:0] serdes_data [0:7];
+  (* MARK_DEBUG = "TRUE" *) wire [7:0] frame_data;
+  (* MARK_DEBUG = "TRUE" *) wire [7:0] serdes_data [0:7];
 
   assign {frame_data[7],serdes_data[7][7],serdes_data[6][7],serdes_data[5][7],serdes_data[4][7],serdes_data[3][7],serdes_data[2][7],serdes_data[1][7],serdes_data[0][7]} = data_s0;  //latest bit received
   assign {frame_data[6],serdes_data[7][6],serdes_data[6][6],serdes_data[5][6],serdes_data[4][6],serdes_data[3][6],serdes_data[2][6],serdes_data[1][6],serdes_data[0][6]} = data_s1;  //
@@ -184,8 +184,8 @@ ad_serdes_in # (
   assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
   assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
 
-wire [15:0] data_out [0:7];
-wire [ 7:0] data_en;
+(* MARK_DEBUG = "TRUE" *) wire [15:0] data_out [0:7];
+(* MARK_DEBUG = "TRUE" *) wire [ 7:0] data_en;
 
 generate
   genvar i;
@@ -206,17 +206,17 @@ generate
  //==========================================================================
 
 always @(posedge adc_clk_div) begin
-if((resolution == 2'b00) && (mode == 2'b11)) begin  //  8-bit quad channel
+if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
      wr_data_int <= {data_out[2][15:8], data_out[0][15:8], data_out[6][15:8], data_out[4][15:8],
                      data_out[3][15:8], data_out[1][15:8], data_out[7][15:8], data_out[5][15:8],
                      data_out[2][ 7:0], data_out[0][ 7:0], data_out[6][ 7:0], data_out[4][ 7:0],
                      data_out[3][ 7:0], data_out[1][ 7:0], data_out[7][ 7:0], data_out[5][ 7:0]};
-  end else if((resolution == 2'b00) && (mode == 2'b01)) begin  //  8-bit dual channel
+  end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
      wr_data_int <= {data_out[4][15:8], data_out[0][15:8], data_out[5][15:8], data_out[1][15:8],
                      data_out[6][15:8], data_out[2][15:8], data_out[7][15:8], data_out[3][15:8],
                      data_out[4][ 7:0], data_out[0][ 7:0], data_out[5][ 7:0], data_out[1][ 7:0],
                      data_out[6][ 7:0], data_out[2][ 7:0], data_out[7][ 7:0], data_out[3][ 7:0]};
-  end else if((resolution == 2'b00) && (mode == 2'b00)) begin  //  8-bit single channel
+  end else if((resolution == 2'b00) && (mode == 3'b001)) begin  //  8-bit single channel
     //  wr_data_int <= {data_out[1][15:8], data_out[0][15:8], data_out[3][15:8], data_out[2][15:8],
                     //  data_out[5][15:8], data_out[4][15:8], data_out[7][15:8], data_out[6][15:8],
                     //  data_out[1][ 7:0], data_out[0][ 7:0], data_out[3][ 7:0], data_out[2][ 7:0],
@@ -228,12 +228,12 @@ if((resolution == 2'b00) && (mode == 2'b11)) begin  //  8-bit quad channel
   end
 end
 
-reg               wr_en8_reg;
-reg               wr_en14_reg;
-reg  [127:0]      wr_data14_reg;
-reg               wr_en_reg;
-reg  [127:0]      wr_data_int;
-reg  [127:0]      wr_data_reg;
+(* MARK_DEBUG = "TRUE" *) reg               wr_en8_reg;
+(* MARK_DEBUG = "TRUE" *) reg               wr_en14_reg;
+(* MARK_DEBUG = "TRUE" *) reg  [127:0]      wr_data14_reg;
+(* MARK_DEBUG = "TRUE" *) reg               wr_en_reg;
+(* MARK_DEBUG = "TRUE" *) reg  [127:0]      wr_data_int;
+(* MARK_DEBUG = "TRUE" *) reg  [127:0]      wr_data_reg;
 
  always @(posedge adc_clk_div) begin
     if(adc_rst) begin
