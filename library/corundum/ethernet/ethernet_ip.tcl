@@ -15,8 +15,8 @@ set_property part xcvu9p-flga2104-2L-e [current_project]
 if [info exists ::env(BOARD)] {
   set board $::env(BOARD)
   if [string equal $board VCU118] {
-    source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
-    source "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_usplus.tcl"
+    source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
   } else {
     error "$board board is not supported!"
   }
@@ -27,14 +27,14 @@ if [info exists ::env(BOARD)] {
 # Corundum sources
 adi_ip_files ethernet [list \
   "ethernet_core.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/cmac_gty_wrapper.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/rb_drp.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/cmac_pad.v" \
-  "$ad_hdl_dir/../ucorundum/fpga/common/rtl/mac_ts_insert.v" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/rtl/sync_reset.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_wrapper.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_gty_ch_wrapper.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/rb_drp.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/cmac_pad.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/rtl/mac_ts_insert.v" \
 ]
 
 adi_ip_properties_lite ethernet

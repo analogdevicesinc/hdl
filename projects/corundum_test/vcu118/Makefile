@@ -14,16 +14,16 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/corundum/scripts/corundum_vcu118_cfg.tcl
 M_DEPS += ../../../library/corundum/scripts/corundum.tcl
 
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/rb_drp.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/common/syn/vivado/mqnic_port.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
-EXTERNAL_DEPS += ../../../../ucorundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/rb_drp.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/common/syn/vivado/mqnic_port.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl
 
 LIB_DEPS += axi_sysid
 LIB_DEPS += sysid_rom
