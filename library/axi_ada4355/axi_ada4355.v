@@ -36,7 +36,9 @@
 module axi_ada4355 #(
 
     parameter   ID = 0,
-    parameter   FPGA_TECHNOLOGY = 0
+    parameter   FPGA_TECHNOLOGY = 2,
+    parameter   IODELAY_CTRL = 1,
+    parameter   IO_DELAY_GROUP = "adc_if_delay_group"
   ) (
 
      // ADC interface
@@ -262,7 +264,8 @@ module axi_ada4355 #(
 
    axi_ada4355_if #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IODELAY_CTRL(1)
+    .IO_DELAY_GROUP(IO_DELAY_GROUP),
+    .IODELAY_CTRL(IODELAY_CTRL)
    ) i_ada4355_interface (
     .dco_n(dco_n),
     .dco_p(dco_p),
