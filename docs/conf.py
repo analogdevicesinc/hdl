@@ -27,7 +27,7 @@ source_suffix = '.rst'
 
 # -- External docs configuration ----------------------------------------------
 
-interref_repos = ['doctools', 'documentation']
+interref_repos = ['doctools', 'documentation', 'pyadi-iio']
 
 # -- Custom extensions configuration ------------------------------------------
 
