@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -92,8 +92,6 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [15:0]  decimation_ratio;
-  wire            filter_reset;
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
   wire            iic_mux_scl_t_s;
@@ -103,7 +101,7 @@ module system_top (
 
   // instantiations
 
-  assign gpio_i[63:49] = 15'b0;
+  assign gpio_i[63:32] = 32'b0;
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -112,22 +110,6 @@ module system_top (
     .dio_i(gpio_o[31:0]),
     .dio_o(gpio_i[31:0]),
     .dio_p(gpio_bd));
-
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_iobuf_filter_reset (
-    .dio_t(gpio_t[48]),
-    .dio_i(gpio_o[48]),
-    .dio_o(gpio_i[48]),
-    .dio_p(filter_reset));
-
-  ad_iobuf #(
-    .DATA_WIDTH(16)
-  ) i_iobuf_dec_ratio (
-    .dio_t(gpio_t[47:32]),
-    .dio_i(gpio_o[47:32]),
-    .dio_o(gpio_i[47:32]),
-    .dio_p(decimation_ratio));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -208,8 +190,6 @@ module system_top (
     .spi1_sdo_o (),
     .adc_clk (adc_clk),
     .adc_data (adc_data),
-    .filter_decimation_ratio (decimation_ratio),
-    .filter_reset (filter_reset),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
