@@ -10,11 +10,11 @@ The :adi:`EVAL-AD7405` is a full-featured evaluation board
 designed to allow the user to easily evaluate all features of the :adi:`AD7405`
 isolated analog-to-digital converter (ADC).
 
-The provided HDL reference design supports the :adi:`AD7405` , :adi:`AD7403`
-and :adi:`ADuM7701` devices.
+The provided HDL reference design supports the :adi:`AD7405`, :adi:`AD7403` and
+:adi:`ADuM7701` devices.
 One of the main differences between these devices is the type of the digital
-data lines. In the case of :adi:`ADuM7701` and :adi:`AD7403`, it is
-single-ended, and for :adi:`AD7405` is differential.
+data lines. In the case of :adi:`ADuM7701` and :adi:`AD7403`, it is single-ended,
+and for :adi:`AD7405` is differential.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -91,37 +91,10 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ==================== ===============
 Instance             Zynq/Microblaze
 ==================== ===============
+axi_ad7405           0x44A0_0000
 axi_ad7405_dma       0x44A3_0000
 axi_adc_clkgen       0x44A4_0000
 ==================== ===============
-
-GPIOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - filter_reset
-     - INOUT
-     - 48
-     - 102
-     - 124
-   * - decimation_ratio[15:0]
-     - INOUT
-     - 47:32
-     - 101:86
-     - 125:110
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -194,6 +167,9 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
+   * - AXI_AD7405
+     - :git-hdl:`library/axi_ad7405`
+     - ---
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`
@@ -221,11 +197,15 @@ HDL related
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - ---
+   * - UTIL_CDC
+     - :git-hdl:`library/util_cdc`
+     - ---
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * No-OS driver at :git-no-os:`legacy/adum7701_fmc`
+* Linux driver at :git-linux:`drivers/iio/adc/admc_adc.c`
 
 .. include:: ../common/more_information.rst
 
