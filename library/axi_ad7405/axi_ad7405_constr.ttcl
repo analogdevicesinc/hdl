@@ -1,0 +1,12 @@
+###############################################################################
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+
+create_clock -name word_clk -period 25.000 [get_pins -hier -filter {name=~*i_util_dec256sinc24b_interface/word_clk_reg/Q}]
