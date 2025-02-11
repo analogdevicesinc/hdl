@@ -26,6 +26,7 @@ ADC/DAC
    axi_ad3552r/index
    axi_ad408x/index
    axi_ad485x/index
+   axi_ad7405/index
    axi_ad7606x/index
    axi_ad7616/index
    axi_ad7768/index
