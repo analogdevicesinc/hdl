@@ -3,6 +3,9 @@
 Build an HDL project
 ===============================================================================
 
+Prerequisites
+-------------------------------------------------------------------------------
+
 .. warning::
 
    Please note that ADI only provides the source files necessary to create
@@ -84,6 +87,12 @@ be described:
 2. Setup the HDL repository
 -------------------------------------------------------------------------------
 
+.. caution::
+
+   We offer support only for
+   `the latest 2 releases <https://github.com/analogdevicesinc/hdl/releases>`__
+   from our repository, and the :git-hdl:`main <>` branch.
+
 These designs are built upon ADI's generic HDL reference designs framework.
 ADI distributes the bit/elf files of these projects as part of the
 :dokuwiki:`ADI Kuiper Linux <resources/tools-software/linux-software/kuiper-linux>`.
@@ -95,23 +104,16 @@ the repository. This is the best method to get the sources.
 Here, we are cloning the repository inside a directory called **adi**.
 Please refer to the :ref:`git_repository` section for more details.
 
+Cloning is now done using HTTPS and a classic PAT (Personal Access Token).
+More details on how to do this,
+`here <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens>`__.
+
 .. shell:: bash
 
-   $git clone git@github.com:analogdevicesinc/hdl.git
+   $git clone https://github.com/analogdevicesinc/hdl.git
 
-.. collapsible:: Cloning is done now using SSH
-
-   .. warning::
-
-      Cloning the HDL repository is done now using SSH, because of
-      GitHub security reasons. Check out this documentation on `how to deal
-      with SSH keys in
-      GitHub <https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent>`__.
-      Both for `Cygwin <https://www.cygwin.com/>`__ and
-      `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__ it is
-      necessary to create a unique SSH key. If you use WSL, to get the best
-      performance, you must clone your HDL repository in the WSL file system.
-      For example: (:code:`\\\\wsl.localhost\\Ubuntu\\home\\username\\hdl`)
+If you use WSL, you must clone your HDL repository in the WSL file system.
+For example ``\\wsl.localhost\Ubuntu\home\username\hdl``.
 
 The above command clones the **default** branch, which is the **main** for
 HDL repo. The **main** branch always points to the latest stable release
@@ -121,7 +123,7 @@ want to switch to any other branch you need to checkout that branch:
 .. shell:: bash
 
    ~/hdl
-   $git checkout hdl_2022_r2
+   $git checkout hdl_2023_r2
 
 If this is your first time cloning, you have the latest source files.
 If not, you can simply pull the latest sources using ``git pull`` or
@@ -131,7 +133,7 @@ If not, you can simply pull the latest sources using ``git pull`` or
 
    ~/hdl
    $git fetch origin               # shows what changes will be pulled on your local copy
-   $git rebase origin/hdl_2022_r2  # updates your local copy
+   $git rebase origin/hdl_2023_r2  # updates your local copy
 
 .. _build_hdl environment:
 
@@ -158,11 +160,9 @@ method in your **~/.bashrc** file as follows:
        source /opt/Xilinx/Vivado/$XVERSION/settings64.sh
    }
 
-.. tip::
-
-   Even though it's convenient, we discourage adding the source scripts to
-   .bashrc files outside of wrapper methods, as multiple vendor environments
-   may conflict with each other.
+Even though it's convenient, we discourage adding the source scripts to
+.bashrc files outside of wrapper methods, as multiple vendor environments
+may conflict with each other.
 
 Then, `re-source your bashrc <https://linuxcommand.org/lc3_man_pages/sourceh.html>`__
 for the current session (or open a new one) and call the defined method:
@@ -213,6 +213,9 @@ For Lattice:
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Cygwin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Because GNU Make is not supported on Windows, you need to install
 `Cygwin <https://www.cygwin.com/>`__, which is a UNIX-like environment
 and command-line interface for Microsoft Windows.
@@ -250,10 +253,111 @@ For Lattice:
    $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
    $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
 
-.. collapsible:: Alternatives to Cygwin/Linux terminal
+WSL
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   A very good alternative to Cygwin -- **but not supported by us** -- is
-   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__.
+`WSL <https://learn.microsoft.com/en-us/windows/wsl/install/>`__ (or Windows
+Subsystem for Linux) is both a UNIX-like environment and a command-line
+interface for Microsoft Windows. You need to install the Ubuntu distribution.
+
+To be able to access the GUI, **WSL2 is recommended**. This is done using
+PowerShell or Windows Command Prompt in Administrator mode.
+In the link above, you can find the installation guide for WSL on Windows.
+
+:red:`We do not offer support on WSL-related issues or on Vivado/Vitis issues!`
+
+.. collapsible:: How to install WSL
+
+   When installing WSL, the Ubuntu distribution will be installed by default.
+   If it is not, after installing WSL, write in the terminal:
+
+   .. shell:: ps1
+
+      $wsl --update
+      $wsl --install -d ubuntu
+
+   If you want to check the WSL version, you can use the Windows Command
+   Prompt command: **wsl -l -v**.
+
+   If you want to check the version for wsl and Ubuntu, you can use the
+   following commands in Ubuntu:
+
+   .. shell:: bash
+
+      $uname -r
+       5.15.90.1-microsoft-standard-WSL2
+
+      $lsb_release -a
+       No LSB modules are available.
+       Distributor ID: Ubuntu
+       Description:    Ubuntu 22.04.2 LTS
+       Release:        22.04
+       Codename:       jammy
+
+.. collapsible:: How to install the tools in WSL
+
+   Before building any project,
+   :red:`it is necessary to install the Linux version for Vivado, in the WSL file system`,
+   because on the Ubuntu distribution on WSL you cannot
+   run projects from on the Windows version of them. When you have to choose
+   the installation path, choose the location where WSL is installed
+   ``\\wsl.localhost\Ubuntu\opt``.
+
+   Also, to get the best performance, you must clone your HDL repository in
+   the WSL file system. For example: ``\\wsl.localhost\Ubuntu\home\username\hdl``.
+
+   For more information you can consult the following link:
+   `WSL Storage <https://learn.microsoft.com/en-us/windows/wsl/filesystems#file-storage-and-performance-across-file-systems>`__.
+
+   Download the Linux version of Vitis (Vivado comes in the same package with
+   Vitis), then one by one, do the following commands in the WSL terminal:
+
+   .. shell:: bash
+
+      ~/Downloads
+      $chmod +x FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
+      $sudo ./FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
+
+   Now, you may have noticed that the installation raised a couple of
+   warnings, such as:
+
+   .. code-block::
+
+      $/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
+      /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+      terminate called after throwing an instance of 'std::runtime_error'
+        what():  locale::facet::_S_create_c_locale name not valid
+      /tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 312:  4105 Aborted                 "$RDI_PROG" "$@"
+
+   See `here <https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US>`__
+   a thread on the Xilinx community.
+
+   Next, run:
+
+   .. shell:: bash
+
+      ~/Downloads
+      $sudo apt-get install locales && sudo localedef -i en_US -f UTF-8 en_US.UTF-8
+      $cd /opt/Xilinx/Vitis/2023.2/scripts
+      $sudo ./installLibs.sh
+      $sudo apt-get install libxrender1 libxtst6 libxi6
+      $sudo apt-get install libtinfo5 # to be used only in case you have issues with missing libtinfo5 when building a project
+
+   Then you need to add the following paths to your $PATH environment variable:
+
+   .. shell:: bash
+
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vivado/202x.x/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vivado_HLS/202x.x/bin
+
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/opt/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+
+.. collapsible:: Alternatives to Cygwin/WSL/Linux terminal
 
    If you do not want to use neither Cygwin nor WSL, there might still be some
    alternative. There are ``make`` alternatives for **Windows Command
@@ -278,9 +382,9 @@ current environment, for example:
    $which make
     /usr/bin/make
    $which vivado
-    /opt/Xilinx/Vivado/2023.1/bin/vivado
+    /opt/Xilinx/Vivado/2023.2/bin/vivado
    $which quartus
-    /opt/intelFPGA/23.1/quartus/bin/quartus
+    /opt/intelFPGA/24.2/quartus/bin/quartus
 
 .. _build_hdl build:
 
@@ -636,7 +740,7 @@ The **sof** file is used to program the device.
 
 .. collapsible:: Building an Intel project in WSL - known issues
 
-   For a10Soc and s10Soc projects it's very possible to face the following
+   For a10Soc and S10Soc projects it's very possible to face the following
    error when you try to build the project:
 
    .. warning::
