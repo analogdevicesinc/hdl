@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -62,6 +62,7 @@ ad_ip_instance axi_dmac axi_ad9695_rx_dma [list \
   DMA_LENGTH_WIDTH 24 \
   DMA_DATA_WIDTH_DEST 128 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
+  CACHE_COHERENT $CACHE_COHERENCY \
   ]
 
 # common cores
@@ -159,8 +160,13 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9695_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 sys_ps7/S_AXI_HP1
-ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect dma_clk_wiz/clk_out1 sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi
+} else {
+  ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect dma_clk_wiz/clk_out1 axi_ad9695_rx_dma/m_dest_axi
+}
 
 # interrupts
 
