@@ -23,7 +23,7 @@ ADC/DAC
 .. toctree::
    :maxdepth: 1
 
-   axi_ad3552r/index
+   axi_ad35xxr/index
    axi_ad408x/index
    axi_ad485x/index
    axi_ad7405/index
