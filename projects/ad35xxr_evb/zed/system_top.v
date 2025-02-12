@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -85,17 +85,17 @@ module system_top (
 
    // dac interface
 
-  inout           ad3552r_ldacn,
-  inout           ad3552r_alertn,
-  inout           ad3552r_gpio_6,
-  inout           ad3552r_gpio_7,
-  inout           ad3552r_gpio_8,
-  inout           ad3552r_gpio_9,
-  inout   [ 3:0]  ad3552r_spi_sdio,
-  output          ad3552r_resetn,
-  output          ad3552r_qspi_sel,
-  output          ad3552r_spi_cs,
-  output          ad3552r_spi_sclk
+  inout           ad35xxr_ldacn,
+  inout           ad35xxr_alertn,
+  inout           ad35xxr_gpio_6,
+  inout           ad35xxr_gpio_7,
+  inout           ad35xxr_gpio_8,
+  inout           ad35xxr_gpio_9,
+  inout   [ 3:0]  ad35xxr_spi_sdio,
+  output          ad35xxr_resetn,
+  output          ad35xxr_qspi_sel,
+  output          ad35xxr_spi_cs,
+  output          ad35xxr_spi_sclk
 );
 
   // internal signals
@@ -109,35 +109,34 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_i_s;
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
-  wire    [ 3:0]  ad3552r_spi_sdo;
-  wire    [ 3:0]  ad3552r_spi_sdi;
-  wire            ad3552r_spi_t;
+  wire    [ 3:0]  ad35xxr_spi_sdo;
+  wire    [ 3:0]  ad35xxr_spi_sdi;
+  wire    [ 3:0]  ad35xxr_spi_t;
 
   assign gpio_i[63:39] = gpio_o[63:39];
 
-  assign ad3552r_qspi_sel = 1'b1;
-  assign ad3552r_resetn   = gpio_o[38];
+  assign ad35xxr_resetn   = gpio_o[38];
 
   ad_iobuf #(
     .DATA_WIDTH(4)
   ) i_dac_0_spi_iobuf (
-    .dio_t({4{ad3552r_spi_t}}),
-    .dio_i(ad3552r_spi_sdo),
-    .dio_o(ad3552r_spi_sdi),
-    .dio_p(ad3552r_spi_sdio));
+    .dio_t({ad35xxr_spi_t}),
+    .dio_i(ad35xxr_spi_sdo),
+    .dio_o(ad35xxr_spi_sdi),
+    .dio_p(ad35xxr_spi_sdio));
 
   ad_iobuf #(
     .DATA_WIDTH(6)
-  ) i_ad3552r_iobuf (
+  ) i_ad35xxr_iobuf (
     .dio_t(gpio_t[37:32]),
     .dio_i(gpio_o[37:32]),
     .dio_o(gpio_i[37:32]),
-    .dio_p({ad3552r_gpio_9,
-            ad3552r_gpio_8,
-            ad3552r_gpio_7,
-            ad3552r_gpio_6,
-            ad3552r_alertn,
-            ad3552r_ldacn}));
+    .dio_p({ad35xxr_gpio_9,
+            ad35xxr_gpio_8,
+            ad35xxr_gpio_7,
+            ad35xxr_gpio_6,
+            ad35xxr_alertn,
+            ad35xxr_ldacn}));
 
   ad_iobuf #(
     .DATA_WIDTH (32)
@@ -236,9 +235,10 @@ module system_top (
 
     //dac interface
 
-    .dac_sclk(ad3552r_spi_sclk),
-    .dac_csn(ad3552r_spi_cs),
-    .dac_spi_sdi(ad3552r_spi_sdi),
-    .dac_spi_sdo(ad3552r_spi_sdo),
-    .dac_spi_sdo_t(ad3552r_spi_t));
+    .dac_sclk(ad35xxr_spi_sclk),
+    .dac_csn(ad35xxr_spi_cs),
+    .dac_spi_sdi(ad35xxr_spi_sdi),
+    .dac_spi_sdo(ad35xxr_spi_sdo),
+    .dac_spi_sdo_t(ad35xxr_spi_t),
+    .dac_qspi_sel(ad35xxr_qspi_sel));
 endmodule

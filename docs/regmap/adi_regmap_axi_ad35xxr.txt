@@ -1,7 +1,7 @@
 TITLE
 USING DAC_COMMON
-AXI AD3552R DAC Common (axi_ad3552r_dac_common)
-AXI_AD3552R_DAC_COMMON
+AXI AD35XXR DAC Common (axi_ad35xxr_dac_common)
+AXI_AD35XXR_DAC_COMMON
 ENDTITLE
 
 ############################################################################################
@@ -38,7 +38,7 @@ FIELD
 [23:0] 0x00000000
 DATA_WRITE
 RW
-Configuration data for the AD3552R device registers. 8/16 LSB are used depending on the
+Configuration data for the AD35XXR device registers. 8/16 LSB are used depending on the
 8b/16b configuration.
 ENDFIELD
 
@@ -64,8 +64,15 @@ FIELD
 [31:24] 0x00000000
 ADDRESS
 RW
-Register address when the AD3552R is configured or stream start address when the
+Register address when the AD35XXR is configured or stream start address when the
 FSM is in stream state.
+ENDFIELD
+
+FIELD
+[3:2] 0x00000000
+MULTI_IO_MODE
+RW
+Controls the SPI mode (0: Single SPI, 1: Dual SPI, 2: Quad SPI).
 ENDFIELD
 
 FIELD
@@ -89,8 +96,8 @@ ENDFIELD
 
 TITLE
 USING DAC_CHANNEL
-AXI AD3552R DAC Channel (axi_ad3552r_dac_channel)
-AXI_AD3552R_DAC_CHANNEL
+AXI AD35XXR DAC Channel (axi_ad35xxr_dac_channel)
+AXI_AD35XXR_DAC_CHANNEL
 ENDTITLE
 
 ############################################################################################

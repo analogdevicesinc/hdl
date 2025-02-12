@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module axi_ad3552r_core #(
+module axi_ad35xxr_core #(
   parameter   ID = 0,
   parameter   FPGA_TECHNOLOGY = 0,
   parameter   FPGA_FAMILY = 0,
@@ -49,65 +49,66 @@ module axi_ad3552r_core #(
 
   // dac interface
 
-  input                   dac_clk,
-  output                  dac_rst,
-  input        [15:0]     adc_data_in_a,
-  input        [15:0]     adc_data_in_b,
-  input        [31:0]     dma_data,
-  input                   adc_valid_in_a,
-  input                   adc_valid_in_b,
-  input                   valid_in_dma,
-  output       [31:0]     dac_data,
-  output                  dac_valid,
-  input                   dac_data_ready,
+  input         dac_clk,
+  output        dac_rst,
+  input  [15:0] adc_data_in_a,
+  input  [15:0] adc_data_in_b,
+  input  [31:0] dma_data,
+  input         adc_valid_in_a,
+  input         adc_valid_in_b,
+  input         valid_in_dma,
+  output [31:0] dac_data,
+  output        dac_valid,
+  input         dac_data_ready,
 
   // output
 
-  output       [ 7:0]     address,
-  input                   if_busy,
-  input        [23:0]     data_read,
-  output       [23:0]     data_write,
-  output                  sdr_ddr_n,
-  output                  symb_8_16b,
-  output                  transfer_data,
-  output                  stream,
-  output                  dac_ext_sync_arm,
+  output [ 7:0] address,
+  input         if_busy,
+  input  [23:0] data_read,
+  output [23:0] data_write,
+  output [ 1:0] multi_io_mode,
+  output        sdr_ddr_n,
+  output        symb_8_16b,
+  output        transfer_data,
+  output        stream,
+  output        dac_ext_sync_arm,
 
   // processor interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  input                   up_wreq,
-  input        [13:0]     up_waddr,
-  input        [31:0]     up_wdata,
-  output reg              up_wack,
-  input                   up_rreq,
-  input        [13:0]     up_raddr,
-  output reg   [31:0]     up_rdata,
-  output reg              up_rack
+  input             up_rstn,
+  input             up_clk,
+  input             up_wreq,
+  input      [13:0] up_waddr,
+  input      [31:0] up_wdata,
+  output reg        up_wack,
+  input             up_rreq,
+  input      [13:0] up_raddr,
+  output reg [31:0] up_rdata,
+  output reg        up_rack
 );
 
-  wire     [31:0]   up_rdata_0_s;
-  wire              up_rack_0_s;
-  wire              up_wack_0_s;
-  wire     [31:0]   up_rdata_1_s;
-  wire              up_rack_1_s;
-  wire              up_wack_1_s;
-  wire     [31:0]   up_rdata_s;
-  wire              up_rack_s;
-  wire              up_wack_s;
+  wire [31:0] up_rdata_0_s;
+  wire        up_rack_0_s;
+  wire        up_wack_0_s;
+  wire [31:0] up_rdata_1_s;
+  wire        up_rack_1_s;
+  wire        up_wack_1_s;
+  wire [31:0] up_rdata_s;
+  wire        up_rack_s;
+  wire        up_wack_s;
 
-  wire     [15:0]   dac_data_channel_0;
-  wire     [15:0]   dac_data_channel_1;
-  wire              dac_valid_channel_0;
-  wire              dac_valid_channel_1;
-  wire              dac_rst_s;
+  wire [15:0] dac_data_channel_0;
+  wire [15:0] dac_data_channel_1;
+  wire        dac_valid_channel_0;
+  wire        dac_valid_channel_1;
+  wire        dac_rst_s;
 
-  wire     [31:0]   dac_data_control;
-  wire     [31:0]   dac_control;
+  wire [31:0] dac_data_control;
+  wire [31:0] dac_control;
 
-  wire              dac_data_sync;
-  wire              dac_dfmt_type;
+  wire        dac_data_sync;
+  wire        dac_dfmt_type;
 
   // defaults
 
@@ -118,6 +119,7 @@ module axi_ad3552r_core #(
   assign data_write    = dac_data_control[23:0];
   assign transfer_data = dac_control[0];
   assign stream        = dac_control[1];
+  assign multi_io_mode = dac_control[3:2];
   assign address       = dac_control[31:24];
 
   // processor read interface
@@ -136,13 +138,13 @@ module axi_ad3552r_core #(
 
   // DAC CHANNEL 0
 
-  axi_ad3552r_channel #(
+  axi_ad35xxr_channel #(
     .CHANNEL_ID(0),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
-  ) axi_ad3552r_channel_0 (
+  ) axi_ad35xxr_channel_0 (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data_valid(dac_valid_channel_0),
@@ -167,13 +169,13 @@ module axi_ad3552r_core #(
 
   // DAC CHANNEL 1
 
-  axi_ad3552r_channel #(
+  axi_ad35xxr_channel #(
     .CHANNEL_ID(1),
     .DDS_DISABLE(DDS_DISABLE),
     .DDS_TYPE(DDS_TYPE),
     .DDS_CORDIC_DW(DDS_CORDIC_DW),
     .DDS_CORDIC_PHASE_DW(DDS_CORDIC_PHASE_DW)
-  ) axi_ad3552r_channel_1(
+  ) axi_ad35xxr_channel_1 (
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),
     .dac_data_valid(dac_valid_channel_1),
@@ -205,7 +207,7 @@ module axi_ad3552r_core #(
     .SPEED_GRADE(SPEED_GRADE),
     .DEV_PACKAGE(DEV_PACKAGE),
     .COMMON_ID(6'h00)
-  ) axi_ad3552r_common_core (
+  ) axi_ad35xxr_common_core (
     .mmcm_rst(),
     .dac_clk(dac_clk),
     .dac_rst(dac_rst_s),

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -35,9 +35,9 @@
 
 `timescale 1ns/100ps
 
-module axi_ad3552r_channel #(
+module axi_ad35xxr_channel #(
 
-  parameter CHANNEL_ID = 32'h0,
+  parameter   CHANNEL_ID = 32'h0,
   parameter   DDS_DISABLE = 0,
   parameter   DDS_TYPE = 1,
   parameter   DDS_CORDIC_DW = 16,

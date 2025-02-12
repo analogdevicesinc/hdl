@@ -7,7 +7,7 @@
    viewBox="0 0 160.82281 132.78648"
    version="1.1"
    id="svg29591"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    sodipodi:docname="ad3552r_evb_zed_block_diagram.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -26,14 +26,16 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.4805976"
-     inkscape:cx="372.48473"
-     inkscape:cy="262.05635"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:cx="451.84458"
+     inkscape:cy="314.40008"
+     inkscape:window-width="2400"
+     inkscape:window-height="1261"
+     inkscape:window-x="2391"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs29588">
     <marker
@@ -1485,7 +1487,7 @@
            text-anchor="middle"
            font-weight="bold"
            id="text8"
-           style="stroke-width:3.33997">AXI_AD3552R  IP</text>
+           style="stroke-width:3.33997">AXI_AD35XXR  IP</text>
       </switch>
     </g>
     <rect
@@ -1539,7 +1541,7 @@
            font-size="12px"
            text-anchor="middle"
            id="text60"
-           style="stroke-width:3.33997;-inkscape-font-specification:'Helvetica, Bold';font-family:Helvetica;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">AXI_AD3552R_IF</text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000;stroke-width:3.33997">AXI_AD35XXR_IF</text>
       </switch>
     </g>
     <rect
@@ -1657,6 +1659,7 @@
               <xhtml:div
                  style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">AXI_AD3552R<xhtml:br />
 
+
 CHANNEL 0</xhtml:div>
             </xhtml:div>
           </xhtml:div>
@@ -1669,11 +1672,11 @@ CHANNEL 0</xhtml:div>
            font-size="12px"
            text-anchor="middle"
            id="text178"
-           style="stroke-width:3.33997;-inkscape-font-specification:'Helvetica, Bold';font-family:Helvetica;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000;stroke-width:3.33997"><tspan
              sodipodi:role="line"
              id="tspan17644"
              x="162"
-             y="212">AXI_AD3552R</tspan><tspan
+             y="212">AXI_AD35XXR</tspan><tspan
              sodipodi:role="line"
              id="tspan17646"
              x="162"
@@ -1711,6 +1714,7 @@ CHANNEL 0</xhtml:div>
               <xhtml:div
                  style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">AXI_AD3552R<xhtml:br />
 
+
 CHANNEL 1</xhtml:div>
             </xhtml:div>
           </xhtml:div>
@@ -1723,11 +1727,11 @@ CHANNEL 1</xhtml:div>
            font-size="12px"
            text-anchor="middle"
            id="text186"
-           style="stroke-width:3.33997;-inkscape-font-specification:'Helvetica, Bold';font-family:Helvetica;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000;stroke-width:3.33997"><tspan
              sodipodi:role="line"
              id="tspan15342"
              x="273"
-             y="212">AXI_AD3552R</tspan><tspan
+             y="212">AXI_AD35XXR</tspan><tspan
              sodipodi:role="line"
              id="tspan15344"
              x="273"
@@ -1764,6 +1768,7 @@ CHANNEL 1</xhtml:div>
                style="box-sizing: border-box; font-size: 0px; text-align: center;">
               <xhtml:div
                  style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: none; white-space: normal; overflow-wrap: normal;">UP_DAC<xhtml:br />
+
 
 COMMON </xhtml:div>
             </xhtml:div>
@@ -1831,7 +1836,7 @@ COMMON </xhtml:div>
            font-size="12px"
            text-anchor="middle"
            id="text202"
-           style="stroke-width:3.33997;-inkscape-font-specification:'Helvetica, Bold';font-family:Helvetica;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000">AXI_AD3552R_CORE</text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#000000;stroke-width:3.33997">AXI_AD35XXR_CORE</text>
       </switch>
     </g>
     <switch
@@ -1889,7 +1894,7 @@ COMMON </xhtml:div>
          id="tspan60912"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="162.07605"
-         y="117.68015">ad3552r_spi_sdio[3:0]</tspan></text>
+         y="117.68015">ad35xxr_spi_sdio[3:0]</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
@@ -1900,7 +1905,7 @@ COMMON </xhtml:div>
          id="tspan60912-5"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="164.85088"
-         y="101.42776">ad3552r_spi_sclk</tspan></text>
+         y="101.42776">ad35xxr_spi_sclk</tspan></text>
     <path
        d="M 155.81595,102.7341 H 197.3037"
        fill="none"
@@ -1920,6 +1925,6 @@ COMMON </xhtml:div>
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="165.04344"
          y="108.316"
-         sodipodi:role="line">ad3552r_spi_cs</tspan></text>
+         sodipodi:role="line">ad35xxr_spi_cs</tspan></text>
   </g>
 </svg>

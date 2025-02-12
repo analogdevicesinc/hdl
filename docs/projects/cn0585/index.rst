@@ -234,8 +234,8 @@ HDL related
      - Source code link
      - Documentation link
    * - AXI_AD3552R
-     - :git-hdl:`library/axi_ad3552r`
-     - :ref:`axi_ad3552r`
+     - :git-hdl:`library/axi_ad35xxr`
+     - :ref:`axi_ad35xxr`
    * - AXI_LTC2387
      - :git-hdl:`library/axi_ltc2387`
      - :ref:`axi_ltc2387`
