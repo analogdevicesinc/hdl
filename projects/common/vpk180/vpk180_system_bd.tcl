@@ -1,7 +1,12 @@
 ###############################################################################
-## Copyright (C) 2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
+
+set CACHE_COHERENCY false
+
+# create board design
+# default ports
 
 create_bd_port -dir O -from 2 -to 0 spi0_csn
 create_bd_port -dir O spi0_sclk

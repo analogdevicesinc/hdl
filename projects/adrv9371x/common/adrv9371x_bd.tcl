@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -100,6 +100,7 @@ ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9371_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_ad9371_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
@@ -148,6 +149,7 @@ ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9371_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_SAMPLE_WIDTH * \
                                                                   $RX_NUM_OF_CONVERTERS * \
                                                                   $RX_SAMPLES_PER_CHANNEL]
+ad_ip_parameter axi_ad9371_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_add_decimation_filter "rx_fir_decimator" 8 $RX_NUM_OF_CONVERTERS 1 {122.88} {122.88} \
                          "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
@@ -197,6 +199,7 @@ ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SAMPLE_WIDTH * \
                                                                      $RX_OS_NUM_OF_CONVERTERS * \
                                                                      $RX_OS_SAMPLES_PER_CHANNEL]
+ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # common cores
 
@@ -385,11 +388,19 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_ad9371_rx_os_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_dma_clk axi_ad9371_tx_dma/m_src_axi
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_ad9371_rx_dma/m_dest_axi
-ad_mem_hp2_interconnect $sys_dma_clk axi_ad9371_rx_os_dma/m_dest_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
+  ad_mem_hpc1_interconnect $sys_dma_clk axi_ad9371_tx_dma/m_src_axi
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_ad9371_rx_dma/m_dest_axi
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_ad9371_rx_os_dma/m_dest_axi
+} else {
+  ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
+  ad_mem_hp1_interconnect $sys_dma_clk axi_ad9371_tx_dma/m_src_axi
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_ad9371_rx_dma/m_dest_axi
+  ad_mem_hp2_interconnect $sys_dma_clk axi_ad9371_rx_os_dma/m_dest_axi
+}
 
 # interrupts
 

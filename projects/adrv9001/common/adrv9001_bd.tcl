@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -85,6 +85,7 @@ ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance util_cpack2 util_adc_1_pack { \
   NUM_OF_CHANNELS 4 \
@@ -102,6 +103,7 @@ ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance util_cpack2 util_adc_2_pack { \
   NUM_OF_CHANNELS 2 \
@@ -119,13 +121,14 @@ ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance util_upack2 util_dac_1_upack { \
   NUM_OF_CHANNELS 4 \
   SAMPLE_DATA_WIDTH 16 \
 }
 
-# dma for tx1
+# dma for tx2
 
 ad_ip_instance axi_dmac axi_adrv9001_tx2_dma
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_TYPE_SRC 0
@@ -136,6 +139,7 @@ ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 32
+ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance util_upack2 util_dac_2_upack { \
   NUM_OF_CHANNELS 2 \
@@ -280,18 +284,27 @@ ad_cpu_interconnect 0x44A40000  axi_adrv9001_rx2_dma
 ad_cpu_interconnect 0x44A50000  axi_adrv9001_tx1_dma
 ad_cpu_interconnect 0x44A60000  axi_adrv9001_tx2_dma
 
-# memory inteconnect
+# memory interconnect
 
-ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_rx1_dma/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_rx2_dma/m_dest_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_tx1_dma/m_src_axi
-ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_tx2_dma/m_src_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_cpu_clk axi_adrv9001_rx1_dma/m_dest_axi
+  ad_mem_hpc0_interconnect $sys_cpu_clk axi_adrv9001_rx2_dma/m_dest_axi
+  ad_mem_hpc0_interconnect $sys_cpu_clk axi_adrv9001_tx1_dma/m_src_axi
+  ad_mem_hpc0_interconnect $sys_cpu_clk axi_adrv9001_tx2_dma/m_src_axi
+} else {
+  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+  ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_rx1_dma/m_dest_axi
+  ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_rx2_dma/m_dest_axi
+  ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_tx1_dma/m_src_axi
+  ad_mem_hp1_interconnect $sys_cpu_clk axi_adrv9001_tx2_dma/m_src_axi
+}
 
 ad_connect $sys_cpu_resetn axi_adrv9001_rx1_dma/m_dest_axi_aresetn
 ad_connect $sys_cpu_resetn axi_adrv9001_rx2_dma/m_dest_axi_aresetn
 ad_connect $sys_cpu_resetn axi_adrv9001_tx1_dma/m_src_axi_aresetn
 ad_connect $sys_cpu_resetn axi_adrv9001_tx2_dma/m_src_axi_aresetn
+
 # interrupts
 
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -95,8 +95,10 @@ ad_cpu_interconnect 0x41000000 i2s_rx_dma
 ad_cpu_interconnect 0x41001000 i2s_tx_dma
 ad_cpu_interconnect 0x42000000 axi_i2s_adi
 
-ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
-ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps8/S_AXI_HP1
+ad_mem_hp1_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
+ad_mem_hp2_interconnect sys_cpu_clk sys_ps8/S_AXI_HP2
+ad_mem_hp2_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
 
 # interrupts
 
