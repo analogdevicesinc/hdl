@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -83,9 +83,9 @@ ad_connect axi_ad9680_dma/fifo_wr_clk util_daq3_xcvr/rx_out_clk_0
 ad_connect axi_ad9680_cpack/packed_fifo_wr axi_ad9680_dma/fifo_wr
 ad_connect axi_ad9680_cpack/fifo_wr_overflow axi_ad9680_tpl_core/adc_dovf
 
-ad_mem_hp0_interconnect sys_cpu_clk sys_ps7/S_AXI_HP0
+ad_mem_hp0_interconnect sys_cpu_clk sys_ps8/S_AXI_HP0
 ad_mem_hp0_interconnect sys_cpu_clk axi_ad9680_xcvr/m_axi
-ad_mem_hp1_interconnect sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
-ad_mem_hp3_interconnect sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi
+ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
+ad_mem_hpc0_interconnect sys_dma_clk axi_ad9680_dma/m_dest_axi
+ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
+ad_mem_hpc1_interconnect sys_dma_clk axi_ad9152_dma/m_src_axi

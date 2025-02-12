@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -97,6 +97,7 @@ ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_wid
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.MAX_BYTES_PER_BURST 512
+ad_ip_parameter axi_adrv9009_fmc_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance axi_adxcvr axi_adrv9009_fmc_rx_xcvr
 ad_ip_parameter axi_adrv9009_fmc_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
@@ -128,6 +129,7 @@ ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_fmc_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance axi_adxcvr axi_adrv9009_fmc_obs_xcvr
 ad_ip_parameter axi_adrv9009_fmc_obs_xcvr CONFIG.NUM_OF_LANES $MAX_RX_OS_NUM_OF_LANES
@@ -157,6 +159,7 @@ ad_ip_parameter axi_adrv9009_fmc_obs_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_fmc_obs_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_fmc_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_OS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_fmc_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_fmc_obs_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_ip_instance util_adxcvr util_adrv9009_fmc_xcvr
 ad_ip_parameter util_adrv9009_fmc_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
@@ -371,12 +374,21 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9009_fmc_obs_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9009_fmc_tx_dma/m_src_axi
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9009_fmc_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9009_fmc_obs_dma/m_dest_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
+  ad_mem_hpc1_interconnect $sys_dma_clk axi_adrv9009_fmc_tx_dma/m_src_axi
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9009_fmc_rx_dma/m_dest_axi
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9009_fmc_obs_dma/m_dest_axi
+} else {
+  ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
+  ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9009_fmc_tx_dma/m_src_axi
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9009_fmc_rx_dma/m_dest_axi
+  ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
+  ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9009_fmc_obs_dma/m_dest_axi
+}
+
 ad_connect $sys_dma_resetn axi_adrv9009_fmc_rx_dma/m_dest_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9009_fmc_tx_dma/m_src_axi_aresetn
 ad_connect $sys_dma_resetn axi_adrv9009_fmc_obs_dma/m_dest_axi_aresetn
