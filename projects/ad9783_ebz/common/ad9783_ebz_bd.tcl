@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -27,6 +27,7 @@ ad_ip_parameter axi_ad9783_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_AXI_PROTOCOL_SRC 1
+ad_ip_parameter axi_ad9783_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # dac-path channel upack
 
@@ -66,8 +67,13 @@ ad_cpu_interconnect 0x7c420000 axi_ad9783_dma
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_ad9783_dma/m_src_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_ad9783_dma/m_src_axi
+} else {
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_ad9783_dma/m_src_axi
+}
 ad_connect  $sys_dma_resetn axi_ad9783_dma/m_src_axi_aresetn
 
 # interrupts

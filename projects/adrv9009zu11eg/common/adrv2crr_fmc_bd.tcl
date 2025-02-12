@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -29,6 +29,9 @@ ad_ip_parameter i2s_tx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
 ad_ip_parameter i2s_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 ad_ip_parameter i2s_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter i2s_tx_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter i2s_tx_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter i2s_tx_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_dmac i2s_rx_dma
 ad_ip_parameter i2s_rx_dma CONFIG.DMA_TYPE_SRC 1
@@ -42,6 +45,9 @@ ad_ip_parameter i2s_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 0
 ad_ip_parameter i2s_rx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter i2s_rx_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+ad_ip_parameter i2s_rx_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter i2s_rx_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter i2s_rx_dma CONFIG.AXI_AXPROT 0b010
 
 # i2s connections
 
@@ -95,8 +101,8 @@ ad_cpu_interconnect 0x41000000 i2s_rx_dma
 ad_cpu_interconnect 0x41001000 i2s_tx_dma
 ad_cpu_interconnect 0x42000000 axi_i2s_adi
 
-ad_mem_hp0_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
-ad_mem_hp0_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
+ad_mem_hpc1_interconnect sys_cpu_clk i2s_tx_dma/m_src_axi
+ad_mem_hpc1_interconnect sys_cpu_clk i2s_rx_dma/m_dest_axi
 
 # interrupts
 
