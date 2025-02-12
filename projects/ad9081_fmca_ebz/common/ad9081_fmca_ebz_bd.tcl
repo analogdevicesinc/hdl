@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -316,6 +316,7 @@ if {$INTF_CFG != "TX"} {
   } else {
     ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
   }
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
 # Instantiate DAC (Tx) path
@@ -384,6 +385,7 @@ if {$INTF_CFG != "RX"} {
     ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
   }
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
 if {$ADI_PHY_SEL == 1} {
@@ -490,8 +492,13 @@ if {$INTF_CFG != "TX"} {
   if {$ADI_PHY_SEL == 1} {
     ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
   }
-  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
-  ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
+  if {$CACHE_COHERENCY} {
+    ad_mem_hpc0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HPC0
+    ad_mem_hpc0_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
+  } else {
+    ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+    ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
+  }
 
   # Interrupts
   ad_cpu_interrupt ps-13 mb-12 axi_mxfe_rx_dma/irq
@@ -541,8 +548,13 @@ if {$INTF_CFG != "RX"} {
   ad_cpu_interconnect 0x7c430000 axi_mxfe_tx_dma
   ad_cpu_interconnect 0x7c440000 $dac_data_offload_name
   # GT / ADC
-  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-  ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
+  if {$CACHE_COHERENCY} {
+    ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
+    ad_mem_hpc1_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
+  } else {
+    ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+    ad_mem_hp2_interconnect $sys_dma_clk axi_mxfe_tx_dma/m_src_axi
+  }
 
   # Interrupts
   ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
