@@ -91,7 +91,7 @@ module system_top (
   output        mfp_0_p2
 );
 
-  wire   [1:0]  sfp_led;
+  wire   [7:0]  sfp_led;
 
   wire  [94:0]  gpio_i;
   wire  [94:0]  gpio_o;
@@ -188,7 +188,6 @@ module system_top (
     .sfp_iic_sda_io(sfp_i2c_sda),
     .tca_iic_scl_io(tca_i2c_scl),
     .tca_iic_sda_io(tca_i2c_sda),
-    .led(),
     .sfp_led(sfp_led),
     .spi0_csn (ad9545_cs),
     .spi0_miso (ad9545_miso),

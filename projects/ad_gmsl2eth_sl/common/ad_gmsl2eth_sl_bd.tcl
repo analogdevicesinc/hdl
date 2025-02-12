@@ -44,8 +44,7 @@ create_bd_port -dir I sfp_mod_abs
 
 create_bd_port -dir O ref_clk0
 
-create_bd_port -dir O -from 1 -to 0 led
-create_bd_port -dir O -from 1 -to 0 sfp_led
+create_bd_port -dir O -from 7 -to 0 sfp_led
 
 # GSML
 
@@ -610,8 +609,8 @@ ad_ip_parameter clk10_gen CONFIG.USE_LOCKED {false}
 create_bd_intf_port -mode Master -vlnv xilinx.com:interface:iic_rtl:1.0 sfp_iic
 ad_connect sfp_iic corundum/iic
 
-ad_connect led corundum/led
-ad_connect sfp_led corundum/sfp_led
+
+ad_connect sfp_led corundum/led
 
 set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [get_filesets sources_1]
 

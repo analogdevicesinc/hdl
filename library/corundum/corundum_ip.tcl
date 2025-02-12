@@ -40,7 +40,7 @@ if { $QSFP_ENABLE == 0 } {
   puts "Using ZCU102 configuration"
 
   add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v"
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core_qsfp.v"
   ]
 
   set_property part xczu11eg-ffvf1517-2-i [current_project]
@@ -50,7 +50,6 @@ if { $QSFP_ENABLE == 0 } {
 
 # Corundum sources
 add_file -norecurse -scan_for_includes -fileset [get_filesets sources_1] [list \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core.v" \
   "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_quad_wrapper.v" \
   "$ad_hdl_dir/../corundum/fpga/common/rtl/eth_xcvr_phy_10g_gty_wrapper.v" \
