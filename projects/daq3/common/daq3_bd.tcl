@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -70,6 +70,7 @@ ad_ip_parameter axi_ad9152_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9152_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9152_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_ad9152_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
+ad_ip_parameter axi_ad9152_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_data_width $dac_fifo_address_width
 
@@ -107,6 +108,7 @@ ad_ip_parameter axi_ad9680_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9680_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_data_width
 ad_ip_parameter axi_ad9680_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad9680_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 if {$sys_zynq == 0 || $sys_zynq == 1} {
   ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_data_width $adc_fifo_address_width
