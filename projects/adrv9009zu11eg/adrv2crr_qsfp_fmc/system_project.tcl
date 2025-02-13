@@ -24,7 +24,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
 #
 
-adi_project_create adrv9009zu11eg 0 [list \
+adi_project_create adrv9009zu11eg_qsfp 0 [list \
   RX_JESD_M       [get_env_param RX_JESD_M     8] \
   RX_JESD_L       [get_env_param RX_JESD_L     4] \
   RX_JESD_S       [get_env_param RX_JESD_S     1] \
@@ -36,11 +36,21 @@ adi_project_create adrv9009zu11eg 0 [list \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S  1] \
 ] "xczu11eg-ffvf1517-2-i"
 
-adi_project_files adrv9009zu11eg [list \
+adi_project_files adrv9009zu11eg_qsfp [list \
   "../common/adrv9009zu11eg_spi.v" \
   "../common/adrv9009zu11eg_constr.xdc" \
   "../common/adrv2crr_fmc_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/ZCU102/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
+  "qsfp_constr.xdc" \
   "system_top.v" ]
 
-adi_project_run adrv9009zu11eg
+adi_project_run adrv9009zu11eg_qsfp

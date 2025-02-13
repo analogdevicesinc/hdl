@@ -4,7 +4,6 @@ GENERIC_DEPS += corundum.v
 
 XILINX_DEPS += corundum_ip.tcl
 
-
 EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/ZCU102/fpga/rtl/fpga_core_qsfp.v
 EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/rtl/fpga_core.v
 EXTERNAL_DEPS += ../../../corundum/fpga/mqnic/KR260/fpga/rtl/sync_signal.v

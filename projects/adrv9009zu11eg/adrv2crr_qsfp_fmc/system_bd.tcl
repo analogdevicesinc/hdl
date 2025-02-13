@@ -5,6 +5,7 @@
 
 source ../common/adrv9009zu11eg_bd.tcl
 source ../common/adrv2crr_fmc_bd.tcl
+source ../common/adrv2crr_fmc_qsfp_bd.tcl
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -20,7 +21,8 @@ L=$ad_project_params(TX_JESD_L)\
 S=$ad_project_params(TX_JESD_S)\
 RX_OS:M=$ad_project_params(RX_OS_JESD_M)\
 L=$ad_project_params(RX_OS_JESD_L)\
-S=$ad_project_params(RX_OS_JESD_S)"
+S=$ad_project_params(RX_OS_JESD_S)\
+QSFP_ENABLE=1"
 
 sysid_gen_sys_init_file $sys_cstring
 
