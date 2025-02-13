@@ -57,26 +57,26 @@ set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI}    {1}
 
 # exported interface
 
-add_interface ad4170_spi_sclk       clock source
-add_interface ad4170_spi_cs         conduit end
-add_interface ad4170_spi_sdi        conduit end
-add_interface ad4170_spi_sdo        conduit end
-add_interface ad4170_spi_trigger    conduit end
-add_interface ad4170_spi_resetn     reset source
+add_interface ad41xx_spi_sclk       clock source
+add_interface ad41xx_spi_cs         conduit end
+add_interface ad41xx_spi_sdi        conduit end
+add_interface ad41xx_spi_sdo        conduit end
+add_interface ad41xx_spi_trigger    conduit end
+add_interface ad41xx_spi_resetn     reset source
 
-set_interface_property ad4170_spi_cs      EXPORT_OF spi_engine_execution_0.if_cs
-set_interface_property ad4170_spi_sclk    EXPORT_OF spi_engine_execution_0.if_sclk
-set_interface_property ad4170_spi_sdi     EXPORT_OF spi_engine_execution_0.if_sdi
-set_interface_property ad4170_spi_sdo     EXPORT_OF spi_engine_execution_0.if_sdo
-set_interface_property ad4170_spi_trigger EXPORT_OF spi_engine_offload_0.if_trigger
-set_interface_property ad4170_spi_resetn  EXPORT_OF reset_bridge_0.out_reset
+set_interface_property ad41xx_spi_cs      EXPORT_OF spi_engine_execution_0.if_cs
+set_interface_property ad41xx_spi_sclk    EXPORT_OF spi_engine_execution_0.if_sclk
+set_interface_property ad41xx_spi_sdi     EXPORT_OF spi_engine_execution_0.if_sdi
+set_interface_property ad41xx_spi_sdo     EXPORT_OF spi_engine_execution_0.if_sdo
+set_interface_property ad41xx_spi_trigger EXPORT_OF spi_engine_offload_0.if_trigger
+set_interface_property ad41xx_spi_resetn  EXPORT_OF reset_bridge_0.out_reset
 
 add_connection axi_spi_engine_0.if_spi_resetn reset_bridge_0.in_reset
 
 # clocks
 
-add_interface ad4170_spi_clk        clock source
-set_interface_property ad4170_spi_clk     EXPORT_OF clock_bridge_0.out_clk
+add_interface ad41xx_spi_clk        clock source
+set_interface_property ad41xx_spi_clk     EXPORT_OF clock_bridge_0.out_clk
 
 add_connection sys_clk.clk axi_spi_engine_0.s_axi_clock
 add_connection sys_clk.clk axi_dmac_0.s_axi_clock

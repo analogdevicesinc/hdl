@@ -114,15 +114,15 @@ module system_top (
   inout         hdmi_i2c_scl,
   inout         hdmi_i2c_sda,
 
-  // ad4170
+  // ad41xx
   inout         i2c_sda,
   inout         i2c_scl,
 
-  output        ad4170_spi_csn,
-  output        ad4170_spi_clk,
-  output        ad4170_spi_mosi,
-  input         ad4170_spi_miso,
-  input  [ 1:0] ad4170_dig_aux,
+  output        ad41xx_spi_csn,
+  output        ad41xx_spi_clk,
+  output        ad41xx_spi_mosi,
+  input         ad41xx_spi_miso,
+  input  [ 1:0] ad41xx_dig_aux,
 
   output        ltc2308_cs,
   output        ltc2308_sclk,
@@ -158,7 +158,7 @@ module system_top (
 
   assign ltc2308_cs = gpio_o[34];
 
-  assign gpio_i[33:32] = ad4170_dig_aux[1:0];
+  assign gpio_i[33:32] = ad41xx_dig_aux[1:0];
 
   // bd gpio
 
@@ -278,13 +278,13 @@ module system_top (
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
     .sys_gpio_out_export (gpio_o[63:32]),
-    .ad4170_spi_cs_cs (ad4170_spi_csn),
-    .ad4170_spi_sclk_clk (ad4170_spi_clk),
-    .ad4170_spi_sdi_sdi (ad4170_spi_miso),
-    .ad4170_spi_sdo_sdo (ad4170_spi_mosi),
-    .ad4170_spi_trigger_if_pwm (spi_trigger),
-    .ad4170_spi_resetn_reset_n (spi_resetn),
-    .ad4170_spi_clk_clk (spi_clk_s),
+    .ad41xx_spi_cs_cs (ad41xx_spi_csn),
+    .ad41xx_spi_sclk_clk (ad41xx_spi_clk),
+    .ad41xx_spi_sdi_sdi (ad41xx_spi_miso),
+    .ad41xx_spi_sdo_sdo (ad41xx_spi_mosi),
+    .ad41xx_spi_trigger_if_pwm (spi_trigger),
+    .ad41xx_spi_resetn_reset_n (spi_resetn),
+    .ad41xx_spi_clk_clk (spi_clk_s),
     .sys_spi_MISO (1'b0),
     .sys_spi_MOSI (),
     .sys_spi_SCLK (),

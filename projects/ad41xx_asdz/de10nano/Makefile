@@ -4,9 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad4170_asdz_de10nano
+PROJECT_NAME := ad41xx_asdz_de10nano
 
-M_DEPS += ../common/ad4170_asdz_qsys.tcl
+M_DEPS += ../common/ad41xx_asdz_qsys.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/de10nano/de10nano_system_qsys.tcl
 M_DEPS += ../../common/de10nano/de10nano_system_assign.tcl

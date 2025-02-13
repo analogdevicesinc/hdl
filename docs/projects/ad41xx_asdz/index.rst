@@ -1,33 +1,35 @@
-.. _ad4170:
+.. _ad41xx:
 
-AD4170_ASDZ HDL project
+AD41XX_ASDZ HDL project
 ================================================================================
 
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD4170-4` and :adi:`AD4170-8` provides a
-high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise
+The HDL reference design for the :adi:`AD4170-4`, :adi:`AD4170-8`, and
+:adi:`AD4190-4` provides a high resolution, 24-Bit, Multichannel, Low Noise,
 Precision Sigma-Delta ADC with PGA.
 
 The data acquisition board incorporates the AD4170-4 or AD4170-8, a DC to 50 kHz
 input bandwidth, low noise, high speed, completely integrated analog front end
 for high precision measurement applications.
 
-The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS.
-The device contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC),
-and can be configured to have 4 differential inputs or 8 single-ended or
-pseudodifferential inputs. The on-chip low noise gain stage ensures that signals
-of small amplitude can be interfaced directly to the AD4170-4/8.
+The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS, while the
+AD4190-4 offers output data rates from 3.8 SPS up to 62.5 kSPS. The devices
+contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC), and can be
+configured to have 4 differential inputs or 8 single-ended or pseudodifferential
+inputs. The on-chip low noise gain stage ensures that signals of small amplitude 
+can be interfaced directly to the devices.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD4170-4/8 24-bit precision ADC. This instance provides support for
+the AD4170-4/8 or AD4190-4 24-bit precision ADC. This instance provides support for
 capturing continuous samples at the maximum sample rate.
 
 Supported boards
 -------------------------------------------------------------------------------
 
 - EVAL-AD4170-ASDZ
+- EVAL-AD4190-ARDZ
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -36,6 +38,7 @@ Supported devices
 - :adi:`AD4170-4`
 - :adi:`AD4171`
 - :adi:`AD4172`
+- :adi:`AD4190-4`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -51,7 +54,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ad417x_hdl.svg
+.. image:: ad41xx_hdl.svg
    :width: 800
    :align: center
    :alt: AD4170-ASDZ block diagram
@@ -65,8 +68,8 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ========================  =================
 Instance                  Zynq*/DE10-Nano**
 ========================  =================
-spi_ad4170_axi_regmap*    0x44A0_0000
-axi_ad4170_dma*           0x44A3_0000
+spi_ad41xx_axi_regmap*    0x44A0_0000
+axi_ad41xx_dma*           0x44A3_0000
 spi_clkgen*               0x44A7_0000
 axi_dmac_0**              0x0002_0000
 axi_spi_engine_0**        0x0003_0000
@@ -182,8 +185,8 @@ Below are the Programmable Logic interrupts used in this project.
 =================== === ========== ===========
 Instance name       HDL Linux Zynq Actual Zynq
 =================== === ========== ===========
-axi_ad4170_dma      13  57         89
-spi_ad4170          12  56         88
+axi_ad41xx_dma      13  57         89
+spi_ad41xx          12  56         88
 axi_iic_ard         11  55         87
 =================== === ========== ===========
 
@@ -209,12 +212,12 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $cd hdl/projects/ad4170_asdz/coraz7s
+   $cd hdl/projects/ad41xx_asdz/coraz7s
    $make
 
 .. shell::
 
-   $cd hdl/projects/ad4170_asdz/de10nano
+   $cd hdl/projects/ad41xx_asdz/de10nano
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -226,11 +229,12 @@ Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Product datasheet: :adi:`AD4170-4`
+- Product datasheet: :adi:`AD4190-4`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD4170_ASDZ HDL project source code <projects/ad4170_asdz>`
+- :git-hdl:`AD41XX_ASDZ HDL project source code <projects/ad41xx_asdz>`
 
 .. list-table::
    :widths: 30 35 35

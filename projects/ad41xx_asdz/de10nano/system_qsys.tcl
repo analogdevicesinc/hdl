@@ -7,9 +7,9 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/de10nano/de10nano_system_qsys.tcl
 
 if [info exists ad_project_dir] {
-  source ../../common/ad4170_asdz_qsys.tcl
+  source ../../common/ad41xx_asdz_qsys.tcl
 } else {
-  source ../common/ad4170_asdz_qsys.tcl
+  source ../common/ad41xx_asdz_qsys.tcl
 }
 
 #system ID

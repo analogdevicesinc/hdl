@@ -6,13 +6,13 @@
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/coraz7s/coraz7s_system_bd.tcl
 
-adi_project_files ad4170_asdz_coraz7s [list \
+adi_project_files ad41xx_asdz_coraz7s [list \
 	"../../../library/common/ad_edge_detect.v" \
 	"../../../library/util_cdc/sync_bits.v" \
 ]
 
 # block design
-source ../common/ad4170_asdz_bd.tcl
+source ../common/ad41xx_asdz_bd.tcl
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
