@@ -670,8 +670,7 @@ module application_core #
     .s_axis_tlast(),
     .s_axis_full(),
     .s_axis_almost_full(),
-    .s_axis_room()
-  );
+    .s_axis_room());
   
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
@@ -802,16 +801,11 @@ module application_core #
   reg                          new_packet;
   reg                          tlast_sig;
 
+  wire                         packet_axis_tready;
   reg                          packet_axis_tvalid;
   reg  [AXIS_DATA_WIDTH-1:0]   packet_axis_tdata;
   reg  [AXIS_DATA_WIDTH/8-1:0] packet_axis_tkeep;
   reg                          packet_axis_tlast;
-
-  reg                          output_axis_tready;
-  reg                          output_axis_tvalid;
-  reg  [AXIS_DATA_WIDTH-1:0]   output_axis_tdata;
-  reg                          output_axis_tlast;
-  reg  [AXIS_DATA_WIDTH/8-1:0] output_axis_tkeep;
 
   // temporary storage
   always @(posedge clk)
@@ -819,14 +813,14 @@ module application_core #
     if (!rstn) begin
       cdc_axis_tdata_reg <= {HEADER_LENGTH{1'b0}};
     end else begin
-      if (cdc_axis_tvalid && output_axis_tready) begin
+      if (cdc_axis_tvalid && packet_axis_tready) begin
         cdc_axis_tdata_reg <= cdc_axis_tdata[AXIS_DATA_WIDTH-1:AXIS_DATA_WIDTH-HEADER_LENGTH];
       end
     end
   end
 
   // ready signal generation
-  assign cdc_axis_tready = ~packet_tlast && output_axis_tready;
+  assign cdc_axis_tready = ~packet_tlast && packet_axis_tready;
 
   // header concatenation
   assign header = {
@@ -844,8 +838,7 @@ module application_core #
     htond_16({ip_version, ip_header_length, ip_type_of_service}),
     htond_16(ethernet_type),
     htond_48(ethernet_source_MAC),
-    htond_48(ethernet_destination_MAC)
-  };
+    htond_48(ethernet_destination_MAC)};
 
   // ip header checksum calculation
   always @(posedge clk)
@@ -897,7 +890,7 @@ module application_core #
     if (!rstn) begin
       new_packet <= 1'b1;
     end else begin
-      if (output_axis_tready && run_packetizer) begin
+      if (packet_axis_tready && run_packetizer) begin
         if (packet_tlast) begin
           new_packet <= 1'b1;
         end else if (cdc_axis_tvalid) begin
@@ -931,7 +924,7 @@ module application_core #
       packet_axis_tkeep <= {AXIS_DATA_WIDTH/8-1{1'b0}};
       packet_axis_tlast <= 1'b0;
     end else begin
-      if (output_axis_tready && run_packetizer) begin
+      if (packet_axis_tready && run_packetizer) begin
         // valid
         if (cdc_axis_tvalid || packet_tlast) begin
           packet_axis_tvalid <= 1'b1;
@@ -958,15 +951,150 @@ module application_core #
     end
   end
   
-  ////----------------------------------------Register----------------------//
+  ////----------------------------------------Packet Buffer FIFO----------------------//
   //////////////////////////////////////////////////
-  always @(posedge clk)
-  begin
-    output_axis_tvalid <= packet_axis_tvalid;
-    output_axis_tdata <= packet_axis_tdata;
-    output_axis_tkeep <= packet_axis_tkeep;
-    output_axis_tlast <= packet_axis_tlast;
-  end
+  reg                          packet_buffer_axis_tready;
+  wire                         packet_buffer_axis_tvalid;
+  wire [AXIS_DATA_WIDTH-1:0]   packet_buffer_axis_tdata;
+  wire                         packet_buffer_axis_tlast;
+  wire [AXIS_DATA_WIDTH/8-1:0] packet_buffer_axis_tkeep;
+
+  wire packet_buffer_almost_full;
+  wire packet_buffer_almost_empty;
+
+  wire packet_fifo_rstn;
+
+  assign packet_fifo_rstn = rstn && !(!run_packetizer && packet_buffer_axis_tready && packet_buffer_axis_tvalid && packet_buffer_axis_tlast);
+
+  util_axis_fifo #(
+    .DATA_WIDTH(AXIS_DATA_WIDTH),
+    .ADDRESS_WIDTH($clog2(8192/AXIS_DATA_WIDTH)*2),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(1),
+    .ALMOST_EMPTY_THRESHOLD(8192/AXIS_DATA_WIDTH),
+    .ALMOST_FULL_THRESHOLD(8192/AXIS_DATA_WIDTH),
+    .TLAST_EN(1),
+    .TKEEP_EN(1),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) packet_buffer_fifo (
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(packet_fifo_rstn),
+    .m_axis_ready(packet_buffer_axis_tready),
+    .m_axis_valid(packet_buffer_axis_tvalid),
+    .m_axis_data(packet_buffer_axis_tdata),
+    .m_axis_tkeep(packet_buffer_axis_tkeep),
+    .m_axis_tlast(packet_buffer_axis_tlast),
+    .m_axis_level(),
+    .m_axis_empty(),
+    .m_axis_almost_empty(packet_buffer_almost_empty),
+
+    .s_axis_aclk(clk),
+    .s_axis_aresetn(packet_fifo_rstn),
+    .s_axis_ready(packet_axis_tready),
+    .s_axis_valid(packet_axis_tvalid),
+    .s_axis_data(packet_axis_tdata),
+    .s_axis_tkeep(packet_axis_tkeep),
+    .s_axis_tlast(packet_axis_tlast),
+    .s_axis_room(),
+    .s_axis_full(),
+    .s_axis_almost_full(packet_buffer_almost_full));
+
+  ////----------------------------------------OS Buffer FIFO----------------------//
+  //////////////////////////////////////////////////
+  wire                               s_axis_sync_tx_tready_int;
+
+  reg                                os_buffer_axis_tready;
+  wire                               os_buffer_axis_tvalid;
+  wire [AXIS_SYNC_DATA_WIDTH-1:0]    os_buffer_axis_tdata;
+  wire                               os_buffer_axis_tlast;
+  wire [AXIS_SYNC_DATA_WIDTH/8-1:0]  os_buffer_axis_tkeep;
+  wire [AXIS_SYNC_TX_USER_WIDTH-1:0] os_buffer_axis_tuser;
+
+  // reg [$clog2(12288/AXIS_SYNC_DATA_WIDTH)*2-1:0] packets_in_buffer;
+
+  // reg input_packet;
+  // reg output_packet;
+
+  // always @(posedge clk)
+  // begin
+  //   if (!rstn) begin
+  //     packets_in_buffer <= 'h0;
+  //   end else begin
+  //     input_packet = s_axis_sync_tx_tready && s_axis_sync_tx_tvalid && s_axis_sync_tx_tlast;
+  //     output_packet = os_buffer_axis_tready && os_buffer_axis_tvalid && os_buffer_axis_tlast;
+  //     case ({output_packet, input_packet})
+  //       2'b01: packets_in_buffer <= packets_in_buffer + 1;
+  //       2'b10: packets_in_buffer <= packets_in_buffer - 1;
+  //       default:;
+  //     endcase
+  //   end
+  // end
+
+  util_axis_fifo #(
+    .DATA_WIDTH(AXIS_SYNC_DATA_WIDTH),
+    .ADDRESS_WIDTH($clog2(12288/AXIS_SYNC_DATA_WIDTH)*2),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(1),
+    .ALMOST_EMPTY_THRESHOLD(),
+    .ALMOST_FULL_THRESHOLD(),
+    .TLAST_EN(1),
+    .TKEEP_EN(1),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) os_buffer_fifo (
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(rstn),
+    .m_axis_ready(os_buffer_axis_tready),
+    .m_axis_valid(os_buffer_axis_tvalid),
+    .m_axis_data(os_buffer_axis_tdata),
+    .m_axis_tkeep(os_buffer_axis_tkeep),
+    .m_axis_tlast(os_buffer_axis_tlast),
+    .m_axis_level(),
+    .m_axis_empty(),
+    .m_axis_almost_empty(),
+
+    .s_axis_aclk(clk),
+    .s_axis_aresetn(rstn),
+    .s_axis_ready(s_axis_sync_tx_tready_int),
+    .s_axis_valid(s_axis_sync_tx_tvalid),
+    .s_axis_data(s_axis_sync_tx_tdata),
+    .s_axis_tkeep(s_axis_sync_tx_tkeep),
+    .s_axis_tlast(s_axis_sync_tx_tlast),
+    .s_axis_room(),
+    .s_axis_full(),
+    .s_axis_almost_full());
+
+  util_axis_fifo #(
+    .DATA_WIDTH(AXIS_SYNC_TX_USER_WIDTH),
+    .ADDRESS_WIDTH($clog2(12288/AXIS_SYNC_DATA_WIDTH)*2),
+    .ASYNC_CLK(0),
+    .M_AXIS_REGISTERED(1),
+    .ALMOST_EMPTY_THRESHOLD(),
+    .ALMOST_FULL_THRESHOLD(),
+    .TLAST_EN(0),
+    .TKEEP_EN(0),
+    .REMOVE_NULL_BEAT_EN(0)
+  ) os_buffer_fifo_tuser (
+    .m_axis_aclk(clk),
+    .m_axis_aresetn(rstn),
+    .m_axis_ready(os_buffer_axis_tready),
+    .m_axis_valid(),
+    .m_axis_data(os_buffer_axis_tuser),
+    .m_axis_tkeep(),
+    .m_axis_tlast(),
+    .m_axis_level(),
+    .m_axis_empty(),
+    .m_axis_almost_empty(),
+
+    .s_axis_aclk(clk),
+    .s_axis_aresetn(rstn),
+    .s_axis_ready(),
+    .s_axis_valid(s_axis_sync_tx_tvalid),
+    .s_axis_data(s_axis_sync_tx_tuser),
+    .s_axis_tkeep(),
+    .s_axis_tlast(),
+    .s_axis_room(),
+    .s_axis_full(),
+    .s_axis_almost_full());
 
   ////----------------------------------------AXI Interface-----------------//
   //////////////////////////////////////////////////
@@ -1148,8 +1276,7 @@ module application_core #
     .up_rreq            (up_rreq),
     .up_raddr           (up_raddr),
     .up_rdata           (up_rdata),
-    .up_rack            (up_rack)
-  );
+    .up_rack            (up_rack));
 
   reg m_axis_sync_tx_tlast_reg;
 
@@ -1251,24 +1378,45 @@ module application_core #
   assign m_axis_direct_rx_tuser = s_axis_direct_rx_tuser;
 
   // Ethernet (synchronous MAC interface - low latency raw traffic)
+  reg datapath_switch; // 0 - OS
+                       // 1 - Packet
+  
+  always @(posedge clk)
+  begin
+    if (!rstn) begin
+      datapath_switch <= 1'b0;
+    end else begin
+      if (packet_buffer_almost_full && (os_buffer_axis_tready && os_buffer_axis_tvalid && os_buffer_axis_tlast)) begin
+        datapath_switch <= 1'b1;
+      end else if ((packet_buffer_almost_empty || !run_packetizer) && (packet_buffer_axis_tready && packet_buffer_axis_tvalid && packet_buffer_axis_tlast) || !packet_fifo_rstn) begin
+        datapath_switch <= 1'b0;
+      end
+    end
+  end
+
   always @(*)
   begin
-    if (!switch) begin
-      m_axis_sync_tx_tdata = s_axis_sync_tx_tdata;
-      m_axis_sync_tx_tkeep = s_axis_sync_tx_tkeep;
-      m_axis_sync_tx_tvalid = s_axis_sync_tx_tvalid;
-      s_axis_sync_tx_tready = m_axis_sync_tx_tready;
-      m_axis_sync_tx_tlast = s_axis_sync_tx_tlast;
+    // if (!switch) begin
+    if (!datapath_switch) begin
+      m_axis_sync_tx_tdata = os_buffer_axis_tdata;
+      m_axis_sync_tx_tkeep = os_buffer_axis_tkeep;
+      m_axis_sync_tx_tvalid = os_buffer_axis_tvalid;
+      os_buffer_axis_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = os_buffer_axis_tlast;
       m_axis_sync_tx_tuser = s_axis_sync_tx_tuser;
 
-      output_axis_tready = 1'b0;
+      s_axis_sync_tx_tready = s_axis_sync_tx_tready_int;
+
+      packet_buffer_axis_tready = 1'b0;
     end else begin
-      m_axis_sync_tx_tdata = output_axis_tdata;
-      m_axis_sync_tx_tkeep = output_axis_tkeep;
-      m_axis_sync_tx_tvalid = output_axis_tvalid;
-      output_axis_tready = m_axis_sync_tx_tready;
-      m_axis_sync_tx_tlast = output_axis_tlast;
+      m_axis_sync_tx_tdata = packet_buffer_axis_tdata;
+      m_axis_sync_tx_tkeep = packet_buffer_axis_tkeep;
+      m_axis_sync_tx_tvalid = packet_buffer_axis_tvalid;
+      packet_buffer_axis_tready = m_axis_sync_tx_tready;
+      m_axis_sync_tx_tlast = packet_buffer_axis_tlast;
       m_axis_sync_tx_tuser = 1'b0;
+
+      os_buffer_axis_tready = 1'b0;
 
       s_axis_sync_tx_tready = 1'b0;
     end
