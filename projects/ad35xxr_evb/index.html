@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AD3552R-EVB HDL project &#8212; HDL  documentation</title>
+    <title>AD35XXR-EVB HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=9cb8e28d" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -89,7 +89,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD3552R-EVB HDL project</a><ul>
+<li><a class="reference internal" href="#">AD35XXR-EVB HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
@@ -194,9 +194,10 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/index.html">AXI AD35XXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/index.html">AXI AD408x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/index.html">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/index.html">AXI AD7405</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/index.html">AXI AD7768</a></li>
@@ -207,6 +208,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/index.html">AXI ADRV9001/2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
@@ -251,7 +253,7 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">AD3552R-EVB</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
@@ -324,17 +326,23 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="ad3552r-evb-hdl-project">
-<span id="ad3552r-evb"></span><h1>AD3552R-EVB HDL project<a class="headerlink" href="#ad3552r-evb-hdl-project" title="Permalink to this heading"></a></h1>
+  <section id="ad35xxr-evb-hdl-project">
+<span id="ad35xxr-evb"></span><h1>AD35XXR-EVB HDL project<a class="headerlink" href="#ad35xxr-evb-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3542R">EVAL-AD3542R</a> is an evaluation board for the
+<a class="icon adi reference external" href="https://www.analog.com/AD3542R">AD3542R</a>, a dual-channel, 16-bit fast precision
+digital-to-analog converter (DAC). The same eval board can be used to
+evaluate the <a class="icon adi reference external" href="https://www.analog.com/AD3541R">AD3541R</a>, the single channel part.</p>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3552R">EVAL-AD3552R</a> is an evaluation board for the
 <a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a>, a dual-channel, 16-bit fast precision
-digital-to-analog converter (DAC). Each channel of the <a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a>
-is equipped with a different transimpedance amplifier: Channel 0 has a fast
-amplifier that achieves the optimal dynamic performance and Channel 1 has a
-precision amplifier that guarantees the optimal DC precision over temperature.</p>
-<p>The board allows testing all the output ranges of the DAC, waveform generation,
+digital-to-analog converter (DAC). The same eval board can be used to evaluate
+the <a class="icon adi reference external" href="https://www.analog.com/AD3551R">AD3551R</a>, the single channel part. Each channel of the
+<a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a> is equipped with a different transimpedance
+amplifier: Channel 0 has a fast amplifier that achieves the optimal dynamic
+performance and Channel 1 has a precision amplifier that guarantees the
+optimal DC precision over temperature.</p>
+<p>The boards allow testing all the output ranges of the DAC, waveform generation,
 power supply and reference options.</p>
 </section>
 <section id="supported-boards">
@@ -346,6 +354,9 @@ power supply and reference options.</p>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3541R">AD3541R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3542R">AD3542R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3551R">AD3551R</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a></p></li>
 </ul>
 </section>
@@ -382,7 +393,7 @@ power supply and reference options.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad3552r_evb_zed_block_diagram.svg"><img alt="EVAL-AD3552R/ZedBoard block diagram" class="align-center" src="../../_images/ad3552r_evb_zed_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad35xxr_evb_zed_block_diagram.svg"><img alt="EVAL-AD35XXR/ZedBoard block diagram" class="align-center" src="../../_images/ad35xxr_evb_zed_block_diagram.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -396,7 +407,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad3552r_dac</p></td>
+<tr class="row-even"><td><p>axi_ad35xxr_dac</p></td>
 <td><p>0x44A7_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_dac_dma</p></td>
@@ -435,43 +446,43 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>ad3552r_resetn</p></td>
+<tr class="row-odd"><td><p>ad35xxr_resetn</p></td>
 <td><p>OUT</p></td>
 <td><p>38</p></td>
 <td><p>92</p></td>
 <td><p>116</p></td>
 </tr>
-<tr class="row-even"><td><p>ad3552r_gpio_9</p></td>
+<tr class="row-even"><td><p>ad35xxr_gpio_9</p></td>
 <td><p>INOUT</p></td>
 <td><p>37</p></td>
 <td><p>91</p></td>
 <td><p>115</p></td>
 </tr>
-<tr class="row-odd"><td><p>ad3552r_gpio_8</p></td>
+<tr class="row-odd"><td><p>ad35xxr_gpio_8</p></td>
 <td><p>INOUT</p></td>
 <td><p>36</p></td>
 <td><p>90</p></td>
 <td><p>114</p></td>
 </tr>
-<tr class="row-even"><td><p>ad3552r_gpio_7</p></td>
+<tr class="row-even"><td><p>ad35xxr_gpio_7</p></td>
 <td><p>INOUT</p></td>
 <td><p>35</p></td>
 <td><p>89</p></td>
 <td><p>113</p></td>
 </tr>
-<tr class="row-odd"><td><p>ad3552r_gpio_6</p></td>
+<tr class="row-odd"><td><p>ad35xxr_gpio_6</p></td>
 <td><p>INOUT</p></td>
 <td><p>34</p></td>
 <td><p>88</p></td>
 <td><p>112</p></td>
 </tr>
-<tr class="row-even"><td><p>ad3552r_alertn</p></td>
+<tr class="row-even"><td><p>ad35xxr_alertn</p></td>
 <td><p>INOUT</p></td>
 <td><p>33</p></td>
 <td><p>87</p></td>
 <td><p>111</p></td>
 </tr>
-<tr class="row-odd"><td><p>ad3552r_ldacn</p></td>
+<tr class="row-odd"><td><p>ad35xxr_ldacn</p></td>
 <td><p>INOUT</p></td>
 <td><p>32</p></td>
 <td><p>86</p></td>
@@ -517,10 +528,10 @@ the HDL repository, and then build the project as follows:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad3552r_evb/zed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad35xxr_evb/zed
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad3552r_evb/zed$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad35xxr_evb/zed$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
@@ -534,24 +545,30 @@ the HDL repository, and then build the project as follows:</p>
 <h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/dac/ad3552r_eval_zed">[Wiki] EVAL-AD3552R Evaluation Board on ZedBoard User Guide</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/dac/eval-ad3542r">[Wiki] EVAL-AD3542R Evaluation Board on ZedBoard User Guide</a></p></li>
 </ul>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>Product datasheets:</p>
 <ul>
+<li><p>Product datasheets:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3541R">AD3541R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3542R">AD3542R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD3551R">AD3551R</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD3552R">AD3552R</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD3552R">EVAL-AD3552R</a></p></li>
 </ul>
+</div></blockquote>
 </li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3552r-ug-2217.pdf">UG-2217, User Guide | EVAL-AD3552R</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3542r-ug-2258.pdf">UG-2258, User Guide | EVAL-AD3542R</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad3552r_evb">EVAL-AD3552R HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad35xxr_evb">EVAL-AD3552R HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -567,9 +584,9 @@ the HDL repository, and then build the project as follows:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_AD3552R</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad3552r">library/axi_ad3552r</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_ad3552r/index.html#axi-ad3552r"><span class="std std-ref">AXI AD3552R</span></a></p></td>
+<tr class="row-even"><td><p>AXI_AD35XXR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad35xxr">library/axi_ad35xxr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_ad35xxr/index.html#axi-ad35xxr"><span class="std std-ref">here</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>

@@ -102,7 +102,6 @@
 </li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
@@ -199,9 +198,10 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad35xxr/index.html">AXI AD35XXR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad408x/index.html">AXI AD408x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad485x/index.html">AXI AD485x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7405/index.html">AXI AD7405</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/index.html">AXI AD7768</a></li>
@@ -212,6 +212,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adrv9001/index.html">AXI ADRV9001/2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_ltc2387/index.html">AXI LTC2387</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
@@ -256,7 +257,7 @@ Content on this topic
 <li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad3552r_evb/index.html">AD3552R-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
@@ -336,11 +337,11 @@ Content on this topic
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD7405">EVAL-AD7405</a> is a full-featured evaluation board
 designed to allow the user to easily evaluate all features of the <a class="icon adi reference external" href="https://www.analog.com/AD7405">AD7405</a>
 isolated analog-to-digital converter (ADC).</p>
-<p>The provided HDL reference design supports the <a class="icon adi reference external" href="https://www.analog.com/AD7405">AD7405</a> , <a class="icon adi reference external" href="https://www.analog.com/AD7403">AD7403</a>
-and <a class="icon adi reference external" href="https://www.analog.com/ADuM7701">ADuM7701</a> devices.
+<p>The provided HDL reference design supports the <a class="icon adi reference external" href="https://www.analog.com/AD7405">AD7405</a>, <a class="icon adi reference external" href="https://www.analog.com/AD7403">AD7403</a> and
+<a class="icon adi reference external" href="https://www.analog.com/ADuM7701">ADuM7701</a> devices.
 One of the main differences between these devices is the type of the digital
-data lines. In the case of <a class="icon adi reference external" href="https://www.analog.com/ADuM7701">ADuM7701</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7403">AD7403</a>, it is
-single-ended, and for <a class="icon adi reference external" href="https://www.analog.com/AD7405">AD7405</a> is differential.</p>
+data lines. In the case of <a class="icon adi reference external" href="https://www.analog.com/ADuM7701">ADuM7701</a> and <a class="icon adi reference external" href="https://www.analog.com/AD7403">AD7403</a>, it is single-ended,
+and for <a class="icon adi reference external" href="https://www.analog.com/AD7405">AD7405</a> is differential.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
@@ -429,53 +430,14 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_ad7405_dma</p></td>
+<tr class="row-even"><td><p>axi_ad7405</p></td>
+<td><p>0x44A0_0000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_ad7405_dma</p></td>
 <td><p>0x44A3_0000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adc_clkgen</p></td>
+<tr class="row-even"><td><p>axi_adc_clkgen</p></td>
 <td><p>0x44A4_0000</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="gpios">
-<h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 15.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
-<th class="head"><p>Direction</p></th>
-<th class="head"><p>HDL GPIO EMIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
-</tr>
-<tr class="row-even"><th class="head"></th>
-<th class="head"><p>(from FPGA view)</p></th>
-<th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-<th class="head"><p>Zynq MP</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-odd"><td><p>filter_reset</p></td>
-<td><p>INOUT</p></td>
-<td><p>48</p></td>
-<td><p>102</p></td>
-<td><p>124</p></td>
-</tr>
-<tr class="row-even"><td><p>decimation_ratio[15:0]</p></td>
-<td><p>INOUT</p></td>
-<td><p>47:32</p></td>
-<td><p>101:86</p></td>
-<td><p>125:110</p></td>
 </tr>
 </tbody>
 </table>
@@ -583,40 +545,48 @@ the HDL repository.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_CLKGEN</p></td>
+<tr class="row-even"><td><p>AXI_AD7405</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad7405">library/axi_ad7405</a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_HDMI_TX</p></td>
+<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
+<tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
+<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<tr class="row-even"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<tr class="row-odd"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_DEC256SINC24B</p></td>
+<tr class="row-even"><td><p>UTIL_DEC256SINC24B</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_dec256sinc24b">library/util_dec256sinc24b</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
+<tr class="row-odd"><td><p>UTIL_I2C_MIXER</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_CDC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_cdc">library/util_cdc</a></p></td>
 <td><p>—</p></td>
 </tr>
 </tbody>
@@ -627,6 +597,7 @@ the HDL repository.</p>
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>No-OS driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/tree/main/legacy/adum7701_fmc">legacy/adum7701_fmc</a></p></li>
+<li><p>Linux driver at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/admc_adc.c">drivers/iio/adc/admc_adc.c</a></p></li>
 </ul>
 </section>
 </section>
