@@ -192,6 +192,23 @@ set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3
 ad_connect util_ad9361_divclk/clk_out sha3_512/ap_clk
 ad_connect util_ad9361_divclk_reset_sha3/peripheral_reset sha3_512/ap_rst
 
+set gpio_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 gpio_slice ]
+set_property -dict [list \
+  CONFIG.DIN_FROM {93} \
+  CONFIG.DIN_TO {93} \
+  CONFIG.DIN_WIDTH {94} \
+] $gpio_slice
+
+ad_connect gpio_slice/din sys_ps8/emio_gpio_o
+
+#bus_mux
+ad_ip_instance bus_mux ramp_sha3_mux
+ad_connect ramp_sha3_mux/sel gpio_slice/dout
+ad_connect ramp_sha3_mux/data_a ramp_sha3/data_out
+ad_connect ramp_sha3_mux/data_a_valid ramp_sha3/data_valid
+ad_connect ramp_sha3_mux/data_b util_ad9361_adc_pack/packed_fifo_wr_data
+ad_connect ramp_sha3_mux/data_b_valid util_ad9361_adc_pack/packed_fifo_wr_en
+
 # Create instance: system_ila_0, and set properties
 set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
 set_property -dict [list \
@@ -205,8 +222,10 @@ set_property -dict [list \
 
 
 # connections with ramp
-ad_connect sha3_512/msgStreamIn_dout ramp_sha3/data_out
-ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/data_valid
+# ad_connect sha3_512/msgStreamIn_dout ramp_sha3/data_out
+# ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/data_valid
+ad_connect sha3_512/msgStreamIn_dout ramp_sha3_mux/data_out
+ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3_mux/data_out_valid
 ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
 ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
 ad_connect sha3_512/digestStreamOut_full_n VCC
@@ -221,10 +240,12 @@ ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
 
 #connections with ILA
 ad_connect util_ad9361_divclk/clk_out system_ila_0/clk
-ad_connect system_ila_0/probe0 util_ad9361_adc_pack/packed_fifo_wr_data
-#ad_connect system_ila_0/probe0 ramp_sha3/ramp_data
-ad_connect system_ila_0/probe1 util_ad9361_adc_pack/packed_fifo_wr_en
-#ad_connect system_ila_0/probe1 ramp_sha3/ramp_data_valid
+ad_connect system_ila_0/probe0 ramp_sha3_mux/data_out
+ad_connect system_ila_0/probe1 ramp_sha3_mux/data_out_valid
+# ad_connect system_ila_0/probe0 ramp_sha3/data_out
+# ad_connect system_ila_0/probe1 ramp_sha3/data_valid
+# ad_connect system_ila_0/probe0 util_ad9361_adc_pack/packed_fifo_wr_data
+# ad_connect system_ila_0/probe1 util_ad9361_adc_pack/packed_fifo_wr_en
 ad_connect system_ila_0/probe2 sha3_512/msgStreamIn_read
 ad_connect system_ila_0/probe3 sha3_512/digestStreamOut_din
 ad_connect system_ila_0/probe4 util_ad9361_divclk_reset_sha3/peripheral_reset

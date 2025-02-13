@@ -15,6 +15,7 @@ M_DEPS += ../../../library/axi_ad9361/axi_ad9361_delay.tcl
 
 LIB_DEPS += axi_ad9361
 LIB_DEPS += axi_dmac
+LIB_DEPS += bus_mux
 LIB_DEPS += ramp
 LIB_DEPS += sha3
 LIB_DEPS += axi_sysid
