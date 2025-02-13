@@ -347,11 +347,12 @@ def concat_and_write_yaml(dir_: str) -> Tuple[List[str], str]:
 
     files: Dict[str, List[str]] = {}
 
+    any_skipped = False;
     for d in targets:
         for d_ in targets[d]:
             if d_ not in targets['main']:
-                print(f"Warning: {d} version of component {d_} not on "
-                      "component (main), skipped")
+                any_skipped = True
+                print(f"Warning: {d}/{d_} not on component (main/*.yaml), skipped")
                 continue
             if d_ in files:
                 files[d_].append('---\n')
@@ -366,6 +367,11 @@ def concat_and_write_yaml(dir_: str) -> Tuple[List[str], str]:
         with open(path.join(dir_, d_), "w") as f:
             for line in files[d_]:
                 f.write(line)
+
+    if any_skipped:
+        print("If the skipped component was renamed on main, "
+              "please update the file name and the subcomponentOf field to match the new name. "
+              "The other fields should be kept the same to preserve history.")
 
     return list(files.keys()), dir_
 
