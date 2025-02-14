@@ -16,7 +16,7 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="AD57XX_ARDZ HDL project" href="../ad57xx_ardz/index.html" />
+    <link rel="next" title="AD5758-SDZ HDL project" href="../ad5758_sdz/index.html" />
     <link rel="prev" title="AD469X-EVB HDL project" href="../ad469x_evb/index.html" />
    
   
@@ -257,18 +257,18 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad6676evb/index.html">AD6676EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
@@ -277,8 +277,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7405_fmc/index.html">AD7405-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
@@ -530,6 +530,7 @@ the HDL repository.</p>
 make command by typing in your command prompt (this example is for
 <a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>):</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
+<p>The default version of the interface is CMOS:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
@@ -540,6 +541,19 @@ make command by typing in your command prompt (this example is for
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>To build the LVDS version of the interface, run:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad485x_fmc/zed
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad485x_fmc/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">LVDS_CMOS_N</span><span class="o">=</span><span class="m">1</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user
@@ -572,7 +586,7 @@ guide.</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad485x_fmc">AD485x_FMCZ HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad485x_fmcz">AD485x_FMCZ HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -590,7 +604,7 @@ guide.</p>
 <tbody>
 <tr class="row-even"><td><p>AXI_AD485x</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad485x">library/axi_ad485x</a></p></td>
-<td><p>—</p></td>
+<td><p><a class="reference internal" href="../../library/axi_ad485x/index.html#axi-ad485x"><span class="std std-ref">AXI AD485x</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
@@ -666,7 +680,7 @@ are, the lower the chances to receive support from <a class="reference external"
               <div class="related">
                 &nbsp;
     <a href="../ad469x_evb/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD469X-EVB HDL project</a>
-    <a href="../ad57xx_ardz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD57XX_ARDZ HDL project</a>
+    <a href="../ad5758_sdz/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD5758-SDZ HDL project</a>
               </div>
           
         </div>

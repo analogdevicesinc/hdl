@@ -269,18 +269,18 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad6676evb/index.html">AD6676EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
@@ -289,8 +289,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7405_fmc/index.html">AD7405-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
@@ -382,10 +382,6 @@ in/multiple out (MIMO) base stations.</p>
 <td><p>FMC HPC1</p></td>
 </tr>
 <tr class="row-even"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
-<td><p>FMCP1</p></td>
-</tr>
-<tr class="row-odd"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
 <td><p>FMCP</p></td>
 </tr>
@@ -469,60 +465,42 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Depends on parameter</p></th>
 <th class="head"><p>Zynq/Microblaze</p></th>
 <th class="head"><p>ZynqMP</p></th>
-<th class="head"><p>Versal</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>rx_adrv9026_tpl_core</p></td>
-<td></td>
 <td><p>0x44A0_0000</p></td>
 <td><p>0x84A0_0000</p></td>
-<td><p>0xA4A0_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>tx_adrv9026_tpl_core</p></td>
-<td></td>
 <td><p>0x44A0_4000</p></td>
 <td><p>0x84A0_4000</p></td>
-<td><p>0xA4A0_4000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_rx_xcvr</p></td>
-<td><p>$ADI_PHY_SEL==1</p></td>
 <td><p>0x44A6_0000</p></td>
 <td><p>0x84A6_0000</p></td>
-<td><p>0xA4A6_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_tx_xcvr</p></td>
-<td><p>$ADI_PHY_SEL==1</p></td>
 <td><p>0x44A8_0000</p></td>
 <td><p>0x84A8_0000</p></td>
-<td><p>0xA4A8_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
-<td></td>
 <td><p>0x44A9_0000</p></td>
 <td><p>0x84A9_0000</p></td>
-<td><p>0xA4A9_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
-<td></td>
 <td><p>0x44AA_0000</p></td>
 <td><p>0x84AA_0000</p></td>
-<td><p>0xA4AA_0000</p></td>
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_rx_dma</p></td>
-<td></td>
 <td><p>0x7C40_0000</p></td>
 <td><p>0x9C40_0000</p></td>
-<td><p>0xBC40_0000</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_tx_dma</p></td>
-<td></td>
 <td><p>0x7C42_0000</p></td>
 <td><p>0x9C42_0000</p></td>
-<td><p>0xBC42_0000</p></td>
 </tr>
 </tbody>
 </table>
@@ -590,7 +568,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <td><p>68</p></td>
 <td><p>146</p></td>
 </tr>
-<tr class="row-even"><td><p>ad9528_reset_b</p></td>
+<tr class="row-even"><td><p>ad9528_sysref_req</p></td>
 <td><p>INOUT</p></td>
 <td><p>67</p></td>
 <td><p>145</p></td>
@@ -832,13 +810,13 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tr>
 <tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
 <td><p>13</p></td>
-<td><p>108</p></td>
-<td><p>140</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
 </tr>
 <tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
 <td><p>14</p></td>
-<td><p>109</p></td>
-<td><p>141</p></td>
+<td><p>110</p></td>
+<td><p>142</p></td>
 </tr>
 </tbody>
 </table>
@@ -900,25 +878,10 @@ by typing in your command prompt:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9026/zcu102$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adrv9026/a10soc
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adrv9026/zcu102/hdl/projects/adrv9026/a10soc$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
-</pre></div>
-</div>
 <div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="2363f3f0ff799727e1ad52cb932e4726a590850c" name="2363f3f0ff799727e1ad52cb932e4726a590850c" type="checkbox"></input><label for="2363f3f0ff799727e1ad52cb932e4726a590850c"><p>Default values of the make parameters for ADRV9026</p>
+<input class="collapsible_input" id="6aa41e999b12645a7308198f14d408de70ecb3de" name="6aa41e999b12645a7308198f14d408de70ecb3de" type="checkbox"></input><label for="6aa41e999b12645a7308198f14d408de70ecb3de"><p>Default values of the make parameters for ADRV9026</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -927,7 +890,7 @@ configure this project, depending on the carrier used.</p>
 <th class="head" colspan="2"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
-<th class="head" colspan="2"><p>ZCU102/A10SoC/VCK190/VCU118</p></th>
+<th class="head" colspan="2"><p>ZCU102/A10SoC/VCU118</p></th>
 </tr>
 </thead>
 <tbody>

@@ -90,12 +90,17 @@
         <nav>
           <ul>
 <li><a class="reference internal" href="#">Build an HDL project</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#needed-tools">1. Needed tools</a></li>
 <li><a class="reference internal" href="#setup-the-hdl-repository">2. Setup the HDL repository</a></li>
 <li><a class="reference internal" href="#environment">3. Environment</a><ul>
 <li><a class="reference internal" href="#a-linux-environment-setup">3a. Linux environment setup</a></li>
-<li><a class="reference internal" href="#b-windows-environment-setup">3b. Windows environment setup</a></li>
+<li><a class="reference internal" href="#b-windows-environment-setup">3b. Windows environment setup</a><ul>
+<li><a class="reference internal" href="#cygwin">Cygwin</a></li>
+<li><a class="reference internal" href="#wsl">WSL</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-projects">4. Building the projects</a><ul>
@@ -274,18 +279,18 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad408x_fmc_evb/index.html">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4170_asdz/index.html">AD4170-ASDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../projects/ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad6676evb/index.html">AD6676EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
@@ -294,8 +299,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad7405_fmc/index.html">AD7405-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../projects/ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
@@ -348,6 +353,8 @@ Content on this topic
             
   <section id="build-an-hdl-project">
 <span id="build-hdl"></span><h1>Build an HDL project<a class="headerlink" href="#build-an-hdl-project" title="Permalink to this heading"></a></h1>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Please note that ADI only provides the source files necessary to create
@@ -374,6 +381,7 @@ in many ways. We use <strong>command line</strong> and mostly <strong>Linux syst
 <p>and simple git command line commands (or the equivalent in GUI):
 <strong>clone, status, checkout, log, fetch, rebase</strong>.</p>
 </div>
+</section>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>This is a detailed guide with lots of information regarding everything.
@@ -422,6 +430,12 @@ projects. Depending on what OS you’re using, you have these options:</p></li>
 </section>
 <section id="setup-the-hdl-repository">
 <span id="build-hdl-setup-repo"></span><h2>2. Setup the HDL repository<a class="headerlink" href="#setup-the-hdl-repository" title="Permalink to this heading"></a></h2>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>We offer support only for
+<a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">the latest 2 releases</a>
+from our repository, and the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">main</a> branch.</p>
+</div>
 <p>These designs are built upon ADI’s generic HDL reference designs framework.
 ADI distributes the bit/elf files of these projects as part of the
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/kuiper-linux">ADI Kuiper Linux</a>.
@@ -431,37 +445,25 @@ If you want to build the sources, ADI makes them available on the
 the repository. This is the best method to get the sources.</p>
 <p>Here, we are cloning the repository inside a directory called <strong>adi</strong>.
 Please refer to the <a class="reference internal" href="git_repository.html#git-repository"><span class="std std-ref">HDL Git repository</span></a> section for more details.</p>
+<p>Cloning is now done using HTTPS and a classic PAT (Personal Access Token).
+More details on how to do this,
+<a class="reference external" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">here</a>.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:analogdevicesinc/hdl.git
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="b456d3771736c2533447ebf4dcfa534f7d7903a4" name="b456d3771736c2533447ebf4dcfa534f7d7903a4" type="checkbox"></input><label for="b456d3771736c2533447ebf4dcfa534f7d7903a4"><p>Cloning is done now using SSH</p>
-<div class="icon"></div></label><div class="collapsible_content docutils container">
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Cloning the HDL repository is done now using SSH, because of
-GitHub security reasons. Check out this documentation on <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">how to deal
-with SSH keys in
-GitHub</a>.
-Both for <a class="reference external" href="https://www.cygwin.com/">Cygwin</a> and
-<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a> it is
-necessary to create a unique SSH key. If you use WSL, to get the best
-performance, you must clone your HDL repository in the WSL file system.
-For example: (<code class="code docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>)</p>
-</div>
-</div>
-</div>
-</div><p>The above command clones the <strong>default</strong> branch, which is the <strong>main</strong> for
+<div class="clear-left"></div></div></div><p>If you use WSL, you must clone your HDL repository in the WSL file system.
+For example <code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>.</p>
+<p>The above command clones the <strong>default</strong> branch, which is the <strong>main</strong> for
 HDL repo. The <strong>main</strong> branch always points to the latest stable release
 branch, but it also has features <strong>that are not fully tested</strong>. If you
 want to switch to any other branch you need to checkout that branch:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2022_r2
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>hdl_2023_r2
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><p>If this is your first time cloning, you have the latest source files.
@@ -476,7 +478,7 @@ If not, you can simply pull the latest sources using <code class="docutils liter
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>origin/hdl_2022_r2<span class="w">  </span><span class="c1"># updates your local copy</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>rebase<span class="w"> </span>origin/hdl_2023_r2<span class="w">  </span><span class="c1"># updates your local copy</span>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
@@ -498,12 +500,9 @@ load_amd<span class="w"> </span><span class="o">()</span>
 <span class="o">}</span>
 </pre></div>
 </div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
 <p>Even though it’s convenient, we discourage adding the source scripts to
 .bashrc files outside of wrapper methods, as multiple vendor environments
 may conflict with each other.</p>
-</div>
 <p>Then, <a class="reference external" href="https://linuxcommand.org/lc3_man_pages/sourceh.html">re-source your bashrc</a>
 for the current session (or open a new one) and call the defined method:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -573,6 +572,8 @@ package name.</p>
 <div class="clear-left"></div></div></div></section>
 <section id="b-windows-environment-setup">
 <h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading"></a></h3>
+<section id="cygwin">
+<h4>Cygwin<a class="headerlink" href="#cygwin" title="Permalink to this heading"></a></h4>
 <p>Because GNU Make is not supported on Windows, you need to install
 <a class="reference external" href="https://www.cygwin.com/">Cygwin</a>, which is a UNIX-like environment
 and command-line interface for Microsoft Windows.</p>
@@ -649,11 +650,187 @@ and command-line interface for Microsoft Windows.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d" name="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d" type="checkbox"></input><label for="bd2d33fee2ebbcb88de52d1a2e905fba4a4eeb5d"><p>Alternatives to Cygwin/Linux terminal</p>
+<div class="clear-left"></div></div></div></section>
+<section id="wsl">
+<h4>WSL<a class="headerlink" href="#wsl" title="Permalink to this heading"></a></h4>
+<p><a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a> (or Windows
+Subsystem for Linux) is both a UNIX-like environment and a command-line
+interface for Microsoft Windows. You need to install the Ubuntu distribution.</p>
+<p>To be able to access the GUI, <strong>WSL2 is recommended</strong>. This is done using
+PowerShell or Windows Command Prompt in Administrator mode.
+In the link above, you can find the installation guide for WSL on Windows.</p>
+<p><span class="red">We do not offer support on WSL-related issues or on Vivado/Vitis issues!</span></p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="f72972ec5ee228876911ca8ca8cd6505336211e5" name="f72972ec5ee228876911ca8ca8cd6505336211e5" type="checkbox"></input><label for="f72972ec5ee228876911ca8ca8cd6505336211e5"><p>How to install WSL</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<p>A very good alternative to Cygwin – <strong>but not supported by us</strong> – is
-<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a>.</p>
+<p>When installing WSL, the Ubuntu distribution will be installed by default.
+If it is not, after installing WSL, write in the terminal:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-ps1 notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="p">-</span><span class="n">-update</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span><span class="p">:</span>\<span class="o">&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-ps1 notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">ubuntu</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>If you want to check the WSL version, you can use the Windows Command
+Prompt command: <strong>wsl -l -v</strong>.</p>
+<p>If you want to check the version for wsl and Ubuntu, you can use the
+following commands in Ubuntu:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uname<span class="w"> </span>-r
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>5.15.90.1-microsoft-standard-WSL2
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lsb_release<span class="w"> </span>-a
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.2 LTS
+Release:        22.04
+Codename:       jammy
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="63b718c0aff00a6cfe53689e2953b4a605021e20" name="63b718c0aff00a6cfe53689e2953b4a605021e20" type="checkbox"></input><label for="63b718c0aff00a6cfe53689e2953b4a605021e20"><p>How to install the tools in WSL</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>Before building any project,
+<span class="red">it is necessary to install the Linux version for Vivado, in the WSL file system</span>,
+because on the Ubuntu distribution on WSL you cannot
+run projects from on the Windows version of them. When you have to choose
+the installation path, choose the location where WSL is installed
+<code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\opt</span></code>.</p>
+<p>Also, to get the best performance, you must clone your HDL repository in
+the WSL file system. For example: <code class="docutils literal notranslate"><span class="pre">\\wsl.localhost\Ubuntu\home\username\hdl</span></code>.</p>
+<p>For more information you can consult the following link:
+<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/filesystems#file-storage-and-performance-across-file-systems">WSL Storage</a>.</p>
+<p>Download the Linux version of Vitis (Vivado comes in the same package with
+Vitis), then one by one, do the following commands in the WSL terminal:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./FPGAs_AdaptiveSoCs_Unified_2023.2_1113_1001_Lin64.bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Now, you may have noticed that the installation raised a couple of
+warnings, such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 31: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8): No such file or directory
+/bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+terminate called after throwing an instance of &#39;std::runtime_error&#39;
+  what():  locale::facet::_S_create_c_locale name not valid
+/tools/Xilinx/Vivado/2023.2/bin/rdiArgs.sh: line 312:  4105 Aborted                 &quot;$RDI_PROG&quot; &quot;$@&quot;
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://adaptivesupport.amd.com/s/question/0D54U00006FYojlSAD/vivado-20222-on-ubuntu-with-error-lcall-cannot-change-locale-enusutf8?language=en_US">here</a>
+a thread on the Xilinx community.</p>
+<p>Next, run:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>locales<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>localedef<span class="w"> </span>-i<span class="w"> </span>en_US<span class="w"> </span>-f<span class="w"> </span>UTF-8<span class="w"> </span>en_US.UTF-8
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/Downloads$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/opt/Xilinx/Vitis/2023.2/scripts
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./installLibs.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libxrender1<span class="w"> </span>libxtst6<span class="w"> </span>libxi6
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vitis/2023.2/scripts$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libtinfo5<span class="w"> </span><span class="c1"># to be used only in case you have issues with missing libtinfo5 when building a project</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>Then you need to add the following paths to your $PATH environment variable:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vivado/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vivado_HLS/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/opt/path_to/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="b77f04415df3131d4396ebc514b3111f2864c90b" name="b77f04415df3131d4396ebc514b3111f2864c90b" type="checkbox"></input><label for="b77f04415df3131d4396ebc514b3111f2864c90b"><p>Alternatives to Cygwin/WSL/Linux terminal</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
 <p>If you do not want to use neither Cygwin nor WSL, there might still be some
 alternative. There are <code class="docutils literal notranslate"><span class="pre">make</span></code> alternatives for <strong>Windows Command
 Prompt</strong>, minimalist GNU for Windows (<strong>MinGW</strong>), or the <strong>Cygwin
@@ -692,7 +869,7 @@ current environment, for example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>vivado
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vivado/2023.1/bin/vivado
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vivado/2023.2/bin/vivado
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -701,10 +878,11 @@ current environment, for example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>quartus
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/intelFPGA/23.1/quartus/bin/quartus
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/intelFPGA/24.2/quartus/bin/quartus
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="building-the-projects">
 <span id="build-hdl-build"></span><h2>4. Building the projects<a class="headerlink" href="#building-the-projects" title="Permalink to this heading"></a></h2>
@@ -1089,9 +1267,9 @@ this contains the most relevant information that you need to provide.</p>
 and/or <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux</a> build.</p>
 <p>The <strong>sof</strong> file is used to program the device.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2" name="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2" type="checkbox"></input><label for="7163e9baaf7a9bfbb62b2aca0a54b69b9b9aeed2"><p>Building an Intel project in WSL - known issues</p>
+<input class="collapsible_input" id="366f5e2be26231237dea59259d35751175a06a6a" name="366f5e2be26231237dea59259d35751175a06a6a" type="checkbox"></input><label for="366f5e2be26231237dea59259d35751175a06a6a"><p>Building an Intel project in WSL - known issues</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
-<p>For a10Soc and s10Soc projects it’s very possible to face the following
+<p>For a10Soc and S10Soc projects it’s very possible to face the following
 error when you try to build the project:</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>

@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="AD4110 HDL project" href="../ad4110/index.html" />
-    <link rel="prev" title="AD35XXR-EVB HDL project" href="../ad35xxr_evb/index.html" />
+    <link rel="prev" title="AD4052-ARDZ HDL project" href="../ad4052_ardz/index.html" />
    
   
   <meta name="repository" content="hdl">
@@ -256,18 +256,18 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AD408X-FMC-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4110/index.html">AD4110-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad6676evb/index.html">AD6676EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
@@ -276,8 +276,8 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad7405_fmc/index.html">AD7405-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad77681evb/index.html">AD7768-1-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
@@ -330,6 +330,12 @@ Content on this topic
             
   <section id="ad408x-fmc-evb-hdl-project">
 <span id="ad408x-fmc-evb"></span><h1>AD408X-FMC-EVB HDL project<a class="headerlink" href="#ad408x-fmc-evb-hdl-project" title="Permalink to this heading"></a></h1>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Although the <a class="icon adi reference external" href="https://www.analog.com/AD4080">AD4080</a> supports CMOS interface, this HDL project does not
+support it. The only available interface for this project is LVDS, in
+single lane mode, DDR.</p>
+</div>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD4080-FMC">EVAL-AD4080-FMC</a> is designed to demonstrate the
@@ -398,11 +404,11 @@ mezzanine card (FMC) connector.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad408x_fmc_evb_zed_block_diagram.svg"><img alt="EVAL-AD4080-FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_evb_zed_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad408x_fmc_evb_zed_block_diagram.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_evb_zed_block_diagram.svg" width="800" /></a>
 </section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/ad408x_fmc_clock_scheme.svg"><img alt="EVAL-AD4080-FMC/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_clock_scheme.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad408x_fmc_clock_scheme.svg"><img alt="AD4080-FMC-EVB/ZedBoard block diagram" class="align-center" src="../../_images/ad408x_fmc_clock_scheme.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -693,7 +699,7 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../ad35xxr_evb/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD35XXR-EVB HDL project</a>
+    <a href="../ad4052_ardz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AD4052-ARDZ HDL project</a>
     <a href="../ad4110/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AD4110 HDL project</a>
               </div>
           
