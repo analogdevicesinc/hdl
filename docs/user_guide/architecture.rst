@@ -6,26 +6,25 @@ HDL Architecture
 Every HDL design of a reference project can be divided into two
 subsystems:
 
--  **Base design** --- description of what the **carrier** contains:
+- **Base design** --- description of what the **carrier** contains:
 
-   -  an embedded processor - soft or hard
-   -  all the peripheral IPs (that are necessary to run a Linux
-      distribution on the system)
-   -  these designs are specific to each carrier, making them **carrier
-      dependent**
-   -  it describes part of the ``system_wrapper`` module
-   -  located in
-      :git-hdl:`projects/common <projects/common>`;
-      one for each carrier
+  - an embedded processor - soft or hard
+  - all the peripheral IPs (that are necessary to run a Linux
+    distribution on the system)
+  - these designs are specific to each carrier, making them **carrier
+    dependent**
+  - it describes part of the ``system_wrapper`` module
+  - located in :git-hdl:`projects/common <projects/common>`; one for each
+    carrier
 
--  **Board design** --- description of what the **board** attached to
-   the carrier contains:
+- **Board design** --- description of what the **board** attached to
+  the carrier contains:
 
-   -  all the necessary IPs needed to support the board
-   -  these designs are common to all carriers, making them **carrier
-      independent**
-   -  it describes part of the ``system_wrapper`` module
-   -  located in ``hdl/projects/$project_name/common/*bd.tcl``
+  - all the necessary IPs needed to support the board
+  - these designs are common to all carriers, making them **carrier
+    independent**
+  - it describes part of the ``system_wrapper`` module
+  - located in ``hdl/projects/$project_name/common/*bd.tcl``
 
 How they're instantiated
 -------------------------------------------------------------------------------
@@ -38,13 +37,12 @@ Example
 
 Take :adi:`AD-FMCOMMS2 <EVAL-ADFMCOMMS2>` with
 :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`;
-the ``system_bd.tcl`` will look like the following:
+the ``system_bd.tcl`` file will have the following designs sourced to be used:
 
-.. shell:: bash
-   :no-path:
+.. code-block::
 
-   $source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
-   $source ../common/fmcomms2_bd.tcl
+   source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
+   source ../common/fmcomms2_bd.tcl
 
 Typical project diagram
 -------------------------------------------------------------------------------
@@ -61,9 +59,9 @@ cores.
 
 Usually, they contain:
 
--  Microprocessor
--  Memory interface controller
--  Peripheral interfaces
+- Microprocessor
+- Memory interface controller
+- Peripheral interfaces
 
 Microprocessor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,15 +107,15 @@ ARM® Cortex® - A9 MPCore™ processor, they also have other integrated
 peripherals and memory interfaces. For more information please visit
 the manufacturer's website, listed in the table above.
 
--  ``PS7`` --- `Zynq-7000 SoC Processing
-   System <https://docs.xilinx.com/v/u/en-US/pg082-processing-system7>`__
-   (``processing_system7``)
--  ``PS8`` --- `Zynq UltraScale+ MPSoC Processing
-   System <https://docs.xilinx.com/viewer/book-attachment/xFC3qkokxbD~75kj6nPLuw/2o4flzqn5OqWHaMHwpG3Qg>`__
-   (``zynq_ultra_ps_e``)
--  ``Versal`` --- `Versal ACAP
-   CIPS <https://docs.xilinx.com/r/en-US/pg352-cips/Overview>`__
-   (``versal_cips``)
+- ``PS7`` --- `Zynq-7000 SoC Processing
+  System <https://docs.xilinx.com/v/u/en-US/pg082-processing-system7>`__
+  (``processing_system7``)
+- ``PS8`` --- `Zynq UltraScale+ MPSoC Processing
+  System <https://docs.xilinx.com/viewer/book-attachment/xFC3qkokxbD~75kj6nPLuw/2o4flzqn5OqWHaMHwpG3Qg>`__
+  (``zynq_ultra_ps_e``)
+- ``Versal`` --- `Versal ACAP
+  CIPS <https://docs.xilinx.com/r/en-US/pg352-cips/Overview>`__
+  (``versal_cips``)
 
 Memory interface controller
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,10 +130,10 @@ data throughput).
 In the following two links, the user can find the landing page of the
 available memory solutions for Intel and AMD:
 
--  Intel's memory interfaces:
-   https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html
--  AMD's memory interfaces:
-   https://www.xilinx.com/products/intellectual-property/mig.html#documentation
+- Intel's memory interfaces:
+  https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html
+- AMD's memory interfaces:
+  https://www.xilinx.com/products/intellectual-property/mig.html#documentation
 
 Peripheral interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -223,11 +221,10 @@ GPIOs
 
 The general rule of thumb is to define 64 GPIO pins for the base design:
 
--  bits [31: 0] always belong to the carrier board;
--  bits [63:32] will be assigned to switches, buttons and/or LEDs, which
-   can be found on the FMC board;
--  bits [95:64] will be used when the FPGA type is Zynq UltraScale+
-   MPSoC.
+- bits [31: 0] always belong to the carrier board;
+- bits [63:32] will be assigned to switches, buttons and/or LEDs, which
+  can be found on the FMC board;
+- bits [95:64] will be used when the FPGA type is Zynq UltraScale+ MPSoC.
 
 When some of these GPIOs are not used, the input pins should have the
 output pins driven to them, so that
@@ -237,14 +234,14 @@ inputs not being assigned to.
 Depending on the processor type, add these values to the GPIO number
 from the HDL project to obtain the final number used in software:
 
--  PS7 EMIO offset = **54**
--  PS8 EMIO offset = **78**
+- PS7 EMIO offset = **54**
+- PS8 EMIO offset = **78**
 
 Connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  Ethernet
--  USB OTG
+- Ethernet
+- USB OTG
 
 These interface designs are borrowed from the golden reference design
 of the board.
@@ -521,67 +518,67 @@ Project files for AMD boards
 
 A project for an AMD FPGA board should contain the following files:
 
--  ``Makefile`` --- auto-generated file; contains all the IP
-   dependencies needed for the project to be built
+- ``Makefile`` --- auto-generated file; contains all the IP
+  dependencies needed for the project to be built
 
--  ``system_project.tcl`` --- script that creates the actual Vivado
-   project and runs the synthesis/implementation of the design
+- ``system_project.tcl`` --- script that creates the actual Vivado
+  project and runs the synthesis/implementation of the design
 
--  ``system_bd.tcl`` --- sources the *base design first*, then the
-   *board design*, and afterwards it contains all the IP instances and
-   connections that must be added on top of the sourced files, to
-   complete the design of the project (these are **specific** to the
-   combination of this carrier and board)
+- ``system_bd.tcl`` --- sources the *base design first*, then the
+  *board design*, and afterwards it contains all the IP instances and
+  connections that must be added on top of the sourced files, to
+  complete the design of the project (these are **specific** to the
+  combination of this carrier and board)
 
--  ``system_constr.xdc`` --- constraints file of the design; it’s the
-   connection between the physical pins of the FPGA and the HDL code
-   that describes the behavior; here you define the FMC I/O pins,
-   board-specific clock signals, timing constraints, etc. The
-   constraints specific to the carrier are imported in the
-   *system_project.tcl* file
+- ``system_constr.xdc`` --- constraints file of the design; it’s the
+  connection between the physical pins of the FPGA and the HDL code
+  that describes the behavior; here you define the FMC I/O pins,
+  board-specific clock signals, timing constraints, etc. The
+  constraints specific to the carrier are imported in the
+  *system_project.tcl* file
 
--  ``system_top.v`` --- contains everything about the HDL part of the
-   project; it instantiates the ``system_wrapper`` module, I/O buffers,
-   I/ODDRs, modules that transform signals from LVDS to single-ended,
-   etc. The I/O ports of this Verilog module will be connected to actual
-   I/O pads of the FPGA.
+- ``system_top.v`` --- contains everything about the HDL part of the
+  project; it instantiates the ``system_wrapper`` module, I/O buffers,
+  I/ODDRs, modules that transform signals from LVDS to single-ended,
+  etc. The I/O ports of this Verilog module will be connected to actual
+  I/O pads of the FPGA.
 
-   -  ``system_wrapper`` --- is a tool-generated file and can be found at
-      ``<project_name>.srcs/sources_1/bd/system/hdl/system_wrapper.v``
+  - ``system_wrapper`` --- is a tool-generated file and can be found at
+    ``<project_name>.srcs/sources_1/bd/system/hdl/system_wrapper.v``
 
-      -  the I/O ports of this module are declared in either
-         *system_bd.tcl* or in the **board** design file
-      -  this can be visualized in Vivado at the Block Design section
-      -  the base design, board design and system_bd.tcl describe this
-         module, making the connections between the instantiated IPs
+     - the I/O ports of this module are declared in either
+       *system_bd.tcl* or in the **board** design file
+     - this can be visualized in Vivado at the Block Design section
+     - the base design, board design and system_bd.tcl describe this
+       module, making the connections between the instantiated IPs
 
 Project files for Intel boards
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A project for an Intel FPGA board should contain the following files:
 
--  ``Makefile`` --- auto-generated file; contains all the IP
-   dependencies needed for the project to be built
+- ``Makefile`` --- auto-generated file; contains all the IP
+  dependencies needed for the project to be built
 
--  ``system_project.tcl`` --- script that creates the actual Quartus
-   project and runs the synthesis/implementation of the design. It also
-   contains the I/O definitions for the interfaces between the board and
-   the FPGA
+- ``system_project.tcl`` --- script that creates the actual Quartus
+  project and runs the synthesis/implementation of the design. It also
+  contains the I/O definitions for the interfaces between the board and
+  the FPGA
 
--  ``system_qsys.tcl`` --- also called **platform designer**; sources
-   the *base design first*, then the *board design*, and afterwards it
-   contains all the IP instances and connections that must be added on
-   top of the sourced files, to complete the design of the project
-   (these are specific to the combination of this carrier and board)
+- ``system_qsys.tcl`` --- also called **platform designer**; sources
+  the *base design first*, then the *board design*, and afterwards it
+  contains all the IP instances and connections that must be added on
+  top of the sourced files, to complete the design of the project
+  (these are specific to the combination of this carrier and board)
 
--  ``system_constr.sdc`` --- contains clock definitions and other path
-   constraints
+- ``system_constr.sdc`` --- contains clock definitions and other path
+  constraints
 
--  ``system_top.v`` --- contains everything about the HDL part of the
-   project; it instantiates the ``system_bd`` module, I/O buffers, specific
-   SPI modules, modules that transform signals from LVDS to single-ended,
-   etc. The I/O ports of this Verilog module will be connected to actual
-   I/O pads of the FPGA
+- ``system_top.v`` --- contains everything about the HDL part of the
+  project; it instantiates the ``system_bd`` module, I/O buffers, specific
+  SPI modules, modules that transform signals from LVDS to single-ended,
+  etc. The I/O ports of this Verilog module will be connected to actual
+  I/O pads of the FPGA
 
 Examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -589,34 +586,33 @@ Examples
 Some carriers have a different name for these files, for example A10SoC
 has constraints file for both PL side and PS side:
 
--  a10soc_plddr4_assign.tcl --- constraints file for the PL
--  a10soc_system_assign.tcl --- constraints file for the PS
+- a10soc_plddr4_assign.tcl --- constraints file for the PL
+- a10soc_system_assign.tcl --- constraints file for the PS
 
 Project files for Lattice boards
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A project for a Lattice FPGA board should contain the following files:
 
--  ``Makefile`` --- auto-generated file; contains all the IP
-   dependencies needed for the project to be built
--  ``system_project_pb.tcl`` --- used to build the Propel Builder project
-   (block design); linked in project-lattice.mk, run by propelbld (Windows),
-   propelbldwrap (Linux);
--  ``system_project.tcl`` --- used to build the Radiant project; Linked in
-   project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);
--  ``system_pb.tcl`` --- linker script for the projects, sourced in
-   adi_project_pb procedure that is called in system_project_pb.tcl and it is
-   defined in adi_project_lattice_pb.tcl; sources the *base design first*,
-   then the *board design*, and afterwards it contains all the IP instances and
-   connections that must be added on top of the sourced files, to
-   complete the design of the project (these are specific to the
-   combination of this carrier and board)
--  ``system_constr.sdc`` --- contains clock definitions and other path
-   constraints
--  ``system_constr.pdc`` --- contains clock definitions and other path
-   constraints  + phisical constraints
--  ``system_top.v`` --- contains everything about the HDL part of the
-   project; it instantiates the **<project_name>.v** ``system_wrapper`` module,
-   IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
-   etc. The I/O ports of this Verilog module will be connected to actual
-   I/O pads of the FPGA
+- ``Makefile`` --- auto-generated file; contains all the IP
+  dependencies needed for the project to be built
+- ``system_project_pb.tcl`` --- used to build the Propel Builder project
+  (block design); linked in project-lattice.mk, run by propelbld (Windows),
+  propelbldwrap (Linux);
+- ``system_project.tcl`` --- used to build the Radiant project; Linked in
+  project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);
+- ``system_pb.tcl`` --- linker script for the projects, sourced in
+  adi_project_pb procedure that is called in system_project_pb.tcl and it is
+  defined in adi_project_lattice_pb.tcl; sources the *base design first*,
+  then the *board design*, and afterwards it contains all the IP instances and
+  connections that must be added on top of the sourced files, to
+  complete the design of the project (these are specific to the
+  combination of this carrier and board)
+- ``system_constr.sdc`` --- contains clock definitions and other path constraints
+- ``system_constr.pdc`` --- contains clock definitions and other path
+  constraints  + physical constraints
+- ``system_top.v`` --- contains everything about the HDL part of the
+  project; it instantiates the **<project_name>.v** ``system_wrapper`` module,
+  I/O buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+  etc. The I/O ports of this Verilog module will be connected to actual
+  I/O pads of the FPGA
