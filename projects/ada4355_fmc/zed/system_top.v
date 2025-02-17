@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,119 +37,104 @@
 
 module system_top (
 
-  inout   [14:0]  ddr_addr,
-  inout   [ 2:0]  ddr_ba,
-  inout           ddr_cas_n,
-  inout           ddr_ck_n,
-  inout           ddr_ck_p,
-  inout           ddr_cke,
-  inout           ddr_cs_n,
-  inout   [ 3:0]  ddr_dm,
-  inout   [31:0]  ddr_dq,
-  inout   [ 3:0]  ddr_dqs_n,
-  inout   [ 3:0]  ddr_dqs_p,
-  inout           ddr_odt,
-  inout           ddr_ras_n,
-  inout           ddr_reset_n,
-  inout           ddr_we_n,
+  inout  [14:0] ddr_addr,
+  inout  [ 2:0] ddr_ba,
+  inout         ddr_cas_n,
+  inout         ddr_ck_n,
+  inout         ddr_ck_p,
+  inout         ddr_cke,
+  inout         ddr_cs_n,
+  inout  [ 3:0] ddr_dm,
+  inout  [31:0] ddr_dq,
+  inout  [ 3:0] ddr_dqs_n,
+  inout  [ 3:0] ddr_dqs_p,
+  inout         ddr_odt,
+  inout         ddr_ras_n,
+  inout         ddr_reset_n,
+  inout         ddr_we_n,
 
-  inout           fixed_io_ddr_vrn,
-  inout           fixed_io_ddr_vrp,
-  inout   [53:0]  fixed_io_mio,
-  inout           fixed_io_ps_clk,
-  inout           fixed_io_ps_porb,
-  inout           fixed_io_ps_srstb,
+  inout         fixed_io_ddr_vrn,
+  inout         fixed_io_ddr_vrp,
+  inout  [53:0] fixed_io_mio,
+  inout         fixed_io_ps_clk,
+  inout         fixed_io_ps_porb,
+  inout         fixed_io_ps_srstb,
 
-  inout   [31:0]  gpio_bd,
+  inout  [31:0] gpio_bd,
 
-  output          hdmi_out_clk,
-  output          hdmi_vsync,
-  output          hdmi_hsync,
-  output          hdmi_data_e,
-  output  [15:0]  hdmi_data,
+  output        hdmi_out_clk,
+  output        hdmi_vsync,
+  output        hdmi_hsync,
+  output        hdmi_data_e,
+  output [15:0] hdmi_data,
 
-  output          i2s_mclk,
-  output          i2s_bclk,
-  output          i2s_lrclk,
-  output          i2s_sdata_out,
-  input           i2s_sdata_in,
+  output        i2s_mclk,
+  output        i2s_bclk,
+  output        i2s_lrclk,
+  output        i2s_sdata_out,
+  input         i2s_sdata_in,
 
-  output          spdif,
+  output        spdif,
 
-  inout           iic_scl,
-  inout           iic_sda,
-  inout   [ 1:0]  iic_mux_scl,
-  inout   [ 1:0]  iic_mux_sda,
+  inout         iic_scl,
+  inout         iic_sda,
+  inout  [ 1:0] iic_mux_scl,
+  inout  [ 1:0] iic_mux_sda,
 
-  input           otg_vbusoc,
+  input         otg_vbusoc,
 
   // FMC connector
   // LVDS data interace
 
-  input           dco_p,
-  input           dco_n,
-  input           da_p,
-  input           da_n,
-  input           db_p,
-  input           db_n,
-  input           frame_clock_p,
-  input           frame_clock_n,
-  input           frame_control,
-
-  input           fpgaclk_p,
-  input           fpgaclk_n,
-
-  input           clk_p,
-  input           clk_n,
+  input         dco_p,
+  input         dco_n,
+  input         da_p,
+  input         da_n,
+  input         db_p,
+  input         db_n,
+  input         frame_clock_p,
+  input         frame_clock_n,
 
   // GPIOs
 
-  input           gain_sel0,
-  input           gain_sel1,
-  input           gain_sel2,
+  inout         gain_sel0,
+  inout         gain_sel1,
+  input         gain_sel2,
 
-  input           fsel,
-  input           gpio_1p8vd_en,
-  input           gpio_1p8va_en,
-
-  //output          ad9508_sync,
+  inout         fsel,
+  inout         gpio_1p8vd_en,
+  input         gpio_1p8va_en,
 
   // ADC SPI
 
-(* mark_debug = "true" *)  input           ada4355_miso,
-(* mark_debug = "true" *)  output          ada4355_sclk,
-(* mark_debug = "true" *)  output          ada4355_csn,
-(* mark_debug = "true" *)  output          ada4355_mosi,
+  input         ada4355_miso,
+  output        ada4355_sclk,
+  output        ada4355_csn,
+  output        ada4355_mosi,
 
-  input           miso_pot,
-  output          sclk_pot,
-  output          mosi_pot,
-  output          csb_ld_pot,
-  output          csb_apd_pot
- 
+  input         miso_pot,
+  output        sclk_pot,
+  output        mosi_pot,
+  output        csb_ld_pot,
+  output        csb_apd_pot
 );
 
   // internal signals
 
-  wire    [63:0]  gpio_i;
-  wire    [63:0]  gpio_o;
-  wire    [63:0]  gpio_t;
+  wire [63:0] gpio_i;
+  wire [63:0] gpio_o;
+  wire [63:0] gpio_t;
 
-  wire    [ 1:0]  iic_mux_scl_i_s;
-  wire    [ 1:0]  iic_mux_scl_o_s;
-  wire            iic_mux_scl_t_s;
-  wire    [ 1:0]  iic_mux_sda_i_s;
-  wire    [ 1:0]  iic_mux_sda_o_s;
-  wire            iic_mux_sda_t_s;
+  wire [ 1:0] iic_mux_scl_i_s;
+  wire [ 1:0] iic_mux_scl_o_s;
+  wire        iic_mux_scl_t_s;
+  wire [ 1:0] iic_mux_sda_i_s;
+  wire [ 1:0] iic_mux_sda_o_s;
+  wire        iic_mux_sda_t_s;
 
-  //assign ad9508_sync    = ~gpio_o[38];
-
-  assign gpio_i[32]     = gain_sel0;
-  assign gpio_i[33]     = gain_sel1;
-  assign gpio_i[34]     = gain_sel2;
-  assign gpio_i[35]     = fsel;
-  assign gpio_i[36]     = gpio_1p8vd_en;
+  assign gpio_i[36]     = gain_sel2;
   assign gpio_i[37]     = gpio_1p8va_en;
+
   assign gpio_i[63:38]  = gpio_o[63:38];
 
   ad_iobuf #(
@@ -159,6 +144,17 @@ module system_top (
     .dio_i({gpio_o[31:0]}),
     .dio_o({gpio_i[31:0]}),
     .dio_p({gpio_bd[31:0]}));
+
+  ad_iobuf #(
+    .DATA_WIDTH(4)
+  ) i_iobuf_ada4355_gpio (
+    .dio_t(gpio_t[35:32]),
+    .dio_i(gpio_o[35:32]),
+    .dio_o(gpio_i[35:32]),
+    .dio_p({gpio_1p8vd_en,
+            fsel,
+            gain_sel1,
+            gain_sel0}));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -247,6 +243,6 @@ module system_top (
     .db_n (db_n),
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
-    .sync_n (1'b1),
-    .frame_control(frame_control));
+    .sync_n (1'b1));
+
 endmodule
