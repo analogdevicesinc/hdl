@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple
 from os import path, mkdir, walk, chdir
 from glob import glob
+import sys
 import yaml
 import re
 import argparse
@@ -93,7 +94,8 @@ def get_description_parts(
 
 
 def get_description(
-    data: List[str]
+    data: List[str],
+    file: str
 ) -> List[str]:
     desc = []
     directive_lock = False
@@ -109,6 +111,10 @@ def get_description(
             else:
                 continue
         desc.append(d)
+
+    if len(desc) < 3:
+        sys.exit(f"{file}: Missing overview/short-description.")
+
     desc.pop()
     desc.pop()
     return desc
@@ -139,7 +145,7 @@ def get_description_library(
 
     title = data[index-3][:-1]
     data = data[index:]
-    desc = get_description(data)
+    desc = get_description(data, file)
 
     return *get_description_parts(desc), title
 
@@ -182,7 +188,7 @@ def get_description_project(
         index = index+1 if data[index] == '\n' else index
 
     data = data[index:]
-    desc = get_description(data)
+    desc = get_description(data, file)
 
     return *get_description_parts(desc), title
 
@@ -341,11 +347,12 @@ def concat_and_write_yaml(dir_: str) -> Tuple[List[str], str]:
 
     files: Dict[str, List[str]] = {}
 
+    any_skipped = False;
     for d in targets:
         for d_ in targets[d]:
             if d_ not in targets['main']:
-                print(f"Warning: {d} version of component {d_} not on "
-                      "component (main), skipped")
+                any_skipped = True
+                print(f"Warning: {d}/{d_} not on component (main/*.yaml), skipped")
                 continue
             if d_ in files:
                 files[d_].append('---\n')
@@ -360,6 +367,11 @@ def concat_and_write_yaml(dir_: str) -> Tuple[List[str], str]:
         with open(path.join(dir_, d_), "w") as f:
             for line in files[d_]:
                 f.write(line)
+
+    if any_skipped:
+        print("If the skipped component was renamed on main, "
+              "please update the file name and the subcomponentOf field to match the new name. "
+              "The other fields should be kept the same to preserve history.")
 
     return list(files.keys()), dir_
 
