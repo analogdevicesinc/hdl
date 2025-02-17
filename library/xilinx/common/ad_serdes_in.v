@@ -48,7 +48,6 @@ module ad_serdes_in #(
   parameter   IODELAY_GROUP = "dev_if_delay_group",
   parameter   REFCLK_FREQUENCY = 200,
   parameter   EXT_SERDES_RESET = 0
-  //parameter   DATA_FRAME = 0
 ) (
 
   // reset and clocks
@@ -68,7 +67,6 @@ module ad_serdes_in #(
   output  [(DATA_WIDTH-1):0]      data_s5,
   output  [(DATA_WIDTH-1):0]      data_s6,
   output  [(DATA_WIDTH-1):0]      data_s7,  // 1st bit received
-  //output  [(DATA_WIDTH-1):0]      data_out,
   input   [(DATA_WIDTH-1):0]      data_in_p,
   input   [(DATA_WIDTH-1):0]      data_in_n,
 
@@ -152,7 +150,7 @@ module ad_serdes_in #(
   endgenerate
 
   // bypass IDELAY
- 
+
   generate
   if (IODELAY_ENABLE == 0) begin
     assign data_in_idelay_s = data_in_ibuf_s;
@@ -239,7 +237,7 @@ module ad_serdes_in #(
         .OCLK (1'b0),
         .DYNCLKDIVSEL (1'b0),
         .DYNCLKSEL (1'b0),
-        .D(1'b0),
+        .D (1'b0),
         .DDLY (data_in_idelay_s[l_inst]),
         .OFB (1'b0),
         .OCLKB (1'b0),
