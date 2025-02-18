@@ -43,7 +43,7 @@ module axi_ada4355_if #(
   parameter IODELAY_CTRL = 1,
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 2  // Max number of lanes is 2
- ) (
+) (
 
   // device interface
   input dco_p,
@@ -120,7 +120,7 @@ module axi_ada4355_if #(
   reg [ 1:0] serdes_valid = 2'b00;
   reg [ 1:0] serdes_valid_d = 2'b00;
   reg [ 2:0] shift_cnt = 3'd0;
-   
+
   reg [15:0] serdes_data_16;
   reg [15:0] serdes_data_16_d;
   reg [7:0]  serdes_data_frame;
@@ -225,7 +225,7 @@ module axi_ada4355_if #(
     .delay_locked(delay_locked));
 
   // serdes for frame
-    
+
   ad_serdes_in #(
     .CMOS_LVDS_N(CMOS_LVDS_N),
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
@@ -340,7 +340,7 @@ module axi_ada4355_if #(
       case (state)
       INIT : begin
         if (data_frame_shifted != pattern_value) begin
-          state <= CNT_UPDATE;          
+          state <= CNT_UPDATE;
         end else begin
           data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
           state <= INIT;
@@ -354,7 +354,7 @@ module axi_ada4355_if #(
          data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
          state <= INIT;
       end
-      RESET : begin 
+      RESET : begin
           shift_cnt <= 0;
           state <= INIT;
       end
