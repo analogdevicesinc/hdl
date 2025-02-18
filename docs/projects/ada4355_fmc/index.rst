@@ -29,13 +29,12 @@ double data rate (DDR) operation.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-ADA4356`
+- :adi:`EVAL-ADA4355`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`ADA4355`
-- :adi:`ADA4356`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -59,7 +58,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ada4355_fmc/ada4355_zed_lvds_diagram.svg
+.. image:: ../ada4355_fmc/ada4355_fmc_zed_block_diagram.svg
    :width: 800
    :align: center
    :alt: ADA4355_FMC/ZedBoard block diagram
@@ -122,7 +121,7 @@ The Software GPIO number is calculated as follows:
    * - gpio_1p8va_en
      - IN
      - 37
-     - 91   
+     - 91
    * - gain_sel2
      - IN
      - 36
@@ -134,11 +133,11 @@ The Software GPIO number is calculated as follows:
    * - fsel
      - INOUT
      - 34
-     - 88       
+     - 88
    * - gain_sel1
      - INOUT
      - 33
-     - 87  
+     - 87
    * - gain_sel0
      - INOUT
      - 32
