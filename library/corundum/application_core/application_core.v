@@ -750,14 +750,14 @@ module application_core #
   always @(posedge clk)
   begin
     if (!rstn) begin
-      sample_counter <= 8'd1;
+      sample_counter <= 8'd0;
       packet_tlast <= 1'b0;
     end else begin
       if (cdc_axis_tvalid && cdc_axis_tready) begin
         if (sample_counter < packet_size_dynamic-1) begin
           sample_counter <= sample_counter + 1;
         end else begin
-          sample_counter <= 8'd1;
+          sample_counter <= 8'd0;
           packet_tlast <= 1'b1;
         end
       end else begin
