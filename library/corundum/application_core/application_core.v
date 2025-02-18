@@ -666,17 +666,18 @@ module application_core #
     .s_axis_ready(input_axis_tready_buffered),
     .s_axis_valid(input_axis_tvalid),
     .s_axis_data(input_axis_tdata),
-    .s_axis_tkeep(),
-    .s_axis_tlast(),
+    .s_axis_tkeep({INPUT_WIDTH/8{1'b0}}),
+    .s_axis_tlast(1'b0),
     .s_axis_full(),
     .s_axis_almost_full(),
     .s_axis_room());
   
   ////----------------------------------------Packetizer--------------------//
   //////////////////////////////////////////////////
-  reg  [7:0] sample_counter;
-  reg  [7:0] packet_size;
-  reg  [7:0] packet_size_dynamic;
+  reg  [15:0] sample_counter;
+  reg  [15:0] packet_size;
+  reg  [15:0] packet_size_dynamic;
+  wire [15:0] packet_size_dynamic_calc;
 
   reg  [JESD_M-1:0] input_enable_old;
   reg               input_enable_ff;
@@ -725,22 +726,24 @@ module application_core #
     end
   end
 
-  function [$clog2(JESD_M)-1:0] converters(input [JESD_M-1:0] input_enable);
+  function [$clog2(JESD_M):0] converters(input [JESD_M-1:0] input_enable);
     integer i;
     begin
-      converters = {$clog2(JESD_M){1'b0}};
+      converters = 0;
       for (i=0; i<JESD_M; i=i+1) begin
         converters = converters + input_enable[i];
       end
     end
   endfunction
 
+  assign packet_size_dynamic_calc = (packet_size/(2**$clog2(JESD_M)))*converters(input_enable_cdc);
+
   always @(posedge clk)
   begin
     if (!rstn) begin
       packet_size_dynamic <= packet_size;
     end else begin
-      packet_size_dynamic <= packet_size/2**$clog2(JESD_M)*converters(input_enable_cdc);
+      packet_size_dynamic <= packet_size_dynamic_calc;
     end
   end
 
@@ -753,11 +756,12 @@ module application_core #
       if (cdc_axis_tvalid && cdc_axis_tready) begin
         if (sample_counter < packet_size_dynamic-1) begin
           sample_counter <= sample_counter + 1;
-          packet_tlast <= 1'b0;
         end else begin
-          sample_counter <= 8'd0;
+          sample_counter <= 8'd1;
           packet_tlast <= 1'b1;
         end
+      end else begin
+        packet_tlast <= 1'b0;
       end
     end
   end
@@ -932,7 +936,7 @@ module application_core #
           packet_axis_tvalid <= 1'b0;
         end
         // data, keep and last
-        if (cdc_axis_tvalid) begin
+        if (cdc_axis_tvalid && cdc_axis_tready) begin
           if (new_packet) begin
             packet_axis_tdata <= {reg_part2, header};
             packet_axis_tkeep <= {AXIS_DATA_WIDTH/8{1'b1}};
@@ -946,6 +950,10 @@ module application_core #
           packet_axis_tdata <= {{AXIS_DATA_WIDTH-HEADER_LENGTH{1'b0}}, reg_part1};
           packet_axis_tkeep <= {{(AXIS_DATA_WIDTH-HEADER_LENGTH)/8{1'b0}}, {HEADER_LENGTH/8{1'b1}}};
           packet_axis_tlast <= 1'b1;
+        end
+      end else begin
+        if (!run_packetizer && packet_buffer_axis_tready && packet_buffer_axis_tvalid && packet_buffer_axis_tlast) begin
+          packet_axis_tvalid <= 1'b0;
         end
       end
     end
@@ -968,7 +976,7 @@ module application_core #
 
   util_axis_fifo #(
     .DATA_WIDTH(AXIS_DATA_WIDTH),
-    .ADDRESS_WIDTH($clog2(8192/AXIS_DATA_WIDTH)*2),
+    .ADDRESS_WIDTH($clog2(8192/AXIS_DATA_WIDTH)+1),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(1),
     .ALMOST_EMPTY_THRESHOLD(8192/AXIS_DATA_WIDTH),
@@ -1386,10 +1394,10 @@ module application_core #
     if (!rstn) begin
       datapath_switch <= 1'b0;
     end else begin
-      if (packet_buffer_almost_full && (os_buffer_axis_tready && os_buffer_axis_tvalid && os_buffer_axis_tlast)) begin
-        datapath_switch <= 1'b1;
-      end else if ((packet_buffer_almost_empty || !run_packetizer) && (packet_buffer_axis_tready && packet_buffer_axis_tvalid && packet_buffer_axis_tlast) || !packet_fifo_rstn) begin
+      if ((packet_buffer_almost_empty || !run_packetizer) && (packet_buffer_axis_tready && packet_buffer_axis_tvalid && packet_buffer_axis_tlast) || !packet_fifo_rstn) begin
         datapath_switch <= 1'b0;
+      end else if (packet_buffer_almost_full && (!os_buffer_axis_tvalid || (os_buffer_axis_tready && os_buffer_axis_tvalid && os_buffer_axis_tlast))) begin
+        datapath_switch <= 1'b1;
       end
     end
   end
