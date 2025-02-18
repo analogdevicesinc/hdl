@@ -252,7 +252,12 @@ module util_axis_fifo_asym #(
       assign m_axis_data = m_axis_data_int_s;
       // if every instance has a valid data, the interface has valid data,
       // otherwise valid is asserted only if TLAST is asserted
-      assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      // assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      if (TLAST_EN) begin
+        assign m_axis_valid_int = (|(m_axis_tlast_int_s & m_axis_valid_int_s)) ? |m_axis_valid_int_s : &m_axis_valid_int_s;
+      end else begin
+        assign m_axis_valid_int = &m_axis_valid_int_s;
+      end
       assign m_axis_valid = m_axis_valid_int;
       // if one of the atomic instance is empty, m_axis_empty should be asserted
       assign m_axis_empty = |m_axis_empty_int_s;
