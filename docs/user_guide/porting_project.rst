@@ -130,10 +130,17 @@ the **adi_project_create** process:
 
 The **sys_zynq** constant variable should be set in the following way:
 
-*  0 - 7 Series FPGA (e.g. Kintex7, Virtex7)
-*  1 - Zynq7000 SoC
-*  2 - Zynq UltraScale+ SoC
-*  3 - Versal
+- 0 - 7 Series FPGA (e.g. Kintex7, Virtex7)
+- 1 - Zynq-7000 SoC
+- 2 - Zynq UltraScale+ MP SoC
+- 3 - Versal
+
+.. caution::
+
+   In case you have a custom board based on an AMD Xilinx chip, let's say
+   a Zynq UltraScale+ MP, then you would need to create the board files, similar
+   to the ones we have for ZCU102 ()
+   with the note that you need to manually enable all the functions needed in the system.
 
 Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -158,9 +165,9 @@ the **adi_project** process:
 .. code:: tcl
 
    if [regexp "_a10soc$" $project_name] {
-       set family "Arria 10"
-       set device 10AS066N3F40E2SG
-       set system_qip_file system_bd/system_bd.qip
+     set family "Arria 10"
+     set device 10AS066N3F40E2SG
+     set system_qip_file system_bd/system_bd.qip
    }
 
 Example with a Lattice board
@@ -180,11 +187,11 @@ by adding the following lines to the file:
 
 .. code:: tcl
 
-    if [regexp "_lfcpnx" $project_name] {
-        set device "LFCPNX-100-9LFG672C"
-        set speed "9_High-Performance_1.0V"
-        set board "Certus Pro NX Evaluation Board"
-    }
+   if [regexp "_lfcpnx" $project_name] {
+     set device "LFCPNX-100-9LFG672C"
+     set speed "9_High-Performance_1.0V"
+     set board "Certus Pro NX Evaluation Board"
+   }
 
 Project files
 -------------------------------------------------------------------------------
@@ -201,15 +208,12 @@ A project for an AMD FPGA board should contain the following files:
 - **system_project.tcl** - this script is creating the actual Vivado project
   and runs the synthesis/implementation of the design. The name of the carrier
   from inside the file, must be updated.
-
 - **system_bd.tcl** - in this file is sourced the **base** design's Tcl script
   and the **board** design's Tcl script. Again, the name of the carrier must be
   updated.
-
 - **system_constr.xdc** - constraints file of the **board** design.
   Here are defined the FMC I/O pins and board specific clock signals.
   All the I/O definitions must be updated, with the new pin names.
-
 - **system_top.v** - top wrapper file, in which the **system_wrapper.v**
   module is instantiated, and a few I/O macros are defined.
   The I/O port of this Verilog module will be connected to actual I/O pads
@@ -222,7 +226,6 @@ A project for an AMD FPGA board should contain the following files:
   **<project_name>.srcs/sources_1/bd/system/hdl/system_wrapper.v**.
   Fixing the instantiation of the wrapper module in most cases eliminates
   all the errors.
-
 - **Makefile** - this is an auto-generated file, but after updating the carrier
   name, should work with the new project without an issue.
 
@@ -239,19 +242,15 @@ A project for an Intel FPGA board should contain the following files:
   and runs the synthesis/implementation of the design. It also contains the I/O
   definitions for the interfaces between the FMC board and FPGA. The carrier
   name and all the I/O pin names inside the file, must be updated.
-
 - **system_qsys.tcl** - in this file is sourced the **base** design's Tcl
   script and the **board** design's Tcl script. Again, the name of the carrier
   must be updated.
-
 - **system_constr.sdc** - contains clock definitions and other path constraints
-
 - **system_top.v** - top wrapper file of the project. The I/O ports of this
   Verilog module will be actual I/O pads of the FPGA. You must make sure that
   the base design's I/Os are updated (delete nonexistent I/Os or add new ones).
   The simplest way to update the *system_top* is to let the synthesis fail and
   the tool will you tell which ports are missing or which ports are redundant.
-
 - **Makefile** - this is an auto-generated file, but after updating the carrier
   name, it should work with the new project without an issue.
 
@@ -260,34 +259,29 @@ Project files for Lattice boards
 
 A project for a Lattice FPGA board should contain the following files:
 
--  **system_project_pb.tcl** - Used to build the Propel Builder project
-   (block design). Linked in project-lattice.mk, run by propelbld (Windows),
-   propelbldwrap (Linux).
-
--  **system_project.tcl** - Used to build the Radiant project. Linked in
-   project-lattice.mk, run by pnmainc (Windows), radiantc (Linux).
-
--  **system_pb.tcl** - linker script for the projects, sourced in adi_project_pb
-   procedure that is called in system_project_pb.tcl and it is
-   defined in adi_project_lattice_pb.tcl. Sources the *base design first*,
-   then the *board design*, and afterwards it contains all the IP instances and
-   connections that must be added on top of the sourced files, to
-   complete the design of the project (these are specific to the
-   combination of this carrier and board).
-
--  **system_constr.sdc** - Contains clock definitions and other path
-   constraints.
--  **system_constr.pdc** - Contains clock definitions and other path
-   constraints + phisical constraints.
-
--  **system_top.v** - Contains everything about the HDL part of the
-   project. It instantiates the **<project_name>.v** ``system_wrapper`` module,
-   IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
-   etc. The I/O ports of this Verilog module will be connected to actual
-   I/O pads of the FPGA.
-
--  **Makefile** - This is an auto-generated file, but after updating the project
-   name, it should work with the new project without an issue.
+- **system_project_pb.tcl** - Used to build the Propel Builder project
+  (block design). Linked in project-lattice.mk, run by propelbld (Windows),
+  propelbldwrap (Linux).
+- **system_project.tcl** - Used to build the Radiant project. Linked in
+  project-lattice.mk, run by pnmainc (Windows), radiantc (Linux).
+- **system_pb.tcl** - linker script for the projects, sourced in adi_project_pb
+  procedure that is called in system_project_pb.tcl and it is
+  defined in adi_project_lattice_pb.tcl. Sources the *base design first*,
+  then the *board design*, and afterwards it contains all the IP instances and
+  connections that must be added on top of the sourced files, to
+  complete the design of the project (these are specific to the
+  combination of this carrier and board).
+- **system_constr.sdc** - Contains clock definitions and other path
+  constraints.
+- **system_constr.pdc** - Contains clock definitions and other path
+  constraints + physical constraints.
+- **system_top.v** - Contains everything about the HDL part of the
+  project. It instantiates the **<project_name>.v** ``system_wrapper`` module,
+  IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+  etc. The I/O ports of this Verilog module will be connected to actual
+  I/O pads of the FPGA.
+- **Makefile** - This is an auto-generated file, but after updating the project
+  name, it should work with the new project without an issue.
 
 Tips
 -------------------------------------------------------------------------------
@@ -300,16 +294,16 @@ of the script :git-hdl:`projects/scripts/adi_fmc_constr_generator.tcl`.
 
 Required setup:
 
--  Carrier common FMC connections file
-   (:git-hdl:`projects/common <projects/common>`/<carrier>/<carrier>_<fmc_port>.txt)
--  Project common FMC connections file
-   (:git-hdl:`projects`/<project>/common/<project>_fmc.txt)
+- Carrier common FMC connections file
+  (:git-hdl:`projects/common <projects/common>`/<carrier>/<carrier>_<fmc_port>.txt)
+- Project common FMC connections file
+  (:git-hdl:`projects`/<project>/common/<project>_fmc.txt)
 
 .. tip::
 
-   In cases where these files don't already exist, you can make your own
-   by following some existing ones as an example.
-   For project common files, you can easily make them following :ref:`creating_fmc`.
+  In cases where these files don't already exist, you can make your own
+  by following some existing ones as an example.
+  For project common files, you can easily make them following :ref:`creating_fmc`.
 
 Calling the script:
 
