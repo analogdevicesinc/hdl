@@ -53,6 +53,9 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
+.. warning::
+    The VADJ for the Zedboard must be set to 2.5V.
+
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -154,6 +157,22 @@ Instance name    HDL Linux Zynq Actual Zynq
 axi_ada4355_dma  13  57         89
 ================ === ========== ===========
 
+SPI connections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 25 25 25 25
+   :header-rows: 1
+
+   * - SPI type
+     - SPI manager instance
+     - SPI subordinate
+     - CS
+   * - PS
+     - SPI 0
+     - ADA4355
+     - 0
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -196,13 +215,13 @@ HDL related
      - Documentation link
    * - AXI_ADA4355
      - :git-hdl:`library/axi_ada4355`
-     - ---
+     - :ref:`axi_ada4355`
    * - AXI_CLOCK_MONITOR
      - :git-hdl:`library/axi_clock_monitor`
      - :ref:`axi_clock_monitor`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
-     - :ref:`axi_clkgen`  
+     - :ref:`axi_clkgen`
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
@@ -224,11 +243,6 @@ HDL related
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - ---
-
-Software related
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-* Linux driver at :git-linux:`drivers/iio/adc/ada4355.c`
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
