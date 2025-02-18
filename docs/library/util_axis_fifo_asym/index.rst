@@ -59,6 +59,11 @@ Configuration Parameters
      - Enable ``TLAST`` logical port on the AXI streaming interface.
    * - TKEEP_EN
      - Enable ``TKEEP`` logical port on the AXI streaming interface.
+   * - FIFO_LIMITED
+     - Enable the address limit that is set to the FIFO with respect to the
+       specified address size
+   * - ADDRESS_WIDTH_PERSPECTIVE
+     - Sets address size from the perspective of Master (1) or Slave (0)
 
 Interface
 --------------------------------------------------------------------------------
@@ -157,7 +162,7 @@ ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:
   is > M_DATA_WIDTH, leading to a smaller FIFO implementation.
 - ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the
   address specified is from the perspective of the Master interface. Since
-  the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
+  the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
   is > M_DATA_WIDTH, leading to a bigger FIFO implementation.
 - ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the
   address specified is from the perspective of the Slave interface. Since
@@ -165,7 +170,7 @@ ADDRESS_WIDTH, FIFO_LIMITED and ADDRESS_WIDTH_PERSPECTIVE:
   is < M_DATA_WIDTH, leading to a smaller FIFO implementation.
 - ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the
   address specified is from the perspective of the Slave interface. Since
-  the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
+  the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
   is < M_DATA_WIDTH, leading to a bigger FIFO implementation.
 
 Software Support
