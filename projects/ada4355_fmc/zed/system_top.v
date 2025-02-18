@@ -244,5 +244,4 @@ module system_top (
     .frame_clock_p(frame_clock_p),
     .frame_clock_n(frame_clock_n),
     .sync_n (1'b1));
-
 endmodule
