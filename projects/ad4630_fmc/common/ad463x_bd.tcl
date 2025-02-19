@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -9,8 +9,9 @@ set NUM_OF_SDI  $ad_project_params(NUM_OF_SDI)
 set CAPTURE_ZONE $ad_project_params(CAPTURE_ZONE)
 set CLK_MODE $ad_project_params(CLK_MODE)
 set DDR_EN $ad_project_params(DDR_EN)
+set NO_REORDER $ad_project_params(NO_REORDER)
 
-puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ;DDR_EN: $DDR_EN"
+puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI ; CAPTURE_ZONE: $CAPTURE_ZONE ; CLK_MODE: $CLK_MODE ; DDR_EN: $DDR_EN ; NO_REORDER: $NO_REORDER"
 
 # block design ports and interfaces
 # specify the CNV generator's reference clock frequency in MHz
@@ -91,8 +92,19 @@ ad_ip_parameter sync_generator CONFIG.N_PWMS 1
 ad_ip_parameter sync_generator CONFIG.PULSE_0_PERIOD $max17687_cycle
 ad_ip_parameter sync_generator CONFIG.PULSE_0_WIDTH [expr int(ceil(double($max17687_cycle) / 2))]
 
-ad_ip_instance spi_axis_reorder data_reorder
-ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
+if {$NO_REORDER == 0} {
+
+  ad_ip_instance spi_axis_reorder data_reorder
+  ad_ip_parameter data_reorder CONFIG.NUM_OF_LANES $NUM_OF_SDI
+
+} elseif {$NO_REORDER == 1} {
+
+    if {$CAPTURE_ZONE == 2} {
+      puts "ERROR: Invalid configuration - Disabling Reorder IP is invalid for Capture Zone 2."
+      exit 2
+    }
+
+}
 
 # dma to receive data stream
 
@@ -102,7 +114,16 @@ ad_ip_parameter axi_ad463x_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_ad463x_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad463x_dma CONFIG.AXI_SLICE_SRC 1
-ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+if {$NO_REORDER == 0} {
+  ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+} elseif {$NO_REORDER == 1} {
+    if {$NUM_OF_SDI == 1} {
+      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+    } elseif {$NUM_OF_SDI == 2} {
+      ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+    }
+}
+  
 ad_ip_parameter axi_ad463x_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 # Trigger for SPI offload
@@ -120,7 +141,7 @@ if {$CAPTURE_ZONE == 1} {
       exit 2
     }
     default {
-      puts "ERROR: Invalid value for CLK_MODE. (valid values are 0 or 1 or 2)"
+      puts "ERROR: Invalid value for CLK_MODE (valid values are 0 or 1 or 2)."
       exit 2
     }
   }
@@ -139,7 +160,11 @@ if {$CAPTURE_ZONE == 1} {
   ad_connect busy_sync/out_bits busy_capture/signal_in
   ad_connect $hier_spi_engine/trigger busy_capture/signal_out
   ## SDI is latched by the SPIE execution module
-  ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
+  if {$NO_REORDER == 0} {
+    ad_connect  $hier_spi_engine/m_axis_sample data_reorder/s_axis
+  } elseif {$NO_REORDER == 1} {
+    ad_connect $hier_spi_engine/m_axis_sample axi_ad463x_dma/s_axis
+  }
 
 } elseif {$CAPTURE_ZONE == 2} {
 
@@ -172,7 +197,7 @@ if {$CAPTURE_ZONE == 1} {
 
     }
     default {
-      puts "ERROR: Invalid value for CLK_MODE. (valid values are 0 or 1 or 2)"
+      puts "ERROR: Invalid value for CLK_MODE (valid values are 0 or 1 or 2)."
       exit 2
     }
   }
@@ -192,7 +217,9 @@ ad_connect $sys_cpu_clk $hier_spi_engine/clk
 ad_connect $sys_cpu_clk cnv_generator/s_axi_aclk
 ad_connect $sys_cpu_clk sync_generator/s_axi_aclk
 ad_connect spi_clk $hier_spi_engine/spi_clk
-ad_connect spi_clk data_reorder/axis_aclk
+if {$NO_REORDER == 0} {
+  ad_connect spi_clk data_reorder/axis_aclk
+}
 ad_connect spi_clk axi_ad463x_dma/s_axis_aclk
 ad_connect ad463x_ext_clk cnv_generator/ext_clk
 ad_connect ad463x_ext_clk sync_generator/ext_clk
@@ -200,7 +227,9 @@ ad_connect ad463x_ext_clk sync_generator/ext_clk
 # resets
 
 ad_connect $sys_cpu_resetn cnv_generator/s_axi_aresetn
-ad_connect data_reorder/axis_aresetn VCC
+if {$NO_REORDER == 0} {
+  ad_connect data_reorder/axis_aresetn VCC
+}
 ad_connect $sys_cpu_resetn $hier_spi_engine/resetn
 ad_connect $sys_cpu_resetn axi_ad463x_dma/m_dest_axi_aresetn
 
@@ -211,7 +240,9 @@ ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sclk ad463x_spi_sclk
 ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdo ad463x_spi_sdo
 ad_connect  $hier_spi_engine/${hier_spi_engine}_execution/sdi ad463x_spi_sdi
 
-ad_connect  axi_ad463x_dma/s_axis data_reorder/m_axis
+if {$NO_REORDER == 0} {
+  ad_connect  axi_ad463x_dma/s_axis data_reorder/m_axis
+}
 
 # AXI memory mapped address space
 
