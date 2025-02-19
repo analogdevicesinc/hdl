@@ -111,9 +111,9 @@ module axi_ada4355 #(
   wire        up_wr_s;
   wire [13:0] up_addr_s;
   wire [31:0] up_wdata_s;
-  wire [31:0] up_rdata_s [0:1];
-  wire        up_rack_s [0:1];
-  wire        up_wack_s [0:1];
+  wire [31:0] up_rdata_s [0:2];
+  wire        up_rack_s [0:2];
+  wire        up_wack_s [0:2];
 
   reg [31:0] up_rdata_r;
   reg        up_rack_r;
@@ -132,7 +132,7 @@ module axi_ada4355 #(
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
-    for(j = 0; j <= 1; j=j+1) begin
+    for(j = 0; j <= 2; j=j+1) begin
       up_rack_r = up_rack_r | up_rack_s[j];
       up_wack_r = up_wack_r | up_wack_s[j];
       up_rdata_r = up_rdata_r | up_rdata_s[j];
