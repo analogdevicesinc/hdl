@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -22,6 +22,7 @@ ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 set sys_cstring "CLK_MODE=$ad_project_params(CLK_MODE)\
 NUM_OF_SDI=$ad_project_params(NUM_OF_SDI)\
 CAPTURE_ZONE=$ad_project_params(CAPTURE_ZONE)\
-DDR_EN=$ad_project_params(DDR_EN)"
+DDR_EN=$ad_project_params(DDR_EN)\
+NO_REORDER=$ad_project_params(NO_REORDER)"
 
 sysid_gen_sys_init_file $sys_cstring
