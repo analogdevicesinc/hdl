@@ -33,6 +33,9 @@ Supported carriers
    * -
      - :xilinx:`ZCU102`
      - FMC HPC1
+   * -
+     - :xilinx:`VCU118`
+     - FMCP
 
 Block design
 -------------------------------------------------------------------------------
@@ -85,9 +88,8 @@ for each project.
    **system_project.tcl** file, located in
    hdl/projects/adrv9026/$CARRIER/system_project.tcl
 
-.. warning::
-
-   ``Lane Rate = I/Q Sample Rate x M x N' x (10 \ 8) \ L``
+.. math::
+   Lane Rate = Sample Rate*\frac{M}{L}*N'* \frac{10}{8}
 
 The following are the parameters of this project that can be configured:
 
@@ -117,18 +119,18 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
-==================== ===========
-Instance             ZynqMP     
-==================== ===========
-axi_adrv9026_tx_jesd 0x84A90000 
-axi_adrv9026_rx_jesd 0x84AA0000
-axi_adrv9026_tx_dma  0x9c420000
-axi_adrv9026_rx_dma  0x9c400000
-tx_adrv9026_tpl_core 0x84A04000
-rx_adrv9026_tpl_core 0x84A00000
-axi_adrv9026_tx_xcvr 0x84A80000
-axi_adrv9026_rx_xcvr 0x84A60000
-==================== ===========
+==================== =============== ===========
+Instance             Zynq/Microblaze ZynqMP     
+==================== =============== ===========
+rx_adrv9026_tpl_core 0x44A0_0000     0x84A0_0000
+tx_adrv9026_tpl_core 0x44A0_4000     0x84A0_4000
+axi_adrv9026_rx_xcvr 0x44A6_0000     0x84A6_0000
+axi_adrv9026_tx_xcvr 0x44A8_0000     0x84A8_0000
+axi_adrv9026_tx_jesd 0x44A9_0000     0x84A9_0000
+axi_adrv9026_rx_jesd 0x44AA_0000     0x84AA_0000
+axi_adrv9026_rx_dma  0x7C40_0000     0x9C40_0000
+axi_adrv9026_tx_dma  0x7C42_0000     0x9C42_0000
+==================== =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,6 +155,8 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ZCU102
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. list-table::
    :widths: 25 20 20 15
    :header-rows: 2
@@ -169,7 +173,7 @@ GPIOs
      - INOUT
      - 68
      - 146
-   * - ad9528_reset_b
+   * - ad9528_sysref_req
      - INOUT
      - 67
      - 145
@@ -242,6 +246,97 @@ GPIOs
      - 50:32
      - 128:110
 
+VCU118
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. list-table::
+   :widths: 25 20 20 15
+   :header-rows: 2
+
+   * - GPIO signal
+     - Direction
+     - HDL GPIO EMIO
+     - Software GPIO
+   * -
+     - (from FPGA view)
+     -
+     - Microblaze
+   * - ad9528_reset_b
+     - INOUT
+     - 62
+     - 62
+   * - ad9528_reset_b
+     - INOUT
+     - 61
+     - 61
+   * - adrv9026_tx1_enable
+     - INOUT
+     - 60
+     - 60
+   * - adrv9026_tx2_enable
+     - INOUT
+     - 59
+     - 59
+   * - adrv9026_tx3_enable
+     - INOUT
+     - 58
+     - 58
+   * - adrv9026_tx4_enable
+     - INOUT
+     - 57
+     - 57
+   * - adrv9026_rx1_enable
+     - INOUT
+     - 56
+     - 56
+   * - adrv9026_rx2_enable
+     - INOUT
+     - 55
+     - 55
+   * - adrv9026_rx3_enable
+     - INOUT
+     - 54
+     - 54
+   * - adrv9026_rx4_enable
+     - INOUT
+     - 53
+     - 53
+   * - adrv9026_test
+     - INOUT
+     - 52
+     - 52
+   * - adrv9026_reset_b
+     - INOUT
+     - 51
+     - 51
+   * - adrv9026_gpint1
+     - INOUT
+     - 50
+     - 50
+   * - adrv9026_gpint2
+     - INOUT
+     - 49
+     - 49
+   * - adrv9026_orx_ctrl_a
+     - INOUT
+     - 48
+     - 48
+   * - adrv9026_orx_ctrl_b
+     - INOUT
+     - 47
+     - 47
+   * - adrv9026_orx_ctrl_c
+     - INOUT
+     - 46
+     - 46
+   * - adrv9026_orx_ctrl_d
+     - INOUT
+     - 45
+     - 45
+   * - adrv9026_gpio[0:18]
+     - INOUT
+     - 44:26
+     - 44:26
+
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -252,9 +347,20 @@ Instance name        HDL Linux ZynqMP Actual ZynqMP
 ==================== === ============ =============
 axi_adrv9026_tx_jesd 10  106          138
 axi_adrv9026_rx_jesd 11  107          139
-axi_adrv9026_tx_dma  13  108          140
-axi_adrv9026_rx_dma  14  109          141
+axi_adrv9026_tx_dma  13  109          141
+axi_adrv9026_rx_dma  14  110          142
 ==================== === ============ =============
+
+Microblaze
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==================== === ============
+Instance name        HDL Microblaze
+==================== === ============
+axi_adrv9026_tx_jesd 15  15         
+axi_adrv9026_rx_jesd 14  14         
+axi_adrv9026_tx_dma  13  13         
+axi_adrv9026_rx_dma  12  12         
+==================== === ============
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -277,39 +383,34 @@ location and run the make command by typing in your command prompt:
    user@analog:~$ cd hdl/projects/adrv9026/zcu102
    user@analog:~/hdl/projects/adrv9026/zcu102$ make
 
-   user@analog:~$ cd hdl/projects/adrv9026/a10soc
-   user@analog:~/hdl/projects/adrv9026/a10soc$ make
-
 The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.
-Where a cell contains a --- (dash) it means that the parameter doesn't exist
-for that project (adrv9026/carrier or adrv9026/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for ADRV9026
+.. collapsible:: Default values of the make parameters for ADRV9026
 
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
    +-------------------+---------------------------+--------------------------+
-   |                   |           A10SoC          |          ZCU102          |
-   +===================+===========================+==========================+
-   | JESD_MODE         |           8B10B           |          8B10B           |
-   +-------------------+---------------------------+--------------------------+
-   | RX_LANE_RATE      |             10            |            10            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_LANE_RATE      |             10            |            10            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_M         |              8            |             8            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_L         |              4            |             4            |
-   +-------------------+---------------------------+--------------------------+
-   | RX_JESD_S         |              1            |             1            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_M         |              8            |             8            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_L         |              4            |             4            |
-   +-------------------+---------------------------+--------------------------+
-   | TX_JESD_S         |              1            |             1            |
-   +-------------------+---------------------------+--------------------------+
+   |                   |                ZCU102/A10SoC/VCU118                  |
+   +===================+======================================================+
+   | JESD_MODE         |                       8B10B                          |
+   +-------------------+------------------------------------------------------+
+   | RX_LANE_RATE      |                         10                           |
+   +-------------------+------------------------------------------------------+
+   | TX_LANE_RATE      |                         10                           |
+   +-------------------+------------------------------------------------------+
+   | RX_JESD_M         |                          8                           |
+   +-------------------+------------------------------------------------------+
+   | RX_JESD_L         |                          4                           |
+   +-------------------+------------------------------------------------------+
+   | RX_JESD_S         |                          1                           |
+   +-------------------+------------------------------------------------------+
+   | TX_JESD_M         |                          8                           |
+   +-------------------+------------------------------------------------------+
+   | TX_JESD_L         |                          4                           |
+   +-------------------+------------------------------------------------------+
+   | TX_JESD_S         |                          1                           |
+   +-------------------+------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
