@@ -37,6 +37,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to sync_error
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_csn
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_mosi
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_miso
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to spi_miso
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_clk
 
 # I2C
