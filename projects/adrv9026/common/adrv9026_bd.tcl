@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -88,6 +88,7 @@ ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_wid
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_adrv9026_tx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9026_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
 
@@ -127,6 +128,7 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_O
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # xcvr interfaces
 
@@ -248,10 +250,17 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9026_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
+  ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
+  ad_mem_hpc1_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
+} else {
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
+  ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
+  ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
+}
 
 # interrupts
 

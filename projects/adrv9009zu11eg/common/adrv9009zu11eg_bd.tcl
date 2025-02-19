@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -284,6 +284,9 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
@@ -319,6 +322,9 @@ ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_obs_xcvr
 ad_ip_parameter axi_adrv9009_som_obs_xcvr CONFIG.NUM_OF_LANES $MAX_RX_OS_NUM_OF_LANES
@@ -352,6 +358,9 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_OS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance util_adxcvr util_adrv9009_som_xcvr
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
@@ -755,23 +764,11 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP3 1
-ad_connect sys_dma_clk sys_ps8/saxihp1_fpd_aclk
-ad_connect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi_aclk
-ad_connect sys_dma_resetn axi_adrv9009_som_obs_dma/m_dest_axi_aresetn
-ad_connect axi_adrv9009_som_obs_dma/m_dest_axi sys_ps8/S_AXI_HP1_FPD
-
-ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP4 1
-ad_connect sys_dma_clk sys_ps8/saxihp2_fpd_aclk
-ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi_aclk
-ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
-ad_connect axi_adrv9009_som_rx_dma/m_dest_axi sys_ps8/S_AXI_HP2_FPD
-
-ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP5 1
-ad_connect sys_dma_clk sys_ps8/saxihp3_fpd_aclk
-ad_connect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi_aclk
-ad_connect sys_dma_resetn axi_adrv9009_som_tx_dma/m_src_axi_aresetn
-ad_connect axi_adrv9009_som_tx_dma/m_src_axi sys_ps8/S_AXI_HP3_FPD
+ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
+ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
+ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
+ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
+ad_mem_hpc1_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
 
 # interrupts
 
@@ -782,11 +779,5 @@ ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
 
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_obs_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP3/HP1_DDR_LOW] SEG_sys_ps8_HP1_DDR_LOW
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_rx_dma/m_dest_axi] [get_bd_addr_segs sys_ps8/SAXIGP4/HP2_DDR_LOW] SEG_sys_ps8_HP2_DDR_LOW
-create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
-    [get_bd_addr_spaces axi_adrv9009_som_tx_dma/m_src_axi] [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_LOW] SEG_sys_ps8_HP3_DDR_LOW
 create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
     [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK

@@ -48,6 +48,7 @@ ad_ip_instance axi_dmac axi_ad9656_rx_dma [list \
   AXI_SLICE_SRC false \
   DMA_DATA_WIDTH_DEST 128 \
   FIFO_SIZE 32 \
+  CACHE_COHERENT $CACHE_COHERENCY \
   ]
 
 # common cores
@@ -115,8 +116,13 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9656_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
-ad_mem_hp2_interconnect $sys_dma_clk axi_ad9656_rx_dma/m_dest_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_ad9656_rx_dma/m_dest_axi
+} else {
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_ad9656_rx_dma/m_dest_axi
+}
 
 # interrupts
 

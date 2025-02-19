@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -129,6 +129,7 @@ ad_ip_parameter axi_adrv904x_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_adrv904x_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # adc peripherals
 
@@ -168,16 +169,17 @@ adi_tpl_jesd204_rx_create rx_adrv904x_tpl_core $RX_NUM_OF_LANES \
                                                $RX_DMA_SAMPLE_WIDTH
 
 ad_ip_instance axi_dmac axi_adrv904x_rx_dma
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_TYPE_SRC 1
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_TYPE_DEST 0
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.ID 0
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.SYNC_TRANSFER_START 0
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_2D_TRANSFER 0
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.CYCLIC 0
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
-  ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_TYPE_SRC 1
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.ID 0
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.CYCLIC 0
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 set tx_ref_clk         tx_ref_clk_0
 set rx_ref_clk         rx_ref_clk_0
@@ -365,10 +367,17 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv904x_rx_xcvr/m_axi
 
 # interconnect (mem/dac)
 
-ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect $sys_dma_clk axi_adrv904x_rx_dma/m_dest_axi
-ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
-ad_mem_hp3_interconnect $sys_dma_clk axi_adrv904x_tx_dma/m_src_axi
+if {$CACHE_COHERENCY} {
+  ad_mem_hpc0_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC0
+  ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv904x_rx_dma/m_dest_axi
+  ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
+  ad_mem_hpc1_interconnect $sys_dma_clk axi_adrv904x_tx_dma/m_src_axi
+} else {
+  ad_mem_hp2_interconnect $sys_dma_clk sys_ps7/S_AXI_HP2
+  ad_mem_hp2_interconnect $sys_dma_clk axi_adrv904x_rx_dma/m_dest_axi
+  ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
+  ad_mem_hp3_interconnect $sys_dma_clk axi_adrv904x_tx_dma/m_src_axi
+}
 
 # interrupts
 
