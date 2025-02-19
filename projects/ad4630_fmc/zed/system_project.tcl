@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -43,6 +43,13 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   0 - MISO runs on SDR
 #   1 - MISO runs on DDR
 #
+# NO_REORDER : Parameter used for CAPTURE_ZONE = 1 and NUM_OF_SDI = 1 (ad4030)
+# or NUM_OF_SDI = 2 (ad4630) to connect the SPI Engine directly to DMA bypassing
+# the spi_axis_reorder IP
+#
+#   0 - spi_axis_reorder present in the system
+#   1 - spi_axis_reorder removed from the system
+#
 # Example:
 #
 #   make NUM_OF_SDI=2 CAPTURE_ZONE=2
@@ -52,7 +59,8 @@ adi_project ad4630_fmc_zed 0 [list \
   CLK_MODE     [get_env_param CLK_MODE      0] \
   NUM_OF_SDI   [get_env_param NUM_OF_SDI    4] \
   CAPTURE_ZONE [get_env_param CAPTURE_ZONE  2] \
-  DDR_EN       [get_env_param DDR_EN  0] ]
+  DDR_EN       [get_env_param DDR_EN        0] \
+  NO_REORDER   [get_env_param NO_REORDER    0] ]
 
 adi_project_files ad4630_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
