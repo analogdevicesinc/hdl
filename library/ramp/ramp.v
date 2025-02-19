@@ -27,6 +27,6 @@ always @(posedge clk) begin
         end
         data_ramp_valid <= 1'b1;   
     end
-  end
+end
 
 endmodule

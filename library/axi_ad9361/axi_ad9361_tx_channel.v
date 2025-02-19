@@ -99,6 +99,8 @@ module axi_ad9361_tx_channel #(
   reg     [23:0]  dac_pn_seq = 'd0;
   reg     [11:0]  dac_pn_data = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
+  reg     [11:0]  dac_ramp_data = 0;
+  reg             ramp_data_valid = 0;
 
   // internal signals
 
@@ -295,6 +297,7 @@ module axi_ad9361_tx_channel #(
 
   always @(posedge dac_clk) begin
     case (dac_data_sel_s)
+      4'hb: dac_data_out_int <= dac_ramp_data;
       4'h9: dac_data_out_int <= dac_pn_data;
       4'h8: dac_data_out_int <= adc_data;
       4'h3: dac_data_out_int <= 12'd0;
@@ -302,6 +305,18 @@ module axi_ad9361_tx_channel #(
       4'h1: dac_data_out_int <= dac_pat_data[15:4];
       default: dac_data_out_int <= dac_dds_data_s;
     endcase
+  end
+  
+  // ramp generator
+
+  always @(posedge dac_clk) begin
+    if (dac_data_sync == 1'b1) begin
+        dac_ramp_data   <= 0;
+        ramp_data_valid <= 1'b0;
+    end else begin
+        dac_ramp_data <= dac_ramp_data + 1'b1;
+        ramp_data_valid <= 1'b1;   
+    end
   end
 
   // prbs sequences
