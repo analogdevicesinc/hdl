@@ -1,3 +1,5 @@
+.. _fir_filter:
+
 Integrate FIR filters into the FMCOMMS2 HDL design
 ===============================================================================
 
@@ -201,7 +203,7 @@ from the DMA see the figure below.
 
 More information about the util_upack_core :dokuwiki:`util_upack_core  </resources/fpga/docs/util_upack>`   
 
-As a fact the data transmuted/received trough LVDS interface at DDR (Double Data Rate) is presented in the diagram below.
+As a fact the data transmuted/received through LVDS interface at DDR (Double Data Rate) is presented in the diagram below.
 
 .. image:: ad9361_lvds_ddr_transmision.svg
    :width: 1000
