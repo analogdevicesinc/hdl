@@ -373,7 +373,7 @@ Generating the programing files
    - :dokuwiki:`Building the ADI Linux  </resources/tools-software/linux-drivers-all>`  
 
 Base system functionality
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------------------------------
 
 For simply testing the fmcomms2 with filter design we loop-back the data from TX to RX for each channel with a SMA to SMA cable.
 
@@ -492,7 +492,7 @@ The signals captured by the ILA:
    :alt: FIR_INACTIVE_DECIMATORS_CH1_ACTIVE_INT_ACTIV
 
 All filters active characteristic
--------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **FFT characteristic**
 
