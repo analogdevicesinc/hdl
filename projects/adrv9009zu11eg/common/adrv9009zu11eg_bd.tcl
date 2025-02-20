@@ -10,6 +10,13 @@
 #   [TX/RX/RX_OS]_JESD_S  : Number of samples per frame
 #   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
 
+## ADC FIFO depth in samples per converter
+# 64 KB
+set adc_fifo_samples_per_converter [expr 64*1024]
+## DAC FIFO depth in samples per converter
+# 2GB
+set dac_fifo_samples_per_converter [expr 1*1024*1024*1024]
+
 if {[info exists FMCOMMS8]} {
   set MAX_TX_NUM_OF_LANES 16
   set MAX_RX_NUM_OF_LANES 8
@@ -21,13 +28,23 @@ if {[info exists FMCOMMS8]} {
 }
 
 set DATAPATH_WIDTH 4
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+
+set TDD_SUPPORT   $ad_project_params(TDD_SUPPORT)
+set SHARED_DEVCLK $ad_project_params(SHARED_DEVCLK)
+
+if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
+  error "SERROR: Cannot enable TDD support without shared deviceclocks!"
+}
 
 # TX parameters
 set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
 set TX_NUM_OF_CONVERTERS $ad_project_params(TX_JESD_M) ; # M
 set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S) ; # S
 set TX_SAMPLE_WIDTH 16                                 ; # N/NP
+set TX_DMA_SAMPLE_WIDTH $TX_SAMPLE_WIDTH
 
 set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
                           ? $ad_project_params(TX_TPL_WIDTH) : {} } ]
@@ -35,17 +52,28 @@ set TX_TPL_WIDTH [ expr { [info exists ad_project_params(TX_TPL_WIDTH)] \
 set TX_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $TX_NUM_OF_LANES $TX_NUM_OF_CONVERTERS $TX_SAMPLES_PER_FRAME $TX_SAMPLE_WIDTH $TX_TPL_WIDTH]
 set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8 * $TX_DATAPATH_WIDTH / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)]
 
+set dac_data_offload_name tx_data_offload
+set dac_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set dac_dma_data_width $dac_data_width
+set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
+
 # RX parameters
 set RX_NUM_OF_LANES $ad_project_params(RX_JESD_L)      ; # L
 set RX_NUM_OF_CONVERTERS $ad_project_params(RX_JESD_M) ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S) ; # S
 set RX_SAMPLE_WIDTH 16                                 ; # N/NP
+set RX_DMA_SAMPLE_WIDTH $RX_SAMPLE_WIDTH
 
 set RX_OCTETS_PER_FRAME [expr $RX_NUM_OF_CONVERTERS * $RX_SAMPLES_PER_FRAME * $RX_SAMPLE_WIDTH / (8 * $RX_NUM_OF_LANES)] ; # F
 set DPW [expr max(4, $RX_OCTETS_PER_FRAME)] ; #max(4, F)
 set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 8 * $DPW / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 8 * DPW / (M* N)
 
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width [expr $RX_NUM_OF_LANES * 8 * $DPW]
+set adc_dma_data_width $adc_data_width
+set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
+# set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
+
 
 # RX Observation parameters
 set RX_OS_NUM_OF_LANES $ad_project_params(RX_OS_JESD_L)      ; # L
@@ -59,8 +87,10 @@ set RX_OS_TPL_WIDTH [ expr { [info exists ad_project_params(RX_OS_TPL_WIDTH)] \
 set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH $RX_OS_TPL_WIDTH]
 set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 
-set dac_fifo_name axi_tx_fifo
-set dac_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMPLES_PER_CHANNEL]
+set adc_data_offload_name rx_data_offload
+set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
+set adc_dma_data_width $adc_data_width
+set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 # default ports
 
@@ -239,18 +269,19 @@ ad_connect ddr4_rtl_1 ddr4_1/C0_DDR4
 set_property -dict [list CONFIG.FREQ_HZ {300000000}] [get_bd_intf_ports ddr4_ref_1]
 ad_connect ddr4_ref_1 ddr4_1/C0_SYS_CLK
 
-ad_ip_instance axi_dacfifo $dac_fifo_name
-ad_ip_parameter $dac_fifo_name CONFIG.DAC_DATA_WIDTH $dac_data_width
-ad_ip_parameter $dac_fifo_name CONFIG.DMA_DATA_WIDTH $dac_data_width
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_DATA_WIDTH 256
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_SIZE 5
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 255
-ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS 0x80000000
+# ad_ip_instance axi_dacfifo $dac_fifo_name
+# ad_ip_parameter $dac_fifo_name CONFIG.DAC_DATA_WIDTH $dac_data_width
+# ad_ip_parameter $dac_fifo_name CONFIG.DMA_DATA_WIDTH $dac_data_width
+# ad_ip_parameter $dac_fifo_name CONFIG.AXI_DATA_WIDTH 256
+# ad_ip_parameter $dac_fifo_name CONFIG.AXI_SIZE 5
+# ad_ip_parameter $dac_fifo_name CONFIG.AXI_LENGTH 255
+# ad_ip_parameter $dac_fifo_name CONFIG.AXI_ADDRESS 0x80000000
 
 create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 ddr4_1_rstgen
 ad_connect ddr4_1_rstgen/slowest_sync_clk ddr4_1/c0_ddr4_ui_clk
 ad_connect ddr4_1/c0_ddr4_ui_clk_sync_rst ddr4_1_rstgen/ext_reset_in
-ad_connect ddr4_1_rstgen/peripheral_aresetn axi_tx_fifo/axi_resetn
+# ad_connect ddr4_1_rstgen/peripheral_aresetn axi_tx_fifo/axi_resetn
+# ad_connect ddr4_1_rstgen/peripheral_aresetn $dac_fifo_name/axi_aresetn
 
 ad_connect sys_reset ddr4_1/sys_rst
 
@@ -274,6 +305,26 @@ adi_tpl_jesd204_tx_create tx_adrv9009_som_tpl_core $TX_NUM_OF_LANES \
                                                $TX_SAMPLE_WIDTH
 
 ad_ip_parameter tx_adrv9009_som_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
+
+set dac_data_offload_size $dac_fifo_samples_per_converter
+#[expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
+set do_axi_data_width 256
+ad_data_offload_create $dac_data_offload_name \
+                       1 \
+                       1 \
+                       $dac_data_offload_size \
+                       $dac_data_width \
+                       $dac_data_width \
+                       $do_axi_data_width \
+                       {}
+                       1
+set_property CONFIG.DDR_BASE_ADDDRESS {2147483648} [get_bd_cells tx_data_offload/storage_unit]
+# Connect DO to external DDR
+ad_connect $dac_data_offload_name/i_data_offload/ddr_calib_done ddr4_1/c0_init_calib_complete
+ad_connect ddr4_1/c0_ddr4_ui_clk $dac_data_offload_name/storage_unit/m_axi_aclk
+ad_connect ddr4_1_rstgen/peripheral_aresetn $dac_data_offload_name/storage_unit/m_axi_aresetn
+ad_connect ddr4_1_rstgen/peripheral_aresetn ddr4_1/c0_ddr4_aresetn
+ad_connect $dac_data_offload_name/storage_unit/MAXI_0 ddr4_1/C0_DDR4_S_AXI
 
 ad_ip_instance axi_dmac axi_adrv9009_som_tx_dma
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_TYPE_SRC 0
@@ -307,15 +358,26 @@ adi_tpl_jesd204_rx_create rx_adrv9009_som_tpl_core $RX_NUM_OF_LANES \
 
 ad_ip_parameter rx_adrv9009_som_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
 
+set adc_data_offload_size $adc_fifo_samples_per_converter
+#[expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
+ad_data_offload_create $adc_data_offload_name \
+                       0 \
+                       0 \
+                       $adc_data_offload_size \
+                       $adc_data_width \
+                       $adc_data_width \
+                       128 \
+                       1
+
 ad_ip_instance axi_dmac axi_adrv9009_som_rx_dma
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
+# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_rx_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
@@ -650,7 +712,7 @@ ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
 ad_connect  core_clk_b util_som_rx_cpack/clk
-ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
+# ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
@@ -684,6 +746,7 @@ for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
 ad_connect  obs_adrv9009_som_tpl_core/adc_dovf util_som_obs_cpack/fifo_wr_overflow
 ad_connect  util_som_obs_cpack/packed_fifo_wr axi_adrv9009_som_obs_dma/fifo_wr
 
+<<<<<<< HEAD
 ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
@@ -704,12 +767,16 @@ ad_connect util_som_tx_upack/s_axis_ready axi_tx_fifo/dac_valid
 ad_connect axi_tx_fifo/axi_clk ddr4_1/c0_ddr4_ui_clk
 ad_connect dac_fifo_bypass axi_tx_fifo/bypass
 ad_connect util_som_tx_upack/s_axis_valid VCC_1/dout
+=======
+# ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+# ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
+>>>>>>> d8f1adf12 (initial commit)
 
 ad_ip_instance clk_wiz dma_clk_wiz
 ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
 ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
 ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
-ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 250
 ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 ad_connect sys_cpu_clk dma_clk_wiz/clk_in1
@@ -728,6 +795,40 @@ ad_connect tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_adrv
 ad_connect rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
 ad_connect obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_out obs_adrv9009_som_tpl_core/adc_tpl_core/adc_sync_manual_req_in
 
+# DAC data offload
+ad_connect  sys_dma_clk $dac_data_offload_name/s_axis_aclk
+ad_connect  sys_dma_clk axi_adrv9009_som_tx_dma/m_axis_aclk
+ad_connect  sys_dma_resetn $dac_data_offload_name/s_axis_aresetn
+ad_connect  sys_cpu_resetn $dac_data_offload_name/s_axi_aresetn
+
+ad_connect  core_clk_a $dac_data_offload_name/m_axis_aclk
+ad_connect  core_clk_a_rstgen/peripheral_aresetn $dac_data_offload_name/m_axis_aresetn
+
+ad_connect  $dac_data_offload_name/s_axis axi_adrv9009_som_tx_dma/m_axis
+ad_connect  util_som_tx_upack/s_axis $dac_data_offload_name/m_axis
+ad_connect  $dac_data_offload_name/init_req axi_adrv9009_som_tx_dma/m_axis_xfer_req
+
+# ADC data offload
+
+ad_connect sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
+ad_connect sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
+
+ad_connect sys_dma_clk $adc_data_offload_name/m_axis_aclk
+ad_connect sys_dma_clk    axi_adrv9009_som_rx_dma/s_axis_aclk
+ad_connect sys_dma_clk    axi_adrv9009_som_rx_dma/m_dest_axi_aclk
+ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+
+ad_connect core_clk_a_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
+ad_connect core_clk_b  $adc_data_offload_name/s_axis_aclk
+
+ad_connect util_som_rx_cpack/packed_fifo_wr_data $adc_data_offload_name/s_axis_tdata
+ad_connect util_som_rx_cpack/packed_fifo_wr_en $adc_data_offload_name/s_axis_tvalid
+ad_connect $adc_data_offload_name/s_axis_tlast GND
+ad_connect $adc_data_offload_name/s_axis_tkeep VCC
+
+ad_connect $adc_data_offload_name/m_axis axi_adrv9009_som_rx_dma/s_axis
+ad_connect $adc_data_offload_name/init_req axi_adrv9009_som_rx_dma/s_axis_xfer_req
+
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A00000 rx_adrv9009_som_tpl_core
@@ -742,6 +843,8 @@ ad_cpu_interconnect 0x44A70000 axi_adrv9009_som_obs_jesd
 ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
+ad_cpu_interconnect 0x7c450000 $dac_data_offload_name
+ad_cpu_interconnect 0x7c460000 $adc_data_offload_name
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
@@ -760,8 +863,13 @@ ad_connect axi_adrv9009_som_obs_dma/m_dest_axi sys_ps8/S_AXI_HP1_FPD
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP4 1
 ad_connect sys_dma_clk sys_ps8/saxihp2_fpd_aclk
+<<<<<<< HEAD
 ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi_aclk
 ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+=======
+# ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi_aclk
+# ad_connect sys_dma_resetn axi_adrv9009_som_rx_dma/m_dest_axi_aresetn
+>>>>>>> d8f1adf12 (initial commit)
 ad_connect axi_adrv9009_som_rx_dma/m_dest_axi sys_ps8/S_AXI_HP2_FPD
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__S_AXI_GP5 1
@@ -786,4 +894,52 @@ create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
 create_bd_addr_seg -range 0x80000000 -offset 0x00000000 \
     [get_bd_addr_spaces axi_adrv9009_som_tx_dma/m_src_axi] [get_bd_addr_segs sys_ps8/SAXIGP5/HP3_DDR_LOW] SEG_sys_ps8_HP3_DDR_LOW
 create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
-    [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
+    [get_bd_addr_spaces $dac_data_offload_name/storage_unit/MAXI_0] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK
+
+if {$TDD_SUPPORT} {
+  set TDD_CHANNEL_CNT $ad_project_params(TDD_CHANNEL_CNT)
+
+  set TDD_DEFAULT_POL [ expr { [info exists ad_project_params(TDD_DEFAULT_POL)] \
+                               ? $ad_project_params(TDD_DEFAULT_POL) : 0 } ]
+  set TDD_REG_WIDTH [ expr { [info exists ad_project_params(TDD_REG_WIDTH)] \
+                             ? $ad_project_params(TDD_REG_WIDTH) : 32 } ]
+  set TDD_BURST_WIDTH [ expr { [info exists ad_project_params(TDD_BURST_WIDTH)] \
+                               ? $ad_project_params(TDD_BURST_WIDTH) : 32 } ]
+  set TDD_SYNC_WIDTH [ expr { [info exists ad_project_params(TDD_SYNC_WIDTH)] \
+                              ? $ad_project_params(TDD_SYNC_WIDTH) : 64 } ]
+
+  set TDD_SYNC_INT $ad_project_params(TDD_SYNC_INT)
+  set TDD_SYNC_EXT $ad_project_params(TDD_SYNC_EXT)
+  set TDD_SYNC_EXT_CDC $ad_project_params(TDD_SYNC_EXT_CDC)
+
+  ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
+                              $TDD_DEFAULT_POL \
+                              $TDD_REG_WIDTH \
+                              $TDD_BURST_WIDTH \
+                              $TDD_SYNC_WIDTH \
+                              $TDD_SYNC_INT \
+                              $TDD_SYNC_EXT \
+                              $TDD_SYNC_EXT_CDC
+
+  ad_connect core_clk_a axi_tdd_0/clk
+  ad_connect core_clk_a_rstgen/peripheral_aresetn axi_tdd_0/resetn
+  ad_connect sys_cpu_clk axi_tdd_0/s_axi_aclk
+  ad_connect sys_cpu_resetn axi_tdd_0/s_axi_aresetn
+  ad_connect axi_tdd_0/sync_in GND
+  ad_cpu_interconnect 0x7c470000 axi_tdd_0
+
+  ad_connect axi_tdd_0/tdd_channel_0 $dac_data_offload_name/sync_ext
+  ad_connect axi_tdd_0/tdd_channel_1 $adc_data_offload_name/sync_ext
+
+  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
+  ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
+  ad_connect axi_tdd_0/tdd_channel_1 axi_adrv9009_som_rx_dma/s_axis_user
+} else {
+  ad_connect GND $dac_data_offload_name/sync_ext
+  ad_connect GND $adc_data_offload_name/sync_ext
+}
+
+# disconnect_bd_net /sys_cpu_clk [get_bd_pins axi_hp0_interconnect/aclk]
+# connect_bd_net [get_bd_pins axi_hp0_interconnect/aclk] [get_bd_pins dma_clk_wiz/clk_out1]
+# disconnect_bd_net /sys_cpu_clk [get_bd_pins sys_ps8/saxihp0_fpd_aclk]
+# connect_bd_net [get_bd_pins sys_ps8/saxihp0_fpd_aclk] [get_bd_pins dma_clk_wiz/clk_out1]
