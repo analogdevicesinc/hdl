@@ -22,5 +22,3 @@ L=$ad_project_params(RX_OS_JESD_L)\
 S=$ad_project_params(RX_OS_JESD_S)"
 
 sysid_gen_sys_init_file $sys_cstring
-
-sysid_gen_sys_init_file
