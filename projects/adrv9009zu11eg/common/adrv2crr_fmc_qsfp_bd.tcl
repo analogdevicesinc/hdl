@@ -152,8 +152,8 @@ ad_ip_parameter corundum CONFIG.RX_HASH_ENABLE "1"
 ad_ip_parameter corundum CONFIG.RX_CHECKSUM_ENABLE "1"
 ad_ip_parameter corundum CONFIG.TX_FIFO_DEPTH "32768"
 ad_ip_parameter corundum CONFIG.RX_FIFO_DEPTH "32768"
-ad_ip_parameter corundum CONFIG.MAX_TX_SIZE "9214"
-ad_ip_parameter corundum CONFIG.MAX_RX_SIZE "9214"
+ad_ip_parameter corundum CONFIG.MAX_TX_SIZE "18428"
+ad_ip_parameter corundum CONFIG.MAX_RX_SIZE "18428"
 ad_ip_parameter corundum CONFIG.TX_RAM_SIZE $TX_RAM_SIZE
 ad_ip_parameter corundum CONFIG.RX_RAM_SIZE $RX_RAM_SIZE
 
