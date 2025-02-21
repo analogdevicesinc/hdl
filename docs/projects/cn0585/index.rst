@@ -79,9 +79,9 @@ axi_ltc2387_dma  0X44A4_0000
 axi_clkgen       0X44B0_0000
 axi_pwm_gen      0X44B1_0000
 max_spi          0X44B2_0000
-axi_ad3552r_0    0X44D0_0000
+axi_ad35xxr_0    0X44D0_0000
 axi_dac_0_dma    0X44D3_0000
-axi_ad3552r_1    0X44E0_0000
+axi_ad35xxr_1    0X44E0_0000
 axi_dac_1_dma    0X44E3_0000
 ================ ===============
 
@@ -233,7 +233,7 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_AD3552R
+   * - AXI_AD35XXR
      - :git-hdl:`library/axi_ad35xxr`
      - :ref:`axi_ad35xxr`
    * - AXI_LTC2387
