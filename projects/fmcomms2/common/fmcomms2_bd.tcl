@@ -164,50 +164,50 @@ ad_connect sys_rstgen_sha3/peripheral_aresetn axi_sha3_dma/m_sg_axi_aresetn
 # ad_connect $sys_cpu_resetn axi_sha3_dma/m_sg_axi_aresetn
 
 #ramp-path ramp
-ad_ip_instance ramp ramp_sha3
-ad_connect util_ad9361_divclk/clk_out ramp_sha3/clk
-ad_connect util_ad9361_divclk_reset/peripheral_reset ramp_sha3/rst
+# ad_ip_instance ramp ramp_sha3
+# ad_connect util_ad9361_divclk/clk_out ramp_sha3/clk
+# ad_connect util_ad9361_divclk_reset/peripheral_reset ramp_sha3/rst
 
 # adc-path ramp dma
-ad_ip_instance axi_dmac axi_ramp_dma
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter axi_ramp_dma CONFIG.CYCLIC 0
-ad_ip_parameter axi_ramp_dma CONFIG.SYNC_TRANSFER_START 0
-ad_ip_parameter axi_ramp_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter axi_ramp_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_SG_TRANSFER 1
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_DATA_WIDTH_SRC 64
-ad_ip_parameter axi_ramp_dma CONFIG.DMA_DATA_WIDTH_SG 64
+# ad_ip_instance axi_dmac axi_ramp_dma
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_TYPE_SRC 2
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_TYPE_DEST 0
+# ad_ip_parameter axi_ramp_dma CONFIG.CYCLIC 0
+# ad_ip_parameter axi_ramp_dma CONFIG.SYNC_TRANSFER_START 0
+# ad_ip_parameter axi_ramp_dma CONFIG.AXI_SLICE_SRC 0
+# ad_ip_parameter axi_ramp_dma CONFIG.AXI_SLICE_DEST 0
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_2D_TRANSFER 0
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_SG_TRANSFER 1
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+# ad_ip_parameter axi_ramp_dma CONFIG.DMA_DATA_WIDTH_SG 64
 
-ad_connect util_ad9361_divclk/clk_out axi_ramp_dma/fifo_wr_clk
-ad_connect ramp_sha3/data_valid axi_ramp_dma/fifo_wr_en
-ad_connect ramp_sha3/data_out axi_ramp_dma/fifo_wr_din
-ad_connect $sys_cpu_resetn axi_ramp_dma/m_dest_axi_aresetn
-ad_connect $sys_cpu_resetn axi_ramp_dma/m_sg_axi_aresetn
+# ad_connect util_ad9361_divclk/clk_out axi_ramp_dma/fifo_wr_clk
+# ad_connect ramp_sha3/data_valid axi_ramp_dma/fifo_wr_en
+# ad_connect ramp_sha3/data_out axi_ramp_dma/fifo_wr_din
+# ad_connect $sys_cpu_resetn axi_ramp_dma/m_dest_axi_aresetn
+# ad_connect $sys_cpu_resetn axi_ramp_dma/m_sg_axi_aresetn
 
 # sha3-path sha3_512
 set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3_512 ]
 ad_connect util_ad9361_divclk/clk_out sha3_512/ap_clk
 ad_connect util_ad9361_divclk_reset_sha3/peripheral_reset sha3_512/ap_rst
 
-set gpio_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 gpio_slice ]
-set_property -dict [list \
-  CONFIG.DIN_FROM {93} \
-  CONFIG.DIN_TO {93} \
-  CONFIG.DIN_WIDTH {94} \
-] $gpio_slice
+# set gpio_slice [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 gpio_slice ]
+# set_property -dict [list \
+#   CONFIG.DIN_FROM {93} \
+#   CONFIG.DIN_TO {93} \
+#   CONFIG.DIN_WIDTH {94} \
+# ] $gpio_slice
 
-ad_connect gpio_slice/din sys_ps8/emio_gpio_o
+# ad_connect gpio_slice/din sys_ps8/emio_gpio_o
 
 #bus_mux
-ad_ip_instance bus_mux ramp_sha3_mux
-ad_connect ramp_sha3_mux/sel gpio_slice/dout
-ad_connect ramp_sha3_mux/data_a ramp_sha3/data_out
-ad_connect ramp_sha3_mux/data_a_valid ramp_sha3/data_valid
-ad_connect ramp_sha3_mux/data_b util_ad9361_adc_pack/packed_fifo_wr_data
-ad_connect ramp_sha3_mux/data_b_valid util_ad9361_adc_pack/packed_fifo_wr_en
+# ad_ip_instance bus_mux ramp_sha3_mux
+# ad_connect ramp_sha3_mux/sel gpio_slice/dout
+# ad_connect ramp_sha3_mux/data_a ramp_sha3/data_out
+# ad_connect ramp_sha3_mux/data_a_valid ramp_sha3/data_valid
+# ad_connect ramp_sha3_mux/data_b util_ad9361_adc_pack/packed_fifo_wr_data
+# ad_connect ramp_sha3_mux/data_b_valid util_ad9361_adc_pack/packed_fifo_wr_en
 
 # Create instance: system_ila_0, and set properties
 set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
@@ -224,28 +224,28 @@ set_property -dict [list \
 # connections with ramp
 # ad_connect sha3_512/msgStreamIn_dout ramp_sha3/data_out
 # ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3/data_valid
-ad_connect sha3_512/msgStreamIn_dout ramp_sha3_mux/data_out
-ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3_mux/data_out_valid
-ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
-ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
-ad_connect sha3_512/digestStreamOut_full_n VCC
-ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
-
-# connections with ADC CPACK2
-# ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
-# ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+# ad_connect sha3_512/msgStreamIn_dout ramp_sha3_mux/data_out
+# ad_connect sha3_512/msgStreamIn_empty_n ramp_sha3_mux/data_out_valid
+# ad_connect sha3_512/msgStreamIn_read ramp_sha3/ready
 # ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
 # ad_connect sha3_512/digestStreamOut_full_n VCC
 # ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
 
+# connections with ADC CPACK2
+ad_connect sha3_512/msgStreamIn_dout util_ad9361_adc_pack/packed_fifo_wr_data
+ad_connect sha3_512/msgStreamIn_empty_n util_ad9361_adc_pack/packed_fifo_wr_en
+ad_connect sha3_512/digestStreamOut_din axi_sha3_dma/fifo_wr_din
+ad_connect sha3_512/digestStreamOut_full_n VCC
+ad_connect sha3_512/digestStreamOut_write axi_sha3_dma/fifo_wr_en
+
 #connections with ILA
 ad_connect util_ad9361_divclk/clk_out system_ila_0/clk
-ad_connect system_ila_0/probe0 ramp_sha3_mux/data_out
-ad_connect system_ila_0/probe1 ramp_sha3_mux/data_out_valid
+# ad_connect system_ila_0/probe0 ramp_sha3_mux/data_out
+# ad_connect system_ila_0/probe1 ramp_sha3_mux/data_out_valid
 # ad_connect system_ila_0/probe0 ramp_sha3/data_out
 # ad_connect system_ila_0/probe1 ramp_sha3/data_valid
-# ad_connect system_ila_0/probe0 util_ad9361_adc_pack/packed_fifo_wr_data
-# ad_connect system_ila_0/probe1 util_ad9361_adc_pack/packed_fifo_wr_en
+ad_connect system_ila_0/probe0 util_ad9361_adc_pack/packed_fifo_wr_data
+ad_connect system_ila_0/probe1 util_ad9361_adc_pack/packed_fifo_wr_en
 ad_connect system_ila_0/probe2 sha3_512/msgStreamIn_read
 ad_connect system_ila_0/probe3 sha3_512/digestStreamOut_din
 ad_connect system_ila_0/probe4 util_ad9361_divclk_reset_sha3/peripheral_reset
@@ -341,9 +341,9 @@ ad_cpu_interconnect 0x79020000 axi_ad9361
 ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
 ad_cpu_interconnect 0x7C440000 axi_sha3_dma
-ad_cpu_interconnect 0x7C460000 axi_ramp_dma
-ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
-ad_mem_hp0_interconnect $sys_cpu_clk axi_ramp_dma/m_dest_axi
+# ad_cpu_interconnect 0x7C460000 axi_ramp_dma
+# ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
+# ad_mem_hp0_interconnect $sys_cpu_clk axi_ramp_dma/m_dest_axi
 ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
 ad_mem_hp2_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP2
@@ -351,7 +351,7 @@ ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 ad_mem_hp3_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP3
 ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_dest_axi
 
-ad_mem_hp0_interconnect $sys_cpu_clk axi_ramp_dma/m_sg_axi
+# ad_mem_hp0_interconnect $sys_cpu_clk axi_ramp_dma/m_sg_axi
 ad_mem_hp1_interconnect $sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
 ad_mem_hp2_interconnect $sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
 ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_sg_axi
@@ -360,6 +360,6 @@ ad_mem_hp3_interconnect $sys_cpu_clk axi_sha3_dma/m_sg_axi
 
 ad_cpu_interrupt ps-13 mb-12 axi_ad9361_adc_dma/irq
 ad_cpu_interrupt ps-14 mb-14 axi_sha3_dma/irq
-ad_cpu_interrupt ps-15 mb-15 axi_ramp_dma/irq
+# ad_cpu_interrupt ps-15 mb-15 axi_ramp_dma/irq
 ad_cpu_interrupt ps-12 mb-13 axi_ad9361_dac_dma/irq
 
