@@ -192,7 +192,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`EVAL-AD3552R HDL project source code <projects/ad35xxr_evb>`
+- :git-hdl:`EVAL-AD35XXR HDL project source code <projects/ad35xxr_evb>`
 
 .. list-table::
    :widths: 30 35 35

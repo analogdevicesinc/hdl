@@ -14,8 +14,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+   xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
      id="namedview11"
      pagecolor="#ffffff"
@@ -25,9 +24,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="2.0567201"
-     inkscape:cx="421.05875"
-     inkscape:cy="140.27188"
+     inkscape:zoom="1.4543207"
+     inkscape:cx="704.10878"
+     inkscape:cy="207.31328"
      inkscape:window-width="2400"
      inkscape:window-height="1261"
      inkscape:window-x="2391"
@@ -56,37 +55,14 @@
        pointer-events="all"
        id="path1"
        style="stroke-width:1.2417" />
-    <g
-       transform="translate(31.103717,0.47242206)"
-       id="g1">
-      <switch
-         id="switch1">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 175px; margin-left: 734px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">QUAD SPI INTERFACE</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="734"
-           y="178"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="11px"
-           text-anchor="middle"
-           id="text1">Single/Dual/Quad SPI INTERFACE</text>
-      </switch>
-    </g>
+    <text
+       x="765.1037"
+       y="178.47243"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="11px"
+       text-anchor="middle"
+       id="text1">Single/Dual/Quad SPI INTERFACE</text>
     <rect
        x="540"
        y="115"
@@ -96,38 +72,14 @@
        stroke="#b46504"
        pointer-events="all"
        id="rect2" />
-    <g
-       transform="translate(-0.5,-0.5)"
-       id="g2">
-      <switch
-         id="switch2">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 102px; height: 1px; padding-top: 175px; margin-left: 541px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">AD3552R<xhtml:br />
-INTERFACE</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="592"
-           y="179"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="12px"
-           text-anchor="middle"
-           id="text2">AD35XXR...</text>
-      </switch>
-    </g>
+    <text
+       x="591.5"
+       y="178.5"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="12px"
+       text-anchor="middle"
+       id="text2">AD35XXR...</text>
     <rect
        x="360"
        y="50"
@@ -137,38 +89,14 @@ INTERFACE</xhtml:div>
        stroke="#d6b656"
        pointer-events="all"
        id="rect3" />
-    <g
-       transform="translate(-0.5,-0.5)"
-       id="g3">
-      <switch
-         id="switch3">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 175px; margin-left: 361px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">AXI_AD3552R<xhtml:br />
-CORE MODULE</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="410"
-           y="179"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="12px"
-           text-anchor="middle"
-           id="text3">AXI_AD35XXR...</text>
-      </switch>
-    </g>
+    <text
+       x="409.5"
+       y="178.5"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="12px"
+       text-anchor="middle"
+       id="text3">AXI_AD35XXR...</text>
     <path
        d="m 50.55,126.33 -0.1,-32.57 77.29,-0.22 -0.05,-16.9 41.81,33.07 -41.62,33.31 -0.05,-16.9 z"
        fill="#e1d5e7"
@@ -176,37 +104,14 @@ CORE MODULE</xhtml:div>
        stroke-miterlimit="10"
        pointer-events="all"
        id="path3" />
-    <g
-       transform="translate(-0.5,-0.5)"
-       id="g4">
-      <switch
-         id="switch4">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 110px; margin-left: 94px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">S_AXI_MM</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="94"
-           y="113"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="11px"
-           text-anchor="middle"
-           id="text4">S_AXI_MM</text>
-      </switch>
-    </g>
+    <text
+       x="93.5"
+       y="112.5"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="11px"
+       text-anchor="middle"
+       id="text4">S_AXI_MM</text>
     <path
        d="M 0.53,266.62 0.47,234.05 124.75,233.8 124.72,216.89 166.5,250 124.85,283.28 124.82,266.37 Z"
        fill="#d5e8d4"
@@ -214,37 +119,14 @@ CORE MODULE</xhtml:div>
        stroke-miterlimit="10"
        pointer-events="all"
        id="path4" />
-    <g
-       transform="translate(-0.5,-0.5)"
-       id="g5">
-      <switch
-         id="switch5">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 251px; margin-left: 81px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">DMAC OR ADC INTERFACE</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="81"
-           y="254"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="11px"
-           text-anchor="middle"
-           id="text5">DMAC OR ADC INTERFACE</text>
-      </switch>
-    </g>
+    <text
+       x="80.5"
+       y="253.5"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="11px"
+       text-anchor="middle"
+       id="text5">DMAC OR ADC INTERFACE</text>
     <rect
        x="190"
        y="70"
@@ -254,37 +136,14 @@ CORE MODULE</xhtml:div>
        stroke="#9673a6"
        pointer-events="all"
        id="rect5" />
-    <g
-       transform="translate(-0.5,-0.5)"
-       id="g6">
-      <switch
-         id="switch6">
-        <foreignObject
-           pointer-events="none"
-           width="100%"
-           height="100%"
-           requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
-           style="overflow: visible; text-align: left;">
-          <xhtml:div
-             style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 98px; height: 1px; padding-top: 110px; margin-left: 191px;">
-            <xhtml:div
-               data-drawio-colors="color: rgb(0, 0, 0); "
-               style="box-sizing: border-box; font-size: 0px; text-align: center;">
-              <xhtml:div
-                 style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">S_AXI TO UP</xhtml:div>
-            </xhtml:div>
-          </xhtml:div>
-        </foreignObject>
-        <text
-           x="240"
-           y="114"
-           fill="#000000"
-           font-family="Helvetica"
-           font-size="12px"
-           text-anchor="middle"
-           id="text6">S_AXI TO UP</text>
-      </switch>
-    </g>
+    <text
+       x="239.5"
+       y="113.5"
+       fill="#000000"
+       font-family="Helvetica"
+       font-size="12px"
+       text-anchor="middle"
+       id="text6">S_AXI TO UP</text>
     <path
        d="m 290,110 h 30 v 60 h 23.63"
        fill="none"
