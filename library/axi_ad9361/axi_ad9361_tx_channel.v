@@ -100,7 +100,6 @@ module axi_ad9361_tx_channel #(
   reg     [11:0]  dac_pn_data = 'd0;
   reg     [15:0]  dac_pat_data = 'd0;
   reg     [11:0]  dac_ramp_data = 0;
-  reg             ramp_data_valid = 0;
 
   // internal signals
 
@@ -311,11 +310,13 @@ module axi_ad9361_tx_channel #(
 
   always @(posedge dac_clk) begin
     if (dac_data_sync == 1'b1) begin
-        dac_ramp_data   <= 0;
-        ramp_data_valid <= 1'b0;
+      dac_ramp_data   <= 0;
     end else begin
+      if (dac_valid == 1'b1) begin
         dac_ramp_data <= dac_ramp_data + 1'b1;
-        ramp_data_valid <= 1'b1;   
+      end else begin
+        dac_ramp_data <= dac_ramp_data;
+      end
     end
   end
 
