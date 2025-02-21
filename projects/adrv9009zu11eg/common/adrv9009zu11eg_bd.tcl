@@ -284,9 +284,6 @@ ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9009_som_tx_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_adxcvr axi_adrv9009_som_rx_xcvr
 ad_ip_parameter axi_adrv9009_som_rx_xcvr CONFIG.NUM_OF_LANES $MAX_RX_NUM_OF_LANES
@@ -359,9 +356,6 @@ ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_som_obs_dma MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_OS_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.DMA_DATA_WIDTH_DEST 128
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9009_som_obs_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance util_adxcvr util_adrv9009_som_xcvr
 ad_ip_parameter util_adrv9009_som_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
@@ -768,8 +762,7 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
 ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
 ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
-ad_mem_hpc1_interconnect sys_dma_clk sys_ps8/S_AXI_HPC1
-ad_mem_hpc1_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
+ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
 
 # interrupts
 

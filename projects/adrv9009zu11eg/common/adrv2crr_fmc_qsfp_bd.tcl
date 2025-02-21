@@ -286,12 +286,12 @@ ad_connect util_reduced_logic_0/Op1 corundum/core_irq
 
 ad_cpu_interrupt ps-4 mb-4 util_reduced_logic_0/Res
 
-ad_mem_hpc0_interconnect corundum_clk sys_ps8/S_AXI_HPC0_FPD
-ad_mem_hpc0_interconnect corundum_clk corundum/m_axi_dma
+ad_mem_hpc1_interconnect corundum_clk sys_ps8/S_AXI_HPC1_FPD
+ad_mem_hpc1_interconnect corundum_clk corundum/m_axi_dma
 
 assign_bd_address [get_bd_addr_segs { \
-  sys_ps8/SAXIGP0/HPC0_LPS_OCM \
-  sys_ps8/SAXIGP0/HPC0_QSPI \
-  sys_ps8/SAXIGP0/HPC0_DDR_LOW \
-  sys_ps8/SAXIGP0/HPC0_DDR_HIGH \
+  sys_ps8/SAXIGP0/HPC1_LPS_OCM \
+  sys_ps8/SAXIGP0/HPC1_QSPI \
+  sys_ps8/SAXIGP0/HPC1_DDR_LOW \
+  sys_ps8/SAXIGP0/HPC1_DDR_HIGH \
 }]
