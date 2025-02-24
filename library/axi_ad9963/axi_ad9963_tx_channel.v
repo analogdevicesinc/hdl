@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -217,7 +217,7 @@ module axi_ad9963_tx_channel #(
     .tone_2_scale (dac_dds_scale_2_s),
     .tone_1_init_offset (dac_dds_init_1_s),
     .tone_2_init_offset (dac_dds_init_2_s),
-    .tone_1_freq_word (dac_dds_init_2_s),
+    .tone_1_freq_word (dac_dds_incr_1_s),
     .tone_2_freq_word (dac_dds_incr_2_s),
     .dac_dds_data (dac_dds_data_s));
 
