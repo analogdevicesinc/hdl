@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,6 +18,11 @@ adi_ip_files util_adxcvr [list \
   "util_adxcvr_xch.v" \
   "util_adxcvr.v" \
   "bd/bd.tcl" ]
+
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_simulation false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files $ad_hdl_dir/library/scripts/adi_xilinx_device_info_enc.tcl]
 
 adi_ip_properties_lite util_adxcvr
 

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIJESD204
 ###############################################################################
 
@@ -29,6 +29,9 @@ adi_ip_files jesd204_rx [list \
   "../../common/ad_upack.v" \
   "bd/bd.tcl"
 ]
+
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
 
 set_property source_mgmt_mode DisplayOnly [current_project]
 
