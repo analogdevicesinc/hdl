@@ -32,8 +32,8 @@ proc p_elaboration {} {
 
   # clock and reset interface
 
-  ad_interface clock  clk      input 1
-  ad_interface reset  reset_n  input 1 if_clk
+  ad_interface clock    clk      input 1
+  ad_interface reset-n  reset_n  input 1 if_clk
 
   add_interface sdo axi4stream end
   add_interface_port sdo sdo_ready tready output 1

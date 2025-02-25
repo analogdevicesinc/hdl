@@ -32,7 +32,6 @@ proc p_elaboration {} {
   # control interface
 
   ad_interface clock ctrl_clk input 1
-  ad_interface reset spi_resetn  input 1 if_spi_clk
 
   add_interface ctrl_cmd_wr conduit end
   add_interface_port ctrl_cmd_wr ctrl_cmd_wr_en    wre   input  1
@@ -69,8 +68,8 @@ proc p_elaboration {} {
 
   # SPI Engine interfaces
 
-  ad_interface clock   spi_clk     input 1
-  ad_interface resetn  spi_resetn  input 1 if_spi_clk
+  ad_interface clock    spi_clk     input 1
+  ad_interface reset-n  spi_resetn  input 1 if_spi_clk
 
   ad_interface signal  trigger     input 1 if_pwm
 

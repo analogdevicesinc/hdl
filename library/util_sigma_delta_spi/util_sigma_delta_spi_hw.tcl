@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 #################################################################################
 
@@ -27,8 +27,8 @@ proc p_elaboration {} {
 
 # clock and reset interface
 
-  ad_interface clock clk    input 1
-  ad_interface reset resetn input 1 if_clk
+  ad_interface clock    clk    input 1
+  ad_interface reset-n  resetn input 1 if_clk
 
   ad_interface signal spi_active input 1 active
   ad_interface signal data_ready output 1 if_pwm
