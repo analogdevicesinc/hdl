@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,6 +13,9 @@ adi_ip_files util_hbm [list \
   "util_hbm.v" \
   "bd/bd.tcl" \
 ]
+
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
 
 adi_ip_properties_lite util_hbm
 adi_ip_ttcl util_dacfifo "util_hbm_ooc.ttcl"
