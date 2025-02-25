@@ -77,7 +77,7 @@ proc p_elaboration {} {
     set if_clk if_clk
   }
 
-  ad_interface reset reset_n output 1 $if_clk
+  ad_interface reset-n reset_n output 1 $if_clk
 
   ad_interface signal offload_trigger input 1 if_pwm
 
