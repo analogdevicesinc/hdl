@@ -47,6 +47,12 @@ set_instance_parameter_value spi_engine_offload_0 {NUM_OF_SDI}    {1}
 add_instance util_sigma_delta_spi util_sigma_delta_spi
 set_instance_parameter_value util_sigma_delta_spi {NUM_OF_CS} {1}
 
+# bridges
+
+add_instance clock_bridge_0 altera_clock_bridge
+set_instance_parameter_value clock_bridge_0 {EXPLICIT_CLOCK_RATE} {0.0}
+set_instance_parameter_value clock_bridge_0 {NUM_CLOCK_OUTPUTS} {1}
+
 # exported interface
 
 add_interface ad411x_spi_sclk       clock source
@@ -55,22 +61,26 @@ add_interface ad411x_spi_sdi        conduit end
 add_interface ad411x_spi_sdo        conduit end
 add_interface ad411x_spi_trigger    conduit end
 add_interface ad411x_spi_resetn     reset source
+add_interface ad411x_spi_clk        clock end
+add_interface util_sigma_delta_spi_resetn reset source
 
 set_interface_property ad411x_spi_cs      EXPORT_OF util_sigma_delta_spi.if_m_cs
 set_interface_property ad411x_spi_sclk    EXPORT_OF util_sigma_delta_spi.if_m_sclk
 set_interface_property ad411x_spi_sdi     EXPORT_OF util_sigma_delta_spi.if_m_sdi
 set_interface_property ad411x_spi_sdo     EXPORT_OF util_sigma_delta_spi.if_m_sdo
 set_interface_property ad411x_spi_trigger EXPORT_OF util_sigma_delta_spi.if_data_ready
+set_interface_property ad411x_spi_clk     EXPORT_OF clock_bridge_0.out_clk
+set_interface_property util_sigma_delta_spi_resetn EXPORT_OF util_sigma_delta_spi.if_resetn
 
 # clocks
 
 add_connection sys_clk.clk axi_spi_engine_0.s_axi_clock
 add_connection sys_clk.clk axi_dmac_0.s_axi_clock
+add_connection sys_dma_clk.clk clock_bridge_0.in_clk
 
 # util_sigma_delta_connection
 
 add_connection sys_dma_clk.clk util_sigma_delta_spi.if_clk
-add_connection sys_clk.clk_reset util_sigma_delta_spi.if_resetn
 
 add_connection spi_engine_execution_0.if_cs util_sigma_delta_spi.if_s_cs
 add_connection spi_engine_execution_0.if_sclk util_sigma_delta_spi.if_s_sclk
