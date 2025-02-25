@@ -32,7 +32,7 @@ proc p_elaboration {} {
   # clock and reset interface
 
   ad_interface clock   clk     input 1
-  ad_interface reset   resetn  input 1 if_clk
+  ad_interface reset-n resetn  input 1 if_clk
 
   ad_interface signal active output 1
 
