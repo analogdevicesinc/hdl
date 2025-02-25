@@ -23,6 +23,9 @@ adi_ip_files jesd204_tx [list \
   "bd/bd.tcl"
 ]
 
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
+
 set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties_lite jesd204_tx
