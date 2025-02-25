@@ -17,33 +17,42 @@
 #include "sha3_ip_512.hpp"
 #include <hls_print.h>
 
-void readIn(hls::stream<sha_uint64_t>& inData, hls::stream<sha_uint64_t> outData[NUM_WORKERS],
+void readIn(hls::stream<uintInputMsg_t>& inData, hls::stream<uintMsg_t> outData[NUM_WORKERS],
             hls::stream<uint128_t> outMsgLen[NUM_WORKERS], hls::stream<bool> outEndLen[NUM_WORKERS]) {
     #pragma HLS INLINE OFF
 
     ap_uint<12> blockIndex = 0;
     int j = 0;
-    for (int i = 0; i < (NUM_BLOCKS * BLOCK_SIZE)*NUM_WORKERS; i++) {
-        #pragma HLS PIPELINE II = 1 REWIND
-        #pragma HLS LOOP_TRIPCOUNT MIN = ((NUM_BLOCKS * BLOCK_SIZE)*NUM_WORKERS) max = ((NUM_BLOCKS * BLOCK_SIZE)*NUM_WORKERS)
 
-        sha_uint64_t word = inData.read();
-        if (blockIndex == 0){
-            outEndLen[j].write(false); //only one worker at a time
-            outMsgLen[j].write((unsigned long long)((NUM_BLOCKS * BLOCK_SIZE)*8));
-        } else if (blockIndex == 1){//else if (indexMod == 1){
-            outEndLen[j].write(true); //only one worker at a time
+    for (int i = 0; i < (NUM_BLOCKS * BLOCK_SIZE)*NUM_BLOCK_WORKERS; i++) {
+        #pragma HLS PIPELINE II = 1 REWIND
+        #pragma HLS LOOP_TRIPCOUNT MIN = ((NUM_BLOCKS * BLOCK_SIZE)*NUM_BLOCK_WORKERS) max = ((NUM_BLOCKS * BLOCK_SIZE)*NUM_BLOCK_WORKERS)
+
+        uintInputMsg_t input = inData.read();
+        uintMsg_t word[NUM_MSG];
+
+        for (int w = 0, offset = 0; w < NUM_MSG; w++, offset = offset + MSG_SIZE){
+            #pragma HLS UNROLL
+
+            word[w] = input.range(offset + (MSG_SIZE-1), offset);
+
+            if (blockIndex == 0){
+                outEndLen[j + w].write(false); //only one worker at a time
+                outMsgLen[j + w].write((unsigned long long)((NUM_BLOCKS * BLOCK_SIZE)*8));
+            } else if (blockIndex == 1){//else if (indexMod == 1){
+                outEndLen[j + w].write(true); //only one worker at a time
+            }
+            outData[j + w].write(word[w]);
         }
-        outData[j].write(word);
         blockIndex++;
         if (blockIndex == (NUM_BLOCKS * BLOCK_SIZE)){
-            j++;
+            j = j + NUM_MSG;
             blockIndex = 0;
         }
     }
 }
 
-void execute(hls::stream<sha_uint64_t>& inData, hls::stream<uint128_t>& inMsgLen,
+void execute(hls::stream<uintMsg_t>& inData, hls::stream<uint128_t>& inMsgLen,
              hls::stream<bool>& inEndLen, hls::stream<uintSizeDigest_t>& outData, hls::stream<bool>& outEndLen) {
     #pragma HLS INLINE OFF
 
@@ -63,12 +72,12 @@ void writeOut(hls::stream<uintSizeDigest_t> inData[NUM_WORKERS], hls::stream<uin
     }
 }
 
-void sha3_ip_512(hls::stream<sha_uint64_t>& msgStreamIn, hls::stream<uintSizeDigest_t>& digestStreamOut){
+void sha3_ip_512(hls::stream<uintInputMsg_t>& msgStreamIn, hls::stream<uintSizeDigest_t>& digestStreamOut){
     #pragma HLS INTERFACE mode=ap_fifo      depth = 100 port = msgStreamIn
     #pragma HLS INTERFACE mode=ap_fifo      depth = 100 port = digestStreamOut
     #pragma HLS INTERFACE mode=ap_ctrl_none port = return
 
-    hls_thread_local hls::stream<sha_uint64_t, (NUM_BLOCKS * BLOCK_SIZE)> msgStrm[NUM_WORKERS]; //leave one extra block space for buffering
+    hls_thread_local hls::stream<uintMsg_t, (NUM_BLOCKS * BLOCK_SIZE)> msgStrm[NUM_WORKERS]; //leave one extra block space for buffering
     hls_thread_local hls::stream<bool,         BLOCK_SIZE > endMsgLenStrm[NUM_WORKERS]; //one write for every block
     hls_thread_local hls::stream<uint128_t, BLOCK_SIZE    > msgLenStrm[NUM_WORKERS]; //one write for every block
     // Outputs

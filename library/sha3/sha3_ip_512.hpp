@@ -17,21 +17,28 @@
 #include <ap_int.h>
 #include "xf_security/sha3.hpp"
 #include "hls_task.h"
-// the size of each message word in byte
-#define MSG_SIZE 8
-// the size of the digest in byte
-#define DIG_SIZE 64
+// the size of each input message word in bits
+#define INPUT_MSG_SIZE 64
+// SHA3 only accepts 64-bit message, 
+#define MSG_SIZE 64
+// number of messages after input message is split
+#define NUM_MSG ((INPUT_MSG_SIZE + (MSG_SIZE-1))/MSG_SIZE)
+// the size of the digest in bits
+#define DIG_SIZE 512
 // the block size in words of 8bytes == (200 - (512/4))/8
 #define BLOCK_SIZE 9
 // number of blocks to be buffered
-#define NUM_BLOCKS 100
+#define NUM_BLOCKS 88
 // buffer size
 #define BUFFER_SIZE ((BLOCK_SIZE + 1) * NUM_BLOCKS)
 // number of workers
 #define NUM_WORKERS 5
+// number of necessary blocks
+#define NUM_BLOCK_WORKERS (NUM_WORKERS/NUM_MSG)
 
-typedef ap_uint<8 * MSG_SIZE> sha_uint64_t;
+typedef ap_uint<INPUT_MSG_SIZE> uintInputMsg_t;
+typedef ap_uint<MSG_SIZE> uintMsg_t;
 typedef ap_uint<128> uint128_t;
-typedef ap_uint<8 * DIG_SIZE> uintSizeDigest_t;
+typedef ap_uint<DIG_SIZE> uintSizeDigest_t;
 
-void sha3_ip_512(hls::stream<sha_uint64_t>& msgStreamIn, hls::stream<uintSizeDigest_t>& digestStreamOut);
+void sha3_ip_512(hls::stream<uintInputMsg_t>& msgStreamIn, hls::stream<uintSizeDigest_t>& digestStreamOut);

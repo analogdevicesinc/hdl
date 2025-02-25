@@ -3,7 +3,7 @@ exec vitis-run --tcl --mode hls sha3_hls.tcl
 set PROJ_TOP "sha3"
 set PROJ_NAME "sha3.hls"
 set SOLUTION_NAME "sol1"
-# exec find $ad_hdl_dir/library/$PROJ_TOP/ -type l -delete
+exec find $ad_hdl_dir/library/$PROJ_TOP/ -type l -delete
 exec ln -sf "$ad_hdl_dir/library/$PROJ_TOP/$PROJ_NAME/$SOLUTION_NAME/impl/ip/component.xml" "$ad_hdl_dir/library/$PROJ_TOP/component.xml"
 exec touch -r "$ad_hdl_dir/library/$PROJ_TOP/$PROJ_NAME/$SOLUTION_NAME/impl/ip/component.xml" "$ad_hdl_dir/library/$PROJ_TOP/component.xml"
 exec ln -sf "$ad_hdl_dir/library/$PROJ_TOP/$PROJ_NAME/$SOLUTION_NAME/impl/ip/constraints" "$ad_hdl_dir/library/$PROJ_TOP/constraints"
