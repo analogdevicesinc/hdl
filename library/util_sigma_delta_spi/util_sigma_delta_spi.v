@@ -83,7 +83,7 @@ module util_sigma_delta_spi #(
   reg [2:0] sdi_d = 'h00;
 
   always @(posedge clk) begin
-    if (resetn == 1'b0) begin
+    if (resetn == 1'b1) begin //FIXME: temporary hack for a411x_ad717x reset polarity issue, breaks other projects
       counter <= IDLE_TIMEOUT;
     end else begin
       if (s_cs[CS_PIN] == 1'b0 && spi_active == 1'b0) begin
