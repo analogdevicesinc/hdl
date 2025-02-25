@@ -144,6 +144,9 @@ module system_top (
   wire        i2c0_out_clk;
   wire        i2c0_scl_in_clk;
 
+  wire        sigma_delta_rst;
+  wire        spi_engine_clk;
+
   // adc control gpio assign
 
   assign gpio_i[63:35] = gpio_o[63:35];
@@ -183,6 +186,15 @@ module system_top (
     .oe(i2c0_out_data),
     .o(i2c0_sda),
     .io(hdmi_i2c_sda));
+
+  sync_bits #(
+    .NUM_OF_BITS (2),
+    .ASYNC_CLK (1)
+  ) i_sigma_sync (
+    .in_bits (gpio_i[35]),
+    .out_clk (spi_engine_clk),
+    .out_resetn (1'b1),
+    .out_bits (sigma_delta_rst));
 
   system_bd i_system_bd (
     .sys_clk_clk (sys_clk),
@@ -259,6 +271,8 @@ module system_top (
     .ad411x_spi_sclk_clk(spi_clk),
     .ad411x_spi_sdi_m_sdi(spi_miso),
     .ad411x_spi_sdo_m_sdo(spi_mosi),
+    .ad411x_spi_clk_clk(spi_engine_clk),
+    .util_sigma_delta_spi_resetn_reset(sigma_delta_rst),
     .axi_hdmi_tx_0_hdmi_if_h_clk (hdmi_out_clk),
     .axi_hdmi_tx_0_hdmi_if_h24_hsync (hdmi_hsync),
     .axi_hdmi_tx_0_hdmi_if_h24_vsync (hdmi_vsync),
