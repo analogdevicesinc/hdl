@@ -87,7 +87,7 @@ module axi_ada4355 #(
   input  [ 2:0] s_axi_arprot
 );
 
-  localparam DELAY_CTRL_NUM_LANES = 2;
+  localparam DELAY_CTRL_NUM_LANES = 3;
   localparam DELAY_CTRL_DRP_WIDTH = 5;
 
   // internal signals
@@ -96,8 +96,12 @@ module axi_ada4355 #(
   wire [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
   wire [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
+  //wire [DELAY_CTRL_DRP_WIDTH-1:0]                       up_dwdata_frame;
+  //wire [DELAY_CTRL_DRP_WIDTH-1:0]                       up_adc_drdata_frame;
+
   wire [ 7:0] adc_custom_control_s;
   wire        delay_locked;
+  //wire        delay_locked_frame;
   wire        adc_enable;
   wire        adc_clk_s;
   wire        adc_rst_s;
@@ -281,7 +285,7 @@ module axi_ada4355 #(
     .areset(up_rstn),
     .sync_n(sync_n));
 
-  // adc delay control
+  // adc data delay control
 
   up_delay_cntrl #(
     .DATA_WIDTH(DELAY_CTRL_NUM_LANES),
