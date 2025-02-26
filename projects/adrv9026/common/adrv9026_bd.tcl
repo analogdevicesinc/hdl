@@ -22,7 +22,7 @@ set TX_NUM_OF_CONVERTERS [expr $TX_JESD_M * $TX_NUM_LINKS] ; # M
 set TX_SAMPLES_PER_FRAME $ad_project_params(TX_JESD_S)     ; # S
 set TX_SAMPLE_WIDTH 16                                     ; # N/NP
 
-set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 32 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 64 / ($TX_NUM_OF_CONVERTERS * $TX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 # RX parameters
 set RX_NUM_OF_LANES [expr $RX_JESD_L * $RX_NUM_LINKS]      ; # L
@@ -30,10 +30,10 @@ set RX_NUM_OF_CONVERTERS [expr $RX_JESD_M * $RX_NUM_LINKS] ; # M
 set RX_SAMPLES_PER_FRAME $ad_project_params(RX_JESD_S)     ; # S
 set RX_SAMPLE_WIDTH 16                                     ; # N/NP
 
-set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 32 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
+set RX_SAMPLES_PER_CHANNEL [expr $RX_NUM_OF_LANES * 64 / ($RX_NUM_OF_CONVERTERS * $RX_SAMPLE_WIDTH)] ; # L * 32 / (M * N)
 
 set dac_fifo_name axi_adrv9026_dacfifo
-set dac_data_width [expr 32*$TX_NUM_OF_LANES]
+set dac_data_width [expr 64*$TX_NUM_OF_LANES]
 set dac_dma_data_width 128
 
 if {$JESD_MODE == "8B10B"} {
@@ -64,6 +64,7 @@ ad_ip_parameter axi_adrv9026_tx_xcvr CONFIG.SYS_CLK_SEL 3
 ad_ip_parameter axi_adrv9026_tx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_tx_create axi_adrv9026_tx_jesd $TX_NUM_OF_LANES $TX_NUM_LINKS $ENCODER_SEL
+ad_ip_parameter axi_adrv9026_tx_jesd/tx CONFIG.TPL_DATA_PATH_WIDTH 8
 
 ad_ip_instance util_upack2 util_adrv9026_tx_upack [list \
   NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
@@ -102,6 +103,7 @@ ad_ip_parameter axi_adrv9026_rx_xcvr CONFIG.SYS_CLK_SEL 0
 ad_ip_parameter axi_adrv9026_rx_xcvr CONFIG.OUT_CLK_SEL 3
 
 adi_axi_jesd204_rx_create axi_adrv9026_rx_jesd $RX_NUM_OF_LANES $RX_NUM_LINKS $ENCODER_SEL
+ad_ip_parameter axi_adrv9026_rx_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH 8
 
 ad_ip_instance util_cpack2 util_adrv9026_rx_cpack [list \
   NUM_OF_CHANNELS $RX_NUM_OF_CONVERTERS \
@@ -123,7 +125,7 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_DEST_REQ 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_SRC_DEST 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.ASYNC_CLK_REQ_SRC 1
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 32*$RX_NUM_OF_LANES]
+ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr 64*$RX_NUM_OF_LANES]
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
@@ -137,35 +139,56 @@ create_bd_port -dir I $tx_ref_clk
 create_bd_port -dir I $rx_ref_clk
 
 # common cores
-
 ad_ip_instance util_adxcvr util_adrv9026_xcvr
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
 ad_ip_parameter util_adrv9026_xcvr CONFIG.LINK_MODE $ENCODER_SEL
 ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
 ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_OUT_DIV 1
+ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_OUT_DIV 2
 ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 4
+ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_OUT_DIV 2
+ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 2
 ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV_4_5 5
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 10
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV 10
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
-ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV 40
+ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 5
+ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV 5
+ad_ip_parameter util_adrv9026_xcvr CONFIG.DATA_PATH_WIDTH 8
+
+# ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
+# ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
+ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV 80
+ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV_RATIO 2
 ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 6
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_INVERT 15
+ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 1
+ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_INVERT 3
+
+set_property -dict [list \
+CONFIG.A_TXDIFFCTRL {"01100"} \
+CONFIG.CH_HSPMUX {0x2424} \
+CONFIG.POR_CFG {0x0000} \
+CONFIG.QPLL_CFG2 {0x0FC3} \
+CONFIG.QPLL_CFG2_G3 {0x0FC3} \
+CONFIG.QPLL_CP {"0011111111"} \
+CONFIG.QPLL_CP_G3 {"0001111"} \
+CONFIG.QPLL_LPF {0b01000011111} \
+CONFIG.RXCDR_CFG0 {0x0003} \
+CONFIG.RXCDR_CFG2 {0x0255} \
+CONFIG.RXCDR_CFG2_GEN2 {0x0255} \
+CONFIG.RXCDR_CFG2_GEN4 {0x0164} \
+CONFIG.RXCDR_CFG3_GEN2 {0b010010} \
+CONFIG.RXCDR_CFG3_GEN4 {0x0012} \
+CONFIG.RXPI_CFG0 {0x102} \
+CONFIG.RXPI_CFG1 {0x0015} \
+] [get_bd_cells util_adrv9026_xcvr]
 
 ad_connect  $sys_cpu_resetn util_adrv9026_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_adrv9026_xcvr/up_clk
 
 # Tx
-ad_xcvrcon util_adrv9026_xcvr axi_adrv9026_tx_xcvr axi_adrv9026_tx_jesd {3 2 0 1} {} core_clk
+ad_xcvrcon util_adrv9026_xcvr axi_adrv9026_tx_xcvr axi_adrv9026_tx_jesd {} {} core_clk
 ad_xcvrpll $tx_ref_clk util_adrv9026_xcvr/qpll_ref_clk_0
 ad_xcvrpll axi_adrv9026_tx_xcvr/up_pll_rst util_adrv9026_xcvr/up_qpll_rst_0
-ad_xcvrpll $tx_ref_clk util_adrv9026_xcvr/qpll_ref_clk_4
-ad_xcvrpll axi_adrv9026_tx_xcvr/up_pll_rst util_adrv9026_xcvr/up_qpll_rst_4
+# ad_xcvrpll $tx_ref_clk util_adrv9026_xcvr/qpll_ref_clk_4
+# ad_xcvrpll axi_adrv9026_tx_xcvr/up_pll_rst util_adrv9026_xcvr/up_qpll_rst_4
 
 # Rx
 ad_xcvrcon  util_adrv9026_xcvr axi_adrv9026_rx_xcvr axi_adrv9026_rx_jesd {} {} core_clk
