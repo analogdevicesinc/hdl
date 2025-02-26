@@ -367,10 +367,10 @@ HDL related
      - ---
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
-     - :ref:`here <axi_sysid>`
+     - :ref:`axi_sysid`
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2` *
-     - :ref:`here <util_cpack2>`
+     - :ref:`util_cpack2`
 
 .. admonition:: Legend
    :class: note
