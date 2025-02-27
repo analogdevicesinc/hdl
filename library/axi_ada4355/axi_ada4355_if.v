@@ -42,7 +42,7 @@ module axi_ada4355_if #(
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
   parameter IODELAY_CTRL = 1,
   parameter DRP_WIDTH = 5,
-  parameter NUM_LANES = 2  // Max number of lanes is 2
+  parameter NUM_LANES = 3  // 2 lanes of data, 1 frame
 ) (
 
   // device interface
@@ -58,26 +58,24 @@ module axi_ada4355_if #(
   input areset,
 
   // delay interface(for IDELAY macros)
-  input                            up_clk,
-  input  [NUM_LANES:0]             up_adc_dld, // 3 instances
-  input  [(DRP_WIDTH*3)-1:0]       up_adc_dwdata,
-  output [(DRP_WIDTH*3)-1:0]       up_adc_drdata,
-  input                            delay_clk,
-  input                            delay_rst,
-  output                           delay_locked,
+  input                              up_clk,
+  input  [NUM_LANES-1:0]             up_adc_dld,
+  input  [(DRP_WIDTH*NUM_LANES)-1:0] up_adc_dwdata,
+  output [(DRP_WIDTH*NUM_LANES)-1:0] up_adc_drdata,
+  input                              delay_clk,
+  input                              delay_rst,
+  output                             delay_locked,
 
   // frame
- // input  [DRP_WIDTH-1:0]           up_adc_dwdata_frame,
-  output [DRP_WIDTH*1-1:0]         up_adc_drdata_frame,
-  output                           delay_locked_frame,
+  output                             delay_locked_frame,
 
   // internal reset and clocks
-  input                            adc_rst,
-  output                           adc_clk,
+  input                              adc_rst,
+  output                             adc_clk,
 
   // Output data
-  (* mark_debug = "true" *) output      [15:0]               adc_data,
-  (* mark_debug = "true" *) output                           adc_valid
+  output [15:0]                      adc_data,
+  output                             adc_valid
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -91,22 +89,22 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_0;
-  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_1;
-  (* mark_debug = "true" *) wire [15:0]          serdes_data;
-  (* mark_debug = "true" *) wire [7:0]           serdes_frame;
-  (* mark_debug = "true" *) wire [7:0]           pattern_value;
-  wire [NUM_LANES-1:0] serdes_in_p;
-  wire [NUM_LANES-1:0] serdes_in_n;
+  wire [ 7:0]          serdes_data_0;
+  wire [ 7:0]          serdes_data_1;
+  wire [15:0]          serdes_data;
+  wire [ 7:0]          serdes_frame;
+  wire [ 7:0]          pattern_value;
+  wire [NUM_LANES-2:0] serdes_in_p;
+  wire [NUM_LANES-2:0] serdes_in_n;
 
-  wire [NUM_LANES-1:0] data_s0;
-  wire [NUM_LANES-1:0] data_s1;
-  wire [NUM_LANES-1:0] data_s2;
-  wire [NUM_LANES-1:0] data_s3;
-  wire [NUM_LANES-1:0] data_s4;
-  wire [NUM_LANES-1:0] data_s5;
-  wire [NUM_LANES-1:0] data_s6;
-  wire [NUM_LANES-1:0] data_s7;
+  wire [NUM_LANES-2:0] data_s0;
+  wire [NUM_LANES-2:0] data_s1;
+  wire [NUM_LANES-2:0] data_s2;
+  wire [NUM_LANES-2:0] data_s3;
+  wire [NUM_LANES-2:0] data_s4;
+  wire [NUM_LANES-2:0] data_s5;
+  wire [NUM_LANES-2:0] data_s6;
+  wire [NUM_LANES-2:0] data_s7;
 
   wire  data_s0_frame;
   wire  data_s1_frame;
@@ -119,20 +117,20 @@ module axi_ada4355_if #(
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
   reg [ 1:0] serdes_valid = 2'b00;
-  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
-  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
+  reg [ 1:0] serdes_valid_d = 2'b00;
+  reg [ 2:0] shift_cnt = 3'd0;
 
-  (* mark_debug = "true" *) reg [15:0] serdes_data_16;
-  (* mark_debug = "true" *) reg [15:0] serdes_data_16_d;
-  (* mark_debug = "true" *) reg [7:0]  serdes_data_frame;
-  (* mark_debug = "true" *) reg [7:0]  serdes_data_frame_d;
-  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
-  (* mark_debug = "true" *) reg [7:0]  data_frame_shifted;
+  reg [15:0] serdes_data_16;
+  reg [15:0] serdes_data_16_d;
+  reg [ 7:0] serdes_data_frame;
+  reg [ 7:0] serdes_data_frame_d;
+  reg [15:0] adc_data_shifted;
+  reg [ 7:0] data_frame_shifted;
 
-  reg [ 2:0]  reg_test;
-  reg         bufr_alignment;
-  reg         bufr_alignment_bufr;
-  (* mark_debug = "true" *) reg [ 2:0]  state = 3'h0;
+  reg [ 2:0] reg_test;
+  reg        bufr_alignment;
+  reg        bufr_alignment_bufr;
+  reg [ 2:0] state = 3'h0;
 
   assign adc_clk           = adc_clk_div;
   assign pattern_value     = 8'hF0;
@@ -198,7 +196,7 @@ module axi_ada4355_if #(
     .IODELAY_CTRL(IODELAY_CTRL),
     .IODELAY_GROUP(IO_DELAY_GROUP),
     .DDR_OR_SDR_N(DDR_OR_SDR_N),
-    .DATA_WIDTH(NUM_LANES),
+    .DATA_WIDTH(NUM_LANES-1),
     .DRP_WIDTH(DRP_WIDTH),
     .SERDES_FACTOR(8),
     .EXT_SERDES_RESET(1)
@@ -219,8 +217,8 @@ module axi_ada4355_if #(
     .data_in_n(serdes_in_n),
     .up_clk(up_clk),
     .up_dld(up_adc_dld[1:0]),
-    .up_dwdata(up_adc_dwdata[(DRP_WIDTH*2)-1:0]),
-    .up_drdata(up_adc_drdata[(DRP_WIDTH*2)-1:0]),
+    .up_dwdata(up_adc_dwdata[(DRP_WIDTH*(NUM_LANES-1))-1:0]),
+    .up_drdata(up_adc_drdata[(DRP_WIDTH*(NUM_LANES-1))-1:0]),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked));
@@ -254,8 +252,8 @@ module axi_ada4355_if #(
     .data_in_n(data_frame_n),
     .up_clk(up_clk),
     .up_dld(up_adc_dld[2]),
-    .up_dwdata(up_adc_dwdata[((DRP_WIDTH*3)-1):(DRP_WIDTH*2)]),
-    .up_drdata(up_adc_drdata[((DRP_WIDTH*3)-1):(DRP_WIDTH*2)]),
+    .up_dwdata(up_adc_dwdata[((DRP_WIDTH*NUM_LANES)-1):(DRP_WIDTH*(NUM_LANES-1))]),
+    .up_drdata(up_adc_drdata[((DRP_WIDTH*NUM_LANES)-1):(DRP_WIDTH*(NUM_LANES-1))]),
     .delay_clk(delay_clk),
     .delay_rst(delay_rst),
     .delay_locked(delay_locked_frame));
