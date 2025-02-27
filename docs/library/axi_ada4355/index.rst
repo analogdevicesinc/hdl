@@ -6,7 +6,7 @@ AXI ADA4355
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI ADA4355 <library/axi_ada4355>` IP core
-can be used to interface the :adi:`AD7405` device using an
+can be used to interface the :adi:`ADA4355` device using an
 FPGA. The core has a AXI Memory Map interface for configuration, supports the
 data interface of the device, and has a simple FIFO interface for the
 DMAC. This documentation only covers the IP core and requires one to be familiar
@@ -25,7 +25,7 @@ Files
    * - :git-hdl:`library/axi_ada4355/axi_ada4355.v`
      - Verilog source for the AXI ADA4355.
    * - :git-hdl:`library/axi_ada4355/axi_ada4355_if.v`
-     - Verilog source for the AXI AD7405 interface.
+     - Verilog source for the AXI ADA4355 interface.
    * - :git-hdl:`library/axi_ada4355/axi_ada4355_ip.tcl`
      - IP definition file (AMD tools)
    * - :git-hdl:`library/common/up_adc_common.v`
