@@ -106,7 +106,7 @@ Block diagram
 
 The modified reference design block diagram containing now **Interpolation** and **Decimation** filters is presented below.
 
-.. image:: fmcomms2_fir_2.svg
+.. image:: fmcomms234_fir_filt_block_diagram.svg
    :width: 1000
    :align: center
    :alt: FMCOMMS2_FIR_FILTERS block diagram
@@ -114,7 +114,7 @@ The modified reference design block diagram containing now **Interpolation** and
 Understanding fmcomms2 clock routing
 -------------------------------------------------------------------------------
 
-.. image:: fmcomms2_fir_clock_domains.svg
+.. image:: fmcomms234_clock_domains.svg
    :width: 1000
    :align: center
    :alt: FMCOMMS2_FIR_CLOCK_DOMAINS
@@ -133,7 +133,7 @@ The design is obtain by simply sourcing the base fmcomms2 block design.
 
 At this point fmcomms2 reference design's TX data path has the following components:
 
-.. image:: fmcomms2_vivado_ref_tx.png
+.. image:: fmcomms2_vivado_ref_tx.JPG
    :width: 1000
    :align: center
    :alt: FMCOMMS2_VIVADO_REF_TX
@@ -145,25 +145,19 @@ connections will be removed and new ones will be created.
 .. code-block:: tcl
 
    # delete reference design connections
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_dac_upack/dac_valid_*]]]
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_dac_upack/dac_enable_*]]]
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_dac_upack/dac_data_*]]]
-
+   delete_bd_objs [get_bd_nets axi_ad9361_dac_fifo_din_valid_0] 
+   delete_bd_objs [get_bd_nets axi_ad9361_dac_fifo_din_enable_*] 
+   delete_bd_objs [get_bd_nets util_ad9361_dac_upack_fifo_rd_data_*] 
+   delete_bd_objs [get_bd_nets util_ad9361_dac_upack_fifo_rd_underflow]  
+   delete_bd_objs [get_bd_nets util_ad9361_dac_upack_fifo_rd_valid]  
 
 We will disconnect/connect the Rx path in a similar manner.
 
 .. code-block:: tcl
 
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_adc_pack/adc_valid_*]]]
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_adc_pack/adc_enable_*]]]
-   delete_bd_objs [get_bd_nets -of_objects 
-      [find_bd_objs -relation connected_to [get_bd_pins util_ad9361_adc_pack/adc_data_*]]]
-
+   delete_bd_objs [get_bd_nets util_ad9361_adc_fifo_dout_valid_0] 
+   delete_bd_objs [get_bd_nets util_ad9361_adc_fifo_dout_enable_*] 
+   delete_bd_objs [get_bd_nets util_ad9361_adc_fifo_dout_data_*]
 
 Adding interpolation filters.
 
@@ -237,64 +231,63 @@ by the decimation filters to obtain the independent I/Q channel data.
 .. code-block:: tcl
 
    set pack0_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_0 ]
-   set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0 
+   set_property -dict [list CONFIG.DIN_FROM {15}] $pack0_slice_0
    set_property -dict [list CONFIG.DIN_TO {0}] $pack0_slice_0
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_0
 
    set pack0_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack0_slice_1 ]
-   set_property -dict [list CONFIG.DIN_FROM {31}] $pack0_slice_1 
+   set_property -dict [list CONFIG.DIN_FROM {31}] $pack0_slice_1
    set_property -dict [list CONFIG.DIN_TO {16}] $pack0_slice_1
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack0_slice_1
 
    set pack1_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_0 ]
-   set_property -dict [list CONFIG.DIN_FROM {15}] $pack1_slice_0 
+   set_property -dict [list CONFIG.DIN_FROM {15}] $pack1_slice_0
    set_property -dict [list CONFIG.DIN_TO {0}] $pack1_slice_0
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_0
 
    set pack1_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 pack1_slice_1 ]
-   set_property -dict [list CONFIG.DIN_FROM {31}] $pack1_slice_1 
+   set_property -dict [list CONFIG.DIN_FROM {31}] $pack1_slice_1
    set_property -dict [list CONFIG.DIN_TO {16}] $pack1_slice_1
    set_property -dict [list CONFIG.DOUT_WIDTH {16}] $pack1_slice_1
 
 Connecting the FIR interpolation filters on the Tx side.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: verilog
+.. code-block:: tcl
 
    # fir interpolator 0
-   ad_connect clkdiv/clk_out fir_interpolator_0/aclk
-   ad_connect util_ad9361_dac_upack/dac_enable_0 dac_fifo/din_enable_0
-   ad_connect util_ad9361_dac_upack/dac_enable_1 dac_fifo/din_enable_1
-   ad_connect util_ad9361_dac_upack/dac_valid_0 fir_interpolator_0/s_axis_data_tready
-   ad_connect util_ad9361_dac_upack/dac_valid_1 fir_interpolator_0/s_axis_data_tready
-   ad_connect util_ad9361_dac_upack/upack_valid_0 fir_interpolator_0/s_axis_data_tvalid
-   ad_connect dac_fifo/din_data_0 fir_interpolator_0/channel_0
-   ad_connect dac_fifo/din_data_1 fir_interpolator_0/channel_1
-   ad_connect dac_fifo/din_valid_0 fir_interpolator_0/dac_read
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_0/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_0] [get_bd_pins axi_ad9361_dac_fifo/din_enable_0]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_1] [get_bd_pins axi_ad9361_dac_fifo/din_enable_1]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tready] 
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_0/s_axis_data_tvalid] 
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_0] [get_bd_pins fir_interpolator_0/channel_0]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_1] [get_bd_pins fir_interpolator_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_0] [get_bd_pins fir_interpolator_0/dac_read]
 
-   ad_connect concat_0/In0 util_ad9361_dac_upack/dac_data_0
-   ad_connect concat_0/In1 util_ad9361_dac_upack/dac_data_1
-   ad_connect concat_0/dout fir_interpolator_0/s_axis_data_tdata
+
+   connect_bd_net [get_bd_pins concat_0/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_0]
+   connect_bd_net [get_bd_pins concat_0/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_1]
+   connect_bd_net [get_bd_pins concat_0/dout ] [get_bd_pins fir_interpolator_0/s_axis_data_tdata]
  
    # fir interpolator 1
-   ad_connect clkdiv/clk_out fir_interpolator_1/aclk
-   ad_connect util_ad9361_dac_upack/dac_enable_2 dac_fifo/din_enable_2
-   ad_connect util_ad9361_dac_upack/dac_enable_3 dac_fifo/din_enable_3
-   ad_connect util_ad9361_dac_upack/dac_valid_2 fir_interpolator_1/s_axis_data_tready
-   ad_connect util_ad9361_dac_upack/dac_valid_3 fir_interpolator_1/s_axis_data_tready
-   ad_connect util_ad9361_dac_upack/upack_valid_2 fir_interpolator_1/s_axis_data_tvalid
-   ad_connect dac_fifo/din_data_2 fir_interpolator_1/channel_0
-   ad_connect dac_fifo/din_data_3 fir_interpolator_1/channel_1
-   ad_connect dac_fifo/din_valid_2 fir_interpolator_1/dac_read
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_interpolator_1/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_2] [get_bd_pins axi_ad9361_dac_fifo/din_enable_2]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/enable_3] [get_bd_pins axi_ad9361_dac_fifo/din_enable_3]
+   connect_bd_net [get_bd_pins util_ad9361_dac_upack/fifo_rd_en] [get_bd_pins fir_interpolator_1/s_axis_data_tvalid] 
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_2] [get_bd_pins fir_interpolator_1/channel_0]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_data_3] [get_bd_pins fir_interpolator_0/channel_1]
+   connect_bd_net [get_bd_pins axi_ad9361_dac_fifo/din_valid_2] [get_bd_pins fir_interpolator_1/dac_read]
 
-   ad_connect concat_1/In0 util_ad9361_dac_upack/dac_data_2
-   ad_connect concat_1/In1 util_ad9361_dac_upack/dac_data_3
-   ad_connect concat_1/dout fir_interpolator_1/s_axis_data_tdata
+
+   connect_bd_net [get_bd_pins concat_1/In0 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_2]
+   connect_bd_net [get_bd_pins concat_1/In1 ] [get_bd_pins util_ad9361_dac_upack/fifo_rd_data_3]
+   connect_bd_net [get_bd_pins concat_1/dout ] [get_bd_pins fir_interpolator_1/s_axis_data_tdata]
    
    # gpio controlled
-   ad_connect axi_ad9361/up_dac_gpio_out interp_slice/Din
-   ad_connect fir_interpolator_0/interpolate interp_slice/Dout
-   ad_connect fir_interpolator_1/interpolate interp_slice/Dout
+   connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins interp_slice/Din]
+   connect_bd_net [get_bd_pins fir_interpolator_0/interpolate] [get_bd_pins interp_slice/Dout]
+   connect_bd_net [get_bd_pins fir_interpolator_1/interpolate] [get_bd_pins interp_slice/Dout]
 
 In this example, the TX data flow is controlled by the interpolation filter when interpolation is activated and
 by the axi_ad9361_core when interpolation is not active. In the reference design, the data flow is controlled by the ad9631_core.
@@ -307,7 +300,7 @@ We must connect the unpack core's dma_xfer_in port to VCC so that the unpack may
 
 At this moment the Interpolation filters are completely integrated into the design and the data path should look like the one in the figure below.
 
-.. image:: fmcomms2_vivado_interp_fir_tx.png
+.. image:: fmcomms2_vivado_interp_fir_tx.JPG
    :width: 1000
    :align: center
    :alt: FMCOMMS2_VIVADO_INTERP_FIR_TX
@@ -318,37 +311,34 @@ Connecting the FIR decimation filters on the Rx side
 .. code-block:: tcl
 
    # fir decimator 0
-   ad_connect clkdiv/clk_out fir_decimator_0/aclk
-   ad_connect util_ad9361_adc_fifo/dout_data_0 fir_decimator_0/channel_0
-   ad_connect util_ad9361_adc_fifo/dout_data_1 fir_decimator_0/channel_1
-   ad_connect util_ad9361_adc_fifo/dout_valid_0 fir_decimator_0/s_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_valid_0 fir_decimator_0/m_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_valid_1 fir_decimator_0/m_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_enable_0 util_ad9361_adc_fifo/dout_enable_0
-   ad_connect util_ad9361_adc_pack/adc_enable_1 util_ad9361_adc_fifo/dout_enable_1
-   ad_connect pack0_slice_0/Din fir_decimator_0/m_axis_data_tdata
-   ad_connect pack0_slice_1/Din fir_decimator_0/m_axis_data_tdata
-   ad_connect util_ad9361_adc_pack/adc_data_0 pack0_slice_0/Dout
-   ad_connect util_ad9361_adc_pack/adc_data_1 pack0_slice_1/Dout
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_decimator_0/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_0] [get_bd_pins fir_decimator_0/channel_0]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_1] [get_bd_pins fir_decimator_0/channel_1]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_valid_0] [get_bd_pins fir_decimator_0/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_0 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_0]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_1 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_1]
+   connect_bd_net [get_bd_pins pack0_slice_0/Din] [get_bd_pins fir_decimator_0/m_axis_data_tdata]
+   connect_bd_net [get_bd_pins pack0_slice_1/Din] [get_bd_pins fir_decimator_0/m_axis_data_tdata]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_0] [get_bd_pins pack0_slice_0/Dout]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_1] [get_bd_pins pack0_slice_1/Dout]
    
    # fir decimator 1
-   ad_connect clkdiv/clk_out fir_decimator_1/aclk
-   ad_connect util_ad9361_adc_fifo/dout_data_2 fir_decimator_1/channel_0
-   ad_connect util_ad9361_adc_fifo/dout_data_3 fir_decimator_1/channel_1
-   ad_connect util_ad9361_adc_fifo/dout_valid_2 fir_decimator_1/s_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_valid_2 fir_decimator_1/m_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_valid_3 fir_decimator_1/m_axis_data_tvalid
-   ad_connect util_ad9361_adc_pack/adc_enable_2 util_ad9361_adc_fifo/dout_enable_2
-   ad_connect util_ad9361_adc_pack/adc_enable_3 util_ad9361_adc_fifo/dout_enable_3
-   ad_connect pack1_slice_0/Din fir_decimator_1/m_axis_data_tdata
-   ad_connect pack1_slice_1/Din fir_decimator_1/m_axis_data_tdata
-   ad_connect util_ad9361_adc_pack/adc_data_2 pack1_slice_0/Dout
-   ad_connect util_ad9361_adc_pack/adc_data_3 pack1_slice_1/Dout
-   
+   connect_bd_net [get_bd_pins util_ad9361_divclk/clk_out] [get_bd_pins fir_decimator_1/aclk]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_2] [get_bd_pins fir_decimator_1/channel_0]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_data_3] [get_bd_pins fir_decimator_1/channel_1]
+   connect_bd_net [get_bd_pins util_ad9361_adc_fifo/dout_valid_2] [get_bd_pins fir_decimator_1/s_axis_data_tvalid]
+   connect_bd_net [get_bd_pins util_ad9361_dac_pack/fifo_rd_en] [get_bd_pins fir_decimator_1/m_axis_data_tvalid] 
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_2 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_2]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/enable_3 ] [get_bd_pins util_ad9361_adc_fifo/dout_enable_3]
+   connect_bd_net [get_bd_pins pack1_slice_0/Din] [get_bd_pins fir_decimator_1/m_axis_data_tdata]
+   connect_bd_net [get_bd_pins pack1_slice_1/Din] [get_bd_pins fir_decimator_1/m_axis_data_tdata]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_2] [get_bd_pins pack1_slice_0/Dout]
+   connect_bd_net [get_bd_pins util_ad9361_adc_pack/fifo_wr_data_3] [get_bd_pins pack1_slice_1/Dout]
+
    #gpio controlled
-   ad_connect axi_ad9361/up_adc_gpio_out decim_slice/Din
-   ad_connect fir_decimator_0/decimate decim_slice/Dout
-   ad_connect fir_decimator_1/decimate decim_slice/Dout
+   connect_bd_net [get_bd_pins axi_ad9361/up_dac_gpio_out] [get_bd_pins decim_slice/Din]
+   connect_bd_net [get_bd_pins fir_decimator_0/decimate] [get_bd_pins decim_slice/Dout]
+   connect_bd_net [get_bd_pins fir_decimator_1/decimate] [get_bd_pins decim_slice/Din]
 
 Generating the programing files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -376,11 +366,6 @@ Base system functionality
 -------------------------------------------------------------------------------
 
 For simply testing the fmcomms2 with filter design we loop-back the data from TX to RX for each channel with a SMA to SMA cable.
-
-.. image:: fmcomms2_txrx_loopback.jpg
-   :width: 1000
-   :align: center
-   :alt: FMCOMMS2_TXRX_LOOPBACK
 
 When first booting up the design none of the filters will be active. For the beginning make sure you have the same **LO frequency for RX and TX**, as in the picture below.
 Configure the Transmit/DDS mode to DAC Buffer Output, and chose one of the .mat files there and press Load this will send data in the .mat file via DMA. This option was
