@@ -3,21 +3,18 @@
 Build the boot image BOOT.BIN
 ===============================================================================
 
+.. caution::
+
+   :red:`This flow is not supported by us in Cygwin!` Use Linux terminal or
+   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install>`__ instead.
+
 The boot image ``BOOT.BIN`` is built using the
 :xilinx:`AMD Xilinx Bootgen tool <support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf>`
 which requires several input files.
 
-All further steps are lengthy explained on the
-`AMD Xilinx wiki <https://xilinx-wiki.atlassian.net/wiki/A>`__ pages:
-
-- `How to build the u-boot <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841973/Build+U-Boot>`__
-- `How to build the FSBL <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL>`__
-- `How to build the BOOT image <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image>`__
-- `How to build the PMU firmware (for ZynqMP) <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware>`__
-- `How to build the Arm Trusted Firmware (for ZynqMP) <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF>`__
-
-For ease of use, we provide a bash shell script which allows building BOOT.BIN
-from system_top.xsa and u-boot.elf.
+For **ease of use**, we provide a bash shell script which allows
+building the BOOT.BIN from ``system_top.xsa`` (generated from building the
+project) and ``u-boot.elf`` (from the SD card with Kuiper image).
 
 .. warning::
 
@@ -34,92 +31,94 @@ For Zynq
 This section applies to the Zynq-based carriers from
 :ref:`our list <architecture amd-platforms>`, but not limited to them only.
 
-The ``build_boot_bin.sh`` script can be downloaded from
-`here <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh>`__.
+Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
+cross-compiler for ``arm`` exists before running the script.
+For more information about cross compilers, see
+:dokuwiki:`Building the Zynq Linux kernel and devicetrees from source <resources/tools-software/linux-build/generic/zynq>`.
+
+The script used is
+`build_boot_bin.sh <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh>`__,
+which needs to be downloaded on your computer.
 
 The script can take 3 parameters:
 
-- the path to the ``system_top.xsa`` file (**mandatory**).
-- the path to the ``u-boot.elf`` file (**mandatory**);
-  see the note below.
-- the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**);
-  see the note below.
+- the path to the ``system_top.xsa``;
+- the path to the ``u-boot.elf``;
+- the ``name`` of the tar.gz output archive (``name``.tar.gz) (optional).
+
+.. important::
+
+   The u-boot can be taken from the *bootgen_sysfiles.tgz* archive located in
+   the project folder of the ADI Kuiper Linux image from the SD card.
+
+   Keep in mind that **the u-boot is FPGA-specific**!
+
+   See the beginning of :external+documentation:ref:`kuiper sdcard` for
+   instructions on how to obtain the ADI Kuiper image.
+
+The script can be saved in the folder local to the project (for
+example, hdl/projects/fmcomms2/zed) and to be run from there.
 
 .. shell:: bash
 
-   $build_boot_bin.sh system_top.xsa u-boot.elf [output-archive]
+   $cd hdl/projects/fmcomms2/zed
+   $chmod +x build_boot_bin.sh
+   $./build_boot_bin.sh fmcomms2_zed.sdk/system_top.xsa path/to/u-boot.elf [output-archive]
 
-The build output can be found in the local directory ``output_boot_bin``
-where you ran the command. The folder follows the pattern:
-*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
-
-.. note::
-
-   For those who don't want to build the u-boot themselves or want to provide
-   the *.tar.gz* output archive, both can be extracted from
-   the *bootgen_sysfiles.tgz* located in the project folder of the Kuiper Linux
-   image.
-
-   See the beginning of :external+documentation:ref:`kuiper sdcard` for
-   instructions on how to obtain the image.
-
-There is also a version of script that works in Windows Powershell:
-`build_boot_bin.ps1 <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.ps1>`__.
+The build output (``BOOT.BIN``) can be found in the local directory
+``output_boot_bin`` where you ran the command.
+The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
 
 .. _build_boot_bin zynqmp:
 
-For ZynqMP
+For Zynq UltraScale+ MP
 -------------------------------------------------------------------------------
 
-This section applies to the ZynqMP-based carriers, usually :xilinx:`ZCU102`
-but not limited to this one only.
+This section applies to the ZynqMP-based carriers (`Zynq UltraScale+ MPSoC`_),
+usually :xilinx:`ZCU102` in our systems, but not limited to this one only.
 
 Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for ``arm64`` exists before running the script.
 For more information about cross compilers, see
 :dokuwiki:`Building the ZynqMP / MPSoC Linux kernel and devicetrees from source <resources/tools-software/linux-build/generic/zynqmp>`.
 
-The ``build_zynqmp_boot_bin.sh`` script can be downloaded from
-`here <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh>`__
+The script used is
+`build_zynqmp_boot_bin.sh <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh>`__,
+which needs to be downloaded on your computer.
 
-The script can take 4 parameters:
+The script can take 4 parameters (the last one is optional):
 
-- the path to the ``system_top.xsa`` file (**mandatory**)
-- the path to the ``u-boot.elf`` file (**mandatory**);
-  see the note below
-- the third parameter is either (**mandatory**):
+- the path to the ``system_top.xsa``;
+- the path to the ``u-boot.elf``;
+- the path to the ``bl31.elf``;
+- the ``name`` of the tar.gz output archive (``name``.tar.gz) (optional).
 
-  - ``download`` (will git clone the ATF repository)
-  - or ``bl31.elf``
-  - or ``<path-to-arm-trusted-firmware-source>`` (the file system path to the
-    ATF source code repository); see note below
+.. important::
 
-- the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**);
-  see the note below.
+   The u-boot and the bl31.elf can be taken from the *bootgen_sysfiles.tgz*
+   archive located in the project folder of the ADI Kuiper Linux image from
+   the SD card.
+
+   Keep in mind that **the u-boot is FPGA-specific**!
+
+   See the beginning of :external+documentation:ref:`kuiper sdcard` for
+   instructions on how to obtain the ADI Kuiper image.
 
 .. shell:: bash
 
-   $build_zynqmp_boot_bin.sh system_top.xsa u-boot.elf (download | bl31.elf | <path-to-arm-trusted-firmware-source>) [output-archive]
+   $cd hdl/projects/fmcomms2/zcu102
+   $chmod +x build_zynqmp_boot_bin.sh
+   $./build_zynqmp_boot_bin.sh fmcomms2_zcu102.sdk/system_top.xsa path/to/u-boot.elf path/to/bl31.elf
 
-The build output can be found in the local directory ``output_boot_bin``
-where you ran the command. The folder follows the pattern:
-*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+The build output (``BOOT.BIN``) can be found in the local directory
+``output_boot_bin`` where you ran the command.
+The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
 
-.. note::
-
-   For those who don't want to build the u-boot or bl31.elf themselves
-   or want to provide the *.tar.gz* output archive, they can be extracted from
-   the *bootgen_sysfiles.tgz* located in the project folder of the Kuiper Linux
-   image.
-
-   u-boot.elf may have a different name, rename that .elf file to u-boot.elf
-   before using.
-
-   See the beginning of :external+documentation:ref:`kuiper sdcard` for
-   instructions on how to obtain the image.
+.. _build_boot_bin versal:
 
 For Versal
 -------------------------------------------------------------------------------
+
 This section applies only to the Versal carriers: :xilinx:`VCK190` and
 :xilinx:`VPK180`.
 
@@ -128,30 +127,49 @@ cross-compiler for ``arm64`` exists before running the script.
 For more information about cross compilers, see
 :dokuwiki:`Building the ZynqMP / MPSoC Linux kernel and devicetrees from source <resources/tools-software/linux-build/generic/zynqmp>`.
 
-The ``build_versal_boot_bin.sh`` script can be downloaded from
-`here <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh>`__
+The script used is
+`build_versal_boot_bin.sh <https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh>`__,
+which needs to be downloaded on your computer.
 
 The script can take 4 parameters:
 
-- the path to the ``system_top.xsa`` file (**mandatory**)
-- the second parameter is either:
+- the path to the ``system_top.xsa``;
+- the path to the ``u-boot.elf``;
+- the path to the ``bl31.elf``;
+- the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**).
 
-  - ``download`` (will git clone the U-boot repository) (**default**)
-  - or ``u-boot.elf``
+.. important::
 
-- the third parameter is either:
+   The u-boot and the bl31.elf can be taken from the *bootgen_sysfiles.tgz*
+   archive located in the project folder of the ADI Kuiper Linux image from
+   the SD card.
 
-  - ``download`` (will git clone the ATF repository) (**default**)
-  - or ``bl31.elf``
-  - or ``<path-to-arm-trusted-firmware-source>`` (the file system path to the
-    ATF source code repository)
+   Keep in mind that **the u-boot is FPGA-specific**!
 
-- the ``name`` of the tar.gz output archive (``name``.tar.gz) (**optional**)
+   See the beginning of :external+documentation:ref:`kuiper sdcard` for
+   instructions on how to obtain the ADI Kuiper image.
 
 .. shell:: bash
 
-   $build_versal_boot_bin.sh system_top.xsa (download | u-boot.elf) (download | bl31.elf | <path-to-arm-trusted-firmware-source>) [output-archive]
+   $cd hdl/projects/ad9081_fmca_ebz/vck190
+   $chmod +x build_versal_boot_bin.sh
+   $./build_versal_boot_bin.sh ad9081_fmca_ebz.vck190.sdk/system_top.xsa (download | u-boot.elf) (download | bl31.elf | <path-to-arm-trusted-firmware-source>) [output-archive]
 
-The build output can be found in the local directory ``output_boot_bin``
-where you ran the command. The folder follows the pattern:
-*hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+The build output (``BOOT.BIN``) can be found in the local directory
+``output_boot_bin`` where you ran the command.
+The folder follows the pattern: *hdl/projects/$ADI_PART/$CARRIER/output_boot_bin*.
+
+More information
+-------------------------------------------------------------------------------
+
+(NOT RECOMMENDED) If you're in for the long story, check out the
+`AMD Xilinx wiki <https://xilinx-wiki.atlassian.net/wiki/A>`__ pages.
+
+.. collapsible:: For more details on the long story (NOT RECOMMENDED)
+
+   - `How to build the FSBL <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL>`__
+   - `How to build the BOOT image <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image>`__
+   - `How to build the PMU firmware (for ZynqMP) <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware>`__
+   - `How to build the Arm Trusted Firmware (for ZynqMP) <https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF>`__
+
+.. _Zynq UltraScale+ MPSoC: https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-mpsoc.html
