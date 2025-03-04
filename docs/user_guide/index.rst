@@ -24,7 +24,7 @@ Contents
    Build the Intel Boot Image <build_intel_boot_image>
    HDL architecture <architecture>
    IP cores <ip_cores/index>
-   Porting reference designs <porting_project>
+   Porting HDL projects <porting_project>
    Customize HDL projects <customize_hdl>
    HDL coding guidelines <hdl_coding_guidelines>
    Documentation guidelines <docs_guidelines>
@@ -35,6 +35,7 @@ Contents
 #. :ref:`git_repository`: Our HDL GitHub repository
 #. :ref:`releases`: Releases and supported tool versions
 #. :ref:`build_hdl`: Building and generating the programming files
+#. :ref:`build_boot_bin`: Generating the BOOT.BIN for AMD Xilinx projects
 #. :ref:`build_intel_boot_image`: Building and generating the programming files
    for Intel projects
 #. :ref:`architecture`: HDL project architecture explained
