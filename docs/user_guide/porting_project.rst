@@ -89,6 +89,19 @@ components of it. The user should look at it as a suggestion only.
    you can find templates for the *system_top.v*, *Makefile*, etc. to help you
    when creating a new project.
 
+The entry point for project creation is ``system_project.tcl``. Some support
+scripts are first loaded (:git-hdl:`scripts/adi_env.tcl`) then the project is
+created (
+:git-hdl:`adi_project_xilinx <projects/scripts/adi_project_xilinx.tcl#L51>`,
+or :git-hdl:`adi_project_intel <projects/scripts/adi_project_intel.tcl#L18>`
+or :git-hdl:`adi_project_lattice <projects/scripts/adi_project_lattice.tcl#L43>`).
+
+Based on the suffix of the project name, the FPGA carrier board is automatically
+detected, based on the ``adi_project`` procedures mentioned above.
+The constraint files and custom modules instantiated directly in the
+``system_top`` module must be added to the project files list, in
+``system_project.tcl``.
+
 Example with an AMD Xilinx board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -124,9 +137,9 @@ the **adi_project_create** process:
 .. tip::
 
    The valid board parts and parts can be retrieved by running the
-   following commands in Tcl console: **get_parts** and **get_board_parts**. Run
-   the commands like **join [get_parts] \\n**, so each part name will be listed on
-   a separate line.
+   following commands in Tcl console: **get_parts** and **get_board_parts**.
+   Run the commands like **join [get_parts] \\n**, so each part name will be
+   listed on a separate line.
 
 The **sys_zynq** constant variable should be set in the following way:
 
@@ -139,8 +152,114 @@ The **sys_zynq** constant variable should be set in the following way:
 
    In case you have a custom board based on an AMD Xilinx chip, let's say
    a Zynq UltraScale+ MP, then you would need to create the board files, similar
-   to the ones we have for ZCU102 ()
-   with the note that you need to manually enable all the functions needed in the system.
+   to the ones we have for ZCU102 (projects/common/zcu102/zcu102\_\*)
+   with the note that you need to manually enable all the functions needed in
+   the system.
+
+The entry point for project creation is ``system_project.tcl``. Some support
+scripts are first loaded (:git-hdl:`scripts/adi_env.tcl`) then the project is
+created (
+:git-hdl:`adi_project_xilinx <projects/scripts/adi_project_xilinx.tcl#L51>`).
+
+When the project is created, *system_bd.tcl* is sourced. *system_bd.tcl*
+will generate the IP Integrator system. The resulting system will be
+instantiated in the *system_top* module.
+
+In our example we use this file:
+:git-hdl:`projects/ad9081_fmca_ebz/zcu102/system_project.tcl`.
+
+.. code-block:: tcl
+
+   source ../../../scripts/adi_env.tcl
+   source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
+   source $ad_hdl_dir/projects/scripts/adi_board.tcl
+
+.. collapsible:: Use ADC/DAC FIFOs in ZCU102 designs
+
+   To use the ADC/DAC FIFOs, the corresponding Tcl files must be sourced in
+   the *system_bd.tcl*.
+   
+   .. code-block:: tcl
+
+      ## ADC FIFO depth in samples per converter
+      set adc_fifo_samples_per_converter [expr 64*1024]
+      
+      ## DAC FIFO depth in samples per converter
+      set dac_fifo_samples_per_converter [expr 64*1024]
+      
+      source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
+      source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
+      source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+
+      # the adc_fifo_samples_per_converter and dac_fifo_samples_per_converter will be used in the file below
+      source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
+      source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+.. collapsible:: Use ADC/DAC FIFOs in ZC706 designs
+
+   To use the ADC/DAC FIFOs, the corresponding Tcl files must be sourced in
+   the *system_bd.tcl*.
+   
+   .. code-block:: tcl
+   
+      source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
+      source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+   
+   If the user wants to swap the resources allocated to the FIFO, the following
+   scripts should be sourced instead:
+   
+   .. code-block:: tcl
+   
+      source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_dacfifo_bd.tcl
+      source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
+
+   The following parameters will define the FIFO's depth. Note, if the FIFO
+   is using the PL side DDR interface, the address width parameter can be
+   ignored, and the FIFO will have an equal depth with the DDR memory 
+   (e.g. in case of the :xilinx:`ZC706` board is 1Gbyte).
+
+   .. code-block:: tcl
+
+      # the DAC FIFO has a 500KSMP depth - 1 Mbyte
+      set dac_fifo_address_width 15
+      
+      # by default PLDDR is used (1 Gbyte), this varible should be ignored
+      set adc_fifo_address_width 15
+
+Sometimes, to easily change between configurations of the project (whether
+this is about changing the number of lanes, or from LVDS to CMOS interface,
+etc.) to be easily configurable, it needs build parameters. They are specified
+like this, and used when running the ``make`` command ("make RX_JESD_L=2
+TX_JESD_L=2").
+
+The "0" from :code:`adi_project ad9081_fmca_ebz_zcu102 0` is the project mode justified by
+:git-hdl:`this <projects/scripts/adi_project_xilinx.tcl#L149>` (or AMD UG892
+user guide).
+
+.. code-block:: tcl
+  
+   adi_project ad9081_fmca_ebz_zcu102 0 [list \
+     JESD_MODE        [get_env_param JESD_MODE      8B10B ] \
+     RX_LANE_RATE     [get_env_param RX_LANE_RATE      10 ] \
+     RX_JESD_L        [get_env_param RX_JESD_L          4 ] \
+     TX_LANE_RATE     [get_env_param TX_LANE_RATE      10 ] \
+     TX_JESD_L        [get_env_param RX_JESD_L          4 ] \
+   ]
+
+   adi_project_files ad9081_fmca_ebz_zcu102 [list \
+     "system_top.v" \
+     "system_constr.xdc"\
+     "timing_constr.xdc"\
+     "../../../library/common/ad_3w_spi.v"\
+     "$ad_hdl_dir/library/common/ad_iobuf.v" \
+     "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
+
+   adi_project_run ad9081_fmca_ebz_zcu102
+
+When using the :ref:`JESD204 Framework <jesd204>` we need to source the
+:git-hdl:`JESD204 support script <library/jesd204/scripts/jesd204.tcl>`.
+:code:`source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl`.
+In this script, several procedures which simplify the design are defined.
 
 Example with an Intel board
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
