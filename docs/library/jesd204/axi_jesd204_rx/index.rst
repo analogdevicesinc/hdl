@@ -85,6 +85,12 @@ Features
 Files
 --------------------------------------------------------------------------------
 
+.. important::
+
+   To use this wrapper in your project, you need to use the procedure
+   :git-hdl:`adi_tpl_jesd204_rx_create <library/jesd204/scripts/jesd204.tcl#L84>`
+   to instantiate it. 
+
 .. list-table::
    :header-rows: 1
 
