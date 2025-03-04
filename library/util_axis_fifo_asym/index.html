@@ -333,11 +333,11 @@ Content on this topic
   <section id="asymmetric-axi-stream-fifo">
 <span id="util-axis-fifo-asym"></span><h1>Asymmetric AXI Stream FIFO<a class="headerlink" href="#asymmetric-axi-stream-fifo" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 406.8 282" width="406.8" class="no-background"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 406.8 258" width="406.8" class="no-background"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="370.8" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axis"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axis</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">m_axis_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">m_axis_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">s_axis_aclk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">s_axis_aresetn</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">s_axis_tkeep</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_axis"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="54">m_axis</text></a><g transform="translate(388.8,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="78">m_axis_tkeep</text></a><g transform="translate(388.8,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="102">m_axis_empty</text></a><g transform="translate(388.8,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="126">m_axis_almost_empty</text></a><g transform="translate(388.8,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="150">m_axis_level</text></a><g transform="translate(388.8,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="174">s_axis_full</text></a><g transform="translate(388.8,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="198">s_axis_almost_full</text></a><g transform="translate(388.8,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="222">s_axis_room</text></a><g transform="translate(388.8,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="370.8" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="203.4" y="266">util_axis_fifo_asym</text></svg></section>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="370.8" height="204" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axis"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axis</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">m_axis_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">m_axis_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">s_axis_aclk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">s_axis_aresetn</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-m_axis"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="54">m_axis</text></a><g transform="translate(388.8,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="78">m_axis_empty</text></a><g transform="translate(388.8,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="102">m_axis_almost_empty</text></a><g transform="translate(388.8,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="126">m_axis_level</text></a><g transform="translate(388.8,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="150">s_axis_full</text></a><g transform="translate(388.8,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="174">s_axis_almost_full</text></a><g transform="translate(388.8,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="370.8" y="198">s_axis_room</text></a><g transform="translate(388.8,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="370.8" height="204" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="203.4" y="242">util_axis_fifo_asym</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_axis_fifo_asym">Asymmetric AXI Stream FIFO</a> core
 is a simple FIFO (First Input First Output) with
 AXI streaming interfaces, supporting synchronous and asynchronous operation
@@ -402,11 +402,8 @@ clock domain.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">64</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">S_ADDRESS_WIDTH</span></code></td>
-<td class="description"><section>
-<p>Width of the Slave AXI’s address, defines the depth of the FIFO.</p>
-</section>
-</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>Address Width.</p></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
 <td class="range"><p></p></td>
 </tr>
@@ -458,6 +455,22 @@ clock domain.</p>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FIFO_LIMITED</span></code></td>
+<td class="description"><section>
+<p>Enable the address limit that is set to the FIFO with respect to the specified address size</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ADDRESS_WIDTH_PERSPECTIVE</span></code></td>
+<td class="description"><section>
+<p>Sets address size from the perspective of Master (1) or Slave (0)</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
+<td class="range"><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -500,6 +513,11 @@ clock domain.</p>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_tlast</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">TLAST</span></code></td>
 <td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_tkeep</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
+<td><p>in [7:0]</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -545,6 +563,11 @@ clock domain.</p>
 <td><p>out</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_tkeep</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">TKEEP</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -581,12 +604,7 @@ clock domain.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_tkeep</span></code></td>
-<td><p>out [15:0]</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_empty</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_empty</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -594,7 +612,7 @@ clock domain.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_almost_empty</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_almost_empty</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -602,7 +620,7 @@ clock domain.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">m_axis_level</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">m_axis_level</span></code></td>
 <td><p>out [31:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -610,7 +628,7 @@ clock domain.</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aclk</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aclk</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -618,18 +636,13 @@ clock domain.</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aresetn</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_aresetn</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Slave AXI stream reset signal (active low) Bus <code class="docutils literal notranslate"><span class="pre">s_axis</span></code> is synchronous to this reset signal.</p>
 </section>
 </td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axis_tkeep</span></code></td>
-<td><p>in [7:0]</p></td>
-<td><p></p></td>
-<td class="description"><p></p></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axis_full</span></code></td>
 <td><p>out</p></td>
@@ -724,7 +737,7 @@ the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
 is &gt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 1 and FIFO_LIMITED is 0 - This means that the
 address specified is from the perspective of the Master interface. Since
-the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
+the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
 is &gt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 1 - This means that the
 address specified is from the perspective of the Slave interface. Since
@@ -732,7 +745,7 @@ the limit is enabled the FIFO size will be reduced if the S_DATA_WIDTH
 is &lt; M_DATA_WIDTH, leading to a smaller FIFO implementation.</p></li>
 <li><p>ADDRESS_WIDTH_PERSPECTIVE is 0 and FIFO_LIMITED is 0 - This means that the
 address specified is from the perspective of the Slave interface. Since
-the limit is disable the FIFO size will remain the same if the S_DATA_WIDTH
+the limit is disabled the FIFO size will remain the same if the S_DATA_WIDTH
 is &lt; M_DATA_WIDTH, leading to a bigger FIFO implementation.</p></li>
 </ul>
 </section>
