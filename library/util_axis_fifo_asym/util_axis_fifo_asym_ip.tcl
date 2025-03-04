@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -30,6 +30,7 @@ adi_add_bus "s_axis" "slave" \
 		{"s_axis_ready" "TREADY"} \
 		{"s_axis_data" "TDATA"} \
 		{"s_axis_tlast" "TLAST"} \
+		{"s_axis_tkeep" "TKEEP"} \
 	}
 
 adi_add_bus "m_axis" "master" \
@@ -40,11 +41,47 @@ adi_add_bus "m_axis" "master" \
 		{"m_axis_ready" "TREADY"} \
 		{"m_axis_data" "TDATA"} \
 		{"m_axis_tlast" "TLAST"} \
+		{"m_axis_tkeep" "TKEEP"} \
 	}
 
 adi_add_bus_clock "m_axis_aclk" "m_axis" "m_axis_aresetn"
 adi_add_bus_clock "s_axis_aclk" "s_axis" "s_axis_aresetn"
 
+set cc [ipx::current_core]
+
+# FIFO_LIMITED Property
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_user_parameters FIFO_LIMITED -of_objects $cc]
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_hdl_parameters FIFO_LIMITED -of_objects $cc]
+
+set_property -dict [list \
+	"display_name" "FIFO Sample Limited" \
+	"tooltip" "Limit the amount of samples the FIFO can accumulate. Enabling this bit may reduce the size of Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
+] [ipgui::get_guiparamspec -name "FIFO_LIMITED" -component $cc]
+
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_user_parameters ADDRESS_WIDTH_PERSPECTIVE -of_objects $cc]
+
+set_property -dict [list \
+	"value_format" "bool" \
+	"value" "false" \
+] [ipx::get_hdl_parameters ADDRESS_WIDTH_PERSPECTIVE -of_objects $cc]
+
+set_property -dict [list \
+	"display_name" "Address Width Perspective" \
+	"tooltip" "Sets the address width from the perspective of Master if True, or Slave if false." \
+] [ipgui::get_guiparamspec -name "ADDRESS_WIDTH_PERSPECTIVE" -component $cc]
+
 ## TODO: Validate RD_ADDRESS_WIDTH
 
-ipx::save_core [ipx::current_core]
+ipx::create_xgui_files $cc
+ipx::save_core $cc
