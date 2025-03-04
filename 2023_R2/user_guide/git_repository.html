@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>HDL Git repository &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="icon" href="../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Releases" href="releases.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">HDL Git repository</a><ul>
+<li><a class="reference internal" href="#folder-structure">Folder structure</a><ul>
+<li><a class="reference internal" href="#the-projects-are-structured-as-follows">The projects are structured as follows</a></li>
+<li><a class="reference internal" href="#the-library-are-structured-as-follows">The library are structured as follows</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#repository-releases-and-branches">Repository releases and branches</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../library/index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="hdl-git-repository">
+<span id="git-repository"></span><h1>HDL Git repository<a class="headerlink" href="#hdl-git-repository" title="Link to this heading"></a></h1>
+<p>All the HDL sources can be found in the following git repository:</p>
+<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">ADI HDL repository</a></p>
+<p>We assume that the user is familiar with <a class="reference external" href="https://git-scm.com/">git</a>.
+Knows how to
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the repository, how to check its
+<a class="reference external" href="https://git-scm.com/docs/git-status">status</a> or how to
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">switch</a>
+between branches.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A basic git knowledge is required in order to work with these source files,
+if you do not have any, don’t worry!</p>
+<p>There are a lot of great resources and tutorials about git all over the
+<a class="reference external" href="http://lmgtfy.com/?q=git+tutorial">web</a>.</p>
+</div>
+<p>If you want to pull down the sources as soon as possible, just do the
+following few steps:</p>
+<ol class="arabic simple">
+<li><p>Install Git from <a class="reference external" href="https://git-scm.com/">here</a></p></li>
+<li><p>Open up Git bash, change your current directory to a place where you
+want to keep the hdl source</p></li>
+<li><p>Clone the repository using
+<a class="reference external" href="https://help.github.com/articles/cloning-a-repository/">these</a>
+instructions</p></li>
+</ol>
+<section id="folder-structure">
+<h2>Folder structure<a class="headerlink" href="#folder-structure" title="Link to this heading"></a></h2>
+<p>The root of the HDL repository has the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span>
+<span class="o">+--</span> <span class="o">.</span><span class="n">github</span>
+<span class="o">+--</span> <span class="n">docs</span>
+<span class="o">+--</span> <span class="n">library</span>
+<span class="o">+--</span> <span class="n">projects</span>
+<span class="o">+--</span> <span class="n">scripts</span>
+<span class="o">+--</span> <span class="n">Makefile</span>
+<span class="o">+--</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+<span class="o">+--</span> <span class="n">LICENSE</span>
+</pre></div>
+</div>
+<p>The repository is divided into 5 separate sections:</p>
+<ul class="simple">
+<li><p><strong>.github</strong> with all our automations regarding coding checks, GitHub actions</p></li>
+<li><p><strong>docs</strong> with our GitHubIO documentation and regmap source files</p></li>
+<li><p><strong>library</strong> with all the Analog Devices Inc. proprietary IP cores and
+hdl modules, which are required to build the projects</p></li>
+<li><p><strong>projects</strong> with all the currently supported projects</p></li>
+<li><p><strong>scripts</strong> with our environment scripts that set tools versions, etc.</p></li>
+</ul>
+<p>The file <strong>.gitattributes</strong> is used to properly <a class="reference external" href="https://help.github.com/articles/dealing-with-line-endings/">handle
+different</a>
+line endings. And the <strong>.gitignore</strong> specifies intentionally untracked
+files that Git should ignore. The root <strong>Makefile</strong> can be used to build
+all the project of the repository. To learn more about hdl <strong>Makefiles</strong>
+visit the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
+<section id="the-projects-are-structured-as-follows">
+<h3>The projects are structured as follows<a class="headerlink" href="#the-projects-are-structured-as-follows" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
++-- docs
++-- library
++-- projects
+¦   +-- ad40xx_fmc
+¦   +-- ad4110
+¦   .
+¦   +-- common
+¦   +-- dac_fmc_ebz
+¦   ¦   +-- common
+¦   ¦   +-- a10soc
+¦   ¦   +-- vcu118
+¦   ¦   .
+¦   ¦   +-- zcu102
+¦   ¦   +-- Makefile
+¦   ¦   +-- Readme.md
+¦   .
+¦   +-- scripts
+¦   .
+¦   +-- Readme.md
+¦   +-- Makefile
+¦   +-- wiki_summary.sh
++-- README.md
+</pre></div>
+</div>
+<p>Besides the project folders, there are two special folders inside the
+<strong>/hdl/projects</strong>:</p>
+<ul class="simple">
+<li><p><strong>common</strong>: This folder contains all the base designs, for all
+currently supported FPGA development boards. Be aware if you see your
+board on this list, it does not necessarily mean that you can use it
+with your FMC board.</p></li>
+<li><p><strong>scripts</strong>: In all cases, we are interacting with the development
+tools (Vivado/Quartus) using Tcl scripts. In this folder are defined
+all the custom Tcl processes, which are used to create a project,
+define the system and generate programming files for the FPGA.</p></li>
+</ul>
+<p>Inside a project folder, you can find folders with an FPGA carrier name
+(e.g. ZC706) which in general contains all the carrier board specific
+files, and a folder called <strong>common</strong> which contains the project
+specific files. If you can not find your FPGA board name in a project
+folder, that means your FPGA board with that particular FMC board is not
+supported.</p>
+</section>
+<section id="the-library-are-structured-as-follows">
+<h3>The library are structured as follows<a class="headerlink" href="#the-library-are-structured-as-follows" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
++-- library
+¦   +-- ad463x_data_capture
+¦   +-- axi_ad3552r
+¦   +-- axi_ad4858
+¦   +-- axi_ad5766
+¦   +-- axi_ad7606x
+¦   +-- axi_ad7616
+¦   +-- axi_ad7768
+¦   +-- axi_ad777x
+¦   +-- axi_ad9122
+¦   .
+¦   +-- common
+¦   .
+¦   +-- interfaces
+¦   +-- jesd204
+¦   +-- scripts
+¦   .
+¦   +-- Makefile
++-- projects
++-- README.md
+</pre></div>
+</div>
+<p>The library folder contains all the IP cores and common modules. An IP,
+in general, contains Verilog files, which describe the hardware logic,
+constraint files, to ease timing closure, and Tcl scripts, which
+generate all the other files required for IP integration (*_ip.tcl for
+Vivado and *_hw.tcl for Quartus) .</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Regarding Vivado, all the IPs must be ‘packed’ before being used in a
+design.</p>
+<p>To find more information about how to build the libraries, please visit
+the <a class="reference internal" href="build_hdl.html#build-hdl"><span class="std std-ref">Building &amp; Generating programming files</span></a> section.</p>
+</div>
+</section>
+</section>
+<section id="repository-releases-and-branches">
+<h2>Repository releases and branches<a class="headerlink" href="#repository-releases-and-branches" title="Link to this heading"></a></h2>
+<p>The repository may contain multiple branches and tags. The
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">main</a> branch
+is the development branch (latest sources, but not stable). If you check
+out this branch, some builds may fail. If you are not into any kind of
+experimentation, you should only check out one of the release branch.</p>
+<p>All our release branches have the following naming convention:
+<strong>hdl_</strong>[year_of_release]<strong>_r</strong>[1 or 2]. (e.g.
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2014_r2/">hdl_2014_r2</a>)</p>
+<p>ADI does two releases each year when all the projects get an update to
+support the latest tools and get additional new features. ** The
+main branch is always synchronized with the latest release.** If you
+are in doubt, ask us on <a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can find the release notes on the GitHub page of the
+repository:</p>
+<p><a class="reference external" href="https://github.com/analogdevicesinc/hdl/releases">https://github.com/analogdevicesinc/hdl/releases</a></p>
+<p>The latest version of tools used on main can be found at:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/scripts/adi_env.tcl">scripts/adi_env.tcl</a> (<em>required_vivado_version</em> and
+<em>required_quartus_version</em> variables). For Intel Quartus Standard, the version
+is specified in each project that uses it, depending on the carrier.</p>
+</div>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="introduction.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Introduction</a>
+    <a href="releases.html" title="Next document (Alt+Shift+RightArrow)" class="next">Releases</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

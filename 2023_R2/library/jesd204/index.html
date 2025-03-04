@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>JESD204 Interface Framework &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=dcfbb431"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="JESD204B/C Link Transmit Peripheral" href="axi_jesd204_tx/index.html" />
+    <link rel="prev" title="Control Interface" href="../i3c_controller/interface.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">JESD204 Interface Framework</a><ul>
+<li><a class="reference internal" href="#how-to-obtain-a-license">How to Obtain a License</a></li>
+<li><a class="reference internal" href="#fpga-hdl-support">FPGA HDL Support</a><ul>
+<li><a class="reference internal" href="#physical-layer">Physical Layer</a></li>
+<li><a class="reference internal" href="#link-layer">Link Layer</a></li>
+<li><a class="reference internal" href="#transport-layer">Transport Layer</a></li>
+<li><a class="reference internal" href="#interfaces">Interfaces</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#software-support">Software Support</a><ul>
+<li><a class="reference internal" href="#linux">Linux</a></li>
+<li><a class="reference internal" href="#no-os">No-OS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li><a class="reference internal" href="#example-projects">Example Projects</a></li>
+<li><a class="reference internal" href="#additional-information">Additional Information</a><ul>
+<li><a class="reference internal" href="#technical-articles">Technical Articles</a></li>
+<li><a class="reference internal" href="#jesd204b-rapid-prototyping-platforms">JESD204B Rapid Prototyping Platforms</a></li>
+<li><a class="reference internal" href="#jesd204b-analog-to-digital-converters">JESD204B Analog-to-Digital Converters</a></li>
+<li><a class="reference internal" href="#jesd204b-digital-to-analog-converters">JESD204B Digital-to-Analog Converters</a></li>
+<li><a class="reference internal" href="#jesd204b-rf-transceivers">JESD204B RF Transceivers</a></li>
+<li><a class="reference internal" href="#jesd204b-c-mixed-signal-front-ends">JESD204B/C Mixed-Signal Front Ends</a></li>
+<li><a class="reference internal" href="#jesd204b-clocking-solutions">JESD204B Clocking Solutions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="current reference internal" href="#">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="jesd204-interface-framework">
+<span id="jesd204"></span><h1>JESD204 Interface Framework<a class="headerlink" href="#jesd204-interface-framework" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
+standard was created through the JEDEC committee to standardize and reduce the
+number of data inputs/outputs between high-speed data converters and other
+devices, such as FPGAs (field-programmable gate arrays). Fewer interconnects
+simplifies layout and allows smaller form factor realization without impacting
+overall system performance. These attributes are important to address the system
+size and cost constraints of a range of high-speed ADC applications, including
+wireless infrastructure (GSM, EDGE, W-CDMA, LTE, CDMA2000, WiMAX, TD-SCDMA)
+transceiver architectures, software-defined radios, portable instrumentation,
+medical ultrasound equipment, and Mil/Aero applications such as radar and secure
+communications. Analog Devices is an original participating member of the JEDEC
+JESD204 standards committee and we have concurrently developed compliant data
+converter technology and tools, and a comprehensive product roadmap to fully
+enable our customers to take advantage of this significant interfacing
+breakthrough.</p>
+<p>Analog Devices supplies a full-stack supporting JESD204B/C which provides a
+fully integrated system level experience. This solution includes:</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#rapid-prototyping-label"><span class="std std-ref">Reference hardware platforms</span></a> for
+rapid-prototyping</p></li>
+<li><p><a class="reference internal" href="#fpga-hdl-support-label"><span class="std std-ref">FPGA HDL support</span></a> for interfacing JESD204B/C ADCs,
+DACs, and RF Transceivers</p></li>
+<li><p><a class="reference internal" href="#software-support-label"><span class="std std-ref">Software support</span></a> to configure the converter
+devices and FPGA HDL peripherals</p></li>
+</ul>
+</div>
+<section id="how-to-obtain-a-license">
+<h2>How to Obtain a License<a class="headerlink" href="#how-to-obtain-a-license" title="Link to this heading"></a></h2>
+<p>When customers and partners download/use software from GitHub, e-mail or
+similar ways, they are obligated to comply to the terms and conditions of
+the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/LICENSE_ADIJESD204">Software License Agreement</a>.
+This core is released under two different licenses. You may choose either:</p>
+<ul class="simple">
+<li><p>Commercial licenses may be purchased from <a class="icon adi reference external" href="https://www.analog.com/">Analog Devices, Inc.</a>. or any
+authorized distributor by ordering
+<a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/jesd204-interface-framework.html">IP-JESD204</a>.
+This will allow you to use the core in a closed system.</p></li>
+<li><p>GPL 2, this allows you to use the core for any purpose, but you must release
+anything else that links to the JESD204 core (this would normally be your
+algorithmic IP). <strong>You do not need to sign or purchase</strong> anything to use
+the JESD204 core under the GPL license.</p></li>
+</ul>
+<p>There is only one core – the only difference is the license and support.
+If you have a question about the license, you can email
+<a class="reference external" href="mailto:jesd204-licensing&#37;&#52;&#48;analog&#46;com">jesd204-licensing<span>&#64;</span>analog<span>&#46;</span>com</a>.</p>
+</section>
+<section id="fpga-hdl-support">
+<span id="fpga-hdl-support-label"></span><h2>FPGA HDL Support<a class="headerlink" href="#fpga-hdl-support" title="Link to this heading"></a></h2>
+<img alt="../../_images/jesd204_layers2.svg" class="align-right" src="../../_images/jesd204_layers2.svg" />
+<p>The JESD204B/C standard defines multiple layers, each layer being responsible
+for a particular function. The Analog Devices JESD204B/C HDL solution follows
+the current standard and defines 4 layers. Physical layer, link layer, transport
+layer and application layer. For the first three layers, <a class="icon adi reference external" href="https://www.analog.com/">ADI</a> provides
+standard components that can be linked to provide a full JESD204B/C protocol
+processing chain.</p>
+<p>Depending on the FPGA and converter combinations that are being interfaced,
+different components can be chosen for the physical and transport layer. The
+FPGA defines which <strong>physical</strong> layer component should be used, meanwhile the
+interfaced converter defines which <strong>transport</strong> layer component should be used.</p>
+<p>The <strong>link</strong> layer component is selected based on the direction of the
+JESD204B/C link.</p>
+<p>The <strong>application</strong> layer is user-defined and can be used to implement
+application-specific signal processing.</p>
+<img alt="../../_images/jesd204_chain.svg" class="align-center" src="../../_images/jesd204_chain.svg" />
+<section id="physical-layer">
+<span id="jesd204-physical-layer"></span><h3>Physical Layer<a class="headerlink" href="#physical-layer" title="Link to this heading"></a></h3>
+<p>Physical layer peripherals are responsible for interfacing and configuring the
+high-speed serial transceivers. Currently, we have support for GTXE2, GTHE3,
+GTHE4, GTYE4 for AMD Xilinx and Arria 10 transceivers for Intel.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI_ADXCVR</span></a>: JESD204B Gigabit
+Transceiver Register Configuration Peripheral</p></li>
+<li><p><a class="reference internal" href="../xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR</span></a>: JESD204B Gigabit
+Transceiver Interface Peripheral for AMD Xilinx FPGAs</p></li>
+</ul>
+</section>
+<section id="link-layer">
+<h3>Link Layer<a class="headerlink" href="#link-layer" title="Link to this heading"></a></h3>
+<p>Link layer peripherals are responsible for JESD204B/C protocol handling,
+including scrambling/descrambling, lane alignment, character replacement and
+alignment monitoring.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Transmit Peripheral</span></a>:
+JESD204B/C Link Layer Transmit Peripheral</p></li>
+<li><p><a class="reference internal" href="axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Receive Peripheral</span></a>:
+JESD204B/C Link Layer Receive Peripheral</p></li>
+</ul>
+</section>
+<section id="transport-layer">
+<span id="jesd204-transport-layer"></span><h3>Transport Layer<a class="headerlink" href="#transport-layer" title="Link to this heading"></a></h3>
+<p>Transport layer peripherals are responsible for converter specific data framing
+and de-framing.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a>:
+JESD204B/C Transport Layer Receive Peripheral</p></li>
+<li><p><a class="reference internal" href="ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a>:
+JESD204B/C Transport Layer Transmit Peripheral</p></li>
+</ul>
+</section>
+<section id="interfaces">
+<h3>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading"></a></h3>
+<p>Interfaces are a well-defined collection of wires that are used to communicate
+between components. The following interfaces are used to connect components of
+the HDL JESD204B/C processing stack.</p>
+</section>
+</section>
+<section id="software-support">
+<span id="software-support-label"></span><h2>Software Support<a class="headerlink" href="#software-support" title="Link to this heading"></a></h2>
+<section id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/jesd204-fsm-framework">JESD204 (FSM) Interface Linux Kernel Framework</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx">JESD204B/C Transmit Linux Driver</a>:
+Linux driver for the JESD204B transmit core.</p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx">JESD204B/C Receive Linux Driver</a>:
+Linux driver for the JESD204B receive core.</p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/jesd204/axi_adxcvr">JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/jesd_eye_scan">JESD204B Statistical Eyescan Application</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/jesd_status">JESD204B Status Utility</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl">AXI DAC HDL Linux Driver</a></p>
+<ul>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/ad9172">AD9172 DAC Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9009">ADRV9009, ADRV9008 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371">AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl">AXI ADC HDL Linux Driver</a></p>
+<ul>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad9208">AD9208 ADC Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">AD9081 MxFE Linux Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9009">ADRV9009, ADRV9008 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9371">AD9371, AD9375 highly integrated, wideband RF transceiver Linux device driver</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="no-os">
+<h3>No-OS<a class="headerlink" href="#no-os" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_adxcvr">ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers No-OS Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_jesd204_rx">ADI JESD204B/C Receive Peripheral No-OS Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_jesd204_tx">ADI JESD204B/C Transmit Peripheral No-OS Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_adc_core">AXI ADC No-OS Driver</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/uc-drivers/jesd204/axi_dac_core">AXI DAC No-OS Driver</a></p></li>
+</ul>
+</section>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/introduction">Introduction</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/system_architecture">System Architecture</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds">Generic JESD204B block designs</a>.
+This will help you understand the generic blocks for the next steps.</p></li>
+<li><p>Checkout the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">HDL Source</span></a>, and then build either one of:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/hdl_xilinx">HDL AMD Xilinx</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/hdl_altera">HDL Altera</a></p></li>
+</ol>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/tutorial/linux">Linux</a></p></li>
+</ol>
+</section>
+<section id="example-projects">
+<h2>Example Projects<a class="headerlink" href="#example-projects" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc2-ebz">AD-FMCADC2-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc2/vc707">AMD Xilinx VC707</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc2/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc3-ebz">AD-FMCADC3-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc2/vc707">AMD Xilinx VC707</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcadc2/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcadc4-ebz">AD-FMCADC4-EBZ Reference Design (RETIRED)</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2018_r2/projects/fmcadc4/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz">AD-FMCJESDADC1-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcjesdadc1/kc705">AMD Xilinx KC705</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcjesdadc1/vc707">AMD Xilinx VC707</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcjesdadc1/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms8-ebz/quick-start-guide">AD-FMCOMMS8-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms8/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz">AD-FMCOMMS11-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/fmcomms11/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">AD-FMCDAQ2-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/daq2/a10gx">Intel A10Gx (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/kc705">AMD Xilinx KC705</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/kcu105">AMD Xilinx KCU105</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2018_r2/projects/daq2/vc707">AMD Xilinx VC707 (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz">AD-FMCDAQ3-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/daq3/a10gx">Intel A10Gx (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/kcu105">AMD Xilinx KCU105</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq3/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">ADRV9371 Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/adrv9371x/a10gx">Intel A10Gx (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/kcu105">AMD Xilinx KCU105</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9371x/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009">ADRV9009 Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG-SOM Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r1/projects/adrv9009/a10gx">Intel A10Gx (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9009zu11eg">ADRV9009-ZU11EG-SOM</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-dac-fmc-ebz">AD913x/AD917x/AD9144/AD915x/AD916X Reference Design</a></p>
+<ul>
+<li><p>See the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz#readme">list of supported parts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dac_fmc_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9081-FMCA-EBZ Reference Design</span></a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu128">AMD Xilinx VCU128</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html#ad9081-fmca-ebz"><span class="std std-ref">AD9082-FMCA-EBZ Reference Design</span></a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zc706">AMD Xilinx ZC706</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/x-band-platform">AD9081-FMCA-EBZ X-Band Phased Array Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz_x_band/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9213_dual_ebz/ad9213_dual_ebz_hdl">AD9213-DUAL-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_dual_ebz/s10soc">Intel S10SOC</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9213_evb/ad9213_evb_hdl">AD9213-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9213_evb/vcu118">AMD Xilinx VCU118</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad6676-ebz/software/baremetal">AD6676-EBZ Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad6676evb/vc707">AMD Xilinx VC707</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad6676evb/zc706">AMD Xilinx ZC706</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9083/ad9083_evb_reference_hdl">AD9083-FMC</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb/a10soc">Intel A10SOC</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9083_evb/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9208_dual_ebz/ad9208_dual_ebz_hdl">AD9208-DUAL-EBZ reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9208_dual_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9209_fmca_ebz/ad9209_fmca_ebz">AD9209-FMCA-EBZ reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9209_fmca_ebz/vck190">AMD Xilinx VCK190</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9656/reference_hdl">AD9656 HDL Reference Design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9656_fmc/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9695_fmc">AD9695-FMC reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9695_fmc/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad_quadmxfe1_ebz/ad_quadmxfe1_ebz_hdl">AD-QUADMXFE1-EBZ reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_quadmxfe1_ebz/vcu118">AMD Xilinx VCU118</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmclidar1-ebz">AD-FMCLIDAR1-EBZ reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/a10soc">Intel A10SOC (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/zc706">AMD Xilinx ZC706 (RETIRED)</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad_fmclidar1_ebz/zcu102">AMD Xilinx ZCU102 (RETIRED)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9026/ad9026_hdl">ADRV9026 reference design</a></p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026/zcu102">AMD Xilinx ZCU102</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="additional-information">
+<h2>Additional Information<a class="headerlink" href="#additional-information" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary">JESD204B Glossary</a></p></li>
+</ul>
+<section id="technical-articles">
+<h3>Technical Articles<a class="headerlink" href="#technical-articles" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/technical-articles/JESD204B-Survival-Guide.pdf">JESD204B Survival Guide</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/technical-articles/synchronizing-sample-clocks-of-a-data-converter-array">Synchronizing Sample Clocks of a Data Converter Array</a></p></li>
+</ul>
+</section>
+<section id="jesd204b-rapid-prototyping-platforms">
+<span id="rapid-prototyping-label"></span><h3>JESD204B Rapid Prototyping Platforms<a class="headerlink" href="#jesd204b-rapid-prototyping-platforms" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADRV9371">EVAL-ADRV9371</a>
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/mykonos">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-ADRV9008-9009">EVAL-ADRV9008-9009</a>
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009">(User Guide)</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9009-zu11eg">ADRV9009-ZU11EG (User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad-fmcjesdadc1-ebz">AD-FMCJESDADC1-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCOMMS11-EBZ">AD-FMCOMMS11-EBZ</a>
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms11-ebz">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCADC2-EBZ">AD-FMCADC2-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCADC3-EBZ">AD-FMCADC3-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD-FMCADC4-EBZ">AD-FMCADC4-EBZ</a>(RETIRED)</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/AD-FMCDAQ2-EBZ">AD-FMCDAQ2-EBZ</a>
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq2-ebz">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-FMCDAQ3-EBZ">EVAL-FMCDAQ3-EBZ</a>
+<a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz">(User Guide)</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad9172">EVAL-AD917X</a></p></li>
+</ul>
+</section>
+<section id="jesd204b-analog-to-digital-converters">
+<h3>JESD204B Analog-to-Digital Converters<a class="headerlink" href="#jesd204b-analog-to-digital-converters" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6673">AD6673</a>: 80 MHz Bandwidth, Dual IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6674">AD6674</a>: 385 MHz BW IF Diversity Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6676">AD6676</a>: Wideband IF Receiver Subsystem</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6677">AD6677</a>: 80 MHz Bandwidth, IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6684">AD6684</a>: 135 MHz Quad IF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD6688">AD6688</a>: RF Diversity and 1.2GHz BW Observation
+Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9207">AD9207</a>: 12-Bit, 6 GSPS, JESD204B/JESD204C
+Dual Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9208">AD9208</a>: 14-Bit, 3GSPS, JESD204B,
+Dual Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9209">AD9209</a>: 12-Bit, 4GSPS, JESD204B/C, Quad
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9213">AD9213</a>: 12-Bit, 10.25 GSPS, JESD204B, RF
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9234">AD9234</a>: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9250">AD9250</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9625">AD9625</a>: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
+1.3 V/2.5 V Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9656">AD9656</a>: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9680">AD9680</a>: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
+MSPS JESD204B, Dual Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9683">AD9683</a>: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9690">AD9690</a>: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9691">AD9691</a>: 14-Bit, 1.25 GSPS JESD204B,
+Dual Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9694">AD9694</a>: 14-Bit, 500 MSPS JESD204B, Quad
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9695">AD9695</a>: 14-Bit, 1300 MSPS/625 MSPS,
+JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9083">AD9083</a>: 16-Channel, 125 MHz Bandwidth, JESD204B
+Analog-to-Digital Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9094">AD9094</a>: 8-Bit, 1 GSPS, JESD204B, Quad
+Analog-to-Digital Converter</p></li>
+</ul>
+</section>
+<section id="jesd204b-digital-to-analog-converters">
+<h3>JESD204B Digital-to-Analog Converters<a class="headerlink" href="#jesd204b-digital-to-analog-converters" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9135">AD9135</a>: Dual, 11-Bit, high dynamic, 2.8 GSPS,
+TxDAC+® Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9136">AD9136</a>: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9144">AD9144</a>: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9152">AD9152</a>: Dual, 16-Bit, 2.25 GSPS, TxDAC+
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9154">AD9154</a>: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
+Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9161">AD9161</a>: 11-Bit, 12 GSPS, RF Digital-to-Analog
+Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9162">AD9162</a>: 16-Bit, 12 GSPS, RF Digital-to-Analog
+Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9163">AD9163</a>: 16-Bit, 12 GSPS, RF DAC and Digital
+Upconverter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-Bit, 12 GSPS, RF DAC and Direct Digital
+Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9172">AD9172</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9173">AD9173</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9174">AD9174</a>: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
+Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9175">AD9175</a>: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
+Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9176">AD9176</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
+Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9177">AD9177</a>: Quad, 16-Bit, 12 GSPS RF DAC with
+Wideband Channelizers</p></li>
+</ul>
+</section>
+<section id="jesd204b-rf-transceivers">
+<h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
+Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
+Observation Path and DPD</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
+with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
+Transmitter with Observation Path</p></li>
+</ul>
+</section>
+<section id="jesd204b-c-mixed-signal-front-ends">
+<h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+Quad, 12-Bit, 4GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+DUAL, 12-Bit, 6GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
+Observation Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
+</ul>
+</section>
+<section id="jesd204b-clocking-solutions">
+<h3>JESD204B Clocking Solutions<a class="headerlink" href="#jesd204b-clocking-solutions" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/AD9528">AD9528</a>: JESD204B Clock Generator with 14
+LVDS/HSTL Outputs</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/HMC7043">HMC7043</a>: High Performance, 3.2 GHz, 14-Output
+Fanout Buffer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/HMC7044">HMC7044</a>: High Performance, 3.2 GHz, 14-Output
+Jitter Attenuator with JESD204B</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/LTC6952">LTC6952</a>: Ultralow Jitter, 4.5GHz PLL,
+JESD204B/JESD204C</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/products/ADF4371">ADF 4371</a>: Microwave Wideband Synthesizer
+with Integrated VCO</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../i3c_controller/interface.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Control Interface</a>
+    <a href="axi_jesd204_tx/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">JESD204B/C Link Transmit Peripheral</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

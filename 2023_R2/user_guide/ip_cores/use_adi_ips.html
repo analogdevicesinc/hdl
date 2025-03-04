@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Use ADI IPs into your own project &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Interfaces" href="interfaces.html" />
+    <link rel="prev" title="Creating a new IP" href="creating_new_ip.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">Use ADI IPs into your own project</a><ul>
+<li><a class="reference internal" href="#vivado">Vivado</a></li>
+<li><a class="reference internal" href="#quartus">Quartus</a></li>
+<li><a class="reference internal" href="#jesd204">JESD204</a><ul>
+<li><a class="reference internal" href="#id1">Vivado</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spi-engine">SPI Engine</a><ul>
+<li><a class="reference internal" href="#id2">Vivado</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html">HDL architecture</a></li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1" checked=""/><div class="collapse"><a class="reference internal" href="index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="use-adi-ips-into-your-own-project">
+<span id="use-adi-ips"></span><h1>Use ADI IPs into your own project<a class="headerlink" href="#use-adi-ips-into-your-own-project" title="Link to this heading"></a></h1>
+<p>Clone the GitHub repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/analogdevicesinc/hdl.git
+</pre></div>
+</div>
+<section id="vivado">
+<h2>Vivado<a class="headerlink" href="#vivado" title="Link to this heading"></a></h2>
+<p>Navigate to hdl/library and build all the libraries</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>-C<span class="w"> </span>library<span class="w"> </span>all
+</pre></div>
+</div>
+<p>Launch a Vivado GUI and open the Settings window. Go to IP section and expand it.
+There you will find a section called Repository.
+From here you can add the path to the library folder inside the ADI repository
+you just cloned.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;hdl_path&gt;/hdl/library
+</pre></div>
+</div>
+<p>Click apply and Ok to save the changes.
+Wait for the IP Catalog to refresh and now you should be able to see the IPs there,
+under User Repository/Analog Devices section.</p>
+</section>
+<section id="quartus">
+<h2>Quartus<a class="headerlink" href="#quartus" title="Link to this heading"></a></h2>
+<p>Launch a Quartus GUI and select the Tools dropdown from the top menu.
+Click the Options category.
+From the pop-up window, select IP Catalog Search Locations and add the path to
+the library folder inside the ADI repository you just cloned.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;hdl_path&gt;/hdl/library/**/*
+</pre></div>
+</div>
+<p>Wait for the IP Catalog to refresh and now you should be able to see the IPs
+under Library/Analog Devices.</p>
+</section>
+<section id="jesd204">
+<h2>JESD204<a class="headerlink" href="#jesd204" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Vivado<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>For the JESD204 IP, it is not as straightforward as for other modules.
+Here you have an example of an instantiation for this interface:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/daq2/common/daq2_bd.tcl">projects/daq2/common/daq2_bd.tcl</a>.
+First, you will have to source the jesd204.tcl script, inside your
+<code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_bd.tcl</span></code>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>jesd204<span class="o">/</span>scripts<span class="o">/</span>jesd204.tcl
+</pre></div>
+</div>
+<p>The following code is for the TX/DAC part. The RX/ADC is similar.</p>
+<p>Add the PL (Physical Layer).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance axi_adxcvr axi_ad9144_xcvr [list \
+  NUM_OF_LANES $TX_NUM_OF_LANES \
+  QPLL_ENABLE 1 \
+  TX_OR_RX_N 1 \
+]
+</pre></div>
+</div>
+<p>Then you have to add the Data Link Layer with the desired number of lanes.
+For RX you will swap this one with <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">adi_axi_jesd204_tx_create</span><span class="w"> </span>axi_ad9144_jesd<span class="w"> </span><span class="nv">$TX_NUM_OF_LANES</span>
+</pre></div>
+</div>
+<p>Let’s instantiate the TPL (Transport Layer). For RX you will swap this one with
+<code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>adi_tpl_jesd204_tx_create axi_ad9144_tpl $TX_NUM_OF_LANES \
+                                           $TX_NUM_OF_CONVERTERS \
+                                           $TX_SAMPLES_PER_FRAME \
+                                           $TX_SAMPLE_WIDTH \
+</pre></div>
+</div>
+<p>You can optionally add the util_upack2 module for unpacking the data.
+For RX you will swap this one with util_cpack2.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance util_upack2 axi_ad9144_upack [list \
+  NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
+  SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL \
+  SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
+]
+</pre></div>
+</div>
+<p>After you added the modules for RX and TX logic, you will have to link them
+together with the util_adxcvr IP. This IP includes the shared transceiver core,
+so it will appear only once per RX-TX pair.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ad_ip_instance util_adxcvr util_daq2_xcvr [list \
+  RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
+  QPLL_REFCLK_DIV 1 \
+  QPLL_FBDIV_RATIO 1 \
+  QPLL_FBDIV 0x30 \
+  RX_OUT_DIV 1 \
+  TX_OUT_DIV 1 \
+  RX_DFE_LPM_CFG 0x0104 \
+  RX_CDR_CFG 0x0B000023FF10400020 \
+]
+</pre></div>
+</div>
+<p>Add the reference clocks and resets.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrpll</span><span class="w">  </span>tx_ref_clk_0<span class="w"> </span>util_daq2_xcvr<span class="o">/</span>qpll_ref_clk_<span class="o">*</span>
+<span class="nv">ad_xcvrpll</span><span class="w">  </span>axi_ad9144_xcvr<span class="o">/</span>up_pll_rst<span class="w"> </span>util_daq2_xcvr<span class="o">/</span>up_qpll_rst_<span class="o">*</span>
+</pre></div>
+</div>
+<p>Almost done, now it is time to use the <code class="docutils literal notranslate"><span class="pre">ad_xcvrcon</span></code> to connect the pieces
+together.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_xcvrcon</span><span class="w">  </span>util_daq2_xcvr<span class="w"> </span>axi_ad9144_xcvr<span class="w"> </span>axi_ad9144_jesd<span class="w"> </span><span class="k">{</span><span class="nv">0</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="k">{}</span><span class="w"> </span><span class="nv">$MAX_TX_NUM_OF_LANES</span>
+</pre></div>
+</div>
+<p>Now just add the interconnects and the interrupts for the added layers (PL, TPL, LL).</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A60000</span><span class="w"> </span>axi_ad9144_xcvr
+<span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A04000</span><span class="w"> </span>axi_ad9144_tpl
+<span class="nv">ad_cpu_interconnect</span><span class="w"> </span><span class="mh">0x44A90000</span><span class="w"> </span>axi_ad9144_jesd
+</pre></div>
+</div>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">ad_cpu_interrupt</span><span class="w"> </span>ps-10<span class="w"> </span>mb-15<span class="w"> </span>axi_ad9144_jesd<span class="o">/</span>irq
+</pre></div>
+</div>
+</section>
+</section>
+<section id="spi-engine">
+<h2>SPI Engine<a class="headerlink" href="#spi-engine" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Vivado<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>The SPI Engine is a special module too, since it consists of more than one IP.
+In order to use it into your own project, you will have to add all of its components.
+For this example, the code shown here is from the ad4630_fmc project:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad4630_fmc/common/ad463x_bd.tcl">projects/ad4630_fmc/common/ad463x_bd.tcl</a></p>
+<p>Let’s start with sourcing the spi_engine.tcl script inside your <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;_db.tcl</span></code>.</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>spi_engine<span class="o">/</span>scripts<span class="o">/</span>spi_engine.tcl
+</pre></div>
+</div>
+<p>The SPI engine has 4 modules: execution, interconnect, regmap and offload.</p>
+<p>All of the modules are instantiated inside the <code class="docutils literal notranslate"><span class="pre">spi_engine_create</span></code> function.
+This function requires 13 parameters. The default values for them are as follow,
+but feel free to configure it as you want:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="k">{{</span><span class="nv">name</span><span class="w"> </span><span class="s2">&quot;spi_engine&quot;</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_width</span><span class="w"> </span><span class="mi">32</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">async_spi_clk</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_cs</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdi</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">num_sdo</span><span class="w"> </span><span class="mi">1</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_delay</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">echo_sclk</span><span class="w"> </span><span class="mi">0</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">data_mem_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdi_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sdo_fifo_addr_width</span><span class="w"> </span><span class="mi">5</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">sync_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}</span><span class="w"> </span><span class="k">{</span><span class="nv">cmd_fifo_addr_width</span><span class="w"> </span><span class="mi">4</span><span class="k">}}</span>
+</pre></div>
+</div>
+<p>An example of instantiation, using the default values for <code class="docutils literal notranslate"><span class="pre">cmd_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">data_mem_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdi_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sdo_fifo_addr_width</span></code>, <code class="docutils literal notranslate"><span class="pre">sync_fifo_addr_width</span></code> and <code class="docutils literal notranslate"><span class="pre">cmd_fifo_addr_width</span></code>:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="c">#                 name         data_width async_spi_clk num_csn num_sdi     sdi_delay  echo_sclk</span>
+<span class="nv">spi_engine_create</span><span class="w"> </span><span class="s2">&quot;spi_ad463x&quot;</span><span class="w"> </span><span class="mi">32</span><span class="w">         </span><span class="mi">1</span><span class="w">             </span><span class="mi">1</span><span class="w">       </span><span class="nv">$NUM_OF_SDI</span><span class="w"> </span><span class="mi">0</span><span class="w">          </span><span class="mi">1</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>execution<span class="w"> </span>CONFIG.DEFAULT_SPI_CFG<span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="k">;</span>
+
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_0<span class="w"> </span><span class="nv">$NUM_OF_SDI</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_1<span class="w"> </span><span class="nv">$CAPTURE_ZONE</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_2<span class="w"> </span><span class="nv">$CLK_MODE</span>
+<span class="nv">ad_ip_parameter</span><span class="w"> </span>spi_ad463x<span class="o">/</span>axi_regmap<span class="w"> </span>CONFIG.CFG_INFO_3<span class="w"> </span><span class="nv">$DDR_EN</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="creating_new_ip.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Creating a new IP</a>
+    <a href="interfaces.html" title="Next document (Alt+Shift+RightArrow)" class="next">Interfaces</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

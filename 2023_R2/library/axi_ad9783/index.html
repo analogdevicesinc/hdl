@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AXI AD9783 &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=dcfbb431"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="AXI AD9963" href="../axi_ad9963/index.html" />
+    <link rel="prev" title="AXI AD9671" href="../axi_ad9671/index.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AXI AD9783</a><ul>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#functional-description">Functional Description</a><ul>
+<li><a class="reference internal" href="#device-interface-description">Device Interface Description</a></li>
+<li><a class="reference internal" href="#internal-interface-description">Internal Interface Description</a><ul>
+<li><a class="reference internal" href="#valid">VALID</a></li>
+<li><a class="reference internal" href="#enable">ENABLE</a></li>
+<li><a class="reference internal" href="#data">DATA</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#parallel-data-port-interface">Parallel data port interface</a></li>
+<li><a class="reference internal" href="#calibration-of-the-device">Calibration of the device</a></li>
+<li><a class="reference internal" href="#block-diagram">Block Diagram</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#interface">Interface</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#software-guidelines">Software Guidelines</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="axi-ad9783">
+<span id="id1"></span><h1>AXI AD9783<a class="headerlink" href="#axi-ad9783" title="Link to this heading"></a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 349.2 282" width="349.2" class="no-background"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="313.2" height="228" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">dac_clk_in_p</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">dac_clk_in_n</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">dac_dunf</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">dac_ddata_*</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="54">dac_clk_out_p</text></a><g transform="translate(331.2,46.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="78">dac_clk_out_n</text></a><g transform="translate(331.2,70.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="102">dac_data_out_p</text></a><g transform="translate(331.2,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="126">dac_data_out_n</text></a><g transform="translate(331.2,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="150">dac_div_clk</text></a><g transform="translate(331.2,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="174">dac_rst</text></a><g transform="translate(331.2,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="198">dac_valid</text></a><g transform="translate(331.2,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="313.2" y="222">dac_enable_*</text></a><g transform="translate(331.2,214.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="313.2" height="228" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="174.6" y="266">axi_ad9783</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783">AXI AD9783</a> IP core
+can be used to interface the <a class="icon adi reference external" href="https://www.analog.com/AD9783">AD9783</a> device.
+It is a dual DAC with 16 bits resolution, interfaced through LVDS, and with sample
+rates up to 500 MSPS. This documentation only covers the IP core and requires
+that one must be familiar with the device for a complete and better understanding.</p>
+<p>More about the generic framework interfacing DACs can be read in <a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html#axi-dac"><span class="std std-ref">Generic AXI DAC</span></a>.</p>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>AXI Memory-Mapped to Streaming control/status interface</p></li>
+<li><p>PRBS monitoring</p></li>
+<li><p>Internal DDS</p></li>
+<li><p>BIST testing</p></li>
+<li><p>Supports only Xilinx devices</p></li>
+</ul>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v">library/axi_ad9783/axi_ad9783.v</a></p></td>
+<td><p>Verilog source for the AXI AD9783.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v">library/common/up_dac_common.v</a></p></td>
+<td><p>Verilog source for the DAC Common regmap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v">library/common/up_dac_channel.v</a></p></td>
+<td><p>Verilog source for the DAC Channel regmap.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functional-description">
+<h2>Functional Description<a class="headerlink" href="#functional-description" title="Link to this heading"></a></h2>
+<p>The axi_ad9783 cores architecture contains:</p>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783.v#L135">Interface</a>
+module in LVDS mode for Xilinx devices</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783/axi_ad9783_core.v">Transmit</a>
+module, which contains:</p>
+<ul>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/axi_ad9783/axi_ad9783_channel.v">DAC channel processing</a> modules, one for each channel</p>
+<ul>
+<li><p>Different data generators (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/ad_dds.v">DDS</a>, pattern, PRBS)</p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_channel.v">DAC Channel register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_dac_common.v">DAC Common register map</a></p></li>
+</ul>
+</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_axi.v">AXI control and status</a> modules.</p></li>
+</ul>
+<section id="device-interface-description">
+<h3>Device Interface Description<a class="headerlink" href="#device-interface-description" title="Link to this heading"></a></h3>
+<p>The interface also provides a single clock tree for the entire core. This clock
+uses a global buffer that has the minimum skew all across the die. On Xilinx
+devices, this is done via the IBUFGDS, BUFGCE_DIV and BUFG primitives. The clock
+<code class="docutils literal notranslate"><span class="pre">dac_clk_in_p</span></code> is passed through these primitives in order to obtain the
+divided clock: through IBUFGDS, then BUFGCE_DIV to BUFG. The core and the
+interface run at the same clock frequency.</p>
+</section>
+<section id="internal-interface-description">
+<h3>Internal Interface Description<a class="headerlink" href="#internal-interface-description" title="Link to this heading"></a></h3>
+<p>The main purpose of all (including this) ADI IP cores is to provide a common,
+well-defined internal interface within the FPGA. This interface consists of the
+following signals per channel, except for VALID which is common to all channels.</p>
+<section id="valid">
+<h4>VALID<a class="headerlink" href="#valid" title="Link to this heading"></a></h4>
+<p>It is always set to logic 1 and indicates a valid sample on each DATA port.
+Because it is in the transmit (DAC) direction, this indicates the current sample
+is being read by the core.</p>
+</section>
+<section id="enable">
+<h4>ENABLE<a class="headerlink" href="#enable" title="Link to this heading"></a></h4>
+<p>The enable signal is only for software use and it is controlled by the
+corresponding register bit. The core simply reflects the programmed bit as an
+output port. In ADI reference projects, this bit is used to activate the channel
+that one is interested in. It is then used by the UPACK core to route the data
+based on total number of channels and the selected number of channels. As an
+example, AXI_AD9783 supports a total of 2 channels, 64 bits each. Because the
+SERDES factor was chosen to be 8, we have 4 samples of 16 bits each, on I
+channel and Q channel also, resulting in DMA with 128 bits as data width.</p>
+</section>
+<section id="data">
+<h4>DATA<a class="headerlink" href="#data" title="Link to this heading"></a></h4>
+<p>The DATA is the raw analog samples, and 4096 samples generated by PRBS are sent.
+It follows two simple rules.</p>
+<ol class="arabic simple">
+<li><p>The samples are always 16 bits. In the transmit direction, if the DAC data
+width is less than 16 bits, the most significant bits are used. This allows
+the same destination portable across different DAC data widths. In other
+words, if the source is generating a 16 bits tone, the signal appears the
+same across a 12 bit, 14 bit or 16 bit DAC with only the corresponding
+amplitude change. The source can thus be independent of the number of bits
+supported by DAC.</p></li>
+<li><p>The DATA is received and transmitted with most significant sample “newest”
+regardless of the channel width. In other words, the most significant sample
+is the “newest” sample. If the total channel width is 64 bits, it carries 4
+samples (16 bits) per clock. If we were to name these samples as S3 (bits 63
+down to 48), S2 (bits 47 down to 32), S1 (bits 31 down to 16) and S0 (bits 15
+down to 0), the following is true. In the transmit direction, S0 is sent
+first and S3 is sent last to the DAC. The analog samples are S0, S1, S2 and
+S3 across time with S0 being the oldest and S3 being the newest sample.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="parallel-data-port-interface">
+<h2>Parallel data port interface<a class="headerlink" href="#parallel-data-port-interface" title="Link to this heading"></a></h2>
+<p>The parallel port data interface consists of up to 18 differential signals,
+<code class="docutils literal notranslate"><span class="pre">dac_clk_out_*</span></code>, <code class="docutils literal notranslate"><span class="pre">dac_clk_in_*</span></code>, and up to 16 data lines
+(<code class="docutils literal notranslate"><span class="pre">dac_data_out_*</span></code>[15:0]).
+DCO is the output clock generated by the AD9783 that is used to clock out the
+data from the digital data engine.</p>
+<p>The data lines transmit the multiplexed I and Q data words for the I and Q
+DACs, respectively.
+DCI provides timing information about the parallel data and signals the I/Q
+status of the data.</p>
+<p>The incoming LVDS data is latched by an internally generated clock referred to
+as the data sampling signal (DSS). DSS is a delayed version of the main DAC
+clock signal.</p>
+<p>The clock input signal provides timing information about the parallel data, as
+well as indicating the destination (that is, I DAC or Q DAC) of the data. The
+data that is processed on rising edge will be outputted on the I DAC, and the
+data that is on falling edge will be outputted on Q DAC (see figure below).</p>
+<img alt="AXI AD9783 parallel interface" src="../../_images/parallel_interface.svg" />
+</section>
+<section id="calibration-of-the-device">
+<h2>Calibration of the device<a class="headerlink" href="#calibration-of-the-device" title="Link to this heading"></a></h2>
+<p>Calibrating the device means finding the proper value for the SMP_DLY register
+(see datasheet) in order for the PRBS function (PN23 in this case) to work
+properly when generating the 4096 samples of data.</p>
+<p>The BIST feature in the AD9783 is a simple type adder and is a user
+synchronizable BIST feature. When a reading is performed, it adds up all the
+data that was generated on the rising edges of the <code class="docutils literal notranslate"><span class="pre">dac_div_clk</span></code> and it
+writes it in the registers accessible by the user: the low part of the result
+is written in register 0x1B, and the high part in 0x1C. For the sum of data
+from falling edges, read 0x1D and 0x1E respectively.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x20</span>
+<span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x00</span> <span class="c1"># to clear the BIST registers</span>
+<span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0x80</span> <span class="c1"># enable BIST</span>
+<span class="c1"># 4096 samples generated by PN23 are sent</span>
+<span class="c1"># send zeroes</span>
+<span class="n">register</span> <span class="mh">0x1A</span> <span class="o">&lt;-</span> <span class="mh">0xC0</span> <span class="c1"># perform BIST read</span>
+<span class="c1"># read registers 0x1B, 0x1C for the sum of data from rising edges</span>
+<span class="c1"># read registers 0x1D, 0x1E for the sum of data from falling edges</span>
+</pre></div>
+</div>
+<p>In register 0x1A, write 0x20 then 0x00 to clear the BIST registers while the
+IP is writing zeros to the data bits. To enable BIST, write 0x80 to register
+0x1A. Afterwards, 4096 samples of data are generated by PN23 PRBS and are sent
+to the data inputs.
+When all samples are sent, the IP is continuously sending zeros after the
+samples, while the BIST read is being performed. Sending zeroes after the
+samples is required in order to maintain the sums unchanged in the registers.
+Perform a BIST read by writing 0xC0 to register 0x1A to receive the unique sum
+of rising edge data in register 0x1B and register 0x1C and a unique sum of
+falling edge data in register 0x1D and register 0x1E. These register contents
+must always give the same values for the same samples each time they are sent.
+In order to change what data is sent, the DAC_DDS_SEL register value should be
+changed. To send PN23, 0x9 should be written in the register. The address for
+the DAC_DDS_SEL register is calculated by adding 0x418 (for the first channel)
+to the offset found in the devicetree, for the device.</p>
+</section>
+<section id="block-diagram">
+<h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h2>
+<a class="reference internal image-reference" href="../../_images/block_diagram9.svg"><img alt="AXI AD9783 block diagram" src="../../_images/block_diagram9.svg" style="width: 600px;" />
+</a>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Core ID should be unique for each IP in the system</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the technology/generation of the FPGA device</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), 7series (1), ultrascale (2), ultrascale+ (3), versal (4)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the family variant of the FPGA device</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), artix (1), kintex (2), virtex (3), zynq (4), versalprime (5), versalaicore (6), versalpremium (7)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the FPGA’s speed-grade</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), -1 (10), -1L (11), -1H (12), -1HV (13), -1LV (14), -2 (20), -2L (21), -2LV (22), -2MP (23), -2LVC (24), -2LVI (25), -3 (30)</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the device package. The package might affect high-speed interfaces</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), rf (1), fl (2), ff (3), fb (4), hc (5), fh (6), cs (7), cp (8), ft (9), fg (10), sb (11), rb (12), rs (13), cl (14), sf (15), ba (16), fa (17), fs (18), fi (19), vs (20), ls (21)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_TYPE</span></code></td>
+<td class="description"><section>
+<p>1 for CORDIC or 2 for Polynomial</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">2</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_CORDIC_DW</span></code></td>
+<td class="description"><section>
+<p>CORDIC DDS data width</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">16</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_CORDIC_PHASE_DW</span></code></td>
+<td class="description"><section>
+<p>CORDIC DDS phase width</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">16</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DAC_DATAPATH_DISABLE</span></code></td>
+<td class="description"><section>
+<p>Disable DAC processing blocks. Disables DDS</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure these parameters have the appropriate values set.</p>
+</div>
+</section>
+<section id="interface">
+<h2>Interface<a class="headerlink" href="#interface" title="Link to this heading"></a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" name="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed" type="checkbox"></input><label for="3623d596eaa21cdbf8ce55aa9f16eb59631f79ed"><div><p>s_axi</p>
+<section>
+<p>Standard AXI Slave Memory Map interface</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="9c8678b85b2f0b699d25e56f3073c3e1b818cd83" name="9c8678b85b2f0b699d25e56f3073c3e1b818cd83" type="checkbox"></input><label for="9c8678b85b2f0b699d25e56f3073c3e1b818cd83"><div><p>s_axi_aclk</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="82934709fcea30747d09c1ddf7392138a8d663d0" name="82934709fcea30747d09c1ddf7392138a8d663d0" type="checkbox"></input><label for="82934709fcea30747d09c1ddf7392138a8d663d0"><div><p>s_axi_aresetn</p>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="4b85eb8e81722c5742c219564dbbbc39872ee995" name="4b85eb8e81722c5742c219564dbbbc39872ee995" type="checkbox"></input><label for="4b85eb8e81722c5742c219564dbbbc39872ee995"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_clk_in_p</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS input clock; comes from DCOP/N of the AD9783 chip</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_clk_in_n</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS input clock; comes from DCOP/N of the AD9783 chip</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_clk_out_p</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS output clock; goes to DCIP/N of the AD9783 chip</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_clk_out_n</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS output clock; goes to DCIP/N of the AD9783 chip</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_data_out_p</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS output data lines</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_data_out_n</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>LVDS output data lines</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_div_clk</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Frequency divided clock used for clocking the DMA and the UPACK; it is 1/4 compared to the reference input clock</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_rst</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Core reset signal</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_valid</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Indicates valid data request for all channels</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_dunf</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Data underflow, must be connected to the DMA</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_enable_*</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>If set, the channel is enabled (one for each channel)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_ddata_*</span></code></td>
+<td><p>in [63:0]</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Transmitted data output (one for each channel)</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<p>The register map of the core contains instances of several generic register maps
+like ADC common, ADC channel, DAC common, DAC channel etc. The following table
+presents the base addresses of each instance, after that can be found the
+detailed description of each generic register map. The absolute address of a
+register should be calculated by adding the instance base address to the
+registers relative address.</p>
+<div class="table-wrapper docutils container" id="id2">
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Register Map base addresses for axi_ad9783</span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000</p></td>
+<td><p>0x0000</p></td>
+<td><p>BASE</p></td>
+<td><p>See the <a class="reference external" href="#hdl-regmap-COMMON">Base</a> table for more details.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x1000</p></td>
+<td><p>0x4000</p></td>
+<td><p>TX COMMON</p></td>
+<td><p>See the <a class="reference external" href="#hdl-regmap-DAC_COMMON">DAC Common</a> table for more details.</p></td>
+</tr>
+<tr class="row-even"><td><p>0x1000</p></td>
+<td><p>0x4000</p></td>
+<td><p>TX CHANNELS</p></td>
+<td><p>See the <a class="reference external" href="#hdl-regmap-DAC_CHANNEL">DAC Channel</a> table for more details.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-COMMON">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="d7c6517c369404a97b27fd3e5b1a469dc88d1687" name="d7c6517c369404a97b27fd3e5b1a469dc88d1687" type="checkbox"></input><label for="d7c6517c369404a97b27fd3e5b1a469dc88d1687"><p>Base (common to all cores) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Version number. Unique to all cores.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Instance identifier number.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CONFIG</span></code></td>
+<td class="description bold"><section>
+<p>Version and Scratch Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCORRECTION_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the IQ Correction module was not implemented. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DCFILTER_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the DC Filter module was not implemented. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DATAFORMAT_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the Data Format module was not implemented. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USERPORTS_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the logic related to the User Data Format (e.g. decimation) was not implemented. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MODE_1R1T</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the core was implemented in 1 channel mode. (e.g. refer to AD9361 data sheet)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DELAY_CONTROL_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the delay control is disabled for this IP. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_DISABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the DDS is disabled for this IP. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMOS_OR_LVDS_N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>CMOS or LVDS mode is used for the interface. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PPS_RECEIVER_ENABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates the PPS receiver is enabled. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[9]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCALECORRECTION_ONLY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, indicates that the IQ Correction module implements only scale correction.
+IQ correction must be enabled. (as a result of a configuration of the IP instance)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set the transport layer cores (ADC/DAC) have implemented the support for external synchronization signal.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[13]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RD_RAW_DATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, the ADC has the capability to read raw data in register CHAN_RAW_DATA from adc_channel.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
+<td class="description bold"><section>
+<p>PPS Interrupt mask</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PPS_IRQ_MASK</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="description"><section>
+<p>Mask bit for the 1PPS receiver interrupt</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x7</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FPGA_INFO</span></code></td>
+<td class="description bold"><section>
+<p>FPGA device information
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_intel_device_info_enc.tcl">library/scripts/adi_intel_device_info_enc.tcl</a> (Intel encoded values)
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/scripts/adi_xilinx_device_info_enc.tcl">library/scripts/adi_xilinx_device_info_enc.tcl</a> (Xilinx encoded values)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the technology/generation of the FPGA device (arria 10/7series)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FPGA_FAMILY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the family variant of the FPGA device(e.g., SX, GX, GT or zynq, kintex, virtex)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SPEED_GRADE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the FPGA’s speed-grade</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DEV_PACKAGE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the device package. The package might affect high-speed interfaces</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+</div><div><section id="hdl-regmap">
+<section id="hdl-regmap-DAC_COMMON">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="ee92c39f58818bbf00d87f6cfc1fb1ee71657370" name="ee92c39f58818bbf00d87f6cfc1fb1ee71657370" type="checkbox"></input><label for="ee92c39f58818bbf00d87f6cfc1fb1ee71657370"><p>DAC Common (axi_ad) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CE_N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Clock enable, default is enabled(0x0). An inverse version of the signal is exported out of
+the module to control clock enables</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MMCM_RSTN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>MMCM reset only (required for DRP access).
+Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RSTN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reset, default is IN-RESET (0x0), software must write 0x1 to bring up the core.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x11</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x44</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CNTRL_1</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Setting this bit synchronizes channels within a DAC, and across multiple instances.
+This bit self clears.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ARM</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Setting this bit will arm the trigger mechanism sensitive to an external sync signal.
+Once the external sync signal goes high it synchronizes channels within a DAC, and across multiple instances.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_DISARM</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Setting this bit will disarm the trigger mechanism sensitive to an external sync signal.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">MANUAL_SYNC_REQUEST</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Setting this bit will issue an external sync event if it is hooked up inside the fabric.
+This bit has an effect only the EXT_SYNC synthesis parameter is set.
+This bit self clears.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x12</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x48</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CNTRL_2</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDR_DDR_N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Interface type (1 represents SDR, 0 represents DDR)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYMB_OP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select data symbol format mode (0x1)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[14]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYMB_8_16B</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select number of bits for symbol format mode (1 represents 8b, 0 represents 16b)</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[12:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NUM_LANES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>Number of active lanes (1 : CSSI 1-lane, LSSI 1-lane, 2 : LSSI 2-lane, 4 : CSSI 4-lane)</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PAR_TYPE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select parity even (0x0) or odd (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[6]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PAR_ENB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select parity (0x1) or frame (0x0) mode.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[5]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">R1_MODE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select number of RF channels 1 (0x1) or 2 (0x0).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DATA_FORMAT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Select data format 2’s complement (0x0) or offset binary (0x1).
+NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NA</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Reserved</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x13</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">RATECNTRL</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The effective dac rate (the maximum possible rate is dependent on the interface clock).
+The samples are generated at 1/RATE of the interface clock.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x50</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FRAME</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">FRAME</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>The use of frame is device specific. Usually setting this bit to 1 generates a FRAME (1
+DCI clock period) pulse on the interface. This bit self clears.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x15</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x54</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">STATUS1</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK_FREQ</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Interface clock frequency. This is relative to the processor clock and in many cases is
+100MHz. The number is represented as unsigned 16.16 format. Assuming a 100MHz processor
+clock the minimum is 1.523kHz and maximum is 6.554THz. The actual interface clock
+is CLK_FREQ * CLK_RATIO (see below). Note that the actual sampling clock may not be
+the same as the interface clock- software must consider device specific implementation
+parameters to calculate the final sampling clock.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x16</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x58</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">STATUS2</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK_RATIO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Interface clock ratio - as a factor actual received clock. This is implementation specific
+and depends on any serial to parallel conversion and interface type (ddr/sdr/qdr).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x17</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">STATUS3</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">STATUS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Interface status, if set indicates no errors. If not set, there
+are errors, software may try resetting the cores.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x18</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x60</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_CLKSEL</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_CLKSEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Allows changing of the clock polarity. Note: its default value is CLK_EDGE_SEL</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1a</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x68</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>DAC Synchronization Status register</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_SYNC_STATUS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>DAC synchronization status. Will be set to 1 while waiting for the external synchronization signal
+This bit has an effect only the EXT_SYNC synthesis parameter is set.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1c</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x70</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DRP_CNTRL</span></code></td>
+<td class="description bold"><section>
+<p>DRP Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[28]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_RWN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>DRP read (0x1) or write (0x0) select (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[27:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_ADDRESS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x000</span></code></td>
+<td class="description"><section>
+<p>DRP address, designs that contain more than one DRP accessible primitives
+have selects based on the most significant bits (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Reserved for backwards compatibility</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1d</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x74</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[17]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_LOCKED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set indicates the MMCM/PLL is locked</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_STATUS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set indicates busy (access pending). The read data may not be valid if
+this bit is set (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RESERVED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Reserved for backwards compatibility</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1e</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x78</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DRP_WDATA</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_WDATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>DRP write data (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1f</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x7c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DRP_RDATA</span></code></td>
+<td class="description bold"><section>
+<p>DAC Interface Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DRP_RDATA</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>DRP read data (does not include GTX lanes).
+NOT-APPLICABLE if DRP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_RD</span></code></td>
+<td class="description bold"><section>
+<p>DAC Read Configuration Data</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_RD</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Custom Read of the available registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_WR</span></code></td>
+<td class="description bold"><section>
+<p>DAC Write Configuration Data</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_WR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Custom Write of the available registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x88</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">UI_STATUS</span></code></td>
+<td class="description bold"><section>
+<p>User Interface Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IF_BUSY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Interface busy. If set, indicates that the data interface is busy.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">UI_OVF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>User Interface overflow. If set, indicates an overflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">UI_UNF</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>User Interface underflow. If set, indicates an underflow occurred during data transfer at
+the user interface (FIFO interface). Software must write a 0x1 to clear this register
+bit.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x23</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_CTRL</span></code></td>
+<td class="description bold"><section>
+<p>DAC Control Configuration Data</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_CUSTOM_CTRL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Custom Control of the available registers.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x28</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xa0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRL_1</span></code></td>
+<td class="description bold"><section>
+<p>DAC User Control &amp; Status</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_CHANMAX</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>This indicates the maximum number of inputs for the channel data multiplexers. User may add
+different processing modules as inputs to the dac.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2e</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xb8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_IN</span></code></td>
+<td class="description bold"><section>
+<p>DAC GPIO inputs</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_IN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>This reads auxiliary GPI pins of the DAC core</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2f</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xbc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_OUT</span></code></td>
+<td class="description bold"><section>
+<p>DAC GPIO outputs</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_GPIO_OUT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>This controls auxiliary GPO pins of the DAC core
+NOT-APPLICABLE if GPIO_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+</div><div><section id="hdl-regmap">
+<section id="hdl-regmap-DAC_CHANNEL">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="988df3881dd6e54e1dc4feb84da7d989941d5164" name="988df3881dd6e54e1dc4feb84da7d989941d5164" type="checkbox"></input><label for="988df3881dd6e54e1dc4feb84da7d989941d5164"><p>DAC Channel (axi_ad*) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x400</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_1</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[21:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PHASE_DW</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The DDS phase data width offers the HDL parameter configuration with the same
+name. This information is used in conjunction with CHAN_CNTRL_9 and CHAN_CNTRL_10.
+More info at <a class="reference internal" href="../common/ad_dds/index.html#ad-dds"><span class="std std-ref">AD Direct Digital Synthesis</span></a>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS scale for tone 1. Sets the amplitude of the tone. The format is 1.1.14
+fixed point (signed, integer, fractional). The DDS in general runs on 16-bits,
+note that if you do use both channels and set both scale to 0x4000, it is
+over-range. The final output is (tone_1_fullscale * scale_1) +
+(tone_2_fullscale * scale_2). NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x101</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x404</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_2</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS phase initialization for tone 1. Sets the initial phase offset
+of the tone. NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of the phase accumulator. Its value can be calculated
+by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the
+generated output frequency, and f_if is the frequency of the digital
+interface, and clock_ratio is the ratio between the sampling clock and
+the interface clock. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1),
+the phase increment for tone 1 is extended in CHAN_CNTRL_9. NOT-APPLICABLE
+if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x102</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x408</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_3</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_SCALE_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS scale for tone 2. Sets the amplitude of the tone. The format
+is 1.1.14 fixed point (signed, integer, fractional).
+The DDS in general runs on 16-bits, note that if you do use both
+channels and set both scale to 0x4000, it is over-range. The final
+output is (tone_1_fullscale * scale_1) + (tone_2_fullscale * scale_2).
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x103</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_4</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS phase initialization for tone 2. Sets the initial phase offset of the
+tone. If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase init
+for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is
+set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of the phase accumulator. Its value can be calculated by
+<span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{16}) * clkratio / f_{if}\)</span>; where f_out is the generated
+output frequency, and f_if is the frequency of the digital interface, and
+clock_ratio is the ratio between the sampling clock and the interface clock.
+If DDS_PHASE_DW is greater than 16(from CHAN_CNTRL_1), the phase increment
+for tone 2 is extended in CHAN_CNTRL_10. NOT-APPLICABLE if DDS_DISABLE is
+set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x410</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_5</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS data pattern for this channel.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_PATT_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The DDS data pattern for this channel.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x105</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x414</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_6</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_ENB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>if set, enables IQ correction.
+NOT-APPLICABLE if DAC_DP_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_LB_OWR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set, forces DAC_DDS_SEL to 0x8, loopback
+If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_PN_OWR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>IF set, forces DAC_DDS_SEL to 0x09, device specific pnX
+If DAC_LB_OWR and DAC_PN_OWR are both set, they are ignored</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x106</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x418</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_7</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_DDS_SEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<dl class="simple">
+<dt>Select internal data sources (available only if the DAC supports it). \</dt><dd><ul class="simple">
+<li><p>0x00: internal tone (DDS) \</p></li>
+<li><p>0x01: pattern (SED) \</p></li>
+<li><p>0x02: input data (DMA) \</p></li>
+<li><p>0x03: 0x00 \</p></li>
+<li><p>0x04: inverted pn7 \</p></li>
+<li><p>0x05: inverted pn15 \</p></li>
+<li><p>0x06: pn7 (standard O.150) \</p></li>
+<li><p>0x07: pn15 (standard O.150) \</p></li>
+<li><p>0x08: loopback data (ADC) \</p></li>
+<li><p>0x09: pnX (Device specific e.g. ad9361) \</p></li>
+<li><p>0x0A: Nibble ramp (Device specific e.g. adrv9001) \</p></li>
+<li><p>0x0B: 16 bit ramp (Device specific e.g. adrv9001) \</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x107</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_8</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the scale value
+and the format is 1.1.14 (sign, integer and fractional bits). If matrix multiplication is used,
+this is the channel I coefficient and the format is 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IQCOR_COEFF_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>IQ correction (if equipped) coefficient. If scale &amp; offset is implemented, this is the offset value
+and the format is 2’s complement. If matrix multiplication is used, this is the channel Q coefficient
+and the format is 1.1.14 (sign, integer and fractional bits).
+NOT-APPLICABLE if IQCORRECTION_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x420</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_3</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[25]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>The user data type format- if set, indicates big endian (default is little endian).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SIGNED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>The user data type format- if set, indicates signed (2’s complement) data (default is unsigned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_SHIFT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- the amount of right shift for actual samples within the total number
+of bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_TOTAL_BITS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- number of total bits used for a sample. The total number of bits must
+be an integer multiple of 8 (byte aligned).
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_DATATYPE_BITS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00</span></code></td>
+<td class="description"><section>
+<p>The user data type format- number of bits in a sample. This indicates the actual sample data bits.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x109</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x424</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_4</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_M</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This holds the user interpolation M value of the channel that is currently being
+selected on the multiplexer above. The total interpolation factor is of the
+form M/N. NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">USR_INTERPOLATION_N</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>This holds the user interpolation N value of the channel that is currently being selected on
+the multiplexer above. The total interpolation factor is of the form M/N.
+NOT-APPLICABLE if USERPORTS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10a</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x428</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">USR_CNTRLn_5</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_MODE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Enable complex mode. In this mode the driven data to the DAC must be a sequence
+of I and Q sample pairs.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DAC_IQ_SWAP</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>Allows IQ swapping in complex mode. Only takes effect if complex mode
+is enabled.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10b</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42c</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_9</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_1_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The extended DDS phase initialization for tone 1. Sets the initial phase offset
+of the tone. The extended init(phase) value should be calculated according to
+DDS_PHASE_DW value from CHAN_CNTRL_1 NOT-APPLICABLE if DDS_DISABLE is
+set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_1_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of tone 1’s phase accumulator. Its value can be calculated
+by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the
+generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_1
+in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface,
+and clock_ratio is the ratio between the sampling clock and the interface clock.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10c</span> <span class="pre">+</span> <span class="pre">0x16*n</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x430</span> <span class="pre">+</span> <span class="pre">0x58*n</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CHAN_CNTRLn_10</span></code></td>
+<td class="description bold"><section>
+<p>DAC Channel Control &amp; Status (channel - 0)
+Where n is from 0 to 15.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INIT_2_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>The extended DDS phase initialization for tone 2. Sets the initial phase offset
+of the tone. The extended init(phase)  value should be calculated according to
+DDS_PHASE_DW value from CHAN_CNTRL_2 NOT-APPLICABLE if DDS_DISABLE is
+set (0x1).</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DDS_INCR_2_EXTENDED</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000</span></code></td>
+<td class="description"><section>
+<p>Sets the frequency of tone 2’s phase accumulator. Its value can be calculated
+by <span class="math notranslate nohighlight">\(INCR = (f_{out} * 2^{phaseDW}) * clkratio / f_{if}\)</span>; Where f_out is the
+generated output frequency, DDS_PHASE_DW value can be found in CHAN_CNTRL_2
+in case DDS_PHASE_DW is not 16, f_if is the frequency of the digital interface,
+and clock_ratio is the ratio between the sampling clock and the interface clock.
+NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+</div></section>
+<section id="software-guidelines">
+<h2>Software Guidelines<a class="headerlink" href="#software-guidelines" title="Link to this heading"></a></h2>
+<p>The software for this IP can be found as part of the ZCU102 Reference Design
+at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/">ADI Linux repository</a>.
+The IP expects the software run a calibration at least once. It has to find
+out what value for the SMP_DLY (see in datasheet) is good for the PRBS to
+work.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ad9783">library/axi_ad9783</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9783">AD9783</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/">ADI Linux repository</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/en/design-center/evaluation-hardware-and-software/evaluation-boards-kits/EVAL-AD9783.html">EVAL-AD9783</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/xilinx/interposer/ad9783">EVAL-AD9783 with ZCU102 reference design description</a></p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug571-ultrascale-selectio.pdf">Ultrascale SelectIO</a></p></li>
+<li><p><a class="reference external" href="https://www.xilinx.com/support/documentation/user_guides/ug572-ultrascale-clocking.pdf">UltraScale Architecture Clocking Resources User Guide</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../axi_ad9671/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">AXI AD9671</a>
+    <a href="../axi_ad9963/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">AXI AD9963</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

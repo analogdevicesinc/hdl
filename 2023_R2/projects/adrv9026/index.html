@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ADRV9026 HDL reference design &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CN0363 HDL project" href="../cn0363/index.html" />
+    <link rel="prev" title="ADAQ7980-SDZ HDL project" href="../adaq7980_sdz/index.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">ADRV9026 HDL reference design</a><ul>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
+<li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
+<li><a class="reference internal" href="#block-design">Block design</a><ul>
+<li><a class="reference internal" href="#block-diagram">Block diagram</a><ul>
+<li><a class="reference internal" href="#example-block-design-for-single-link-m-8-l-4">Example block design for Single link; M=8; L=4</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
+<li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
+<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
+<li><a class="reference internal" href="#gpios">GPIOs</a></li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
+<li><a class="reference internal" href="#other-considerations">Other considerations</a><ul>
+<li><a class="reference internal" href="#adc-lane-mapping">ADC - lane mapping</a></li>
+<li><a class="reference internal" href="#dac-lane-mapping">DAC - lane mapping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resources">Resources</a><ul>
+<li><a class="reference internal" href="#systems-related">Systems related</a></li>
+<li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
+<li><a class="reference internal" href="#hdl-related">HDL related</a></li>
+<li><a class="reference internal" href="#software-related">Software related</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2"/><div class="collapse"><a class="reference internal" href="../../library/index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../../library/i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/axi_spi_engine.html">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../library/spi_engine/tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../../library/xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../library/common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="adrv9026-hdl-reference-design">
+<span id="adrv9026"></span><h1>ADRV9026 HDL reference design<a class="headerlink" href="#adrv9026-hdl-reference-design" title="Link to this heading"></a></h1>
+<p>The ADRV9026 is a highly integrated, radio frequency (RF) agile transceiver
+offering four independently controlled transmitters, dedicated observation
+receiver inputs for monitoring each transmitter channel, four independently
+controlled receivers, integrated synthesizers, and digital signal processing
+functions providing a complete transceiver solution. The device provides the
+performance demanded by cellular infrastructure applications, such as small
+cell base station radios, macro 3G/4G/5G systems, and massive multiple
+in/multiple out (MIMO) base stations.</p>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9026">ADRV9026/ADRV9029</a></p></li>
+</ul>
+</section>
+<section id="supported-carriers">
+<h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Link to this heading"></a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Carrier</p></th>
+<th class="head"><p>FMC slot</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADRV9026">ADRV9026/ADRV9029</a></p></td>
+<td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html">A10SoC</a></p></td>
+<td><p>FMCA</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
+<td><p>FMC HPC1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Link to this heading"></a></h2>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Link to this heading"></a></h3>
+<p>The data path and clock domains are depicted in the below diagrams:</p>
+<section id="example-block-design-for-single-link-m-8-l-4">
+<h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="../../_images/adrv9026_zcu102_jesd204b.svg"><img alt="ADRV9026 JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/adrv9026_zcu102_jesd204b.svg" style="width: 800px;" />
+</a>
+<p>The Rx links (ADC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>RX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+<p>The Tx links (DAC Path) operate with the following parameters:</p>
+<ul class="simple">
+<li><p>Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16</p></li>
+<li><p>Sample Rate: 250 MSPS</p></li>
+<li><p>Dual link: No</p></li>
+<li><p>TX_DEVICE_CLK: 250 MHz (Lane Rate/40)</p></li>
+<li><p>REF_CLK: 500MHz (Lane Rate/20)</p></li>
+<li><p>JESD204B Lane Rate: 10Gbps</p></li>
+<li><p>QPLL0 or CPLL</p></li>
+</ul>
+</section>
+</section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Link to this heading"></a></h3>
+<p>The block design supports configuration of parameters and scales.</p>
+<p>We have listed a couple of examples at section
+<a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a> and the default modes
+for each project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The parameters for Rx or Tx links can be changed from the
+<strong>system_project.tcl</strong> file, located in
+hdl/projects/adrv9026/$CARRIER/system_project.tcl</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">Lane</span> <span class="pre">Rate</span> <span class="pre">=</span> <span class="pre">I/Q</span> <span class="pre">Sample</span> <span class="pre">Rate</span> <span class="pre">x</span> <span class="pre">M</span> <span class="pre">x</span> <span class="pre">N'</span> <span class="pre">x</span> <span class="pre">(10</span> <span class="pre">\</span> <span class="pre">8)</span> <span class="pre">\</span> <span class="pre">L</span></code></p>
+</div>
+<p>The following are the parameters of this project that can be configured:</p>
+<ul class="simple">
+<li><p>JESD_MODE: used link layer encoder mode</p>
+<ul>
+<li><p>64B66B - 64b66b link layer defined in JESD204C</p></li>
+<li><p>8B10B  - 8b10b link layer defined in JESD204B</p></li>
+</ul>
+</li>
+<li><p>RX_LANE_RATE: lane rate of the Rx link</p></li>
+<li><p>TX_LANE_RATE: lane rate of the Tx link</p></li>
+<li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
+<li><p>[RX/TX]_JESD_L: number of lanes per link</p></li>
+<li><p>[RX/TX]_JESD_S: number of samples per frame</p></li>
+<li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
+</ul>
+</section>
+<section id="clock-scheme">
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="../../_images/adrv9026_zcu102_clocking.svg"><img alt="ADRV9026 ZCU102 clock scheme" class="align-center" src="../../_images/adrv9026_zcu102_clocking.svg" style="width: 500px;" />
+</a>
+</section>
+<section id="cpu-memory-interconnects-addresses">
+<h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Link to this heading"></a></h3>
+<p>The addresses are dependent on the architecture of the FPGA, having an offset
+added to the base address from HDL (see more at <a class="reference internal" href="../../user_guide/architecture.html#architecture"><span class="std std-ref">HDL Architecture</span></a>).</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance</p></th>
+<th class="head"><p>ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
+<td><p>0x84A90000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
+<td><p>0x84AA0000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
+<td><p>0x9c420000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
+<td><p>0x9c400000</p></td>
+</tr>
+<tr class="row-even"><td><p>tx_adrv9026_tpl_core</p></td>
+<td><p>0x84A04000</p></td>
+</tr>
+<tr class="row-odd"><td><p>rx_adrv9026_tpl_core</p></td>
+<td><p>0x84A00000</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9026_tx_xcvr</p></td>
+<td><p>0x84A80000</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_xcvr</p></td>
+<td><p>0x84A60000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="spi-connections">
+<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>SPI type</p></th>
+<th class="head"><p>SPI manager instance</p></th>
+<th class="head"><p>SPI subordinate</p></th>
+<th class="head"><p>CS</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PS</p></td>
+<td><p>spi0</p></td>
+<td><p>ADRV9026</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td><p>AD9528</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gpios">
+<h3>GPIOs<a class="headerlink" href="#gpios" title="Link to this heading"></a></h3>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31.2%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 18.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>HDL GPIO EMIO</p></th>
+<th class="head"><p>Software GPIO</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>(from FPGA view)</p></th>
+<th class="head"></th>
+<th class="head"><p>Zynq MP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>ad9528_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>68</p></td>
+<td><p>146</p></td>
+</tr>
+<tr class="row-even"><td><p>ad9528_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>67</p></td>
+<td><p>145</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_tx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>66</p></td>
+<td><p>144</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_tx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>65</p></td>
+<td><p>143</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_tx3_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>64</p></td>
+<td><p>142</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_tx4_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>63</p></td>
+<td><p>141</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_rx1_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>62</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_rx2_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>61</p></td>
+<td><p>139</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_rx3_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>60</p></td>
+<td><p>138</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_rx4_enable</p></td>
+<td><p>INOUT</p></td>
+<td><p>59</p></td>
+<td><p>137</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_test</p></td>
+<td><p>INOUT</p></td>
+<td><p>58</p></td>
+<td><p>136</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_reset_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>57</p></td>
+<td><p>135</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_gpint1</p></td>
+<td><p>INOUT</p></td>
+<td><p>56</p></td>
+<td><p>134</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_gpint2</p></td>
+<td><p>INOUT</p></td>
+<td><p>55</p></td>
+<td><p>133</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_a</p></td>
+<td><p>INOUT</p></td>
+<td><p>54</p></td>
+<td><p>132</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_b</p></td>
+<td><p>INOUT</p></td>
+<td><p>53</p></td>
+<td><p>131</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_orx_ctrl_c</p></td>
+<td><p>INOUT</p></td>
+<td><p>52</p></td>
+<td><p>130</p></td>
+</tr>
+<tr class="row-even"><td><p>adrv9026_orx_ctrl_d</p></td>
+<td><p>INOUT</p></td>
+<td><p>51</p></td>
+<td><p>129</p></td>
+</tr>
+<tr class="row-odd"><td><p>adrv9026_gpio[0:18]</p></td>
+<td><p>INOUT</p></td>
+<td><p>50:32</p></td>
+<td><p>128:110</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interrupts">
+<h3>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h3>
+<p>Below are the Programmable Logic interrupts used in this project.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Linux ZynqMP</p></th>
+<th class="head"><p>Actual ZynqMP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_adrv9026_tx_jesd</p></td>
+<td><p>10</p></td>
+<td><p>106</p></td>
+<td><p>138</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_jesd</p></td>
+<td><p>11</p></td>
+<td><p>107</p></td>
+<td><p>139</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9026_tx_dma</p></td>
+<td><p>13</p></td>
+<td><p>108</p></td>
+<td><p>140</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9026_rx_dma</p></td>
+<td><p>14</p></td>
+<td><p>109</p></td>
+<td><p>141</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="building-the-hdl-project">
+<h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Link to this heading"></a></h2>
+<p>The design is built upon ADI’s generic HDL reference design framework.
+ADI does not distribute the bit/elf files of these projects so they
+must be built from the sources available <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">here</a>. To get
+the source you must
+<a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
+the HDL repository.</p>
+<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026">projects/adrv9026</a>
+location and run the make command by typing in your command prompt:</p>
+<p><strong>Linux/Cygwin/WSL</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>user@analog:~$ cd hdl/projects/adrv9026/zcu102
+<span class="linenos">2</span>user@analog:~/hdl/projects/adrv9026/zcu102$ make
+<span class="linenos">3</span>
+<span class="linenos">4</span>user@analog:~$ cd hdl/projects/adrv9026/a10soc
+<span class="linenos">5</span>user@analog:~/hdl/projects/adrv9026/a10soc$ make
+</pre></div>
+</div>
+<p>The following dropdowns contain tables with the parameters that can be used to
+configure this project, depending on the carrier used.
+Where a cell contains a — (dash) it means that the parameter doesn’t exist
+for that project (adrv9026/carrier or adrv9026/carrier).</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="7d8d1606be33a13cf7bb26d1fe038e8e05d8b5fb" name="7d8d1606be33a13cf7bb26d1fe038e8e05d8b5fb" type="checkbox"></input><label for="7d8d1606be33a13cf7bb26d1fe038e8e05d8b5fb"><p>Default values of the ``make`` parameters for ADRV9026</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head" colspan="2"><p>Default value of the parameters depending on carrier</p></th>
+</tr>
+<tr class="row-even"><th class="head"></th>
+<th class="head"><p>A10SoC</p></th>
+<th class="head"><p>ZCU102</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td><p>JESD_MODE</p></td>
+<td><p>8B10B</p></td>
+<td><p>8B10B</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_LANE_RATE</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_LANE_RATE</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_M</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX_JESD_L</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>RX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_M</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>TX_JESD_L</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX_JESD_S</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build a HDL project</span></a> user guide.</p>
+</section>
+<section id="other-considerations">
+<h2>Other considerations<a class="headerlink" href="#other-considerations" title="Link to this heading"></a></h2>
+<section id="adc-lane-mapping">
+<h3>ADC - lane mapping<a class="headerlink" href="#adc-lane-mapping" title="Link to this heading"></a></h3>
+<p>Due to physical constraints, Rx lanes are reordered as described in the
+following table.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADC phy Lane</p></th>
+<th class="head"><p>FPGA Rx lane / Logical Lane</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dac-lane-mapping">
+<h3>DAC - lane mapping<a class="headerlink" href="#dac-lane-mapping" title="Link to this heading"></a></h3>
+<p>Due to physical constraints, Tx lanes are reordered as described in the
+following table.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DAC phy lane</p></th>
+<th class="head"><p>FPGA Tx lane / Logical lane</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<section id="systems-related">
+<h3>Systems related<a class="headerlink" href="#systems-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9025">[Wiki] ADRV9026 &amp; ADRV9029 Prototyping Platform User Guide</a></p></li>
+</ul>
+<p>Here you can find the quick start guides available for these evaluation boards:</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 66.7%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
+<th class="head"><p>Zynq UltraScale+ MP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ADRV9026/ADRV9029</p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv9026/quickstart/zynqmp">ZCU102</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="hardware-related">
+<h3>Hardware related<a class="headerlink" href="#hardware-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Product datasheets:</p>
+<ul>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9026">ADRV9026</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://www.analog.com/media/radioverse-adrv9026/adrv9026-system-development-user-guide-ug-1727.pdf">UG-1578, Device User Guide</a></p></li>
+</ul>
+</section>
+<section id="hdl-related">
+<h3>HDL related<a class="headerlink" href="#hdl-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adrv9026">ADRV9026 HDL project source code</a></p></li>
+</ul>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28.6%" />
+<col style="width: 38.1%" />
+<col style="width: 33.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>IP name</p></th>
+<th class="head"><p>Source code link</p></th>
+<th class="head"><p>Documentation link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">here</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_sysid">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_cpack">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_upack">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">library/xilinx/util_adxcvr</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/util_xcvr">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_ADXCVR for Intel</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/intel/axi_adxcvr">library/intel/axi_adxcvr</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adxcvr">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_ADXCVR for AMD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">library/xilinx/axi_adxcvr</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/axi_adxcvr">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>AXI_JESD204_RX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_rx">library/jesd204/axi_jesd204_rx</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_JESD204_TX</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/axi_jesd204_tx">library/jesd204/axi_jesd204_tx</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_tx">[Wiki]</a></p></td>
+</tr>
+<tr class="row-even"><td><p>JESD204_TPL_ADC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc">library/jesd204/ad_ip_jesd204_tpl_adc</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_adc">[Wiki]</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>JESD204_TPL_DAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_dac">library/jesd204/ad_ip_jesd204_tpl_dac</a></p></td>
+<td><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_tpl_dac">[Wiki]</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/docs/hdl/generic_jesd_bds">[Wiki] Generic JESD204B block designs</a></p></li>
+<li><p><a class="reference internal" href="../../library/jesd204/index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
+</ul>
+</section>
+<section id="software-related">
+<h3>Software related<a class="headerlink" href="#software-related" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/adrv9025">[Wiki] ADRV9026 Linux driver wiki page</a></p></li>
+</ul>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../user_guide/index.html#user-guide"><span class="std std-ref">ADI HDL User guide</span></a></p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://www.analog.com/en/index.html">Analog Devices, Inc.</a> will provide <strong>limited</strong> online support for anyone
+using the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/">reference design</a> with <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> components via the
+<a class="icon ez reference external" href="https://ez.analog.com/fpga">EngineerZone</a> FPGA reference designs forum.</p>
+<p>For questions regarding the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> Linux device drivers, device trees, etc.
+from our <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/">Linux GitHub repository</a>, the team will offer support
+on the <a class="icon ez reference external" href="https://ez.analog.com/linux-software-drivers">EngineerZone</a> Linux software drivers forum.</p>
+<p>For questions concerning the <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> No-OS drivers, from our
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/no-OS/">No-OS GitHub repository</a>, the team will offer support on the
+<a class="icon ez reference external" href="https://ez.analog.com/microcontroller-no-os-drivers">EngineerZone</a> microcontroller No-OS drivers forum.</p>
+<p>It should be noted, that the older the tools’ versions and release branches
+are, the lower the chances to receive support from <a class="reference external" href="https://www.analog.com/en/index.html">ADI</a> engineers.</p>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="../adaq7980_sdz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADAQ7980-SDZ HDL project</a>
+    <a href="../cn0363/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">CN0363 HDL project</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>

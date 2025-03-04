@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AXI SPI Engine Module &#8212; HDL  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=cad18f0a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="https://wavedrom.com/skins/default.js"></script>
+    <script src="https://wavedrom.com/wavedrom.min.js"></script>
+    <script defer="" src="../../_static/app.umd.js?v=dcfbb431"></script>
+    <link rel="icon" href="../../_static/icon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SPI Engine Offload Module" href="spi_engine_offload.html" />
+    <link rel="prev" title="SPI Engine Execution Module" href="spi_engine_execution.html" />
+   
+  
+  <meta name="repository" content="hdl">
+  <meta name="version" content="">
+  
+
+
+<style>
+  body {
+    
+  }
+
+  body.dark {
+    
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body:not(.light) {
+      
+    }
+  }
+</style>
+  </head><body>
+  <input type="checkbox" id="input-show-toc">
+  <input type="checkbox" id="input-show-localtoc">
+  <input type="checkbox" id="input-show-repotoc">
+
+  
+  <div class="search-area">
+    <form action="" method="get">
+      <input type="text" name="q" aria-labelledby="search-documentation" value="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="search" placeholder="Search"/>
+      <button value="search" class="icon"></button>
+      <span id="search-progress"></span>
+    </form>
+  </div>
+  
+
+  <header>
+    <div id="left">
+      <label id="show-sidebar" class="icon" for="input-show-toc" title="Show/hide index"></label>
+    </div>
+    <div id="right">
+      <span>
+        <a id="logo-org" href="https://analog.com"></a>
+        <div class="vertical-divider"></div>
+        <label id="show-repotoc" for="input-show-repotoc" title="Show/hide docs" tabindex="0">Docs</label>
+        <a id="logo" href="../../index.html">
+          <div>HDL</div>
+        </a>
+      </span>
+      <span class="reverse">
+        <label id="show-localtoc" class="icon" for="input-show-localtoc" title="Show/hide contents"></label>
+      </span>
+    </div>
+  </header>
+
+
+  <div class="repotoc-tree overlay">
+    <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+  </div>
+    <div class="localtoc">
+      <div class="tocwrapper">
+        <div>
+          <div class="localtoc-header"></div>
+          <a id="scroll-up" href="#top-anchor" title="Back to top"></a>
+        </div>
+        <nav>
+          <ul>
+<li><a class="reference internal" href="#">AXI SPI Engine Module</a><ul>
+<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#configuration-parameters">Configuration Parameters</a></li>
+<li><a class="reference internal" href="#signal-and-interface-pins">Signal and Interface Pins</a></li>
+<li><a class="reference internal" href="#register-map">Register Map</a></li>
+<li><a class="reference internal" href="#theory-of-operation">Theory of Operation</a><ul>
+<li><a class="reference internal" href="#fifos">FIFOs</a></li>
+<li><a class="reference internal" href="#synchronization-events">Synchronization Events</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interrupts">Interrupts</a><ul>
+<li><a class="reference internal" href="#fifo-threshold-interrupts">FIFO Threshold Interrupts</a></li>
+<li><a class="reference internal" href="#sync-event-interrupt">SYNC_EVENT Interrupt</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </nav>
+      </div>
+    </div>
+
+  
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+    <a id="no-logo" href="../../index.html">
+      HDL
+    </a><input id="input-switch-toc" type="checkbox">
+<label id="show-repotoc" for="input-switch-toc">
+All content
+</label>
+<label id="show-toc" for="input-switch-toc">
+Content on this topic
+</label>
+<div class="repotoc-tree">
+  <root>
+  <a href="../../index.html" class="current">HDL</a>
+</root>
+
+</div>
+<div class="toc-tree">
+  <html>
+  <body><ul class="current">
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1" id="toctree-collapse-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/index.html">User Guide</a><label for="toctree-collapse-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/git_repository.html">Git repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/releases.html">Releases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/build_hdl.html">Build a HDL project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/architecture.html">HDL architecture</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-1-1" id="toctree-collapse-1-1"/><div class="collapse"><a class="reference internal" href="../../user_guide/ip_cores/index.html">IP cores</a><label for="toctree-collapse-1-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/creating_new_ip.html">Creating a new IP</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/use_adi_ips.html">Use ADI IPs into your own project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/interfaces.html">Interfaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_adc/index.html">Generic AXI ADC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/third_party.html">Third party forks</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2" id="toctree-collapse-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">IP Cores</a><label for="toctree-collapse-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad3552r/index.html">AXI AD3552R</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7606x/index.html">AXI AD7606x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7616/index.html">AXI AD7616</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad7768/index.html">AXI AD7768</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad777x/index.html">AXI AD777x</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9265/index.html">AXI AD9265</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9361/index.html">AXI AD9361</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9671/index.html">AXI AD9671</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_decimate/index.html">AXI ADC Decimate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adc_trigger/index.html">AXI ADC Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_adxcvr/index.html">AXI_ADXCVR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_clkgen/index.html">AXI CLK Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dac_interpolate/index.html">AXI DAC Interpolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_dmac/index.html">AXI DMAC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_fan_control/index.html">AXI Fan Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_tx/index.html">AXI HDMI TX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_hdmi_rx/index.html">AXI HDMI RX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_laser_driver/index.html">AXI Laser Driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_logic_analyzer/index.html">AXI Logic Analyzer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_pwm_gen/index.html">AXI PWM Generator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_sysid/index.html">AXI System ID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_tdd/index.html">AXI TDD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../data_offload/index.html">Data Offload</a></li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-1" id="toctree-collapse-2-1"/><div class="collapse"><a class="reference internal" href="../i3c_controller/index.html">I3C Controller</a><label for="toctree-collapse-2-1"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_host_interface.html">Host Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/i3c_controller_core.html">Core Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../i3c_controller/interface.html">Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3" checked=""/><div class="collapse"><a class="reference internal" href="index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="spi_engine_execution.html">Execution Module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">AXI Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spi_engine_offload.html">Offload Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spi_engine_interconnect.html">Interconnect Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control-interface.html">Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="offload-control-interface.html">Offload Control Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spi-bus-interface.html">SPI Bus Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="instruction-format.html">Instruction Set Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline-delays.html">Pipeline Delays</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial.html">Tutorial - PulSAR ADC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-4" id="toctree-collapse-2-4"/><div class="collapse"><a class="reference internal" href="../xilinx/index.html">AMD Xilinx Specific IPs</a><label for="toctree-collapse-2-4"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../xilinx/util_adxcvr/index.html">UTIL_ADXCVR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo/index.html">AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_axis_fifo_asym/index.html">Asymmetric AXI Stream FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_cpack2.html">Channel CPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_pack/util_upack2.html">Channel UPACK Utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_extract/index.html">Util Extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_mii_to_rmii/index.html">Util MII to RMII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_rfifo/index.html">Util RFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_wfifo/index.html">Util WFIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../util_var_fifo/index.html">Util VAR FIFO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../common/ad_dds/index.html">AD Direct Digital Synthesis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../../projects/index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4134_fmc/index.html">AD4134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad469x_fmc/index.html">AD469X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad5766_sdz/index.html">AD5766-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7134_fmc/index.html">AD7134-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad719x_asdz/index.html">AD719X-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad738x_fmc/index.html">AD738X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7606x_fmc/index.html">AD7606X-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7616_sdz/index.html">AD7616-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad7768evb/index.html">AD7768-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9265_fmc/index.html">AD9265-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9434_fmc/index.html">AD9434-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9026/index.html">ADRV9026</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0363/index.html">CN0363</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0540/index.html">CN0540</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0561/index.html">CN0561</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/index.html">CN0585</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_adc/index.html">PULSAR-ADC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/pulsar_lvds/index.html">PULSAR-LVDS</a></li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+
+</div>
+        </div>
+      </div>
+
+  <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper" id="top-anchor">
+          <div class="body" role="main">
+            
+  <section id="axi-spi-engine-module">
+<span id="spi-engine-axi"></span><h1>AXI SPI Engine Module<a class="headerlink" href="#axi-spi-engine-module" title="Link to this heading"></a></h1>
+<div><section id="hdl-component-diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 445.2 354" width="445.2" class="no-background"><style>
+                a {
+                    text-decoration: none;
+                }
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="409.2" height="300" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">up_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">up_rstn</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">up_wreq</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">up_waddr</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">up_wdata</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">up_rreq</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">up_raddr</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">spi_clk</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-spi_engine_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="54">spi_engine_ctrl</text></a><g transform="translate(427.2,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-spi_engine_offload_ctrl0"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="78">spi_engine_offload_ctrl0</text></a><g transform="translate(427.2,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="102">up_wack</text></a><g transform="translate(427.2,94.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="126">up_rdata</text></a><g transform="translate(427.2,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="150">up_rack</text></a><g transform="translate(427.2,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="174">irq</text></a><g transform="translate(427.2,166.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="409.2" y="198">spi_resetn</text></a><g transform="translate(427.2,190.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="409.2" height="300" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="222.6" y="338">axi_spi_engine</text></svg></section>
+</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine">AXI SPI Engine</a> IP core
+allows asynchronous interrupt-driven memory-mapped access to a SPI Engine Control
+Interface.
+This is typically used in combination with a software program to dynamically
+generate SPI transactions.</p>
+<p>The peripheral has also support for providing memory-mapped access to one or more
+<a class="reference internal" href="spi_engine_offload.html#spi-engine-offload"><span class="std std-ref">SPI Engine Offload Module</span></a> cores and change its content dynamically at runtime.</p>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading"></a></h2>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine/axi_spi_engine.v">library/spi_engine/axi_spi_engine/axi_spi_engine.v</a></p></td>
+<td><p>Verilog source for the peripheral.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/spi_engine/axi_spi_engine/axi_spi_engine_ip.tcl">library/spi_engine/axi_spi_engine/axi_spi_engine_ip.tcl</a></p></td>
+<td><p>TCL script to generate the Vivado IP-integrator project for the peripheral.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="configuration-parameters">
+<h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Link to this heading"></a></h2>
+<div><section id="hdl-parameters">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Configures the size of the command FIFO.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SYNC_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>SYNC FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Configures the size of the serial-data out FIFO.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_ADDRESS_WIDTH</span></code></td>
+<td class="description"><section>
+<p>Configures the size of the serial-data in FIFO.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">5</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span></code></td>
+<td class="description"><p>Memory Mapped Interface Type.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>AXI4 Memory Mapped (0), ADI uP FIFO (1)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_SPI_CLK</span></code></td>
+<td class="description"><section>
+<p>If set to 1 the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> and <code class="docutils literal notranslate"><span class="pre">spi_clk</span></code> clocks are assumed to be asynchronous.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">False</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_OFFLOAD</span></code></td>
+<td class="description"><section>
+<p>The number of offload control interfaces.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 8.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_CMD_MEM_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>Offload command FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_SDO_MEM_ADDRESS_WIDTH</span></code></td>
+<td class="description"><p>Offload MOSI FIFO address width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">4</span></code></td>
+<td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><p>Core ID.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>From 0 to 255.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
+<td class="description"><p>Parallel data width.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">8</span></code></td>
+<td class="range"><p>From 8 to 256.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
+<td class="description"><p>Number of MISO lines.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p>From 1 to 8.</p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></td>
+<td class="description"><p>Cfg Info 0.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></td>
+<td class="description"><p>Cfg Info 1.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></td>
+<td class="description"><p>Cfg Info 2.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_3</span></code></td>
+<td class="description"><p>Cfg Info 3.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div></section>
+<section id="signal-and-interface-pins">
+<h2>Signal and Interface Pins<a class="headerlink" href="#signal-and-interface-pins" title="Link to this heading"></a></h2>
+<div><section id="bus-interface-s_axi">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="be21216f9c2f696574f009b0ece2b1680559cd62" name="be21216f9c2f696574f009b0ece2b1680559cd62" type="checkbox"></input><label for="be21216f9c2f696574f009b0ece2b1680559cd62"><div><p>s_axi</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code><span>.</span><section>
+<p>AXI-Lite bus subordinate. Memory-mapped AXI-lite bus that provides access to modules register map.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awaddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWVALID</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_awready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">AWREADY</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WDATA</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wstrb</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WSTRB</span></code></td>
+<td><p>in [3:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WVALID</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_wready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WREADY</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BVALID</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_bready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">BREADY</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_araddr</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARADDR</span></code></td>
+<td><p>in [15:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arprot</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARPROT</span></code></td>
+<td><p>in [2:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARVALID</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_arready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ARREADY</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rdata</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RDATA</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rresp</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RRESP</span></code></td>
+<td><p>out [1:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rvalid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RVALID</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_rready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RREADY</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aclk">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="1dc56d29da40dc12d3bc689cbeba25a5a4260acf" name="1dc56d29da40dc12d3bc689cbeba25a5a4260acf" type="checkbox"></input><label for="1dc56d29da40dc12d3bc689cbeba25a5a4260acf"><div><p>s_axi_aclk</p>
+<section>
+<p>All <code class="docutils literal notranslate"><span class="pre">s_axi</span></code> signals and <code class="docutils literal notranslate"><span class="pre">irq</span></code> are synchronous to this clock.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CLK</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-s_axi_aresetn">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="d88bff9de94ceab57dbebdbe77fc8e41985422f5" name="d88bff9de94ceab57dbebdbe77fc8e41985422f5" type="checkbox"></input><label for="d88bff9de94ceab57dbebdbe77fc8e41985422f5"><div><p>s_axi_aresetn</p>
+<section>
+<p>Synchronous active-low reset. Resets the internal state of the peripheral.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">s_axi_aresetn</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RST</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">0</span></code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-spi_engine_ctrl">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="8aa0f3d3094919772de6a3dfb7d83ba37578682a" name="8aa0f3d3094919772de6a3dfb7d83ba37578682a" type="checkbox"></input><label for="8aa0f3d3094919772de6a3dfb7d83ba37578682a"><div><p>spi_engine_ctrl</p>
+<section>
+<p><a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a> subordinate. SPI Engine Control stream that contains commands and data for the execution module.</p>
+</section>
+</div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_ready</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_valid</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_data</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_ready</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdo_data_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_valid</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_data</span></code></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_ready</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sdi_data_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_valid</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdi_data</span></code></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bus-interface-spi_engine_offload_ctrl0">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="889d9d61e6538eed6bbce63d8479c0a65f1d58d8" name="889d9d61e6538eed6bbce63d8479c0a65f1d58d8" type="checkbox"></input><label for="889d9d61e6538eed6bbce63d8479c0a65f1d58d8"><div><p>spi_engine_offload_ctrl0</p>
+<span>Enabled if </span><code class="docutils literal notranslate"><span class="pre">NUM_OFFLOAD</span> <span class="pre">&gt;</span> <span class="pre">0</span></code><span>.</span></div><div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Logical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload0_cmd_wr_en</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_wr_en</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload0_cmd_wr_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">cmd_wr_data</span></code></td>
+<td><p>out [15:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload0_sdo_wr_en</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_wr_en</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload0_sdo_wr_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sdo_wr_data</span></code></td>
+<td><p>out [7:0]</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload0_enable</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">enable</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload0_enabled</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">enabled</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload0_mem_reset</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">mem_reset</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_ready</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_ready</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_valid</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_valid</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">offload_sync_data</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">sync_data</span></code></td>
+<td><p>in [7:0]</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="ports">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="88dd3991a00f45c6c21eb87ad7dbb74628c21d94" name="88dd3991a00f45c6c21eb87ad7dbb74628c21d94" type="checkbox"></input><label for="88dd3991a00f45c6c21eb87ad7dbb74628c21d94"><p>Ports</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Physical Port</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Dependency</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_clk</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_rstn</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_wreq</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_waddr</span></code></td>
+<td><p>in [13:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_wdata</span></code></td>
+<td><p>in [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_wack</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_rreq</span></code></td>
+<td><p>in</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_raddr</span></code></td>
+<td><p>in [13:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">up_rdata</span></code></td>
+<td><p>out [31:0]</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">up_rack</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">MM_IF_TYPE</span> <span class="pre">=</span> <span class="pre">1</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">irq</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>Level-High Interrupt. Interrupt output of the module. Is asserted when at least one of the modules interrupt is pending and unmasked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">spi_clk</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p><code class="docutils literal notranslate"><span class="pre">spi_resetn</span></code> is synchronous to this clock. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl</span></code> is synchronous to this clock domain.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">spi_resetn</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><section>
+<p>This signal is asserted when the module is disabled through the ENABLE register. Typically used as the reset for the SPI Engine modules connected to these modules. Bus <code class="docutils literal notranslate"><span class="pre">spi_engine_ctrl</span></code> is synchronous to this reset signal.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</div></section>
+<section id="register-map">
+<h2>Register Map<a class="headerlink" href="#register-map" title="Link to this heading"></a></h2>
+<div><section id="hdl-regmap">
+<section id="hdl-regmap-AXI_SPI_ENGINE">
+<div class="collapsible docutils container">
+<input class="collapsible_input" id="dc16510b1ae07cfa8df3edd12196670d3c5f7a11" name="dc16510b1ae07cfa8df3edd12196670d3c5f7a11" type="checkbox"></input><label for="dc16510b1ae07cfa8df3edd12196670d3c5f7a11"><p>SPI Engine (axi_spi_engine) register map</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper regmap docutils container">
+<table class="regmap docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>DWORD</p></th>
+<th class="head"><p>BYTE</p></th>
+<th class="head" colspan="4"><p>Reg Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<thead>
+<tr class="row-even"><th class="head" colspan="2"><p></p></th>
+<th class="head"><p>BITS</p></th>
+<th class="head"><p>Field Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">VERSION</span></code></td>
+<td class="description bold"><section>
+<p>Version of the peripheral. Follows semantic versioning. Current version 1.02.01.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MAJOR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0001</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_MINOR</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x02</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">VERSION_PATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x01</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">PERIPHERAL_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Value of the ID configuration parameter.
+In case of multiple instances, each instance will have a unique ID.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SCRATCH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Scratch register useful for debug.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">NUM_OF_SDI</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">NUM_​OF_​SDI</span></code></td>
+<td class="description"><section>
+<p>Number of SDI.
+It is equal with the maximum supported SDI lines in bits.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DATA_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">DATA_​WITH</span></code></td>
+<td class="description"><section>
+<p>Data width of the SDI/SDO parallel interface.
+It is equal with the maximum supported transfer length in bits.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x4</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_MEM_ADDR_WIDTH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDO_MEM_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
+<td class="description"><section>
+<p>Address width for the data (SDO) memory on the Offload Module.
+The size of the memory is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_MEM_ADDRESS_WIDTH</span></code> data words.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMD_MEM_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
+<td class="description"><section>
+<p>Address width for the command memory on the Offload Module.
+The size of the command memory is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_MEM_ADDRESS_WIDTH</span></code> instructions.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x5</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x14</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">FIFO_ADDR_WIDTH</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:24]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
+<td class="description"><section>
+<p>Address width for the SDI FIFO.
+The size of the SDI FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDI_FIFO_ADDRESS_WIDTH</span></code>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[23:16]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x05</span></code></td>
+<td class="description"><section>
+<p>Address width for the SDO FIFO.
+The size of the SDO FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SDO_FIFO_ADDRESS_WIDTH</span></code>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[15:8]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC_FIFO_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
+<td class="description"><section>
+<p>Address width for the synchronization FIFO.
+The size of the synchronization FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**SYNC_FIFO_ADDRESS_WIDTH</span></code>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ADDRESS_WIDTH</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x04</span></code></td>
+<td class="description"><section>
+<p>Address width for the command FIFO.
+The size of the command FIFO is thus <code class="docutils literal notranslate"><span class="pre">2**CMD_FIFO_ADDRESS_WIDTH</span></code>.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x10</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">ENABLE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
+<td class="description"><section>
+<p>Enable register. If the enable bit is set to 1 the internal state of the peripheral is reset.
+For proper operation, the bit needs to be set to 0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set to 0 the CMD_ALMOST_EMPTY interrupt is masked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[1]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set to 0 the SDO_ALMOST_EMPTY interrupt is masked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set to 0 the SDI_ALMOST_FULL interrupt is masked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[3]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set to 0 the SYNC_EVENT interrupt is masked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[4]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SYNC_ID_PENDING</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="description"><section>
+<p>If set to 0 the OFFLOAD_SYNC_ID_PENDING interrupt is masked.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x21</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x84</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW1C</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pending IRQs with mask.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x22</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x88</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Pending IRQs without mask.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x30</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SYNC_ID</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SYNC_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>Last synchronization event ID received from the SPI engine control interface.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x31</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xc4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SYNC_ID</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD_SYNC_ID</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Offload Sync ID.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x34</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO_ROOM</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^CMD_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
+<td class="description"><section>
+<p>Number of free entries in the command FIFO. The reset value of the CMD_FIFO_ROOM register
+depends on the setting of the CMD_FIFO_ADDRESS_WIDTH parameter.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x35</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO_ROOM</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">log2((2^SDO_​FIFO_​ADDRESS_​WIDTH)-1)</span></code></td>
+<td class="description"><section>
+<p>Number of free entries in the serial-data-out FIFO. The reset value of the SDO_FIFO_ROOM
+register depends on the setting of the SDO_FIFO_ADDRESS_WIDTH parameter.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x36</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xd8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_LEVEL</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_LEVEL</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Number of valid entries in the serial-data-in FIFO.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x38</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CMD_FIFO</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CMD_FIFO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>Command FIFO register. Writing to this register inserts an entry into the command FIFO.
+Writing to this register when the command FIFO is full has no effect and the written entry
+is discarded. Reading from this register always returns 0x0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x39</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe4</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDO_FIFO</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDO_FIFO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>SDO FIFO register. Writing to this register inserts an entry into the SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3a</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xe8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>SDI FIFO register. Reading from this register removes the first entry from the SDI FIFO.
+Reading this register when the SDI FIFO is empty will return undefined data.
+Writing to it has no effect.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3b</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xec</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_MSB</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_MSB</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>Store SDI’s 32 bits MSB, if exists.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x3c</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0xf0</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_PEEK</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">SDI_FIFO_PEEK</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>SDI FIFO peek register.
+Reading from this register returns the first entry from the SDI FIFO, but without removing
+it from the FIFO. Reading this register when the SDI FIFO is empty will return undefined
+data. Writing to it has no effect.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x40</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x100</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_EN</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_EN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Set this bit to enable the offload module.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x41</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x104</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_STATUS</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_STATUS</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Offload status register.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x42</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x108</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_MEM_RESET</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_MEM_RESET</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="description"><section>
+<p>Reset the memory of the offload module.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x44</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x110</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_CDM_FIFO</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_CDM_FIFO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>Offload command FIFO register. Writing to this register inserts an entry into the command FIFO
+of the offload module. Writing to this register when the command FIFO is full has no effect
+and the written entry is discarded. Reading from this register always returns 0x0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x45</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x114</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_SDO_FIFO</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">OFFLOAD0_SDO_FIFO</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">WO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0xXXXXXXXX</span></code></td>
+<td class="description"><section>
+<p>Offload SDO FIFO register. Writing to this register inserts an entry into the offload SDO FIFO.
+Writing to this register when the SDO FIFO is full has no effect and the written entry is
+discarded. Reading from this register always returns 0x0.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x80</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x200</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_0</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​0</span></code></td>
+<td class="description"><section>
+<p>Configuration Info.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x81</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x204</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_1</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​1</span></code></td>
+<td class="description"><section>
+<p>Configuration Info.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x82</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x208</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_2</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​2</span></code></td>
+<td class="description"><section>
+<p>Configuration Info.</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x83</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x20c</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">CFG_INFO_3</span></code></td>
+<td class="description bold"><p></p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">CFG_INFO_4</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">CFG_​INFO_​3</span></code></td>
+<td class="description"><section>
+<p>Configuration Info.</p>
+</section>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Access Type</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RO</p></td>
+<td><p>Read-only</p></td>
+<td><p>Reads will return the current register value. Writes have no effect.</p></td>
+</tr>
+<tr class="row-odd"><td><p>RW</p></td>
+<td><p>Read-write</p></td>
+<td><p>Reads will return the current register value. Writes will change the current register value.</p></td>
+</tr>
+<tr class="row-even"><td><p>RW1C</p></td>
+<td><p>Read,write-1-to-clear</p></td>
+<td><p>Reads will return the current register value. Writing the register will clear those bits of the register which were set to 1 in the value written. Bits are set by hardware.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WO</p></td>
+<td><p>Write-only</p></td>
+<td><p>Writes will change the current register value. Reads have no effect.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</div></section>
+<section id="theory-of-operation">
+<h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Link to this heading"></a></h2>
+<p>Typically a software application running on a CPU will be able to execute much
+faster than the SPI engine command will be processed.
+In order to allow the software to execute other tasks while the SPI engine is
+busy processing commands the AXI SPI Engine peripheral offers interrupt-driven
+notification which can be used to notify the software when a SPI command has
+been executed.
+In order to reduce the necessary context switches the AXI SPI Engine peripheral
+incorporates FIFOs to buffer the command as well as the data streams.</p>
+<section id="fifos">
+<h3>FIFOs<a class="headerlink" href="#fifos" title="Link to this heading"></a></h3>
+<p>The AXI SPI Engine peripheral has three FIFOs, one for each of the command, SDO
+and SDI streams.
+The size of the FIFOs can be configured by setting the CMD_FIFO_ADDRESS_WIDTH,
+SDO_FIFO_ADDRESS_WIDTH and SDI_FIFO_ADDRESS_WIDTH parameters.</p>
+<p>One end of the FIFOs are connected to a memory-mapped register and can be
+accessed via the AXI-Lite interface.
+The other end is directly connected to the matching stream of the
+<a class="reference internal" href="control-interface.html#spi-engine-control-interface"><span class="std std-ref">SPI Engine Control Interface</span></a>.</p>
+<p>Data can be inserted into the command FIFO by writing to the CMD_FIFO register
+and new data can be inserted into the SDO_FIFO register.
+If an application attempts to write to a FIFO while the FIFO is already full the
+data is discarded and the state of the FIFO remains unmodified.
+The number of empty entries in the command and SDO FIFO can be queried by
+reading the CMD_FIFO_ROOM or SDO_FIFO_ROOM register.</p>
+<p>Data can be removed from the SDI FIFO by reading from the SDI_FIFO register.
+If an application attempts to read data while the FIFO is empty undefined data
+is returned and the state of the FIFO remains unmodified.
+It is possible to read the first entry in the SDI FIFO without removing it by
+reading from the SDI_FIFO_PEEK register.
+The number of valid entries in the SDI FIFO register can be queried by reading
+the SDI_FIFO_LEVEL register.</p>
+<p>If the peripheral is disabled by setting the ENABLE register to 0 any data
+stored in the FIFOs is discarded and the state of the FIFO is reset.</p>
+</section>
+<section id="synchronization-events">
+<h3>Synchronization Events<a class="headerlink" href="#synchronization-events" title="Link to this heading"></a></h3>
+<p>Synchronization events can be used to notify the software application about the
+progress of the command stream.
+An application can insert a SYNC instruction at any point in the command stream.
+If the execution module reaches the SYNC instruction it will generate an event
+on the SYNC stream.
+When this event is received by the AXI SPI Engine peripheral it will update the
+SYNC_ID register with the received event ID and will assert the SYNC_EVENT
+interrupt.</p>
+<p>Typically the SYNC instruction should be inserted after the last instruction in
+a SPI transaction.
+This will allow the application to be notified about the completion of the
+transaction and allows it to do further processing based on the result of the
+transaction.</p>
+<p>It is recommended that synchronization IDs are generated in a monotonic
+incrementing or decrementing manner.
+This makes it possible to easily check if an event has completed by checking if
+it is less or equal (incrementing IDs) or more or equal (decrementing IDs) to
+the ID of the last completed event.</p>
+</section>
+</section>
+<section id="interrupts">
+<h2>Interrupts<a class="headerlink" href="#interrupts" title="Link to this heading"></a></h2>
+<p>The SPI Engine AXI peripheral has 4 internal interrupts, which are
+asserted when:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CMD_ALMOST_EMPTY</span></code>: the level falls bellow the almost empty level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SDO_ALMOST_EMPTY</span></code>: the level falls bellow the almost empty level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SDI_ALMOST_FULL</span></code>: the level rises above the almost full level.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code>: a new synchronization event arrives.</p></li>
+</ul>
+<p>The peripheral has 1 external interrupt which is supposed to be connected to the
+upstream interrupt controller.
+The external interrupt is a logical OR-operation over the internal interrupts,
+meaning if at least one of the internal interrupts is asserted the external
+interrupt is asserted and only if all internal interrupts are de-asserted the
+external interrupt is de-asserted.</p>
+<p>In addition, each interrupt has a mask bit which can be used to stop the propagation
+of the internal interrupt to the external interrupt.
+If an interrupt is masked it will count towards the external interrupt state as if
+it were not asserted.</p>
+<p>The mask bits can be modified by writing to the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> register.
+The raw interrupt status can be read from the <code class="docutils literal notranslate"><span class="pre">IRQ_SOURCE</span></code> register and the
+combined state of the <code class="docutils literal notranslate"><span class="pre">IRQ_MASK</span></code> and raw interrupt state can be read from the
+<code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">IRQ_PENDING</span> <span class="o">=</span> <span class="n">IRQ_SOURCE</span> <span class="o">&amp;</span> <span class="n">IRQ_MASK</span><span class="p">;</span>
+<span class="n">IRQ</span> <span class="o">=</span> <span class="o">|</span><span class="n">IRQ_PENDING</span><span class="p">;</span>
+</pre></div>
+</div>
+<section id="fifo-threshold-interrupts">
+<h3>FIFO Threshold Interrupts<a class="headerlink" href="#fifo-threshold-interrupts" title="Link to this heading"></a></h3>
+<p>The FIFO threshold interrupts can be used by software for flow control of the
+command, <code class="docutils literal notranslate"><span class="pre">SDI</span></code> and <code class="docutils literal notranslate"><span class="pre">SDO</span></code> streams.</p>
+<p>If an application wants to send more data than what fits into the FIFO can write
+samples into the FIFO until it is full then suspend operation wait for the almost
+empty interrupt and continue writing data to the FIFO.
+Similarly, when the application wants to read more data than what fits into FIFO
+it should listen for the almost full interrupt and read data from the FIFO when
+it occurs.</p>
+<p>The FIFO threshold interrupt is asserted when then FIFO level rises above the
+watermark and is automatically de-asserted when the level drops below the
+watermark.</p>
+</section>
+<section id="sync-event-interrupt">
+<h3>SYNC_EVENT Interrupt<a class="headerlink" href="#sync-event-interrupt" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> interrupt is asserted when a new sync event is received from
+the sync stream.
+An application that generated a <code class="docutils literal notranslate"><span class="pre">SYNC</span></code> instruction on the command stream can
+use this interrupt to be notified when the sync instruction has been completed.</p>
+<p>To de-assert the <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> interrupt, the application needs to acknowledge its
+reception by writing 1 to the <code class="docutils literal notranslate"><span class="pre">SYNC_EVENT</span></code> bit in the <code class="docutils literal notranslate"><span class="pre">IRQ_PENDING</span></code> register.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/javascript">
+        function init() {
+            WaveDrom.ProcessAll();
+        }
+        window.onload = init;
+    </script>
+
+          </div>
+              <div class="related">
+                &nbsp;
+    <a href="spi_engine_execution.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">SPI Engine Execution Module</a>
+    <a href="spi_engine_offload.html" title="Next document (Alt+Shift+RightArrow)" class="next">SPI Engine Offload Module</a>
+              </div>
+          
+        </div>
+      </div>
+  </div>
+
+  <div id="vertical-border"></div>
+
+  <label id="cancel-area-show-toc" for="input-show-toc"></label>
+  <label id="cancel-area-show-localtoc" for="input-show-localtoc"></label>
+    <footer>
+      &#169;2024, Analog Devices, Inc.
+      
+      |
+      Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/analogdevicesinc/doctools">Doctools</a>
+      
+    </footer>
+  </body>
+</html>
