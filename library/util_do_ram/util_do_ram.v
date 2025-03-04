@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,8 +40,9 @@
 module util_do_ram #(
   parameter SRC_DATA_WIDTH = 512,
   parameter DST_DATA_WIDTH = 128,
-
-  parameter LENGTH_WIDTH = 16
+  parameter LENGTH_WIDTH = 16,
+  parameter RD_DATA_REGISTERED = 0,
+  parameter RD_FIFO_ADDRESS_WIDTH = 2
 ) (
   input                                    wr_request_enable,
   input                                    wr_request_valid,
@@ -83,7 +84,7 @@ module util_do_ram #(
   //   dst = m_axis_* = rd
   //
 
-  localparam RAM_LATENCY = 2;
+  localparam RAM_LATENCY = RD_DATA_REGISTERED + 2;
 
   localparam SRC_ADDR_ALIGN = $clog2(SRC_DATA_WIDTH/8);
   localparam DST_ADDR_ALIGN = $clog2(DST_DATA_WIDTH/8);
@@ -91,22 +92,37 @@ module util_do_ram #(
   localparam SRC_ADDRESS_WIDTH = LENGTH_WIDTH - SRC_ADDR_ALIGN;
   localparam DST_ADDRESS_WIDTH = LENGTH_WIDTH - DST_ADDR_ALIGN;
 
-  wire  wr_enable;
-  wire  [DST_DATA_WIDTH-1:0] rd_data;
-  wire  [DST_DATA_WIDTH/8-1:0] rd_keep;
-  wire  [1:0] rd_fifo_room;
-  wire        rd_enable;
-  wire        rd_last_beat;
-  wire        rd_fifo_s_ready;
-  wire        rd_fifo_s_valid;
+  wire                        wr_enable;
+  wire                        wr_last_beat;
+  wire                        rd_early_finish;
+  wire                        rd_enable;
+  wire [1:0]                  rd_fifo_room;
+  wire                        rd_last_beat;
+  wire [DST_DATA_WIDTH-1:0]   rd_data;
+  wire [DST_DATA_WIDTH/8-1:0] rd_keep;
+  wire                        rd_valid_s;
+  wire                        rd_last_s;
+  wire [DST_DATA_WIDTH-1:0]   rd_data_s;
+  wire [DST_DATA_WIDTH/8-1:0] rd_keep_s;
+  wire                        rd_fifo_s_ready;
+  wire                        rd_fifo_s_valid;
+  wire                        rd_fifo_s_last;
+  wire [DST_DATA_WIDTH-1:0]   rd_fifo_s_data;
+  wire [DST_DATA_WIDTH/8-1:0] rd_fifo_s_keep;
 
-  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
+  reg                         wr_full = 1'b0;
   reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
+  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
+  reg                         rd_active = 1'b0;
+  reg [1:0]                   rd_req_cnt = 2'b0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
+  reg                         rd_valid_l1 = 1'b0;
+  reg                         rd_valid_l2 = 1'b0;
+  reg                         rd_last_l1 = 1'b0;
+  reg                         rd_last_l2 = 1'b0;
   reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
   reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
-  reg rd_pending = 1'b0;
 
   always @(posedge s_axis_aclk) begin
     if (~s_axis_aresetn)
@@ -122,7 +138,6 @@ module util_do_ram #(
       wr_length <= wr_request_length[LENGTH_WIDTH-1:SRC_ADDR_ALIGN];
     end
 
-  wire wr_last_beat;
   assign wr_last_beat = s_axis_valid & s_axis_ready & ((wr_addr == wr_length) | s_axis_last);
 
   always @(posedge s_axis_aclk) begin
@@ -147,7 +162,6 @@ module util_do_ram #(
       wr_response_measured_length <= {wr_addr, {SRC_ADDR_ALIGN{1'b1}}};
   end
 
-  reg wr_full = 1'b0;
   // Protect against larger transfers than storage
   always @(posedge s_axis_aclk) begin
     if (wr_request_valid & wr_request_ready)
@@ -197,8 +211,6 @@ module util_do_ram #(
     .addrb (rd_addr),
     .doutb (rd_keep));
 
-  reg rd_active = 1'b0;
-  reg [1:0] rd_req_cnt = 2'b0;
   always @(posedge m_axis_aclk) begin
     if (~rd_request_enable)
       rd_req_cnt <= 2'b0;
@@ -214,8 +226,6 @@ module util_do_ram #(
     if (rd_request_valid & rd_request_ready)
       rd_length <= rd_request_length[LENGTH_WIDTH-1:DST_ADDR_ALIGN];
   end
-
-  wire rd_early_finish;
 
   assign rd_early_finish = rd_active & ~rd_request_enable;
   assign rd_last_beat = (rd_addr == rd_length) & rd_enable;
@@ -242,43 +252,57 @@ module util_do_ram #(
   end
 
   // Delay read enable with latency cycles
-  // <TODO> make this depend on parameter
-  reg rd_valid_l1 = 1'b0;
-  reg rd_valid_l2 = 1'b0;
-  reg rd_last_l1 = 1'b0;
-  reg rd_last_l2 = 1'b0;
   always @(posedge m_axis_aclk) begin
     rd_valid_l1 <= rd_enable;
     rd_last_l1 <= rd_last_beat;
   end
 
+  util_pipeline_stage #(
+    .WIDTH(DST_DATA_WIDTH*9/8+2),
+    .REGISTERED(RD_DATA_REGISTERED)
+  ) i_rd_pipeline_stage (
+    .clk(m_axis_aclk),
+    .in({
+      rd_valid_l1,
+      rd_last_l1,
+      rd_data,
+      rd_keep}),
+    .out({
+      rd_valid_s,
+      rd_last_s,
+      rd_data_s,
+      rd_keep_s}));
+
   // Extra pipeline to be sucked in by the BRAM/URAM output stage
   always @(posedge m_axis_aclk) begin
-    if (rd_valid_l1)
-      rd_data_l2 <= rd_data;
+    if (rd_valid_s)
+      rd_data_l2 <= rd_data_s;
   end
 
   always @(posedge m_axis_aclk) begin
-    if (rd_valid_l1)
-      rd_keep_l2 <= rd_keep;
+    if (rd_valid_s)
+      rd_keep_l2 <= rd_keep_s;
   end
 
   always @(posedge m_axis_aclk) begin
-    if (rd_valid_l1)
+    if (rd_valid_s)
       rd_valid_l2 <= 1'b1;
     else if (rd_fifo_s_ready)
       rd_valid_l2 <= 1'b0;
 
-    if (rd_valid_l1)
-      rd_last_l2 <= rd_last_l1;
+    if (rd_valid_s)
+      rd_last_l2 <= rd_last_s;
   end
 
   assign rd_fifo_s_valid = rd_valid_l2;
+  assign rd_fifo_s_last = rd_last_l2;
+  assign rd_fifo_s_data = rd_data_l2;
+  assign rd_fifo_s_keep = rd_keep_l2;
 
   // Read datapath to AXIS logic
   util_axis_fifo #(
     .DATA_WIDTH(DST_DATA_WIDTH),
-    .ADDRESS_WIDTH(2),
+    .ADDRESS_WIDTH(RD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(0),
     .M_AXIS_REGISTERED(0),
     .TLAST_EN(1),
@@ -289,10 +313,10 @@ module util_do_ram #(
     .s_axis_valid(rd_fifo_s_valid),
     .s_axis_ready(rd_fifo_s_ready),
     .s_axis_full(),
-    .s_axis_data(rd_data_l2),
+    .s_axis_data(rd_fifo_s_data),
     .s_axis_room(rd_fifo_room),
-    .s_axis_tkeep(rd_keep_l2),
-    .s_axis_tlast(rd_last_l2),
+    .s_axis_tkeep(rd_fifo_s_keep),
+    .s_axis_tlast(rd_fifo_s_last),
     .s_axis_almost_full(),
 
     .m_axis_aclk(m_axis_aclk),
