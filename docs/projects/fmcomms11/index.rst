@@ -66,6 +66,53 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: FMCOMMS11 block diagram
 
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+   
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADCFIFO
+        - :git-hdl:`axi_adcfifo <library/xilinx/axi_adcfifo>`
+        - ---
+        - ---
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr amd`
+        - 2 instances, one for Rx and one for Tx
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 2 instances, one for Rx and one for Tx
+      * - RX JESD LINK
+        - axi_ad9625_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - axi_ad9625_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_ad9162_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - axi_ad9162_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_DACFIFO
+        - :git-hdl:`util_dacfifo <library/util_dacfifo>`
+        - ---
+        - ---
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -224,7 +271,7 @@ as data capture cannot be done continuously.
 .. collapsible:: JESD204 Transport layer
 
    The transport layer is instantiated in the next lines, for both
-   :ref:`TX <ad_ip_jesd204_tpl_dac>` and :ref:`Rx <ad_ip_jesd204_tpl_adc>`.
+   :ref:`TX <ad_ip_jesd204_tpl_dac>` and :ref:`RX <ad_ip_jesd204_tpl_adc>`.
    The TPL peripherals are responsible for converter specific data framing and
    de-framing and provide a generic FIFO interface to the rest of the system.
 
@@ -375,9 +422,9 @@ In this case, both ADC and DAC sides are using the same remapping scheme.
 With the following remapping scheme: {0 1 2 3 7 4 6 5},
 where the **n**-th logical lane is mapped to the **list[n]** physical lane.
 
-======== ===========================
-Phy Lane FPGA Rx lane / Logical Lane
-======== ===========================
+======== ========================
+Phy Lane FPGA lane / Logical Lane
+======== ========================
 0        0
 1        1
 2        2
@@ -386,7 +433,7 @@ Phy Lane FPGA Rx lane / Logical Lane
 5        7
 6        6
 7        4
-======== ===========================
+======== ========================
 
 Resources
 -------------------------------------------------------------------------------
