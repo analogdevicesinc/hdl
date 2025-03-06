@@ -475,6 +475,9 @@ Intel platforms
    * - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
      - ---
+   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>` (Agilex 7 I-Series)
+     - FMC+ (16 @ 32 Gbps)
+     - FMC+ (16 @ 32 Gbps)
 
 .. note::
 
@@ -500,6 +503,9 @@ VADJ values
    * - :intel:`S10SoC </content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
      - **\*3.3V**/1.8V/1.2V
      - **\*3.3V**/1.8V/1.2V
+   * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
+     - 1.8V/**\*1.2V**
+     - 1.8V/**\*1.2V**
 
 .. note::
 
