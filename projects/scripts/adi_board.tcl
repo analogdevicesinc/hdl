@@ -7,6 +7,8 @@ package require math
 
 ## Global variables for interconnect interface indexing
 #
+set sys_cpu_interconnect_instance 0
+set sys_cpu_interconnect_cascade 0
 set sys_hpc0_interconnect_index -1
 set sys_hpc1_interconnect_index -1
 set sys_hp0_interconnect_index -1
@@ -968,15 +970,38 @@ proc ad_mem_hpx_interconnect {p_sel p_clk p_name} {
 proc ad_hpmx_interconnect {p_sel p_address p_name {p_intf_name {}}} {
 
   global sys_zynq
+  global sys_cpu_interconnect_instance
+  global sys_cpu_interconnect_cascade
   global use_smartconnect
 
-  set interconnect_name [format "axi_%s_interconnect" [string tolower $p_sel]]
+  set interconnect_name_intermediate [format "axi_%s_interconnect" [string tolower $p_sel]]
 
-  if {[catch {
-    set interconnect_index [get_property CONFIG.NUM_MI [get_bd_cells $interconnect_name]]
-  } err]} {
-    set interconnect_index 0
+  if {$sys_cpu_interconnect_cascade == 1} {
+    set interconnect_name ${interconnect_name_intermediate}_${sys_cpu_interconnect_instance}
+
+    if {[catch {
+      set interconnect_index [get_property CONFIG.NUM_MI [get_bd_cells $interconnect_name]]
+    } err]} {
+      set interconnect_index 0
+    }
+
+    if {$interconnect_index == 15} {
+      set_property CONFIG.NUM_MI [expr $interconnect_index + 1] [get_bd_cells $interconnect_name]
+      set interconnect_index 0
+
+      set sys_cpu_interconnect_instance [expr $sys_cpu_interconnect_instance + 1]
+      set interconnect_name ${interconnect_name_intermediate}_${sys_cpu_interconnect_instance}
+    }
+  } else {
+    set interconnect_name $interconnect_name_intermediate
+
+    if {[catch {
+      set interconnect_index [get_property CONFIG.NUM_MI [get_bd_cells $interconnect_name]]
+    } err]} {
+      set interconnect_index 0
+    }
   }
+
   set i_str [format "M%02d" $interconnect_index]
 
   if {$i_str eq "M00"} {
@@ -996,28 +1021,34 @@ proc ad_hpmx_interconnect {p_sel p_address p_name {p_intf_name {}}} {
       ad_connect sys_cpu_resetn $interconnect_name/S00_ARESETN
     }
 
-    if {$sys_zynq == 3} {
-      ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
-      ad_connect $interconnect_name/S00_AXI sys_cips/M_AXI_FPD
-    } elseif {($p_sel eq "HPM0_FPD") && ($sys_zynq == 2)} {
-      ad_connect sys_cpu_clk sys_ps8/maxihpm0_fpd_aclk
-      ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM0_FPD
-    } elseif {($p_sel eq "HPM1_FPD") && ($sys_zynq == 2)} {
-      ad_connect sys_cpu_clk sys_ps8/maxihpm1_fpd_aclk
-      ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM1_FPD
-    } elseif {($p_sel eq "HPM0_LPD") && ($sys_zynq == 2)} {
-      ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
-      ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM0_LPD
-    } elseif {($p_sel eq "GP0") && ($sys_zynq == 1)} {
-      ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
-      ad_connect $interconnect_name/S00_AXI sys_ps7/M_AXI_GP0
-    } elseif {($p_sel eq "GP1") && ($sys_zynq == 1)} {
-      ad_connect sys_cpu_clk sys_ps7/M_AXI_GP1_ACLK
-      ad_connect $interconnect_name/S00_AXI sys_ps7/M_AXI_GP1
-    } elseif {$sys_zynq == 0} {
-      ad_connect $interconnect_name/S00_AXI sys_mb/M_AXI_DP
-    } elseif {$sys_zynq == -1} {
-      ad_connect $interconnect_name/S00_AXI mng_axi_vip/M_AXI
+    if {$sys_cpu_interconnect_instance == 0} {
+      if {$sys_zynq == 3} {
+        ad_connect sys_cpu_clk sys_cips/m_axi_fpd_aclk
+        ad_connect $interconnect_name/S00_AXI sys_cips/M_AXI_FPD
+      } elseif {($p_sel eq "HPM0_FPD") && ($sys_zynq == 2)} {
+        ad_connect sys_cpu_clk sys_ps8/maxihpm0_fpd_aclk
+        ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM0_FPD
+      } elseif {($p_sel eq "HPM1_FPD") && ($sys_zynq == 2)} {
+        ad_connect sys_cpu_clk sys_ps8/maxihpm1_fpd_aclk
+        ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM1_FPD
+      } elseif {($p_sel eq "HPM0_LPD") && ($sys_zynq == 2)} {
+        ad_connect sys_cpu_clk sys_ps8/maxihpm0_lpd_aclk
+        ad_connect $interconnect_name/S00_AXI sys_ps8/M_AXI_HPM0_LPD
+      } elseif {($p_sel eq "GP0") && ($sys_zynq == 1)} {
+        ad_connect sys_cpu_clk sys_ps7/M_AXI_GP0_ACLK
+        ad_connect $interconnect_name/S00_AXI sys_ps7/M_AXI_GP0
+      } elseif {($p_sel eq "GP1") && ($sys_zynq == 1)} {
+        ad_connect sys_cpu_clk sys_ps7/M_AXI_GP1_ACLK
+        ad_connect $interconnect_name/S00_AXI sys_ps7/M_AXI_GP1
+      } elseif {$sys_zynq == 0} {
+        ad_connect $interconnect_name/S00_AXI sys_mb/M_AXI_DP
+      } elseif {$sys_zynq == -1} {
+        ad_connect $interconnect_name/S00_AXI mng_axi_vip/M_AXI
+      }
+    } else {
+      set temp_sys_cpu_interconnect_instance [expr $sys_cpu_interconnect_instance - 1]
+      set temp_name ${interconnect_name_intermediate}_${temp_sys_cpu_interconnect_instance}
+      ad_connect $interconnect_name/S00_AXI $temp_name/M15_AXI
     }
   }
 
