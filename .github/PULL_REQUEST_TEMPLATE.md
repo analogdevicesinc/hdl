@@ -14,6 +14,7 @@ try to push all related PRs at the same time.
 - [ ] Bug fix (change that fixes an issue)
 - [ ] New feature (change that adds new functionality)
 - [ ] Breaking change (has dependencies in other repos or will cause CI to fail)
+- [ ] Documentation
 
 ## PR Checklist
 - [ ] I have followed the code style guidelines
