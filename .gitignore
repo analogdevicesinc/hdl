@@ -119,3 +119,6 @@ share/
 ipcfg
 _bld
 radiantc.*
+*Zone.Identifier
+*.sim*
+*output_boot_bin*
