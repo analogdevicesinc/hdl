@@ -12,7 +12,8 @@ adi_project_create sharkbyte 0 {} "xc7z010clg225-1"
 adi_project_files sharkbyte [list \
   "system_top.v" \
   "system_constr.xdc" \
-  "$ad_hdl_dir/library/common/ad_iobuf.v"]
+  "$ad_hdl_dir/library/common/ad_iobuf.v" \
+  "$ad_hdl_dir/library/common/ad_3w_spi.v"]
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 adi_project_run sharkbyte

@@ -60,88 +60,84 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  output          enable,
-  input           clk_out,
+  // JTAG
+  input           jtag_tck,
+  input           jtag_tdi,
+  input           jtag_tms,
+  output          jtag_tdo,   // ? how to connect them? 
+  
+  // I2C - ?
+  inout           iic_scl,
+  inout           iic_sca,    // ? how to connect them? 
 
-  inout           gpio_resetb,
-  inout           gpio_en_agc,
-  inout   [ 3:0]  gpio_ctl,
-  inout   [ 7:0]  gpio_status,
+  // UART
+  input           uart_rx,
+  output          uart_tx,    // ? how to connect them? 
 
-  input           clk_in_p, // new, were added to bd, all need constraints mapping
-  input           clk_in_n, // new
+  inout           ad9696_ldac,
 
-  input           fclk_p, // new
-  input           fclk_n, // new
+  // these signals are new, must be added/changed in constraints and base design
+
+  input           clk_in_a1_p, // new, were added to bd, all need constraints mapping
+  input           clk_in_a1_n, // new
+
+  input           clk_in_a2_p,
+  input           clk_in_a2_n,
+
+  input           fclk_a1_p, // new
+  input           fclk_a1_n, // new
+
+  input           fclk_a2_p,
+  input           fclk_a2_n, 
 
   input   [ 7:0]  data_in_a1_p, // new, name should be changed in BD, from previous name
   input   [ 7:0]  data_in_a1_n, // and modify the IP too
   input   [ 7:0]  data_in_a2_p, // new, add those two in BD too
   input   [ 7:0]  data_in_a2_n, // new
 
-  output          spi_csn,
+  // ? use ad_3w_spi IP
+  output          spi_a1_csn,
+  output          spi_a2_csn,
   output          spi_clk,
-  output          spi_mosi,
-  input           spi_miso,
-
-  output          pl_gpio0,
-  input           pl_gpio1,
-  inout           pl_gpio2,
-  inout           pl_gpio3,
-  inout           pl_gpio4
+  inout           spi_sdio,   // ? how to connect it? 
 );
 
   // internal signals
 
+  wire            spi_miso_s;
+  wire            spi_mosi_s;
   wire    [17:0]  gpio_i;
   wire    [17:0]  gpio_o;
   wire    [17:0]  gpio_t;
-
-  wire            iic_scl;
-  wire            iic_sda;
-  wire            phaser_enable;
-  wire            pl_burst;
-  wire            pl_muxout;
-  wire            pl_spi_clk_o;
-  wire            pl_spi_miso;
-  wire            pl_spi_mosi;
-  wire            pl_txdata;
+  wire    [6:0]   ps_gpio; // ? not sure what to do with tem
 
   // instantiations
 
   ad_iobuf #(
     .DATA_WIDTH(14)
   ) i_iobuf (
-    .dio_t (gpio_t[13:0]),
-    .dio_i (gpio_o[13:0]),
-    .dio_o (gpio_i[13:0]),
-    .dio_p ({ gpio_resetb,        // 13:13
-              gpio_en_agc,        // 12:12
-              gpio_ctl,           // 11: 8
-              gpio_status}));     //  7: 0
+    .dio_t (gpio_t[0]),
+    .dio_i (gpio_o[0]),
+    .dio_o (gpio_i[0]),
+    .dio_p (ad9696_ldac));
 
-  assign gpio_i[16:14] = gpio_o[16:14];
-  assign gpio_i[17] = pl_muxout;
-  assign phaser_enable = gpio_o[14];
+  ad_3w_spi #(
+    .NUM_OF_SLAVES(2)
+  ) i_spi (
+    .spi_csn ({spi_a1_csn, spi_a2_csn}),
+    .spi_clk (spi_clk),
+    .spi_mosi (spi_mosi_s),
+    .spi_miso (spi_miso_s),
+    .spi_sdio (spi_sdio),
+    .spi_dir ());
+    
 
-  assign pl_gpio4 = iic_scl;      //PL_GPIO4
-  assign pl_gpio3 = iic_sda;      //PL_GPIO3
+  assign gpio_i[17:1] = gpio_o[17:1];
+  assign ps_gpio[6:0] = ps_gpio[6:0];
 
-  //PL_GPIO2
-  ad_iobuf #(
-    .DATA_WIDTH(1)
-  ) i_pl_gpio_iobuf (
-    .dio_t (phaser_enable),
-    .dio_i (pl_spi_clk_o),
-    .dio_o (pl_muxout),
-    .dio_p (pl_gpio2));
-
-  //PL_GPIO1
-  assign pl_spi_miso = pl_gpio1 & ~phaser_enable;
-  assign pl_burst    = pl_gpio1 &  phaser_enable;
-
-  //PL_GPIO0
-  assign pl_gpio0 = phaser_enable ? pl_txdata : pl_spi_mosi;
+  // assign if iic_sca/scl are wires
+  //assign pl_gpio0 = iic_sca;
+  //assign pl_gpio1 = iic_scl;
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -159,7 +155,6 @@ module system_top (
     .ddr_ras_n (ddr_ras_n),
     .ddr_reset_n (ddr_reset_n),
     .ddr_we_n (ddr_we_n),
-    .enable (enable),
     .fixed_io_ddr_vrn (fixed_io_ddr_vrn),
     .fixed_io_ddr_vrp (fixed_io_ddr_vrp),
     .fixed_io_mio (fixed_io_mio),
@@ -169,36 +164,43 @@ module system_top (
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
     .gpio_t (gpio_t),
-    .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sda),
 
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
-    .spi0_csn_0_o (spi_csn),
-    .spi0_csn_1_o (),
+    .spi0_csn_0_o (spi_a1_csn), // 1st ADC
+    .spi0_csn_1_o (spi_a2_csn), // 2nd ADC
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso),
+    .spi0_sdi_i (spi_miso_s),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi),
+    .spi0_sdo_o (spi_mosi_s),
 
-    .clk_in_p (clk_in_p)
-    .clk_in_n (clk_in_n)
-    .fclk_p (fclk_p)
-    .fclk_n (fclk_n)
-    .data_in_p (data_in_p)
-    .data_in_n (data_in_n)
+    .clk_in_a1_p (clk_in_a1_p),
+    .clk_in_a1_n (clk_in_a1_n),
+    .clk_in_a2_p (clk_in_a2_p)
+    .clk_in_a2_n (clk_in_a2_n)
+    
+    .fclk_a1_p (fclk_a1_p),
+    .fclk_a1_n (fclk_a1_n),
+    .fclk_a2_p (fclk_a2_p),
+    .fclk_a2_n (fclk_a2_n),
+
+    .data_in_a1_p (data_in_a1_p),
+    .data_in_a1_n (data_in_a1_n),
+    .data_in_a2_p (data_in_a2_p),
+    .data_in_a2_n (data_in_a2_n),
+
+
+
+    .iic_main_scl_io (iic_scl),
+    .iic_main_sda_io (iic_sca),
 
     .spi_clk_i(1'b0),
-    .spi_clk_o(pl_spi_clk_o),
+    .spi_clk_o(),
     .spi_csn_i(1'b1),
     .spi_csn_o(),
-    .spi_sdi_i(pl_spi_miso),
+    .spi_sdi_i(),
     .spi_sdo_i(1'b0),
-    .spi_sdo_o(pl_spi_mosi),
-
-    .tdd_ext_sync(pl_burst),
-
-    .up_enable (gpio_o[15]));
+    .spi_sdo_o());
 
 endmodule

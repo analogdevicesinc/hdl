@@ -14,6 +14,7 @@ M_DEPS += ../../library/common/ad_iobuf.v
 M_DEPS += ../../library/common/ad_bus_mux.v
 M_DEPS += ../../library/axi_tdd/scripts/axi_tdd.tcl
 M_DEPS += ../../library/axi_hmcad15xx
+M_DEPS += ../../../library/common/ad_3w_spi.v
 
 LIB_DEPS += axi_hmcad15xx
 LIB_DEPS += axi_dmac

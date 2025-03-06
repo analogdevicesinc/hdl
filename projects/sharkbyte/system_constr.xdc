@@ -29,6 +29,13 @@ set_property  -dict {PACKAGE_PIN N13 IOSTANDARD LVDS} [get_ports data_in_a1_n[6]
 set_property  -dict {PACKAGE_PIN M15 IOSTANDARD LVDS} [get_ports data_in_a1_p[7]]; # A1DP4B IO_L8N_T1_34 
 set_property  -dict {PACKAGE_PIN L15 IOSTANDARD LVDS} [get_ports data_in_a1_n[7]]; # A1DN4B IO_L8P_T1_34 
 
+set_property  -dict {PACKAGE_PIN K11 IOSTANDARD LVDS} [get_ports clk_in_a1_p];     # A1LCLKP IO_L11P_T1_SRCC_34
+set_property  -dict {PACKAGE_PIN K12 IOSTANDARD LVDS} [get_ports clk_in_a1_n];     # A1LCLKN IO_L11N_T1_SRCC_34
+
+set_property  -dict {PACKAGE_PIN L12 IOSTANDARD LVDS} [get_ports fclk_a1_p];       # A1FCLKP IO_L12P_T1_MRCC_34
+set_property  -dict {PACKAGE_PIN M12 IOSTANDARD LVDS} [get_ports fclk_a1_n];       # A1FCLKN IO_L12N_T1_MRCC_34
+
+
 # hmcad15xx, 2nd ADC
 
 set_property  -dict {PACKAGE_PIN R13 IOSTANDARD LVDS} [get_ports data_in_a2_p[0]]; # A2DP1A IO_L17N_T2_34
@@ -55,50 +62,48 @@ set_property  -dict {PACKAGE_PIN P8 IOSTANDARD LVDS}  [get_ports data_in_a2_n[6]
 set_property  -dict {PACKAGE_PIN R10 IOSTANDARD LVDS} [get_ports data_in_a2_p[7]]; # A2DP4B IO_L24N_T3_34
 set_property  -dict {PACKAGE_PIN P10 IOSTANDARD LVDS} [get_ports data_in_a2_n[7]]; # A2DN4B IO_L24P_T3_34
 
+set_property  -dict {PACKAGE_PIN P15 IOSTANDARD LVDS} [get_ports clk_in_a2_p];     # A2LCLKP IO_L15P_T2_DQS_34
+set_property  -dict {PACKAGE_PIN R15 IOSTANDARD LVDS} [get_ports clk_in_a2_n];     # A2LCLKN IO_L15N_T2_DQS_34
+
+set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS} [get_ports fclk_a2_p];       # A2FCLKP IO_L13P_T2_MRCC_34
+set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS} [get_ports fclk_a2_n];       # A2FCLKN IO_L13N_T2_MRCC_34
+
+# JTAG
+
+set_property  -dict {PACKAGE_PIN G9 IOSTANDARD LVCMOS18} [get_ports jtag_tck];     # JTAG_TCK TCK_0
+set_property  -dict {PACKAGE_PIN L7 IOSTANDARD LVCMOS18} [get_ports jtag_tdi];     # JTAG_TDI TDI_O
+set_property  -dict {PACKAGE_PIN L9 IOSTANDARD LVCMOS18} [get_ports jtag_tms];     # JTAG_TMS TMS_0
+set_property  -dict {PACKAGE_PIN L8 IOSTANDARD LVCMOS18} [get_ports jtag_tdo];     # JTAG_TDO TDO_0
+
+# I2C - not sure if okay
+
+set_property  -dict {PACKAGE_PIN M14 IOSTANDARD LVDS} [get_ports iic_scl];         # SCL IO_L9N_T1_DQS_34
+set_property  -dict {PACKAGE_PIN L14 IOSTANDARD LVDS} [get_ports iic_sca];         # SDA IO_L9P_T1_DQS_34
+
+# UART - not sure if okay
+
+set_property  -dict {PACKAGE_PIN C6 IOSTANDARD LVDS} [get_ports uart_rx];          # UART_RX PS_MIO13_500
+set_property  -dict {PACKAGE_PIN B7 IOSTANDARD LVDS} [get_ports uart_tx];          # UART_TX PS_MIO12_500
+
 # GPIOs
 
-set_property  -dict {PACKAGE_PIN  L15  IOSTANDARD LVCMOS18} [get_ports gpio_status[0]]
-set_property  -dict {PACKAGE_PIN  M15  IOSTANDARD LVCMOS18} [get_ports gpio_status[1]]
-set_property  -dict {PACKAGE_PIN  N11  IOSTANDARD LVCMOS18} [get_ports gpio_status[2]]
-set_property  -dict {PACKAGE_PIN  N12  IOSTANDARD LVCMOS18} [get_ports gpio_status[3]]
-set_property  -dict {PACKAGE_PIN  M10  IOSTANDARD LVCMOS18} [get_ports gpio_status[4]]
-set_property  -dict {PACKAGE_PIN  M11  IOSTANDARD LVCMOS18} [get_ports gpio_status[5]]
-set_property  -dict {PACKAGE_PIN  N7   IOSTANDARD LVCMOS18} [get_ports gpio_status[6]]
-set_property  -dict {PACKAGE_PIN  N8   IOSTANDARD LVCMOS18} [get_ports gpio_status[7]]
+set_property  -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS18} [get_ports ad9696_ldac]; # LDAC
 
-set_property  -dict {PACKAGE_PIN  F13  IOSTANDARD LVCMOS18} [get_ports gpio_ctl[0]]
-set_property  -dict {PACKAGE_PIN  F14  IOSTANDARD LVCMOS18} [get_ports gpio_ctl[1]]
-set_property  -dict {PACKAGE_PIN  G15  IOSTANDARD LVCMOS18} [get_ports gpio_ctl[2]]
-set_property  -dict {PACKAGE_PIN  F15  IOSTANDARD LVCMOS18} [get_ports gpio_ctl[3]]
+# not sure about the GPIOS if they are LVCMOS
+set_property  -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS18}  [get_ports ps_gpio[0]];  # PS_GPIO0 PS_MIO0_500
+set_property  -dict {PACKAGE_PIN B10 IOSTANDARD LVCMOS18} [get_ports ps_gpio[1]];  # PS_GPIO1 PS_MIO11_500
+set_property  -dict {PACKAGE_PIN D6 IOSTANDARD LVCMOS18}  [get_ports ps_gpio[2]];  # PS_GPIO2 PS_MIO10_500
+set_property  -dict {PACKAGE_PIN B5 IOSTANDARD LVCMOS18}  [get_ports ps_gpio[3]];  # PS_GPIO3 PS_MIO9_500
+set_property  -dict {PACKAGE_PIN C13 IOSTANDARD LVCMOS18} [get_ports ps_gpio[4]];  # PS_GPIO4 PS_MIO53_501
+set_property  -dict {PACKAGE_PIN D13 IOSTANDARD LVCMOS18} [get_ports ps_gpio[5]];  # PS_GPIO5 PS_MIO49_501
+set_property  -dict {PACKAGE_PIN B12 IOSTANDARD LVCMOS18} [get_ports ps_gpio[6]];  # PS_GPIO6 PS_MIO48_501
 
-set_property  -dict {PACKAGE_PIN  L13  IOSTANDARD LVCMOS18} [get_ports gpio_en_agc]
-set_property  -dict {PACKAGE_PIN  P9   IOSTANDARD LVCMOS18} [get_ports gpio_resetb]
+# SPI
 
-set_property  -dict {PACKAGE_PIN  K12  IOSTANDARD LVCMOS18} [get_ports enable]
-set_property  -dict {PACKAGE_PIN  K11  IOSTANDARD LVCMOS18} [get_ports txnrx]
-
-set_property  -dict {PACKAGE_PIN  E12  IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_csn]
-set_property  -dict {PACKAGE_PIN  E11  IOSTANDARD LVCMOS18} [get_ports spi_clk]
-set_property  -dict {PACKAGE_PIN  E13  IOSTANDARD LVCMOS18} [get_ports spi_mosi]
-set_property  -dict {PACKAGE_PIN  F12  IOSTANDARD LVCMOS18} [get_ports spi_miso]
-
-# PL GPIOs
-#
-# Pin  | Package Pin | GPIO     | Pluto    | Phaser  |
-# -----|-------------|----------|----------|---------|
-# L10P | K13         | PL_GPIO0 | SPI MOSI | TXDATA  |
-# L12N | M12         | PL_GPIO1 | SPI MISO | BURST   |
-# L24N | R10         | PL_GPIO2 | SPI CLKO | MUXOUT  |
-# L7N  | N14         | PL_GPIO3 | IIC SDA  | IIC SDA |
-# L9N  | M14         | PL_GPIO4 | IIC SCL  | IIC SCL |
-
-set_property  -dict {PACKAGE_PIN  K13  IOSTANDARD LVCMOS18} [get_ports pl_gpio0]
-set_property  -dict {PACKAGE_PIN  M12  IOSTANDARD LVCMOS18} [get_ports pl_gpio1]
-set_property  -dict {PACKAGE_PIN  R10  IOSTANDARD LVCMOS18} [get_ports pl_gpio2]
-set_property  -dict {PACKAGE_PIN  N14  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports pl_gpio3]
-set_property  -dict {PACKAGE_PIN  M14  IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports pl_gpio4]
-
-set_property  -dict {PACKAGE_PIN  P8   IOSTANDARD LVCMOS18} [get_ports clk_out]
+set_property  -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_a1_csn]; # CSN_A1 IO_L1P_T0_AD0P_35
+set_property  -dict {PACKAGE_PIN E13 IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_a2_csn]; # CSN_A2 IO_L1N_T0_AD0N_35
+set_property  -dict {PACKAGE_PIN E11 IOSTANDARD LVCMOS18} [get_ports spi_clk];                     # SCLK IO_L2P_T0_AD8P_35
+set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS18} [get_ports spi_mosi];                    # SDIO IO_L2N_T0_AD8N_35
 
 # probably gone in 2016.4
 

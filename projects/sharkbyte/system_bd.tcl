@@ -4,6 +4,8 @@
 ###############################################################################
 
 # create board design
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
+create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
@@ -274,4 +276,4 @@ ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_dma/m_dest_axi
 # interrupts
 
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
-ad_cpu_interrupt ps-13 mb-12  hmcad15xx_dma/irq
+ad_cpu_interrupt ps-13 mb-12 hmcad15xx_dma/irq
