@@ -1,16 +1,9 @@
 ###############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 # create board design
-source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
-source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
-
-# default ports
-
-create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr
-create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 fixed_io
 
 create_bd_port -dir O spi0_csn_2_o
 create_bd_port -dir O spi0_csn_1_o
@@ -34,8 +27,6 @@ create_bd_port -dir I spi_sdo_i
 create_bd_port -dir O spi_sdo_o
 create_bd_port -dir I spi_sdi_i
 
-create_bd_port -dir O txdata_o
-create_bd_port -dir I tdd_ext_sync
 
 # hmcad15xx interface
 
@@ -233,64 +224,23 @@ ad_connect  iic_main axi_iic_main/iic
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
 
-ad_add_interpolation_filter "tx_fir_interpolator" 8 2 1 {61.44} {7.68} \
-                             "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
 ad_ip_instance xlslice interp_slice
 ad_ip_instance util_upack2 tx_upack
 
-ad_add_decimation_filter "rx_fir_decimator" 8 2 1 {61.44} {61.44} \
-                         "$ad_hdl_dir/library/util_fir_int/coefile_int.coe"
 ad_ip_instance xlslice decim_slice
 ad_ip_instance util_cpack2 cpack
 
 # connections
 
-ad_connect cpack/enable_0 rx_fir_decimator/enable_out_0
-ad_connect cpack/enable_1 rx_fir_decimator/enable_out_1
-ad_connect cpack/fifo_wr_data_0 rx_fir_decimator/data_out_0
-ad_connect cpack/fifo_wr_data_1 rx_fir_decimator/data_out_1
-
-ad_connect rx_fir_decimator/valid_out_0 cpack/fifo_wr_en
-ad_connect rx_fir_decimator/active decim_slice/Dout
-
-ad_connect  tx_upack/fifo_rd_data_0  tx_fir_interpolator/data_in_0
-ad_connect  tx_upack/enable_0  tx_fir_interpolator/enable_out_0
-ad_connect  tx_upack/fifo_rd_data_1  tx_fir_interpolator/data_in_1
-ad_connect  tx_upack/enable_1  tx_fir_interpolator/enable_out_1
-ad_connect  tx_fir_interpolator/active interp_slice/Dout
-
 ad_ip_instance util_vector_logic logic_or [list \
   C_OPERATION {or} \
   C_SIZE 1]
 
-ad_connect  logic_or/Op1  tx_fir_interpolator/valid_out_0
 ad_connect  logic_or/Res  tx_upack/fifo_rd_en
-
-# External TDD
-set TDD_CHANNEL_CNT 3
-set TDD_DEFAULT_POL 0b110
-set TDD_REG_WIDTH 32
-set TDD_BURST_WIDTH 32
-set TDD_SYNC_WIDTH 0
-set TDD_SYNC_INT 0
-set TDD_SYNC_EXT 1
-set TDD_SYNC_EXT_CDC 1
-ad_tdd_gen_create axi_tdd_0 $TDD_CHANNEL_CNT \
-                            $TDD_DEFAULT_POL \
-                            $TDD_REG_WIDTH \
-                            $TDD_BURST_WIDTH \
-                            $TDD_SYNC_WIDTH \
-                            $TDD_SYNC_INT \
-                            $TDD_SYNC_EXT \
-                            $TDD_SYNC_EXT_CDC
 
 ad_ip_instance util_vector_logic logic_inv [list \
   C_OPERATION {not} \
   C_SIZE 1]
-
-ad_connect logic_inv/Res  axi_tdd_0/resetn
-ad_connect axi_tdd_0/sync_in tdd_ext_sync
-ad_connect axi_tdd_0/tdd_channel_0 txdata_o
 
 # cpu / memory interconnects
 
@@ -301,11 +251,9 @@ ad_cpu_interconnect 0x79020000 {*}
 ad_cpu_interconnect 0x7C400000 {*}
 ad_cpu_interconnect 0x7C420000 {*}
 ad_cpu_interconnect 0x7C430000 axi_spi
-ad_cpu_interconnect 0x7C440000 axi_tdd_0
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
-ad_connect {*}/m_dest_axi sys_ps7/S_AXI_HP1
 
 create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
                     [get_bd_addr_spaces {*}/m_dest_axi] \
@@ -314,24 +262,16 @@ create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP2_ACLK
-ad_connect {*}/m_src_axi sys_ps7/S_AXI_HP2
 
 create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
                     [get_bd_addr_spaces {*}/m_src_axi] \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
                     SEG_sys_ps7_HP2_DDR_LOWOCM
 
-ad_connect sys_cpu_clk {*}/m_src_axi_aclk
-ad_connect sys_cpu_clk {*}/m_dest_axi_aclk
-ad_connect sys_cpu_resetn {*}/m_dest_axi_aresetn
-ad_connect sys_cpu_resetn {*}/m_src_axi_aresetn
-
 ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_dma/m_dest_axi
 
 # interrupts
 
-ad_cpu_interrupt ps-13 mb-13 {*}/irq
-ad_cpu_interrupt ps-12 mb-12 {*}/irq
 ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
 ad_cpu_interrupt ps-13 mb-12  hmcad15xx_dma/irq

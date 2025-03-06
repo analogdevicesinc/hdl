@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -16,5 +16,3 @@ adi_project_files sharkbyte [list \
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 adi_project_run sharkbyte
-source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
-

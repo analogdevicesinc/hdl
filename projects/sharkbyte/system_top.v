@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -60,15 +60,7 @@ module system_top (
   inout           fixed_io_ps_porb,
   inout           fixed_io_ps_srstb,
 
-  input           rx_clk_in,
-  input           rx_frame_in,
-  input   [11:0]  rx_data_in,
-  output          tx_clk_out,
-  output          tx_frame_out,
-  output  [11:0]  tx_data_out,
-
   output          enable,
-  output          txnrx,
   input           clk_out,
 
   inout           gpio_resetb,
@@ -76,14 +68,16 @@ module system_top (
   inout   [ 3:0]  gpio_ctl,
   inout   [ 7:0]  gpio_status,
 
-  input           clk_in_p, // new
+  input           clk_in_p, // new, were added to bd, all need constraints mapping
   input           clk_in_n, // new
 
   input           fclk_p, // new
   input           fclk_n, // new
 
-  input   [ 7:0]  data_in_p, // new 
-  input   [ 7:0]  data_in_n, // new
+  input   [ 7:0]  data_in_a1_p, // new, name should be changed in BD, from previous name
+  input   [ 7:0]  data_in_a1_n, // and modify the IP too
+  input   [ 7:0]  data_in_a2_p, // new, add those two in BD too
+  input   [ 7:0]  data_in_a2_n, // new
 
   output          spi_csn,
   output          spi_clk,
@@ -177,9 +171,6 @@ module system_top (
     .gpio_t (gpio_t),
     .iic_main_scl_io (iic_scl),
     .iic_main_sda_io (iic_sda),
-    .rx_clk_in (rx_clk_in),
-    .rx_data_in (rx_data_in),
-    .rx_frame_in (rx_frame_in),
 
     .spi0_clk_i (1'b0),
     .spi0_clk_o (spi_clk),
@@ -191,6 +182,13 @@ module system_top (
     .spi0_sdo_i (1'b0),
     .spi0_sdo_o (spi_mosi),
 
+    .clk_in_p (clk_in_p)
+    .clk_in_n (clk_in_n)
+    .fclk_p (fclk_p)
+    .fclk_n (fclk_n)
+    .data_in_p (data_in_p)
+    .data_in_n (data_in_n)
+
     .spi_clk_i(1'b0),
     .spi_clk_o(pl_spi_clk_o),
     .spi_csn_i(1'b1),
@@ -200,13 +198,7 @@ module system_top (
     .spi_sdo_o(pl_spi_mosi),
 
     .tdd_ext_sync(pl_burst),
-    .txdata_o(pl_txdata),
 
-    .tx_clk_out (tx_clk_out),
-    .tx_data_out (tx_data_out),
-    .tx_frame_out (tx_frame_out),
-    .txnrx (txnrx),
-    .up_enable (gpio_o[15]),
-    .up_txnrx (gpio_o[16]));
+    .up_enable (gpio_o[15]));
 
 endmodule
