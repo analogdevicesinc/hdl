@@ -307,6 +307,35 @@ adi_tpl_jesd204_rx_create rx_adrv9009_som_tpl_core $RX_NUM_OF_LANES \
 
 ad_ip_parameter rx_adrv9009_som_tpl_core/adc_tpl_core CONFIG.EXT_SYNC 1
 
+# sha3-path sha3_512
+set sha3_512 [ create_bd_cell -type ip -vlnv xilinx.com:hls:sha3_ip_512:1.0 sha3_512 ]
+ad_connect core_clk_b sha3_512/ap_clk
+ad_connect rx_adrv9009_som_tpl_core/adc_tpl_core/adc_rst sha3_512/ap_rst
+ad_connect util_som_rx_cpack/packed_fifo_wr_data sha3_512/msgStreamIn_dout
+ad_connect util_som_rx_cpack/packed_fifo_wr_en sha3_512/msgStreamIn_empty_n
+ad_connect sha3_512/digestStreamOut_full_n VCC
+
+ad_ip_instance axi_dmac sha3_dma
+ad_ip_parameter sha3_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter sha3_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter sha3_dma CONFIG.CYCLIC 0
+ad_ip_parameter sha3_dma CONFIG.DMA_LENGTH_WIDTH 31
+ad_ip_parameter sha3_dma CONFIG.SYNC_TRANSFER_START 0
+ad_ip_parameter sha3_dma CONFIG.AXI_SLICE_SRC 1
+ad_ip_parameter sha3_dma CONFIG.AXI_SLICE_DEST 1
+ad_ip_parameter sha3_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter sha3_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter sha3_dma MAX_BYTES_PER_BURST 4096
+ad_ip_parameter sha3_dma CONFIG.DMA_DATA_WIDTH_SRC 512
+ad_ip_parameter sha3_dma CONFIG.DMA_DATA_WIDTH_DEST 128
+ad_ip_parameter sha3_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter sha3_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter sha3_dma CONFIG.AXI_AXPROT 0b010
+
+ad_connect sha3_512/digestStreamOut_write sha3_dma/fifo_wr_en
+ad_connect sha3_512/digestStreamOut_din sha3_dma/fifo_wr_din
+
+
 ad_ip_instance axi_dmac axi_adrv9009_som_rx_dma
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 2
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_DEST 0
@@ -655,6 +684,9 @@ ad_connect tx_sysref_0 tx_adrv9009_som_tpl_core/dac_tpl_core/dac_sync_in
 ad_connect  core_clk_b rx_adrv9009_som_tpl_core/link_clk
 ad_connect  core_clk_b util_som_rx_cpack/clk
 ad_connect  axi_adrv9009_som_rx_dma/fifo_wr_clk core_clk_b
+ad_connect  sys_cpu_clk sha3_dma/s_axi_aclk
+ad_connect  sys_cpu_resetn sha3_dma/s_axi_aresetn
+ad_connect  core_clk_b sha3_dma/fifo_wr_clk
 
 ad_connect  axi_adrv9009_som_rx_jesd/rx_sof rx_adrv9009_som_tpl_core/link_sof
 ad_connect  axi_adrv9009_som_rx_jesd/rx_data_tdata rx_adrv9009_som_tpl_core/link_data
@@ -693,6 +725,8 @@ ad_connect  util_som_obs_cpack/packed_sync axi_adrv9009_som_obs_dma/sync
 ad_connect core_clk_a axi_adrv9009_som_tx_dma/m_axis_aclk
 
 ad_connect util_som_rx_cpack/packed_fifo_wr axi_adrv9009_som_rx_dma/fifo_wr
+ad_connect util_som_rx_cpack/packed_fifo_wr_data axi_adrv9009_som_rx_dma/fifo_wr_din
+ad_connect util_som_rx_cpack/packed_fifo_wr_en axi_adrv9009_som_rx_dma/fifo_wr_en
 ad_connect util_som_rx_cpack/packed_sync axi_adrv9009_som_rx_dma/sync
 
 ad_connect axi_tx_fifo/axi ddr4_1/C0_DDR4_S_AXI
@@ -749,6 +783,7 @@ ad_cpu_interconnect 0x44A70000 axi_adrv9009_som_obs_jesd
 ad_cpu_interconnect 0x7c400000 axi_adrv9009_som_tx_dma
 ad_cpu_interconnect 0x7c420000 axi_adrv9009_som_rx_dma
 ad_cpu_interconnect 0x7c440000 axi_adrv9009_som_obs_dma
+ad_cpu_interconnect 0x7c460000 sha3_dma
 ad_cpu_interconnect 0x45000000 axi_sysid_0
 
 # gt uses hp0, and 100MHz clock for both DRP and AXI4
@@ -762,6 +797,7 @@ ad_mem_hp0_interconnect sys_cpu_clk axi_adrv9009_som_obs_xcvr/m_axi
 ad_mem_hpc0_interconnect sys_dma_clk sys_ps8/S_AXI_HPC0
 ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_obs_dma/m_dest_axi
 ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_rx_dma/m_dest_axi
+ad_mem_hpc0_interconnect sys_dma_clk sha3_dma/m_dest_axi
 ad_mem_hpc0_interconnect sys_dma_clk axi_adrv9009_som_tx_dma/m_src_axi
 
 # interrupts
@@ -772,6 +808,7 @@ ad_cpu_interrupt ps-10 mb-15 axi_adrv9009_som_rx_dma/irq
 ad_cpu_interrupt ps-11 mb-14 axi_adrv9009_som_obs_jesd/irq
 ad_cpu_interrupt ps-12 mb-13 axi_adrv9009_som_tx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9009_som_rx_jesd/irq
+ad_cpu_interrupt ps-15 mb-11 sha3_dma/irq
 
 create_bd_addr_seg -range 0x80000000 -offset 0x80000000 \
     [get_bd_addr_spaces axi_tx_fifo/axi] [get_bd_addr_segs ddr4_1/C0_DDR4_MEMORY_MAP/C0_DDR4_ADDRESS_BLOCK] SEG_ddr4_1_C0_DDR4_ADDRESS_BLOCK

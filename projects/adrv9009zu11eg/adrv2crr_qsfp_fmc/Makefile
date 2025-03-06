@@ -30,6 +30,7 @@ LIB_DEPS += axi_dmac
 LIB_DEPS += axi_fan_control
 LIB_DEPS += axi_i2s_adi
 LIB_DEPS += axi_sysid
+LIB_DEPS += sha3
 LIB_DEPS += corundum
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_dac
