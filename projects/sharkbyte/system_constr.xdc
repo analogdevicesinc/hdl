@@ -75,21 +75,16 @@ set_property  -dict {PACKAGE_PIN L7 IOSTANDARD LVCMOS18} [get_ports jtag_tdi];  
 set_property  -dict {PACKAGE_PIN L9 IOSTANDARD LVCMOS18} [get_ports jtag_tms];     # JTAG_TMS TMS_0
 set_property  -dict {PACKAGE_PIN L8 IOSTANDARD LVCMOS18} [get_ports jtag_tdo];     # JTAG_TDO TDO_0
 
-# I2C - not sure if okay
+# I2C
 
-set_property  -dict {PACKAGE_PIN M14 IOSTANDARD LVDS} [get_ports iic_scl];         # SCL IO_L9N_T1_DQS_34
-set_property  -dict {PACKAGE_PIN L14 IOSTANDARD LVDS} [get_ports iic_sca];         # SDA IO_L9P_T1_DQS_34
-
-# UART - not sure if okay
-
-set_property  -dict {PACKAGE_PIN C6 IOSTANDARD LVDS} [get_ports uart_rx];          # UART_RX PS_MIO13_500
-set_property  -dict {PACKAGE_PIN B7 IOSTANDARD LVDS} [get_ports uart_tx];          # UART_TX PS_MIO12_500
+set_property  -dict {PACKAGE_PIN M14 IOSTANDARD LVCMOS18} [get_ports iic_scl];         # SCL IO_L9N_T1_DQS_34
+set_property  -dict {PACKAGE_PIN L14 IOSTANDARD LVCMOS18} [get_ports iic_sca];         # SDA IO_L9P_T1_DQS_34
 
 # GPIOs
 
 set_property  -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS18} [get_ports ad9696_ldac]; # LDAC
 
-# not sure about the GPIOS if they are LVCMOS
+# PROBABLY MUST CUT THEM AS THEY ARE IN MIO ALREADY PRESENT
 set_property  -dict {PACKAGE_PIN D8 IOSTANDARD LVCMOS18}  [get_ports ps_gpio[0]];  # PS_GPIO0 PS_MIO0_500
 set_property  -dict {PACKAGE_PIN B10 IOSTANDARD LVCMOS18} [get_ports ps_gpio[1]];  # PS_GPIO1 PS_MIO11_500
 set_property  -dict {PACKAGE_PIN D6 IOSTANDARD LVCMOS18}  [get_ports ps_gpio[2]];  # PS_GPIO2 PS_MIO10_500

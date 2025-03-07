@@ -21,23 +21,21 @@ create_bd_port -dir I -from 17 -to 0 gpio_i
 create_bd_port -dir O -from 17 -to 0 gpio_o
 create_bd_port -dir O -from 17 -to 0 gpio_t
 
-create_bd_port -dir O spi_csn_o
-create_bd_port -dir I spi_csn_i
-create_bd_port -dir I spi_clk_i
-create_bd_port -dir O spi_clk_o
-create_bd_port -dir I spi_sdo_i
-create_bd_port -dir O spi_sdo_o
-create_bd_port -dir I spi_sdi_i
-
-
 # hmcad15xx interface
 
-create_bd_port -dir I clk_in_p
-create_bd_port -dir I clk_in_n
-create_bd_port -dir I fclk_p
-create_bd_port -dir I fclk_n
-create_bd_port -dir I -from 7 -to 0 data_in_p
-create_bd_port -dir I -from 7 -to 0 data_in_n
+create_bd_port -dir I -from 7 -to 0 data_in_a1_p
+create_bd_port -dir I -from 7 -to 0 data_in_a1_n
+create_bd_port -dir I -from 7 -to 0 data_in_a2_p
+create_bd_port -dir I -from 7 -to 0 data_in_a2_n
+
+create_bd_port -dir I clk_in_a1_p
+create_bd_port -dir I clk_in_a1_n
+create_bd_port -dir I clk_in_a2_p
+create_bd_port -dir I clk_in_a2_n
+create_bd_port -dir I fclk_a1_p
+create_bd_port -dir I fclk_a1_n
+create_bd_port -dir I fclk_a2_p
+create_bd_port -dir I fclk_a2_n
 
 # instance: sys_ps7
 
@@ -102,39 +100,83 @@ ad_ip_parameter sys_concat_intc CONFIG.NUM_PORTS 16
 ad_ip_instance proc_sys_reset sys_rstgen
 ad_ip_parameter sys_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
-# instance: hcmad15xx dma
+# instance: hcmad15xx_a1 dma
 
-ad_ip_instance axi_dmac hmcad15xx_dma
-ad_ip_parameter hmcad15xx_dma CONFIG.DMA_TYPE_SRC 2
-ad_ip_parameter hmcad15xx_dma CONFIG.DMA_TYPE_DEST 0
-ad_ip_parameter hmcad15xx_dma CONFIG.CYCLIC 0
-ad_ip_parameter hmcad15xx_dma CONFIG.SYNC_TRANSFER_START 1
-ad_ip_parameter hmcad15xx_dma CONFIG.AXI_SLICE_SRC 0
-ad_ip_parameter hmcad15xx_dma CONFIG.AXI_SLICE_DEST 0
-ad_ip_parameter hmcad15xx_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter hmcad15xx_dma CONFIG.DMA_DATA_WIDTH_SRC 128
-ad_ip_parameter hmcad15xx_dma CONFIG.DMA_DATA_WIDTH_DEST 64
-ad_ip_parameter hmcad15xx_dma CONFIG.FIFO_SIZE 32
-ad_ip_parameter hmcad15xx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+ad_ip_instance axi_dmac hmcad15xx_a1_dma
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.CYCLIC 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter hmcad15xx_a1_dma CONFIG.MAX_BYTES_PER_BURST 4096
 
-# axi_hmcad15xx
+# instance: hcmad15xx_a2 dma
 
-ad_ip_instance axi_hmcad15xx axi_hmcad15xx_adc
-ad_ip_parameter axi_hmcad15xx_adc CONFIG.NUM_CHANNELS 4
+ad_ip_instance axi_dmac hmcad15xx_a2_dma
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_SRC 2
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_TYPE_DEST 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.CYCLIC 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_SRC 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.AXI_SLICE_DEST 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_SRC 128
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.FIFO_SIZE 32
+ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096
 
-ad_connect axi_hmcad15xx_adc/s_axi_aclk    sys_cpu_clk
-ad_connect axi_hmcad15xx_adc/clk_in_p      clk_in_p
-ad_connect axi_hmcad15xx_adc/clk_in_n      clk_in_n
-ad_connect axi_hmcad15xx_adc/fclk_p        fclk_p
-ad_connect axi_hmcad15xx_adc/fclk_n        fclk_n
-ad_connect axi_hmcad15xx_adc/data_in_p     data_in_p
-ad_connect axi_hmcad15xx_adc/data_in_n     data_in_n
-ad_connect axi_hmcad15xx_adc/delay_clk     $sys_iodelay_clk
+# instance: axi_hmcad15xx_a1
 
-ad_connect axi_hmcad15xx_adc/adc_clk   hmcad15xx_dma/fifo_wr_clk
-ad_connect axi_hmcad15xx_adc/adc_data  hmcad15xx_dma/fifo_wr_din
-ad_connect axi_hmcad15xx_adc/adc_valid hmcad15xx_dma/fifo_wr_en
-ad_connect axi_hmcad15xx_adc/adc_dovf  hmcad15xx_dma/fifo_wr_overflow
+ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a1_adc
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4
+
+ad_connect axi_hmcad15xx_a1_adc/s_axi_aclk    sys_cpu_clk
+ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_p
+ad_connect axi_hmcad15xx_a1_adc/clk_in_n      clk_in_n
+ad_connect axi_hmcad15xx_a1_adc/fclk_p        fclk_p
+ad_connect axi_hmcad15xx_a1_adc/fclk_n        fclk_n
+ad_connect axi_hmcad15xx_a1_adc/data_in_p     data_in_p
+ad_connect axi_hmcad15xx_a1_adc/data_in_n     data_in_n
+ad_connect axi_hmcad15xx_a1_adc/delay_clk     $sys_iodelay_clk
+
+ad_connect axi_hmcad15xx_a1_adc/adc_clk   hmcad15xx_a1_dma/fifo_wr_clk
+ad_connect axi_hmcad15xx_a1_adc/adc_data  hmcad15xx_a1_dma/fifo_wr_din
+ad_connect axi_hmcad15xx_a1_adc/adc_valid hmcad15xx_a1_dma/fifo_wr_en
+ad_connect axi_hmcad15xx_a1_adc/adc_dovf  hmcad15xx_a1_dma/fifo_wr_overflow
+
+ad_connect axi_hmcad15xx_a1_adc/adc_clk   hmcad15xx_a2_dma/fifo_wr_clk
+ad_connect axi_hmcad15xx_a1_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
+ad_connect axi_hmcad15xx_a1_adc/adc_valid hmcad15xx_a2_dma/fifo_wr_en
+ad_connect axi_hmcad15xx_a1_adc/adc_dovf  hmcad15xx_a2_dma/fifo_wr_overflow
+
+# instance: axi_hmcad15xx_a2
+
+ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a2_adc
+ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4
+
+ad_connect axi_hmcad15xx_a2_adc/s_axi_aclk    sys_cpu_clk
+ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_p
+ad_connect axi_hmcad15xx_a2_adc/clk_in_n      clk_in_n
+ad_connect axi_hmcad15xx_a2_adc/fclk_p        fclk_p
+ad_connect axi_hmcad15xx_a2_adc/fclk_n        fclk_n
+ad_connect axi_hmcad15xx_a2_adc/data_in_p     data_in_p
+ad_connect axi_hmcad15xx_a2_adc/data_in_n     data_in_n
+ad_connect axi_hmcad15xx_a2_adc/delay_clk     $sys_iodelay_clk
+
+ad_connect axi_hmcad15xx_a2_adc/adc_clk   hmcad15xx_a1_dma/fifo_wr_clk
+ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a1_dma/fifo_wr_din
+ad_connect axi_hmcad15xx_a2_adc/adc_valid hmcad15xx_a1_dma/fifo_wr_en
+ad_connect axi_hmcad15xx_a2_adc/adc_dovf  hmcad15xx_a1_dma/fifo_wr_overflow
+
+ad_connect axi_hmcad15xx_a2_adc/adc_clk   hmcad15xx_a2_dma/fifo_wr_clk
+ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
+ad_connect axi_hmcad15xx_a2_adc/adc_valid hmcad15xx_a2_dma/fifo_wr_en
+ad_connect axi_hmcad15xx_a2_adc/adc_dovf  hmcad15xx_a2_dma/fifo_wr_overflow
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 150.0
@@ -147,16 +189,12 @@ ad_connect  sys_150m_rstgen/ext_reset_in sys_ps7/FCLK_RESET2_N
 
 #DMA
 
-ad_connect  hmcad15xx_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_aresetn
+ad_connect  hmcad15xx_a1_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_aresetn
+ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_aresetn
 
 # system reset/clock definitions
 
 # add external spi
-
-ad_ip_instance axi_quad_spi axi_spi
-ad_ip_parameter axi_spi CONFIG.C_USE_STARTUP 0
-ad_ip_parameter axi_spi CONFIG.C_NUM_SS_BITS 1
-ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 8
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
 ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
@@ -184,17 +222,6 @@ ad_connect  spi0_clk_o sys_ps7/SPI0_SCLK_O
 ad_connect  spi0_sdo_i sys_ps7/SPI0_MOSI_I
 ad_connect  spi0_sdo_o sys_ps7/SPI0_MOSI_O
 ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
-
-# axi spi connections
-
-ad_connect  sys_cpu_clk  axi_spi/ext_spi_clk
-ad_connect  spi_csn_i  axi_spi/ss_i
-ad_connect  spi_csn_o  axi_spi/ss_o
-ad_connect  spi_clk_i  axi_spi/sck_i
-ad_connect  spi_clk_o  axi_spi/sck_o
-ad_connect  spi_sdo_i  axi_spi/io0_i
-ad_connect  spi_sdo_o  axi_spi/io0_o
-ad_connect  spi_sdi_i  axi_spi/io1_i
 
 # interrupts
 
@@ -246,34 +273,55 @@ ad_ip_instance util_vector_logic logic_inv [list \
 
 # cpu / memory interconnects
 
-ad_cpu_interconnect 0x44A00000 axi_hmcad15xx_adc
-ad_cpu_interconnect 0x44A30000 hmcad15xx_dma
+ad_cpu_interconnect 0x44A00000 axi_hmcad15xx_a1_adc
+ad_cpu_interconnect 0x44A30000 hmcad15xx_a1_dma
+ad_cpu_interconnect 0x44A60000 axi_hmcad15xx_a2_adc
+ad_cpu_interconnect 0x44A90000 hmcad15xx_a2_dma
 
-ad_cpu_interconnect 0x79020000 {*}
-ad_cpu_interconnect 0x7C400000 {*}
-ad_cpu_interconnect 0x7C420000 {*}
-ad_cpu_interconnect 0x7C430000 axi_spi
+# + doua adrese pentru celaltat hmc
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP1 {1}
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
 
 create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
-                    [get_bd_addr_spaces {*}/m_dest_axi] \
+                    [get_bd_addr_spaces hmcad15xx_a1_dma/m_dest_axi] \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] \
                     SEG_sys_ps7_HP1_DDR_LOWOCM
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
-ad_connect sys_cpu_clk sys_ps7/S_AXI_HP2_ACLK
+# create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+#                     [get_bd_addr_spaces axi_hmcad15xx_a1_adc/m_src_axi] \
+#                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
+#                     SEG_sys_ps7_HP2_DDR_LOWOCM
 
 create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
-                    [get_bd_addr_spaces {*}/m_src_axi] \
-                    [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
-                    SEG_sys_ps7_HP2_DDR_LOWOCM
+                    [get_bd_addr_spaces hmcad15xx_a2_dma/m_dest_axi] \
+                    [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] \
+                    SEG_sys_ps7_HP1_DDR_LOWOCM
+
+# create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
+#                     [get_bd_addr_spaces axi_hmcad15xx_a2_adc/m_src_axi] \
+#                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
+#                     SEG_sys_ps7_HP2_DDR_LOWOCM
+
+ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP2 {1}
+ad_connect sys_cpu_clk sys_ps7/S_AXI_HP2_ACLK
+ad_connect hmcad15xx_a1_dma/m_src_axi sys_ps7/S_AXI_HP2
+ad_connect hmcad15xx_a2_dma/m_src_axi sys_ps7/S_AXI_HP2
 
 ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_a1_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_a2_dma/m_dest_axi
+
+ad_connect sys_cpu_clk hmcad15xx_a1_dma/m_src_axi_aclk
+ad_connect sys_cpu_clk hmcad15xx_a2_dma/m_src_axi_aclk
+ad_connect sys_cpu_clk hmcad15xx_a1_dma/m_dest_axi_aclk
+ad_connect sys_cpu_clk hmcad15xx_a2_dma/m_dest_axi_aclk
+ad_connect sys_cpu_resetn hmcad15xx_a1_dma/m_src_axi_aresetn
+ad_connect sys_cpu_resetn hmcad15xx_a2_dma/m_src_axi_aresetn
+ad_connect sys_cpu_resetn hmcad15xx_a1_dma/m_dest_axi_aresetn
+ad_connect sys_cpu_resetn hmcad15xx_a2_dma/m_dest_axi_aresetn
 
 # interrupts
 
-ad_cpu_interrupt ps-11 mb-11 axi_spi/ip2intc_irpt
-ad_cpu_interrupt ps-13 mb-12 hmcad15xx_dma/irq
+ad_cpu_interrupt ps-13 mb-12 hmcad15xx_a1_dma/irq
+ad_cpu_interrupt ps-13 mb-12 hmcad15xx_a2_dma/irq

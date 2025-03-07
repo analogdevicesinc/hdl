@@ -68,11 +68,7 @@ module system_top (
   
   // I2C - ?
   inout           iic_scl,
-  inout           iic_sca,    // ? how to connect them? 
-
-  // UART
-  input           uart_rx,
-  output          uart_tx,    // ? how to connect them? 
+  inout           iic_sca,
 
   inout           ad9696_ldac,
 
@@ -95,11 +91,10 @@ module system_top (
   input   [ 7:0]  data_in_a2_p, // new, add those two in BD too
   input   [ 7:0]  data_in_a2_n, // new
 
-  // ? use ad_3w_spi IP
   output          spi_a1_csn,
   output          spi_a2_csn,
   output          spi_clk,
-  inout           spi_sdio,   // ? how to connect it? 
+  inout           spi_sdio,
 );
 
   // internal signals
@@ -109,7 +104,7 @@ module system_top (
   wire    [17:0]  gpio_i;
   wire    [17:0]  gpio_o;
   wire    [17:0]  gpio_t;
-  wire    [6:0]   ps_gpio; // ? not sure what to do with tem
+  wire    [6:0]   ps_gpio;
 
   // instantiations
 
@@ -134,10 +129,6 @@ module system_top (
 
   assign gpio_i[17:1] = gpio_o[17:1];
   assign ps_gpio[6:0] = ps_gpio[6:0];
-
-  // assign if iic_sca/scl are wires
-  //assign pl_gpio0 = iic_sca;
-  //assign pl_gpio1 = iic_scl;
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -190,17 +181,7 @@ module system_top (
     .data_in_a2_p (data_in_a2_p),
     .data_in_a2_n (data_in_a2_n),
 
-
-
     .iic_main_scl_io (iic_scl),
-    .iic_main_sda_io (iic_sca),
-
-    .spi_clk_i(1'b0),
-    .spi_clk_o(),
-    .spi_csn_i(1'b1),
-    .spi_csn_o(),
-    .spi_sdi_i(),
-    .spi_sdo_i(1'b0),
-    .spi_sdo_o());
+    .iic_main_sda_io (iic_sca));
 
 endmodule
