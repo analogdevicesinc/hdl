@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -51,8 +51,8 @@ INTEL_DEPS += ../jesd204_common/jesd204_frame_align_replace.v
 INTEL_DEPS += ../jesd204_common/jesd204_frame_mark.v
 INTEL_DEPS += ../jesd204_common/jesd204_lmfc.v
 INTEL_DEPS += ../jesd204_common/jesd204_scrambler.v
-INTEL_DEPS += ../jesd204_common/pipeline_stage.v
 INTEL_DEPS += ../jesd204_common/jesd204_crc12.v
+INTEL_DEPS += ../../common/util_pipeline_stage.v
 INTEL_DEPS += error_monitor.v
 INTEL_DEPS += jesd204_rx_constr.sdc
 INTEL_DEPS += jesd204_rx_hw.tcl
