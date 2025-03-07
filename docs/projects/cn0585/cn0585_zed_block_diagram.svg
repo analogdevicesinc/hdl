@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    sodipodi:docname="cn0585_zed_block_diagram.svg"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
    style="shape-rendering:crispEdges"
    id="svg6470"
    version="1.1"
@@ -1540,6 +1540,36 @@
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="scale(0.4)" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1216-9-9-6-3-55-6"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1214-1-9-0-7-4-1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker1216-9-9-6-3-55-6-7"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1214-1-9-0-7-4-1-3"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      inkscape:document-rotation="0"
@@ -1547,17 +1577,17 @@
      inkscape:snap-page="true"
      showguides="false"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="1912"
-     inkscape:window-height="1017"
-     inkscape:window-width="1920"
+     inkscape:window-y="-9"
+     inkscape:window-x="2391"
+     inkscape:window-height="1271"
+     inkscape:window-width="2400"
      units="px"
      showgrid="true"
      inkscape:current-layer="svg6470"
      inkscape:document-units="px"
-     inkscape:cy="495"
-     inkscape:cx="548.5"
-     inkscape:zoom="1"
+     inkscape:cy="510.25"
+     inkscape:cx="224.25"
+     inkscape:zoom="2"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1572,23 +1602,31 @@
        originy="160"
        originx="220.00002"
        id="grid7015"
-       type="xygrid" />
+       type="xygrid"
+       spacingy="1"
+       spacingx="1"
+       units="px"
+       visible="true" />
     <sodipodi:guide
        position="29.142982,1040.857"
        orientation="0,891.96814"
-       id="guide2469" />
+       id="guide2469"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="921.11115,1040.857"
        orientation="1001.714,0"
-       id="guide2471" />
+       id="guide2471"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="921.11115,39.143012"
        orientation="0,-891.96814"
-       id="guide2473" />
+       id="guide2473"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="29.142982,39.143012"
        orientation="-1001.714,0"
-       id="guide2475" />
+       id="guide2475"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata6467">
@@ -1608,6 +1646,24 @@
      height="1000"
      x="29.999981"
      y="20" />
+  <path
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path1206-9-7-0-71-02-2-4"
+     d="m 114.24435,474.84488 h 32.47873"
+     style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55-6-7);shape-rendering:crispEdges;enable-background:new"
+     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+     inkscape:export-xdpi="224.36"
+     inkscape:export-ydpi="224.36" />
+  <path
+     sodipodi:nodetypes="cc"
+     inkscape:connector-curvature="0"
+     id="path1206-9-7-0-71-02-2"
+     d="M 114.11627,420 H 146.595"
+     style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55-6);shape-rendering:crispEdges;enable-background:new"
+     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
+     inkscape:export-xdpi="224.36"
+     inkscape:export-ydpi="224.36" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
@@ -1625,7 +1681,7 @@
        transform="matrix(1.1787565,0,0,1.1091093,28.15516,244.15427)" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.84839;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-1-5-1-0);shape-rendering:crispEdges;enable-background:new"
-       d="m 376.02533,806.72443 0.79196,-315.97864"
+       d="M 376.02489,806.72443 V 490.74579"
        id="path1206-7-8-6-5-7-4-2-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1634,7 +1690,7 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.84839;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-1-5-1-0-1);shape-rendering:crispEdges;enable-background:new"
-       d="m 360.74587,795.74579 0.79196,-305"
+       d="m 360.74589,795.74579 v -305"
        id="path1206-7-8-6-5-7-4-2-0-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -1643,16 +1699,16 @@
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.84839;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-1-5-1-0-3);shape-rendering:crispEdges;enable-background:new"
-       d="m 336.02533,781.72444 0.79196,-295.97865"
+       d="m 336.02489,781.72444 0.10877,-40.48486 -0.10877,-255.49379"
        id="path1206-7-8-6-5-7-4-2-0-7"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
+       sodipodi:nodetypes="ccc"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"
        inkscape:export-xdpi="224.36"
        inkscape:export-ydpi="224.36" />
     <path
        style="display:inline;fill:none;stroke:#000000;stroke-width:1.84839;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-8-3-7-3-1-5-1-0-1-2);shape-rendering:crispEdges;enable-background:new"
-       d="m 322.03159,762.74583 0.79196,-277.00002"
+       d="m 321.63606,762.74583 0.79166,-277.00002"
        id="path1206-7-8-6-5-7-4-2-0-6-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -2189,7 +2245,7 @@
        x="426.80331"
        y="309.27594"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:20.0095px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke-width:1.1434px"
-       id="tspan45137">AD3552R CORE</tspan></text>
+       id="tspan45137">AXI_AD35XXR CORE</tspan></text>
   <text
      id="text2401-1-7-3-9-9-7"
      y="371.13113"
@@ -2323,7 +2379,7 @@
        y="665.9469"
        x="-445.50375"
        id="tspan5790-5-8"
-       sodipodi:role="line">AD3552R_IF</tspan></text>
+       sodipodi:role="line">AD35XXR_IF</tspan></text>
   <text
      id="text2401-1-7-3-9-9-74-2"
      y="359.79678"
@@ -2357,7 +2413,7 @@
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
      id="path1206-9-7-0-71-4"
-     d="M 154.29492,838.00263 H 124.99998"
+     d="M 154.29492,838.003 H 124.99998"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01136;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-4);shape-rendering:crispEdges;enable-background:new"
      inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
      inkscape:export-xdpi="224.36"
@@ -2366,7 +2422,7 @@
      sodipodi:nodetypes="cc"
      inkscape:connector-curvature="0"
      id="path1206-9-7-0-71-4-9"
-     d="M 229.29344,837.81139 H 202.30336"
+     d="m 229.29344,837.811 -26.99008,3.9e-4"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-4-3);shape-rendering:crispEdges;enable-background:new"
      inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
      inkscape:export-xdpi="224.36"
@@ -2377,24 +2433,6 @@
      id="path1206-9-7-0-71-02"
      d="M 201.40519,431.08508 H 334.99997"
      style="display:inline;fill:none;stroke:#000000;stroke-width:2.01137;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-55);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
-     inkscape:export-xdpi="224.36"
-     inkscape:export-ydpi="224.36" />
-  <path
-     sodipodi:nodetypes="cc"
-     inkscape:connector-curvature="0"
-     id="path1206-9-7-0-71-0-1"
-     d="m 149.70264,419.88461 c -68.430412,-0.33656 -17.09507,0.74107 -2.26626,1.20747"
-     style="display:inline;fill:none;stroke:#000000;stroke-width:2.13428;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-5-4);shape-rendering:crispEdges;enable-background:new"
-     inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
-     inkscape:export-xdpi="224.36"
-     inkscape:export-ydpi="224.36" />
-  <path
-     sodipodi:nodetypes="cc"
-     inkscape:connector-curvature="0"
-     id="path1206-9-7-0-71-0-1-4"
-     d="M 154.99998,473.79254 C 69.964859,473.45598 133.75678,474.53361 152.18381,475"
-     style="display:inline;fill:none;stroke:#000000;stroke-width:2.13428;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-6-3-5-4-9);shape-rendering:crispEdges;enable-background:new"
      inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\LLDK\DIAGRAMS\final_diagram_hil.png"
      inkscape:export-xdpi="224.36"
      inkscape:export-ydpi="224.36" />
@@ -2867,7 +2905,7 @@
      ry="3.5355327" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.858824;stroke:#a01414;stroke-width:1.84838;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.901961;marker-end:url(#marker1216-8-3-7-3-1);shape-rendering:crispEdges;enable-background:new"
-     d="m 414.81746,963.41783 255.1825,-0.22567"
+     d="M 414.81746,963.41783 669.99996,963.305"
      id="path1206-7-8-6-5-7"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -2876,7 +2914,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.84838;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-8-3-7-3-1-50);shape-rendering:crispEdges;enable-background:new"
-     d="m 505.01332,781.79757 -228.86121,0.22567"
+     d="M 505.01332,781.798 H 276.15211"
      id="path1206-7-8-6-5-7-9"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -2885,7 +2923,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.84838;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-8-3-7-3-1-50-9);shape-rendering:crispEdges;enable-background:new"
-     d="m 521.15936,828.00496 -245.03232,0.22567"
+     d="m 521.15936,827.89218 -245.03232,0.22563"
      id="path1206-7-8-6-5-7-9-6"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -2894,7 +2932,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.84838;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-8-3-7-3-1-50-2);shape-rendering:crispEdges;enable-background:new"
-     d="m 516.08436,812.64782 -240.0013,0.22567"
+     d="M 516.08436,812.648 H 276.08306"
      id="path1206-7-8-6-5-7-9-7"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -2903,7 +2941,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.639216;stroke:#a01414;stroke-width:1.84838;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.858824;marker-end:url(#marker1216-8-3-7-3-1-50-3);shape-rendering:crispEdges;enable-background:new"
-     d="M 510.64564,798.3621 276.0965,798.58777"
+     d="m 510.646,798.24911 -234.5495,0.22577"
      id="path1206-7-8-6-5-7-9-2"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -2912,7 +2950,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.858824;stroke:#a01414;stroke-width:1.84837;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.901961;marker-end:url(#marker1216-8-3-7-3-1-4);shape-rendering:crispEdges;enable-background:new"
-     d="m 414.22924,992.02323 443.3397,-0.22567"
+     d="m 414.22924,992.023 h 443.3397"
      id="path1206-7-8-6-5-7-2"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -3207,7 +3245,7 @@
        id="tspan5125-2-3-9">120Mhz</tspan></text>
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.858824;stroke:#a01414;stroke-width:1.63966;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.901961;marker-end:url(#marker1216-8-3-7-3);shape-rendering:crispEdges;enable-background:new"
-     d="M 692.99997,957.0681 739.99998,957"
+     d="m 692.99997,957 h 47.00001"
      id="path1206-7-8-6-5"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -3216,7 +3254,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.858824;stroke:#a01414;stroke-width:1.63965;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.901961;marker-end:url(#marker1216-8-3-7-3-0);shape-rendering:crispEdges;enable-background:new"
-     d="m 764.99999,950.47708 89.99998,-0.0681"
+     d="m 764.99999,950.44304 89.99998,-0.0681"
      id="path1206-7-8-6-5-8"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"
@@ -3225,7 +3263,7 @@
      inkscape:export-ydpi="224.36" />
   <path
      style="display:inline;fill:#a01414;fill-opacity:0.858824;stroke:#a01414;stroke-width:1.63966;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.901961;marker-end:url(#marker1216-8-3-7-3-0-4);shape-rendering:crispEdges;enable-background:new"
-     d="M 769.14266,967.56814 855,967.50004"
+     d="M 769.14266,967.5 H 855"
      id="path1206-7-8-6-5-8-6"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc"

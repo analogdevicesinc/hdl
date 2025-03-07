@@ -60,7 +60,7 @@ Block Diagram
 --------------------------------------------------------------------------------
 
 .. image:: block_diagram.svg
-   :alt: AXI AD3552R block diagram
+   :alt: AXI AD35XXR block diagram
 
 Configuration Parameters
 --------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ The example design uses a DMA to move the data from the memory to the CHIP quad
 SPI interface.
 
 If the data needs to be processed in HDL before moving to DAC's output, it can be
-done at the input of the IP (at the system level) or inside the axi_ad3552r_if
+done at the input of the IP (at the system level) or inside the axi_ad35xxr_if
 interface module (at the IP level).
 
 The example design uses a processor to program all the registers. If no
