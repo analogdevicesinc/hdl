@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ADAQ8092-FMC HDL project &#8212; HDL  documentation</title>
+    <title>DC2677A HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3d3703ae" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -16,8 +16,8 @@
     <link rel="icon" href="../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="ADRV9371x HDL reference design" href="../adrv9371x/index.html" />
-    <link rel="prev" title="ADAQ7980-SDZ HDL project" href="../adaq7980_sdz/index.html" />
+    <link rel="next" title="FMCOMMS2/3/4 HDL Project" href="../fmcomms2/index.html" />
+    <link rel="prev" title="DAC-FMC-EBZ HDL project" href="../dac_fmc_ebz/index.html" />
    
   
   <meta name="repository" content="hdl">
@@ -89,23 +89,22 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADAQ8092-FMC HDL project</a><ul>
+<li><a class="reference internal" href="#">DC2677A HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
+<li><a class="reference internal" href="#jumper-setup">Jumper setup</a></li>
+<li><a class="reference internal" href="#hardware-setup">Hardware setup</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
-<li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
 <li><a class="reference internal" href="#resources">Resources</a><ul>
-<li><a class="reference internal" href="#systems-related">Systems related</a></li>
 <li><a class="reference internal" href="#hardware-related">Hardware related</a></li>
 <li><a class="reference internal" href="#hdl-related">HDL related</a></li>
 <li><a class="reference internal" href="#software-related">Software related</a></li>
@@ -299,7 +298,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad9695_fmc/index.html">AD9695-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9783_ebz/index.html">AD9783-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">ADAQ8092-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9371x/index.html">ADRV9371x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
@@ -315,7 +314,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dac_fmc_ebz/index.html">DAC-FMC-EBZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../dc2677a/index.html">DC2677A</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DC2677A</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms2/index.html">FMCOMMS2/3/4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms8/index.html">FMCOMMS8</a></li>
@@ -343,79 +342,178 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="adaq8092-fmc-hdl-project">
-<span id="adaq8092-fmc"></span><h1>ADAQ8092-FMC HDL project<a class="headerlink" href="#adaq8092-fmc-hdl-project" title="Permalink to this heading"></a></h1>
+  <section id="dc2677a-hdl-project">
+<span id="dc2677a"></span><h1>DC2677A HDL project<a class="headerlink" href="#dc2677a-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ8092">EVAL-ADAQ8092</a> evaluates the <a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a>, a
-14-bit, 105MSPS , high-speed dual-channel data acquisition uModule solution.
-This device uses the System-in-Package (SiP) that integrates three common signal
-processing and conditioning blocks.</p>
-<p>This <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ8092">EVAL-ADAQ8092</a> board does not need an external power
-supply to operate and requires a very small jitter in the clock source. We
-recommend to use the <a class="icon adi reference external" href="https://www.analog.com/DC1075B">DC1075B</a> to improve the clock signal source. For
-full details on the  <a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a>, see the  <a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a> data sheet,
-which must be consulted in conjunction with this user guide when using the
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ8092">EVAL-ADAQ8092</a>.</p>
+<p>Demonstration circuit 2677A (<a class="icon adi reference external" href="https://www.analog.com/DC2677A">DC2677A</a>) is a reference design for robust
+industrial data acquisition applications for the LTC2358-18. The LTC2358-18 is
+capable of high voltage measurements with a large input common range; however,
+the <a class="icon adi reference external" href="https://www.analog.com/DC2677A">DC2677A</a> implements input protection that allows up to 400V of continuous
+input protection. Combined with gas discharge tubes, which provide protection from
+surges, the <a class="icon adi reference external" href="https://www.analog.com/DC2677A">DC2677A</a> is capable of surviving extreme abuse.</p>
+<p>This reference design includes the LTC2358-18 SAR ADC, <a class="icon adi reference external" href="https://www.analog.com/ADA4522-2">ADA4522-2</a> dual zero-drift
+operational amplifier, and an <a class="icon adi reference external" href="https://www.analog.com/LT6658">LT6658</a> dual-output, high current reference for
+sensor excitation.</p>
+<p>The digital interface is an HSMC (high-speed mezzanine connector), which is
+compatible with Altera Cyclone V SoCkit and other Altera FPGA evaluation boards
+that support 3.3V CMOS I/O.</p>
+<p>Applications:</p>
+<ul class="simple">
+<li><p>Programmable Logic Controllers</p></li>
+<li><p>Industrial Process Control</p></li>
+<li><p>Power Line Monitoring</p></li>
+<li><p>Test and Measurement</p></li>
+</ul>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ8092">EVAL-ADAQ8092</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/DC1075B">DC1075B</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/DC2677A">DC2677A</a></p></li>
 </ul>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC2358-18">LTC2358-18</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
-<div class="table-wrapper colwidths-given docutils container">
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/cyclone/v-sx.html">C5SoC</a> (Cyclone V SoC)
+HSMC</p></li>
+</ul>
+</section>
+<section id="block-design">
+<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
+<section id="block-diagram">
+<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
+<p>The data path and clock domains are depicted in the below diagram:</p>
+<a class="reference internal image-reference" href="../../_images/dc2677a_block_diagram.svg"><img alt="DC2677A block diagram" class="align-center" src="../../_images/dc2677a_block_diagram.svg" width="800" /></a>
+</section>
+<section id="jumper-setup">
+<h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Carrier</p></th>
-<th class="head"><p>FMC slot</p></th>
+<tr class="row-odd"><th class="head"><p>Jumper/Solder link</p></th>
+<th class="head"><p>Position</p></th>
+<th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-ADAQ8092">EVAL-ADAQ8092</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
-<td><p>FMC-LPC</p></td>
+<tr class="row-even"><td><p>J15</p></td>
+<td><p>Short Pin 2-3</p></td>
+<td><p>CLKSEL0 - Default for clock connection on HPS</p></td>
+</tr>
+<tr class="row-odd"><td><p>J16</p></td>
+<td><p>Short Pin 2-3</p></td>
+<td><p>CLKSEL1 - Default for clock connection on HPS</p></td>
+</tr>
+<tr class="row-even"><td><p>J17</p></td>
+<td><p>Short Pin 1-2</p></td>
+<td><p>BOOTSEL0 - Needed for SD card boot</p></td>
+</tr>
+<tr class="row-odd"><td><p>J19</p></td>
+<td><p>Short Pin 2-3</p></td>
+<td><p>BOOTSEL1 - Needed for SD card boot</p></td>
+</tr>
+<tr class="row-even"><td><p>J18</p></td>
+<td><p>Short Pin 1-2</p></td>
+<td><p>BOOTSEL2 - Needed for SD card boot</p></td>
+</tr>
+<tr class="row-odd"><td><p>JP2</p></td>
+<td><p>Short Pin 7-8</p></td>
+<td><p>HSMC Voltage level setting. Set to 3.3V</p></td>
+</tr>
+<tr class="row-even"><td><p>SW6[4:0]</p></td>
+<td><p>10010</p></td>
+<td><p>MSEL - Sets configuration scheme to default
+ASx4 mode. (1 = OFF, 0 = ON).</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="block-design">
-<h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The VADJ for the Zedboard must be set to 2.5V.</p>
+<section id="hardware-setup">
+<h3>Hardware setup<a class="headerlink" href="#hardware-setup" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Signal</p></th>
+<th class="head"><p>DC2677A Testpoint</p></th>
+<th class="head"><p>Cyclone V SoCKit HSMC LTC2358/LTC2357/LTC2353</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sdo[0]</p></td>
+<td><p>SDO0</p></td>
+<td><p>lvds_rxn1/lvds_rxn2/lvds_rxp3</p></td>
+</tr>
+<tr class="row-odd"><td><p>sdo[1]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxp2/lvds_rxp3/lvds_rxn4</p></td>
+</tr>
+<tr class="row-even"><td><p>sdo[2]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxn2/lvds_rxn4</p></td>
+</tr>
+<tr class="row-odd"><td><p>sdo[3]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxp3/lvds_rxp5</p></td>
+</tr>
+<tr class="row-even"><td><p>sdo[4]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxn4</p></td>
+</tr>
+<tr class="row-odd"><td><p>sdo[5]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxp5</p></td>
+</tr>
+<tr class="row-even"><td><p>sdo[6]</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxn5</p></td>
+</tr>
+<tr class="row-odd"><td><p>sdo[7]</p></td>
+<td><p>SDO7</p></td>
+<td><p>lvds_rxp6</p></td>
+</tr>
+<tr class="row-even"><td><p>sdi</p></td>
+<td><p>SDI</p></td>
+<td><p>lvds_rxn6</p></td>
+</tr>
+<tr class="row-odd"><td><p>scki</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxn3</p></td>
+</tr>
+<tr class="row-even"><td><p>scko</p></td>
+<td><p>—</p></td>
+<td><p>lvds_rxp4</p></td>
+</tr>
+<tr class="row-odd"><td><p>lvds_cmos_n</p></td>
+<td><p>LVDS/CMOS</p></td>
+<td><p>lvds_rxp1</p></td>
+</tr>
+<tr class="row-even"><td><p>cnv</p></td>
+<td><p>CNV</p></td>
+<td><p>lvds_rxp0</p></td>
+</tr>
+<tr class="row-odd"><td><p>busy</p></td>
+<td><p>BUSY</p></td>
+<td><p>lvds_rxp7</p></td>
+</tr>
+<tr class="row-even"><td><p>cs_n</p></td>
+<td><p>CSL</p></td>
+<td><p>lvds_rxn7</p></td>
+</tr>
+<tr class="row-odd"><td><p>pd</p></td>
+<td><p>PD</p></td>
+<td><p>lvds_rxn0</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<section id="block-diagram">
-<h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="../../_images/adaq8092_zed_hdl_block_diagram.svg"><img alt="ADAQ8092-FMC/ZedBoard block diagram" class="align-center" src="../../_images/adaq8092_zed_hdl_block_diagram.svg" width="800" /></a>
-</section>
-<section id="clock-scheme">
-<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p>External clock source</p>
-<ul>
-<li><p>Rohde &amp; Schwarz SMA100A (clock source) - Suggested</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/DC1075B">DC1075B (Clock Divider) - Suggested</a></p></li>
-</ul>
-</li>
-</ul>
-<a class="reference internal image-reference" href="../../_images/adaq8092_clock_scheme.svg"><img alt="ADAQ8092-FMC clock scheme" class="align-center" src="../../_images/adaq8092_clock_scheme.svg" width="800" /></a>
 </section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
@@ -425,42 +523,18 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Zynq/Microblaze</p></th>
+<th class="head"><p>Cyclone V</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_adaq8092</p></td>
-<td><p>0x44A0_0000</p></td>
+<tr class="row-even"><td><p>axi_ltc235x</p></td>
+<td><p>0xff320000</p></td>
 </tr>
-<tr class="row-odd"><td><p>axi_adaq8092_dma</p></td>
-<td><p>0x44A3_0000</p></td>
+<tr class="row-odd"><td><p>adc_pwm_gen</p></td>
+<td><p>0xff340000</p></td>
 </tr>
-</tbody>
-</table>
-</div>
-</section>
-<section id="spi-connections">
-<h3>SPI connections<a class="headerlink" href="#spi-connections" title="Permalink to this heading"></a></h3>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-<col style="width: 25.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>SPI type</p></th>
-<th class="head"><p>SPI manager instance</p></th>
-<th class="head"><p>SPI subordinate</p></th>
-<th class="head"><p>CS</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>PS</p></td>
-<td><p>SPI 0</p></td>
-<td><p>ADAQ8092</p></td>
-<td><p>0</p></td>
+<tr class="row-even"><td><p>axi_adc_dma</p></td>
+<td><p>0xff300000</p></td>
 </tr>
 </tbody>
 </table>
@@ -471,50 +545,33 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 25.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 20.0%" />
-<col style="width: 15.0%" />
+<col style="width: 29.4%" />
+<col style="width: 23.5%" />
+<col style="width: 23.5%" />
+<col style="width: 23.5%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>GPIO signal</p></th>
 <th class="head"><p>Direction</p></th>
 <th class="head"><p>HDL GPIO EMIO</p></th>
 <th class="head"><p>Software GPIO</p></th>
-<th class="head"><p>Software GPIO</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
 <th class="head"><p>(from FPGA view)</p></th>
 <th class="head"></th>
-<th class="head"><p>Zynq-7000</p></th>
-<th class="head"><p>Zynq MP</p></th>
+<th class="head"><p>Cyclone V</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-odd"><td><p>en_1p8</p></td>
+<tr class="row-odd"><td><p>cs_n</p></td>
 <td><p>OUT</p></td>
-<td><p>35</p></td>
-<td><p>89</p></td>
-<td><p>113</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
 </tr>
-<tr class="row-even"><td><p>adc_pd2</p></td>
+<tr class="row-even"><td><p>pd</p></td>
 <td><p>OUT</p></td>
-<td><p>34</p></td>
-<td><p>88</p></td>
-<td><p>112</p></td>
-</tr>
-<tr class="row-odd"><td><p>adc_pd1</p></td>
-<td><p>OUT</p></td>
-<td><p>33</p></td>
-<td><p>87</p></td>
-<td><p>111</p></td>
-</tr>
-<tr class="row-even"><td><p>adc_par_ser</p></td>
-<td><p>IN</p></td>
-<td><p>32</p></td>
-<td><p>86</p></td>
-<td><p>110</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
 </tr>
 </tbody>
 </table>
@@ -528,15 +585,30 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance name</p></th>
 <th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
+<th class="head"><p>Linux Cyclone V</p></th>
+<th class="head"><p>Actual Cyclone V</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>axi_adaq8092_dma</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
+<tr class="row-even"><td><p>video_dmac</p></td>
+<td><p>4</p></td>
+<td><p>44</p></td>
+<td><p>76</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adc_dma</p></td>
+<td><p>2</p></td>
+<td><p>42</p></td>
+<td><p>74</p></td>
+</tr>
+<tr class="row-even"><td><p>sys_spi</p></td>
+<td><p>1</p></td>
+<td><p>41</p></td>
+<td><p>73</p></td>
+</tr>
+<tr class="row-odd"><td><p>sys_gpio_bd</p></td>
+<td><p>0</p></td>
+<td><p>40</p></td>
+<td><p>72</p></td>
 </tr>
 </tbody>
 </table>
@@ -556,10 +628,10 @@ the HDL repository, and then build the project as follows:</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/adaq8092_fmc/zed
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/dc2677a/c5soc
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/adaq8092_fmc/zed$
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/dc2677a/c5soc$
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
@@ -569,22 +641,17 @@ the HDL repository, and then build the project as follows:</p>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
-<section id="systems-related">
-<h3>Systems related<a class="headerlink" href="#systems-related" title="Permalink to this heading"></a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guide/adaq8092-eval-board">[Wiki] ADAQ8092 Evaluation Board User Guide</a></p></li>
-</ul>
-</section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Product datasheets: <a class="icon adi reference external" href="https://www.analog.com/ADAQ8092">ADAQ8092</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/DC2677A">DC2677A</a></p></li>
+<li><p><a class="reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/DC2677A_UG-1387.pdf">UG-1387: DEMO MANUAL DC2677A</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/adaq8092_fmc">EVAL-ADAQ8092 HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/dc2677a">DC2677A HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -600,45 +667,21 @@ the HDL repository, and then build the project as follows:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>AXI_ADAQ8092</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adaq8092">library/axi_adaq8092</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_adaq8092/index.html#axi-adaq8092"><span class="std std-ref">AXI ADAQ8092</span></a></p></td>
+<tr class="row-even"><td><p>AXI_LTC235X</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x">library/axi_ltc235x</a></p></td>
+<td><p><span class="xref std std-ref">axi_ltc235x</span></p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_CLKGEN</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_clkgen">library/axi_clkgen</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_clkgen/index.html#axi-clkgen"><span class="std std-ref">AXI CLK Generator</span></a></p></td>
+<tr class="row-odd"><td><p>AXI_PWM_GEN</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_pwm_gen">library/axi_pwm_gen</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_pwm_gen/index.html#axi-pwm-gen"><span class="std std-ref">AXI PWM Generator</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>AXI_DMAC</p></td>
+<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_cpack2">library/util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">library/axi_dmac</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_HDMI_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_hdmi_tx">library/axi_hdmi_tx</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>AXI_SPDIF_TX</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_spdif_tx">library/axi_spdif_tx</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_SYSID</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>SYSID_ROM</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
-<td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
-</tr>
-<tr class="row-even"><td><p>UTIL_I2C_MIXER</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_i2c_mixer">library/util_i2c_mixer</a></p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
-<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -647,14 +690,8 @@ the HDL repository, and then build the project as follows:</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/adaq8092">[Wiki] ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver</a></p></li>
-<li><p>Python support :</p>
-<ul>
-<li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/devices/adi.adaq8092.html">ADAQ8092 Python class documentation</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/examples/adaq8092_example.py">ADAQ8092 PyADI-IIO example</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/pyadi-iio/tree/main/">PyADI-IIO documentation</a></p></li>
-</ul>
-</li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts">Linux device tree socfpga_cyclone5_sockit_dc2677a.dts</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/drivers/iio/adc/ltc2358.c">LTC2358 Linux driver ltc2358.c</a></p></li>
 </ul>
 </section>
 </section>
@@ -684,8 +721,8 @@ are, the lower the chances to receive support from <a class="reference external"
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../adaq7980_sdz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">ADAQ7980-SDZ HDL project</a>
-    <a href="../adrv9371x/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">ADRV9371x HDL reference design</a>
+    <a href="../dac_fmc_ebz/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">DAC-FMC-EBZ HDL project</a>
+    <a href="../fmcomms2/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">FMCOMMS2/3/4 HDL Project</a>
               </div>
           
         </div>
