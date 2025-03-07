@@ -248,7 +248,6 @@ module spi_engine_execution #(
       sdo_idle_state <= SDO_DEFAULT;
       clk_div <= DEFAULT_CLK_DIV;
       word_length <= DATA_WIDTH;
-      last_bit_count <= DATA_WIDTH-1;
       left_aligned <= 8'b0;
     end else if (exec_write_cmd == 1'b1) begin
       if (cmd[9:8] == REG_CONFIG) begin
@@ -261,10 +260,15 @@ module spi_engine_execution #(
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0];
-        last_bit_count <= cmd[7:0] - 1;
-        left_aligned <= DATA_WIDTH - cmd[7:0];
+        left_aligned <= DATA_WIDTH - cmd[7:0]; // needed 1 cycle before transfer_active goes high
       end
     end
+  end
+
+  always @(posedge clk) begin
+    // we can calculate this from word_length (instead of cmd), with an extra cycle delay
+    // because even in the worst case (transfer after config), we still have another cycle before using it
+    last_bit_count <= word_length - 1; // needed when transfer_active goes high
   end
 
   always @(posedge clk) begin
