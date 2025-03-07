@@ -7,7 +7,7 @@
    viewBox="0 0 715.33429 705.0506"
    id="svg2"
    version="1.1"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="fmcomms234_fir_filt_block_diagram.svg"
    style="shape-rendering:crispEdges;enable-background:new"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -1264,9 +1264,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="194.63114"
-     inkscape:cy="208.41973"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="322.08714"
+     inkscape:cy="457.14454"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1279,12 +1279,17 @@
      inkscape:snap-bbox="false"
      inkscape:snap-global="true"
      units="px"
-     inkscape:pagecheckerboard="0">
+     inkscape:pagecheckerboard="0"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
        id="grid6887"
        originx="-5.6633289"
-       originy="-8.9619618" />
+       originy="-8.9619618"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -1499,6 +1504,27 @@
      id="layer1"
      transform="translate(-5.6633289,-381.32416)"
      style="display:inline">
+    <rect
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect6779-7-3-3"
+       width="421.83316"
+       height="524.70862"
+       x="258.58112"
+       y="552.16858" />
+    <rect
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect6779-7-7"
+       width="140.17131"
+       height="525.19659"
+       x="99.860741"
+       y="552.32275" />
+    <rect
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:1.97047;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:7.88187, 7.88187;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect6779-7-8-6"
+       width="65.124283"
+       height="525.06494"
+       x="15.785501"
+       y="552.43494" />
     <rect
        style="display:inline;opacity:1;fill:#00ffff;fill-opacity:0.825581;fill-rule:nonzero;stroke:#00ff00;stroke-width:1.913;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.913, 5.739;stroke-dashoffset:0;stroke-opacity:0;shape-rendering:crispEdges;enable-background:new"
        id="rect6779"
@@ -2149,14 +2175,14 @@
          transform="rotate(-90)"
          id="text5771"
          y="143.22855"
-         x="-985.84332"
+         x="-997.84332"
          style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
            y="143.22855"
-           x="-985.84332"
+           x="-997.84332"
            id="tspan5773"
-           sodipodi:role="line">ADC PACK</tspan></text>
+           sodipodi:role="line">UTIL_CPACK</tspan></text>
     </g>
     <g
        id="g5779"
@@ -2173,14 +2199,14 @@
          transform="rotate(-90)"
          id="text5775"
          y="87.602455"
-         x="-982.08795"
+         x="-990.08795"
          style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#a01414;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
            y="87.602455"
-           x="-982.08795"
+           x="-990.08795"
            id="tspan5777"
-           sodipodi:role="line">ADC DMA</tspan></text>
+           sodipodi:role="line">AXI_DMAC</tspan></text>
     </g>
     <rect
        y="632.46057"
@@ -2193,14 +2219,14 @@
        transform="rotate(-90)"
        id="text5788"
        y="95.802895"
-       x="-772.61047"
+       x="-776.61047"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
          y="95.802895"
-         x="-772.61047"
+         x="-776.61047"
          id="tspan5790"
-         sodipodi:role="line">DAC DMA</tspan></text>
+         sodipodi:role="line">AXI_DMAC</tspan></text>
     <g
        transform="matrix(-1,0,0,1,260.27004,181.88328)"
        style="display:inline;fill:#0f3296;fill-opacity:1;stroke:#0f3296;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -2230,7 +2256,7 @@
          y="150.9425"
          x="-789.51233"
          id="tspan5800"
-         sodipodi:role="line">DAC UNPACK</tspan></text>
+         sodipodi:role="line">UTIL_UPACK</tspan></text>
     <g
        id="ddr"
        transform="matrix(1.4208528,0,0,1.4208528,-187.98358,-220.82469)">
@@ -2651,14 +2677,14 @@
        transform="rotate(-90)"
        id="text5788-7"
        y="254.97054"
-       x="-773.60638"
+       x="-779.60638"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
          y="254.97054"
-         x="-773.60638"
+         x="-779.60638"
          id="tspan5790-7"
-         sodipodi:role="line">DAC FIFO</tspan></text>
+         sodipodi:role="line">UTIL_RFIFO</tspan></text>
     <g
        id="g5828-5"
        style="display:inline;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -2746,14 +2772,14 @@
          transform="rotate(-90)"
          id="text5771-3"
          y="143.22855"
-         x="-985.84332"
+         x="-993.84332"
          style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke:none;stroke-opacity:1"
            y="143.22855"
-           x="-985.84332"
+           x="-993.84332"
            id="tspan5773-2"
-           sodipodi:role="line">ADC FIFO</tspan></text>
+           sodipodi:role="line">UTIL_WFIFO</tspan></text>
     </g>
     <g
        id="g5654-7-1-2"
@@ -2987,27 +3013,6 @@
          y="579.64618"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          id="tspan4307">= 100MHz</tspan></text>
-    <rect
-       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       id="rect6779-7-3-3"
-       width="421.83316"
-       height="524.70862"
-       x="258.58112"
-       y="552.16858" />
-    <rect
-       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:8, 8;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       id="rect6779-7-7"
-       width="140.17131"
-       height="525.19659"
-       x="99.860741"
-       y="552.32275" />
-    <rect
-       style="display:inline;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#915f00;stroke-width:1.97047;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:7.88187, 7.88187;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-       id="rect6779-7-8-6"
-       width="65.124283"
-       height="525.06494"
-       x="15.785501"
-       y="552.43494" />
   </g>
   <g
      inkscape:groupmode="layer"
