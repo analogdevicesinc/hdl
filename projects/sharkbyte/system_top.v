@@ -61,10 +61,10 @@ module system_top (
   inout           fixed_io_ps_srstb,
 
   // JTAG
-  input           jtag_tck,
-  input           jtag_tdi,
-  input           jtag_tms,
-  output          jtag_tdo,   // ? how to connect them? 
+  // input           jtag_tck,
+  // input           jtag_tdi,
+  // input           jtag_tms,
+  // output          jtag_tdo,   // ? how to connect them? 
   
   // I2C - ?
   inout           iic_scl,

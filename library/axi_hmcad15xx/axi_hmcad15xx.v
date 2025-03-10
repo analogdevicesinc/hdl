@@ -43,7 +43,8 @@ module axi_hmcad15xx #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
-  parameter   IO_DELAY_GROUP = "adc_if_delay_group"
+  parameter   IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter   IODELAY_CTRL = 1
 ) (
 
   input           adc_dovf,
@@ -245,7 +246,8 @@ assign mode       = adc_custom_control[4:2];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-    .IO_DELAY_GROUP(IO_DELAY_GROUP)
+    .IO_DELAY_GROUP(IO_DELAY_GROUP),
+    .IODELAY_CTRL(IODELAY_CTRL)
   ) i_axi_hmcad15xx_if (
     .up_clk(up_clk),
     .adc_rst(adc_rst_s),

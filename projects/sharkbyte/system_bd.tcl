@@ -134,6 +134,7 @@ ad_ip_parameter hmcad15xx_a2_dma CONFIG.MAX_BYTES_PER_BURST 4096
 
 ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a1_adc
 ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4
+ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.IODELAY_CTRL 0
 
 ad_connect axi_hmcad15xx_a1_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_a1_p
@@ -153,6 +154,7 @@ ad_connect axi_hmcad15xx_a1_adc/adc_dovf  hmcad15xx_a1_dma/fifo_wr_overflow
 
 ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a2_adc
 ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4
+ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.IODELAY_CTRL 1
 
 ad_connect axi_hmcad15xx_a2_adc/s_axi_aclk    sys_cpu_clk
 ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_a2_p
@@ -243,26 +245,8 @@ ad_connect  iic_main axi_iic_main/iic
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
 
-ad_ip_instance util_cpack2 cpack_a1
-ad_ip_instance util_cpack2 cpack_a2
-
 # connections - working here new
 
-ad_connect axi_hmcad15xx_a1_adc/adc_clk cpack_a1/clk
-ad_connect axi_hmcad15xx_a1_adc/adc_reset cpack_a1/reset
-#ad_connect  sys_200m_clk axi_hmcad15xx_a1_adc/delay_clk
-ad_connect axi_hmcad15xx_a1_adc/adc_enable_0 cpack_a1/enable_0
-ad_connect axi_hmcad15xx_a1_adc/adc_enable_1 cpack_a1/enable_1
-ad_connect axi_hmcad15xx_a1_adc/adc_enable_2 cpack_a1/enable_2
-ad_connect axi_hmcad15xx_a1_adc/adc_enable_3 cpack_a1/enable_3
-
-ad_connect axi_hmcad15xx_a2_adc/adc_clk cpack_a2/clk
-ad_connect axi_hmcad15xx_a2_adc/adc_reset cpack_a2/reset
-#ad_connect  sys_200m_clk axi_hmcad15xx_a1_adc/delay_clk
-ad_connect axi_hmcad15xx_a2_adc/adc_enable_0 cpack_a2/enable_0
-ad_connect axi_hmcad15xx_a2_adc/adc_enable_1 cpack_a2/enable_1
-ad_connect axi_hmcad15xx_a2_adc/adc_enable_2 cpack_a2/enable_2
-ad_connect axi_hmcad15xx_a2_adc/adc_enable_3 cpack_a2/enable_3
 
 # cpu / memory interconnects
 
@@ -291,6 +275,8 @@ create_bd_addr_seg -range 0x20000000 -offset 0x00000000 \
                     [get_bd_addr_segs sys_ps7/S_AXI_HP2/HP2_DDR_LOWOCM] \
                     SEG_sys_ps7_HP2_DDR_LOWOCM
 
+# add axi interconnect
+
 # ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 sys_ps7/S_AXI_HP1
 # ad_mem_hp1_interconnect sys_ps7/FCLK_CLK2 hmcad15xx_a1_dma/m_dest_axi
 
@@ -305,5 +291,5 @@ ad_connect sys_cpu_clk hmcad15xx_a2_dma/m_dest_axi_aclk
 
 # interrupts
 
-ad_cpu_interrupt ps-13 mb-12 hmcad15xx_a1_dma/irq
+ad_cpu_interrupt ps-12 mb-12 hmcad15xx_a1_dma/irq
 ad_cpu_interrupt ps-13 mb-12 hmcad15xx_a2_dma/irq
