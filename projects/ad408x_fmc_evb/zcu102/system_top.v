@@ -36,9 +36,9 @@
 `timescale 1ns/100ps
 
 module system_top (
-  input   [12:0]  gpio_bd_i, 
+  input   [12:0]  gpio_bd_i,
   output  [7:0]  gpio_bd_o,
- 
+
 
 
   // LVDS data interace
@@ -93,17 +93,13 @@ module system_top (
   output          ad9508_adf4350_sclk, // as above
   output          ad9508_adf4350_mosi, // as above
   output          ad9508_csn, // as above
-  output          adf4350_csn, // as above
-  //wire  [2:0]   ad9508_adf4350_csn, // new signal to merge both csn 
-  wire   [2:0] spi1_csn
-  //output          spi1_csn0,
-  //output          spi1_csn1
+  output          adf4350_csn // as above
 );
   // internal signals
   wire    [94:0]  gpio_i; // ZCU 102 default template is 94:0, modified this to reflect Zed
   wire    [94:0]  gpio_o; // ZCU 102 default template is 94:0, modified this to reflect Zed
   wire    [94:0]  gpio_t; // added to default
-  
+
 //  assign gpio_bd_o = gpio_o[7:0]; // ZCU 102 default template
 
 //  assign gpio_i[94:21] = gpio_o[94:21]; // ZCU 102 default template
@@ -113,6 +109,8 @@ module system_top (
   wire            filter_data_ready_n; // in ad408x_fmc_evb_bd.tcl
   wire            fpga_100_clk; // as above & output of clock buffer - IBUFDS i_fpga_100_clk
   wire            fpga_ref_clk;// as above & output of clock buffer - IBUFDS i_fpga_clk
+  wire   [2:0]    spi0_csn;
+  wire   [2:0]    spi1_csn;
 
   assign gp0_dir        = 1'b0; // in project constr file
   assign gp1_dir        = 1'b0; // as above
@@ -129,13 +127,12 @@ module system_top (
   assign ad9508_sync    = ~gpio_o[37]; // in project constr file
   assign gpio_i[35]     = adf435x_lock; // in project constr file
   assign gpio_i[36]     = pwrgd; // in project constr file
-  assign gpio_i[94:38]  = gpio_o[94:38]; 
-  //assign  ad9508_csn = ad9508_adf4350_csn [0]    ; // new
-  //assign adf4350_csn = ad9508_adf4350_csn [1]    ; // new
-  assign spi1_csn[0]   = ad9508_csn ; // new
-  assign spi1_csn[1]   = adf4350_csn ; // new
-  
-  
+  assign gpio_i[94:38]  = gpio_o[94:38];
+
+  assign ad4080_csn = spi0_csn[0];
+  assign ad9508_csn = spi1_csn[0];
+  assign adf4350_csn = spi1_csn[1];
+
   //spi1_csn[0] (ad9508_csn),
     //.spi1_csn[1] (adf4350_csn),
 //  ad_iobuf #(
@@ -156,8 +153,8 @@ module system_top (
     .I (fpgaclk_p), // in project constr file
     .IB (fpgaclk_n), // not in proj contraints file - auto zero if not connected?
     .O (fpga_100_clk)); // output goes to system wrapper section
-	
-/*The ad_iobuf module is used in FPGA designs to interface general-purpose input/output (GPIO) signals with external pins. 
+
+/*The ad_iobuf module is used in FPGA designs to interface general-purpose input/output (GPIO) signals with external pins.
 This module is particularly useful for handling bidirectional signals, allowing the same pin to function as either an input or an output depending on the control signals.
 Here’s a brief overview of how it works:
 dio_t: Tri-state control signal. When high, the pin behaves as an input; when low, it behaves as an output.
@@ -176,13 +173,11 @@ The ad_iobuf module essentially converts these signals to and from the external 
     .gpio_o (gpio_o),// in ZCU102 system bd
     .gpio_t (gpio_t), // in ZCU102 system bd
 
-    .spi0_csn (ad4080_csn), // in ZCU102 system bd (in sys constr)
+    .spi0_csn (spi0_csn), // in ZCU102 system bd (in sys constr)
     .spi0_miso (ad4080_miso),//in ZCU102 system bd (in sys constr)
     .spi0_mosi (ad4080_mosi),//in ZCU102 system bd (in sys constr)
     .spi0_sclk (ad4080_sclk), //in ZCU102 system bd (in sys constr)
-	.spi1_csn (ad9508_csn), //in ZCU102 system bd (new merged signal)
-	//.spi1_csn0 (adf4350_csn),
-	//.spi1_csn1 (adf4350_csn),
+    .spi1_csn (spi1_csn), //in ZCU102 system bd (new merged signal)
     .spi1_miso (ad9508_adf4350_miso), //in ZCU102 system bd (in sys constr)
     .spi1_mosi (ad9508_adf4350_mosi), //in ZCU102 system bd (in sys constr)
     .spi1_sclk (ad9508_adf4350_sclk), //in ZCU102 system bd (in sys constr)
