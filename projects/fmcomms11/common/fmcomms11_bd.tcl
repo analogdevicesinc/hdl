@@ -64,8 +64,8 @@ ad_ip_instance axi_dmac axi_ad9162_dma [list \
   DMA_LENGTH_WIDTH 24 \
   DMA_2D_TRANSFER 0 \
   CYCLIC 0 \
-  DMA_DATA_WIDTH_SRC 256 \
-  DMA_DATA_WIDTH_DEST 256 \
+  DMA_DATA_WIDTH_SRC 64 \
+  DMA_DATA_WIDTH_DEST $dac_dma_data_width \
 ]
 
 ad_dacfifo_create $dac_fifo_name $dac_data_width $dac_dma_data_width $dac_fifo_address_width
@@ -95,7 +95,7 @@ ad_ip_instance axi_dmac axi_ad9625_dma [list \
   DMA_LENGTH_WIDTH 24 \
   DMA_2D_TRANSFER 0 \
   CYCLIC 0 \
-  DMA_DATA_WIDTH_SRC 64 \
+  DMA_DATA_WIDTH_SRC $adc_dma_data_width \
   DMA_DATA_WIDTH_DEST 64 \
 ]
 
