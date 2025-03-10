@@ -36,8 +36,8 @@
 `timescale 1ns/100ps
 
 module system_top (
-   input   [94:0]  gpio_bd_i, 
-   output  [94:0]  gpio_bd_o,
+  input   [12:0]  gpio_bd_i, 
+  output  [7:0]  gpio_bd_o,
  
 
 
@@ -49,8 +49,8 @@ module system_top (
   input           da_n, // in project constr file
   input           db_p, // in project constr file
   input           db_n, // in project constr file
-  input           cnv_in_p, // in project constr file
-  input           cnv_in_n, // in project constr file
+  //input           cnv_in_p, // in project constr file
+  //input           cnv_in_n, // in project constr file
 
   input           fpgaclk_p, // in project constr file
   input           fpgaclk_n,
@@ -94,18 +94,21 @@ module system_top (
   output          ad9508_adf4350_mosi, // as above
   output          ad9508_csn, // as above
   output          adf4350_csn, // as above
-  output  [2:0]   ad9508_adf4350_csn // new signal to merge both csn 
+  //wire  [2:0]   ad9508_adf4350_csn, // new signal to merge both csn 
+  wire   [2:0] spi1_csn
+  //output          spi1_csn0,
+  //output          spi1_csn1
 );
   // internal signals
   wire    [94:0]  gpio_i; // ZCU 102 default template is 94:0, modified this to reflect Zed
   wire    [94:0]  gpio_o; // ZCU 102 default template is 94:0, modified this to reflect Zed
   wire    [94:0]  gpio_t; // added to default
   
-  assign gpio_bd_o = gpio_o[7:0]; // ZCU 102 default template
+//  assign gpio_bd_o = gpio_o[7:0]; // ZCU 102 default template
 
-  //assign gpio_i[94:21] = gpio_o[94:21]; // ZCU 102 default template
-  //assign gpio_i[20: 8] = gpio_bd_i; // ZCU 102 default template
-  //assign gpio_i[ 7: 0] = gpio_o[ 7: 0];// ZCU 102 default template
+//  assign gpio_i[94:21] = gpio_o[94:21]; // ZCU 102 default template
+    assign gpio_i[20: 8] = gpio_bd_i; // ZCU 102 default template
+    assign gpio_bd_o= gpio_o[ 7: 0];// ZCU 102 default template
 
   wire            filter_data_ready_n; // in ad408x_fmc_evb_bd.tcl
   wire            fpga_100_clk; // as above & output of clock buffer - IBUFDS i_fpga_100_clk
@@ -127,20 +130,21 @@ module system_top (
   assign gpio_i[35]     = adf435x_lock; // in project constr file
   assign gpio_i[36]     = pwrgd; // in project constr file
   assign gpio_i[94:38]  = gpio_o[94:38]; 
-  assign ad9508_adf4350_csn [0]    = ad9508_csn; // new
-  assign ad9508_adf4350_csn [1]    = adf4350_csn; // new
-
+  //assign  ad9508_csn = ad9508_adf4350_csn [0]    ; // new
+  //assign adf4350_csn = ad9508_adf4350_csn [1]    ; // new
+  assign spi1_csn[0]   = ad9508_csn ; // new
+  assign spi1_csn[1]   = adf4350_csn ; // new
   
   
   //spi1_csn[0] (ad9508_csn),
     //.spi1_csn[1] (adf4350_csn),
-  ad_iobuf #(
-    .DATA_WIDTH(32)
-  ) i_gpio_bd ( // in Common zed constr file
-    .dio_t({gpio_t[31:0]}),
-    .dio_i({gpio_o[31:0]}),
-    .dio_o({gpio_i[31:0]}),
-    .dio_p({gpio_bd_i[31:0]})); // in Common zed constr file - not sure if it should be input or out
+//  ad_iobuf #(
+//    .DATA_WIDTH(32)
+//  ) i_gpio_bd ( // in Common zed constr file
+//    .dio_t({gpio_t[31:0]}),
+//    .dio_i({gpio_o[31:0]}),
+//    .dio_o({gpio_i[31:0]}),
+//    .dio_p({gpio_bd_o[31:0]})); // in Common zed constr file - not sure if it should be input or out
 
 
   IBUFDS i_fpga_clk (
@@ -176,7 +180,9 @@ The ad_iobuf module essentially converts these signals to and from the external 
     .spi0_miso (ad4080_miso),//in ZCU102 system bd (in sys constr)
     .spi0_mosi (ad4080_mosi),//in ZCU102 system bd (in sys constr)
     .spi0_sclk (ad4080_sclk), //in ZCU102 system bd (in sys constr)
-	.spi1_csn (ad9508_adf4350_csn), //in ZCU102 system bd (new merged signal)
+	.spi1_csn (ad9508_csn), //in ZCU102 system bd (new merged signal)
+	//.spi1_csn0 (adf4350_csn),
+	//.spi1_csn1 (adf4350_csn),
     .spi1_miso (ad9508_adf4350_miso), //in ZCU102 system bd (in sys constr)
     .spi1_mosi (ad9508_adf4350_mosi), //in ZCU102 system bd (in sys constr)
     .spi1_sclk (ad9508_adf4350_sclk), //in ZCU102 system bd (in sys constr)
