@@ -94,7 +94,7 @@ module system_top (
   output          spi_a1_csn,
   output          spi_a2_csn,
   output          spi_clk,
-  inout           spi_sdio,
+  inout           spi_sdio
 );
 
   // internal signals
@@ -168,8 +168,8 @@ module system_top (
 
     .clk_in_a1_p (clk_in_a1_p),
     .clk_in_a1_n (clk_in_a1_n),
-    .clk_in_a2_p (clk_in_a2_p)
-    .clk_in_a2_n (clk_in_a2_n)
+    .clk_in_a2_p (clk_in_a2_p),
+    .clk_in_a2_n (clk_in_a2_n),
     
     .fclk_a1_p (fclk_a1_p),
     .fclk_a1_n (fclk_a1_n),

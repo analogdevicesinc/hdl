@@ -18,8 +18,6 @@ M_DEPS += ../../library/common/ad_3w_spi.v
 LIB_DEPS += axi_hmcad15xx
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_tdd
-LIB_DEPS += axi_hdmi_tx
 LIB_DEPS += util_pack/util_cpack2
-LIB_DEPS += util_pack/util_upack2
 
 include ../scripts/project-xilinx.mk

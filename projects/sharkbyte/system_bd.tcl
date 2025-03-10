@@ -136,13 +136,13 @@ ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a1_adc
 ad_ip_parameter axi_hmcad15xx_a1_adc CONFIG.NUM_CHANNELS 4
 
 ad_connect axi_hmcad15xx_a1_adc/s_axi_aclk    sys_cpu_clk
-ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_p
-ad_connect axi_hmcad15xx_a1_adc/clk_in_n      clk_in_n
-ad_connect axi_hmcad15xx_a1_adc/fclk_p        fclk_p
-ad_connect axi_hmcad15xx_a1_adc/fclk_n        fclk_n
-ad_connect axi_hmcad15xx_a1_adc/data_in_p     data_in_p
-ad_connect axi_hmcad15xx_a1_adc/data_in_n     data_in_n
-#ad_connect axi_hmcad15xx_a1_adc/delay_clk     $sys_iodelay_clk
+ad_connect axi_hmcad15xx_a1_adc/clk_in_p      clk_in_a1_p
+ad_connect axi_hmcad15xx_a1_adc/clk_in_n      clk_in_a1_n
+ad_connect axi_hmcad15xx_a1_adc/fclk_p        fclk_a1_p
+ad_connect axi_hmcad15xx_a1_adc/fclk_n        fclk_a1_n
+ad_connect axi_hmcad15xx_a1_adc/data_in_p     data_in_a1_p
+ad_connect axi_hmcad15xx_a1_adc/data_in_n     data_in_a1_n
+ad_connect axi_hmcad15xx_a1_adc/delay_clk     sys_ps7/FCLK_CLK1
 
 ad_connect axi_hmcad15xx_a1_adc/adc_clk   hmcad15xx_a1_dma/fifo_wr_clk
 ad_connect axi_hmcad15xx_a1_adc/adc_data  hmcad15xx_a1_dma/fifo_wr_din
@@ -155,13 +155,13 @@ ad_ip_instance axi_hmcad15xx axi_hmcad15xx_a2_adc
 ad_ip_parameter axi_hmcad15xx_a2_adc CONFIG.NUM_CHANNELS 4
 
 ad_connect axi_hmcad15xx_a2_adc/s_axi_aclk    sys_cpu_clk
-ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_p
-ad_connect axi_hmcad15xx_a2_adc/clk_in_n      clk_in_n
-ad_connect axi_hmcad15xx_a2_adc/fclk_p        fclk_p
-ad_connect axi_hmcad15xx_a2_adc/fclk_n        fclk_n
-ad_connect axi_hmcad15xx_a2_adc/data_in_p     data_in_p
-ad_connect axi_hmcad15xx_a2_adc/data_in_n     data_in_n
-#ad_connect axi_hmcad15xx_a2_adc/delay_clk     $sys_iodelay_clk
+ad_connect axi_hmcad15xx_a2_adc/clk_in_p      clk_in_a2_p
+ad_connect axi_hmcad15xx_a2_adc/clk_in_n      clk_in_a2_n
+ad_connect axi_hmcad15xx_a2_adc/fclk_p        fclk_a2_p
+ad_connect axi_hmcad15xx_a2_adc/fclk_n        fclk_a2_n
+ad_connect axi_hmcad15xx_a2_adc/data_in_p     data_in_a2_p
+ad_connect axi_hmcad15xx_a2_adc/data_in_n     data_in_a2_n
+ad_connect axi_hmcad15xx_a2_adc/delay_clk     sys_ps7/FCLK_CLK1
 
 ad_connect axi_hmcad15xx_a2_adc/adc_clk   hmcad15xx_a2_dma/fifo_wr_clk
 ad_connect axi_hmcad15xx_a2_adc/adc_data  hmcad15xx_a2_dma/fifo_wr_din
@@ -187,7 +187,7 @@ ad_connect  hmcad15xx_a2_dma/m_dest_axi_aresetn     sys_150m_rstgen/peripheral_a
 # add external spi
 
 ad_connect  sys_cpu_clk sys_ps7/FCLK_CLK0
-ad_connect  sys_200m_clk sys_ps7/FCLK_CLK1
+#ad_connect sys_200m_clk sys_ps7/FCLK_CLK1
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
@@ -243,23 +243,26 @@ ad_connect  iic_main axi_iic_main/iic
 ad_cpu_interconnect 0x41600000 axi_iic_main
 ad_cpu_interrupt ps-15 mb-15 axi_iic_main/iic2intc_irpt
 
-ad_ip_instance xlslice interp_slice
-ad_ip_instance util_upack2 tx_upack
+ad_ip_instance util_cpack2 cpack_a1
+ad_ip_instance util_cpack2 cpack_a2
 
-ad_ip_instance xlslice decim_slice
-ad_ip_instance util_cpack2 cpack
+# connections - working here new
 
-# connections
+ad_connect axi_hmcad15xx_a1_adc/adc_clk cpack_a1/clk
+ad_connect axi_hmcad15xx_a1_adc/adc_reset cpack_a1/reset
+#ad_connect  sys_200m_clk axi_hmcad15xx_a1_adc/delay_clk
+ad_connect axi_hmcad15xx_a1_adc/adc_enable_0 cpack_a1/enable_0
+ad_connect axi_hmcad15xx_a1_adc/adc_enable_1 cpack_a1/enable_1
+ad_connect axi_hmcad15xx_a1_adc/adc_enable_2 cpack_a1/enable_2
+ad_connect axi_hmcad15xx_a1_adc/adc_enable_3 cpack_a1/enable_3
 
-ad_ip_instance util_vector_logic logic_or [list \
-  C_OPERATION {or} \
-  C_SIZE 1]
-
-ad_connect  logic_or/Res  tx_upack/fifo_rd_en
-
-ad_ip_instance util_vector_logic logic_inv [list \
-  C_OPERATION {not} \
-  C_SIZE 1]
+ad_connect axi_hmcad15xx_a2_adc/adc_clk cpack_a2/clk
+ad_connect axi_hmcad15xx_a2_adc/adc_reset cpack_a2/reset
+#ad_connect  sys_200m_clk axi_hmcad15xx_a1_adc/delay_clk
+ad_connect axi_hmcad15xx_a2_adc/adc_enable_0 cpack_a2/enable_0
+ad_connect axi_hmcad15xx_a2_adc/adc_enable_1 cpack_a2/enable_1
+ad_connect axi_hmcad15xx_a2_adc/adc_enable_2 cpack_a2/enable_2
+ad_connect axi_hmcad15xx_a2_adc/adc_enable_3 cpack_a2/enable_3
 
 # cpu / memory interconnects
 
