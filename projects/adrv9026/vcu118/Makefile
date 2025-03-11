@@ -14,6 +14,7 @@ M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
+LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
 LIB_DEPS += jesd204/ad_ip_jesd204_tpl_adc
