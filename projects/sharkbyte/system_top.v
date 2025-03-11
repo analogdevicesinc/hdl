@@ -86,10 +86,10 @@ module system_top (
   input           fclk_a2_p,
   input           fclk_a2_n, 
 
-  input   [ 7:0]  data_in_a1_p, // new, name should be changed in BD, from previous name
-  input   [ 7:0]  data_in_a1_n, // and modify the IP too
-  input   [ 7:0]  data_in_a2_p, // new, add those two in BD too
-  input   [ 7:0]  data_in_a2_n, // new
+  input   [7:0]   data_in_a1_p, // new, name should be changed in BD, from previous name
+  input   [7:0]   data_in_a1_n, // and modify the IP too
+  input   [7:0]   data_in_a2_p, // new, add those two in BD too
+  input   [7:0]   data_in_a2_n, // new
 
   output          spi_a1_csn,
   output          spi_a2_csn,
@@ -109,7 +109,7 @@ module system_top (
   // instantiations
 
   ad_iobuf #(
-    .DATA_WIDTH(14)
+    .DATA_WIDTH(1)
   ) i_iobuf (
     .dio_t (gpio_t[0]),
     .dio_i (gpio_o[0]),
