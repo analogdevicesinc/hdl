@@ -48,14 +48,14 @@ module up_delay_cntrl #(
 
   // delay interface
 
-  input                           delay_clk,
-  output                          delay_rst,
-  input                           delay_locked,
+(* mark_debug = "true" *) input                           delay_clk,
+(* mark_debug = "true" *) output                          delay_rst,
+(* mark_debug = "true" *) input                           delay_locked,
 
   // io interface
 
-  output  [(DATA_WIDTH-1):0]      up_dld,
-  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
+(* mark_debug = "true" *)  output  [(DATA_WIDTH-1):0]      up_dld,
+(* mark_debug = "true" *)  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
   input   [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_drdata,
 
   // processor interface
