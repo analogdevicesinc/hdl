@@ -17,6 +17,9 @@ adi_ip_files axi_adxcvr [list \
   "axi_adxcvr_mstatus.v" \
   "axi_adxcvr.v" ]
 
+set_property used_in_simulation false [get_files  ./../../scripts/adi_xilinx_device_info_enc.tcl]
+set_property used_in_synthesis false [get_files ./../../scripts/adi_xilinx_device_info_enc.tcl]
+
 adi_ip_properties axi_adxcvr
 adi_ip_infer_mm_interfaces axi_adxcvr
 
