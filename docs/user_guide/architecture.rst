@@ -504,8 +504,8 @@ VADJ values
      - **\*3.3V**/1.8V/1.2V
      - **\*3.3V**/1.8V/1.2V
    * - :intel:`FM87 <content/www/us/en/products/details/fpga/development-kits/agilex/si-agi027.html>`
-     - 1.8V/**\*1.2V**
-     - 1.8V/**\*1.2V**
+     - **\*1.2V**
+     - **\*1.2V**
 
 .. note::
 
