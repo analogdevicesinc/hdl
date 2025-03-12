@@ -107,6 +107,7 @@ module spi_engine_execution #(
   reg [7:0] sleep_counter;
   reg [(BIT_COUNTER_WIDTH-1):0] bit_counter;
   reg [7:0] transfer_counter;
+  reg [7:0] echo_transfer_counter;
   reg ntx_rx;
   reg sleep_counter_increment;
 
@@ -114,9 +115,12 @@ module spi_engine_execution #(
   reg trigger_next = 1'b0;
   reg wait_for_io = 1'b0;
   reg transfer_active = 1'b0;
+  reg transfer_done = 1'b0;
 
   reg last_transfer;
+  reg echo_last_transfer;
   reg [7:0] word_length = DATA_WIDTH;
+  reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
@@ -138,6 +142,7 @@ module spi_engine_execution #(
   wire sdo_int_s;
 
   wire last_bit;
+  wire echo_last_bit;
   wire first_bit;
   wire end_of_word;
 
@@ -164,8 +169,6 @@ module spi_engine_execution #(
 
   wire io_ready1;
   wire io_ready2;
-
-  wire end_of_sdi_latch;
 
   wire sdo_io_ready;
 
@@ -197,12 +200,12 @@ module spi_engine_execution #(
     .left_aligned(left_aligned),
     .word_length(word_length),
     .sdo_io_ready(sdo_io_ready),
+    .echo_last_bit(echo_last_bit),
     .transfer_active(transfer_active),
     .trigger_tx(trigger_tx),
     .trigger_rx(trigger_rx),
     .first_bit(first_bit),
-    .cs_activate(cs_activate),
-    .end_of_sdi_latch(end_of_sdi_latch));
+    .cs_activate(cs_activate));
 
   assign cs_gen = inst_d1 == CMD_CHIPSELECT
                   && ((cs_sleep_counter_compare == 1'b1) || cs_sleep_early_exit)
@@ -257,9 +260,15 @@ module spi_engine_execution #(
       end else if (cmd[9:8] == REG_WORD_LENGTH) begin
         // the max value of this reg must be DATA_WIDTH
         word_length <= cmd[7:0];
-        left_aligned <= DATA_WIDTH - cmd[7:0];
+        left_aligned <= DATA_WIDTH - cmd[7:0]; // needed 1 cycle before transfer_active goes high
       end
     end
+  end
+
+  always @(posedge clk) begin
+    // we can calculate this from word_length (instead of cmd), with an extra cycle delay
+    // because even in the worst case (transfer after config), we still have another cycle before using it
+    last_bit_count <= word_length - 1; // needed when transfer_active goes high
   end
 
   always @(posedge clk) begin
@@ -332,7 +341,7 @@ module spi_engine_execution #(
       end else begin
         case (inst_d1)
         CMD_TRANSFER: begin
-          if (transfer_active == 1'b0 && wait_for_io == 1'b0 && end_of_sdi_latch == 1'b1)
+          if (transfer_done)
             idle <= 1'b1;
         end
         CMD_CHIPSELECT: begin
@@ -405,6 +414,32 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
+    if (resetn == 1'b0 || idle == 1'b1) begin
+      echo_last_transfer    <= 1'b0;
+    end else begin
+      if (inst_d1 == CMD_TRANSFER && cmd_d1[7:0] == 0) begin
+        echo_last_transfer    <= 1'b1;
+      end else if (echo_last_bit == 1'b1) begin
+        if (echo_transfer_counter +1 == cmd_d1[7:0]) begin
+          echo_last_transfer    <= 1'b1;
+        end else begin
+          echo_last_transfer    <= 1'b0;
+        end
+      end
+    end
+  end
+
+  always @(posedge clk ) begin
+    if (resetn == 1'b0 || idle == 1'b1) begin
+      echo_transfer_counter <= 0;
+    end else begin
+      if (echo_last_bit == 1'b1) begin
+        echo_transfer_counter <= echo_transfer_counter + 1;
+      end
+    end
+  end
+
+  always @(posedge clk) begin
     if (resetn == 1'b0) begin
       transfer_active <= 1'b0;
       wait_for_io <= 1'b0;
@@ -421,6 +456,18 @@ module spi_engine_execution #(
         if (io_ready2 == 1'b0)
           wait_for_io <= 1'b1;
       end
+    end
+  end
+
+  always @(posedge clk ) begin
+    if (resetn == 1'b0) begin
+      transfer_done <= 1'b0;
+    end else begin
+       if (ECHO_SCLK) begin
+        transfer_done <= echo_last_bit && echo_last_transfer;
+       end else begin
+        transfer_done <= (wait_for_io && io_ready1 && last_transfer) || (!wait_for_io && transfer_active && end_of_word && last_transfer );
+       end
     end
   end
 
@@ -444,7 +491,7 @@ module spi_engine_execution #(
   // end_of_word will signal the end of a transaction, pushing the command
   // stream execution to the next command. end_of_word in normal mode can be
   // generated using the global bit_counter
-  assign last_bit = bit_counter == word_length - 1;
+  assign last_bit = (bit_counter == last_bit_count);
   assign end_of_word = last_bit == 1'b1 && ntx_rx == 1'b1 && clk_div_last == 1'b1;
 
   always @(posedge clk) begin
