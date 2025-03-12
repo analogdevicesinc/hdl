@@ -74,8 +74,8 @@ module axi_ada4355_if #(
   output                             adc_clk,
 
   // Output data
-  output [15:0]                      adc_data,
-  output                             adc_valid
+  (* mark_debug = "true" *) output [15:0]                      adc_data,
+  (* mark_debug = "true" *) output                             adc_valid
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -89,11 +89,11 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  wire [ 7:0]          serdes_data_0;
-  wire [ 7:0]          serdes_data_1;
-  wire [15:0]          serdes_data;
-  wire [ 7:0]          serdes_frame;
-  wire [ 7:0]          pattern_value;
+  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_0;
+  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_1;
+  (* mark_debug = "true" *) wire [15:0]          serdes_data;
+  (* mark_debug = "true" *) wire [ 7:0]          serdes_frame;
+  (* mark_debug = "true" *) wire [ 7:0]          pattern_value;
   wire [NUM_LANES-2:0] serdes_in_p;
   wire [NUM_LANES-2:0] serdes_in_n;
 
@@ -116,21 +116,21 @@ module axi_ada4355_if #(
   wire  data_s7_frame;
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
-  reg [ 1:0] serdes_valid = 2'b00;
-  reg [ 1:0] serdes_valid_d = 2'b00;
-  reg [ 2:0] shift_cnt = 3'd0;
+  (* mark_debug = "true" *) reg [ 1:0] serdes_valid = 2'b00;
+  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
+  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
 
-  reg [15:0] serdes_data_16;
-  reg [15:0] serdes_data_16_d;
-  reg [ 7:0] serdes_data_frame;
-  reg [ 7:0] serdes_data_frame_d;
-  reg [15:0] adc_data_shifted;
-  reg [ 7:0] data_frame_shifted;
+  (* mark_debug = "true" *) reg [15:0] serdes_data_16;
+  (* mark_debug = "true" *) reg [15:0] serdes_data_16_d;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_data_frame;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_data_frame_d;
+  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
+  (* mark_debug = "true" *) reg [ 7:0] data_frame_shifted;
 
   reg [ 2:0] reg_test;
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
-  reg [ 2:0] state = 3'h0;
+  (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
 
   assign adc_clk           = adc_clk_div;
   assign pattern_value     = 8'hF0;
@@ -258,14 +258,14 @@ module axi_ada4355_if #(
     .delay_rst(delay_rst),
     .delay_locked(delay_locked_frame));
 
-  assign {serdes_data_1[0],serdes_data_0[0]} = data_s0;  // f-e latest bit received
-  assign {serdes_data_1[1],serdes_data_0[1]} = data_s1;  // r-e
-  assign {serdes_data_1[2],serdes_data_0[2]} = data_s2;  // f-e
-  assign {serdes_data_1[3],serdes_data_0[3]} = data_s3;  // r-e
-  assign {serdes_data_1[4],serdes_data_0[4]} = data_s4;  // f-e
-  assign {serdes_data_1[5],serdes_data_0[5]} = data_s5;  // r-e
-  assign {serdes_data_1[6],serdes_data_0[6]} = data_s6;  // f-e
-  assign {serdes_data_1[7],serdes_data_0[7]} = data_s7;  // r-e oldest bit received
+  assign {serdes_data_0[0],serdes_data_1[0]} = data_s0;  // f-e latest bit received
+  assign {serdes_data_0[1],serdes_data_1[1]} = data_s1;  // r-e
+  assign {serdes_data_0[2],serdes_data_1[2]} = data_s2;  // f-e
+  assign {serdes_data_0[3],serdes_data_1[3]} = data_s3;  // r-e
+  assign {serdes_data_0[4],serdes_data_1[4]} = data_s4;  // f-e
+  assign {serdes_data_0[5],serdes_data_1[5]} = data_s5;  // r-e
+  assign {serdes_data_0[6],serdes_data_1[6]} = data_s6;  // f-e
+  assign {serdes_data_0[7],serdes_data_1[7]} = data_s7;  // r-e oldest bit received
 
   // Assert serdes valid after 2 clock cycles is pulled out of reset
 
@@ -383,7 +383,7 @@ module axi_ada4355_if #(
   end
 
   always @(posedge adc_clk_div) begin
-    adc_data_shifted <= {serdes_data_16_d,serdes_data_16} >> (shift_cnt) >> (shift_cnt);
+    adc_data_shifted <= (({serdes_data_16_d,serdes_data_16} >> (shift_cnt)) >> (shift_cnt));
     serdes_valid_d <= serdes_valid;
   end
 
