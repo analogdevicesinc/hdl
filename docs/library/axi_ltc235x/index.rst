@@ -1,7 +1,7 @@
 .. _axi_ltc235x:
 
 AXI LTC235X
-================================================================================
+===============================================================================
 
 .. hdl-component-diagram::
    :path: library/axi_ltc235x
@@ -20,7 +20,7 @@ familiar with the device for a complete and better understanding.
 More about the generic framework interfacing ADCs can be read in :ref:`axi_adc`.
 
 Features
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 - AXI based configuration
 - Quartus Prime compatible
@@ -30,7 +30,7 @@ Features
 - SoftSpan configuration
 
 Files
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 .. list-table::
    :header-rows: 1
@@ -49,20 +49,26 @@ Files
      - Verilog source for the ADC Channel regmap
 
 Block Diagram
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+CMOS mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: axi_ltc235x_cmos.svg
    :width: 600
    :align: center
    :alt: AXI LTC235X CMOS IP block diagram
-   
+
+LVDS mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. image:: axi_ltc235x_lvds.svg
    :width: 600
    :align: center
    :alt: AXI LTC235X LVDS IP block diagram
 
 Configuration Parameters
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 .. hdl-parameters::
    :path: library/axi_ltc235x
@@ -70,12 +76,12 @@ Configuration Parameters
 .. _axi_ltc235x interface:
 
 Interface
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 .. hdl-interfaces::
 
 Detailed Architecture
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 .. image:: axi_ltc235x_architecture.svg
    :width: 800
@@ -83,7 +89,7 @@ Detailed Architecture
    :alt: AXI LTC235X Detailed Architecture
 
 Detailed Description
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 The top module :git-hdl:`library/axi_ltc235x/axi_ltc235x.v` instantiates:
 
@@ -112,7 +118,7 @@ The data from the interface module is processed by the adc channel module.
 This includes the channel ID and the SoftSpan ID.
 
 Register Map
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 .. hdl-regmap::
    :name: COMMON
@@ -127,7 +133,7 @@ Register Map
    :no-type-info:
 
 Design Guidelines
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 The control of the chip is done through the CMOS/LVDS interface at system level.
 The SoftSpan ID register per channel in
@@ -148,13 +154,13 @@ The example design uses a processor to program all the registers. If no processo
 available in your system, you can create your IP starting from the interface module.
 
 Software Support
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 - Linux device driver at :git-linux:`drivers/iio/adc/ltc2358.c`
 - LTC235X Linux device tree at :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts`
 
 References
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 - HDL IP core at :git-hdl:`library/axi_ltc235x`
 - HDL project at :git-hdl:`projects/dc2677a`
