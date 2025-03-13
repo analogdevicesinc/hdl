@@ -56,8 +56,13 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 18
 ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 0
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD1_PERIPHERAL_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD1_GRP_CD_ENABLE {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD1_GRP_POW_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD1_GRP_WP_ENABLE {0}
+ad_ip_parameter sys_ps7 CONFIG.PCW_SD1_SD1_IO {MIO 10 .. 15}
 ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}
+ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_UART1_IO {MIO 48 .. 49}
 ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE 0
 ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_ENABLE 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE 1
