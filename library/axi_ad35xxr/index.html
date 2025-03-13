@@ -403,7 +403,7 @@ as an input data source.</p></li>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
-<img alt="AXI AD3552R block diagram" src="../../_images/block_diagram.svg" /></section>
+<img alt="AXI AD35XXR block diagram" src="../../_images/block_diagram.svg" /></section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div><section id="hdl-parameters">
@@ -2588,7 +2588,7 @@ NOT-APPLICABLE if DDS_DISABLE is set (0x1).</p>
 <p>The example design uses a DMA to move the data from the memory to the CHIP quad
 SPI interface.</p>
 <p>If the data needs to be processed in HDL before moving to DAC’s output, it can be
-done at the input of the IP (at the system level) or inside the axi_ad3552r_if
+done at the input of the IP (at the system level) or inside the axi_ad35xxr_if
 interface module (at the IP level).</p>
 <p>The example design uses a processor to program all the registers. If no
 processor is available in your system, you can create your IP starting from the
