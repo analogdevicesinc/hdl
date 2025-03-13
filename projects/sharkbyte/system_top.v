@@ -94,13 +94,13 @@ module system_top (
   output          spi_a1_csn,
   output          spi_a2_csn,
   output          spi_clk,
-  inout           spi_sdio
+  output          spi_sdata
 );
 
   // internal signals
 
-  wire            spi_miso_s;
-  wire            spi_mosi_s;
+  // wire            spi_miso_s;
+  // wire            spi_mosi_s;
   wire    [17:0]  gpio_i;
   wire    [17:0]  gpio_o;
   wire    [17:0]  gpio_t;
@@ -116,16 +116,15 @@ module system_top (
     .dio_o (gpio_i[0]),
     .dio_p (ad9696_ldac));
 
-  ad_3w_spi #(
-    .NUM_OF_SLAVES(2)
-  ) i_spi (
-    .spi_csn ({spi_a1_csn, spi_a2_csn}),
-    .spi_clk (spi_clk),
-    .spi_mosi (spi_mosi_s),
-    .spi_miso (spi_miso_s),
-    .spi_sdio (spi_sdio),
-    .spi_dir ());
-    
+  // ad_3w_spi #(
+  //   .NUM_OF_SLAVES(2)
+  // ) i_spi (
+  //   .spi_csn ({spi_a1_csn, spi_a2_csn}),
+  //   .spi_clk (spi_clk),
+  //   .spi_mosi (spi_mosi_s),
+  //   .spi_miso (spi_miso_s),
+  //   .spi_sdio (spi_sdio),
+  //   .spi_dir ());
 
   assign gpio_i[17:1] = gpio_o[17:1];
   assign ps_gpio[6:0] = ps_gpio[6:0];
@@ -162,9 +161,9 @@ module system_top (
     .spi0_csn_1_o (spi_a2_csn), // 2nd ADC
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (spi_miso_s),
+    .spi0_sdi_i (1'b0),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (spi_mosi_s),
+    .spi0_sdo_o (spi_sdata),
 
     .clk_in_a1_p (clk_in_a1_p),
     .clk_in_a1_n (clk_in_a1_n),

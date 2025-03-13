@@ -99,7 +99,7 @@ set_property  -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS18} [get_ports ad9696_ldac
 set_property  -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_a1_csn]; # CSN_A1 IO_L1P_T0_AD0P_35
 set_property  -dict {PACKAGE_PIN E13 IOSTANDARD LVCMOS18  PULLTYPE PULLUP} [get_ports spi_a2_csn]; # CSN_A2 IO_L1N_T0_AD0N_35
 set_property  -dict {PACKAGE_PIN E11 IOSTANDARD LVCMOS18} [get_ports spi_clk];                     # SCLK IO_L2P_T0_AD8P_35
-set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS18} [get_ports spi_sdio];                    # SDIO IO_L2N_T0_AD8N_35
+set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS18} [get_ports spi_sdata];                   # SDIO IO_L2N_T0_AD8N_35
 
 # probably gone in 2016.4
 
