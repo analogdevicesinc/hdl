@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -94,9 +94,8 @@ module system_top (
   output        cnv_n,
   inout         en0_fmc,
   inout         en1_fmc,
-  inout         fpga_pll_cnv_p,
-  inout         fpga_pll_cnv_n,
-  inout         pll_sync_fmc
+  inout         en2_fmc,
+  inout         en3_fmc
 );
 
   // internal signals
@@ -121,12 +120,14 @@ module system_top (
   assign gpio_i[63:36] = gpio_o[63:36];
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
+    .DATA_WIDTH(4)
   ) i_iobuf (
-    .dio_t(gpio_t[33:32]),
-    .dio_i(gpio_o[33:32]),
-    .dio_o(gpio_i[33:32]),
-    .dio_p({en1_fmc,      // 87
+    .dio_t(gpio_t[35:32]),
+    .dio_i(gpio_o[35:32]),
+    .dio_o(gpio_i[35:32]),
+    .dio_p({en3_fmc,      // 89
+            en2_fmc,      // 88
+            en1_fmc,      // 87
             en0_fmc}));   // 86
 
   // instantiations
