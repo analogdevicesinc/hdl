@@ -51,6 +51,7 @@ module up_delay_cntrl #(
   input                           delay_clk,
   output                          delay_rst,
   input                           delay_locked,
+  input                           core_rst,
 
   // io interface
 
@@ -197,7 +198,7 @@ module up_delay_cntrl #(
   assign delay_rst = delay_rst_s;
 
   ad_rst i_delay_rst_reg (
-    .rst_async (up_preset),
+    .rst_async (core_rst),
     .clk (delay_clk),
     .rstn (),
     .rst (delay_rst_s));
