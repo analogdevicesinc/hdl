@@ -627,6 +627,7 @@ module axi_adrv9001_core #(
     .DISABLE(DISABLE_RX1_SSI),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl_rx1 (
+    .core_rst (1'b0),
     .delay_clk (delay_clk),
     .delay_rst (delay_rx1_rst),
     .delay_locked (delay_rx1_locked),

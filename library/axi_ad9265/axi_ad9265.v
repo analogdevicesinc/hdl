@@ -211,6 +211,7 @@ module axi_ad9265 #(
     .DATA_WIDTH(9),
     .BASE_ADDRESS(6'h02)
   ) i_delay_cntrl (
+    .core_rst (1'b0),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),

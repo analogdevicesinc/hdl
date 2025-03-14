@@ -336,6 +336,7 @@ module axi_ad485x #(
         .DATA_WIDTH(1),
         .BASE_ADDRESS(6'h02)
       ) i_delay_cntrl (
+        .core_rst (1'b0),
         .delay_clk (delay_clk),
         .delay_rst (delay_rst),
         .delay_locked (delay_locked),
