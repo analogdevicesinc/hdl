@@ -410,8 +410,10 @@ module axi_ad9361_rx #(
   up_delay_cntrl #(
     .INIT_DELAY (INIT_DELAY),
     .DATA_WIDTH (13),
-    .BASE_ADDRESS (6'h02)
+    .BASE_ADDRESS (6'h02),
+    .CUSTOM_RST (1)
   ) i_delay_cntrl (
+    .core_rst (adc_rst),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked),
