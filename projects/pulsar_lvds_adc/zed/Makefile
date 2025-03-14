@@ -1,13 +1,13 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 PROJECT_NAME := pulsar_lvds_adc_zed
 
-M_DEPS += ad7960_system_top.v
-M_DEPS += ad7626_system_top.v
+M_DEPS += system_top_ad7960.v
+M_DEPS += system_top_ad7626.v
 M_DEPS += ../common/pulsar_lvds_adc_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zed/zed_system_constr.xdc
