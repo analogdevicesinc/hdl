@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -105,6 +105,10 @@ proc adi_project {project_name {mode 0} {parameter_list {}} } {
   if [regexp "_zcu102" $project_name] {
     set device "xczu9eg-ffvb1156-2-e"
     set board [lindex [lsearch -all -inline [get_board_parts] *zcu102*] end]
+  }
+    if [regexp "_zcu106" $project_name] {
+    set device "xczu7ev-ffvc1156-2-e"
+    set board [lindex [lsearch -all -inline [get_board_parts] *zcu106*] end]
   }
   if [regexp "_vmk180_es1" $project_name] {
     enable_beta_device xcvm*
