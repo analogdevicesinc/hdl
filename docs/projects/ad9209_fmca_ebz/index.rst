@@ -1,79 +1,56 @@
 .. _ad9209_fmca_ebz:
 
-AD9209-FMCA-EBZ
+AD9209-FMCA-EBZ HDL project
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9209-FMCA-EBZ` reference design
-is a processor based  embedded system.
-This reference design works with :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` /
-:adi:`AD9082-FMCA-EBZ <EVAL-AD9082>` / :adi:`EVAL-AD9986` /
-:adi:`EVAL-AD9988` or :adi:`AD9209`.
-The design consists from a receive chain.
+The :adi:`AD9209-FMCA-EBZ` reference design is a processor-based embedded
+system. This reference design works with :adi:`AD9209-FMCA-EBZ`/
+:adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` (RX only) /
+:adi:`AD9082-FMCA-EBZ <EVAL-AD9082>` (RX only) / :adi:`EVAL-AD9986` (RX only) /
+:adi:`EVAL-AD9988` (RX only).
+
+This design consists of one receive chain. Thus, only the RX path would be used
+when the evaulation board is either EVAL-AD9081/AD9082/AD9986/AD9988.
 
 The receive chain transports the captured samples from ADC to the system
-memory (DDR). Before transferring the data to DDR the samples are stored
-in a buffer implemented on block rams from the FPGA fabric
+memory (DDR). Before transferring the data to DDR the samples are stored in a
+buffer implemented on block RAMs from the FPGA fabric
 (:git-hdl:`util_adcfifo <library/util_adcfifo>`).
-The space allocated in the buffer for each channel
-depends on the number of currently active channels. It goes up to M x
-64k samples if a single channel is selected or 64k samples per channel
-if all channels are selected.
+The space allocated in the buffer for each channel depends on the number of
+currently active channels. It goes up to M x 64k samples if a single channel
+is selected or 64k samples per channel, if all channels are selected.
 
-All cores from the receive chain are programmable through
-an AXI-Lite interface.
+All cores from the receive chain are programmable through an AXI-Lite interface.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-- :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
-- :adi:`EVAL-AD9988`
-- :adi:`EVAL-AD9986`
-- :adi:`AD9209`
+- :adi:`AD9209-FMCA-EBZ`
+- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` *
+- :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>` *
+- :adi:`EVAL-AD9988` *
+- :adi:`EVAL-AD9986` *
+
+.. note::
+
+   **\*** - only the RX path would be used!
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD9081 <EVAL-AD9081>`
-- :adi:`AD9082 <EVAL-AD9082>`
 - :adi:`AD9209`
+- :adi:`AD9081`
+- :adi:`AD9082`
 - :adi:`AD9986`
 - :adi:`AD9988`
 
 Supported carriers
 -------------------------------------------------------------------------------
 
-.. note::
-
-   :adi:`EVAL-AD9988` can be an alternative to
-   :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` and :adi:`EVAL-AD9986`
-   can be an alternative to :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`.
-
-   Both :adi:`AD9081` and :adi:`AD9988` have MxFE Quad, 16-bit, 12 GSPS RF DAC
-   & Quad, 12-bit, 4 GSPS RF ADC,
-
-   The same goes for :adi:`AD9082` and :adi:`AD9986`, both have MxFE Quad,
-   16-bit, 12 GSPS RF DAC & Dual, 12-bit, 6 GSPS RF ADC.
-
-.. list-table::
-   :widths: 35 35 30
-   :header-rows: 1
-
-   * - Evaluation board
-     - Carrier
-     - FMC slot
-   * - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
-     - :xilinx:`VCK190`
-     - FMC0
-   * - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
-     - :xilinx:`VCK190`
-     - FMC0
-   * - :adi:`AD9209`
-     - :xilinx:`VCK190`
-     - FMC0
+- :xilinx:`VCK190` on FMC0
 
 Block design
 -------------------------------------------------------------------------------
@@ -101,7 +78,7 @@ for each project.
 
    The parameters for Rx links can be changed from the
    **system_project.tcl** file, located in
-   hdl/projects/ad9209_fmca_ebz/$CARRIER/system_project.tcl
+   hdl/projects/ad9209_fmca_ebz/vck190/system_project.tcl
 
 .. important::
 
@@ -119,22 +96,20 @@ for each project.
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
-      Layer
-   -  8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
-      Layer
+  - 64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical Layer
+  - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical Layer
 
--  RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
--  REF_CLK_RATE: the rate of the reference clock
--  RX_JESD_M: number of converters per link
--  RX_JESD_L: number of lanes per link
--  RX_JESD_S: number of samples per frame
--  RX_JESD_NP: number of bits per sample
--  RX_NUM_LINKS: number of links
--  RX_KS_PER_CHANNEL: Number of samples stored in internal buffers in
-   kilosamples per converter (M)
+- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+- REF_CLK_RATE: the rate of the reference clock
+- RX_JESD_M: number of converters per link
+- RX_JESD_L: number of lanes per link
+- RX_JESD_S: number of samples per frame
+- RX_JESD_NP: number of bits per sample
+- RX_NUM_LINKS: number of links
+- RX_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+  kilosamples per converter (M)
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,9 +247,6 @@ the source you must
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Then go to the :git-hdl:`projects/ad9209_fmca_ebz`
-location and run the make command by typing in you command prompt:
-
 Example for building the project with parameters:
 
 **Linux/Cygwin/WSL**
@@ -299,7 +271,7 @@ configure this project, depending on the carrier used.
 
    ``NP`` notation is equivalent with ``N'``
 
-.. collapsible:: Default values of the make parameters for AD9081-FMCA-EBZ
+.. collapsible:: Default values of the make parameters for AD9209-FMCA-EBZ
 
    +-------------------+---------+
    | Parameter         | Default |
@@ -362,27 +334,18 @@ Systems related
 - :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
 - Here you can find all the quick start guides on wiki documentation
   :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
-
-Here you can find the quick start guides available for these evaluation boards:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Evaluation board
-     - Versal
-   * - AD9081/AD9082/AD9986/AD9988
-     - :dokuwiki:`VCK190/VMK180/VPK180 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
+- :dokuwiki:`AD9209-FMCA-EBZ Quick start guide on VCK190 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Product datasheets:
 
+  - :adi:`AD9209`
   - :adi:`AD9081`
   - :adi:`AD9082`
   - :adi:`AD9988`
   - :adi:`AD9986`
-  - :adi:`AD9209`
 
 - :adi:`UG-1578, Device User Guide <media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`
 - :adi:`UG-1829, Evaluation Board User Guide <media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`
@@ -390,8 +353,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
-- :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
+- :git-hdl:`AD9209_FMCA_EBZ HDL project source code <projects/ad9209_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -429,6 +391,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+  applies to the AD9209-FMCA-EBZ board as well, just the RX side
 - Python support:
 
   - :external+pyadi-iio:py:mod:`AD9081 class documentation <adi.ad9081>`
