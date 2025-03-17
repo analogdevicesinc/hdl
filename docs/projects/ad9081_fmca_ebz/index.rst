@@ -52,9 +52,6 @@ Supported devices
 
 - :adi:`AD9081`
 - :adi:`AD9082`
-- :adi:`AD9177`
-- :adi:`AD9207`
-- :adi:`AD9209`
 - :adi:`AD9986`
 - :adi:`AD9988`
 
@@ -543,7 +540,7 @@ If you want to build the sources, ADI makes them available on the
 the HDL repository.
 
 Then go to the :git-hdl:`projects/ad9081_fmca_ebz` or
-(:git-hdl:`projects/ad9082_fmca_ebz`)
+(:git-hdl:`projects/ad9082_fmca_ebz`, for :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`)
 location and run the make command by typing in you command prompt:
 
 Example for building the project with parameters:
