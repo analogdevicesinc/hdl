@@ -7,11 +7,11 @@ Overview
 -------------------------------------------------------------------------------
 
 The :adi:`ADRV9361-Z7035` is built on a portfolio of highly integrated
-System-On-Module (SOMs) based on the Xilinx Zynq®-7000 All Programmable (AP)SoC.
+System-On-Module (SOMs) based on the Xilinx Zynq-7000 All Programmable (AP) SoC.
 Starting with the :adi:`AD9361`, it is schematically & HDL similar to the
 :ref:`fmcomms2`.
 
-The purpose of the :adi:1ADRV9361-Z70351 RF SOM is to provide an RF platform to
+The purpose of the :adi:`ADRV9361-Z7035` RF SOM is to provide an RF platform to
 software developers, system architects, product developers, etc, who want a
 single platform operating over a wide tuning range (70 MHz - 6 GHz) that is
 capable of being used for prototype, evaluation and reference design to help
@@ -223,7 +223,7 @@ command.
    
    .. note::
    
-      FMC & BOB carrier designs includes loopback daughtercards for connectivity
+      FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
    
 .. collapsible:: Board Constraint Files (pin-out & io-standard)
@@ -256,7 +256,7 @@ command.
    
    .. note::
    
-      FMC & BOB carrier designs includes loopback daughtercards for connectivity
+      FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -267,9 +267,7 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here you can find the quick start guides available for these evaluation boards:
-
-- :dokuwiki:`ADRV9361-Z7035 <resources/eval/user-guides/adrv9361-z7035>`
+- :dokuwiki:`ADRV9361-Z7035 quick start guide<resources/eval/user-guides/adrv9361-z7035>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -331,10 +329,10 @@ HDL related
    * - UTIL_WFIFO
      - :git-hdl:`library/util_wfifo`
      - :ref:`util_wfifo`
-   * - XILINX_AXI_XCVRLB
+   * - AXI_XCVRLB
      - :git-hdl:`library/xilinx/axi_xcvrlb` **
      - ---
-   * - XILINX_UTIL_CLKDIV
+   * - UTIL_CLKDIV
      - :git-hdl:`library/xilinx/util_clkdiv`
      - ---
 
@@ -355,8 +353,8 @@ Software related
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree - TDD mode <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc-rfcard-tdd.dts>`
 - :git-linux:`ADRV9361-Z7035 ccpackrf_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-packrf.dts>`
 
-- :dokuwiki:`[Wiki]  ADRV9361-Z7035 User Guide - Software <resources/eval/user-guides/adrv936x_rfsom/user-guide/software>`
-- :dokuwiki:`[Wiki]  AD9361 Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+- :dokuwiki:`[Wiki] ADRV9361-Z7035 User Guide - Software documentation<resources/eval/user-guides/adrv936x_rfsom/user-guide/software>`
+- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
 
 .. include:: ../common/more_information.rst
 
