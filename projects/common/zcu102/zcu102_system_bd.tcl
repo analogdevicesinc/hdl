@@ -3,6 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set CACHE_COHERENCY true
 # create board design
 # default ports
 
