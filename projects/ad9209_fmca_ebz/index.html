@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AD9209-FMCA-EBZ &#8212; HDL  documentation</title>
+    <title>AD9209-FMCA-EBZ HDL project &#8212; HDL  documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../_static/app.min.css?v=3d3703ae" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
@@ -90,7 +90,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">AD9209-FMCA-EBZ</a><ul>
+<li><a class="reference internal" href="#">AD9209-FMCA-EBZ HDL project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
@@ -168,7 +168,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
@@ -353,88 +353,55 @@ Content on this topic
         <div class="bodywrapper" id="top-anchor">
           <div class="body" role="main">
             
-  <section id="ad9209-fmca-ebz">
-<span id="id1"></span><h1>AD9209-FMCA-EBZ<a class="headerlink" href="#ad9209-fmca-ebz" title="Permalink to this heading"></a></h1>
+  <section id="ad9209-fmca-ebz-hdl-project">
+<span id="ad9209-fmca-ebz"></span><h1>AD9209-FMCA-EBZ HDL project<a class="headerlink" href="#ad9209-fmca-ebz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a> reference design
-is a processor based  embedded system.
-This reference design works with <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> /
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a> / <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a> /
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> or <a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a>.
-The design consists from a receive chain.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a> reference design is a processor-based embedded
+system. This reference design works with <a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a>/
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> (RX only) /
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a> (RX only) / <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a> (RX only) /
+<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> (RX only).</p>
+<p>This design consists of one receive chain. Thus, only the RX path would be used
+when the evaulation board is either EVAL-AD9081/AD9082/AD9986/AD9988.</p>
 <p>The receive chain transports the captured samples from ADC to the system
-memory (DDR). Before transferring the data to DDR the samples are stored
-in a buffer implemented on block rams from the FPGA fabric
+memory (DDR). Before transferring the data to DDR the samples are stored in a
+buffer implemented on block RAMs from the FPGA fabric
 (<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo">util_adcfifo</a>).
-The space allocated in the buffer for each channel
-depends on the number of currently active channels. It goes up to M x
-64k samples if a single channel is selected or 64k samples per channel
-if all channels are selected.</p>
-<p>All cores from the receive chain are programmable through
-an AXI-Lite interface.</p>
+The space allocated in the buffer for each channel depends on the number of
+currently active channels. It goes up to M x 64k samples if a single channel
+is selected or 64k samples per channel, if all channels are selected.</p>
+<p>All cores from the receive chain are programmable through an AXI-Lite interface.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> *</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a> *</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> *</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a> *</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>*</strong> - only the RX path would be used!</p>
+</div>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> can be an alternative to
-<a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> and <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a>
-can be an alternative to <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a>.</p>
-<p>Both <a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a> have MxFE Quad, 16-bit, 12 GSPS RF DAC
-&amp; Quad, 12-bit, 4 GSPS RF ADC,</p>
-<p>The same goes for <a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a> and <a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a>, both have MxFE Quad,
-16-bit, 12 GSPS RF DAC &amp; Dual, 12-bit, 6 GSPS RF ADC.</p>
-</div>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Carrier</p></th>
-<th class="head"><p>FMC slot</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
-<td><p>FMC0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
-<td><p>FMC0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
-<td><p>FMC0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a> on FMC0</p></li>
+</ul>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
@@ -453,7 +420,7 @@ for each project.</p>
 <p class="admonition-title">Note</p>
 <p>The parameters for Rx links can be changed from the
 <strong>system_project.tcl</strong> file, located in
-hdl/projects/ad9209_fmca_ebz/$CARRIER/system_project.tcl</p>
+hdl/projects/ad9209_fmca_ebz/vck190/system_project.tcl</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -472,10 +439,8 @@ hdl/projects/ad9209_fmca_ebz/$CARRIER/system_project.tcl</p>
 <ul class="simple">
 <li><p>JESD_MODE: used link layer encoder mode</p>
 <ul>
-<li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
-Layer</p></li>
-<li><p>8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
-Layer</p></li>
+<li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical Layer</p></li>
+<li><p>8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical Layer</p></li>
 </ul>
 </li>
 <li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)</p></li>
@@ -681,8 +646,6 @@ must be built from the sources available <a class="icon git reference external" 
 the source you must
 <a class="reference external" href="https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">clone</a>
 the HDL repository.</p>
-<p>Then go to the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9209_fmca_ebz">projects/ad9209_fmca_ebz</a>
-location and run the make command by typing in you command prompt:</p>
 <p>Example for building the project with parameters:</p>
 <p><strong>Linux/Cygwin/WSL</strong></p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -712,7 +675,7 @@ configure this project, depending on the carrier used.</p>
 <p><code class="docutils literal notranslate"><span class="pre">NP</span></code> notation is equivalent with <code class="docutils literal notranslate"><span class="pre">N'</span></code></p>
 </div>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="05e309593dd65f865729cd914030ac89468e9089" name="05e309593dd65f865729cd914030ac89468e9089" type="checkbox"></input><label for="05e309593dd65f865729cd914030ac89468e9089"><p>Default values of the make parameters for AD9081-FMCA-EBZ</p>
+<input class="collapsible_input" id="efca65d39721d96b748050099f5a4fd1f356d410" name="efca65d39721d96b748050099f5a4fd1f356d410" type="checkbox"></input><label for="efca65d39721d96b748050099f5a4fd1f356d410"><p>Default values of the make parameters for AD9209-FMCA-EBZ</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -812,33 +775,19 @@ accordingly.</p>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz">[Wiki] AD9081 &amp; AD9082 &amp; AD9988 &amp; AD9986 Prototyping Platform User Guide</a></p></li>
 <li><p>Here you can find all the quick start guides on wiki documentation
 <a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart">[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal">AD9209-FMCA-EBZ Quick start guide on VCK190</a></p></li>
 </ul>
-<p>Here you can find the quick start guides available for these evaluation boards:</p>
-<div class="table-wrapper docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Versal</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>AD9081/AD9082/AD9986/AD9988</p></td>
-<td><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal">VCK190/VMK180/VPK180</a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </section>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheets:</p>
 <ul>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209">AD9209</a></p></li>
 </ul>
 </li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf">UG-1578, Device User Guide</a></p></li>
@@ -848,8 +797,7 @@ accordingly.</p>
 <section id="hdl-related">
 <h3>HDL related<a class="headerlink" href="#hdl-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9081_fmca_ebz">AD9081_FMCA_EBZ HDL project source code</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9082_fmca_ebz">AD9082_FMCA_EBZ HDL project source code</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9209_fmca_ebz">AD9209_FMCA_EBZ HDL project source code</a></p></li>
 </ul>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
@@ -904,7 +852,8 @@ accordingly.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a>
+applies to the AD9209-FMCA-EBZ board as well, just the RX side</p></li>
 <li><p>Python support:</p>
 <ul>
 <li><p><a class="reference external" href="https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html#module-adi.ad9081" title="(in Analog Devices Hardware Python Interfaces v0.0.19)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AD9081</span> <span class="pre">class</span> <span class="pre">documentation</span></code></a></p></li>

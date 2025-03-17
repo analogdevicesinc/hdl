@@ -176,7 +176,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
@@ -363,55 +363,58 @@ Content on this topic
             
   <section id="hdl-architecture">
 <span id="architecture"></span><h1>HDL Architecture<a class="headerlink" href="#hdl-architecture" title="Permalink to this heading"></a></h1>
-<p>Every HDL design of a reference project can be divided into two
-subsystems:</p>
+<p>Every HDL design of a reference project can be divided into:</p>
+<ol class="arabic simple">
+<li><p>Base design for the <strong>carrier</strong> board (projects/common/$CARRIER) —
+description of what the carrier contains</p>
 <ul class="simple">
-<li><p><strong>Base design</strong> — description of what the <strong>carrier</strong> contains:</p>
-<ul>
-<li><p>an embedded processor - soft or hard</p></li>
-<li><p>all the peripheral IPs (that are necessary to run a Linux
-distribution on the system)</p></li>
+<li><p>an embedded processor - soft or hard;</p></li>
+<li><p>all the peripheral IPs (that are necessary to run a Linux distribution
+on the system);</p></li>
 <li><p>these designs are specific to each carrier, making them <strong>carrier
-dependent</strong></p></li>
-<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module</p></li>
-<li><p>located in
-<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>;
-one for each carrier</p></li>
+dependent</strong>;</p></li>
+<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module;</p></li>
+<li><p>located in <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">projects/common</a>; one for each carrier;</p></li>
+<li><p>here we do most of the PS configuration, add SPI, I2C and GPIOs;</p></li>
+<li><p>in some cases, we have scripts to instantiate the PL DDR as ADC offload
+memory or DAC offload memory.</p></li>
 </ul>
 </li>
-<li><p><strong>Board design</strong> — description of what the <strong>board</strong> attached to
-the carrier contains:</p>
-<ul>
-<li><p>all the necessary IPs needed to support the board</p></li>
-<li><p>these designs are common to all carriers, making them <strong>carrier
-independent</strong></p></li>
-<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module</p></li>
-<li><p>located in <code class="docutils literal notranslate"><span class="pre">hdl/projects/$project_name/common/*bd.tcl</span></code></p></li>
+<li><p>Base design for the <strong>evaluation</strong> board (projects/$EVAL_BOARD/common)
+— description of what the evaluation contains</p>
+<ul class="simple">
+<li><p>instantiates all the necessary IPs to control the evaluation board and to
+capture or send data;</p></li>
+<li><p>the data paths defined in this block design are common across multiple
+carrier platforms, making them <strong>carrier independent</strong>;</p></li>
+<li><p>it describes part of the <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module;</p></li>
+<li><p>located at <code class="docutils literal notranslate"><span class="pre">hdl/projects/$EVAL_BOARD/common</span></code> (<code class="docutils literal notranslate"><span class="pre">*_bd.tcl</span></code> for
+AMD Xilinx FPGAs, and <code class="docutils literal notranslate"><span class="pre">*_qsys.tcl</span></code> for Intel FPGAs).</p></li>
 </ul>
 </li>
+<li><p>Specific design for the system (projects/$EVAL_BOARD/$CARRIER)</p>
+<ul class="simple">
+<li><p>we source the carrier board configuration (#1), then the evaluation
+board configuration (#2) and then we do some specific parameter
+modification, if required.</p></li>
 </ul>
+</li>
+</ol>
 <section id="how-they-re-instantiated">
 <h2>How they’re instantiated<a class="headerlink" href="#how-they-re-instantiated" title="Permalink to this heading"></a></h2>
-<p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file, we have to source
-the <em>base design first</em>, then the <em>board design</em>.</p>
+<p>In case of a project, inside the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file we have to source
+the base design of the carrier first (#1), then the base design of the
+evaluation board (#2).</p>
 <section id="example">
 <h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
-<p>Take <a class="icon adi reference external" href="https://www.analog.com/EVAL-ADFMCOMMS2">AD-FMCOMMS2</a> with
+<p>Take <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS2-EBZ">FMCOMMS2</a> with
 <a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a>;
-the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> will look like the following:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
+the <code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> file will have the following designs sourced to be used:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>projects<span class="o">/</span>common<span class="o">/</span>zed<span class="o">/</span>zed_system_bd.tcl
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>common<span class="o">/</span>fmcomms2_bd.tcl
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span>/projects/common/zed/zed_system_bd.tcl
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>../common/fmcomms2_bd.tcl
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
+</section>
 </section>
 <section id="typical-project-diagram">
 <h2>Typical project diagram<a class="headerlink" href="#typical-project-diagram" title="Permalink to this heading"></a></h2>
@@ -431,16 +434,8 @@ cores.</p>
 <section id="microprocessor">
 <h3>Microprocessor<a class="headerlink" href="#microprocessor" title="Permalink to this heading"></a></h3>
 <p>In our designs, we use only three types:</p>
-<div class="table-wrapper colwidths-given docutils container">
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 16.7%" />
-<col style="width: 16.7%" />
-<col style="width: 16.7%" />
-<col style="width: 16.7%" />
-<col style="width: 16.7%" />
-<col style="width: 16.7%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Intel</p></th>
 <th class="head"></th>
@@ -489,13 +484,14 @@ CIPS</a>
 <section id="memory-interface-controller">
 <h3>Memory interface controller<a class="headerlink" href="#memory-interface-controller" title="Permalink to this heading"></a></h3>
 <p>In almost all cases, the carrier board is not made and designed by
-<a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a>, so the external memory solution of the system is given.
-Meaning, we can not support, modify or alter this important part of the
+<a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a>, so the external memory solution of the system is
+given.</p>
+<p>Meaning, <strong>we cannot support, modify or alter this important part</strong> of the
 system. In several cases we even have system limitations because of it
 (e.g. the memory interface is not fast enough to handle the required
 data throughput).</p>
-<p>In the following two links, the user can find the landing page of the
-available memory solutions for Intel and AMD:</p>
+<p>In the following two links, one can find the landing page of the available
+memory solutions for Intel and AMD:</p>
 <ul class="simple">
 <li><p>Intel’s memory interfaces:
 <a class="reference external" href="https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html">https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html</a></p></li>
@@ -514,9 +510,9 @@ have the naming of the ports depending on the microprocessor used.</p>
 <span id="architecture-cpu-intercon-addr"></span><h4>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h4>
 <p>The memory addresses that will be used by software are based on the HDL
 addresses of the IP register map, to which an offset is added, depending
-on the architecture of the used FPGA (see also <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl">ad_cpu_interconnect
-procedure</a>; architecture is
-specified by <code class="docutils literal notranslate"><span class="pre">sys_zynq</span></code> variable, for AMD FPGAs).</p>
+on the architecture of the used FPGA (see also
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/scripts/adi_board.tcl">ad_cpu_interconnect procedure</a>;
+architecture is specified by <code class="docutils literal notranslate"><span class="pre">sys_zynq</span></code> variable, for AMD FPGAs).</p>
 <p><strong>Zynq-7000 and 7 Series</strong></p>
 <p>Because this was the original target, this is the reference
 address used, the common one, to which depending on the architecture,
@@ -544,19 +540,19 @@ able to determine it.</p>
 </section>
 <section id="spi">
 <h4>SPI<a class="headerlink" href="#spi" title="Permalink to this heading"></a></h4>
-<p>In general, the base system has two Serial Peripheral Interfaces, which
-are used as a control interface for FMC/HSMC devices. These SPI
-interfaces are controlled by the integrated SPI controller of the <strong>Hard
-Processor System</strong> (HPS) or <strong>Processing System 7/8</strong> (PS7/8) or an
+<p>In general, the base design of the carrier (#1) has two Serial Peripheral
+Interfaces (SPIs), which are used as a control interface for FMC/HSMC devices.
+These SPI interfaces are controlled by the integrated SPI controller of the
+<strong>Hard Processor System</strong> (HPS) or <strong>Processing System 7/8</strong> (PS7/8) or an
 Intel or AMD SPI controller core.</p>
 </section>
 <section id="i2c-i2s-spdif">
 <h4>I2C/I2S/SPDIF<a class="headerlink" href="#i2c-i2s-spdif" title="Permalink to this heading"></a></h4>
-<p>A couple of carrier boards require these standard interfaces for
-different purposes (e.g. a configuration interface for an audio
-peripheral device). These peripherals do not necessarily have vital roles
-in the reference design – it’s more like a generic goal to support all
-the provided peripherals of the carrier board.</p>
+<p>A couple of carriers require these standard interfaces for different purposes
+(e.g. a configuration interface for an audio peripheral device).
+These peripherals do not necessarily have vital roles in the reference
+design – it’s more like a generic goal to support all the provided
+peripherals of the carrier board.</p>
 </section>
 <section id="hdmi">
 <h4>HDMI<a class="headerlink" href="#hdmi" title="Permalink to this heading"></a></h4>
@@ -566,13 +562,12 @@ as HDMI transmitter. The HDMI transmitter core can be found
 </section>
 <section id="gpios">
 <h4>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h4>
-<p>The general rule of thumb is to define 64 GPIO pins for the base design:</p>
+<p>The general rule of thumb is to define 64 GPIO pins for the design:</p>
 <ul class="simple">
 <li><p>bits [31: 0] always belong to the carrier board;</p></li>
 <li><p>bits [63:32] will be assigned to switches, buttons and/or LEDs, which
 can be found on the FMC board;</p></li>
-<li><p>bits [95:64] will be used when the FPGA type is Zynq UltraScale+
-MPSoC.</p></li>
+<li><p>bits [95:64] will be used when the FPGA type is Zynq UltraScale+ MPSoC.</p></li>
 </ul>
 <p>When some of these GPIOs are not used, the input pins should have the
 output pins driven to them, so that
@@ -1104,9 +1099,9 @@ both the carrier and the device(s)</p>
 dependencies needed for the project to be built</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_project.tcl</span></code> — script that creates the actual Vivado
 project and runs the synthesis/implementation of the design</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> — sources the <em>base design first</em>, then the
-<em>board design</em>, and afterwards it contains all the IP instances and
-connections that must be added on top of the sourced files, to
+<li><p><code class="docutils literal notranslate"><span class="pre">system_bd.tcl</span></code> — sources the base design of the carrier first, then the
+base design of the evaluation board, and afterwards it contains all the IP
+instances and connections that must be added on top of the sourced files, to
 complete the design of the project (these are <strong>specific</strong> to the
 combination of this carrier and board)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_constr.xdc</span></code> — constraints file of the design; it’s the
@@ -1125,7 +1120,7 @@ I/O pads of the FPGA.</p>
 <code class="docutils literal notranslate"><span class="pre">&lt;project_name&gt;.srcs/sources_1/bd/system/hdl/system_wrapper.v</span></code></p>
 <ul>
 <li><p>the I/O ports of this module are declared in either
-<em>system_bd.tcl</em> or in the <strong>board</strong> design file</p></li>
+<em>system_bd.tcl</em> or in the base design of the evaluation board (#2) file</p></li>
 <li><p>this can be visualized in Vivado at the Block Design section</p></li>
 <li><p>the base design, board design and system_bd.tcl describe this
 module, making the connections between the instantiated IPs</p></li>
@@ -1145,10 +1140,10 @@ dependencies needed for the project to be built</p></li>
 project and runs the synthesis/implementation of the design. It also
 contains the I/O definitions for the interfaces between the board and
 the FPGA</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">system_qsys.tcl</span></code> — also called <strong>platform designer</strong>; sources
-the <em>base design first</em>, then the <em>board design</em>, and afterwards it
-contains all the IP instances and connections that must be added on
-top of the sourced files, to complete the design of the project
+<li><p><code class="docutils literal notranslate"><span class="pre">system_qsys.tcl</span></code> — also called <strong>platform designer</strong>; sources the base
+design of the carrier first, then the base design of the evaluation board,
+and afterwards it contains all the IP instances and connections that must
+be added on top of the sourced files, to complete the design of the project
 (these are specific to the combination of this carrier and board)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path
 constraints</p></li>
@@ -1181,18 +1176,17 @@ propelbldwrap (Linux);</p></li>
 project-lattice.mk, run by pnmainc (Windows), radiantc (Linux);</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_pb.tcl</span></code> — linker script for the projects, sourced in
 adi_project_pb procedure that is called in system_project_pb.tcl and it is
-defined in adi_project_lattice_pb.tcl; sources the <em>base design first</em>,
-then the <em>board design</em>, and afterwards it contains all the IP instances and
-connections that must be added on top of the sourced files, to
-complete the design of the project (these are specific to the
-combination of this carrier and board)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path
-constraints</p></li>
+defined in adi_project_lattice_pb.tcl; sources the base design of the carrier
+first, then the base design of the evaluation board, and afterwards it
+contains all the IP instances and connections that must be added on top of
+the sourced files, to complete the design of the project (these are specific
+to the combination of this carrier and board)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system_constr.sdc</span></code> — contains clock definitions and other path constraints</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_constr.pdc</span></code> — contains clock definitions and other path
-constraints  + phisical constraints</p></li>
+constraints  + physical constraints</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">system_top.v</span></code> — contains everything about the HDL part of the
 project; it instantiates the <strong>&lt;project_name&gt;.v</strong> <code class="docutils literal notranslate"><span class="pre">system_wrapper</span></code> module,
-IO buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
+I/O buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
 etc. The I/O ports of this Verilog module will be connected to actual
 I/O pads of the FPGA</p></li>
 </ul>

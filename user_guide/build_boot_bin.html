@@ -91,8 +91,9 @@
           <ul>
 <li><a class="reference internal" href="#">Build the boot image BOOT.BIN</a><ul>
 <li><a class="reference internal" href="#for-zynq">For Zynq</a></li>
-<li><a class="reference internal" href="#for-zynqmp">For ZynqMP</a></li>
+<li><a class="reference internal" href="#for-zynq-ultrascale-mp">For Zynq UltraScale+ MP</a></li>
 <li><a class="reference internal" href="#for-versal">For Versal</a></li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
 </ul>
 </li>
 </ul>
@@ -139,7 +140,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs_guidelines.html">Documentation guidelines</a></li>
@@ -326,20 +327,17 @@ Content on this topic
             
   <section id="build-the-boot-image-boot-bin">
 <span id="build-boot-bin"></span><h1>Build the boot image BOOT.BIN<a class="headerlink" href="#build-the-boot-image-boot-bin" title="Permalink to this heading"></a></h1>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p><span class="red">This flow is not supported by us in Cygwin!</span> Use Linux terminal or
+<a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> instead.</p>
+</div>
 <p>The boot image <code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code> is built using the
 <a class="reference external" href="https://www.xilinx.com/support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf">AMD Xilinx Bootgen tool</a>
 which requires several input files.</p>
-<p>All further steps are lengthy explained on the
-<a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/A">AMD Xilinx wiki</a> pages:</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841973/Build+U-Boot">How to build the u-boot</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL">How to build the FSBL</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image">How to build the BOOT image</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware">How to build the PMU firmware (for ZynqMP)</a></p></li>
-<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF">How to build the Arm Trusted Firmware (for ZynqMP)</a></p></li>
-</ul>
-<p>For ease of use, we provide a bash shell script which allows building BOOT.BIN
-from system_top.xsa and u-boot.elf.</p>
+<p>For <strong>ease of use</strong>, we provide a bash shell script which allows
+building the BOOT.BIN from <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> (generated from building the
+project) and <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code> (from the SD card with Kuiper image).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>You need to have the AMD Xilinx Vivado, Vitis and Bootgen tool paths in
@@ -350,123 +348,165 @@ the <code class="docutils literal notranslate"><span class="pre">$PATH</span></c
 <span id="build-boot-bin-zynq"></span><h2>For Zynq<a class="headerlink" href="#for-zynq" title="Permalink to this heading"></a></h2>
 <p>This section applies to the Zynq-based carriers from
 <a class="reference internal" href="architecture.html#architecture-amd-platforms"><span class="std std-ref">our list</span></a>, but not limited to them only.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">build_boot_bin.sh</span></code> script can be downloaded from
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh">here</a>.</p>
+<p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
+cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm</span></code> exists before running the script.
+For more information about cross compilers, see
+<a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynq">Building the Zynq Linux kernel and devicetrees from source</a>.</p>
+<p>The script used is
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.sh">build_boot_bin.sh</a>,
+which needs to be downloaded on your computer.</p>
 <p>The script can take 3 parameters:</p>
 <ul class="simple">
-<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> file (<strong>mandatory</strong>).</p></li>
-<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code> file (<strong>mandatory</strong>);
-see the note below.</p></li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>);
-see the note below.</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code>;</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code>;</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (optional).</p></li>
 </ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The u-boot can be taken from the <em>bootgen_sysfiles.tgz</em> archive located in
+the project folder of the ADI Kuiper Linux image from the SD card.</p>
+<p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
+<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+instructions on how to obtain the ADI Kuiper image.</p>
+</div>
+<p>The script can be saved in the folder local to the project (for
+example, hdl/projects/fmcomms2/zed) and to be run from there.</p>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>build_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/fmcomms2/zed
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
-where you ran the command. The folder follows the pattern:
-<em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For those who don’t want to build the u-boot themselves or want to provide
-the <em>.tar.gz</em> output archive, both can be extracted from
-the <em>bootgen_sysfiles.tgz</em> located in the project folder of the Kuiper Linux
-image.</p>
-<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
-instructions on how to obtain the image.</p>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/fmcomms2/zed$
+</pre></div>
 </div>
-<p>There is also a version of script that works in Windows Powershell:
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynq_boot_bin/build_boot_bin.ps1">build_boot_bin.ps1</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>build_boot_bin.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/fmcomms2/zed$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build_boot_bin.sh<span class="w"> </span>fmcomms2_zed.sdk/system_top.xsa<span class="w"> </span>path/to/u-boot.elf<span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The build output (<code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code>) can be found in the local directory
+<code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code> where you ran the command.
+The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
 </section>
-<section id="for-zynqmp">
-<span id="build-boot-bin-zynqmp"></span><h2>For ZynqMP<a class="headerlink" href="#for-zynqmp" title="Permalink to this heading"></a></h2>
-<p>This section applies to the ZynqMP-based carriers, usually <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a>
-but not limited to this one only.</p>
+<section id="for-zynq-ultrascale-mp">
+<span id="build-boot-bin-zynqmp"></span><h2>For Zynq UltraScale+ MP<a class="headerlink" href="#for-zynq-ultrascale-mp" title="Permalink to this heading"></a></h2>
+<p>This section applies to the ZynqMP-based carriers (<a class="reference external" href="https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-mpsoc.html">Zynq UltraScale+ MPSoC</a>),
+usually <a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a> in our systems, but not limited to this one only.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm64</span></code> exists before running the script.
 For more information about cross compilers, see
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">build_zynqmp_boot_bin.sh</span></code> script can be downloaded from
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh">here</a></p>
-<p>The script can take 4 parameters:</p>
+<p>The script used is
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/main/zynqmp_boot_bin/build_zynqmp_boot_bin.sh">build_zynqmp_boot_bin.sh</a>,
+which needs to be downloaded on your computer.</p>
+<p>The script can take 4 parameters (the last one is optional):</p>
 <ul class="simple">
-<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> file (<strong>mandatory</strong>)</p></li>
-<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code> file (<strong>mandatory</strong>);
-see the note below</p></li>
-<li><p>the third parameter is either (<strong>mandatory</strong>):</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">download</span></code> (will git clone the ATF repository)</p></li>
-<li><p>or <code class="docutils literal notranslate"><span class="pre">bl31.elf</span></code></p></li>
-<li><p>or <code class="docutils literal notranslate"><span class="pre">&lt;path-to-arm-trusted-firmware-source&gt;</span></code> (the file system path to the
-ATF source code repository); see note below</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code>;</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code>;</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">bl31.elf</span></code>;</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (optional).</p></li>
 </ul>
-</li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>);
-see the note below.</p></li>
-</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The u-boot and the bl31.elf can be taken from the <em>bootgen_sysfiles.tgz</em>
+archive located in the project folder of the ADI Kuiper Linux image from
+the SD card.</p>
+<p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
+<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+instructions on how to obtain the ADI Kuiper image.</p>
+</div>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>build_zynqmp_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span>u-boot.elf<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/fmcomms2/zcu102
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
-where you ran the command. The folder follows the pattern:
-<em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For those who don’t want to build the u-boot or bl31.elf themselves
-or want to provide the <em>.tar.gz</em> output archive, they can be extracted from
-the <em>bootgen_sysfiles.tgz</em> located in the project folder of the Kuiper Linux
-image.</p>
-<p>u-boot.elf may have a different name, rename that .elf file to u-boot.elf
-before using.</p>
-<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
-instructions on how to obtain the image.</p>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/fmcomms2/zcu102$
+</pre></div>
 </div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>build_zynqmp_boot_bin.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/fmcomms2/zcu102$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build_zynqmp_boot_bin.sh<span class="w"> </span>fmcomms2_zcu102.sdk/system_top.xsa<span class="w"> </span>path/to/u-boot.elf<span class="w"> </span>path/to/bl31.elf
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The build output (<code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code>) can be found in the local directory
+<code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code> where you ran the command.
+The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
 </section>
 <section id="for-versal">
-<h2>For Versal<a class="headerlink" href="#for-versal" title="Permalink to this heading"></a></h2>
+<span id="build-boot-bin-versal"></span><h2>For Versal<a class="headerlink" href="#for-versal" title="Permalink to this heading"></a></h2>
 <p>This section applies only to the Versal carriers: <a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a> and
 <a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a>.</p>
 <p>Make sure that AMD Xilinx Vivado and Vitis are included in the path and a
 cross-compiler for <code class="docutils literal notranslate"><span class="pre">arm64</span></code> exists before running the script.
 For more information about cross compilers, see
 <a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-build/generic/zynqmp">Building the ZynqMP / MPSoC Linux kernel and devicetrees from source</a>.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">build_versal_boot_bin.sh</span></code> script can be downloaded from
-<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh">here</a></p>
+<p>The script used is
+<a class="reference external" href="https://raw.githubusercontent.com/analogdevicesinc/wiki-scripts/refs/heads/main/versal_boot_bin/build_versal_boot_bin.sh">build_versal_boot_bin.sh</a>,
+which needs to be downloaded on your computer.</p>
 <p>The script can take 4 parameters:</p>
 <ul class="simple">
-<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code> file (<strong>mandatory</strong>)</p></li>
-<li><p>the second parameter is either:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">download</span></code> (will git clone the U-boot repository) (<strong>default</strong>)</p></li>
-<li><p>or <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code></p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">system_top.xsa</span></code>;</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">u-boot.elf</span></code>;</p></li>
+<li><p>the path to the <code class="docutils literal notranslate"><span class="pre">bl31.elf</span></code>;</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>).</p></li>
 </ul>
-</li>
-<li><p>the third parameter is either:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">download</span></code> (will git clone the ATF repository) (<strong>default</strong>)</p></li>
-<li><p>or <code class="docutils literal notranslate"><span class="pre">bl31.elf</span></code></p></li>
-<li><p>or <code class="docutils literal notranslate"><span class="pre">&lt;path-to-arm-trusted-firmware-source&gt;</span></code> (the file system path to the
-ATF source code repository)</p></li>
-</ul>
-</li>
-<li><p>the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the tar.gz output archive (<code class="docutils literal notranslate"><span class="pre">name</span></code>.tar.gz) (<strong>optional</strong>)</p></li>
-</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The u-boot and the bl31.elf can be taken from the <em>bootgen_sysfiles.tgz</em>
+archive located in the project folder of the ADI Kuiper Linux image from
+the SD card.</p>
+<p>Keep in mind that <strong>the u-boot is FPGA-specific</strong>!</p>
+<p>See the beginning of <a class="reference external" href="https://analogdevicesinc.github.io/documentation/linux/kuiper/sdcard/index.html#kuiper-sdcard" title="(in System Level Documentation)"><span>SD Card flashing</span></a> for
+instructions on how to obtain the ADI Kuiper image.</p>
+</div>
 <div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>build_versal_boot_bin.sh<span class="w"> </span>system_top.xsa<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>u-boot.elf<span class="o">)</span><span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>hdl/projects/ad9081_fmca_ebz/vck190
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The build output can be found in the local directory <code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code>
-where you ran the command. The folder follows the pattern:
-<em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9081_fmca_ebz/vck190$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>build_versal_boot_bin.sh
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9081_fmca_ebz/vck190$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./build_versal_boot_bin.sh<span class="w"> </span>ad9081_fmca_ebz.vck190.sdk/system_top.xsa<span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>u-boot.elf<span class="o">)</span><span class="w"> </span><span class="o">(</span>download<span class="w"> </span><span class="p">|</span><span class="w"> </span>bl31.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>&lt;path-to-arm-trusted-firmware-source&gt;<span class="o">)</span><span class="w"> </span><span class="o">[</span>output-archive<span class="o">]</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>The build output (<code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code>) can be found in the local directory
+<code class="docutils literal notranslate"><span class="pre">output_boot_bin</span></code> where you ran the command.
+The folder follows the pattern: <em>hdl/projects/$ADI_PART/$CARRIER/output_boot_bin</em>.</p>
 </section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
+<p>(NOT RECOMMENDED) If you’re in for the long story, check out the
+<a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/A">AMD Xilinx wiki</a> pages.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="0d336428113ed265df51a908f8dd9882f649603a" name="0d336428113ed265df51a908f8dd9882f649603a" type="checkbox"></input><label for="0d336428113ed265df51a908f8dd9882f649603a"><p>For more details on the long story (NOT RECOMMENDED)</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<ul class="simple">
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841798/Build+FSBL">How to build the FSBL</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841976/Prepare+boot+image">How to build the BOOT image</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842462/Build+PMU+Firmware">How to build the PMU firmware (for ZynqMP)</a></p></li>
+<li><p><a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18842305/Build+ARM+Trusted+Firmware+ATF">How to build the Arm Trusted Firmware (for ZynqMP)</a></p></li>
+</ul>
+</div>
+</div>
+</div></section>
 </section>
 
 

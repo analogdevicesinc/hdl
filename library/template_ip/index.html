@@ -146,7 +146,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="../../user_guide/ip_cores/axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../user_guide/docs_guidelines.html">Documentation guidelines</a></li>
@@ -662,10 +662,12 @@ Content on this topic
 <li><p>The AXI handling interface.</p></li>
 </ul>
 <p>The data from the interface module is processed by the ADC channel module.
-The Up_adc_common  module implements the ADC COMMON register map, allowing for
-basic monitoring and control of the ADC.
-The Up_adc_channel module implements the ADC CHANNEL register map, allowing for
-basic monitoring and control of the ADC’s channel.</p>
+The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_common.v">up_adc_common</a> module implements
+the ADC COMMON register map, allowing for basic monitoring and control of
+the ADC.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/common/up_adc_channel.v">up_adc_channel</a> module
+implements the ADC CHANNEL register map, allowing for basic monitoring and
+control of the ADC’s channel.</p>
 </section>
 <section id="register-map">
 <h2>Register Map<a class="headerlink" href="#register-map" title="Permalink to this heading"></a></h2>

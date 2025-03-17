@@ -89,10 +89,7 @@
         </div>
         <nav>
           <ul>
-<li><a class="reference internal" href="#">ADI IP cores</a><ul>
-<li><a class="reference internal" href="#contents">Contents</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">ADI IP cores</a></li>
 </ul>
 
         </nav>
@@ -137,7 +134,7 @@ Content on this topic
 <li class="toctree-l3"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../porting_project.html">Porting reference designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../porting_project.html">Porting HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../customize_hdl.html">Customize HDL projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../hdl_coding_guidelines.html">HDL coding guidelines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docs_guidelines.html">Documentation guidelines</a></li>
@@ -324,15 +321,6 @@ Content on this topic
             
   <section id="adi-ip-cores">
 <span id="user-guide-ip-cores"></span><h1>ADI IP cores<a class="headerlink" href="#adi-ip-cores" title="Permalink to this heading"></a></h1>
-<p>Here you can find documentations about ADI IP cores, such as
-<a class="reference internal" href="creating_new_ip.html#creating-new-ip"><span class="std std-ref">Creating a new IP</span></a> and
-how to <a class="reference internal" href="use_adi_ips.html#use-adi-ips"><span class="std std-ref">Use ADI IPs into your own project</span></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>See <a class="reference internal" href="../../library/index.html#library"><span class="std std-ref">IP Cores</span></a> for a list of IP cores by category.</p>
-</div>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="creating_new_ip.html">Creating a new IP</a></li>
@@ -342,7 +330,15 @@ how to <a class="reference internal" href="use_adi_ips.html#use-adi-ips"><span c
 <li class="toctree-l1"><a class="reference internal" href="axi_dac/index.html">Generic AXI DAC</a></li>
 </ul>
 </div>
-</section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="../../library/index.html#library"><span class="std std-ref">IP Cores</span></a> for a list of IP cores by category.</p>
+</div>
+<p>In case you want the same project for that evaluation board, but you need it
+to be on another FPGA carrier and also do some extra processing, please take a
+look at our <a class="reference internal" href="../porting_project.html#porting-project"><span class="std std-ref">Porting ADI’s HDL reference designs</span></a> guide on how to migrate the project onto
+another FPGA + the above pages, for details on how to add the IPs into your
+customized project (<a class="reference internal" href="../customize_hdl.html#customize-hdl"><span class="std std-ref">Customize HDL projects</span></a>).</p>
 </section>
 
 
