@@ -68,6 +68,7 @@ Contents
    ADRV9009-ZU11EG <adrv9009zu11eg/index>
    ADV7511 <adv7511/index>
    ADV7513 <adv7513/index>
+   ARRADIO <arradio/index>
    CN0363 <cn0363/index>
    CN0506 <cn0506/index>
    CN0540 <cn0540/index>
