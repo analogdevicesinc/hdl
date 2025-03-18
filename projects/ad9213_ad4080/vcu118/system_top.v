@@ -188,7 +188,7 @@ module system_top (
 
   assign adf4371_csb    = hmc7044_adf4371_csn[1];
   assign hmc7044_csb    = hmc7044_adf4371_csn[0];
-  assign ad4080_sync_n  = ~gpio_o[56];
+  assign ad4080_sync_n  = 1'b1;
   assign gpio_i[63:57]  = gpio_o[63:57];
 
   ad_iobuf #(
