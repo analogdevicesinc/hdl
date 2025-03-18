@@ -46,10 +46,10 @@ module system_top (
   input         mipi_ch0_clk_n,
   input         mipi_ch0_clk_p,
 
-  input  [ 3:0] mipi_ch1_data_n,
-  input  [ 3:0] mipi_ch1_data_p,
-  input         mipi_ch1_clk_n,
-  input         mipi_ch1_clk_p,
+//  input  [ 3:0] mipi_ch1_data_n,
+//  input  [ 3:0] mipi_ch1_data_p,
+//  input         mipi_ch1_clk_n,
+//  input         mipi_ch1_clk_p,
 
   /*
    * Ethernet: SFP+
@@ -104,6 +104,9 @@ module system_top (
   wire          ap_rstn_frmbuf_5;
   wire          ap_rstn_frmbuf_6;
   wire          ap_rstn_frmbuf_7;
+
+  wire          ap_rstn_isp;
+
   wire          csirxss_rstn;
 
   assign csirxss_rstn = gpio_o[0];
@@ -115,6 +118,8 @@ module system_top (
   assign ap_rstn_frmbuf_5 = gpio_o[7];
   assign ap_rstn_frmbuf_6 = gpio_o[8];
   assign ap_rstn_frmbuf_7 = gpio_o[9];
+ 
+  assign ap_rstn_isp = gpio_o[29];
 
   assign sfp_i2c_rstn = gpio_o[10];
   assign sfp_i2c_en = 1'b0;
@@ -153,6 +158,7 @@ module system_top (
     .ap_rstn_frmbuf_5 (ap_rstn_frmbuf_5),
     .ap_rstn_frmbuf_6 (ap_rstn_frmbuf_6),
     .ap_rstn_frmbuf_7 (ap_rstn_frmbuf_7),
+    .ap_rstn_isp (ap_rstn_isp),
     .csirxss_rstn (csirxss_rstn),
     .gpio_i (gpio_i),
     .gpio_o (gpio_o),
@@ -169,10 +175,10 @@ module system_top (
     .mipi_phy_if_0_clk_p (mipi_ch0_clk_p),
     .mipi_phy_if_0_data_n (mipi_ch0_data_n),
     .mipi_phy_if_0_data_p (mipi_ch0_data_p),
-    .mipi_phy_if_1_clk_n (mipi_ch1_clk_n),
-    .mipi_phy_if_1_clk_p (mipi_ch1_clk_p),
-    .mipi_phy_if_1_data_n (mipi_ch1_data_n),
-    .mipi_phy_if_1_data_p (mipi_ch1_data_p),
+//    .mipi_phy_if_1_clk_n (mipi_ch1_clk_n),
+//    .mipi_phy_if_1_clk_p (mipi_ch1_clk_p),
+//    .mipi_phy_if_1_data_n (mipi_ch1_data_n),
+//    .mipi_phy_if_1_data_p (mipi_ch1_data_p),
     .ref_clk0 (ref_ad9545_pl),
     .sfp_mgt_refclk_n (sfp_mgt_refclk_n),
     .sfp_mgt_refclk_p (sfp_mgt_refclk_p),
