@@ -115,7 +115,7 @@ module system_top #(
 
   // spi
 
-  /* spi_en is active low 
+  /* spi_en is active low
   * AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
   */
 
@@ -151,9 +151,9 @@ module system_top #(
     .dio_t (gpio_t[25:24]),
     .dio_i (gpio_o[25:24]),
     .dio_o (gpio_i[25:24]),
-    .dio_p (
+    .dio_p ({
       dac_ctrl           /* 25 - 24 */
-    ));
+    }));
 
   /*
   * Control signals for different FMC boards:
