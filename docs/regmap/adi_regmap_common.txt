@@ -145,6 +145,13 @@ RO
 If set, the ADC has the capability to read raw data in register CHAN_RAW_DATA from adc_channel.
 ENDFIELD
 
+FIELD
+[14] 0x00000000
+SELECTABLE_CLOCK
+RO
+If set, the ADC has the capability to select the reference clock for Tx SSI.
+ENDFIELD
+
 ############################################################################################
 ############################################################################################
 
