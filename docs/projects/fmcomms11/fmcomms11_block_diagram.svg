@@ -3934,14 +3934,14 @@
        transform="rotate(-90)"
        id="text5798"
        y="299.59839"
-       x="-1400.8313"
+       x="-1408.8308"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.6667px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.6667px;line-height:108%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:none;stroke-opacity:1"
          y="299.59839"
-         x="-1400.8313"
+         x="-1408.8308"
          id="tspan5800"
-         sodipodi:role="line">UTIL_DACFIFO</tspan></text>
+         sodipodi:role="line">DATA_OFFLOAD</tspan></text>
     <rect
        style="display:inline;fill:#d2e6eb;fill-opacity:1;fill-rule:nonzero;stroke:#0f3296;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect5796-8-9-3"
@@ -4859,7 +4859,7 @@
          sodipodi:role="line"
          id="tspan24537-5"
          x="-1605.424"
-         y="239.2083">64b</tspan><tspan
+         y="239.2083">256b</tspan><tspan
          sodipodi:role="line"
          x="-1605.424"
          y="250.87495"
@@ -5044,7 +5044,7 @@
            id="tspan3345-9-10-6"
            x="140.42747"
            y="551.55389"
-           style="fill:#ffffff;fill-opacity:1;stroke-width:0.3607">64b</tspan></text>
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.3607">256b</tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -5483,7 +5483,7 @@
          id="tspan38490-0"
          style="font-size:9.33333333px;line-height:1.25;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;-inkscape-font-specification:'sans-serif, Normal';font-family:sans-serif;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
          x="-1686.2051"
-         y="250.33215">4 samples</tspan></text>
+         y="250.33215">16 samples</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.33333333px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke:none;shape-rendering:crispEdges;enable-background:new"
@@ -5553,7 +5553,7 @@
          x="-1392.6472"
          y="250.63489">16 samples</tspan></text>
     <g
-       transform="matrix(1.0107417,0,0,0.99950034,140.14109,686.92779)"
+       transform="matrix(1.0107417,0,0,0.99950034,140.14109,695.92766)"
        id="g5828"
        style="display:inline;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new">
       <text
@@ -5567,7 +5567,7 @@
            y="157.05742"
            x="-1005.8705"
            id="tspan5773"
-           sodipodi:role="line">AXI_ADCFIFO</tspan></text>
+           sodipodi:role="line">DATA_OFFLOAD</tspan></text>
     </g>
     <g
        id="g2"
