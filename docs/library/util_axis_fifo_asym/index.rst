@@ -43,8 +43,8 @@ Configuration Parameters
      - Data width of the Master AXI streaming interface.
    * - S_DATA_WIDTH
      - Data width of the Slave AXI streaming interface.
-   * - S_ADDRESS_WIDTH
-     - Width of the Slave AXI's address, defines the depth of the FIFO.
+   * - ADDRESS_WIDTH
+     - Defines the depth of the FIFO.
    * - ASYNC_CLK
      - Clocking mode. If set, the FIFO operates on asynchronous mode.
    * - M_AXIS_REGISTERED
