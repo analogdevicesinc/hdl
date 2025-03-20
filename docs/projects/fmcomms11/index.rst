@@ -71,7 +71,7 @@ The data path and clock domains are depicted in the below diagram:
    .. list-table::
       :widths: 10 20 35 35
       :header-rows: 1
-   
+
       * - Block name
         - IP name
         - Documentation
@@ -113,6 +113,57 @@ The data path and clock domains are depicted in the below diagram:
         - :ref:`util_upack2`
         - ---
 
+Clock scheme
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, the board comes with the solders set to
+**internal clock references**.
+
+The on-board clock reference is provided by a 122.88MHz local oscillator.
+
+To use external clock references, take a look at the section
+*JP location and control* from below, where you have a table explaining the
+connections.
+
+Several GPO and GPIO pins are brought to the RF card through connector J2,
+found on the bottom of the PCB. These pins allow configuration of the PA,
+LNA and SPDT switch found on the PCB.
+
+The schematic of the board can be found
+:adi:`here <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`.
+
+The settings A, COM and B refer to solder positions: 1, 2, and 3 respectively.
+
+.. collapsible:: JP location and control
+
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | Location |  Device Controlled                          | Settings  | Action                             |
+   +==========+=============================================+===========+====================================+
+   | JP1      | \+ Differential Clock Reference for ADF4355 | A and COM | Internal Clock Reference (default) |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \+ Differential Clock Reference for ADF4355 | B and COM | External Clock Reference           |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | JP2      | \- Differential Clock Reference for ADF4355 | A and COM | Internal Clock Reference (default) |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \- Differential Clock Reference for ADF4355 | B and COM | External Clock Reference           |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | JP22     | \+ Differential Clock Reference for DAC     | A and COM | ADF4355 Clock Reference (default)  |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \+ Differential Clock Reference for DAC     | B and COM | External Clock Reference           |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | JP5      | \- Differential Clock Reference for DAC     | A and COM | ADF4355 Clock Reference (default)  |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \- Differential Clock Reference for DAC     | B and COM | External Clock Reference           |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | JP3      | \+ Differential Clock Reference for ADC     | A and COM | External Clock Reference           |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \+ Differential Clock Reference for ADC     | B and COM | HMC361 Clock Reference (default)   |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+   | JP4      | \- Differential Clock Reference for ADC     | A and COM | External Clock Reference           |
+   |          +---------------------------------------------+-----------+------------------------------------+
+   |          | \- Differential Clock Reference for ADC     | B and COM | HMC361 Clock Reference (default)   |
+   +----------+---------------------------------------------+-----------+------------------------------------+
+
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -123,10 +174,10 @@ layer represented by a JESD LINK module and transport layer represented by a
 JESD TPL module. The HDL project in its current state, has
 **the link operating in subclass 0**.
 
-| Rx device clock - 122.88 MHz
-| Tx device clock - 245.76 MHz
-| JESD204B Rx Lane Rate - 4.9152 Gbps
-| JESD204B Tx Lane Rate - 9.8304 Gbps
+- Rx device clock - 122.88 MHz
+- Tx device clock - 245.76 MHz
+- JESD204B Rx Lane Rate - 4.9152 Gbps
+- JESD204B Tx Lane Rate - 9.8304 Gbps
 
 The current HDL project supports only the following configuration:
 
@@ -139,44 +190,17 @@ The current HDL project supports only the following configuration:
 - Rx/Tx sample width (N, NP): 16
 - Tx number of samples per channel: :math:`= \frac{L * 32}{M * N}`
 
-Several GPO and GPIO pins are brought to the RF card through connector J2,
-found on the bottom of the PCB. These pins allow configuration of the PA,
-LNA and SPDT switch found on the PCB. These devices are summarized in a
-table below.
+.. caution::
 
-Several solder link are brought to the RF card to allow optional clock referece
-for the clock management uni, ADC and DAC. These configuration options are
-summarized in the table below.
+   In case you have a **rev. A** :adi:`FMCOMMS11 <AD-FMCOMMS11-EBZ>`, the
+   system will work only if you use the
+   :git-linux:`rev. A device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts>`
+   and the :git-hdl:`old HDL project <hdl_2023_r2:projects/fmcomms11>` (prior
+   to adding the :ref:`data_offload`).
 
-.. collapsible:: JP location and control
-
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | Location |  Device Controlled                          | Settings  | Action                   |
-   +==========+=============================================+===========+==========================+
-   | JP1      | \+ Differential Clock Reference for ADF4355 | A and COM | Internal Clock Reference |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \+ Differential Clock Reference for ADF4355 | B and COM | External Clock Reference |
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | JP2      | \- Differential Clock Reference for ADF4355 | A and COM | Internal Clock Reference |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \- Differential Clock Reference for ADF4355 | B and COM | External Clock Reference |
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | JP22     | \+ Differential Clock Reference for DAC     | A and COM | ADF4355 Clock Reference  |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \+ Differential Clock Reference for DAC     | B and COM | External Clock Reference |
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | JP5      | \- Differential Clock Reference for DAC     | A and COM | ADF4355 Clock Reference  |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \- Differential Clock Reference for DAC     | B and COM | External Clock Reference |
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | JP3      | \+ Differential Clock Reference for ADC     | A and COM | External Clock Reference |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \+ Differential Clock Reference for ADC     | B and COM | HMC361 Clock Reference   |
-   +----------+---------------------------------------------+-----------+--------------------------+
-   | JP4      | \- Differential Clock Reference for ADC     | A and COM | External Clock Reference |
-   |          +---------------------------------------------+-----------+--------------------------+
-   |          | \- Differential Clock Reference for ADC     | B and COM | HMC361 Clock Reference   |
-   +----------+---------------------------------------------+-----------+--------------------------+
+   In case you have a **rev. B** :adi:`FMCOMMS11 <AD-FMCOMMS11-EBZ>`, the
+   system will work only if you do a hardware rework: solder a wire between
+   TP19 and C89.
 
 Detailed description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -358,6 +382,8 @@ SPI connections
      - HMC1119
      - 6
 
+The AD9508 chip select will be used only in the rev. A of the FMCOMMS11.
+
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -475,6 +501,8 @@ Hardware related
 
   - :adi:`AD9162`
   - :adi:`AD9625`
+- Board schematic and design files
+  :adi:`here <media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -541,6 +569,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`FMCOMMS11/ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11.dts>`
+- :git-linux:`FMCOMMS11 rev. A/ZC706 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts>`
 - :dokuwiki:`[Wiki] FMCOMMS11 IIO Oscilloscope plugin wiki page <resources/tools-software/linux-software/fmcomms11_plugin>`
 
 .. include:: ../common/more_information.rst
