@@ -76,10 +76,6 @@ The data path and clock domains are depicted in the below diagram:
         - IP name
         - Documentation
         - Additional info
-      * - AXI_ADCFIFO
-        - :git-hdl:`axi_adcfifo <library/xilinx/axi_adcfifo>`
-        - ---
-        - ---
       * - AXI_ADXCVR
         - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
         - :ref:`axi_adxcvr`
@@ -87,6 +83,10 @@ The data path and clock domains are depicted in the below diagram:
       * - AXI_DMAC
         - :git-hdl:`axi_dmac <library/axi_dmac>`
         - :ref:`axi_dmac`
+        - 2 instances, one for Rx and one for Tx
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
         - 2 instances, one for Rx and one for Tx
       * - RX JESD LINK
         - axi_ad9625_jesd
@@ -104,10 +104,6 @@ The data path and clock domains are depicted in the below diagram:
         - axi_ad9162_core
         - :ref:`ad_ip_jesd204_tpl_dac`
         - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
-      * - UTIL_DACFIFO
-        - :git-hdl:`util_dacfifo <library/util_dacfifo>`
-        - ---
-        - ---
       * - UTIL_UPACK
         - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
         - :ref:`util_upack2`
@@ -208,9 +204,12 @@ state, has **the link operating in subclass 0**.
 
 The transport layer transfers data continuously from/to the ADC/DAC. In the TX
 data path, :ref:`UPACK <util_upack2>` will only send the enabled channels to
-the DMA which in turn will transfer it to the system memory. Depending on
-system specifics, :ref:`data offload FIFOs <data_offload>` may be inserted
-between :ref:`UPACK <util_upack2>`/:ref:`CPACK <util_cpack2>` and the DMA.
+the transport layer.
+:ref:`Data offload FIFOs <data_offload>` are inserted between the transport layers
+and the DMAs to handle the devices' higher data rate in the newer version of
+the project, replacing the obsolete :git-hdl:`util_dacfifo <library/util_dacfifo>`
+/:git-hdl:`util_adcfifo <library/util_adcfifo>`.
+
 When a FIFO is used, the DMA connection to the DDR can run at a lower speed,
 as data capture cannot be done continuously.
 
@@ -334,18 +333,20 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-================ ===============
-Instance         Zynq/Microblaze
-================ ===============
-axi_ad9162_xcvr  0x44A6_0000
-axi_ad9162_core  0x44A0_0000
-axi_ad9162_jesd  0x44A9_0000
-axi_ad9162_dma   0x7C42_0000
-axi_ad9625_xcvr  0x44A5_0000
-axi_ad9625_core  0x44A1_0000
-axi_ad9625_jesd  0x44AA_0000
-axi_ad9625_dma   0x7C40_0000
-================ ===============
+===================  ===============
+Instance             Zynq/Microblaze
+===================  ===============
+axi_ad9162_xcvr      0x44A6_0000
+axi_ad9162_core      0x44A0_0000
+axi_ad9162_jesd      0x44A9_0000
+axi_ad9162_dma       0x7C42_0000
+ad9162_data_offload  0x7C43_0000
+axi_ad9625_xcvr      0x44A5_0000
+axi_ad9625_core      0x44A1_0000
+axi_ad9625_jesd      0x44AA_0000
+axi_ad9625_dma       0x7C40_0000
+ad9625_data_offload  0x7C41_0000
+===================  ===============
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -457,34 +458,6 @@ the HDL repository.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
-Software considerations
--------------------------------------------------------------------------------
-
-Given that the IP uses the same QUAD as the DAC, performing channel
-reconfiguration may affect the DAC and vice versa. When using the JESD204B
-framework, this is taken into consideration by software.
-
-To relax the constraints for PCB design, the **n**-th physical lane it's
-not connected to the **n**-th logical lane, therefore there is a remapping
-scheme between the physical and link layer to reorder the data streams.
-In this case, both ADC and DAC sides are using the same remapping scheme.
-
-With the following remapping scheme: {0 1 2 3 7 4 6 5},
-where the **n**-th logical lane is mapped to the **list[n]** physical lane.
-
-======== ========================
-Phy Lane FPGA lane / Logical Lane
-======== ========================
-0        0
-1        1
-2        2
-3        3
-4        5
-5        7
-6        6
-7        4
-======== ========================
-
 Resources
 -------------------------------------------------------------------------------
 
@@ -538,12 +511,9 @@ HDL related
    * - UTIL_UPACK2
      - :git-hdl:`library/util_pack/util_upack2`
      - :ref:`util_upack2`
-   * - UTIL_DACFIFO
-     - :git-hdl:`library/util_dacfifo`
-     - ---
-   * - AXI_ADCFIFO
-     - :git-hdl:`library/xilinx/axi_adcfifo`
-     - ---
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - UTIL_ADXCVR
      - :git-hdl:`library/xilinx/util_adxcvr`
      - :ref:`util_adxcvr`
