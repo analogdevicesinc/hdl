@@ -95,8 +95,9 @@ ad_data_offload_create $adc_data_offload_name \
                        $adc_data_offload_size \
                        $adc_data_width \
                        $adc_data_width \
-                       $$adc_dma_data_width \
+                       $adc_dma_data_width \
                        1
+
 ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
 
 ad_ip_instance axi_dmac axi_ad9213_dma
