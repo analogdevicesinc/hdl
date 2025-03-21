@@ -61,7 +61,7 @@ Identification number
 ENDREG
 
 FIELD
-[31:0] 0x504C5347
+[31:0] 0x601A3471
 CORE_MAGIC
 RW
 Identification number.
