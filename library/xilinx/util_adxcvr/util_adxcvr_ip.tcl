@@ -19,6 +19,11 @@ adi_ip_files util_adxcvr [list \
   "util_adxcvr.v" \
   "bd/bd.tcl" ]
 
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_simulation false [get_files  ./../../scripts/adi_xilinx_device_info_enc.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files ./../../scripts/adi_xilinx_device_info_enc.tcl]
+
 adi_ip_properties_lite util_adxcvr
 
 adi_ip_bd util_adxcvr "bd/bd.tcl"
