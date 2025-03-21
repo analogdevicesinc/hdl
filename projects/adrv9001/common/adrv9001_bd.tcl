@@ -3,16 +3,11 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# create debug ports
-create_bd_port -dir O adc1_div_clk
-create_bd_port -dir O adc2_div_clk
-create_bd_port -dir O dac1_div_clk
-create_bd_port -dir O dac2_div_clk
-
-create_bd_port -dir I ref_clk
-
 create_bd_port -dir I tx_output_enable
 
+create_bd_port -dir I ref_clk
+create_bd_port -dir I mcs_in
+create_bd_port -dir O mcs_out
 create_bd_port -dir I mssi_sync
 
 # adrv9001 interface
@@ -161,11 +156,12 @@ ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
 ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
 
-ad_connect ref_clk           axi_adrv9001/ref_clk
-
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001/mssi_sync
+ad_connect ref_clk           axi_adrv9001/ref_clk
+ad_connect mcs_in            axi_adrv9001/mcs_in
+ad_connect mcs_out           axi_adrv9001/mcs_out
+ad_connect mssi_sync         axi_adrv9001/mssi_sync_in
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
@@ -311,11 +307,3 @@ ad_cpu_interrupt ps-13 mb-12 axi_adrv9001_rx1_dma/irq
 ad_cpu_interrupt ps-12 mb-11 axi_adrv9001_rx2_dma/irq
 ad_cpu_interrupt ps-9  mb-6 axi_adrv9001_tx1_dma/irq
 ad_cpu_interrupt ps-10 mb-5 axi_adrv9001_tx2_dma/irq
-
-
-# Connect debug ports
-ad_connect  axi_adrv9001/adc_1_clk adc1_div_clk
-ad_connect  axi_adrv9001/adc_2_clk adc2_div_clk
-ad_connect  axi_adrv9001/dac_1_clk dac1_div_clk
-ad_connect  axi_adrv9001/dac_2_clk dac2_div_clk
-
