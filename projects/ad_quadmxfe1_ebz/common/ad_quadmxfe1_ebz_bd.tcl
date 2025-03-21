@@ -76,10 +76,17 @@ set TX_SAMPLES_PER_CHANNEL [expr $TX_NUM_OF_LANES * 8*$TX_DATAPATH_WIDTH / ($TX_
 set adc_offload_name mxfe_rx_data_offload
 set adc_data_width [expr $RX_DMA_SAMPLE_WIDTH*$RX_NUM_OF_CONVERTERS*$RX_SAMPLES_PER_CHANNEL]
 set adc_dma_data_width $adc_data_width
+set adc_fifo_address_width [expr int(ceil(log(($adc_fifo_samples_per_converter*$RX_NUM_OF_CONVERTERS) / ($adc_data_width/$RX_DMA_SAMPLE_WIDTH))/log(2)))]
 
 set dac_offload_name mxfe_tx_data_offload
 set dac_data_width [expr $TX_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
 set dac_dma_data_width [expr $TX_DMA_SAMPLE_WIDTH*$TX_NUM_OF_CONVERTERS*$TX_SAMPLES_PER_CHANNEL]
+set dac_fifo_address_width [expr int(ceil(log(($dac_fifo_samples_per_converter*$TX_NUM_OF_CONVERTERS) / ($dac_data_width/$TX_DMA_SAMPLE_WIDTH))/log(2)))]
+
+set adc_do_mem_type [ expr { [info exists ad_project_params(ADC_DO_MEM_TYPE)] \
+                          ? $ad_project_params(ADC_DO_MEM_TYPE) : 0 } ]
+set dac_do_mem_type [ expr { [info exists ad_project_params(DAC_DO_MEM_TYPE)] \
+                          ? $ad_project_params(DAC_DO_MEM_TYPE) : 0 } ]
 
 create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
@@ -208,9 +215,10 @@ ad_ip_instance util_cpack2 util_mxfe_cpack [list \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
+set adc_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
 ad_data_offload_create $adc_offload_name \
                        0 \
-                       $adc_offload_type \
+                       $adc_do_mem_type \
                        $adc_offload_size \
                        $adc_data_width \
                        $adc_data_width
@@ -266,9 +274,10 @@ ad_ip_instance util_upack2 util_mxfe_upack [list \
   SAMPLE_DATA_WIDTH $TX_SAMPLE_WIDTH \
 ]
 
+set dac_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
 ad_data_offload_create $dac_offload_name \
                        1 \
-                       $dac_offload_type \
+                       $dac_do_mem_type \
                        $dac_offload_size \
                        $dac_data_width \
                        $dac_data_width
