@@ -1,21 +1,25 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 1GB, PL_DDR is used
-set adc_fifo_address_width 16
+## Offload attributes
+set adc_offload_type 1                      ; ## PL_DDR
+set adc_offload_size [expr 1024*1024*1024]  ; ## 1 GB
 
-## FIFO depth is 8Mb - 500k samples
-set dac_fifo_address_width 16
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 1*1024*1024]  ; ## 1 MB
 
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~47%
+set plddr_offload_axi_data_width 512
 
 source $ad_hdl_dir/projects/common/zc706/zc706_system_bd.tcl
-source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_adcfifo_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+source $ad_hdl_dir/projects/common/zc706/zc706_plddr3_data_offload_bd.tcl
 source ../common/daq3_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+ad_ip_parameter $dac_offload_name/storage_unit CONFIG.RD_DATA_REGISTERED 1
+ad_ip_parameter $dac_offload_name/storage_unit CONFIG.RD_FIFO_ADDRESS_WIDTH 3
+ad_plddr_data_offload_create $adc_offload_name
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
@@ -28,7 +32,9 @@ S=$ad_project_params(RX_JESD_S)\
 TX:M=$ad_project_params(TX_JESD_M)\
 L=$ad_project_params(TX_JESD_L)\
 S=$ad_project_params(TX_JESD_S)\
-ADC_FIFO_ADDR_WIDTH=$adc_fifo_address_width\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+ADC_OFFLOAD:TYPE=$adc_offload_type\
+SIZE=$adc_offload_size\
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
