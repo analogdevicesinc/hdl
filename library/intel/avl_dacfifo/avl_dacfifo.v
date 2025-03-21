@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module avl_dacfifo #(
-
+  parameter   ACTIVE_LOW_RESET = 0,
   parameter   DAC_DATA_WIDTH = 64,
   parameter   DAC_MEM_ADDRESS_WIDTH = 8,
   parameter   DMA_DATA_WIDTH = 64,
@@ -102,9 +102,9 @@ module avl_dacfifo #(
   wire                                  dma_ready_bypass_s;
   wire                                  avl_read_s;
   wire                                  avl_write_s;
-  wire        [ 24:0]                   avl_wr_address_s;
-  wire        [ 24:0]                   avl_rd_address_s;
-  wire        [ 24:0]                   avl_last_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_wr_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_rd_address_s;
+  wire        [(AVL_ADDRESS_WIDTH-1):0] avl_last_address_s;
   wire        [  6:0]                   avl_last_burstcount_s;
   wire        [  7:0]                   dma_last_beats_s;
   wire        [  6:0]                   avl_wr_burstcount_s;
@@ -120,9 +120,19 @@ module avl_dacfifo #(
   wire                                  dac_dunf_fifo_s;
   wire                                  dac_dunf_bypass_s;
 
+  wire                                  avl_reset_s;
+
+  generate if (ACTIVE_LOW_RESET == 1) begin
+    assign avl_reset_s = ~avl_reset;
+  end else begin
+    assign avl_reset_s = avl_reset;
+  end
+  endgenerate
+
   avl_dacfifo_wr #(
     .AVL_DATA_WIDTH (AVL_DATA_WIDTH),
     .DMA_DATA_WIDTH (DMA_DATA_WIDTH),
+    .AVL_ADDRESS_WIDTH (AVL_ADDRESS_WIDTH),
     .AVL_DDR_BASE_ADDRESS (AVL_BASE_ADDRESS),
     .DMA_MEM_ADDRESS_WIDTH(DMA_MEM_ADDRESS_WIDTH),
     .AVL_BURST_LENGTH (AVL_BURST_LENGTH)
@@ -138,7 +148,7 @@ module avl_dacfifo #(
     .avl_last_address (avl_last_address_s),
     .avl_last_burstcount (avl_last_burstcount_s),
     .avl_clk (avl_clk),
-    .avl_reset (avl_reset),
+    .avl_reset (avl_reset_s),
     .avl_address (avl_wr_address_s),
     .avl_burstcount (avl_wr_burstcount_s),
     .avl_byteenable (avl_wr_byteenable_s),
@@ -151,6 +161,7 @@ module avl_dacfifo #(
   avl_dacfifo_rd #(
     .AVL_DATA_WIDTH(AVL_DATA_WIDTH),
     .DAC_DATA_WIDTH(DAC_DATA_WIDTH),
+    .AVL_ADDRESS_WIDTH (AVL_ADDRESS_WIDTH),
     .AVL_DDR_BASE_ADDRESS(AVL_BASE_ADDRESS),
     .AVL_DDR_ADDRESS_LIMIT(AVL_ADDRESS_LIMIT),
     .DAC_MEM_ADDRESS_WIDTH(DAC_MEM_ADDRESS_WIDTH),
@@ -163,7 +174,7 @@ module avl_dacfifo #(
     .dac_xfer_req(dac_xfer_fifo_out_s),
     .dac_dunf(dac_dunf_fifo_s),
     .avl_clk(avl_clk),
-    .avl_reset(avl_reset),
+    .avl_reset(avl_reset_s),
     .avl_address(avl_rd_address_s),
     .avl_burstcount(avl_rd_burstcount_s),
     .avl_byteenable(avl_rd_byteenable_s),
@@ -182,7 +193,7 @@ module avl_dacfifo #(
   assign avl_xfer_wren_s = ~avl_xfer_in_s;
 
   always @(posedge avl_clk) begin
-    if (avl_reset == 1'b1) begin
+    if (avl_reset_s == 1'b1) begin
       avl_address <= 0;
       avl_burstcount <= 0;
       avl_byteenable <= 0;
