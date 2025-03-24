@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -42,6 +42,8 @@ ad_ip_instance axi_adxcvr axi_ad9162_xcvr [list \
   TX_OR_RX_N 1 \
 ]
 
+# create tx link layer with 8 lanes
+
 adi_axi_jesd204_tx_create axi_ad9162_jesd 8
 
 adi_tpl_jesd204_tx_create axi_ad9162_core $TX_NUM_OF_LANES \
@@ -82,6 +84,8 @@ adi_tpl_jesd204_rx_create axi_ad9625_core $RX_NUM_OF_LANES \
                                           $RX_NUM_OF_CONVERTERS \
                                           $RX_SAMPLES_PER_FRAME \
                                           $RX_SAMPLE_WIDTH
+
+# create rx link layer with 8 lanes
 
 adi_axi_jesd204_rx_create axi_ad9625_jesd 8
 
@@ -127,8 +131,9 @@ ad_connect  $sys_cpu_resetn util_fmcomms11_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_fmcomms11_xcvr/up_clk
 
 # connections (dac)
+# lane mapping {0 1 2 3 4 5 6 7}
 
-ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd {0 1 2 3 7 4 6 5}
+ad_xcvrcon  util_fmcomms11_xcvr axi_ad9162_xcvr axi_ad9162_jesd
 ad_connect  util_fmcomms11_xcvr/tx_out_clk_0 axi_ad9162_core/link_clk
 ad_connect  axi_ad9162_jesd/tx_data axi_ad9162_core/link
 
@@ -159,8 +164,9 @@ ad_connect  axi_ad9162_fifo/dma_xfer_last axi_ad9162_dma/m_axis_last
 ad_connect  dac_fifo_bypass axi_ad9162_fifo/bypass
 
 # connections (adc)
+# rx lane mapping {0 1 2 3 4 5 6 7}
 
-ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd {0 1 2 3 7 4 6 5}
+ad_xcvrcon  util_fmcomms11_xcvr axi_ad9625_xcvr axi_ad9625_jesd
 ad_connect  util_fmcomms11_xcvr/rx_out_clk_0 axi_ad9625_core/link_clk
 
 ad_connect  axi_ad9625_jesd/rx_sof axi_ad9625_core/link_sof
