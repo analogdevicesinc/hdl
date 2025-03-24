@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,14 +13,14 @@ set_property  -dict {PACKAGE_PIN  AG8 } [get_ports rx_data_p[2]]                
 set_property  -dict {PACKAGE_PIN  AG7 } [get_ports rx_data_n[2]]                                      ; ## A07  FMC_HPC_DP2_M2C_N
 set_property  -dict {PACKAGE_PIN  AE8 } [get_ports rx_data_p[3]]                                      ; ## A10  FMC_HPC_DP3_M2C_P
 set_property  -dict {PACKAGE_PIN  AE7 } [get_ports rx_data_n[3]]                                      ; ## A11  FMC_HPC_DP3_M2C_N
-set_property  -dict {PACKAGE_PIN  AH6 } [get_ports rx_data_p[4]]                                      ; ## A14  FMC_HPC_DP4_M2C_P
-set_property  -dict {PACKAGE_PIN  AH5 } [get_ports rx_data_n[4]]                                      ; ## A15  FMC_HPC_DP4_M2C_N
-set_property  -dict {PACKAGE_PIN  AG4 } [get_ports rx_data_p[5]]                                      ; ## A18  FMC_HPC_DP5_M2C_P
-set_property  -dict {PACKAGE_PIN  AG3 } [get_ports rx_data_n[5]]                                      ; ## A19  FMC_HPC_DP5_M2C_N
+set_property  -dict {PACKAGE_PIN  AH6 } [get_ports rx_data_p[5]]                                      ; ## A14  FMC_HPC_DP4_M2C_P
+set_property  -dict {PACKAGE_PIN  AH5 } [get_ports rx_data_n[5]]                                      ; ## A15  FMC_HPC_DP4_M2C_N
+set_property  -dict {PACKAGE_PIN  AG4 } [get_ports rx_data_p[7]]                                      ; ## A18  FMC_HPC_DP5_M2C_P
+set_property  -dict {PACKAGE_PIN  AG3 } [get_ports rx_data_n[7]]                                      ; ## A19  FMC_HPC_DP5_M2C_N
 set_property  -dict {PACKAGE_PIN  AF6 } [get_ports rx_data_p[6]]                                      ; ## B16  FMC_HPC_DP6_M2C_P
 set_property  -dict {PACKAGE_PIN  AF5 } [get_ports rx_data_n[6]]                                      ; ## B17  FMC_HPC_DP6_M2C_N
-set_property  -dict {PACKAGE_PIN  AD6 } [get_ports rx_data_p[7]]                                      ; ## B12  FMC_HPC_DP7_M2C_P
-set_property  -dict {PACKAGE_PIN  AD5 } [get_ports rx_data_n[7]]                                      ; ## B13  FMC_HPC_DP7_M2C_N
+set_property  -dict {PACKAGE_PIN  AD6 } [get_ports rx_data_p[4]]                                      ; ## B12  FMC_HPC_DP7_M2C_P
+set_property  -dict {PACKAGE_PIN  AD5 } [get_ports rx_data_n[4]]                                      ; ## B13  FMC_HPC_DP7_M2C_N
 set_property  -dict {PACKAGE_PIN  AK17  IOSTANDARD LVDS_25} [get_ports rx_sync_p]                     ; ## H07  FMC_HPC_LA02_P
 set_property  -dict {PACKAGE_PIN  AK18  IOSTANDARD LVDS_25} [get_ports rx_sync_n]                     ; ## H08  FMC_HPC_LA02_N
 
@@ -34,14 +34,14 @@ set_property  -dict {PACKAGE_PIN  AJ4 } [get_ports tx_data_p[2]]                
 set_property  -dict {PACKAGE_PIN  AJ3 } [get_ports tx_data_n[2]]                                      ; ## A27  FMC_HPC_DP2_C2M_N
 set_property  -dict {PACKAGE_PIN  AK2 } [get_ports tx_data_p[3]]                                      ; ## A30  FMC_HPC_DP3_C2M_P
 set_property  -dict {PACKAGE_PIN  AK1 } [get_ports tx_data_n[3]]                                      ; ## A31  FMC_HPC_DP3_C2M_N
-set_property  -dict {PACKAGE_PIN  AH2 } [get_ports tx_data_p[4]]                                      ; ## A34  FMC_HPC_DP4_C2M_P
-set_property  -dict {PACKAGE_PIN  AH1 } [get_ports tx_data_n[4]]                                      ; ## A35  FMC_HPC_DP4_C2M_N
-set_property  -dict {PACKAGE_PIN  AF2 } [get_ports tx_data_p[5]]                                      ; ## A38  FMC_HPC_DP5_C2M_P
-set_property  -dict {PACKAGE_PIN  AF1 } [get_ports tx_data_n[5]]                                      ; ## A39  FMC_HPC_DP5_C2M_N
+set_property  -dict {PACKAGE_PIN  AH2 } [get_ports tx_data_p[5]]                                      ; ## A34  FMC_HPC_DP4_C2M_P
+set_property  -dict {PACKAGE_PIN  AH1 } [get_ports tx_data_n[5]]                                      ; ## A35  FMC_HPC_DP4_C2M_N
+set_property  -dict {PACKAGE_PIN  AF2 } [get_ports tx_data_p[7]]                                      ; ## A38  FMC_HPC_DP5_C2M_P
+set_property  -dict {PACKAGE_PIN  AF1 } [get_ports tx_data_n[7]]                                      ; ## A39  FMC_HPC_DP5_C2M_N
 set_property  -dict {PACKAGE_PIN  AE4 } [get_ports tx_data_p[6]]                                      ; ## B36  FMC_HPC_DP6_C2M_P
 set_property  -dict {PACKAGE_PIN  AE3 } [get_ports tx_data_n[6]]                                      ; ## B37  FMC_HPC_DP6_C2M_N
-set_property  -dict {PACKAGE_PIN  AD2 } [get_ports tx_data_p[7]]                                      ; ## B32  FMC_HPC_DP7_C2M_P
-set_property  -dict {PACKAGE_PIN  AD1 } [get_ports tx_data_n[7]]                                      ; ## B33  FMC_HPC_DP7_C2M_N
+set_property  -dict {PACKAGE_PIN  AD2 } [get_ports tx_data_p[4]]                                      ; ## B32  FMC_HPC_DP7_C2M_P
+set_property  -dict {PACKAGE_PIN  AD1 } [get_ports tx_data_n[4]]                                      ; ## B33  FMC_HPC_DP7_C2M_N
 set_property  -dict {PACKAGE_PIN  AH19  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_p]      ; ## G09  FMC_HPC_LA03_P
 set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVDS_25 DIFF_TERM TRUE} [get_ports tx_sync_n]      ; ## G10  FMC_HPC_LA03_N
 
