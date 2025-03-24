@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -70,12 +70,12 @@ module fmcomms11_spi (
 
   // check on rising edge and change on falling edge
 
-  assign spi_csn_ad9625 = spi_csn6_s[0];
-  assign spi_csn_ad9162 = spi_csn6_s[1];
-  assign spi_csn_ad9508 = spi_csn6_s[2];
-  assign spi_csn_adl5240 = spi_csn6_s[3];
-  assign spi_csn_adf4355 = spi_csn6_s[4];
-  assign spi_csn_hmc1119 = spi_csn6_s[5];
+  assign spi_csn_ad9625 = spi_csn6_s[0];  // CS1
+  assign spi_csn_ad9162 = spi_csn6_s[1];  // CS2
+  assign spi_csn_ad9508 = spi_csn6_s[2];  // CS3 ONLY for FMCOMMS11 rev. A
+  assign spi_csn_adl5240 = spi_csn6_s[3]; // CS4
+  assign spi_csn_adf4355 = spi_csn6_s[4]; // CS5
+  assign spi_csn_hmc1119 = spi_csn6_s[5]; // CS6
 
   assign spi_csn6_s[0] = (spi_csn == 3'b001) ? 1'b0 : 1'b1;
   assign spi_csn6_s[1] = (spi_csn == 3'b010) ? 1'b0 : 1'b1;
