@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -117,8 +117,8 @@ component.xml: $(XILINX_DEPS) $(_XILINX_INTF_DEPS) $(_XILINX_LIB_DEPS)
 
 $(_XILINX_INTF_DEPS):
 	$(MAKE) -C $(dir $@) $(notdir $@)
-
-$(_XILINX_LIB_DEPS):
+FORCE:
+$(_XILINX_LIB_DEPS): FORCE
 	flock $(dir $@).lock -c "$(MAKE) -C $(dir $@) xilinx"; exit $$?
 
 %.xml:
