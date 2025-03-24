@@ -126,18 +126,19 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-==================== =============== ===========
-Instance             Zynq/Microblaze ZynqMP     
-==================== =============== ===========
-rx_adrv9026_tpl_core 0x44A0_0000     0x84A0_0000
-tx_adrv9026_tpl_core 0x44A0_4000     0x84A0_4000
-axi_adrv9026_rx_xcvr 0x44A6_0000     0x84A6_0000
-axi_adrv9026_tx_xcvr 0x44A8_0000     0x84A8_0000
-axi_adrv9026_tx_jesd 0x44A9_0000     0x84A9_0000
-axi_adrv9026_rx_jesd 0x44AA_0000     0x84AA_0000
-axi_adrv9026_rx_dma  0x7C40_0000     0x9C40_0000
-axi_adrv9026_tx_dma  0x7C42_0000     0x9C42_0000
-==================== =============== ===========
+===================== =============== ===========
+Instance              Zynq/Microblaze ZynqMP     
+===================== =============== ===========
+rx_adrv9026_tpl_core  0x44A0_0000     0x84A0_0000
+tx_adrv9026_tpl_core  0x44A0_4000     0x84A0_4000
+axi_adrv9026_rx_xcvr  0x44A6_0000     0x84A6_0000
+axi_adrv9026_tx_xcvr  0x44A8_0000     0x84A8_0000
+axi_adrv9026_tx_jesd  0x44A9_0000     0x84A9_0000
+axi_adrv9026_rx_jesd  0x44AA_0000     0x84AA_0000
+axi_adrv9026_rx_dma   0x7C40_0000     0x9C40_0000
+axi_adrv9026_tx_dma   0x7C42_0000     0x9C42_0000
+adrv9026_data_offload 0x7C43_0000     0x9C43_0000
+===================== =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -497,6 +498,9 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
