@@ -234,11 +234,6 @@ ad_ip_parameter bram_adc CONFIG.Write_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Read_Width_B 32
 ad_ip_parameter bram_adc CONFIG.Write_Depth_A 8192
 
-# FIXME: Bring this back eventually
-#ad_ip_instance util_cpack util_cpack_ad9963
-#ad_ip_parameter util_cpack_ad9963 CONFIG.NUM_OF_CHANNELS 2
-#ad_ip_parameter util_cpack_ad9963 CONFIG.CHANNEL_DATA_WIDTH 16
-
 create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 ad9963_adc_concat
 
 ad_ip_instance axi_dmac ad9963_adc_dmac
