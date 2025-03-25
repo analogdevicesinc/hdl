@@ -128,7 +128,6 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK3_PORT 1
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 27.778
 ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ 55.556
 
-
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125}
@@ -159,7 +158,6 @@ ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
 ad_connect  sys_rstgen/ext_reset_in sys_ps7/FCLK_RESET0_N
 
-#ad_connect logic_analyzer_clk_in sys_ps7/FCLK_CLK2
 ad_connect converter_dma_clk sys_ps7/FCLK_CLK3
 
 # interface connections
@@ -328,7 +326,6 @@ ad_connect pattern_generator_dmac/fifo_rd_valid   logic_analyzer/dac_valid
 
 
 ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
-#ad_connect axi_ad9963/adc_clk  util_cpack_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
 ad_connect axi_adc_decimate/adc_rst axi_ad9963/adc_rst
 
@@ -336,24 +333,12 @@ ad_connect ad9963_adc_dmac/fifo_wr_clk     axi_ad9963/adc_clk
 ad_connect bram_adc/clka                   axi_ad9963/adc_clk
 ad_connect bram_adc/clkb                   axi_ad9963/adc_clk
 
-#ad_connect axi_ad9963/adc_rst    util_cpack_ad9963/adc_rst
 ad_connect axi_ad9963/adc_rst    adc_trigger_fifo/rst
 
 ad_connect axi_adc_decimate/adc_data_a axi_ad9963/adc_data_i
 ad_connect axi_adc_decimate/adc_data_b axi_ad9963/adc_data_q
 ad_connect axi_adc_decimate/adc_valid_a axi_ad9963/adc_valid_i
 ad_connect axi_adc_decimate/adc_valid_b axi_ad9963/adc_valid_q
-
-#ad_connect axi_ad9963/adc_enable_i        util_cpack_ad9963/adc_enable_0
-#ad_connect adc_trigger/data_valid_a_trig  util_cpack_ad9963/adc_valid_0
-#ad_connect adc_trigger/data_a_trig        util_cpack_ad9963/adc_data_0
-#ad_connect axi_ad9963/adc_enable_q        util_cpack_ad9963/adc_enable_1
-#ad_connect adc_trigger/data_valid_b_trig  util_cpack_ad9963/adc_valid_1
-#ad_connect adc_trigger/data_b_trig        util_cpack_ad9963/adc_data_1
-
-#ad_connect adc_trigger_fifo/data_in        util_cpack_ad9963/adc_data
-#ad_connect adc_trigger_fifo/data_in_valid  util_cpack_ad9963/adc_valid
-#ad_connect util_cpack_ad9963/adc_data      adc_trigger_extract/data_in_trigger
 
 ad_connect adc_trigger_fifo/din_w       bram_adc/dina
 ad_connect adc_trigger_fifo/en_w        bram_adc/ena
@@ -540,7 +525,6 @@ ad_cpu_interrupt ps-8 mb-16 ad9963_dac_dmac_b/irq
 # interconnects
 
 ad_cpu_interconnect 0x41600000 axi_iic_main
-#ad_cpu_interconnect 0x70000000 clk_generator
 ad_cpu_interconnect 0x70100000 logic_analyzer
 ad_cpu_interconnect 0x70200000 axi_ad9963
 ad_cpu_interconnect 0x7C400000 logic_analyzer_dmac
