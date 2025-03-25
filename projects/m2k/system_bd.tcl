@@ -36,7 +36,6 @@ create_bd_port -dir I -from 16 -to 0 gpio_i
 create_bd_port -dir O -from 16 -to 0 gpio_o
 create_bd_port -dir O -from 16 -to 0 gpio_t
 
-#m2k ports
 create_bd_port -dir I -from 15 -to 0  data_i
 create_bd_port -dir I -from  1 -to 0  trigger_i
 
@@ -89,6 +88,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE {REVERSE}
 # * PLL: 1000 MHz
 # * DDR: 500 MHz (2.0Gb/s),
 # * CPU: 500 MHz (downclocked to 250 MHz when idle)
+
 ad_ip_parameter sys_ps7 CONFIG.PCW_CPU_PERIPHERAL_CLKSRC {DDR PLL}
 ad_ip_parameter sys_ps7 CONFIG.PCW_SMC_PERIPHERAL_CLKSRC {DDR PLL}
 ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_CLKSRC {DDR PLL}
@@ -123,10 +123,10 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_DDRPLL_CTRL_FBDIV {30}
 # Logic analyzer (FCLK2): 100 MHz
 # Converter DMA (FCLK3): 55.6 MHz
 
-ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK3_PORT 1
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 27.778
-ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ 55.556
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK2_PORT {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_EN_CLK3_PORT {1}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {27.778}
+ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA3_PERIPHERAL_FREQMHZ {55.556}
 
 # DDR MT41K256M16 HA-125 (32M, 16bit, 8banks)
 
@@ -141,6 +141,8 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_DQS_TO_CLK_DELAY_1 {0.050}
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY0 {0.241}
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_BOARD_DELAY1 {0.240}
 ad_ip_parameter sys_ps7 CONFIG.PCW_UIPARAM_DDR_FREQ_MHZ {500.0}
+
+# add instances
 
 ad_ip_instance axi_iic axi_iic_main
 
@@ -168,6 +170,8 @@ ad_connect  gpio_o sys_ps7/GPIO_O
 ad_connect  gpio_t sys_ps7/GPIO_T
 ad_connect  fixed_io sys_ps7/FIXED_IO
 ad_connect  iic_main axi_iic_main/iic
+
+# add instances
 
 ad_ip_instance axi_logic_analyzer logic_analyzer
 
@@ -278,6 +282,8 @@ ad_ip_instance axi_rd_wr_combiner axi_rd_wr_combiner_converter
 create_bd_cell -type module -reference sync_event cdc_adc_trig_sync
 create_bd_cell -type module -reference sync_event cdc_la_trig_sync
 
+# logic analyzer & la_trigger_fifo connections
+
 ad_connect data_i     logic_analyzer/data_i
 ad_connect trigger_i  logic_analyzer/trigger_i
 ad_connect data_o     logic_analyzer/data_o
@@ -319,6 +325,7 @@ ad_connect pattern_generator_dmac/fifo_rd_en      logic_analyzer/dac_read
 ad_connect pattern_generator_dmac/fifo_rd_dout    logic_analyzer/dac_data
 ad_connect pattern_generator_dmac/fifo_rd_valid   logic_analyzer/dac_valid
 
+# axi_ad9963 connections
 
 ad_connect axi_ad9963/adc_clk  adc_trigger_fifo/clk
 ad_connect axi_adc_decimate/adc_clk axi_ad9963/adc_clk
@@ -334,6 +341,8 @@ ad_connect axi_adc_decimate/adc_data_a axi_ad9963/adc_data_i
 ad_connect axi_adc_decimate/adc_data_b axi_ad9963/adc_data_q
 ad_connect axi_adc_decimate/adc_valid_a axi_ad9963/adc_valid_i
 ad_connect axi_adc_decimate/adc_valid_b axi_ad9963/adc_valid_q
+
+# adc_trigger_fifo connections
 
 ad_connect adc_trigger_fifo/din_w       bram_adc/dina
 ad_connect adc_trigger_fifo/en_w        bram_adc/ena
@@ -356,6 +365,8 @@ ad_connect adc_trigger/trigger_in        logic_analyzer/trigger_out_adc
 ad_connect adc_trigger_fifo/data_out        ad9963_adc_dmac/fifo_wr_din
 ad_connect adc_trigger/trigger_out          ad9963_adc_dmac/sync
 ad_connect adc_trigger_fifo/data_out_valid  ad9963_adc_dmac/fifo_wr_en
+
+# axi_dac_interpolate & ad9963_dac_dmac connections
 
 ad_connect axi_dac_interpolate/dac_clk      axi_ad9963/dac_clk
 ad_connect axi_dac_interpolate/dac_rst      axi_ad9963/dac_rst
@@ -395,6 +406,8 @@ ad_connect axi_dac_interpolate/dac_valid_out_b  axi_ad9963/dma_valid_q
 ad_connect axi_dac_interpolate/last_a           ad9963_dac_dmac_a/m_axis_last
 ad_connect axi_dac_interpolate/last_b           ad9963_dac_dmac_b/m_axis_last
 
+# axi_ad9963 interface connections
+
 ad_connect /axi_ad9963/tx_data    txd
 ad_connect /axi_ad9963/tx_iq      txiq
 ad_connect /axi_ad9963/tx_clk     tx_clk
@@ -421,6 +434,7 @@ ad_connect axi_ad9963/adc_dovf    ad9963_adc_dmac/fifo_wr_overflow
 ad_connect axi_ad9963/dac_dunf    axi_dac_interpolate/underflow
 
 # Logic analyzer DMA
+
 ad_connect sys_cpu_clk axi_rd_wr_combiner_logic/clk
 ad_connect sys_cpu_clk logic_analyzer_dmac/m_dest_axi_aclk
 ad_connect sys_cpu_clk pattern_generator_dmac/m_src_axi_aclk
@@ -433,6 +447,7 @@ ad_connect sys_cpu_clk sys_ps7/S_AXI_HP1_ACLK
 ad_connect axi_rd_wr_combiner_logic/m_axi sys_ps7/S_AXI_HP1
 
 # Converter DMA
+
 ad_connect converter_dma_clk axi_rd_wr_combiner_converter/clk
 ad_connect converter_dma_clk ad9963_adc_dmac/m_dest_axi_aclk
 ad_connect converter_dma_clk ad9963_dac_dmac_a/m_src_axi_aclk
@@ -445,6 +460,7 @@ ad_connect converter_dma_clk sys_ps7/S_AXI_HP2_ACLK
 ad_connect axi_rd_wr_combiner_converter/m_axi sys_ps7/S_AXI_HP2
 
 # Only 16-bit we can run at a slower clock
+
 ad_ip_parameter sys_ps7 CONFIG.PCW_USE_S_AXI_HP3 {1}
 
 ad_connect sys_cpu_clk sys_ps7/S_AXI_HP3_ACLK
@@ -459,6 +475,7 @@ create_bd_addr_seg -range 0x20000000 -offset 0x00000000 [get_bd_addr_spaces axi_
                     [get_bd_addr_segs sys_ps7/S_AXI_HP1/HP1_DDR_LOWOCM] SEG_sys_ps7_HP1_DDR_LOWOCM
 
 # Map rd-wr combiner
+
 assign_bd_address [get_bd_addr_segs { \
   axi_rd_wr_combiner_converter/s_rd_axi/reg0 \
   axi_rd_wr_combiner_converter/s_wr_axi/reg0 \
