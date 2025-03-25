@@ -501,12 +501,12 @@ ad_connect  spi0_sdi_i sys_ps7/SPI0_MISO_I
 ad_connect  sys_concat_intc/dout sys_ps7/IRQ_F2P
 ad_connect  sys_concat_intc/In15 GND
 ad_connect  sys_concat_intc/In14 axi_iic_main/iic2intc_irpt
-ad_connect  sys_concat_intc/In13 GND
-ad_connect  sys_concat_intc/In12 GND
+ad_connect  sys_concat_intc/In13 logic_analyzer_dmac/irq
+ad_connect  sys_concat_intc/In12 pattern_generator_dmac/irq
 ad_connect  sys_concat_intc/In11 GND
-ad_connect  sys_concat_intc/In10 GND
-ad_connect  sys_concat_intc/In9 GND
-ad_connect  sys_concat_intc/In8 GND
+ad_connect  sys_concat_intc/In10 ad9963_adc_dmac/irq
+ad_connect  sys_concat_intc/In9 ad9963_dac_dmac_a/irq
+ad_connect  sys_concat_intc/In8 ad9963_dac_dmac_b/irq
 ad_connect  sys_concat_intc/In7 GND
 ad_connect  sys_concat_intc/In6 GND
 ad_connect  sys_concat_intc/In5 GND
@@ -515,12 +515,6 @@ ad_connect  sys_concat_intc/In3 GND
 ad_connect  sys_concat_intc/In2 GND
 ad_connect  sys_concat_intc/In1 GND
 ad_connect  sys_concat_intc/In0 GND
-
-ad_cpu_interrupt ps-13 mb-12 logic_analyzer_dmac/irq
-ad_cpu_interrupt ps-12 mb-13 pattern_generator_dmac/irq
-ad_cpu_interrupt ps-10 mb-14 ad9963_adc_dmac/irq
-ad_cpu_interrupt ps-9 mb-15 ad9963_dac_dmac_a/irq
-ad_cpu_interrupt ps-8 mb-16 ad9963_dac_dmac_b/irq
 
 # interconnects
 
