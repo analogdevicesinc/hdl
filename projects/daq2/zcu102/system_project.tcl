@@ -10,12 +10,48 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 set BOARD_NAME zcu102
 
 # get_env_param retrieves parameter value from the environment if exists,
-# other case use the default value
+# other case use the default value.
 #
 #   Use over-writable parameters from the environment.
 #
-#    e.g.
+#    e.g. JESD only
 #      make RX_JESD_L=4 RX_JESD_M=2 TX_JESD_L=4 TX_JESD_M=2
+#
+#    e.g. XCVR only
+#      make PLL_TYPE=QPLL0 REF_CLK=500 LANE_RATE=10
+#
+#    e.g. JESD and XCVR
+#      make TX_JESD_M=2 \
+#      TX_JESD_L=4 \
+#      RX_JESD_M=2 \
+#      RX_JESD_L=4 \
+#      PLL_TYPE=QPLL0 \
+#      REF_CLK=500 \
+#      LANE_RATE=10
+
+# adi_xcvr_project runs the xcvr_wizard project sub-build and returns a
+# dictionary with the paths to the `cfng` file containing the modified
+# parameters and to the `_common.v` file for GTXE2.
+#
+#   e.g. call for make with parameters
+#   set xcvr_config_paths [adi_xcvr_project [list \
+#     LANE_RATE 10\
+#     REF_CLK 500\
+#     PLL_TYPE QPLL0\
+#   ]]
+
+global xcvr_config_paths
+
+# Parameter description:
+#   LANE_RATE: Value of lane rate [gbps]
+#   REF_CLK: Value of the reference clock [MHz] (usually LANE_RATE/20 or LANE_RATE/40)
+#   PLL_TYPE: The PLL used for driving the link [CPLL/QPLL0/QPLL1]
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE [get_env_param LANE_RATE   10]\
+  REF_CLK   [get_env_param REF_CLK    500]\
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL0]\
+]]
 
 # Parameter description:
 #   [RX/TX]_JESD_M : Number of converters per link
