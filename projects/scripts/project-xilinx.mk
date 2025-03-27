@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2025 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -22,7 +22,12 @@ endif
 VIVADO := vivado -mode batch -source
 
 # Parse the variables passed to make and convert them to the filename format
-CMD_VARIABLES := $(shell echo $(-*-command-variables-*-) | tac -s ' ')
+ifeq ($(shell expr $(MAKELEVEL) % 2),0)
+  CMD_VARIABLES := $(shell echo $(-*-command-variables-*-) | tac -s ' ')
+else
+  CMD_VARIABLES := $(shell echo $(MAKEOVERRIDES))
+endif
+
 ifneq ($(strip $(CMD_VARIABLES)), )
     PARAMS := $(shell echo $(CMD_VARIABLES) | sed -e 's/[=]/_/g')
     GEN_NAME := $(shell echo $(PARAMS) | sed -e $(GEN_SED) | sed -e 's/[ .]/_/g')
@@ -34,7 +39,7 @@ ifneq ($(strip $(DIR_NAME)), )
     $(shell test -d $(DIR_NAME) || mkdir $(DIR_NAME))
     ADI_PROJECT_DIR := $(DIR_NAME)/
     export ADI_PROJECT_DIR
-	VIVADO := vivado -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source 
+	VIVADO := vivado -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
 endif
 
 CLEAN_TARGET := *.cache
