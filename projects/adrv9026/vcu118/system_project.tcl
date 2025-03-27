@@ -38,6 +38,8 @@ adi_project_files adrv9026_vcu118 [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
 
-## To improve timing of the BRAM buffers
+## To improve timing in DDR4 MIG
+set_property strategy Performance_RefinePlacement [get_runs impl_1]
+set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE ExploreWithAggressiveHoldFix [get_runs impl_1]
 
 adi_project_run adrv9026_vcu118
