@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -62,9 +62,17 @@ adi_add_bus "spi_engine_offload_ctrl" "slave" \
 		{ "status_sync_data" "sync_data"} \
   }
 
+adi_add_bus "m_interconnect_ctrl" "master" \
+	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
+	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
+	{ \
+		{"interconnect_dir" "interconnect_dir"} \
+	}
+
 adi_add_bus_clock "ctrl_clk" "spi_engine_offload_ctrl"
 adi_add_bus_clock "spi_clk" "spi_engine_ctrl" "spi_resetn"
 adi_add_bus_clock "dma_clk" "dma_fifo_tx"
+adi_add_bus_clock "spi_clk" "m_interconnect_ctrl" "resetn"
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]

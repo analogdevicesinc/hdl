@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -31,6 +31,7 @@ current_bd_instance /spi
         ad_connect  axi/spi_engine_offload_ctrl0 axi_ad5766/spi_engine_offload_ctrl
         ad_connect  axi/spi_engine_ctrl interconnect/s0_ctrl
         ad_connect  axi_ad5766/spi_engine_ctrl interconnect/s1_ctrl
+        ad_connect  axi_ad5766/m_interconnect_ctrl interconnect/s_interconnect_ctrl
         ad_connect  interconnect/m_ctrl execution/ctrl
         ad_connect  m_spi execution/spi
         ad_connect  dma_data axi_ad5766/dma_data

@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -59,6 +59,13 @@ proc p_elaboration {} {
 
   set_interface_property status_sync associatedClock if_spi_clk
   set_interface_property status_sync associatedReset if_spi_resetn
+
+  # interconnect direction interface
+
+  add_interface m_interconnect_ctrl conduit end
+  add_interface_port m_interconnect_ctrl interconnect_dir interconnect_dir output 1
+  set_interface_property m_interconnect_ctrl associatedClock if_spi_clk
+  set_interface_property m_interconnect_ctrl associatedReset if_spi_resetn
 
   # SPI Engine interfaces
 
