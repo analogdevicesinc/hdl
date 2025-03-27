@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -38,6 +38,14 @@ adi_add_bus "m_ctrl" "master" \
 		{"m_sync" "sync_data"} \
 	}
 adi_add_bus_clock "clk" "m_ctrl" "resetn"
+
+adi_add_bus "s_interconnect_ctrl" "slave" \
+	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
+	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
+	{ \
+		{"interconnect_dir" "interconnect_dir"} \
+	}
+adi_add_bus_clock "clk" "s_interconnect_ctrl" "resetn"
 
 foreach prefix [list "s0" "s1"] {
 	adi_add_bus [format "%s_ctrl" $prefix] "slave" \
