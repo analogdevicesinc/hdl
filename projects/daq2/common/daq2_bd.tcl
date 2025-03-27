@@ -12,6 +12,7 @@
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 # JESD204B interface configurations
 
@@ -133,17 +134,14 @@ ad_connect axi_ad9680_offload/sync_ext GND
 
 # shared transceiver core
 
-ad_ip_instance util_adxcvr util_daq2_xcvr [list \
+global xcvr_config_paths
+
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
   RX_NUM_OF_LANES $MAX_RX_NUM_OF_LANES \
-  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES \
-  QPLL_REFCLK_DIV 1 \
-  QPLL_FBDIV_RATIO 1 \
-  QPLL_FBDIV 0x30 \
-  RX_OUT_DIV 1 \
-  TX_OUT_DIV 1 \
-  RX_DFE_LPM_CFG 0x0104 \
-  RX_CDR_CFG 0x0B000023FF10400020 \
-]
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES\
+]]
+
+ad_ip_instance util_adxcvr util_daq2_xcvr $util_adxcvr_parameters
 
 ad_connect  $sys_cpu_resetn util_daq2_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_daq2_xcvr/up_clk
