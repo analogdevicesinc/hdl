@@ -44,11 +44,5 @@ ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_tx_dma    CONFIG.FIFO_SIZE 32
 
 ad_ip_parameter util_adrv9009_xcvr  CONFIG.QPLL_FBDIV 20
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.CPLL_FBDIV 2
 ad_ip_parameter util_adrv9009_xcvr  CONFIG.RX_CLK25_DIV 20
 ad_ip_parameter util_adrv9009_xcvr  CONFIG.TX_CLK25_DIV 20
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.CPLL_CFG0 0x67f8
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.CPLL_CFG1 0xa4ac
-ad_ip_parameter util_adrv9009_xcvr  CONFIG.CPLL_CFG2 0x0007

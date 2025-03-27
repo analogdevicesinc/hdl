@@ -17,6 +17,7 @@ set DATAPATH_WIDTH 4
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 # TX parameters
 set TX_NUM_OF_LANES $ad_project_params(TX_JESD_L)      ; # L
@@ -221,18 +222,14 @@ ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # common cores
 
+global xcvr_config_paths
 
-ad_ip_instance util_adxcvr util_adrv9009_xcvr
-ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
-ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES
-ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_adrv9009_xcvr CONFIG.CPLL_FBDIV 4
-ad_ip_parameter util_adrv9009_xcvr CONFIG.CPLL_FBDIV_4_5 5
-ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_CLK25_DIV 10
-ad_ip_parameter util_adrv9009_xcvr CONFIG.TX_CLK25_DIV 10
-ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_PMA_CFG 0x001E7080
-ad_ip_parameter util_adrv9009_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
-ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 0x080
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+  RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES] \
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES\
+]]
+
+ad_ip_instance util_adxcvr util_adrv9009_xcvr $util_adxcvr_parameters
 
 # xcvr interfaces
 
