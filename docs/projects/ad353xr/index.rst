@@ -6,12 +6,13 @@ AD353XR HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The :adi:`AD3530R`/ :adi:`AD3530` are low power, 8-channel, 16-bit, buffered
-voltage output, digital-to-analog converters (DACs) that include a gain bit field,
-resulting in a full-scale output of 2.5 V (gain = 1) or 5 V (gain = 2) for a
-reference voltage of 2.5 V. The :adi:`AD3530R` has an on-chip, buffered, 2.5 V
-reference available at the VREF pin, capable of sourcing external loads up to
-+5 mA.
+The :adi:`AD3530R`/ :adi:`AD3530` and :adi:`AD3531R`/ :adi:`AD3531` are low power,
+16-bit, buffered voltage output, digital-to-analog converters (DACs) that include
+a gain bit field, resulting in a full-scale output of 2.5 V (gain = 1) or 5 V
+(gain = 2) for a reference voltage of 2.5 V. AD3530/AD3530R has 8 channels, and
+AD3531/AD3531R has 4 channels. :adi:`AD3530R` and :adi:`AD3531R` has an on-chip,
+buffered, 2.5 V reference available at the VREF pin, capable of sourcing external
+loads up to +5 mA.
 
 Each DAC channel has its own Input register and DAC register. The DAC Register 
 stores digital code equivalent to the DAC output voltage while the Input Register
@@ -20,13 +21,15 @@ the LDAC function, one or more DAC registers could be updated in parallel with
 the data held in the Input Register. The DAC registers can also be directly written
 to, in which the corresponding output updates immediately without an LDAC. 
 
-The :adi:`AD3530R`/ :adi:`AD3530` contains eight buffered voltage output DAC 
-channels capable of sourcing and sinking up to 40 mA of current.
+:adi:`AD3530R`/ :adi:`AD3530` contains eight buffered voltage output DAC 
+channels capable of sourcing 50 mA and sinking up to 40 mA of current. :adi:`AD3531R`/
+:adi:`AD3531` contains four buffered voltage output DAC channels capable of sourcing
+100 mA and sinking 80 mA of current.
 
-The :adi:`AD3530R`/ :adi:`AD3530` contains a 27:1 multiplexer which could
-output a voltage on the MUX_OUT pin that is a representative of
-either the output voltage or output current of a chosen channel, or
-the internal die temperature of the device.
+The :adi:`AD3530R`/ :adi:`AD3530` contains a 27:1 multiplexer while :adi:`AD3531R`/
+:adi:`AD3531` contains a 15:1 multiplexer, in which both could output a voltage on
+the MUX_OUT pin that is a representative of either the output voltage or output
+current of a chosen channel, or the internal die temperature of the device.
 
 Applications:
 
@@ -38,13 +41,16 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD3530R`
+- :adi:`EVAL-AD3530RARDZ`
+- :adi:`EVAL-AD3531RARDZ`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD3530`
 - :adi:`AD3530R`
+- :adi:`AD3531`
+- :adi:`AD3531R`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -136,11 +142,12 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
-Hardware related (Links To be Updated)
+Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheet: :adi:`AD353XR`
-- `UG-1203: EVAL-AD3530RARDZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD4110-1SDZ-UG-1203.pdf>`__
+- Product datasheet: :adi:`AD3530R`
+- Product datasheet: :adi:`AD3531R`
+- `UG-1203: EVAL-AD3530RARDZ Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad3530r-ug-2276.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
