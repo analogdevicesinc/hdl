@@ -821,8 +821,34 @@ The **sof** file is used to program the device.
    unknown compatibility reason. You can use Cygwin on Windows or a normal
    Linux installation.
 
-The Lattice build is in a very early version. It does not support any ADI
-library builds, yet. We're just starting to develop the library build part.
+.. warning::
+
+   Automatic IP download does not work properly in **Propel Builder 2024.2**.
+   Please make sure you download the necessary IPs manually in Propel Builder
+   GUI following the error messages in the **$(PROJECT_NAME)_propel_builder.log**
+   file.
+
+.. tip::
+
+   You can set the LATTICE_EXTERNAL_LIBS environment variable to include
+   custom Lattice IPs in the design like:
+
+   .. shell:: bash
+
+      export LATTICE_EXTERNAL_LIBS="<your_lib_path_0> <your_lib_path_1> <...>"
+
+.. tip::
+
+   Optionally you can set the LATTICE_DEFAULT_PATHS environment variable to 1
+   to generate the IPs and IP interfaces in the default IP download directory of
+   Propel Builder. This way they will be accessible from Propel Builder GUI.
+
+   .. shell:: bash
+
+      export LATTICE_DEFAULT_PATHS=1
+
+The Lattice build is in a very early version. We are just adding the first
+version of library infrastructure support.
 Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design **(Propel Builder)** and building an HDL design **(Radiant)**.
