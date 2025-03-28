@@ -86,6 +86,7 @@ Contents
    FMCOMMS5 <fmcomms5/index>
    FMCOMMS8 <fmcomms8/index>
    FMCOMMS11 <fmcomms11/index>
+   M2K <m2k/index>
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
    PULSAR-ADC <pulsar_adc/index>
