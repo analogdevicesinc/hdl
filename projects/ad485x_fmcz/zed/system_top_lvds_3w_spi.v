@@ -94,8 +94,9 @@ module system_top (
   output                  pd,
   output                  lvds_cmos_n,
 
+  input                   csd0, //spiad_sdo
   output  reg             csck, //spiad_sck
-  inout                   csdio,//spiad_sdi/spiad_sdo shared
+  output  reg             csdio,//spiad_sdi
   output  reg             cs_n  //spiad_csn
 );
 
@@ -117,19 +118,13 @@ module system_top (
   wire                    spiad_sck_s;
   wire                    spiad_csn_s;
   reg           [ 4:0]    cnt_cs_up = 3'd0;
-  reg                     csdio_t;
-  reg                     csdio_o;
-  wire                    csdio_i;
-
-  assign csdio = (csdio_t) ? csdio_o : 1'bz;
-  assign csdio_i = csdio;
+  reg                     sdio_s;
 
   always @(posedge cpu_clk) begin
     csck <= spiad_sck_s;
     if (spiad_csn_s == 1'b0) begin
       cs_n <= 1'b0;
       cnt_cs_up <= 3'd0;
-      csdio_t <= 1'b1;
     end else if (cnt_cs_up == 5'h1f) begin
       cs_n <= 1'b0;
       cnt_cs_up <= cnt_cs_up;
@@ -144,11 +139,11 @@ module system_top (
   ad_3w_spi #(
     .NUM_OF_SLAVES(2)
   ) i_spi (
-    .spi_csn(cs_n),
+    .spi_csn(spiad_csn_s),
     .spi_clk(csck),
-    .spi_mosi(csdio_o),
-    .spi_miso(csdio_i),
-    .spi_sdio(csdio),
+    .spi_mosi(csdio),
+    .spi_miso(csd0),
+    .spi_sdio(sdio_s),
     .spi_dir());
 
   ad_iobuf #(
@@ -227,8 +222,8 @@ module system_top (
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (csdio),
-    .spi0_sdo_i (csdio),
+    .spi0_sdi_i (csd0),
+    .spi0_sdo_i (spiad_sdi_s),
     .spi0_sdo_o (spiad_sdi_s),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
