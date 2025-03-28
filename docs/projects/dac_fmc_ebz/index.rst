@@ -20,7 +20,6 @@ Supported boards
 - :adi:`AD9144-FMC-EBZ <EVAL-AD9144>`
 - :adi:`AD9152-FMC-EBZ <EVAL-AD9152>`
 - :adi:`AD9154-FMC-EBZ <EVAL-AD9154>`
-- :adi:`AD916x-FMC-EBZ <EVAL-AD916x>`
 - :adi:`AD917x-FMC-EBZ <EVAL-AD917x>`
 
 Supported devices
@@ -31,10 +30,6 @@ Supported devices
 - :adi:`AD9144`
 - :adi:`AD9152`
 - :adi:`AD9154`
-- :adi:`AD9161`
-- :adi:`AD9162`
-- :adi:`AD9163`
-- :adi:`AD9164`
 - :adi:`AD9171`
 - :adi:`AD9172`
 - :adi:`AD9173`
@@ -42,23 +37,17 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-+--------------------------------------+------------------+----------+
-| Evaluation board                     | Carrier          | FMC slot |
-+======================================+==================+==========+
-|| :adi:`AD9135-FMC-EBZ <EVAL-AD9135>` | `A10SoC`_        | FMCA     |
-|| :adi:`AD9136-FMC-EBZ <EVAL-AD9136>` +------------------+----------+
-|| :adi:`AD9144-FMC-EBZ <EVAL-AD9144>` | :xilinx:`VCU118` | FMC+     |
-|| :adi:`AD9152-FMC-EBZ <EVAL-AD9152>` +------------------+----------+
-|| :adi:`AD9154-FMC-EBZ <EVAL-AD9154>` | :xilinx:`ZC706`  | FMC HPC  |
-|| :adi:`AD917x-FMC-EBZ <EVAL-AD917x>` +------------------+----------+
-|                                      | :xilinx:`ZCU102` | FMC HPC0 |
-+--------------------------------------+------------------+----------+
-| :adi:`AD916x-FMC-EBZ <EVAL-AD916x>`  | :xilinx:`VCU118` | FMC+     |
-|                                      +------------------+----------+
-|                                      | :xilinx:`ZC706`  | FMC HPC  |
-|                                      +------------------+----------+
-|                                      | :xilinx:`ZCU102` | FMC HPC0 |
-+--------------------------------------+------------------+----------+
++-------------------------------------+------------------+----------+
+| Evaluation board                    | Carrier          | FMC slot |
++=====================================+==================+==========+
+| :adi:`AD9135-FMC-EBZ <EVAL-AD9135>` | `A10SoC`_        | FMCA     |
+| :adi:`AD9136-FMC-EBZ <EVAL-AD9136>` +------------------+----------+
+| :adi:`AD9144-FMC-EBZ <EVAL-AD9144>` | :xilinx:`VCU118` | FMC+     |
+| :adi:`AD9152-FMC-EBZ <EVAL-AD9152>` +------------------+----------+
+| :adi:`AD9154-FMC-EBZ <EVAL-AD9154>` | :xilinx:`ZC706`  | FMC HPC  |
+| :adi:`AD917x-FMC-EBZ <EVAL-AD917x>` +------------------+----------+
+|                                     | :xilinx:`ZCU102` | FMC HPC0 |
++-------------------------------------+------------------+----------+
 
 Block design
 -------------------------------------------------------------------------------
@@ -118,10 +107,6 @@ are:
   - AD9144
   - AD9154
   - AD9152
-  - AD9161
-  - AD9162
-  - AD9163
-  - AD9164
   - AD9171
   - AD9173
 
@@ -239,28 +224,6 @@ configure them trough ``make`` parameters:
    | 09   | 1  | 2  | 1  | 1  | 1  | 16 | 16 |
    +------+----+----+----+----+----+----+----+
    | 10   | 1  | 1  | 1  | 2  | 0  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-
-.. collapsible:: AD9161/2/3/4 supported modes
-
-   +------+----------------------------------+
-   |      | JESD parameters                  |
-   |      +----+----+----+----+----+----+----+
-   | Mode | M  | L  | S  | F  | HD | N  | NP |
-   +======+====+====+====+====+====+====+====+
-   | 01   | 2  | 1  | 1  | 4  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 02   | 2  | 2  | 2  | 2  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 03   | 2  | 3  | 3  | 4  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 04   | 2  | 4  | 1  | 1  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 06   | 2  | 6  | 3  | 2  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 08   | 2  | 8  | 2  | 1  | 1  | 16 | 16 |
-   +------+----+----+----+----+----+----+----+
-   | 09   | 1  | 8  | 4  | 1  | 1  | 16 | 16 |
    +------+----+----+----+----+----+----+----+
 
 .. collapsible:: AD9171 supported modes
@@ -385,7 +348,7 @@ SPI connections
 
    ``spi_en`` is:
 
-    - **active HIGH** for AD913X, AD91X4, AD915X and AD916X evaluation boards
+    - **active HIGH** for AD913X, AD91X4, and AD915X evaluation boards
     - **active LOW**  for AD917X evaluation boards
 
 +------------------------------+---------------------------------+------------------------------------+----+
@@ -395,17 +358,14 @@ SPI connections
 +==============+===============+==============+==================+====================================+====+
 | PS           | PL            | SPI 0        | SYS_SPI/AXI_SPI  | HMC7044                            | 0  |
 +--------------+---------------+--------------+------------------+------------------------------------+----+
-| PS           | PL            | SPI 0        | SYS_SPI/AXI_SPI  | AD913x/AD91x4/AD915x/AD916x/AD917x | 1  |
+| PS           | PL            | SPI 0        | SYS_SPI/AXI_SPI  | AD913x/AD91x4/AD915x/AD917x        | 1  |
 +--------------+---------------+--------------+------------------+------------------------------------+----+
-| PS           | PL            | SPI 0        | SYS_SPI/AXI_SPI  | ADF4355*                           | 2  |
-+--------------+---------------+--------------+------------------+------------------------------------+----+
-| PS           | ---           | SPI 1        | ---              | PMOD**                             | 0  |
+| PS           | ---           | SPI 1        | ---              | PMOD*                              | 0  |
 +--------------+---------------+--------------+------------------+------------------------------------+----+
 
 .. note::
 
-   - \*  - only when the selected device is AD916x.
-   - \** - only on the ZC706/ZCU102 carriers
+   - \* - only on the ZC706/ZCU102 carriers
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -434,21 +394,21 @@ GPIOs
 
    - \* - only on the ZC706/ZCU102 carriers
 
-+-------------+-----------------------------------------------------+
-| GPIO signal | Function                                            |
-+-------------+----------------------+----------------+-------------+
-|             | AD91X4/AD915X/AD913X | AD916X         | AD917X      |
-+=============+======================+================+=============+
-| dac_ctrl[4] | NC                   | FMC_HMC849VCTL | NC          |
-+-------------+----------------------+----------------+-------------+
-| dac_ctrl[3] | FMC_TXEN_1           | NC             | NC          |
-+-------------+----------------------+----------------+-------------+
-| dac_ctrl[2] | NC                   | NC             | FMC_TXEN_1  |
-+-------------+----------------------+----------------+-------------+
-| dac_ctrl[1] | NC                   | NC             | FMC_TXEN_0  |
-+-------------+----------------------+----------------+-------------+
-| dac_ctrl[0] | FMC_TXEN_0           | FMC_TXEN_0     | FMC_PE_CTRL |
-+-------------+----------------------+----------------+-------------+
++-------------+------------------------------------+
+| GPIO signal | Function                           |
++-------------+----------------------+-------------+
+|             | AD91X4/AD915X/AD913X | AD917X      |
++=============+======================+=============+
+| dac_ctrl[4] | NC                   | NC          |
++-------------+----------------------+-------------+
+| dac_ctrl[3] | FMC_TXEN_1           | NC          |
++-------------+----------------------+-------------+
+| dac_ctrl[2] | NC                   | FMC_TXEN_1  |
++-------------+----------------------+-------------+
+| dac_ctrl[1] | NC                   | FMC_TXEN_0  |
++-------------+----------------------+-------------+
+| dac_ctrl[0] | FMC_TXEN_0           | FMC_PE_CTRL |
++-------------+----------------------+-------------+
 
 .. note::
 
@@ -494,37 +454,39 @@ The **default configuration**, regardless of the carrier, is
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
    user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make
 
-Example: if the AD9164 device is needed and the mode should be 08, the following
+Example: if the AD9152 device is needed and the mode should be 09, the following
 command should be run:
 
 .. code-block::
 
    user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
-   user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=08
+   user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
 
-Example: if the AD9164 device is needed and there is a need for a custom mode
-, the following commands should be run:
+Example: if the AD9152 device is needed and there is a need for a custom mode,
+the following commands should be run:
 
 .. code-block::
 
-   make ADI_DAC_DEVICE=AD9164 ADI_LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16
+   make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16
 
 or:
 
 .. code-block::
 
-   make ADI_DAC_DEVICE=AD9164  ADI_LANE_RATE=12.5 ADI_DAC_MODE= 08 M=1 S=4
+   make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 ADI_DAC_MODE=09 M=1 S=4
 
 With either of these two options, the design will be built in the same
 configuration:
 
-**ADI_DAC_DEVICE=AD9164 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16**
+**ADI_DAC_DEVICE=AD9152 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16**
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
-if the following command was run ``make ADI_DAC_DEVICE=AD9164 ADI_DAC_MODE=08``
-then the folder name will be: ``ADIDACDEVICEAD9164_ADIDACMODE08``
+- if the following command was run ``make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09``
+  then the folder name will be: ``ADIDACDEVICEAD9152_ADIDACMODE09``
+- if the following command was run ``make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
+  ADI_LANE_RATE=12.5`` then the folder name will be: ``ADIDACDEVICEAD9152_ADIDACMODE09_ADILANERATE12_5``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -563,15 +525,10 @@ Hardware related
   - :adi:`AD9144`
   - :adi:`AD9152`
   - :adi:`AD9154`
-  - :adi:`AD9161`
-  - :adi:`AD9162`
-  - :adi:`AD9163`
-  - :adi:`AD9164`
   - :adi:`AD9171`
   - :adi:`AD9172`
   - :adi:`AD9173`
 
-- `UG-1526, AD9161/AD9162/AD9163/AD9164 User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/AD9161-9162-9163-9164-UG-1526.pdf>`__
 - :dokuwiki:`[Wiki] AD9171/AD9172/AD9173/AD9174/AD9175/AD9176 Evaluation Board <resources/eval/dpg/eval-ad9172>`
 
 HDL related
@@ -629,7 +586,6 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD916X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-pll/ad9162>`
 - :dokuwiki:`[Wiki] AD917X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-dds/ad9172>`
 - :dokuwiki:`[Wiki] AXI DAC HDL Linux Driver wiki page <tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
 

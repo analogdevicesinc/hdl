@@ -52,8 +52,7 @@ spi_clk       FMC_SCK         G09  FMC_HPC0_LA03_P           Y2     IO_L22P_T3U_
 spi_en        FMC_SPI_EN      D12  FMC_HPC0_LA05_N           AC3    IO_L20N_T3L_N3_AD1N_66_AC3
 
 pe_ctrl       FMC_PE_CTRL     H13  FMC_HPC0_LA07_P           U5     IO_L18P_T2U_N10_AD2P_66_U5
-txen[0]       FMC_TXEN_0      C10  FMC_HPC0_LA06_P           AC2    IO_L19P_T3L_N0_DBC_AD9P_66_AC2
-txen[1]       FMC_TXEN_1      C11  FMC_HPC0_LA06_N           AC1    IO_L19N_T3L_N1_DBC_AD9N_66_AC1
+txen[0]       FMC_TXEN_0      C10  FMC0_LA09_N               W1     IO_L24N_T3U_N11_66
 
 tx_data_p[0]  SERDIN0_N       A38  FMC_HPC0_DP5_C2M_P        P6     MGTHTXP1_228_P6
 tx_data_n[0]  SERDIN0_P       A39  FMC_HPC0_DP5_C2M_N        P5     MGTHTXN1_228_P5
@@ -75,8 +74,6 @@ tx_sync_p[0]  SYNC0_P         D08  FMC_HPC0_LA01_CC_P        AB4    IO_L16P_T2U_
 tx_sync_n[0]  SYNC0_N         D09  FMC_HPC0_LA01_CC_N        AC4    IO_L16N_T2U_N7_QBC_AD3N_66_AC4
 NC            SYNC1_N         H08  FMC_HPC0_LA02_N           V1     IO_L23N_T3U_N9_66_V1
 NC            SYNC1_P         H07  FMC_HPC0_LA02_P           V2     IO_L23P_T3U_N8_66_V2
-tx_sysref_n   SYSREF2_N       G07  FMC_HPC0_LA00_CC_N        Y3     IO_L13N_T2L_N1_GC_QBC_66_Y3
-tx_sysref_p   SYSREF2_P       G06  FMC_HPC0_LA00_CC_P        Y4     IO_L13P_T2L_N0_GC_QBC_66_Y4
 */
 
 module system_top #(
@@ -88,8 +85,6 @@ module system_top #(
 
   input           tx_ref_clk_p,
   input           tx_ref_clk_n,
-  input           tx_sysref_p,
-  input           tx_sysref_n,
   input   [ 1:0]  tx_sync_p,
   input   [ 1:0]  tx_sync_n,
   output  [ 7:0]  tx_data_p,
@@ -97,18 +92,13 @@ module system_top #(
 
   output          spi_csn_dac,
   output          spi_csn_clk,
+  output          spi_csn_clk2,
   input           spi_miso,
   output          spi_mosi,
   output          spi_clk,
   output          spi_en,
 
-  inout   [ 3:0]  dac_ctrl,
-
-  output          pmod_spi_clk,
-  output          pmod_spi_csn,
-  output          pmod_spi_mosi,
-  input           pmod_spi_miso,
-  inout   [ 3:0]  pmod_gpio
+  inout    [ 1:0] dac_ctrl
 );
 
   // internal signals
@@ -116,24 +106,25 @@ module system_top #(
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
-  wire    [ 1:0]  spi0_csn;
+  wire    [ 2:0]  spi0_csn;
   wire    [ 2:0]  spi1_csn;
   wire            tx_ref_clk;
-  wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
+  wire            tx_sysref_loc;
+  wire            dac_fifo_bypass;
+
   // spi
 
-  // spi_en is active ...
-  //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
-  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
-  // If you are planning to build a bitstream for just one of those boards you
-  // can hardwire the logic level here.
-  //
-  assign spi_en = (DEVICE_CODE <= 2);
+  /* spi_en is active low
+  * AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
+  */
 
-  //                                        9135/9144/9172
+  assign spi_en = 0;
+
+  //                                       AD916(1,2,3,4)
   assign spi_csn_dac  = spi0_csn[1];
-  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044
+  assign spi_csn_clk  = spi0_csn[0];    // AD9508
+  assign spi_csn_clk2 = spi0_csn[2];    // ADF4355
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -142,11 +133,6 @@ module system_top #(
     .IB (tx_ref_clk_n),
     .O (tx_ref_clk),
     .ODIV2 ());
-
-  IBUFDS i_ibufds_tx_sysref (
-    .I (tx_sysref_p),
-    .IB (tx_sysref_n),
-    .O (tx_sysref));
 
   IBUFDS i_ibufds_tx_sync_0 (
     .I (tx_sync_p[0]),
@@ -160,38 +146,25 @@ module system_top #(
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(4)
+    .DATA_WIDTH(2)
   ) i_iobuf (
-    .dio_t (gpio_t[21+:4]),
-    .dio_i (gpio_o[21+:4]),
-    .dio_o (gpio_i[21+:4]),
+    .dio_t (gpio_t[25:24]),
+    .dio_i (gpio_o[25:24]),
+    .dio_o (gpio_i[25:24]),
     .dio_p ({
-      dac_ctrl           /* 24 - 21 */
+      dac_ctrl           /* 25 - 24 */
     }));
 
   /*
   * Control signals for different FMC boards:
   *
-  * dac_ctrl  FMC   9144 like    9172 like
-  *        0  H13   FMC_TXEN_0   FMC_PE_CTRL
-  *        1  C10   NC           FMC_TXEN_0
-  *        2  C11   NC           FMC_TXEN_1
-  *        3  H14   FMC_TXEN_1   NC
+  * dac_ctrl  FMC  916x family
+  *
+  *        0  H13  FMC_TXEN_0
+  *        1  D15  FMC_HMC849VCTL
   */
 
   assign dac_fifo_bypass = gpio_o[40];
-
-  /* PMOD GPIOs 48-51 */
-  ad_iobuf #(
-    .DATA_WIDTH(4)
-  ) i_iobuf_pmod (
-    .dio_t (gpio_t[48+:4]),
-    .dio_i (gpio_o[48+:4]),
-    .dio_o (gpio_i[48+:4]),
-    .dio_p (pmod_gpio));
-
-  /* PMOD SPI */
-  assign pmod_spi_csn = spi1_csn[0];
 
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
@@ -211,9 +184,6 @@ module system_top #(
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
     .spi1_csn (spi1_csn),
-    .spi1_miso (pmod_spi_miso),
-    .spi1_mosi (pmod_spi_mosi),
-    .spi1_sclk (pmod_spi_clk),
     .tx_data_0_n (tx_data_n[0]),
     .tx_data_0_p (tx_data_p[0]),
     .tx_data_1_n (tx_data_n[1]),
@@ -233,6 +203,10 @@ module system_top #(
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref));
+    .tx_sysref_0 (tx_sysref_loc));
+
+  // AD9161/2/3/4-FMC-EBZ works only in single link,
+  // The FMC connector has SYNC1 connected to it
+  assign tx_sysref_loc = tx_sync[1];
 
 endmodule
