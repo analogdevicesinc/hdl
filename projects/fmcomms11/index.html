@@ -97,6 +97,7 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
+<li><a class="reference internal" href="#clock-scheme">Clock scheme</a></li>
 <li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#detailed-description">Detailed description</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
@@ -477,39 +478,22 @@ and receive chains.</p>
 </div>
 </div>
 </div></section>
-<section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The design has one JESD receive chain and one transmit chain, each with 8 lanes.</p>
-<p>Each chain consists of a physical layer represented by an XCVR module, a link
-layer represented by a JESD LINK module and transport layer represented by a
-JESD TPL module. The HDL project in its current state, has
-<strong>the link operating in subclass 0</strong>.</p>
-<div class="line-block">
-<div class="line">Rx device clock - 122.88 MHz</div>
-<div class="line">Tx device clock - 245.76 MHz</div>
-<div class="line">JESD204B Rx Lane Rate - 4.9152 Gbps</div>
-<div class="line">JESD204B Tx Lane Rate - 9.8304 Gbps</div>
-</div>
-<p>The current HDL project supports only the following configuration:</p>
-<ul class="simple">
-<li><p>JESD204B interfaces in subclass 0</p></li>
-<li><p>Rx/Tx number of lanes (L): 8</p></li>
-<li><p>Rx number of converters per device (M): 1</p></li>
-<li><p>Tx number of converters per device (M): 2</p></li>
-<li><p>Rx number of samples per frame (S): 4</p></li>
-<li><p>Tx number of samples per frame (S): 2</p></li>
-<li><p>Rx/Tx sample width (N, NP): 16</p></li>
-<li><p>Tx number of samples per channel: <span class="math notranslate nohighlight">\(= \frac{L * 32}{M * N}\)</span></p></li>
-</ul>
+<section id="clock-scheme">
+<h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
+<p>By default, the board comes with the solders set to
+<strong>internal clock references</strong>.</p>
+<p>The on-board clock reference is provided by a 122.88MHz local oscillator.</p>
+<p>To use external clock references, take a look at the section
+<em>JP location and control</em> from below, where you have a table explaining the
+connections.</p>
 <p>Several GPO and GPIO pins are brought to the RF card through connector J2,
 found on the bottom of the PCB. These pins allow configuration of the PA,
-LNA and SPDT switch found on the PCB. These devices are summarized in a
-table below.</p>
-<p>Several solder link are brought to the RF card to allow optional clock referece
-for the clock management uni, ADC and DAC. These configuration options are
-summarized in the table below.</p>
+LNA and SPDT switch found on the PCB.</p>
+<p>The schematic of the board can be found
+<a class="icon adi reference external" href="https://www.analog.com/media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip">here</a>.</p>
+<p>The settings A, COM and B refer to solder positions: 1, 2, and 3 respectively.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="ba7d92e505818728e4f8c742731b9d729b51e7d1" name="ba7d92e505818728e4f8c742731b9d729b51e7d1" type="checkbox"></input><label for="ba7d92e505818728e4f8c742731b9d729b51e7d1"><p>JP location and control</p>
+<input class="collapsible_input" id="6af4e9d5918f47cae791c70a2d1c9e46e01e9d5c" name="6af4e9d5918f47cae791c70a2d1c9e46e01e9d5c" type="checkbox"></input><label for="6af4e9d5918f47cae791c70a2d1c9e46e01e9d5c"><p>JP location and control</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -524,7 +508,7 @@ summarized in the table below.</p>
 <tr class="row-even"><td rowspan="2"><p>JP1</p></td>
 <td><p>+ Differential Clock Reference for ADF4355</p></td>
 <td><p>A and COM</p></td>
-<td><p>Internal Clock Reference</p></td>
+<td><p>Internal Clock Reference (default)</p></td>
 </tr>
 <tr class="row-odd"><td><p>+ Differential Clock Reference for ADF4355</p></td>
 <td><p>B and COM</p></td>
@@ -533,7 +517,7 @@ summarized in the table below.</p>
 <tr class="row-even"><td rowspan="2"><p>JP2</p></td>
 <td><p>- Differential Clock Reference for ADF4355</p></td>
 <td><p>A and COM</p></td>
-<td><p>Internal Clock Reference</p></td>
+<td><p>Internal Clock Reference (default)</p></td>
 </tr>
 <tr class="row-odd"><td><p>- Differential Clock Reference for ADF4355</p></td>
 <td><p>B and COM</p></td>
@@ -542,7 +526,7 @@ summarized in the table below.</p>
 <tr class="row-even"><td rowspan="2"><p>JP22</p></td>
 <td><p>+ Differential Clock Reference for DAC</p></td>
 <td><p>A and COM</p></td>
-<td><p>ADF4355 Clock Reference</p></td>
+<td><p>ADF4355 Clock Reference (default)</p></td>
 </tr>
 <tr class="row-odd"><td><p>+ Differential Clock Reference for DAC</p></td>
 <td><p>B and COM</p></td>
@@ -551,7 +535,7 @@ summarized in the table below.</p>
 <tr class="row-even"><td rowspan="2"><p>JP5</p></td>
 <td><p>- Differential Clock Reference for DAC</p></td>
 <td><p>A and COM</p></td>
-<td><p>ADF4355 Clock Reference</p></td>
+<td><p>ADF4355 Clock Reference (default)</p></td>
 </tr>
 <tr class="row-odd"><td><p>- Differential Clock Reference for DAC</p></td>
 <td><p>B and COM</p></td>
@@ -564,7 +548,7 @@ summarized in the table below.</p>
 </tr>
 <tr class="row-odd"><td><p>+ Differential Clock Reference for ADC</p></td>
 <td><p>B and COM</p></td>
-<td><p>HMC361 Clock Reference</p></td>
+<td><p>HMC361 Clock Reference (default)</p></td>
 </tr>
 <tr class="row-even"><td rowspan="2"><p>JP4</p></td>
 <td><p>- Differential Clock Reference for ADC</p></td>
@@ -573,7 +557,7 @@ summarized in the table below.</p>
 </tr>
 <tr class="row-odd"><td><p>- Differential Clock Reference for ADC</p></td>
 <td><p>B and COM</p></td>
-<td><p>HMC361 Clock Reference</p></td>
+<td><p>HMC361 Clock Reference (default)</p></td>
 </tr>
 </tbody>
 </table>
@@ -581,6 +565,42 @@ summarized in the table below.</p>
 </div>
 </div>
 </div></section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<p>The design has one JESD receive chain and one transmit chain, each with 8 lanes.</p>
+<p>Each chain consists of a physical layer represented by an XCVR module, a link
+layer represented by a JESD LINK module and transport layer represented by a
+JESD TPL module. The HDL project in its current state, has
+<strong>the link operating in subclass 0</strong>.</p>
+<ul class="simple">
+<li><p>Rx device clock - 122.88 MHz</p></li>
+<li><p>Tx device clock - 245.76 MHz</p></li>
+<li><p>JESD204B Rx Lane Rate - 4.9152 Gbps</p></li>
+<li><p>JESD204B Tx Lane Rate - 9.8304 Gbps</p></li>
+</ul>
+<p>The current HDL project supports only the following configuration:</p>
+<ul class="simple">
+<li><p>JESD204B interfaces in subclass 0</p></li>
+<li><p>Rx/Tx number of lanes (L): 8</p></li>
+<li><p>Rx number of converters per device (M): 1</p></li>
+<li><p>Tx number of converters per device (M): 2</p></li>
+<li><p>Rx number of samples per frame (S): 4</p></li>
+<li><p>Tx number of samples per frame (S): 2</p></li>
+<li><p>Rx/Tx sample width (N, NP): 16</p></li>
+<li><p>Tx number of samples per channel: <span class="math notranslate nohighlight">\(= \frac{L * 32}{M * N}\)</span></p></li>
+</ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>In case you have a <strong>rev. A</strong> <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS11-EBZ">FMCOMMS11</a>, the
+system will work only if you use the
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts">rev. A device tree</a>
+and the <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2023_r2/projects/fmcomms11">old HDL project</a> (prior
+to adding the <a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a>).</p>
+<p>In case you have a <strong>rev. B</strong> <a class="icon adi reference external" href="https://www.analog.com/AD-FMCOMMS11-EBZ">FMCOMMS11</a>, the
+system will work only if you do a hardware rework: solder a wire between
+TP19 and C89.</p>
+</div>
+</section>
 <section id="detailed-description">
 <h3>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h3>
 <p>The transport layer transfers data continuously from/to the ADC/DAC. In the TX
@@ -791,6 +811,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </tbody>
 </table>
 </div>
+<p>The AD9508 chip select will be used only in the rev. A of the FMCOMMS11.</p>
 </section>
 <section id="gpios">
 <h3>GPIOs<a class="headerlink" href="#gpios" title="Permalink to this heading"></a></h3>
@@ -974,6 +995,8 @@ where the <strong>n</strong>-th logical lane is mapped to the <strong>list[n]</s
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9625">AD9625</a></p></li>
 </ul>
 </li>
+<li><p>Board schematic and design files
+<a class="icon adi reference external" href="https://www.analog.com/media/en/reference-design-documentation/design-integration-files/ad-fmcomms11-ebz-designsupport.zip">here</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
@@ -1067,6 +1090,7 @@ where the <strong>n</strong>-th logical lane is mapped to the <strong>list[n]</s
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11.dts">FMCOMMS11/ZC706 Linux device tree</a></p></li>
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-fmcomms11-RevA.dts">FMCOMMS11 rev. A/ZC706 Linux device tree</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-software/fmcomms11_plugin">[Wiki] FMCOMMS11 IIO Oscilloscope plugin wiki page</a></p></li>
 </ul>
 </section>
