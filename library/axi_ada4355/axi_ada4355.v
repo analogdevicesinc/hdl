@@ -47,8 +47,8 @@ module axi_ada4355 #(
   input         da_n,
   input         db_p,
   input         db_n,
-  input         data_frame_p,
-  input         data_frame_n,
+  input         serdes_frame_p,
+  input         serdes_frame_n,
   input         sync_n,
 
   // output data interface
@@ -265,8 +265,8 @@ module axi_ada4355 #(
     .da_n(da_n),
     .db_p(db_p),
     .db_n(db_n),
-    .data_frame_p(data_frame_p),
-    .data_frame_n(data_frame_n),
+    .serdes_frame_p(serdes_frame_p),
+    .serdes_frame_n(serdes_frame_n),
     .up_clk(up_clk),
     .up_adc_dld(up_dld),
     .up_adc_dwdata(up_dwdata),

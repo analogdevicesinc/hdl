@@ -52,8 +52,8 @@ module axi_ada4355_if #(
   input da_n,
   input db_p,
   input db_n,
-  input data_frame_p,
-  input data_frame_n,
+  input serdes_frame_p,
+  input serdes_frame_n,
   input sync_n,
   input areset,
 
@@ -74,8 +74,8 @@ module axi_ada4355_if #(
   output                             adc_clk,
 
   // Output data
-  (* mark_debug = "true" *) output [15:0]                      adc_data,
-  (* mark_debug = "true" *) output                             adc_valid
+  output [15:0]                      adc_data,
+  output                             adc_valid
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -89,11 +89,11 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_0;
-  (* mark_debug = "true" *) wire [ 7:0]          serdes_data_1;
-  (* mark_debug = "true" *) wire [15:0]          serdes_data;
-  (* mark_debug = "true" *) wire [ 7:0]          serdes_frame;
-  (* mark_debug = "true" *) wire [ 7:0]          pattern_value;
+  wire [ 7:0]          serdes_data_0;
+  wire [ 7:0]          serdes_data_1;
+  wire [15:0]          serdes_data;
+  wire [ 7:0]          serdes_out_frame;
+  wire [ 7:0]          pattern_value;
   wire [NUM_LANES-2:0] serdes_in_p;
   wire [NUM_LANES-2:0] serdes_in_n;
 
@@ -106,31 +106,30 @@ module axi_ada4355_if #(
   wire [NUM_LANES-2:0] data_s6;
   wire [NUM_LANES-2:0] data_s7;
 
-  wire  data_s0_frame;
-  wire  data_s1_frame;
-  wire  data_s2_frame;
-  wire  data_s3_frame;
-  wire  data_s4_frame;
-  wire  data_s5_frame;
-  wire  data_s6_frame;
-  wire  data_s7_frame;
+  wire  serdes_s0_frame;
+  wire  serdes_s1_frame;
+  wire  serdes_s2_frame;
+  wire  serdes_s3_frame;
+  wire  serdes_s4_frame;
+  wire  serdes_s5_frame;
+  wire  serdes_s6_frame;
+  wire  serdes_s7_frame;
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
-  (* mark_debug = "true" *) reg [ 1:0] serdes_valid = 2'b00;
-  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
-  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
-
-  (* mark_debug = "true" *) reg [15:0] serdes_data_16;
-  (* mark_debug = "true" *) reg [15:0] serdes_data_16_d;
-  (* mark_debug = "true" *) reg [ 7:0] serdes_data_frame;
-  (* mark_debug = "true" *) reg [ 7:0] serdes_data_frame_d;
-  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
-  (* mark_debug = "true" *) reg [ 7:0] data_frame_shifted;
+  reg [ 1:0] serdes_valid = 2'b00;
+  reg [ 1:0] serdes_valid_d = 2'b00;
+  reg [ 2:0] shift_cnt = 3'd0;
+  reg [15:0] serdes_data_16;
+  reg [15:0] serdes_data_16_d;
+  reg [ 7:0] serdes_frame;
+  reg [ 7:0] serdes_frame_d;
+  reg [15:0] adc_data_shifted;
+  reg [ 7:0] frame_shifted;
 
   reg [ 2:0] reg_test;
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
-  (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
+  reg [ 2:0] state = 3'h0;
 
   assign adc_clk           = adc_clk_div;
   assign pattern_value     = 8'hF0;
@@ -240,16 +239,16 @@ module axi_ada4355_if #(
     .ext_serdes_rst(serdes_reset_s),
     .clk(adc_clk_in_fast_frame),
     .div_clk(adc_clk_div_frame),
-    .data_s0(data_s0_frame),
-    .data_s1(data_s1_frame),
-    .data_s2(data_s2_frame),
-    .data_s3(data_s3_frame),
-    .data_s4(data_s4_frame),
-    .data_s5(data_s5_frame),
-    .data_s6(data_s6_frame),
-    .data_s7(data_s7_frame),
-    .data_in_p(data_frame_p),
-    .data_in_n(data_frame_n),
+    .data_s0(serdes_s0_frame),
+    .data_s1(serdes_s1_frame),
+    .data_s2(serdes_s2_frame),
+    .data_s3(serdes_s3_frame),
+    .data_s4(serdes_s4_frame),
+    .data_s5(serdes_s5_frame),
+    .data_s6(serdes_s6_frame),
+    .data_s7(serdes_s7_frame),
+    .data_in_p(serdes_frame_p),
+    .data_in_n(serdes_frame_n),
     .up_clk(up_clk),
     .up_dld(up_adc_dld[2]),
     .up_dwdata(up_adc_dwdata[((DRP_WIDTH*NUM_LANES)-1):(DRP_WIDTH*(NUM_LANES-1))]),
@@ -296,21 +295,21 @@ module axi_ada4355_if #(
                         serdes_data_0[0],
                         serdes_data_1[0]};
 
-  assign serdes_frame = {data_s7_frame,
-                         data_s6_frame,
-                         data_s5_frame,
-                         data_s4_frame,
-                         data_s3_frame,
-                         data_s2_frame,
-                         data_s1_frame,
-                         data_s0_frame};
+  assign serdes_out_frame = {serdes_s7_frame,
+                             serdes_s6_frame,
+                             serdes_s5_frame,
+                             serdes_s4_frame,
+                             serdes_s3_frame,
+                             serdes_s2_frame,
+                             serdes_s1_frame,
+                             serdes_s0_frame};
 
   always @(*) begin
     serdes_data_16 = serdes_data;
   end
 
   always @(*) begin
-    serdes_data_frame = serdes_frame;
+    serdes_frame = serdes_out_frame;
   end
 
   always @(posedge adc_clk_div) begin
@@ -321,7 +320,7 @@ module axi_ada4355_if #(
 
   always @(posedge adc_clk_div) begin
     if(serdes_valid_d[1:0] == 2'b11) begin
-      serdes_data_frame_d <= serdes_data_frame;
+      serdes_frame_d <= serdes_frame;
     end
   end
 
@@ -334,14 +333,14 @@ module axi_ada4355_if #(
     if (serdes_reset_d) begin
       state <= INIT;
       shift_cnt <= 'h0;
-      data_frame_shifted <= serdes_data_frame;
+      frame_shifted <= serdes_frame;
     end else begin
       case (state)
       INIT : begin
-        if (data_frame_shifted != pattern_value) begin
+        if (frame_shifted != pattern_value) begin
           state <= CNT_UPDATE;
         end else begin
-          data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
+          frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
           state <= INIT;
         end
       end
@@ -350,7 +349,7 @@ module axi_ada4355_if #(
         state <= FRAME_SHIFTED;
       end
       FRAME_SHIFTED : begin
-         data_frame_shifted <= {serdes_data_frame, serdes_data_frame_d} >> shift_cnt;
+         frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
          state <= INIT;
       end
       RESET : begin
@@ -366,7 +365,7 @@ module axi_ada4355_if #(
   always @(posedge adc_clk_div) begin
     reg_test[0] <= serdes_data_0[0];
     reg_test[1] <= serdes_data_1[0];
-    reg_test[2] <= data_s0_frame;
+    reg_test[2] <= serdes_s0_frame;
   end
 
   always @(posedge clk_in_s or negedge areset) begin
