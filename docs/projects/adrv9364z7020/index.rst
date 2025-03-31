@@ -96,7 +96,7 @@ I2C connections
      - axi_iic_main
      - 0x4160_0000
      - ---
-     
+
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -194,16 +194,22 @@ command.
    $make
 
 .. collapsible:: Supported SOM & Carriers
-   
-   ============= ===============================================
+
+   ============= ================================================
    Directory     Description
-   ============= ===============================================
+   ============= ================================================
    ccbob_cmos    ADRV9364Z7020-SOM (CMOS Mode) + ADRV1CRR-BOB
    ccbob_lvds    ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-BOB
-   ccpackrf_lvds ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-PACKRF
    ccusb_lvds    ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-USB
-   ============= ===============================================
-   
+   ccpackrf_lvds ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF*
+   ============= ================================================
+
+   .. admonition:: Legend
+      :class: note
+
+      - ``*`` removed, last release that supported the project is
+        :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/adrv9361z7035/ccpackrf_lvds>`
+
 .. collapsible:: Board Design Files (Vivado IPI)
 
    =========================== =====================================
@@ -211,15 +217,14 @@ command.
    =========================== =====================================
    common/adrv9364z7020_bd.tcl ADRV9364Z7020-SOM board design file.
    common/ccbob_bd.tcl         carrier, break out board design file.
-   common/ccpackrf_bd.tcl      carrier, pack rf board design file.
    common/ccusb_bd.tcl         carrier, usb board design file.
    =========================== =====================================
-   
+
    .. note::
-   
+
       FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
-   
+
 .. collapsible:: Board Constraint Files (pin-out & io-standard)
 
    +-------------------------------+--------------------------------------+
@@ -237,14 +242,11 @@ command.
    | common/ccbob_constr.xdc       | carrier, break out board constraints |
    |                               | file.                                |
    +-------------------------------+--------------------------------------+
-   | common/ccpackrf_constr.xdc    | carrier, packrf board constraints    |
-   |                               | file.                                |
-   +-------------------------------+--------------------------------------+
    | common/ccusb_constr.xdc       | carrier, usb board constraints file. |
    +-------------------------------+--------------------------------------+
-   
+
    .. note::
-   
+
       FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
 
@@ -285,9 +287,6 @@ HDL related
    * - AXI_GPREG
      - :git-hdl:`library/axi_gpreg` *
      - ---
-   * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi` **
-     - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
@@ -316,15 +315,13 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   - ``*`` only used for ccbob_cmos (ADRV1CRR-BOB) & ccfmc_lvds (ADRV1CRR-FMC)  
-   - ``**`` only used for ccpackrf_lvds (ADRV1CRR-PACKRF)
+   - ``*`` only used for ccbob_cmos (ADRV1CRR-BOB) & ccfmc_lvds (ADRV1CRR-FMC)
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADRV9364-Z7020 ccbob_cmos Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob-cmos.dts>`
 - :git-linux:`ADRV9364-Z7020 ccbob_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob.dts>`
-- :git-linux:`ADRV9364-Z7020 ccpackrf_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-packrf.dts>`
 
 - :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
 

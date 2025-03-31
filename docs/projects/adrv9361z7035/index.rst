@@ -30,11 +30,11 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
- - :adi:`ADRV1CRR-BOB`
- - :dokuwiki:`ADRV1CRR-FMC <resources/eval/user-guides/pzsdr/carriers/packrf>`
- - :adi:`ADRV1CRR-FMC`
- - ADRV1CRR-PCI (OBSOLETE)
- - ADRV1CRR-USB (OBSOLETE)
+- :adi:`ADRV1CRR-BOB`
+- :dokuwiki:`ADRV1CRR-FMC <resources/eval/user-guides/pzsdr/carriers/packrf>`
+- :adi:`ADRV1CRR-FMC`
+- ADRV1CRR-PCI (OBSOLETE)
+- ADRV1CRR-USB (OBSOLETE)
 
 Block design
 -------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ I2C connections
      - axi_iic_main
      - 0x4160_0000
      - ---
-     
+
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -196,18 +196,24 @@ command.
    $make
 
 .. collapsible:: Supported SOM & Carriers
-   
-   ============= ===============================================
+
+   ============= ================================================
    Directory     Description
-   ============= ===============================================
+   ============= ================================================
    ccbob_cmos    ADRV9361Z7035-SOM (CMOS Mode) + ADRV1CRR-BOB
    ccbob_lvds    ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-BOB
-   ccpackrf_lvds ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF
+   ccpackrf_lvds ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF*
    ccfmc_lvds    ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-FMC
    ccpci_lvds    ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PCI
    ccusb_lvds    ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-USB
-   ============= ===============================================
-   
+   ============= ================================================
+
+   .. admonition:: Legend
+      :class: note
+
+      - ``*`` removed; last release that supported the project is
+        :git-hdl:`hdl_2021_r2 <hdl_2021_r2:projects/adrv9361z7035/ccpackrf_lvds>`
+
 .. collapsible:: Board Design Files (Vivado IPI)
 
    =========================== =====================================
@@ -215,17 +221,16 @@ command.
    =========================== =====================================
    common/adrv9361z7035_bd.tcl ADRV9361Z7035-SOM board design file.
    common/ccbob_bd.tcl         carrier, break out board design file.
-   common/ccpackrf_bd.tcl      carrier, pack rf board design file.
    common/ccfmc_bd.tcl         carrier, fmc board design file.
    common/ccpci_bd.tcl         carrier, pci-e board design file.
    common/ccusb_bd.tcl         carrier, usb board design file.
    =========================== =====================================
-   
+
    .. note::
-   
+
       FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
-   
+
 .. collapsible:: Board Constraint Files (pin-out & io-standard)
 
    +-------------------------------+--------------------------------------+
@@ -243,9 +248,6 @@ command.
    | common/ccbob_constr.xdc       | carrier, break out board constraints |
    |                               | file.                                |
    +-------------------------------+--------------------------------------+
-   | common/ccpackrf_constr.xdc    | carrier, packrf board constraints    |
-   |                               | file.                                |
-   +-------------------------------+--------------------------------------+
    | common/ccfmc_constr.xdc       | carrier, fmc board constraints file. |
    +-------------------------------+--------------------------------------+
    | common/ccpci_constr.xdc       | carrier, pci-e board constraints     |
@@ -253,9 +255,9 @@ command.
    +-------------------------------+--------------------------------------+
    | common/ccusb_constr.xdc       | carrier, usb board constraints file. |
    +-------------------------------+--------------------------------------+
-   
+
    .. note::
-   
+
       FMC & BOB carrier designs include loopback daughtercards for connectivity
       testing.
 
@@ -303,7 +305,7 @@ HDL related
      - :git-hdl:`library/axi_hdmi_tx` *
      - :ref:`axi_hdmi_tx`
    * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi` \***
+     - :git-hdl:`library/axi_i2s_adi` *
      - ---
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx` *
@@ -339,9 +341,8 @@ HDL related
 .. admonition:: Legend
    :class: note
 
-   - ``*`` only used for ccfmc_lvds (ADRV1CRR-FMC)  
-   - ``**`` only used for ccbob_cmos (ADRV1CRR-BOB), ccbob_lvds (ADRV1CRR-BOB), ccfmc_lvds (ADRV1CRR-FMC)  
-   - ``***`` only used for ccfmc_lvds (ADRV1CRR-FMC), ccpackrf_lvds (ADRV1CRR-PACKRF)  
+   - ``*`` only used for ccfmc_lvds (ADRV1CRR-FMC)
+   - ``**`` only used for ccbob_cmos (ADRV1CRR-BOB), ccbob_lvds (ADRV1CRR-BOB), ccfmc_lvds (ADRV1CRR-FMC)
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,7 +352,6 @@ Software related
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc.dts>`
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-userspace.dts>`
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree - TDD mode <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc-rfcard-tdd.dts>`
-- :git-linux:`ADRV9361-Z7035 ccpackrf_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-packrf.dts>`
 
 - :dokuwiki:`[Wiki] ADRV9361-Z7035 User Guide - Software documentation<resources/eval/user-guides/adrv936x_rfsom/user-guide/software>`
 - :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
