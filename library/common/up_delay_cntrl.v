@@ -56,8 +56,8 @@ module up_delay_cntrl #(
 
   // io interface
 
-(* mark_debug = "true" *)  output  [(DATA_WIDTH-1):0]      up_dld,
-(* mark_debug = "true" *)  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
+  output  [(DATA_WIDTH-1):0]      up_dld,
+  output  [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_dwdata,
   input   [((DATA_WIDTH*DRP_WIDTH)-1):0]  up_drdata,
 
   // processor interface
