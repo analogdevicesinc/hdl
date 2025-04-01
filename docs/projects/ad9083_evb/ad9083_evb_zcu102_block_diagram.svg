@@ -7,7 +7,7 @@
    viewBox="0 0 909.14293 484.41089"
    version="1.1"
    id="svg1993"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14)"
    sodipodi:docname="ad9083_evb_zcu102_block_diagram.svg"
    inkscape:export-filename="C:\src\ghdl\docs\block_diagrams\ad9208_dual_ebz\ad9208_vcu118_clocking.png"
    inkscape:export-xdpi="96"
@@ -148,10 +148,10 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter4222"
-       x="-0.0055817185"
-       width="1.0111634"
-       y="-0.002731273"
-       height="1.0027412">
+       x="-0.00223134"
+       width="1.0044627"
+       y="-0.0038715175"
+       height="1.0092942">
       <feGaussianBlur
          inkscape:collect="always"
          stdDeviation="0.00061692564"
@@ -717,14 +717,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="679.25"
-     inkscape:cy="284.75"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="375.12015"
+     inkscape:cy="197.9899"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g5828-0"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-width="1680"
+     inkscape:window-height="987"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -735,7 +735,9 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      scale-x="1"
-     inkscape:pagecheckerboard="0" />
+     inkscape:pagecheckerboard="0"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <metadata
      id="metadata1990">
     <rdf:RDF>
@@ -1798,7 +1800,7 @@
        id="g5828-0"
        style="display:inline;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new">
       <rect
-         style="opacity:0.87;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:2.00222;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges"
+         style="opacity:1;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:2.00222;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges"
          id="rect5679-8"
          width="40.84959"
          height="196.20293"
