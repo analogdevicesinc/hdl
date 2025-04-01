@@ -231,7 +231,9 @@ Software related
 
 - :git-linux:`AD719x Linux driver <drivers/iio/adc/ad7192.c>`
 - :git-linux:`AD7190/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7190.dts>`
+- :git-linux:`AD7192/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7192.dts>`
 - :git-linux:`AD7193/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7193.dts>`
+- :git-linux:`AD7194/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7194.dts>`
 - :git-linux:`AD7195/CoraZ7S Linux device tree <arch/arm/boot/dts/zynq-coraz7s-ad7195.dts>`
 - :git-no-os:`AD719x no-OS project <projects/ad719x>`
 - :git-no-os:`AD719x no-OS driver <drivers/adc/ad719x>`
