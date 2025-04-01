@@ -17,6 +17,12 @@ adi_ip_files axi_clkgen [list \
   "bd/bd.tcl" \
   "axi_clkgen.v" ]
 
+set_property used_in_simulation false [get_files ./bd/bd.tcl]
+set_property used_in_simulation false [get_files  ./../scripts/adi_xilinx_device_info_enc.tcl]
+set_property used_in_synthesis false [get_files ./bd/bd.tcl]
+set_property used_in_synthesis false [get_files ./../scripts/adi_xilinx_device_info_enc.tcl]
+
+
 adi_ip_properties axi_clkgen
 adi_ip_bd axi_clkgen "bd/bd.tcl"
 
