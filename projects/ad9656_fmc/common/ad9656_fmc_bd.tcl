@@ -48,6 +48,7 @@ ad_ip_instance axi_dmac axi_ad9656_rx_dma [list \
   AXI_SLICE_SRC false \
   DMA_DATA_WIDTH_DEST 128 \
   FIFO_SIZE 32 \
+  DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH \
   CACHE_COHERENT $CACHE_COHERENCY \
   ]
 

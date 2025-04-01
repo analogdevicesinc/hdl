@@ -57,6 +57,7 @@ ad_ip_instance axi_dmac axi_ad9083_rx_dma [list \
   DMA_LENGTH_WIDTH 31 \
   DMA_DATA_WIDTH_DEST 128 \
   DMA_DATA_WIDTH_SRC $adc_dma_data_width \
+  DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH \
   CACHE_COHERENT $CACHE_COHERENCY \
 ]
 

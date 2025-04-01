@@ -129,6 +129,7 @@ ad_ip_parameter axi_adrv904x_tx_dma CONFIG.CYCLIC 1
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+ad_ip_parameter axi_adrv904x_tx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_adrv904x_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # adc peripherals
@@ -179,6 +180,7 @@ ad_ip_parameter axi_adrv904x_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
 ad_ip_parameter axi_adrv904x_rx_dma CONFIG.CYCLIC 0
 ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_width
 ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
+ad_ip_parameter axi_adrv904x_rx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_adrv904x_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 set tx_ref_clk         tx_ref_clk_0

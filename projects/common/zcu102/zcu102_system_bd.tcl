@@ -3,6 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+set AXI_ADDR_WIDTH  36
 set CACHE_COHERENCY true
 
 # create board design

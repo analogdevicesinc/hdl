@@ -52,6 +52,7 @@ ad_ip_instance axi_dmac dac_dma [list \
   DMA_TYPE_DEST 1 \
   DMA_DATA_WIDTH_SRC 64 \
   DMA_DATA_WIDTH_DEST $dac_dma_data_width \
+  DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH \
   CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
