@@ -472,7 +472,15 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`PulSAR ADC PMDZ Linux driver source code <drivers/iio/adc/ad_pulsar.c>`
-- :git-linux:`AD40xx/ADAQ40xx Linux driver source code <drivers/iio/adc/ad400x.c>`
+- :git-linux:`AD40xx/ADAQ40xx Linux driver source code <drivers/iio/adc/ad4000.c>`
+- :git-linux:`AD4003 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4003.dts>`
+- :git-linux:`AD4020 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4020.dts>`
+- :git-linux:`AD7687 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7687-pmdz.dts>`
+- :git-linux:`AD7689 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7689-ardz.dts>`
+- :git-linux:`AD7946 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946.dts>`
+- :git-linux:`AD7984 CoraZ7S  Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984.dts>`
+- :git-linux:`ADAQ4003 Zed Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts>`
+- :git-linux:`ADAQ4003 CoraZ7S Linux device tree <arch/arm/boot/dts/xilinx/zynq-coraz7s-adaq4003.dts>`
 
 .. include:: ../common/more_information.rst
 
