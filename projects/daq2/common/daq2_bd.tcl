@@ -66,6 +66,7 @@ ad_ip_instance axi_dmac axi_ad9144_dma [list \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC 128 \
   DMA_DATA_WIDTH_DEST $dac_data_width \
+  DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH \
   CACHE_COHERENT $CACHE_COHERENCY \
 ]
 
@@ -116,6 +117,7 @@ ad_ip_instance axi_dmac axi_ad9680_dma [list \
   CYCLIC 0 \
   DMA_DATA_WIDTH_SRC $adc_data_width \
   DMA_DATA_WIDTH_DEST 64 \
+  DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH \
   CACHE_COHERENT $CACHE_COHERENCY \
 ]
 

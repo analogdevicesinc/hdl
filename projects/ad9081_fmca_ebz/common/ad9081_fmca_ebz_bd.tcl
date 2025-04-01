@@ -316,6 +316,7 @@ if {$INTF_CFG != "TX"} {
   } else {
     ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_DATA_WIDTH_DEST [expr min(512, $adc_dma_data_width)]
   }
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 
@@ -385,6 +386,7 @@ if {$INTF_CFG != "RX"} {
     ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC [expr min(512, $dac_dma_data_width)]
   }
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_dma_data_width
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 }
 

@@ -109,6 +109,7 @@ ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_DATA_WIDTH_DEST $dac_data_width
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.AXI_SLICE_SRC true
+ad_ip_parameter axi_adrv9009_tx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_data_offload_create $dac_offload_name \
@@ -171,6 +172,7 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_DATA_WIDTH_SRC $adc_dma_data_widt
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.AXI_SLICE_SRC true
+ad_ip_parameter axi_adrv9009_rx_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_adrv9009_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # adc-os peripherals
@@ -217,6 +219,7 @@ ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $RX_OS_SA
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.MAX_BYTES_PER_BURST 256
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_DEST true
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.AXI_SLICE_SRC true
+ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # common cores

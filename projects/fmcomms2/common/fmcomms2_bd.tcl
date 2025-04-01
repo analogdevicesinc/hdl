@@ -145,6 +145,7 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SG 64
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_adc_dma/fifo_wr_clk
@@ -208,6 +209,7 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SG 64
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 ad_connect util_ad9361_divclk/clk_out axi_ad9361_dac_dma/m_axis_aclk

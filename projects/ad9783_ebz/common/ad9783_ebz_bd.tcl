@@ -27,6 +27,7 @@ ad_ip_parameter axi_ad9783_dma CONFIG.AXI_SLICE_SRC 1
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter axi_ad9783_dma CONFIG.DMA_AXI_PROTOCOL_SRC 1
+ad_ip_parameter axi_ad9783_dma CONFIG.DMA_AXI_ADDR_WIDTH $AXI_ADDR_WIDTH
 ad_ip_parameter axi_ad9783_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # dac-path channel upack
