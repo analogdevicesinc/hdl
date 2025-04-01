@@ -6,20 +6,19 @@ AD9083-EVB HDL Project
 Overview
 -------------------------------------------------------------------------------
 
+The :git-hdl:`AD9083_EVB <projects/ad9083_evb>` reference design is a
+processor-based embedded system. The design consists of a receive chain; the
+receive chain transports the captured samples from ADC to the system memory
+(DDR). The :adi:`AD9083-EVB <EVAL-AD9083>` evaluation board includes all the
+support circuitry required to operate the :adi:`AD9083` in various modes and
+configurations.
+
 The :adi:`AD9083` is a 16-bit, 16 channel with 125 MHz bandwidth per channel
 (2 GSPS total) analog-to-digital converter (ADC) featuring an on-chip
 programmable, single-pole antialiasing filter and termination resistor that
 is designed for low power, small size, and ease of use. The digital outputs
 are designed to use the JESD204B standard, in subclass 1 or 0. The current
 HDL design supports only subclass 1 operations.
-
-The dual ADC cores feature a multistage, differential pipelined architecture
-with integrated output error correction logic. Each ADC features wide bandwidth
-inputs supporting a variety of user-selectable input ranges.
-
-The :git-hdl:`AD9083_EVB <projects/ad9083_evb>` reference design is a processor
-based embedded system. The design consists of a receive chain; the receive
-chain transports the captured samples from ADC to the system memory (DDR).
 
 Supported boards
 -------------------------------------------------------------------------------
