@@ -15,7 +15,6 @@ adi_project ad916x_fmc_zcu102 0 [list \
   JESD_S    [get_config_param S] \
   JESD_NP   [get_config_param NP] \
   NUM_LINKS $num_links \
-  DEVICE_CODE $device_code \
 ]
 
 adi_project_files ad916x_fmc_zcu102 [list \
@@ -25,4 +24,3 @@ adi_project_files ad916x_fmc_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run ad916x_fmc_zcu102
-

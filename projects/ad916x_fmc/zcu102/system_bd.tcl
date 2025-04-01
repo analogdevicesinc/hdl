@@ -9,15 +9,13 @@ source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
-source ../common/ad916x_fmc_bd.tcl
+source $ad_hdl_dir/projects/dac_fmc_ebz/common/dac_fmc_ebz_bd.tcl
 
 if {[info exists ::env(ADI_LANE_RATE)]} {
   set ADI_LANE_RATE [get_env_param ADI_LANE_RATE 12.5]
 } elseif {![info exists ADI_LANE_RATE]} {
   set ADI_LANE_RATE 12.5
 }
-
-set ADI_DEVICE_CODE $ad_project_params(DEVICE_CODE)
 
 # Common for both 12.5 and 4.16 GHz Lane Rate
 
@@ -71,9 +69,8 @@ if { $ADI_LANE_RATE == 12.5 } {
 ad_ip_parameter  dac_jesd204_link/tx   CONFIG.SYSREF_IOB         false
 ad_ip_parameter  dac_dma               CONFIG.DMA_DATA_WIDTH_SRC 128
 
-if { $ADI_DEVICE_CODE == 3 } {
-  ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
-}
+ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
+
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
@@ -87,7 +84,6 @@ L=$ad_project_params(JESD_L)\
 S=$ad_project_params(JESD_S)\
 NP=$ad_project_params(JESD_NP)\
 LINKS=$ad_project_params(NUM_LINKS)\
-DEVICE_CODE=$ADI_DEVICE_CODE\
 DAC_DEVICE=$ADI_DAC_DEVICE\
 DAC_MODE=$ADI_DAC_MODE\
 ADI_LANE_RATE=$ADI_LANE_RATE\

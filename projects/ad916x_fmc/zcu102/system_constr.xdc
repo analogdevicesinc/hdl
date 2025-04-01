@@ -40,8 +40,8 @@ set_property -dict {PACKAGE_PIN Y1   IOSTANDARD LVCMOS18} [get_ports spi_mosi]  
 set_property -dict {PACKAGE_PIN AC3  IOSTANDARD LVCMOS18} [get_ports spi_en]        ; ## D12  FMC0_LA05_N IO_L20N_T3L_N3_AD1N_66
 
 # For AD916(1,2,3,4)-FMC-EBZ
-set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports dac_ctrl[0]]   ; ## H13  FMC0_LA07_P      IO_L18P_T2U_N10_AD2P_66_U5
-set_property -dict {PACKAGE_PIN W1   IOSTANDARD LVCMOS18} [get_ports dac_ctrl[1]]   ; ## D15  FMC0_LA09_N      IO_L24N_T3U_N11_66
+set_property -dict {PACKAGE_PIN U5   IOSTANDARD LVCMOS18} [get_ports fmc_txen_0]        ; ## H13  FMC0_LA07_P      IO_L18P_T2U_N10_AD2P_66_U5
+set_property -dict {PACKAGE_PIN W1   IOSTANDARD LVCMOS18} [get_ports fmc_hmc849vctrl]   ; ## D15  FMC0_LA09_N      IO_L24N_T3U_N11_66
 
 # Max lane rate of 15.4 Gbps
 # ref clock lane_rate/40 or lane_rate/20
