@@ -56,21 +56,21 @@ Interface
 
    * - sync_n
      - Signals when the clock is disabled and the design should be in reset
-   * - serdes_frame_p
+   * - fco_p
      - LVDS input positive side of differential data frame signal
-   * - serdes_frame_n
+   * - fco_n
      - LVDS input negative side of differential data frame signal  
    * - dco_p
      - LVDS input positive side of differential reference clock signal
    * - dco_n
      - LVDS input negative side of differential reference clock signal
-   * - da_p
+   * - d0a_p
      - LVDS input positive side of differential data line A signal
-   * - da_n
+   * - d0a_n
      - LVDS input negative side of differential data line A signal
-   * - db_p
+   * - d1a_p
      - LVDS input positive side of differential data line B signal
-   * - db_n
+   * - d1a_n
      - LVDS input negative side of differential data line B signal
    * - delay_clk
      - Delay clock input for IO_DELAY control, 200 MHz (7 series) or 300 MHz

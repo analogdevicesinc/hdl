@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.0938812"
-     inkscape:cx="351.73915"
-     inkscape:cy="259.32703"
+     inkscape:zoom="1.4805976"
+     inkscape:cx="292.78718"
+     inkscape:cy="268.81038"
      inkscape:window-width="1920"
      inkscape:window-height="1112"
      inkscape:window-x="-8"
@@ -1113,7 +1113,7 @@
          y="85.793015"
          x="168.36563"
          id="tspan2399"
-         sodipodi:role="line">DA_p</tspan></text>
+         sodipodi:role="line">D0A_p</tspan></text>
     <text
        id="text2401-0"
        y="90.503342"
@@ -1125,7 +1125,7 @@
          y="90.503342"
          x="168.4097"
          id="tspan2399-27"
-         sodipodi:role="line">DA_n</tspan></text>
+         sodipodi:role="line">D0A_n</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
@@ -1149,7 +1149,7 @@
          y="95.195396"
          x="168.36203"
          id="tspan2399-4"
-         sodipodi:role="line">DB_p</tspan></text>
+         sodipodi:role="line">D1A_p</tspan></text>
     <text
        id="text2401-0-2"
        y="99.905655"
@@ -1161,7 +1161,7 @@
          y="99.905655"
          x="168.4061"
          id="tspan2399-27-7"
-         sodipodi:role="line">DB_n</tspan></text>
+         sodipodi:role="line">D1A_n</tspan></text>
     <g
        style="display:inline;shape-rendering:crispEdges;enable-background:new"
        id="ddr"
