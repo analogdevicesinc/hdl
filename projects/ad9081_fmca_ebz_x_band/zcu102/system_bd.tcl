@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -13,6 +13,8 @@ source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 
 ad_mem_hp0_interconnect $sys_cpu_clk sys_ps8/S_AXI_HP0
+
+ad_ip_parameter sys_ps8 CONFIG.PSU__CRL_APB__PL1_REF_CTRL__FREQMHZ 300
 
 source $ad_hdl_dir/projects/ad9081_fmca_ebz/common/ad9081_fmca_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
@@ -157,6 +159,11 @@ ad_cpu_interrupt ps-9 mb-7 axi_spi_fmc/ip2intc_irpt
 
 ad_cpu_interconnect 0x45300000 axi_spi_fmc
 
+# changes on the AD9081 block design
+
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
+
 # Connect TDD
 create_bd_port -dir I tdd_sync
 create_bd_port -dir O tdd_enabled
@@ -166,8 +173,54 @@ create_bd_port -dir O tdd_tx_stingray_en
 
 set tdd_sync_in_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_tdd_0/sync_in]]]
 set tdd_sync_in_pin [get_bd_pins axi_tdd_0/sync_in]
-ad_disconnect $tdd_sync_in_net $tdd_sync_in_pin
+
+set adc_do_m_axis_clk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins $adc_data_offload_name/m_axis_aclk]]]
+set adc_do_m_axis_clk_pin [get_bd_pins $adc_data_offload_name/m_axis_aclk]
+
+set adc_dma_s_axis_clk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_mxfe_rx_dma/s_axis_aclk]]]
+set adc_dma_s_axis_clk_pin [get_bd_pins axi_mxfe_rx_dma/s_axis_aclk]
+
+set adc_do_m_axis_rst_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins $adc_data_offload_name/m_axis_aresetn]]]
+set adc_do_m_axis_rst_pin [get_bd_pins $adc_data_offload_name/m_axis_aresetn]
+
+
+set dac_do_s_axis_aclk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins $dac_data_offload_name/s_axis_aclk]]]
+set dac_do_s_axis_aclk_pin [get_bd_pins $dac_data_offload_name/s_axis_aclk]
+
+set dac_dma_m_axis_aclk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_mxfe_tx_dma/m_axis_aclk]]]
+set dac_dma_m_axis_aclk_pin [get_bd_pins axi_mxfe_tx_dma/m_axis_aclk]
+
+
+set dac_do_s_axis_aresetn_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins $dac_data_offload_name/s_axis_aresetn]]]
+set dac_do_s_axis_aresetn_pin [get_bd_pins $dac_data_offload_name/s_axis_aresetn]
+
+
+ad_disconnect $tdd_sync_in_net               $tdd_sync_in_pin
+ad_disconnect $adc_do_m_axis_clk_net         $adc_do_m_axis_clk_pin
+ad_disconnect $adc_dma_s_axis_clk_net        $adc_dma_s_axis_clk_pin
+ad_disconnect $adc_do_m_axis_rst_net         $adc_do_m_axis_rst_pin
+
+ad_disconnect $dac_do_s_axis_aclk_net         $dac_do_s_axis_aclk_pin
+ad_disconnect $dac_dma_m_axis_aclk_net        $dac_dma_m_axis_aclk_pin
+ad_disconnect $dac_do_s_axis_aresetn_net      $dac_do_s_axis_aresetn_pin
+
+ad_connect  rx_device_clk  $adc_data_offload_name/m_axis_aclk
+ad_connect  tx_device_clk  $dac_data_offload_name/s_axis_aclk
+
+ad_connect  tx_device_clk  axi_mxfe_tx_dma/m_axis_aclk
+ad_connect  rx_device_clk  axi_mxfe_rx_dma/s_axis_aclk
+
+ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/m_axis_aresetn
+ad_connect  tx_device_clk_rstgen/peripheral_aresetn $dac_data_offload_name/s_axis_aresetn
+
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.AXIS_TUSER_SYNC 0
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
+
 ad_connect axi_tdd_0/sync_in tdd_sync
+
+ad_connect axi_tdd_0/tdd_channel_0 axi_mxfe_tx_dma/sync
+ad_connect axi_tdd_0/tdd_channel_1 axi_mxfe_rx_dma/sync
 ad_connect axi_tdd_0/tdd_channel_2 tdd_enabled
 ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_mxfe_en
 ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_mxfe_en

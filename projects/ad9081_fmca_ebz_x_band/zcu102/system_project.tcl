@@ -55,6 +55,7 @@ adi_project ad9081_fmca_ebz_x_band_zcu102 0 [list \
   TDD_SYNC_INT      [get_env_param TDD_SYNC_INT      0     ] \
   TDD_SYNC_EXT      [get_env_param TDD_SYNC_EXT      1     ] \
   TDD_SYNC_EXT_CDC  [get_env_param TDD_SYNC_EXT_CDC  1     ] \
+  CACHE_COHERENCY   [get_env_param CACHE_COHERENCY   1     ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_x_band_zcu102 [list \
@@ -67,4 +68,3 @@ adi_project_files ad9081_fmca_ebz_x_band_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run ad9081_fmca_ebz_x_band_zcu102
-
