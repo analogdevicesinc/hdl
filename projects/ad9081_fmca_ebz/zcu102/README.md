@@ -41,64 +41,113 @@ The overwritable parameters from the environment are:
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081.dts)
 
-This specific command is equivalent to running "make" only:
+This specific command is equivalent to running `make` only:
 
 ```
 make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=4 TX_JESD_L=8 TX_JESD_S=1
 ```
 
-#### RX link mode 10, TX link mode 9, subclass 1, VCXO 100 MHz
+#### TX link mode 9, RX link mode 10, subclass 1, VCXO 100 MHz
 
-Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
+Corresponding device trees:
 
-```
-make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1
-```
-
-#### RX link mode 10, TX link mode 9, subclass 1, VCXO 122.88 MHz
-
-Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts)
+- [zynqmp-zcu102-rev10-ad9081-m8-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4.dts)
+- with Data Offload: [zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-do.dts)
+- with FFH: [zynqmp-zcu102-rev10-ad9081-m8-l4-ffh.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-ffh.dts)
+- with VCXO 122.88 MHz: [zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-vcxo122p88.dts)
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=10 \
+TX_LANE_RATE=10 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1
 ```
 
-#### RX link mode 10, TX link mode 9, subclass 1 with TDD support
+#### TX link mode 9, RX link mode 10, subclass 1 with TDD support
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-tdd.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-tdd.dts)
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 TDD_SUPPORT=1 SHARED_DEVCLK=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=10 \
+TX_LANE_RATE=10 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+TDD_SUPPORT=1 \
+SHARED_DEVCLK=1
 ```
 
-#### RX link mode 10, TX link mode 9, subclass 1, on AD9081-FMCA-EBZ rev. C with 100 MHz VCXO, using QPLL for both ADXCVR instances
+#### TX link mode 9, RX link mode 10, subclass 1, on AD9081-FMCA-EBZ rev. C with 100 MHz VCXO, using QPLL for both ADXCVR instances
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-qpllrx.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-qpllrx.dts)
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=11.5 TX_LANE_RATE=11.5 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=11.5 \
+TX_LANE_RATE=11.5 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1
 ```
 
-#### RX link mode 10, TX link mode 9, subclass 1, overlay
+#### TX link mode 9, RX link mode 10, subclass 1, overlay
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-m8-l4-overlay.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-m8-l4-overlay.dts)
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=5.76 TX_LANE_RATE=5.76 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=5.76 \
+TX_LANE_RATE=5.76 \
+RX_JESD_M=8 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1
 ```
 
-#### RX link mode 4, TX link mode 9, subclass 1
+#### TX link mode 9, RX link mode 4, subclass 1
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-204b-txmode9-rxmode4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-204b-txmode9-rxmode4.dts)
 
 ```
-make JESD_MODE=8B10B RX_LANE_RATE=2 TX_LANE_RATE=4 RX_JESD_M=8 RX_JESD_L=2 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1
+make JESD_MODE=8B10B \
+RX_LANE_RATE=2 \
+TX_LANE_RATE=4 \
+RX_JESD_M=8 \
+RX_JESD_L=2 \
+RX_JESD_S=1 \
+TX_JESD_M=8 \
+TX_JESD_L=4 \
+TX_JESD_S=1
 ```
 
-#### JESD204C, RX link mode 1, TX link mode 0, subclass 1
+#### JESD204C, TX link mode 0, RX link mode 1, subclass 1
 
 Corresponding device tree: [zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081-204c-txmode0-rxmode1.dts)
 
 ```
-make JESD_MODE=64B66B RX_LANE_RATE=7.97 TX_LANE_RATE=15.95 RX_JESD_M=8 RX_JESD_L=1 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=1 TX_JESD_S=1
+make JESD_MODE=64B66B \
+RX_LANE_RATE=5.98 \
+TX_LANE_RATE=11.96 \
+RX_JESD_M=8 \
+RX_JESD_L=1 \
+RX_JESD_S=1 \
+RX_JESD_NP=12 \
+TX_JESD_M=8 \
+TX_JESD_L=1 \
+TX_JESD_S=1 \
+TX_JESD_NP=12
 ```
