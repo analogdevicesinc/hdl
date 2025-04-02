@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2020-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -56,10 +56,25 @@ ad_ip_instance axi_dmac axi_ad9656_rx_dma [list \
 ad_ip_instance util_adxcvr util_ad9656_xcvr [list \
   RX_NUM_OF_LANES $RX_NUM_OF_LANES \
   TX_NUM_OF_LANES 0 \
-  CPLL_FBDIV 4 \
-  CPLL_FBDIV_4_5 5 \
+  CPLL_FBDIV 5 \
+  CPLL_FBDIV_4_5 4 \
   RX_OUT_DIV 2 \
   RX_CLK25_DIV 5 \
+  CPLL_CFG0 0x1FA \
+  CPLL_CFG1 0x23 \
+  CPLL_CFG2 0x2 \
+  CPLL_CFG3 0x0 \
+  RXCDR_CFG0 0x3 \
+  RXCDR_CFG2 0x255 \
+  RXCDR_CFG2_GEN2 0x255 \
+  RXCDR_CFG2_GEN4 0x164 \
+  RXCDR_CFG3 0x12 \
+  RXCDR_CFG3_GEN2 0x12 \
+  RXCDR_CFG3_GEN3 0x12 \
+  RXCDR_CFG3_GEN4 0x12 \
+  RXPI_CFG1 0xFD \
+  RX_WIDEMODE_CDR 0x0 \
+  CH_HSPMUX 0x3C3C \
   ]
 
 # xcvr interfaces

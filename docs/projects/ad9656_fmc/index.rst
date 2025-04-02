@@ -68,6 +68,7 @@ The Rx links (ADC Path) operate with the following parameters:
 - RX_DEVICE_CLK: 62.5 MHz
 - REF_CLK: 125MHz
 - JESD204B Lane Rate: 10Gbps
+- Line Rate (LaneRate/4): 2.5Gbps
 - QPLL0 or CPLL
 
 AD9656 FMC Card block diagram
@@ -248,7 +249,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`No-OS project <drivers/adc/ad9656>`
-- :git-no-os:`No-OS driver ad9467.c <drivers/adc/ad9656/ad9656.c>`
+- :git-no-os:`No-OS driver ad9656.c <drivers/adc/ad9656/ad9656.c>`
 
 .. include:: ../common/more_information.rst
 
