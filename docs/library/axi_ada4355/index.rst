@@ -56,9 +56,9 @@ Interface
 
    * - sync_n
      - Signals when the clock is disabled and the design should be in reset
-   * - data_frame_p
+   * - serdes_frame_p
      - LVDS input positive side of differential data frame signal
-   * - data_frame_n
+   * - serdes_frame_n
      - LVDS input negative side of differential data frame signal  
    * - dco_p
      - LVDS input positive side of differential reference clock signal

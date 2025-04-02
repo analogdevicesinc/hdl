@@ -23,11 +23,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="4.1877624"
-     inkscape:cx="327.74066"
-     inkscape:cy="288.93712"
+     inkscape:zoom="2.0938812"
+     inkscape:cx="351.73915"
+     inkscape:cy="259.32703"
      inkscape:window-width="1920"
-     inkscape:window-height="1122"
+     inkscape:window-height="1112"
      inkscape:window-x="-8"
      inkscape:window-y="1342"
      inkscape:window-maximized="1"
@@ -666,12 +666,26 @@
        inkscape:export-ydpi="224.36"
        inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png" />
     <rect
-       style="fill:#fefdfe;fill-opacity:1;fill-rule:evenodd;stroke:#071414;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:75.5906;stroke-opacity:1"
+       style="fill:#ebebeb;fill-opacity:1;fill-rule:evenodd;stroke:#071414;stroke-width:0.360983;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:75.5906;stroke-opacity:1"
        id="rect46745"
-       width="48.278683"
-       height="73.750252"
-       x="110.51522"
-       y="73.042595" />
+       width="48.317699"
+       height="60.016006"
+       x="110.4957"
+       y="80.099266" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="134.49785"
+       y="111.41489"
+       id="text4482-5"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\workspace\ad\ghdl\docs\block_diagrams\cn0577\cn0577_block_diagram.png"><tspan
+         sodipodi:role="line"
+         x="134.49785"
+         y="111.41489"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.29167px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:0.264583px"
+         id="tspan3725-1">AXI-ADA4355 IP</tspan></text>
     <rect
        style="display:inline;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:0.330549;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect4477"
@@ -1494,130 +1508,6 @@
          x="92.421837"
          y="113.01427"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none">16</tspan></text>
-    <rect
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.505109;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0505109, 0.0505109;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect19131"
-       width="39.730656"
-       height="32.484879"
-       x="116.05311"
-       y="78.63308" />
-    <rect
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426002, 0.0426002;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect19131-2"
-       width="39.872944"
-       height="6.1456804"
-       x="114.85004"
-       y="138.39899" />
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958"
-       width="15.066154"
-       height="11.580877"
-       x="128.79294"
-       y="81.146324" />
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958-1"
-       width="18.344688"
-       height="13.827947"
-       x="115.95206"
-       y="114.81905" />
-    <text
-       xml:space="preserve"
-       transform="matrix(0.1434475,0,0,0.13069708,58.30228,25.53336)"
-       id="text4758"
-       style="font-size:20.6116px;line-height:1.35;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:center;white-space:pre;shape-inside:url(#rect4760);display:inline;stroke-width:1.93234"
-       x="67.042442"
-       y="0"><tspan
-         x="506.22387"
-         y="460.40516"
-         id="tspan10"><tspan
-           style="font-weight:bold;font-size:15.4587px;-inkscape-font-specification:'Arial Bold'"
-           id="tspan9">ad_serdes&#10;</tspan></tspan><tspan
-         x="528.57408"
-         y="488.23082"
-         id="tspan12"><tspan
-           style="font-weight:bold;font-size:15.4587px;-inkscape-font-specification:'Arial Bold'"
-           id="tspan11">data</tspan></tspan></text>
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958-2"
-       width="15.066154"
-       height="11.580877"
-       x="128.69794"
-       y="97.453529" />
-    <text
-       xml:space="preserve"
-       transform="matrix(0.1434475,0,0,0.13069708,58.234801,42.163359)"
-       id="text4758-0"
-       style="font-size:20.6116px;line-height:1.35;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:center;white-space:pre;shape-inside:url(#rect4760-2);display:inline;stroke-width:1.93234"
-       x="67.042442"
-       y="0"><tspan
-         x="506.22387"
-         y="460.40516"
-         id="tspan14"><tspan
-           style="font-weight:bold;font-size:15.4587px;-inkscape-font-specification:'Arial Bold'"
-           id="tspan13">ad_serdes&#10;</tspan></tspan><tspan
-         x="523.41489"
-         y="488.23082"
-         id="tspan16"><tspan
-           style="font-weight:bold;font-size:15.4587px;-inkscape-font-specification:'Arial Bold'"
-           id="tspan15">frame</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       transform="matrix(0.13201657,0,0,0.13069708,78.342228,59.439291)"
-       id="text24668"
-       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670);display:inline;stroke-width:2.01426"><tspan
-         x="298.9668"
-         y="484.35348"
-         id="tspan19">ADC COMMON</tspan></text>
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958-1-1"
-       width="18.344688"
-       height="13.827947"
-       x="136.71077"
-       y="114.69421" />
-    <text
-       xml:space="preserve"
-       transform="matrix(0.13201657,0,0,0.13069708,99.100946,59.314451)"
-       id="text24668-1"
-       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-6);display:inline;stroke-width:2.01426"><tspan
-         x="298.9668"
-         y="484.35348"
-         id="tspan20">ADC CHANNEL</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:4.20337px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
-       x="127.25005"
-       y="143.25801"
-       id="text41823"
-       transform="scale(1.0050352,0.99499002)"><tspan
-         sodipodi:role="line"
-         id="tspan41821"
-         style="stroke-width:0.264583"
-         x="127.25005"
-         y="143.25801">UP_AXI</tspan></text>
-    <path
-       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-3);marker-end:url(#marker51146)"
-       d="m 146.57665,130.75804 c 0,5.55326 0,5.33969 0,5.33969"
-       id="path42520-2" />
-    <path
-       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-0);marker-end:url(#marker51146-9)"
-       d="m 124.37647,130.79376 c 0,5.55327 0,5.33969 0,5.33969"
-       id="path42520-2-7" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.15252px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
-       x="124.45455"
-       y="77.760315"
-       id="text49535"
-       transform="scale(1.0050352,0.99499002)"><tspan
-         sodipodi:role="line"
-         id="tspan49533"
-         style="font-size:3.15252px;stroke-width:0.264583"
-         x="124.45455"
-         y="77.760315">AXI-ADA4355 IP </tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
