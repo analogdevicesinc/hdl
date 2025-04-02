@@ -6,7 +6,7 @@
   - [EVAL-AD7193](https://www.analog.com/eval-ad7193asdz)
   - [EVAL-AD7194](https://www.analog.com/eval-ad7194asdz)
   - [EVAL-AD7195](https://www.analog.com/eval-ad7195asdz)
-- System documentation: https://wiki.analog.com/resources/eval/adc/ad719x_asdz 
+- System documentation: to be added
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html
 
 ## Supported parts
