@@ -7,13 +7,13 @@
 
 create_bd_port -dir I dco_p
 create_bd_port -dir I dco_n
-create_bd_port -dir I da_p
-create_bd_port -dir I da_n
-create_bd_port -dir I db_p
-create_bd_port -dir I db_n
+create_bd_port -dir I d0a_p
+create_bd_port -dir I d0a_n
+create_bd_port -dir I d1a_p
+create_bd_port -dir I d1a_n
 create_bd_port -dir I sync_n
-create_bd_port -dir I frame_clock_p
-create_bd_port -dir I frame_clock_n
+create_bd_port -dir I frame_p
+create_bd_port -dir I frame_n
 
 # axi_ada4355
 
@@ -36,13 +36,13 @@ ad_ip_parameter axi_ada4355_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 
 ad_connect dco_p                axi_ada4355_adc/dco_p
 ad_connect dco_n                axi_ada4355_adc/dco_n
-ad_connect da_p                 axi_ada4355_adc/da_p
-ad_connect da_n                 axi_ada4355_adc/da_n
-ad_connect db_p                 axi_ada4355_adc/db_p
-ad_connect db_n                 axi_ada4355_adc/db_n
+ad_connect d0a_p                axi_ada4355_adc/d0a_p
+ad_connect d0a_n                axi_ada4355_adc/d0a_n
+ad_connect d1a_p                axi_ada4355_adc/d1a_p
+ad_connect d1a_n                axi_ada4355_adc/d1a_n
 ad_connect sync_n               axi_ada4355_adc/sync_n
-ad_connect frame_clock_p        axi_ada4355_adc/serdes_frame_p
-ad_connect frame_clock_n        axi_ada4355_adc/serdes_frame_n
+ad_connect frame_p              axi_ada4355_adc/fco_p
+ad_connect frame_n              axi_ada4355_adc/fco_n
 ad_connect $sys_iodelay_clk     axi_ada4355_adc/delay_clk
 
 # connect datapath

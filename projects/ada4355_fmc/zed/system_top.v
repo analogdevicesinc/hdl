@@ -88,12 +88,12 @@ module system_top (
 
   input         dco_p,
   input         dco_n,
-  input         da_p,
-  input         da_n,
-  input         db_p,
-  input         db_n,
-  input         frame_clock_p,
-  input         frame_clock_n,
+  input         d0a_p,
+  input         d0a_n,
+  input         d1a_p,
+  input         d1a_n,
+  input         frame_p,
+  input         frame_n,
 
   // GPIOs
 
@@ -237,11 +237,11 @@ module system_top (
     .spi1_sdo_o (mosi_pot),
     .dco_p (dco_p),
     .dco_n (dco_n),
-    .da_p (da_p),
-    .da_n (da_n),
-    .db_p (db_p),
-    .db_n (db_n),
-    .frame_clock_p(frame_clock_p),
-    .frame_clock_n(frame_clock_n),
+    .d0a_p (d0a_p),
+    .d0a_n (d0a_n),
+    .d1a_p (d1a_p),
+    .d1a_n (d1a_n),
+    .frame_p(frame_p),
+    .frame_n(frame_n),
     .sync_n (1'b1));
 endmodule

@@ -6,14 +6,14 @@
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_p]; ## H4 FMC_CLK0_M2C_P IO_L12P_T1_MRCC_34
 set_property -dict {PACKAGE_PIN L19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports dco_n]; ## H5 FMC_CLK0_M2C_N IO_L12N_T1_MRCC_34
 
-set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports da_p];  ## G9 FMC_LA03_P IO_L16P_T2_34
-set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports da_n];  ## G10 FMC_LA03_N IO_L16N_T2_34
+set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_p];  ## G9 FMC_LA03_P IO_L16P_T2_34
+set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d0a_n];  ## G10 FMC_LA03_N IO_L16N_T2_34
 
-set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_p];  ## H10 FMC_LA04_P IO_L15P_T2_DQS_34
-set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports db_n];  ## H11 FMC_LA04_N IO_L15N_T2_DQS_34
+set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_p];  ## H10 FMC_LA04_P IO_L15P_T2_DQS_34
+set_property -dict {PACKAGE_PIN M22 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports d1a_n];  ## H11 FMC_LA04_N IO_L15N_T2_DQS_34
 
-set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_p]; ## G2  FMC_CLK1_M2C_P IO_L12P_T1_MRCC_35
-set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_clock_n]; ## G3 FMC_CLK1_M2C_N IO_L12N_T1_MRCC_35
+set_property -dict {PACKAGE_PIN D18 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_p]; ## G2  FMC_CLK1_M2C_P IO_L12P_T1_MRCC_35
+set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25 DIFF_TERM 1} [get_ports frame_n]; ## G3 FMC_CLK1_M2C_N IO_L12N_T1_MRCC_35
 
 set_property -dict {PACKAGE_PIN E19 IOSTANDARD LVCMOS25} [get_ports fsel];          ## H25 FMC_LA21_P IO_L21P_T3_DQS_AD14P_35
 set_property -dict {PACKAGE_PIN G20 IOSTANDARD LVCMOS25} [get_ports gain_sel0];     ## G21 FMC_LA20_P IO_L22P_T3_AD7P_35
