@@ -384,6 +384,12 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
+    if (cs == 1) begin
+      cs <= 16'h10FE;
+    end
+  end
+
+  always @(posedge clk) begin
     if (resetn == 1'b0) begin
       sync_valid <= 1'b0;
     end else begin
