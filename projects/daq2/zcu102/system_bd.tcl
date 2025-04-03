@@ -35,6 +35,3 @@ DAC_OFFLOAD:TYPE=$dac_offload_type\
 SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
-
-ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_FBDIV 20
-ad_ip_parameter util_daq2_xcvr CONFIG.QPLL_REFCLK_DIV 1
