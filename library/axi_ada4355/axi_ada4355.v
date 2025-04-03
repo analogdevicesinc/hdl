@@ -278,7 +278,7 @@ module axi_ada4355 #(
     .adc_clk(adc_clk_s),
     .adc_data(adc_data),
     .adc_valid(adc_valid),
-    .areset(up_rstn),
+    .aresetn(up_rstn),
     .sync_n(sync_n));
 
   // adc delay control
