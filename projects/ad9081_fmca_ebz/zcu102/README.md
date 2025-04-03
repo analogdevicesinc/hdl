@@ -1,4 +1,4 @@
-# AD9081-FMCA-EBZ HDL Project
+# AD9081-FMCA-EBZ/ZCU102 HDL Project
 
 ## Building the project
 
