@@ -257,11 +257,11 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- AD9467-FMC KC705 Linux device tree :git-linux:`arch/microblaze/boot/dts/kc705_ad9467_fmc.dts`
-- :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
+- :git-linux:`AD9467-FMC KC705 Linux device tree <arch/microblaze/boot/dts/kc705_ad9467_fmc.dts>`
+- :git-linux:`AD9467-FMC ZedBoard Linux device tree zynq-zed-adv7511-ad9467-fmc-250ebz.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9467-fmc-250ebz.dts>`
 - :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
 - :dokuwiki:`[Wiki] AD9467-FMC on ZedBoard using ACE </resources/eval/ad9467-fmc-250ebz-zedboard>`
-- :git-no-os:`No-OS project <projects/ad9467>` and :git-no-os:`no-OS driver <drivers/adc/ad9467>`
+- :git-no-os:`No-OS project <projects/ad9467>` and :git-no-os:`No-OS driver <drivers/adc/ad9467>`
 
 .. include:: ../common/more_information.rst
 
