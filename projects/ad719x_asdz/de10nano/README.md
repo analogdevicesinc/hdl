@@ -1,8 +1,6 @@
-# AD719X-ASDZ HDL Project
+# AD719X-ASDZ/DE10-Nano HDL Project
 
 ## Building the project
-
-#### Configuration using Arduino shield
 
 Connect the evaluation board to the Arduino shield, by placing it on top of DE10-Nano.
 

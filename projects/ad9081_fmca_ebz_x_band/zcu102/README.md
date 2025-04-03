@@ -1,4 +1,4 @@
-# AD9081-FMCA-EBZ-X-BAND HDL Project
+# AD9081-FMCA-EBZ-X-BAND/ZCU102 HDL Project
 
 ## Building the project
 
@@ -39,12 +39,13 @@ The overwritable parameters from the environment:
 
 #### RX link mode 10, TX link mode 9, subclass 1 with TDD support (default)
 
-Corresponding device tree: [zynqmp-zcu102-rev10-stingray.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts)
-
-This specific command is equivalent to running "make" only:
+This specific command is equivalent to running `make` only:
 
 ```
 make JESD_MODE=8B10B RX_LANE_RATE=10 TX_LANE_RATE=10 RX_JESD_M=8 RX_JESD_L=4 RX_JESD_S=1 TX_JESD_M=8 TX_JESD_L=4 TX_JESD_S=1 TDD_SUPPORT=1 SHARED_DEVCLK=1 TDD_CHANNEL_CNT=6 TDD_SYNC_WIDTH=0 TDD_SYNC_INT=0 TDD_SYNC_EXT=1 TDD_SYNC_EXT_CDC=1
 ```
 
-Another device tree having the same JESD parameters, but using VCXO of 100MHz, can be found here: [zynqmp-zcu102-rev10-stingray-vcxo100.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts)
+Corresponding device trees:
+
+- [zynqmp-zcu102-rev10-stingray.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray.dts)
+- using VCXO of 100MHz: [zynqmp-zcu102-rev10-stingray-vcxo100.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-stingray-vcxo100.dts)

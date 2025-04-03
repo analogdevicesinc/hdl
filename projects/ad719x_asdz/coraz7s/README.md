@@ -1,4 +1,4 @@
-# AD719X-ASDZ HDL Project
+# AD719X-ASDZ/CoraZ7S HDL Project
 
 ## Building the project
 
@@ -19,6 +19,13 @@ The overwritable parameters from the environment are:
 
 #### Configuration using PMOD connector (default)
 
+Connect the evaluation board PMOD to the PMOD JA connector of Cora.
+This specific command is equivalent to running `make` only:
+
+```
+make ARDZ_PMOD_N=0
+```
+
 Corresponding device trees:
 
 - [zynq-coraz7s-ad7190.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7190.dts)
@@ -26,13 +33,6 @@ Corresponding device trees:
 - [zynq-coraz7s-ad7193.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7193.dts)
 - [zynq-coraz7s-ad7194.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7194.dts)
 - [zynq-coraz7s-ad7195.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/zynq-coraz7s-ad7195.dts)
-
-Connect the evaluation board PMOD to the PMOD JA connector of Cora.
-This specific command is equivalent to running "make" only:
-
-```
-make ARDZ_PMOD_N=0
-```
 
 #### Configuration using Arduino shield
 
