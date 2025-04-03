@@ -24,8 +24,8 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.4805976"
-     inkscape:cx="292.78718"
-     inkscape:cy="268.81038"
+     inkscape:cx="336.01297"
+     inkscape:cy="328.92124"
      inkscape:window-width="1920"
      inkscape:window-height="1112"
      inkscape:window-x="-8"
@@ -1529,7 +1529,7 @@
          id="tspan41770-2"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="81.975174"
-         y="154.93251">REF_CLK= DCO_CLK(500MHz) / 4 </tspan></text>
+         y="154.93251">REF_CLK= 125 MHz </tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
