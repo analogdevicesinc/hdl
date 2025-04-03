@@ -251,7 +251,7 @@ module axi_ada4355_if #(
     end
 
   assign serdes_reset_s = serdes_reset[5];
-  assign serdes_reset_d = serdes_reset[9];  
+  assign serdes_reset_d = serdes_reset[9];
 
   // Assert serdes valid after 2 clock cycles is pulled out of reset
 
