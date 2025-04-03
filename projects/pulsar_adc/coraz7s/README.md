@@ -1,4 +1,4 @@
-# PULSAR-ADC HDL Project
+# PULSAR-ADC/CoraZ7S HDL Project
 
 ## Building the project
 

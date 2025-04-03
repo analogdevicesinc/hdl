@@ -1,4 +1,4 @@
-# PULSAR-ADC HDL Project
+# PULSAR-ADC/Zed HDL Project
 
 ## Building the project
 
@@ -21,21 +21,21 @@ The overwritable parameter from the environment is:
 
 #### Building the project for EVAL-AD40XX-FMCZ (default)
 
-Corresponding device trees:
-
-- [zynq-zed-adv7511-ad4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4003.dts)
-- [zynq-zed-adv7511-ad4020.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4020.dts)
-
-This specific command is equivalent to running "make" only:
+This specific command is equivalent to running `make` only:
 
 ```
 make AD40XX_ADAQ400X_N=1
 ```
 
-#### Building the project for EVAL-ADAQ400x
+Corresponding device trees:
 
-Corresponding device tree: [zynq-zed-adv7511-adaq4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts)
+- [zynq-zed-adv7511-ad4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4003.dts)
+- [zynq-zed-adv7511-ad4020.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4020.dts)
+
+#### Building the project for EVAL-ADAQ400x
 
 ```
 make AD40XX_ADAQ400X_N=0
 ```
+
+Corresponding device tree: [zynq-zed-adv7511-adaq4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts)
