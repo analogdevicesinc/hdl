@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2025 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -13,7 +13,6 @@ M_DEPS += ../../common/zed/zed_system_bd.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 
 LIB_DEPS += axi_ada4355
-LIB_DEPS += axi_clock_monitor
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hdmi_tx
