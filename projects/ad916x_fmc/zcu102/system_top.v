@@ -78,7 +78,7 @@ module system_top #(
   */
 
   assign spi_en = 0;
-                                    
+
   assign spi_csn_dac  = spi0_csn[1];    // AD916(1,2,3,4)
   assign spi_csn_clk  = spi0_csn[0];    // AD9508
   assign spi_csn_clk2 = spi0_csn[2];    // ADF4355
@@ -127,7 +127,7 @@ module system_top #(
   /* Board GPIOS. Buttons, LEDs, etc... */
   assign gpio_i[20: 8] = gpio_bd_i;
   assign gpio_bd_o = gpio_o[7:0];
-  
+
   assign gpio_i[94:24] = gpio_o[94:24];
   assign gpio_i[ 7: 0] = gpio_o[7:0];
 

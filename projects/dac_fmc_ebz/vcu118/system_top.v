@@ -119,7 +119,6 @@ module system_top #(
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  
   assign spi_csn_dac  = spi_csn[1];    //   AD9135/9144/9172
   assign spi_csn_clk  = spi_csn[0];    //   HMC7044
 
