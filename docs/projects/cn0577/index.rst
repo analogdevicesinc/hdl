@@ -233,7 +233,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
-- :git-linux:`CN0577 Linux device tree <arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts>`
+- :git-linux:`CN0577 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0577.dts>`
 - :git-linux:`LTC2387 Linux driver <drivers/iio/adc/ltc2387.c>`
 
 .. include:: ../common/more_information.rst
