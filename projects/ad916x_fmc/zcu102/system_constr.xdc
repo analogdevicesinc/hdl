@@ -53,4 +53,4 @@ create_clock -name tx_ref_clk   -period 2.597 [get_ports tx_ref_clk_p]
 
 set_input_delay -clock [get_clocks tx_ref_clk] \
   [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \
-  [get_ports {tx_sysref_*}]
+  [get_ports {tx_sync_p[1] tx_sync_n[1]}]
