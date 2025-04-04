@@ -217,7 +217,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`Linux device tree zynq-zc706-adv7511-ad9434-fmc-500ebz.dts <arch/arm/boot/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts>`
+- :git-linux:`Linux device tree zynq-zc706-adv7511-ad9434-fmc-500ebz.dts <arch/arm/boot/xilinx/dts/zynq-zc706-adv7511-ad9434-fmc-500ebz.dts>`
+- :git-linux:`Linux device tree zynq-zed-adv7511-ad9434-fmc-500ebz.dts <arch/arm/boot/xilinx/dts/zynq-zed-adv7511-ad9434-fmc-500ebz.dts>`
 - :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
   (used for AD9434-FMC as well)
 
