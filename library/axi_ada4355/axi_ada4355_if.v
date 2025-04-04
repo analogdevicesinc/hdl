@@ -32,8 +32,6 @@
 //
 // ***************************************************************************
 // ***************************************************************************
-// This is the LVDS/DDR interface, note that overrange is independent of data path,
-// software will not be able to relate overrange to a specific sample!
 
 `timescale 1ns/100ps
 
@@ -172,7 +170,7 @@ module axi_ada4355_if #(
     end
   endgenerate
 
-    //serdes for data
+  //serdes for data
 
   ad_serdes_in #(
     .CMOS_LVDS_N(CMOS_LVDS_N),
