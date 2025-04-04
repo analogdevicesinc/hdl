@@ -37,7 +37,6 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
-- :xilinx:`ZC706` on FMC LPC slot
 
 Other required hardware
 -------------------------------------------------------------------------------
