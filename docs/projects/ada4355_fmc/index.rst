@@ -46,7 +46,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-ADA4355 <EVAL-ADA4355>`
+   * - :adi:`EVAL-ADA4355`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC
 
@@ -195,15 +195,15 @@ the HDL repository.
    $cd hdl/projects/ada4355_fmc/zed
    $make
 
+A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
+
 Resources
 -------------------------------------------------------------------------------
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
-
-   -  :adi:`ADA4355`
+-  Product datasheet: :adi:`ADA4355`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -247,8 +247,6 @@ HDL related
    * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - ---
-
-A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
 .. include:: ../common/more_information.rst
 

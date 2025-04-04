@@ -92,12 +92,12 @@ Internal Interface Description
 The axi_ada4355 operates as follows:
 
 * The LVDS data is deserialized by the
-  :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
+  :git-hdl:`ad_serdes_in <library/xilinx/common/ad_serdes_in.v>` module with
   a 1:8 ratio.
 * The LVDS data frame is also deserialized by the
-  :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
+  :git-hdl:`ad_serdes_in <library/xilinx/common/ad_serdes_in.v>` module with
   a 1:8 ratio.  
-* After deserialization, data are alinged using data_frame and a fixed pattern.
+* After deserialization, data is aligned using data_frame and a fixed pattern.
 
 Register Map
 --------------------------------------------------------------------------------
