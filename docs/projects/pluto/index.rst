@@ -31,7 +31,7 @@ is what you received.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`PLUTO <PLUTO>`
+- :adi:`ADALM-PLUTO`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -314,6 +314,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- :git-linux:`PLUTO SDR rev. B Linux device tree <arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revb.dts>`
 - :git-linux:`PLUTO SDR rev. C Linux device tree <arch/arm/boot/dts/xilinx/zynq-pluto-sdr-revc.dts>`
 
 - :dokuwiki:`[Wiki] Linux Drivers <university/tools/pluto/drivers/linux>`
