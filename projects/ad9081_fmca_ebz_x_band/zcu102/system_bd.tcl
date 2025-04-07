@@ -163,7 +163,8 @@ ad_cpu_interconnect 0x45300000 axi_spi_fmc
 
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_mxfe_tx_dma CONFIG.AXIS_TUSER_SYNC 0
-
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 30
+ad_ip_parameter axi_mxfe_tx_dma CONFIG.FIFO_SIZE 32
 # Connect TDD
 create_bd_port -dir I tdd_sync
 create_bd_port -dir O tdd_enabled
