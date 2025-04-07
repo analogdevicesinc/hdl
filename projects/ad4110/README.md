@@ -1,9 +1,15 @@
 # AD4110 HDL Project
 
-This project supports EVAL-AD4110-1.
+- Evaluation board product page: [EVAL-AD4110-1] (https://www.analog.com/eval-ad4110-1)
+- System documentation: TO BE ADDED
+- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad4110/index.html
+ 
+## Supported parts
 
-Here are some pointers to help you:
-  * [EVAL-AD4110-1 Board Product Page](https://www.analog.com/eval-ad4110-1)
-  * Parts: AD4110-1 [Universal Input Analog Front End with 24-Bit ADC for Industrial Process Control Systems](https://www.analog.com/ad4110-1)
-  * Project doc: [AD4110 IIO Application](https://wiki.analog.com/resources/tools-software/product-support-software/ad4110_mbed_iio_application)
-  * NO-OS Drivers: https://wiki.analog.com/resources/tools-software/uc-drivers/ad4110
+| Part name                                  | Description                                      |
+|--------------------------------------------|--------------------------------------------------|
+| [AD4110-1](https://www.analog.com/a4110-1) | Universal Input Analog Front End with 24-Bit ADC for Industrial Process Control Systems |
+
+## Building the project
+
+Please enter the folder for the FPGA carrier you want to use and read the README.md.
