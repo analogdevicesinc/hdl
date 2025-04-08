@@ -58,6 +58,7 @@ Contents
    AD9694-FMC <ad9694_fmc/index>
    AD9695-FMC <ad9695_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
+   ADA4355-FMC <ada4355_fmc/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
    ADRV9001 <adrv9001/index>
