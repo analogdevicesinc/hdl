@@ -341,6 +341,18 @@ HDL related
      - :git-hdl:`library/util_i2c_mixer`
      - ---
 
+Software related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Linux support:
+
+- :git-linux:`AD796X IIO ADC Linux Driver <drivers/iio/adc/ad7625.c>`
+
+No-OS support:
+
+- :git-no-os:`AD796X-FMCZ No-OS project source code <projects/ad796x_fmcz>`
+- :git-no-os:`AD796X No-OS Driver source code <drivers/adc/ad796x/ad796x.c>`
+
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
