@@ -1,6 +1,6 @@
-.. _pulsar_lvds:
+.. _pulsar_lvds_adc:
 
-PULSAR-LVDS HDL project
+PULSAR-LVDS-ADC HDL project
 ==================================================================================
 
 Overview
@@ -84,10 +84,10 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: pulsar_lvds_block_diagram.svg
+.. image:: pulsar_lvds_adc_block_diagram.svg
    :width: 800
    :align: center
-   :alt: PulSAR LVDS block diagram
+   :alt: PulSAR LVDS ADC block diagram
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -301,7 +301,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`PULSAR_LVDS HDL project source code <projects/pulsar_lvds_adc>`
+- :git-hdl:`PULSAR_LVDS_ADC HDL project source code <projects/pulsar_lvds_adc>`
 
 .. list-table::
    :widths: 30 35 35
