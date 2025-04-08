@@ -31,6 +31,9 @@ Supported carriers
      - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - FMCA
    * -
+     - :xilinx:`KCU105`
+     - FMC_HPC
+   * -
      - :intel:`S10SoC <content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html>`
      - FMCA
    * -
@@ -148,26 +151,26 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-========================= ============ ===========
-Instance                  Zynq         ZynqMP
-========================= ============ ===========
-rx_adrv9009_tpl_core      0x44A0_0000  0x84A0_0000
-tx_adrv9009_tpl_core      0x44A0_4000  0x84A0_4000
-rx_os_adrv9009_tpl_core   0x44A0_8000  0x84A0_8000
-axi_adrv9009_rx_xcvr      0x44A6_0000  0x84A6_0000
-axi_adrv9009_tx_xcvr      0x44A8_0000  0x84A8_0000
-axi_adrv9009_rx_os_xcvr   0x44A5_0000  0x84A5_0000
-axi_adrv9009_tx_jesd      0x44A9_0000  0x84A9_0000
-axi_adrv9009_rx_jesd      0x44AA_0000  0x84AA_0000
-axi_adrv9009_rx_os_jesd   0x44AB_0000  0x84AB_0000
-axi_adrv9009_rx_dma       0x7C40_0000  0x9C40_0000
-axi_adrv9009_tx_dma       0x7C42_0000  0x9C42_0000
-axi_adrv9009_rx_os_dma    0x7C44_0000  0x9C44_0000
-adrv9009_data_offload     0x7c43_0000  0x9C43_0000
-axi_adrv9009_rx_clkgen    0x43C1_0000  0x83C1_0000
-axi_adrv9009_tx_clkgen    0x43C0_0000  0x83C0_0000
-axi_adrv9009_rx_os_clkgen 0x43C2_0000  0x83C2_0000
-========================= ============ ===========
+========================= =============== ===========
+Instance                  Zynq/Microblaze ZynqMP
+========================= =============== ===========
+rx_adrv9009_tpl_core      0x44A0_0000     0x84A0_0000
+tx_adrv9009_tpl_core      0x44A0_4000     0x84A0_4000
+rx_os_adrv9009_tpl_core   0x44A0_8000     0x84A0_8000
+axi_adrv9009_rx_xcvr      0x44A6_0000     0x84A6_0000
+axi_adrv9009_tx_xcvr      0x44A8_0000     0x84A8_0000
+axi_adrv9009_rx_os_xcvr   0x44A5_0000     0x84A5_0000
+axi_adrv9009_tx_jesd      0x44A9_0000     0x84A9_0000
+axi_adrv9009_rx_jesd      0x44AA_0000     0x84AA_0000
+axi_adrv9009_rx_os_jesd   0x44AB_0000     0x84AB_0000
+axi_adrv9009_rx_dma       0x7C40_0000     0x9C40_0000
+axi_adrv9009_tx_dma       0x7C42_0000     0x9C42_0000
+axi_adrv9009_rx_os_dma    0x7C44_0000     0x9C44_0000
+adrv9009_data_offload     0x7c43_0000     0x9C43_0000
+axi_adrv9009_rx_clkgen    0x43C1_0000     0x83C1_0000
+axi_adrv9009_tx_clkgen    0x43C0_0000     0x83C0_0000
+axi_adrv9009_rx_os_clkgen 0x43C2_0000     0x83C2_0000
+========================= =============== ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -261,6 +264,20 @@ axi_adrv9009_tx_dma     12  56         88          108          140
 axi_adrv9009_rx_dma     13  57         89          109          141
 ======================= === ========== =========== ============ =============
 
+Microblaze
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+======================= === ==========
+Instance name           HDL Microblaze
+======================= === ==========
+axi_adrv9009_rx_os_jesd 8   8
+axi_adrv9009_tx_jesd    7   7
+axi_adrv9009_rx_jesd    15  15
+axi_adrv9009_rx_os_dma  14  14
+axi_adrv9009_tx_dma     13  13
+axi_adrv9009_rx_dma     12  12
+======================= === ==========
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -290,7 +307,7 @@ configure this project, depending on the carrier used.
    +-------------------+------------------------------------------------------+
    | Parameter         | Default value of the parameters depending on carrier |
    +-------------------+------------------------------------------------------+
-   |                   |             A10SoC/S10SoC/ZC706/ZCU102               |
+   |                   |             A10SoC/KCU105/S10SoC/ZC706/ZCU102        |
    +===================+======================================================+
    | RX_JESD_M         |                          4                           |
    +-------------------+------------------------------------------------------+
