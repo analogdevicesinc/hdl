@@ -89,7 +89,7 @@ Contents
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
    PULSAR-ADC <pulsar_adc/index>
-   PULSAR-LVDS <pulsar_lvds/index>
+   PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
 
 Obsolete projects
 -------------------------------------------------------------------------------
