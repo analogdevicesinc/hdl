@@ -24,11 +24,11 @@ set_property  -dict {PACKAGE_PIN J13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports 
 set_property  -dict {PACKAGE_PIN J11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[5]]; # A1DP3B IO_L6N_T0_VREF_34
 set_property  -dict {PACKAGE_PIN H11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[5]]; # A1DN3B IO_L6P_T0_34
 
-set_property  -dict {PACKAGE_PIN N14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[6]]; # A1DP4A IO_L7N_T1_34  
-set_property  -dict {PACKAGE_PIN N13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[6]]; # A1DN4A IO_L7P_T1_34 
+set_property  -dict {PACKAGE_PIN N14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[6]]; # A1DP4A IO_L7N_T1_34
+set_property  -dict {PACKAGE_PIN N13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[6]]; # A1DN4A IO_L7P_T1_34
 
-set_property  -dict {PACKAGE_PIN M15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[7]]; # A1DP4B IO_L8N_T1_34 
-set_property  -dict {PACKAGE_PIN L15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[7]]; # A1DN4B IO_L8P_T1_34 
+set_property  -dict {PACKAGE_PIN M15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[7]]; # A1DP4B IO_L8N_T1_34
+set_property  -dict {PACKAGE_PIN L15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[7]]; # A1DN4B IO_L8P_T1_34
 
 set_property  -dict {PACKAGE_PIN K11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a1_p];     # A1LCLKP IO_L11P_T1_SRCC_34
 set_property  -dict {PACKAGE_PIN K12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a1_n];     # A1LCLKN IO_L11N_T1_SRCC_34
@@ -68,6 +68,24 @@ set_property  -dict {PACKAGE_PIN R15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports 
 
 set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_p];       # A2FCLKP IO_L13P_T2_MRCC_34 -> should be changed after switch
 set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_n];       # A2FCLKN IO_L13N_T2_MRCC_34 -> should be changed after switch
+
+
+create_clock -name ref_clk_a1        -period 2   [get_ports clk_in_a1_p]
+create_clock -name ref_clk_a2        -period 2   [get_ports clk_in_a2_p]
+
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay 1.0 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 1.05 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay 1.0 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 1.05 [get_ports {data_in_a1_n[*]}]
+
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay 1.0 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 1.05 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay 1.0 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 1.05 [get_ports {data_in_a2_n[*]}]
+
+
+set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
+set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 
 # JTAG
 

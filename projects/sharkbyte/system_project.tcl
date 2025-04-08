@@ -7,7 +7,7 @@ source ../../scripts/adi_env.tcl
 source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
 source $ad_hdl_dir/projects/scripts/adi_board.tcl
 
-adi_project_create sharkbyte 0 {} "xc7z010clg225-1"
+adi_project_create sharkbyte 0 {} "xc7z010clg225-2"
 
 adi_project_files sharkbyte [list \
   "system_top.v" \
