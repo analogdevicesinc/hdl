@@ -316,7 +316,7 @@ module spi_engine_execution #(
       ntx_rx  <= 1'b0;
       sleep_counter_increment <= 1'b0;
     end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-      if (bit_counter == word_length && transfer_active) begin
+      if (last_bit && transfer_active && ntx_rx) begin
         bit_counter <= 'h0;
         transfer_counter <= transfer_counter + 1;
         ntx_rx <= ~ntx_rx;
