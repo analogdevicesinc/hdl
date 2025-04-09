@@ -73,33 +73,46 @@ set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports 
 create_clock -name ref_clk_a1        -period 8   [get_ports clk_in_a1_p]
 create_clock -name ref_clk_a2        -period 8   [get_ports clk_in_a2_p]
 
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay -1.95  [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay -1.95 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 6.05 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay -1.95 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 6.05 [get_ports {data_in_a1_n[*]}]
+# input                  ____________________
+# clock    _____________|                    |_____________
+#                       |                    |
+#                dv_bre | dv_are      dv_bfe | dv_afe
+#               <------>|<------>    <------>|<------>
+#          _    ________|________    ________|________    _
+# data     _XXXX____Rise_Data____XXXX____Fall_Data____XXXX_
+#
 
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay -1.95 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 6.05 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay -1.95 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 6.05 [get_ports {data_in_a2_n[*]}]
+set a1_input_clock          ref_clk_a1;      # Name of input clock
+set a1_input_clock_period   8;    # Period of input clock (full-period)
+set a1_tdata                0.050; # adc clock to valid data (from datasheet, T_data)
+set a1_tlvds                [expr $a1_input_clock_period/2];    # LVDS bit period TODO: change constraints to take into account tLVDS max and min (LVDS bit clock duty cycle ranges from 45 to 55%)
+set a1_dv_bre               [expr $a1_tlvds/2 - $a1_tdata]; # Data valid before the rising clock edge
+set a1_dv_are               [expr $a1_tlvds/2];             # Data valid after the rising clock edge
+set a1_dv_bfe               [expr $a1_tlvds/2 - $a1_tdata]; # Data valid before the falling clock edge
+set a1_dv_afe               [expr $a1_tlvds/2];             # Data valid after the falling clock edge
+set a1_input_ports          "data_in_a1_p[*]";     # List of input ports
 
-# set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay 1.0 [get_ports {data_in_a1_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 1.05 [get_ports {data_in_a1_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay 1.0 [get_ports {data_in_a1_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 1.05 [get_ports {data_in_a1_n[*]}]
+set a2_input_clock          ref_clk_a2;      # Name of input clock
+set a2_input_clock_period   8;    # Period of input clock (full-period)
+set a2_tdata                0.050; # adc clock to valid data (from datasheet, T_data)
+set a2_tlvds                [expr $a2_input_clock_period/2];    # LVDS bit period TODO: change constraints to take into account tLVDS max and min (LVDS bit clock duty cycle ranges from 45 to 55%)
+set a2_dv_bre               [expr $a2_tlvds/2 - $a2_tdata]; # Data valid before the rising clock edge
+set a2_dv_are               [expr $a2_tlvds/2];             # Data valid after the rising clock edge
+set a2_dv_bfe               [expr $a2_tlvds/2 - $a2_tdata]; # Data valid before the falling clock edge
+set a2_dv_afe               [expr $a2_tlvds/2];             # Data valid after the falling clock edge
+set a2_input_ports          "data_in_a2_p[*]";     # List of input ports
 
-# set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay 1.0 [get_ports {data_in_a2_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 1.05 [get_ports {data_in_a2_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay 1.0 [get_ports {data_in_a2_n[*]}]
-# set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 1.05 [get_ports {data_in_a2_n[*]}]
+# # Input Delay Constraint
+set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bfe]    [get_ports $a1_input_ports];
+set_input_delay -clock $a1_input_clock -min $a1_dv_are                                      [get_ports $a1_input_ports];
+set_input_delay -clock $a1_input_clock -max [expr $a1_input_clock_period/2 - $a1_dv_bre]    [get_ports $a1_input_ports] -clock_fall -add_delay;
+set_input_delay -clock $a1_input_clock -min $a1_dv_afe                                      [get_ports $a1_input_ports] -clock_fall -add_delay;
+
+set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bfe]    [get_ports $a2_input_ports];
+set_input_delay -clock $a2_input_clock -min $a2_dv_are                                      [get_ports $a2_input_ports];
+set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bre]    [get_ports $a2_input_ports] -clock_fall -add_delay;
+set_input_delay -clock $a2_input_clock -min $a2_dv_afe                                      [get_ports $a2_input_ports] -clock_fall -add_delay;
+
 
 
 # set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
