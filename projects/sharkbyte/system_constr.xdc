@@ -70,26 +70,26 @@ set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports 
 set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_n];       # A2FCLKN IO_L13N_T2_MRCC_34 -> should be changed after switch
 
 
-create_clock -name ref_clk_a1        -period 4   [get_ports clk_in_a1_p]
-create_clock -name ref_clk_a2        -period 4   [get_ports clk_in_a2_p]
+create_clock -name ref_clk_a1        -period 8   [get_ports clk_in_a1_p]
+create_clock -name ref_clk_a2        -period 8   [get_ports clk_in_a2_p]
 
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay 2  [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 2.05 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay 2 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 2.05 [get_ports {data_in_a1_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay 2 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 2.05 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay 2 [get_ports {data_in_a1_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 2.05 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay -1.95  [get_ports {data_in_a1_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a1_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay -1.95 [get_ports {data_in_a1_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 6.05 [get_ports {data_in_a1_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -min -add_delay -1.95 [get_ports {data_in_a1_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a1}] -max -add_delay 6.05 [get_ports {data_in_a1_n[*]}]
 
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay 2 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 2.05 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay 2 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 2.05 [get_ports {data_in_a2_p[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay 2 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 2.05 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay 2 [get_ports {data_in_a2_n[*]}]
-set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 2.05 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a2_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a2_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay -1.95 [get_ports {data_in_a2_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 6.05 [get_ports {data_in_a2_p[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -min -add_delay -1.95 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -clock_fall -max -add_delay 6.05 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -min -add_delay -1.95 [get_ports {data_in_a2_n[*]}]
+set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 6.05 [get_ports {data_in_a2_n[*]}]
 
 # set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -min -add_delay 1.0 [get_ports {data_in_a1_n[*]}]
 # set_input_delay -clock [get_clocks {ref_clk_a1}] -clock_fall -max -add_delay 1.05 [get_ports {data_in_a1_n[*]}]
@@ -102,8 +102,8 @@ set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 2.05 [get_ports
 # set_input_delay -clock [get_clocks {ref_clk_a2}] -max -add_delay 1.05 [get_ports {data_in_a2_n[*]}]
 
 
-set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
-set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
+# set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
+# set_property IDELAY_VALUE 6 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 
 # JTAG
 
