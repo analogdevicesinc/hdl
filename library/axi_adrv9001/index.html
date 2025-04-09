@@ -207,6 +207,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9467/index.html">AXI AD9467</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9783/index.html">AXI AD9783</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ad9963/index.html">AXI AD9963</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../axi_ada4355/index.html">AXI ADA4355</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_adaq8092/index.html">AXI ADAQ8092</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">AXI ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../axi_ltc235x/index.html">AXI LTC235X</a></li>
@@ -297,6 +298,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9694_fmc/index.html">AD9694-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9695_fmc/index.html">AD9695-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9783_ebz/index.html">AD9783-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ada4355_fmc/index.html">ADA4355-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq7980_sdz/index.html">ADAQ7980-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/adrv9001/index.html">ADRV9001</a></li>
@@ -360,11 +362,11 @@ Content on this topic
   <section id="axi-adrv9001">
 <span id="id1"></span><h1>AXI ADRV9001<a class="headerlink" href="#axi-adrv9001" title="Permalink to this heading"></a></h1>
 <div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 589.2 1266" width="589.2" class="no-background"><style>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 589.2 1362" width="589.2" class="no-background"><style>
                 a {
                     text-decoration: none;
                 }
-                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="553.2" height="1212" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-delay_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">delay_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">ref_clk</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">mssi_sync</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">tx_output_enable</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">adc_sync_in</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">dac_sync_in</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">rx1_dclk_in_n_NC</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">rx1_dclk_in_p_dclk_in</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="318">rx1_idata_in_n_idata0</text></a><g transform="translate(18,310.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="342">rx1_idata_in_p_idata1</text></a><g transform="translate(18,334.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="366">rx1_qdata_in_n_qdata2</text></a><g transform="translate(18,358.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="390">rx1_qdata_in_p_qdata3</text></a><g transform="translate(18,382.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="414">rx1_strobe_in_n_NC</text></a><g transform="translate(18,406.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="438">rx1_strobe_in_p_strobe_in</text></a><g transform="translate(18,430.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="462">rx2_dclk_in_n_NC</text></a><g transform="translate(18,454.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="486">rx2_dclk_in_p_dclk_in</text></a><g transform="translate(18,478.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="510">rx2_idata_in_n_idata0</text></a><g transform="translate(18,502.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="534">rx2_idata_in_p_idata1</text></a><g transform="translate(18,526.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="558">rx2_qdata_in_n_qdata2</text></a><g transform="translate(18,550.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="582">rx2_qdata_in_p_qdata3</text></a><g transform="translate(18,574.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="606">rx2_strobe_in_n_NC</text></a><g transform="translate(18,598.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="630">rx2_strobe_in_p_strobe_in</text></a><g transform="translate(18,622.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="654">tx1_dclk_in_n_NC</text></a><g transform="translate(18,646.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="678">tx1_dclk_in_p_dclk_in</text></a><g transform="translate(18,670.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="702">tx2_dclk_in_n_NC</text></a><g transform="translate(18,694.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="726">tx2_dclk_in_p_dclk_in</text></a><g transform="translate(18,718.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="750">adc_1_dovf</text></a><g transform="translate(18,742.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="774">adc_2_dovf</text></a><g transform="translate(18,766.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="798">dac_1_dunf</text></a><g transform="translate(18,790.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="822">dac_2_dunf</text></a><g transform="translate(18,814.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="846">tdd_sync</text></a><g transform="translate(18,838.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="870">gpio_rx1_enable_in</text></a><g transform="translate(18,862.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="894">gpio_rx2_enable_in</text></a><g transform="translate(18,886.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="918">gpio_tx1_enable_in</text></a><g transform="translate(18,910.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="942">gpio_tx2_enable_in</text></a><g transform="translate(18,934.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="966">dac_1_data_i*</text></a><g transform="translate(18,958.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="990">dac_1_data_q*</text></a><g transform="translate(18,982.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="1014">dac_2_data_i*</text></a><g transform="translate(18,1006.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="1038">dac_2_data_q*</text></a><g transform="translate(18,1030.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-adc_1_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="54">adc_1_clk</text></a><g transform="translate(571.2,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_2_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="78">adc_2_clk</text></a><g transform="translate(571.2,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_1_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="102">dac_1_clk</text></a><g transform="translate(571.2,94.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_2_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="126">dac_2_clk</text></a><g transform="translate(571.2,118.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_1_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="150">adc_1_rst</text></a><g transform="translate(571.2,142.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_2_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="174">adc_2_rst</text></a><g transform="translate(571.2,166.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_1_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="198">dac_1_rst</text></a><g transform="translate(571.2,190.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_2_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="222">dac_2_rst</text></a><g transform="translate(571.2,214.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="246">tx1_dclk_out_n_NC</text></a><g transform="translate(571.2,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="270">tx1_dclk_out_p_dclk_out</text></a><g transform="translate(571.2,262.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="294">tx1_idata_out_n_idata0</text></a><g transform="translate(571.2,286.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="318">tx1_idata_out_p_idata1</text></a><g transform="translate(571.2,310.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="342">tx1_qdata_out_n_qdata2</text></a><g transform="translate(571.2,334.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="366">tx1_qdata_out_p_qdata3</text></a><g transform="translate(571.2,358.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="390">tx1_strobe_out_n_NC</text></a><g transform="translate(571.2,382.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="414">tx1_strobe_out_p_strobe_out</text></a><g transform="translate(571.2,406.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="438">tx2_dclk_out_n_NC</text></a><g transform="translate(571.2,430.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="462">tx2_dclk_out_p_dclk_out</text></a><g transform="translate(571.2,454.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="486">tx2_idata_out_n_idata0</text></a><g transform="translate(571.2,478.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="510">tx2_idata_out_p_idata1</text></a><g transform="translate(571.2,502.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="534">tx2_qdata_out_n_qdata2</text></a><g transform="translate(571.2,526.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="558">tx2_qdata_out_p_qdata3</text></a><g transform="translate(571.2,550.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="582">tx2_strobe_out_n_NC</text></a><g transform="translate(571.2,574.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="606">tx2_strobe_out_p_strobe_out</text></a><g transform="translate(571.2,598.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="630">rx1_enable</text></a><g transform="translate(571.2,622.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="654">rx2_enable</text></a><g transform="translate(571.2,646.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="678">tx1_enable</text></a><g transform="translate(571.2,670.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="702">tx2_enable</text></a><g transform="translate(571.2,694.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="726">tdd_sync_cntr</text></a><g transform="translate(571.2,718.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="750">adc_1_valid_i*</text></a><g transform="translate(571.2,742.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="774">adc_1_enable_i*</text></a><g transform="translate(571.2,766.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="798">adc_1_data_i*</text></a><g transform="translate(571.2,790.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="822">adc_1_valid_q*</text></a><g transform="translate(571.2,814.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="846">adc_1_enable_q*</text></a><g transform="translate(571.2,838.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="870">adc_1_data_q*</text></a><g transform="translate(571.2,862.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="894">adc_2_valid_i*</text></a><g transform="translate(571.2,886.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="918">adc_2_enable_i*</text></a><g transform="translate(571.2,910.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="942">adc_2_data_i*</text></a><g transform="translate(571.2,934.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="966">adc_2_valid_q*</text></a><g transform="translate(571.2,958.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="990">adc_2_enable_q*</text></a><g transform="translate(571.2,982.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1014">adc_2_data_q*</text></a><g transform="translate(571.2,1006.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1038">dac_1_valid_i*</text></a><g transform="translate(571.2,1030.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1062">dac_1_enable_i*</text></a><g transform="translate(571.2,1054.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1086">dac_1_valid_q*</text></a><g transform="translate(571.2,1078.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1110">dac_1_enable_q*</text></a><g transform="translate(571.2,1102.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1134">dac_2_valid_i*</text></a><g transform="translate(571.2,1126.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1158">dac_2_enable_i*</text></a><g transform="translate(571.2,1150.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1182">dac_2_valid_q*</text></a><g transform="translate(571.2,1174.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1206">dac_2_enable_q*</text></a><g transform="translate(571.2,1198.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="553.2" height="1212" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="294.6" y="1250">axi_adrv9001</text></svg></section>
+                </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="553.2" height="1308" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-delay_clk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">delay_clk</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">mssi_sync_in</text></a><g transform="translate(18,142.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">ref_clk</text></a><g transform="translate(18,166.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">mcs_in</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">tx_output_enable</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">rx1_dclk_in_n_NC</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="270">rx1_dclk_in_p_dclk_in</text></a><g transform="translate(18,262.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="294">rx1_idata_in_n_idata0</text></a><g transform="translate(18,286.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="318">rx1_idata_in_p_idata1</text></a><g transform="translate(18,310.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="342">rx1_qdata_in_n_qdata2</text></a><g transform="translate(18,334.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="366">rx1_qdata_in_p_qdata3</text></a><g transform="translate(18,358.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="390">rx1_strobe_in_n_NC</text></a><g transform="translate(18,382.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="414">rx1_strobe_in_p_strobe_in</text></a><g transform="translate(18,406.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="438">rx2_dclk_in_n_NC</text></a><g transform="translate(18,430.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="462">rx2_dclk_in_p_dclk_in</text></a><g transform="translate(18,454.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="486">rx2_idata_in_n_idata0</text></a><g transform="translate(18,478.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="510">rx2_idata_in_p_idata1</text></a><g transform="translate(18,502.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="534">rx2_qdata_in_n_qdata2</text></a><g transform="translate(18,526.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="558">rx2_qdata_in_p_qdata3</text></a><g transform="translate(18,550.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="582">rx2_strobe_in_n_NC</text></a><g transform="translate(18,574.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="606">rx2_strobe_in_p_strobe_in</text></a><g transform="translate(18,598.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="630">tx1_dclk_in_n_NC</text></a><g transform="translate(18,622.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="654">tx1_dclk_in_p_dclk_in</text></a><g transform="translate(18,646.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="678">tx2_dclk_in_n_NC</text></a><g transform="translate(18,670.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="702">tx2_dclk_in_p_dclk_in</text></a><g transform="translate(18,694.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="726">adc_1_dovf</text></a><g transform="translate(18,718.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="750">adc_2_dovf</text></a><g transform="translate(18,742.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="774">dac_1_dunf</text></a><g transform="translate(18,766.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="798">dac_2_dunf</text></a><g transform="translate(18,790.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="822">tdd_sync</text></a><g transform="translate(18,814.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="846">gpio_rx1_enable_in</text></a><g transform="translate(18,838.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="870">gpio_rx2_enable_in</text></a><g transform="translate(18,862.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="894">gpio_tx1_enable_in</text></a><g transform="translate(18,886.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="918">gpio_tx2_enable_in</text></a><g transform="translate(18,910.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="942">dac_1_data_i*</text></a><g transform="translate(18,934.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="966">dac_1_data_q*</text></a><g transform="translate(18,958.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="990">dac_2_data_i*</text></a><g transform="translate(18,982.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="1014">dac_2_data_q*</text></a><g transform="translate(18,1006.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-adc_1_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="54">adc_1_clk</text></a><g transform="translate(571.2,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_2_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="78">adc_2_clk</text></a><g transform="translate(571.2,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_1_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="102">dac_1_clk</text></a><g transform="translate(571.2,94.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_2_clk"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="126">dac_2_clk</text></a><g transform="translate(571.2,118.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_1_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="150">adc_1_rst</text></a><g transform="translate(571.2,142.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-adc_2_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="174">adc_2_rst</text></a><g transform="translate(571.2,166.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_1_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="198">dac_1_rst</text></a><g transform="translate(571.2,190.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-dac_2_rst"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="222">dac_2_rst</text></a><g transform="translate(571.2,214.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="246">mcs_out</text></a><g transform="translate(571.2,238.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="270">mcs_src</text></a><g transform="translate(571.2,262.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="294">tx1_dclk_out_n_NC</text></a><g transform="translate(571.2,286.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="318">tx1_dclk_out_p_dclk_out</text></a><g transform="translate(571.2,310.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="342">tx1_idata_out_n_idata0</text></a><g transform="translate(571.2,334.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="366">tx1_idata_out_p_idata1</text></a><g transform="translate(571.2,358.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="390">tx1_qdata_out_n_qdata2</text></a><g transform="translate(571.2,382.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="414">tx1_qdata_out_p_qdata3</text></a><g transform="translate(571.2,406.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="438">tx1_strobe_out_n_NC</text></a><g transform="translate(571.2,430.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="462">tx1_strobe_out_p_strobe_out</text></a><g transform="translate(571.2,454.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="486">tx2_dclk_out_n_NC</text></a><g transform="translate(571.2,478.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="510">tx2_dclk_out_p_dclk_out</text></a><g transform="translate(571.2,502.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="534">tx2_idata_out_n_idata0</text></a><g transform="translate(571.2,526.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="558">tx2_idata_out_p_idata1</text></a><g transform="translate(571.2,550.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="582">tx2_qdata_out_n_qdata2</text></a><g transform="translate(571.2,574.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="606">tx2_qdata_out_p_qdata3</text></a><g transform="translate(571.2,598.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="630">tx2_strobe_out_n_NC</text></a><g transform="translate(571.2,622.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="654">tx2_strobe_out_p_strobe_out</text></a><g transform="translate(571.2,646.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="678">rx1_enable</text></a><g transform="translate(571.2,670.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="702">rx2_enable</text></a><g transform="translate(571.2,694.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="726">tx1_enable</text></a><g transform="translate(571.2,718.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="750">tx2_enable</text></a><g transform="translate(571.2,742.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="774">adc_1_start_sync</text></a><g transform="translate(571.2,766.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="798">adc_2_start_sync</text></a><g transform="translate(571.2,790.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="822">tdd_sync_cntr</text></a><g transform="translate(571.2,814.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="846">adc_1_valid_i*</text></a><g transform="translate(571.2,838.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="870">adc_1_enable_i*</text></a><g transform="translate(571.2,862.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="894">adc_1_data_i*</text></a><g transform="translate(571.2,886.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="918">adc_1_valid_q*</text></a><g transform="translate(571.2,910.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="942">adc_1_enable_q*</text></a><g transform="translate(571.2,934.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="966">adc_1_data_q*</text></a><g transform="translate(571.2,958.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="990">adc_2_valid_i*</text></a><g transform="translate(571.2,982.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1014">adc_2_enable_i*</text></a><g transform="translate(571.2,1006.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1038">adc_2_data_i*</text></a><g transform="translate(571.2,1030.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1062">adc_2_valid_q*</text></a><g transform="translate(571.2,1054.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1086">adc_2_enable_q*</text></a><g transform="translate(571.2,1078.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1110">adc_2_data_q*</text></a><g transform="translate(571.2,1102.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1134">dac_1_valid_i*</text></a><g transform="translate(571.2,1126.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1158">dac_1_enable_i*</text></a><g transform="translate(571.2,1150.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1182">dac_1_valid_q*</text></a><g transform="translate(571.2,1174.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1206">dac_1_enable_q*</text></a><g transform="translate(571.2,1198.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1230">dac_2_valid_i*</text></a><g transform="translate(571.2,1222.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1254">dac_2_enable_i*</text></a><g transform="translate(571.2,1246.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1278">dac_2_valid_q*</text></a><g transform="translate(571.2,1270.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="553.2" y="1302">dac_2_enable_q*</text></a><g transform="translate(571.2,1294.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="553.2" height="1308" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="294.6" y="1346">axi_adrv9001</text></svg></section>
 </div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_adrv9001">AXI ADRV9001</a> IP Core can be used to
 interface the ADRV9001 family, meaning:</p>
 <ul class="simple">
@@ -913,6 +915,16 @@ DDR)</p></li>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ENABLE_REF_CLK_MON</span></code></td>
+<td class="description"><p>Enable Ref Clk Mon.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">EN_RX_MCS_TO_STRB_M</span></code></td>
+<td class="description"><p>Enable 6’th MCS to Rx strobe measurment.</p></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p></p></td>
+</tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">USE_RX_CLK_FOR_TX1</span></code></td>
 <td class="description"><section>
 <p>Select the clock to drive the TX1 SSI interface 
@@ -1373,35 +1385,37 @@ signals. For simplicity, we will look only at the data part:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ref_clk</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">mssi_sync_in</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">mssi_sync</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ref_clk</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx_output_enable</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">mcs_in</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_sync_in</span></code></td>
-<td><p>in</p></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">mcs_out</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
 <td class="description"><p></p></td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_sync_in</span></code></td>
-<td><p>in</p></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC</span> <span class="pre">==</span> <span class="pre">1</span></code></td>
-<td class="description"><section>
-<p>Synchronization signal of the transmit path for slave devices (ID&gt;0)</p>
-</section>
-</td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">mcs_src</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_dclk_in_n_NC</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx_output_enable</span></code></td>
+<td><p>in</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_dclk_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1409,7 +1423,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_dclk_in_p_dclk_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_dclk_in_p_dclk_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1417,7 +1431,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_idata_in_n_idata0</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_idata_in_n_idata0</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1425,7 +1439,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_idata_in_p_idata1</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_idata_in_p_idata1</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1433,7 +1447,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_qdata_in_n_qdata2</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_qdata_in_n_qdata2</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1441,7 +1455,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_qdata_in_p_qdata3</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_qdata_in_p_qdata3</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1449,7 +1463,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_strobe_in_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_strobe_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1457,7 +1471,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_strobe_in_p_strobe_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_strobe_in_p_strobe_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1465,7 +1479,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_dclk_in_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_dclk_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1473,7 +1487,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_dclk_in_p_dclk_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_dclk_in_p_dclk_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1481,7 +1495,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_idata_in_n_idata0</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_idata_in_n_idata0</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1489,7 +1503,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_idata_in_p_idata1</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_idata_in_p_idata1</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1497,7 +1511,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_qdata_in_n_qdata2</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_qdata_in_n_qdata2</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1505,7 +1519,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_qdata_in_p_qdata3</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_qdata_in_p_qdata3</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1513,7 +1527,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_strobe_in_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_strobe_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1521,7 +1535,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_strobe_in_p_strobe_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_strobe_in_p_strobe_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1529,7 +1543,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_out_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_out_n_NC</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1537,7 +1551,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_out_p_dclk_out</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_out_p_dclk_out</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1545,7 +1559,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_in_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1553,7 +1567,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_in_p_dclk_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_dclk_in_p_dclk_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1561,7 +1575,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_idata_out_n_idata0</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_idata_out_n_idata0</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1569,7 +1583,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_idata_out_p_idata1</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_idata_out_p_idata1</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1577,7 +1591,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_qdata_out_n_qdata2</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_qdata_out_n_qdata2</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1585,7 +1599,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_qdata_out_p_qdata3</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_qdata_out_p_qdata3</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1593,7 +1607,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_strobe_out_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_strobe_out_n_NC</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1601,7 +1615,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_strobe_out_p_strobe_out</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_strobe_out_p_strobe_out</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1609,7 +1623,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_out_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_out_n_NC</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1617,7 +1631,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_out_p_dclk_out</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_out_p_dclk_out</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1625,7 +1639,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_in_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_in_n_NC</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1633,7 +1647,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_in_p_dclk_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_dclk_in_p_dclk_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1641,7 +1655,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_idata_out_n_idata0</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_idata_out_n_idata0</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1649,7 +1663,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_idata_out_p_idata1</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_idata_out_p_idata1</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1657,7 +1671,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_qdata_out_n_qdata2</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_qdata_out_n_qdata2</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1665,7 +1679,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_qdata_out_p_qdata3</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_qdata_out_p_qdata3</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1673,7 +1687,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_strobe_out_n_NC</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_strobe_out_n_NC</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1681,7 +1695,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_strobe_out_p_strobe_out</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_strobe_out_p_strobe_out</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1689,7 +1703,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx1_enable</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx1_enable</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1697,7 +1711,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">rx2_enable</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">rx2_enable</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1705,7 +1719,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx1_enable</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx1_enable</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1713,7 +1727,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tx2_enable</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tx2_enable</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1721,13 +1735,18 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_dovf</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_dovf</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
 <p>Data overflow, signal comming from pack</p>
 </section>
 </td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_start_sync</span></code></td>
+<td><p>out</p></td>
+<td><p></p></td>
+<td class="description"><p></p></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_dovf</span></code></td>
 <td><p>in</p></td>
@@ -1737,7 +1756,12 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_dunf</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_start_sync</span></code></td>
+<td><p>out</p></td>
+<td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
+<td class="description"><p></p></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_dunf</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1745,7 +1769,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_dunf</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_dunf</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1753,7 +1777,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tdd_sync</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tdd_sync</span></code></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1761,7 +1785,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">tdd_sync_cntr</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">tdd_sync_cntr</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1769,7 +1793,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">gpio_rx1_enable_in</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gpio_rx1_enable_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1777,7 +1801,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gpio_rx2_enable_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">gpio_rx2_enable_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1785,7 +1809,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">gpio_tx1_enable_in</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gpio_tx1_enable_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX1_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1793,7 +1817,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">gpio_tx2_enable_in</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">gpio_tx2_enable_in</span></code></td>
 <td><p>in</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">0</span></code></td>
 <td class="description"><section>
@@ -1801,7 +1825,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_valid_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_valid_i*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1809,7 +1833,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_enable_i*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_enable_i*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1817,7 +1841,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_data_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_data_i*</span></code></td>
 <td><p>out [15:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1825,7 +1849,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_valid_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_valid_q*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1833,7 +1857,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_enable_q*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_enable_q*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1841,7 +1865,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_1_data_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_1_data_q*</span></code></td>
 <td><p>out [15:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1849,7 +1873,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_valid_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_valid_i*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1857,7 +1881,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_enable_i*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_enable_i*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1865,7 +1889,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_data_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_data_i*</span></code></td>
 <td><p>out [15:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1873,7 +1897,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_valid_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_valid_q*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1881,7 +1905,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_enable_q*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_enable_q*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1889,7 +1913,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">adc_2_data_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">adc_2_data_q*</span></code></td>
 <td><p>out [15:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_RX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1897,7 +1921,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_valid_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_valid_i*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1905,7 +1929,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_enable_i*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_enable_i*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1913,7 +1937,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_data_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_data_i*</span></code></td>
 <td><p>in [15:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1921,7 +1945,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_valid_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_valid_q*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1929,7 +1953,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_enable_q*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_enable_q*</span></code></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1937,7 +1961,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_1_data_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_1_data_q*</span></code></td>
 <td><p>in [15:0]</p></td>
 <td><p></p></td>
 <td class="description"><section>
@@ -1945,7 +1969,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_valid_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_valid_i*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1953,7 +1977,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_enable_i*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_enable_i*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1961,7 +1985,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_data_i*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_data_i*</span></code></td>
 <td><p>in [15:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1969,7 +1993,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_valid_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_valid_q*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1977,7 +2001,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_enable_q*</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_enable_q*</span></code></td>
 <td><p>out</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
@@ -1985,7 +2009,7 @@ signals. For simplicity, we will look only at the data part:</p>
 </section>
 </td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">dac_2_data_q*</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">dac_2_data_q*</span></code></td>
 <td><p>in [15:0]</p></td>
 <td><code class="docutils literal notranslate"><span class="pre">INDEPENDENT_1R1T_SUPPORT</span> <span class="pre">==</span> <span class="pre">1</span> <span class="pre">&amp;&amp;</span> <span class="pre">DISABLE_TX2_SSI</span> <span class="pre">==</span> <span class="pre">*</span> </code></td>
 <td class="description"><section>
