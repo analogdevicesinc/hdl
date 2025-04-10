@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -20,6 +20,7 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 # files
 
 ad_ip_files axi_adxcvr [list \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/common/up_axi.v \
   axi_adxcvr_up.v \
   axi_adxcvr.v \
