@@ -23,8 +23,9 @@ help:
 
 PROJECTS := $(filter-out $(NO_PROJ), $(notdir $(wildcard projects/*)))
 SUBPROJECTS := $(foreach projname,$(PROJECTS), \
+	$(if $(wildcard projects/$(projname)/system_project.tcl), $(projname) , \
 	$(foreach archname,$(notdir $(subst /Makefile,,$(wildcard projects/$(projname)/*/Makefile))), \
-		$(projname).$(archname)))
+		$(projname).$(archname))))
 
 .PHONY: lib all clean clean-ipcache clean-all $(SUBPROJECTS)
 
