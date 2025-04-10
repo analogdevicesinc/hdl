@@ -38,7 +38,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    [RX/TX]_JESD_NP : Number of bits per sample, only 16 is supported
 #    [RX/TX]_NUM_LINKS : Number of links, matches number of MxFE devices
 #    [RX/TX]_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
-#
+#    DAC_TPL_XBAR_ENABLE: Enable NxN crossbar functionality at the transport layer, where N is the number of channels
 
 adi_project ad_quadmxfe1_ebz_vcu118 0 [list \
   JESD_MODE            [get_env_param JESD_MODE       64B66B ] \
