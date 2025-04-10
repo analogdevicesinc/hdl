@@ -82,6 +82,7 @@ Contents
    CN0579 <cn0579/index>
    CN0585 <cn0585/index>
    DAC-FMC-EBZ <dac_fmc_ebz/index>
+   DAQ3 <daq3/index>
    DC2677A <dc2677a/index>
    FMCOMMS2/3/4 <fmcomms2/index>
    FMCOMMS5 <fmcomms5/index>
