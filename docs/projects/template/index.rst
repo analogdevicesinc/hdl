@@ -90,19 +90,99 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the project has multiple ways of configuration, then make subsections to
-this section and show the default configuration and some other popular modes.
+..
+  If the project has multiple ways of configuration, then make subsections to
+  this section and show the default configuration and some other popular modes.
+
+The 4 MxFE RX and TX links are connected to a single transceiver block,
+having 16x RX and 16x TX lanes in total (4 * L).
+
+The 4 RX links merge into a single receive Link Layer, and a single
+Transport Layer, having a compatible configuration as detailed below.
+Similarly, the single transmit Link Layer and Transport Layer handle the
+four TX links.
+
+- JESD204B with lane rate 10Gbps
+- RX, TX: L=4, M=8, S=1, NP=16, NUM_LINKS=4
 
 ..
    KEEP THIS PARAGRAPH
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ../ad9783_ebz/ad9783_zcu102_block_diagram.svg
-   :width: 800
+.. image:: ../ad_quadmxfe1_ebz/ad_quadmxfe1_ebz_jesd204b_block_diagram.svg
+   :width: 1000
    :align: center
-   :alt: AD9783-EBZ/ZCU102 block diagram
+   :alt: AD-QUADMXFE1-EBZ/VCU118 JESD204B block diagram
 
+.. important::
+
+   This configuration was built using the ``make`` command with the following
+   parameters:
+
+   .. shell:: bash
+
+      /hdl/projects/ad_quadmxfe1_ebz
+      $make JESD_MODE=8B10B \
+      $     RX_JESD_L=4 \
+      $     RX_JESD_M=8 \
+      $     RX_JESD_NP=16 \
+      $     RX_NUM_LINKS=4 \
+      $     TX_JESD_L=4 \
+      $     TX_JESD_M=8 \
+      $     TX_JESD_NP=16 \
+      $     TX_NUM_LINKS=4
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_ADXCVR
+        - :git-hdl:`axi_adxcvr <library/xilinx/axi_adxcvr>`
+        - :ref:`axi_adxcvr`
+        - 2 instances, one for RX and one for TX
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - 2 instances, one for RX and one for TX
+      * - DATA_OFFLOAD
+        - :git-hdl:`data_offload <library/data_offload>`
+        - :ref:`data_offload`
+        - 2 instances, one for RX and one for TX
+      * - RX JESD LINK
+        - axi_mxfe_rx_jesd
+        - :ref:`axi_jesd204_rx`
+        - Instantiaded by ``adi_axi_jesd204_rx_create`` procedure
+      * - RX JESD TPL
+        - rx_mxfe_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_adc`
+        - Instantiated by ``adi_tpl_jesd204_rx_create`` procedure
+      * - TX JESD LINK
+        - axi_mxfe_tx_jesd
+        - :ref:`axi_jesd204_tx`
+        - Instantiaded by ``adi_axi_jesd204_tx_create`` procedure
+      * - TX JESD TPL
+        - tx_mxfe_tpl_core
+        - :ref:`ad_ip_jesd204_tpl_dac`
+        - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_ADXCVR
+        - :git-hdl:`util_adxcvr <library/xilinx/util_adxcvr>`
+        - :ref:`util_adxcvr`
+        - Used for both AXI ADXCVR instances
+      * - UTIL_CPACK
+        - :git-hdl:`util_cpack2 <library/util_pack/util_cpack2>`
+        - :ref:`util_cpack2`
+        - ---
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
 ..
    MUST: Use SVG format for the diagram
 
@@ -493,14 +573,14 @@ command.
 Example of running the ``make`` command without parameters (using the default
 configuration):
 
-.. shell::
+.. shell:: bash
 
    $cd hdl/projects/ad9081_fmca_ebz/zcu102
    $make
 
 Example of running the ``make`` command with parameters:
 
-.. shell::
+.. shell:: bash
 
    $cd hdl/projects/ad9081_fmca_ebz/a10soc
    $make RX_LANE_RATE=2.5 TX_LANE_RATE=2.5 RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1 RX_JESD_NP=16 TX_JESD_L=8 TX_JESD_M=4 TX_JESD_S=1 TX_JESD_NP=16
@@ -779,3 +859,5 @@ and of the device tree.
 .. include:: ../common/support.rst
 
 .. _Example link: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html
+.. _AMD PG198: https://docs.amd.com/v/u/en-US/pg198-jesd204-phy
+.. _AMD UG578: https://docs.amd.com/v/u/en-US/ug578-ultrascale-gty-transceivers
