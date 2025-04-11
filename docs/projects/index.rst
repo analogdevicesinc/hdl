@@ -33,6 +33,7 @@ Contents
    AD469X-EVB <ad469x_evb/index>
    AD485X-FMCZ <ad485x_fmcz/index>
    AD488X-FMC-EVB <ad488x_fmc_evb/index>
+   AD5706R <ad5706r/index>
    AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
    AD57XX-ARDZ <ad57xx_ardz/index>
