@@ -34,6 +34,7 @@ Contents
    AD485X-FMCZ <ad485x_fmcz/index>
    AD4880-FMC-EVB <ad4880_fmc_evb/index>
    AD5529R-ARDZ <ad5529r_ardz/index>
+   AD5706R <ad5706r/index>
    AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
    AD57XX-ARDZ <ad57xx_ardz/index>
