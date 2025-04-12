@@ -269,6 +269,7 @@ Content on this topic
 <ul>
 <li class="toctree-l1"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-3" id="toctree-collapse-3"/><div class="collapse"><a class="reference internal" href="../index.html">Projects</a><label for="toctree-collapse-3"><div class="icon"></div></label></div><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ad_gmsl2eth_sl/index.html">AD-GMSL2ETH-SL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad_quadmxfe1_ebz/index.html">AD-QUADMXFE1-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad353xr/index.html">AD353XR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad35xxr_evb/index.html">AD35XXR-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4052_ardz/index.html">AD4052-ARDZ</a></li>
@@ -294,7 +295,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad77681evb/index.html">AD7768-1-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7768evb/index.html">AD7768-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad777x_ardz/index.html">AD777X-ARDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081/AD9082/AD9986/AD9988</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9083_evb/index.html">AD9083-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad9208_dual_ebz/index.html">AD9208-DUAL-EBZ</a></li>
@@ -313,13 +314,13 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../adaq8092_fmc/index.html">ADAQ8092-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001/index.html">ADRV9001</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9001_dual/index.html">ADRV9001-DUAL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/index.html">ADRV9371x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9009/index.html">ADRV9009</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9026/index.html">ADRV9026</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv904x/index.html">ADRV904x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../adrv9009zu11eg/index.html">ADRV9009-ZU11EG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adrv9361z7035/index.html">ADRV9361Z7035</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9364z7020/index.html">ADRV9364Z7020</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../adrv9371x/index.html">ADRV9371x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7511/index.html">ADV7511</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../adv7513/index.html">ADV7513</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../arradio/index.html">ARRADIO</a></li>
@@ -336,6 +337,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms8/index.html">FMCOMMS8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms11/index.html">FMCOMMS11</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../m2k/index.html">M2K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../max96724/index.html">MAX96724</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pluto/index.html">PLUTO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../pulsar_adc/index.html">PULSAR-ADC</a></li>
@@ -463,11 +465,112 @@ Content on this topic
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
-<p>If the project has multiple ways of configuration, then make subsections to
-this section and show the default configuration and some other popular modes.</p>
+<p>The 4 MxFE RX and TX links are connected to a single transceiver block,
+having 16x RX and 16x TX lanes in total (4 * L).</p>
+<p>The 4 RX links merge into a single receive Link Layer, and a single
+Transport Layer, having a compatible configuration as detailed below.
+Similarly, the single transmit Link Layer and Transport Layer handle the
+four TX links.</p>
+<ul class="simple">
+<li><p>JESD204B with lane rate 10Gbps</p></li>
+<li><p>RX, TX: L=4, M=8, S=1, NP=16, NUM_LINKS=4</p></li>
+</ul>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad9783_zcu102_block_diagram.svg"><img alt="AD9783-EBZ/ZCU102 block diagram" class="align-center" src="../../_images/ad9783_zcu102_block_diagram.svg" width="800" /></a>
-</section>
+<a class="reference internal image-reference" href="../../_images/ad_quadmxfe1_ebz_jesd204b_block_diagram.svg"><img alt="AD-QUADMXFE1-EBZ/VCU118 JESD204B block diagram" class="align-center" src="../../_images/ad_quadmxfe1_ebz_jesd204b_block_diagram.svg" width="1000" /></a>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This configuration was built using the <code class="docutils literal notranslate"><span class="pre">make</span></code> command with the following
+parameters:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>/hdl/projects/ad_quadmxfe1_ebz$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">JESD_MODE</span><span class="o">=</span>8B10B<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_NUM_LINKS</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_L</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_M</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_JESD_NP</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">TX_NUM_LINKS</span><span class="o">=</span><span class="m">4</span>
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="9fd2fc2ae35618a9adee5759dfe38b0b2814455d" name="9fd2fc2ae35618a9adee5759dfe38b0b2814455d" type="checkbox"></input><label for="9fd2fc2ae35618a9adee5759dfe38b0b2814455d"><p>Click here for details on the block diagram modules</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 10.0%" />
+<col style="width: 20.0%" />
+<col style="width: 35.0%" />
+<col style="width: 35.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Block name</p></th>
+<th class="head"><p>IP name</p></th>
+<th class="head"><p>Documentation</p></th>
+<th class="head"><p>Additional info</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AXI_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/axi_adxcvr">axi_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_adxcvr/index.html#axi-adxcvr"><span class="std std-ref">AXI ADXCVR</span></a></p></td>
+<td><p>2 instances, one for RX and one for TX</p></td>
+</tr>
+<tr class="row-odd"><td><p>AXI_DMAC</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_dmac">axi_dmac</a></p></td>
+<td><p><a class="reference internal" href="../../library/axi_dmac/index.html#axi-dmac"><span class="std std-ref">AXI DMAC</span></a></p></td>
+<td><p>2 instances, one for RX and one for TX</p></td>
+</tr>
+<tr class="row-even"><td><p>DATA_OFFLOAD</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/data_offload">data_offload</a></p></td>
+<td><p><a class="reference internal" href="../../library/data_offload/index.html#data-offload"><span class="std std-ref">Data Offload</span></a></p></td>
+<td><p>2 instances, one for RX and one for TX</p></td>
+</tr>
+<tr class="row-odd"><td><p>RX JESD LINK</p></td>
+<td><p>axi_mxfe_rx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_rx/index.html#axi-jesd204-rx"><span class="std std-ref">JESD204B/C Link Receive Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>RX JESD TPL</p></td>
+<td><p>rx_mxfe_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_adc/index.html#ad-ip-jesd204-tpl-adc"><span class="std std-ref">ADC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_rx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>TX JESD LINK</p></td>
+<td><p>axi_mxfe_tx_jesd</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/axi_jesd204_tx/index.html#axi-jesd204-tx"><span class="std std-ref">JESD204B/C Link Transmit Peripheral</span></a></p></td>
+<td><p>Instantiaded by <code class="docutils literal notranslate"><span class="pre">adi_axi_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-even"><td><p>TX JESD TPL</p></td>
+<td><p>tx_mxfe_tpl_core</p></td>
+<td><p><a class="reference internal" href="../../library/jesd204/ad_ip_jesd204_tpl_dac/index.html#ad-ip-jesd204-tpl-dac"><span class="std std-ref">DAC JESD204B/C Transport Peripheral</span></a></p></td>
+<td><p>Instantiated by <code class="docutils literal notranslate"><span class="pre">adi_tpl_jesd204_tx_create</span></code> procedure</p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_ADXCVR</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_adxcvr">util_adxcvr</a></p></td>
+<td><p><a class="reference internal" href="../../library/xilinx/util_adxcvr/index.html#util-adxcvr"><span class="std std-ref">UTIL_ADXCVR core for AMD Xilinx devices</span></a></p></td>
+<td><p>Used for both AXI ADXCVR instances</p></td>
+</tr>
+<tr class="row-even"><td><p>UTIL_CPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">util_cpack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>UTIL_UPACK</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">util_upack2</a></p></td>
+<td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
+<td><p>—</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The following are the parameters of this project that can be configured:</p>
