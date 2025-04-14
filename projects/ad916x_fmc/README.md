@@ -1,7 +1,8 @@
-# EVAL-AD916x-FMC HDL Project
+# AD916X-FMC HDL Project
 
-- Evaluation board product page: [EVAL-AD916x-FMCZ](https://www.analog.com/eval-AD916x)
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad916x_fmc/index.html
+- Evaluation board product page: [EVAL-AD916X-FMCZ](https://www.analog.com/eval-ad916x)
+- System documentation: to be added
+- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad916x_fmc/index.html
 
 ## Supported parts
 

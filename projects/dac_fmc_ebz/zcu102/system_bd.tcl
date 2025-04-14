@@ -8,6 +8,7 @@ set dac_fifo_address_width 13
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+source ../common/dac_fmc_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 set ADI_DEVICE_CODE $ad_project_params(DEVICE_CODE)

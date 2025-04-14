@@ -23,7 +23,7 @@ configures the DACs and monitors the status of all registers.
 Supported boards
 --------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD916x`
+- :adi:`EVAL-AD916X`
 
 Supported devices
 --------------------------------------------------------------------------------
@@ -77,6 +77,10 @@ The data path and clock domains are depicted in the below diagram:
         - axi_ad916x_core
         - :ref:`ad_ip_jesd204_tpl_dac`
         - Instantiated by ``adi_tpl_jesd204_tx_create`` procedure
+      * - UTIL_ADXCVR for AMD
+        - :git-hdl:`library/xilinx/util_adxcvr`
+        - :ref:`util_adxcvr`
+        - ---
       * - UTIL_DACFIFO
         - :git-hdl:`util_dacfifo <library/util_dacfifo>`
         - ---
@@ -114,19 +118,19 @@ can configure the parameters manually, trough ``make`` (according to the
 datasheet of each chip, Table "JESD204B Parameters for Interpolation Rate
 and Number of Lanes"):
 
-- **M**:  number of converters per link (**set by the ADI_DAC_MODE (default)**)
-- **L**:  number of lanes per link (**set by the ADI_DAC_MODE (default)**)
-- **S**:  number of samples per frame (**set by the ADI_DAC_MODE (default)**)
-- **F**:  number of octets per frame (**set by the ADI_DAC_MODE (default)**)
-- **HD**: high-density (**set by the ADI_DAC_MODE (default)**)
-- **N**:  converter resolution (**set by the ADI_DAC_MODE (default)**)
-- **NP**: number of bits per sample (**set by the ADI_DAC_MODE (default)**)
+- M:  number of converters per link (**set by the ADI_DAC_MODE (default)**)
+- L:  number of lanes per link (**set by the ADI_DAC_MODE (default)**)
+- S:  number of samples per frame (**set by the ADI_DAC_MODE (default)**)
+- F:  number of octets per frame (**set by the ADI_DAC_MODE (default)**)
+- HD: high-density (**set by the ADI_DAC_MODE (default)**)
+- N:  converter resolution (**set by the ADI_DAC_MODE (default)**)
+- NP: number of bits per sample (**set by the ADI_DAC_MODE (default)**)
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :adi:`EVAL-AD916x` can be tested using the on-board clock generator or using
-and external clock source. The jumper positions are described below: 
+and external clock source. The jumper positions are described below:
 
 ================== ========= ===============================
 Jumper/Solder link Position  Description
@@ -148,10 +152,10 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 ========================  ===========
 Instance                  ZynqMP
 ========================  ===========
-dac_dma                   0x7C42_0000
-dac_jesd204_link          0x44A9_0000
-dac_jesd204_transport     0x44A0_4000
-dac_jesd204_xcvr          0x44A6_0000
+dac_jesd204_xcvr          0x84A6_0000
+dac_jesd204_transport     0x84A0_4000
+dac_jesd204_link          0x84A9_0000
+dac_dma                   0x9C42_0000
 ========================  ===========
 
 SPI connections
@@ -175,7 +179,7 @@ SPI connections
      - 1
    * - PS
      - SPI 0
-     - AD916x chip
+     - AD916x
      - 1
 
 GPIOs
@@ -197,10 +201,14 @@ The Software GPIO number is calculated as follows:
      - (from FPGA view)
      -
      - ZCU102
-   * - dac_ctrl[1:0]
+   * - fmc_hmc849vctrl
      - INOUT
-     - 25:24
-     - 100:99
+     - 23
+     - 100
+   * - fmc_txen_0
+     - INOUT
+     - 22
+     - 99
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,7 +259,7 @@ more context):
 .. shell::
 
    $cd hdl/projects/ad916x_fmc/zcu102
-   $make ADI_DAC_DEVICE=AD9164 ADI_LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16
+   $make ADI_DAC_DEVICE=AD9164 ADI_LANE_RATE=12.5 M=1 L=8 S=4 NP=16
 
 or:
 
@@ -328,6 +336,7 @@ Software related
 Linux support:
 
 - :git-linux:`Linux driver ad9162.c <drivers/iio/adc/ad9162.c>`
+- :dokuwiki:`[Wiki] AD916X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-pll/ad9162>`
 
 .. collapsible:: Linux devicetrees:
 
@@ -340,8 +349,6 @@ Linux support:
   - (AD9163) :git-linux:`Linux device tree (MODE 2) zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_s1_f1.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_s1_f1.dts>`
   - (AD9164) :git-linux:`Linux device tree (MODE 8) adi-ad9164-fmc-ebz.dtsi <arch/arm64/boot/dts/xilinx/adi-ad9164-fmc-ebz.dtsi>`
   - (AD9164) :git-linux:`Linux device tree (MODE 8) zynqmp-zcu102-rev10-ad9164-fmc-ebz_m2_s2.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9164-fmc-ebz_m2_s2.dts>`
-
-- :dokuwiki:`[Wiki] AD916X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-pll/ad9162>`
 
 .. include:: ../common/more_information.rst
 

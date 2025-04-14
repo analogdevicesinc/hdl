@@ -71,7 +71,6 @@ ad_ip_parameter  dac_dma               CONFIG.DMA_DATA_WIDTH_SRC 128
 
 ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
 
-
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"

@@ -3625,16 +3625,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.0000001"
-     inkscape:cx="519.49995"
-     inkscape:cy="317.99997"
+     inkscape:cx="464.49995"
+     inkscape:cy="241.99998"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:window-width="1920"
      inkscape:window-height="1122"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-x="18"
+     inkscape:window-y="1357"
      inkscape:window-maximized="1"
      inkscape:pagecheckerboard="0"
      inkscape:showpageshadow="2"
@@ -4490,7 +4490,7 @@
                y="539.12646"
                x="127.00217"
                id="tspan4313-9"
-               sodipodi:role="line">Zynq</tspan></text>
+               sodipodi:role="line">ZynqMP</tspan></text>
         </g>
       </g>
       <g
@@ -4518,7 +4518,7 @@
              x="33.237"
              sodipodi:role="line"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial"
-             id="tspan7">Transmit path (AD916x) </tspan></text>
+             id="tspan7">Transmit path </tspan></text>
       </g>
       <path
          style="display:inline;fill:#ff6600;fill-opacity:0;fill-rule:evenodd;stroke:#915f00;stroke-width:1.79371;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.58742, 3.58742;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
@@ -5153,7 +5153,7 @@
          x="-1355.5713"
          y="571.49445"
          id="tspan13"
-         style="stroke-width:1.01544">@245.76MHz</tspan></text>
+         style="stroke-width:1.01544">@312.5 MHz</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.47741px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.01544;shape-rendering:crispEdges;enable-background:new"
@@ -5187,7 +5187,7 @@
          x="662.39178"
          y="1394.5375"
          id="tspan17-2"
-         style="stroke-width:1.01544">@245.76MHz</tspan></text>
+         style="stroke-width:1.01544">@312.5 MHz</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:14.6667px;text-align:center;text-anchor:middle;fill:none;stroke-width:3.33732;stroke-linecap:round;stroke-miterlimit:0"
@@ -5197,6 +5197,6 @@
          sodipodi:role="line"
          id="tspan1"
          x="399.04019"
-         y="1273.5787"></tspan></text>
+         y="1273.5787" /></text>
   </g>
 </svg>

@@ -449,29 +449,29 @@ carrier and run the make command by typing in your command prompt:
 The **default configuration**, regardless of the carrier, is
 **ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04**.
 
-.. shell::
+.. shell:: bash
 
-   $user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
-   $user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make
+   $cd hdl/projects/dac_fmc_ebz/zcu102
+   $make
 
 Example: if the AD9152 device is needed and the mode should be 09, the following
 command should be run:
 
-.. shell::
+.. shell:: bash
 
-   $user@analog:~$ cd hdl/projects/dac_fmc_ebz/zcu102
-   $user@analog:~/hdl/projects/dac_fmc_ebz/zcu102$ make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
+   $cd hdl/projects/dac_fmc_ebz/zcu102
+   $make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
 
 Example: if the AD9152 device is needed and there is a need for a custom mode,
 the following commands should be run:
 
-.. shell::
+.. shell:: bash
 
-   $make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 M=1 L=8 S=4 F=1 HD=1 N=16 NP=16
+   $make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 M=1 L=8 S=4 NP=16
 
 or:
 
-.. shell::
+.. shell:: bash
 
    $make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 ADI_DAC_MODE=09 M=1 S=4
 
