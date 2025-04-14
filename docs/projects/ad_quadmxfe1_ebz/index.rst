@@ -101,7 +101,7 @@ the TX link (which has double the number of channels of RX).
 
    .. shell:: bash
 
-      /hdl/projects/ad_quadmxfe1_ebz
+      /hdl/projects/ad_quadmxfe1_ebz/vcu118
       $make JESD_MODE=64B66B \
       $     RX_LANE_RATE=16.5 \
       $     TX_LANE_RATE=16.5 \
@@ -188,7 +188,7 @@ four TX links.
 
    .. shell:: bash
 
-      /hdl/projects/ad_quadmxfe1_ebz
+      /hdl/projects/ad_quadmxfe1_ebz/vcu118
       $make JESD_MODE=8B10B \
       $     RX_JESD_L=4 \
       $     RX_JESD_M=8 \
