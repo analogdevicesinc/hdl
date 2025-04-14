@@ -253,7 +253,7 @@ Software related
 
 Linux support:
 
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4134.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4134.dts>`
+- :git-linux:`Linux device tree zynq-zed-adv7511-ad4134.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4134.dts>`
 - :git-linux:`Linux driver ad4134.c <drivers/iio/adc/ad4134.c>`
 
 No-OS support:
