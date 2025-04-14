@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -92,7 +92,6 @@ module axi_clock_monitor #(
   // local parameters
 
   localparam  PCORE_VERSION = 1;
- 
   localparam [7:0] DIV_VALUE = (DIV_RATE == 4'd1) ? "1" :
                                (DIV_RATE == 4'd2) ? "2" :
                                (DIV_RATE == 4'd3) ? "3" :
@@ -101,7 +100,6 @@ module axi_clock_monitor #(
                                (DIV_RATE == 4'd6) ? "6" :
                                (DIV_RATE == 4'd7) ? "7" :
                                (DIV_RATE == 4'd8) ? "8" : "0";
-
   localparam  SEVEN_SERIES    = 1;
   localparam  ULTRASCALE      = 2;
   localparam  ULTRASCALE_PLUS = 3; 
@@ -114,7 +112,7 @@ module axi_clock_monitor #(
   reg          up_scratch = 'd0;
   reg          up_reset_core = 'd0;
   reg  [31:0]  up_rdata_int = 'd0;
-  
+
   // internal signals
 
   wire         up_clk;
@@ -123,19 +121,17 @@ module axi_clock_monitor #(
   wire         up_rreq_s;
   wire         up_waddr_s;
   wire         up_raddr_s;
-  
   wire         clock          [0:15];
   wire [20:0]  clk_mon_count  [0:15];
   wire         clock_div      [0:15];
   wire [7:0]   div_rate_s;
-
   wire [13:0]  up_waddr_i_s;
   wire [31:0]  up_wdata_i_s;
   wire         up_wack_o_s;
-  wire [13:0]  up_raddr_i_s;  
+  wire [13:0]  up_raddr_i_s;
   wire [31:0]  up_rdata_o_s;
   wire         up_rack_o_s;
- 
+
   // loop variables
 
   genvar  n;
@@ -259,8 +255,7 @@ module axi_clock_monitor #(
       end else begin
         assign clock_div[n] = clock[n];
       end
-
-        up_clock_mon #(
+      up_clock_mon #(
            .TOTAL_WIDTH(21)
          ) i_clock_mon (
            .up_rstn(~up_reset_core),
@@ -269,7 +264,6 @@ module axi_clock_monitor #(
            .d_rst(1'b0),
            .d_clk(clock_div[n]));
     end
-
     for (n = NUM_OF_CLOCKS; n < 16; n = n + 1) begin: clk_mon_z
       assign clk_mon_count[n] = 21'd0;
     end
