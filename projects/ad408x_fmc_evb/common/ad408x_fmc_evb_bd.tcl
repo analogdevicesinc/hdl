@@ -27,7 +27,6 @@ ad_ip_parameter ad408x_clock_monitor CONFIG.DIV_RATE 4
 ad_connect fpga_ref_clk  ad408x_clock_monitor/clock_0
 ad_connect fpga_100_clk  ad408x_clock_monitor/clock_1
 
-
 # axi_ad408x
 
 ad_ip_instance axi_ad408x axi_ad4080_adc
