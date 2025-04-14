@@ -74,7 +74,10 @@ module axi_ada4355_if #(
 
   // Output data
   output [15:0]                      adc_data,
-  output                             adc_valid
+  (* mark_debug = "true" *) output                             adc_valid,
+  output                             adc_pn_err,
+  output  [31:0]                     adc_config_ctrl,
+  input   [31:0]                     enable_error
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -86,6 +89,7 @@ module axi_ada4355_if #(
                     FRAME_SHIFTED = 3'h2,
                     RESET = 3'h3;
   localparam [ 7:0] pattern_value = 8'hF0;
+  localparam [31:0] expected_pattern = 32'hFFFFFFFC;
 
   wire                 clk_in_s;
   wire                 out_ibufmrce_clock;
@@ -93,8 +97,9 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  wire [ 7:0]          data_0;
-  wire [ 7:0]          data_1;
+  //wire [31:0]          enable_error_sync;
+  (* mark_debug = "true" *) wire [ 7:0]          data_0;
+  (* mark_debug = "true" *) wire [ 7:0]          data_1;
   wire [NUM_LANES-2:0] data_in_p;
   wire [NUM_LANES-2:0] data_in_n;
 
@@ -107,29 +112,35 @@ module axi_ada4355_if #(
   wire [NUM_LANES-2:0] data_s6;
   wire [NUM_LANES-2:0] data_s7;
 
-  wire frame_s0;
-  wire frame_s1;
-  wire frame_s2;
-  wire frame_s3;
-  wire frame_s4;
-  wire frame_s5;
-  wire frame_s6;
-  wire frame_s7;
+  (* mark_debug = "true" *) wire frame_s0;
+  (* mark_debug = "true" *) wire frame_s1;
+  (* mark_debug = "true" *) wire frame_s2;
+  (* mark_debug = "true" *) wire frame_s3;
+  (* mark_debug = "true" *) wire frame_s4;
+  (* mark_debug = "true" *) wire frame_s5;
+  (* mark_debug = "true" *) wire frame_s6;
+  (* mark_debug = "true" *) wire frame_s7;
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
   reg [ 1:0] serdes_valid = 2'b00;
-  reg [ 1:0] serdes_valid_d = 2'b00;
-  reg [ 2:0] shift_cnt = 3'd0;
-  reg [15:0] serdes_data;
-  reg [15:0] serdes_data_d;
-  reg [ 7:0] serdes_frame;
-  reg [ 7:0] serdes_frame_d;
-  reg [15:0] adc_data_shifted;
-  reg [ 7:0] frame_shifted;
+  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
+  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
+  (* mark_debug = "true" *) reg [4:0] delay = 5'd0;
+  (* mark_debug = "true" *) reg [15:0] serdes_data;
+  (* mark_debug = "true" *) reg [15:0] serdes_data_d;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_frame;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_frame_d;
+  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
+  (* mark_debug = "true" *) reg [ 7:0] frame_shifted;
   reg [ 2:0] reg_test;
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
-  reg [ 2:0] state = 3'h0;
+  (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
+  (* mark_debug = "true" *) reg [31:0] adc_config_ctrl_r;
+  (* mark_debug = "true" *) reg        adc_pn_err_r;
+  reg        frame_err_r;
+  reg        data_err_r;
+  reg [31:0] test_pattern;
 
   IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -274,7 +285,28 @@ module axi_ada4355_if #(
     end
   end
 
+
+  /*sync_bits #(
+    .NUM_OF_BITS (32),
+    .ASYNC_CLK (0)
+  ) i_offload_enable_sync (
+    .in_bits (enable_error),
+    .out_resetn (adc_rst),
+    .out_clk (adc_clk_div),
+    .out_bits (enable_error_sync)); */
+
+  /*sync_data #(
+    .NUM_OF_BITS (32),
+    .ASYNC_CLK (1)
+  ) i_cdc_status (
+    .in_clk (up_clk),
+    .in_data (enable_error),
+    .out_clk (adc_clk_div),
+    .out_data (enable_error_sync));
+*/
   assign adc_clk = adc_clk_div;
+  assign adc_pn_err = ((frame_err_r & enable_error[0]) | (data_err_r & enable_error[1]));
+  assign adc_config_ctrl = adc_config_ctrl_r;
 
   assign data_in_p = {d1a_p, d0a_p};
   assign data_in_n = {d1a_n, d0a_n};
@@ -326,6 +358,10 @@ module axi_ada4355_if #(
   end
 
   always @(posedge adc_clk_div) begin
+    test_pattern <= adc_data_shifted;
+  end
+
+  always @(posedge adc_clk_div) begin
     if (serdes_reset_d) begin
       state <= INIT;
       shift_cnt <= 'h0;
@@ -337,10 +373,19 @@ module axi_ada4355_if #(
           state <= CNT_UPDATE;
         end else begin
           frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
+          if (expected_pattern == test_pattern) begin
+            data_err_r <= 1'b0;
+          end else begin
+            data_err_r <= 1'b1;
+          end
           state <= INIT;
         end
       end
       CNT_UPDATE : begin
+        if (shift_cnt == 3'b111) begin
+          frame_err_r <= 1'b1;
+          state <= RESET;
+        end
         shift_cnt <= shift_cnt + 1;
         state <= FRAME_SHIFTED;
       end
@@ -351,6 +396,8 @@ module axi_ada4355_if #(
       RESET : begin
           shift_cnt <= 0;
           state <= INIT;
+          frame_err_r <= 1'b0;
+          data_err_r <= 1'b0;
       end
       default :
         state <= INIT;
