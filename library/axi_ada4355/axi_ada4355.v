@@ -62,6 +62,10 @@ module axi_ada4355 #(
 
   input         delay_clk,
 
+  // error monitoring
+
+  output        up_adc_pn_err,
+
 // AXI interface
 
   input         s_axi_aclk,
@@ -102,6 +106,10 @@ module axi_ada4355 #(
   wire        adc_clk_s;
   wire        adc_rst_s;
   wire        delay_rst;
+  wire        adc_pn_err_s;
+  wire        up_adc_pn_err_s;
+  wire        up_adc_pn_oos_s;
+  wire [ 2:0] enable_error_s;
 
   wire        up_rstn;
   wire        up_clk;
@@ -111,9 +119,9 @@ module axi_ada4355 #(
   wire        up_wr_s;
   wire [13:0] up_addr_s;
   wire [31:0] up_wdata_s;
-  wire [31:0] up_rdata_s [0:2];
-  wire        up_rack_s [0:2];
-  wire        up_wack_s [0:2];
+  wire [31:0] up_rdata_s [0:3];
+  wire        up_rack_s [0:3];
+  wire        up_wack_s [0:3];
 
   reg [31:0] up_rdata_r;
   reg        up_rack_r;
@@ -127,12 +135,13 @@ module axi_ada4355 #(
   assign adc_clk = adc_clk_s;
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+  assign up_adc_pn_err = up_adc_pn_err_s;
 
   always @(*) begin
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
-    for(j = 0; j <= 2; j=j+1) begin
+    for(j = 0; j <= 3; j=j+1) begin
       up_rack_r = up_rack_r | up_rack_s[j];
       up_wack_r = up_wack_r | up_wack_s[j];
       up_rdata_r = up_rdata_r | up_rdata_s[j];
@@ -168,15 +177,15 @@ module axi_ada4355 #(
     .adc_iqcor_coeff_2(),
     .adc_pnseq_sel(),
     .adc_data_sel(),
-    .adc_pn_err(1'b0),
+    .adc_pn_err(adc_pn_err_s),
     .adc_pn_oos(1'b0),
     .adc_or(),
     .adc_read_data(),
     .adc_status_header('b0),
     .adc_crc_err('b0),
     .up_adc_crc_err(),
-    .up_adc_pn_err(),
-    .up_adc_pn_oos(),
+    .up_adc_pn_err(up_adc_pn_err_s),
+    .up_adc_pn_oos(up_adc_pn_oos_s),
     .up_adc_or(),
     .up_usr_datatype_be(),
     .up_usr_datatype_signed(),
@@ -224,8 +233,8 @@ module axi_ada4355 #(
     .up_pps_status(1'b0),
     .up_pps_irq_mask(),
     .up_adc_ce(),
-    .up_status_pn_err(1'b0),
-    .up_status_pn_oos(1'b0),
+    .up_status_pn_err(up_adc_pn_err_s),
+    .up_status_pn_oos(up_adc_pn_oos_s),
     .up_status_or(1'b0),
     .up_drp_sel(),
     .up_drp_wr(),
@@ -279,6 +288,8 @@ module axi_ada4355 #(
     .adc_data(adc_data),
     .adc_valid(adc_valid),
     .aresetn(up_rstn),
+    .adc_pn_err(adc_pn_err_s),
+    .enable_error(enable_error_s),
     .sync_n(sync_n));
 
   // adc delay control
@@ -304,6 +315,21 @@ module axi_ada4355 #(
     .up_raddr(up_raddr_s),
     .up_rdata(up_rdata_s[2]),
     .up_rack(up_rack_s[2]));
+
+  axi_ada4355_regmap i_regmap(
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_s[3]),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_s[3]),
+    .up_rack(up_rack_s[3]),
+    .clk_div(adc_clk_s),
+    .enable_error_sync(enable_error_s),
+    .adc_rst(adc_rst_s));
 
   // up bus interface
 
