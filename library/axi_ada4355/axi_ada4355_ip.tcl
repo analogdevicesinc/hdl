@@ -23,14 +23,18 @@ adi_ip_files axi_ada4355 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "axi_ada4355_constr.ttcl" \
+  "axi_ada4355_regmap.v" \
   "axi_ada4355_if.v" \
   "axi_ada4355.v" ]
 
 adi_ip_properties axi_ada4355
+adi_ip_ttcl axi_ada4355 "axi_ada4355_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
