@@ -45,7 +45,7 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-The data path consist of the shared transceivers, then are followed by the
+The data path consists of the shared transceivers, then are followed by the
 individual JESD204B link and transport layer IP cores. The cores are
 programmable through an AXI-lite interface. Both JESD204 interfaces run in
 subclass 0.
@@ -167,18 +167,6 @@ The settings A, COM and B refer to solder positions: 1, 2, and 3 respectively.
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The design has one JESD receive chain and one transmit chain, each with 8 lanes.
-
-Each chain consists of a physical layer represented by an XCVR module, a link
-layer represented by a JESD LINK module and transport layer represented by a
-JESD TPL module. The HDL project in its current state, has
-**the link operating in subclass 0**.
-
-- Rx device clock - 122.88 MHz
-- Tx device clock - 245.76 MHz
-- JESD204B Rx Lane Rate - 4.9152 Gbps
-- JESD204B Tx Lane Rate - 9.8304 Gbps
-
 The current HDL project supports only the following configuration:
 
 - JESD204B interfaces in subclass 0
@@ -204,6 +192,19 @@ The current HDL project supports only the following configuration:
 
 Detailed description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The design has one JESD204B receive chain and one transmit chain, each with
+8 lanes.
+
+Each chain consists of a transport layer represented by a JESD TPL module, 
+a link layer represented by a JESD LINK module, and a shared among chains
+physical layer, represented by an XCVR module. The HDL project in its current
+state, has **the link operating in subclass 0**.
+
+- Rx device clock - 122.88 MHz
+- Tx device clock - 245.76 MHz
+- JESD204B Rx Lane Rate - 4.9152 Gbps
+- JESD204B Tx Lane Rate - 9.8304 Gbps
 
 The transport layer transfers data continuously from/to the ADC/DAC. In the TX
 data path, :ref:`UPACK <util_upack2>` will only send the enabled channels to
