@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2023 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -39,8 +39,6 @@ adi_project_files daq3_zc706 [list \
 
 set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
-
 set_property part "xc7z045ffg900-3" [get_runs synth_1]
 set_property part "xc7z045ffg900-3" [get_runs impl_1]
 adi_project_run daq3_zc706
-

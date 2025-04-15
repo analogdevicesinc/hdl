@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -40,4 +40,3 @@ adi_project_files daq3_kcu105 [list \
 set_property strategy Performance_ExploreWithRemap [get_runs impl_1]
 
 adi_project_run daq3_kcu105
-
