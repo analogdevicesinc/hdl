@@ -1078,17 +1078,17 @@
      inkscape:snap-page="true"
      showguides="false"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="4763"
-     inkscape:window-height="1272"
-     inkscape:window-width="2400"
+     inkscape:window-y="1342"
+     inkscape:window-x="-8"
+     inkscape:window-height="1112"
+     inkscape:window-width="1920"
      units="px"
      showgrid="true"
      inkscape:current-layer="g11134"
      inkscape:document-units="px"
-     inkscape:cy="213.14219"
-     inkscape:cx="672.25652"
-     inkscape:zoom="0.98994949"
+     inkscape:cy="558"
+     inkscape:cx="681.5"
+     inkscape:zoom="1"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -1369,15 +1369,15 @@
          inkscape:export-xdpi="96"
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
-         x="-204.38219"
+         x="-180.9399"
          y="-125.48253"
          id="text5788"
          transform="rotate(-90)"><tspan
            sodipodi:role="line"
            id="tspan5790"
-           x="-204.38219"
+           x="-180.9399"
            y="-125.48253"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:1px;stroke-opacity:1">PULSAR_ADC_DMA</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.5px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:1px;stroke-opacity:1">CN0363_DMA</tspan></text>
       <text
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
@@ -1408,13 +1408,13 @@
       <path
          sodipodi:nodetypes="cccc"
          id="path2454-4"
-         d="m 73.191162,185.59331 -59.938991,-0.1061 -0.160773,-21.06156 -0.02634,-3.45059"
+         d="M 68.631272,185.3675 H 13.065277 l 0.02612,-20.94185 -0.02612,-3.45059"
          style="display:inline;fill:none;stroke:#000000;stroke-width:1.22133;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458-6);shape-rendering:crispEdges;enable-background:new" />
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1206-9-7-12-4-7-2"
-         d="m 118.37961,100.22981 c 0.14671,5.74761 0.29341,23.41579 0.44012,35.12369"
+         d="m 118.81994,100.22981 c 0.14671,5.74761 -0.14671,23.41579 0,35.12369"
          style="display:inline;fill:none;stroke:#000000;stroke-width:1.8117;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-2-7-7-3);shape-rendering:crispEdges;enable-background:new" />
       <g
          id="adc_core"
@@ -1828,18 +1828,14 @@
          id="text6100-7-7-9"
          y="329.97366"
          x="-205.92009"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;white-space:pre;inline-size:67.6349;display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;shape-rendering:crispEdges;enable-background:new"
          xml:space="preserve"><tspan
-           id="tspan5125-0-2-6"
-           style="stroke-width:1"
+           x="-205.92009"
            y="329.97366"
+           id="tspan8">sys_clk    </tspan><tspan
            x="-205.92009"
-           sodipodi:role="line">sys_clk </tspan><tspan
-           id="tspan331"
-           style="stroke-width:1"
-           y="343.30704"
-           x="-205.92009"
-           sodipodi:role="line">= 100MHz</tspan></text>
+           y="343.30702"
+           id="tspan11">=100MHz</tspan></text>
       <flowRoot
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          id="flowRoot482"
@@ -1882,12 +1878,12 @@
       <path
          sodipodi:nodetypes="ccc"
          id="path2454"
-         d="M 2.0464536,295.04765 -22.5329,294.78125 -22.055852,162.7268"
+         d="M 0.77171882,294.72913 H -22.055632 V 162.7268"
          style="fill:none;stroke:#000000;stroke-width:1.8741;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458)" />
       <path
          sodipodi:nodetypes="ccc"
          id="path2454-3"
-         d="m 234.88673,87.023044 0.0228,-23.923593 -56.51673,0.193795"
+         d="M 234.88632,87.022821 V 63.099119 h -56.49353"
          style="display:inline;fill:none;stroke:#000000;stroke-width:1.8444;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458-8);shape-rendering:crispEdges;enable-background:new" />
       <text
          inkscape:export-ydpi="96"
@@ -1911,12 +1907,12 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path1206-9-7-12-4-7-6"
-         d="m -50.23001,118.68358 -56.85058,0.2717"
+         d="M -48.655338,118.68336 H -109.85501"
          style="display:inline;fill:none;stroke:#000000;stroke-width:1.49591;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-2-7-7-8);shape-rendering:crispEdges;enable-background:new" />
       <path
          sodipodi:nodetypes="ccc"
          id="path2454-1"
-         d="M 382.55718,265.81325 236.25647,265.69466 235.91673,164.67383"
+         d="M 382.55718,265.81313 H 235.91707 v -101.1393"
          style="display:inline;fill:none;stroke:#000000;stroke-width:2.39047;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker2458-9);shape-rendering:crispEdges;enable-background:new" />
     </g>
     <g
