@@ -6,7 +6,7 @@ ADV7511 HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`ADV7511` is a 225 MHz High-Definition Multimedia Interface (HDMI®) transmitter,
+The :adi:`ADV7511` is a 225 MHz High-Definition Multimedia Interface (HDMI) transmitter,
 which is ideal for home entertainment products including DVD players/recorders, digital
 set top boxes, A/V receivers, gaming consoles, and PCs.
 
@@ -215,12 +215,9 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADV7511 driver source code <drivers/gpu/drm/bridge/adv7511>`
-- :git-linux:`ADV7511 - ZED dtsi source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dtsi>`
-- :git-linux:`ADV7511 - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511.dts>`
-- :git-linux:`ADV7511 - ZC706 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dtsi>`
-- :git-linux:`ADV7511 - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511.dts>`
-- :git-linux:`ADV7511 - ZC702 dtsi source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dtsi>`
-- :git-linux:`ADV7511 - ZC702 dts source code (arm32) <arch/arm/boot/dts/zynq-zc702-adv7511.dts>`
+- :git-linux:`ADV7511 - ZED dts source code <arch/arm/boot/dts/xilinx/zynq-zed-adv7511.dts>`
+- :git-linux:`ADV7511 - ZC706 dts source code <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511.dts>`
+- :git-linux:`ADV7511 - ZC702 dts source code <arch/arm/boot/dts/xilinx/zynq-zc702-adv7511.dts>`
 - :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
 - :git-no-OS:`ADV7511 no-OS project source code <projects/adv7511>`
 
