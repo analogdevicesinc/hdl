@@ -194,26 +194,35 @@ Software Guidelines
      - Register
      - BIT
      - Description
-   * - BITSLIP_ENABLE
+   * - SYNC *
      - 0x44 (ADC Common)
      - 3
-     - Enables the sync process.
-   * - NUM_LANES
+     - This bit enables capture synchronization. When activated, it initiates
+       an HDL process that aligns the sample's most significant bit (MSB) based
+       solely on the captured data, without considering the AD4080's CNV signal.
+       This bit is self-clearing and should be toggled whenever synchronization
+       is needed (e.g., at boot or after updating the sampling rate).
+   * - NUM_LANES *
      - 0x44 (ADC Common)
      - [12:8]
-     - Controls the number of lanes enabled.
+     - This field specifies the number of data lanes utilized for data transfer,
+       which can be either 1 or 2.
    * - FILTER_ENABLE
      - 0x4C (ADC Common)
      - 0
-     - Controls the filter status.
-   * - SELF_SYNC
-     - 0x4C (ADC Common)
-     - 1
-     - Controls if the data capture synchronization is done through CNV signal or bit-slip.
-   * - SYNC_STATUS
+     - Setting this bit configures the sample capture to occur at each falling
+       edge of the Filter Result Ready pin of the AD4080, as opposed to
+       continuous mode when the digital filter feature is disabled.
+   * - SYNC_STATUS *
      - 0x68 (ADC Common)
      - 0
-     - States the synchronization status.
+     - This bit indicates whether the sample's MSB alignment has been correctly
+       performed and the capture is synchronized. If successful, this bit will
+       be set to 1.
+
+.. note::
+
+  \* The register already exist in ADC Common. This is just a detailed explanation.
 
 Software Suppport
 --------------------------------------------------------------------------------
