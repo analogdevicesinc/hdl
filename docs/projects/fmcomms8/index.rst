@@ -5,7 +5,7 @@ FMCOMMS8 HDL reference design
 
 The HDL reference design is an embedded system built around a processor core
 either ARM, NIOS-II or Microblaze. A functional block diagram of the system
-is shown below. The two ADRV9009's digital interface is handled by the
+is shown below. The two :adi:`ADRV9009's <ADRV9009>` digital interface is handled by the
 transceiver IP followed by the JESD204B and device specific cores. The JESD204B
 lanes are shared among the 8 transmit, 4 receive and 4 observation/sniffer
 receive data paths by the same set of transceivers within the IP. The cores
@@ -17,6 +17,11 @@ Supported boards
 -------------------------------------------------------------------------------
 
 - :adi:`AD-FMCOMMS8-EBZ <EVAL-AD-FMCOMMS8-EBZ>`
+
+Supported devices
+-------------------------------------------------------------------------------
+
+- :adi:`ADRV9009`
 
 Supported carriers
 -------------------------------------------------------------------------------
