@@ -467,7 +467,7 @@ be found below.
 
 .. literalinclude:: ../../projects/index.rst
   :start-at: daq3_zc706
-  :end-before: daq3_zcu102
+  :end-before: resources-daq3-zcu102
 
 Building the HDL project
 -------------------------------------------------------------------------------
