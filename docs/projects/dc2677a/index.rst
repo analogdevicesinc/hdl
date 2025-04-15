@@ -206,7 +206,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`Linux device tree socfpga_cyclone5_sockit_dc2677a.dts <arch/arm/boot/dts/socfpga_cyclone5_sockit_dc2677a.dts>`
+- :git-linux:`Linux device tree socfpga_cyclone5_sockit_dc2677a.dts <arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_sockit_dc2677a.dts>`
 - :git-linux:`LTC2358 Linux driver ltc2358.c <drivers/iio/adc/ltc2358.c>`
 
 .. include:: ../common/more_information.rst
