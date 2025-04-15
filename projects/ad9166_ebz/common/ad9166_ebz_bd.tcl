@@ -139,7 +139,8 @@ ad_ip_parameter axi_spi_fmc CONFIG.C_USE_STARTUP 0
 ad_ip_parameter axi_spi_fmc CONFIG.C_NUM_SS_BITS 4
 ad_ip_parameter axi_spi_fmc CONFIG.C_SCK_RATIO 8
 ad_ip_parameter axi_spi_fmc CONFIG.C_SPI_MODE 0
-ad_ip_parameter axi_spi_fmc CONFIG.C_NUM_TRANSFER_BITS 16
+# was 16
+ad_ip_parameter axi_spi_fmc CONFIG.C_NUM_TRANSFER_BITS 8
 
 ad_connect spi_fmc_csn_i axi_spi_fmc/ss_i
 ad_connect spi_fmc_csn_o axi_spi_fmc/ss_o
