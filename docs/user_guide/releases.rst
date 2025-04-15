@@ -28,9 +28,10 @@ following:
 First, disable the version check of the scripts.
 
 The ADI build scripts are making sure that the releases are being run on
-the validated tool version. It will promptly notify the user if he or
-she trying to use an unsupported version of tools. You need to disable
-this check by setting the environment variable ``ADI_IGNORE_VERSION_CHECK``.
+the validated tool version. It will promptly notify the user if he/she is
+trying to use an unsupported version of tools. You need to disable
+this check by setting the environment variable **ADI_IGNORE_VERSION_CHECK**:
+``export ADI_IGNORE_VERSION_CHECK=1``.
 
 Second, make Intel and AMD IP cores version change.
 
@@ -45,7 +46,6 @@ After which, update the Tcl scripts accordingly.
 The versions are specified in the following format.
 
 .. code-block:: tcl
-   :linenos:
 
    add_instance sys_cpu altera_nios2_gen2 16.0
    set sys_mb [create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:9.5 sys_mb]
@@ -68,9 +68,9 @@ Release branches
      - List of supported projects and IP cores
    * - :git-hdl:`main <main:/>`
      - Quartus Pro 24.2
-     - Vivado 2023.2
-     -
-     -
+     - Vivado 2024.2
+     - ---
+     - ---
    * - :git-hdl:`hdl_2023_r2 <hdl_2023_r2:>`
      - Quartus Pro 23.2
      - Vivado 2023.2
