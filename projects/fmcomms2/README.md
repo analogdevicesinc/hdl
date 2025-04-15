@@ -16,6 +16,6 @@ Here are some pointers to help you:
 | [AD9361](https://www.analog.com/AD9361) | RF 2 × 2 transceiver with integrated 12-bit DACs and ADCs |
 | [AD9364](https://www.analog.com/AD9364) | RF 1 × 1 transceiver with integrated 12-bit DACs and ADCs |
 
-## Building the 
+## Building the project
 
 Please enter the folder for the FPGA carrier you want to use and read the README.md.
