@@ -3,9 +3,6 @@
 AXI LTC235X
 ===============================================================================
 
-.. hdl-component-diagram::
-   :path: library/axi_ltc235x
-
 The :git-hdl:`AXI LTC235X <library/axi_ltc235x>` IP core can be used to
 interface the :adi:`LTC2358-18`, :adi:`LTC2358-16`, and similar devices
 using an FPGA. The core has a AXI Memory Map interface for configuration,
@@ -70,15 +67,184 @@ LVDS mode
 Configuration Parameters
 -------------------------------------------------------------------------------
 
-.. hdl-parameters::
-   :path: library/axi_ltc235x
+.. list-table::
+   :widths: 20 40 10 30
+   :header-rows: 1
+
+   * - Name
+     - Description
+     - Default Value
+     - Choices/Range
+   * - ID
+     - Core ID should be unique for each IP in the system
+     - 0
+     -
+   * - XILINX_INTEL_N
+     - IP Core Compatibility
+     - 0
+     - FPGAS: 0 for Intel, 1 for Xilinx
+   * - LVDS_CMOS_N
+     - Selects physical interface type
+     - 0
+     - Interface: 0 for CMOS, 1 for LVDS
+   * - LTC235X_FAMILY
+     - Selects chip family
+     - 0
+     - 0 for 2358-18, 1 for 2358-16, 2 for 2357-18, 3 for 2357-16, 4 for 2353-18, 5 for 2353-16
+   * - LANE_0_ENABLE
+     - Lane 0 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_1_ENABLE
+     - Lane 1 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_2_ENABLE
+     - Lane 2 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_3_ENABLE
+     - Lane 3 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_4_ENABLE
+     - Lane 4 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_5_ENABLE
+     - Lane 5 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_6_ENABLE
+     - Lane 6 Enable, if set lane signal is connected
+     - 1
+     -
+   * - LANE_7_ENABLE
+     - Lane 7 Enable, if set lane signal is connected
+     - 1
+     -
+   * - EXTERNAL_CLK
+     - Enables external_clk input pin
+     - 0
+     - If 1, uses an external clock
+   * - NUM_CHANNELS
+     - Select number of ADC channels
+     - 8
+     - 8 for LTC2358, 4 for LTC2357, 2 for LTC2353
+   * - DATA_WIDTH
+     - Select width of data in bits
+     - 18
+     - 18 or 16 based on the part
 
 .. _axi_ltc235x interface:
 
 Interface
 -------------------------------------------------------------------------------
 
-.. hdl-interfaces::
+.. list-table::
+   :widths: 20 30 10 40
+   :header-rows: 1
+
+   * - Interface
+     - Pin
+     - Type
+     - Description
+   * - Input data interface
+     -
+     -
+     - ADC data interface signals
+   * -
+     - busy
+     - input
+     - Indicates that a conversion is in progress. This pin transitions lowto-high at the start of each conversion and stays high until the conversion is complete
+   * -
+     - lvds_cmos_n
+     - output
+     - I/O mode select
+   * -
+     - external_clk
+     - input
+     - external clock
+   * -
+     -
+     -
+     - CMOS signals
+   * -
+     - scki
+     - output
+     - Serial clock input of device
+   * -
+     - scko
+     - input
+     - Serial clock output of device
+   * -
+     - sdi
+     - output
+     - Serial data input of device
+   * -
+     - sdo
+     - input [7:0]
+     - Serial data output of device
+   * -
+     -
+     -
+     - LVDS signals
+   * -
+     - scki_p
+     - output
+     - Positive serial clock input of device
+   * -
+     - scki_n
+     - output
+     - Negative serial clock input of device
+   * -
+     - scko_p
+     - input
+     - Positive serial clock output of device
+   * -
+     - scko_n
+     - input
+     - Negative serial clock output of device
+   * -
+     - sdi_p
+     - output
+     - Positive serial data input of device
+   * -
+     - sdi_n
+     - output
+     - Negative serial data input of device
+   * -
+     - sdo_p
+     - input
+     - Positive serial data output of device
+   * -
+     - sdo_n
+     - input
+     - Negative serial data output of device
+   * - s axi_*
+     -
+     -
+     - AXI Slave Memory Map interface
+   * - adc fifo
+     -
+     -
+     - FIFO interface for connecting to the DMA
+   * -
+     - adc_dovf
+     - input
+     - Data overflow, must be connected to the DMA.
+   * -
+     - adc_enable_*
+     - output
+     - If set, the channel is enabled. One for each channel
+   * -
+     - adc_valid_*
+     - output
+     - Indicates valid data at the current channel. One for each channel
+   * -
+     - adc_data_*
+     - output [31:0]
+     - Received data output. One for each channel
 
 Detailed Architecture
 -------------------------------------------------------------------------------
