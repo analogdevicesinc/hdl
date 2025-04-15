@@ -11,6 +11,6 @@
 | [ADAQ23876](https://www.analog.com/ADAQ23876) | 16-Bit, 15 MSPS, μModule Data Acquisition Solution |
 | [LTC2387-18](https://www.analog.com/LTC2387-18) | 18-Bit, 15 MSPS, SAR ADC |
 
-## Building the 
+## Building the project
 
 Please enter the folder for the FPGA carrier you want to use and read the README.md.
