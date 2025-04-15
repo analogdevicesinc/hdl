@@ -47,6 +47,26 @@ ad_ip_parameter  dac_dma               CONFIG.DMA_DATA_WIDTH_SRC 128
 
 ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
 
+create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 ila_0
+set_property -dict [list \
+  CONFIG.C_ADV_TRIGGER {false} \
+  CONFIG.C_DATA_DEPTH {4096} \
+  CONFIG.C_EN_STRG_QUAL {1} \
+  CONFIG.C_MONITOR_TYPE {Native} \
+  CONFIG.C_NUM_OF_PROBES {6} \
+  CONFIG.C_PROBE0_WIDTH {128} \
+  CONFIG.C_PROBE1_WIDTH {128} \
+  CONFIG.C_TRIGIN_EN {false} \
+  CONFIG.C_TRIGOUT_EN {false} \
+] [get_bd_cells ila_0]
+connect_bd_net [get_bd_pins ila_0/clk] [get_bd_pins util_dac_jesd204_xcvr/tx_out_clk_0]
+connect_bd_net [get_bd_pins dac_upack/fifo_rd_data_0] [get_bd_pins ila_0/probe0]
+connect_bd_net [get_bd_pins dac_upack/fifo_rd_data_1] [get_bd_pins ila_0/probe1]
+connect_bd_net [get_bd_pins dac_upack/enable_0] [get_bd_pins ila_0/probe2]
+connect_bd_net [get_bd_pins dac_upack/enable_1] [get_bd_pins ila_0/probe3]
+connect_bd_net [get_bd_pins dac_upack/fifo_rd_underflow] [get_bd_pins ila_0/probe4]
+connect_bd_net [get_bd_pins dac_upack/fifo_rd_valid] [get_bd_pins ila_0/probe5]
+
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
