@@ -453,6 +453,7 @@ Instance name    HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP S10SoC Li
 
 Resource utilization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ..
   To see the resources utilization, please go to
   :ref:`projects resources-daq3-zc706`. A simplified version of that table can

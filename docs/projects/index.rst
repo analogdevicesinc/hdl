@@ -3,17 +3,14 @@ Projects
 
 .. note::
 
-   This page lists only reference designs that have been ported to the new
-   documentation format.
+   This page lists the HD reference designs that have documentation on the HDL
+   repository, as well as the Resource utilization for each project.
 
-   See
-   :dokuwiki:`AMD Xilinx Reference Designs <resources/alliances/xilinx>`
-   and
-   :dokuwiki:`Intel Reference Designs <resources/alliances/altera>`
-   for a complete list of reference designs.
-
-Contents
+Projects list
 -------------------------------------------------------------------------------
+
+The following are the documentations for the HDL reference designs that we
+created and we offer support for:
 
 .. toctree::
    :maxdepth: 1
@@ -103,6 +100,10 @@ Contents
 
 Obsolete projects
 -------------------------------------------------------------------------------
+
+The following are the documentations for the HDL reference designs which are
+**now obsolete and not maintained anymore**: (:red:`support is limited`)
+
 .. toctree::
    :maxdepth: 1
 
@@ -116,10 +117,9 @@ Obsolete projects
 .. toctree::
    :maxdepth: 1
 
-The following projects are obsolete and **not maintained anymore**.
-Support is limited. The latest tested sources for these projects can be
-found in the following release branches, or in their corresponding ADI Kuiper
-Linux images (the already built files):
+The latest tested sources for these projects can be found in the following
+release branches, or in their corresponding ADI Kuiper Linux images (the
+already-built files):
 
 .. list-table::
    :widths: 50 50
@@ -139,3 +139,29 @@ Linux images (the already built files):
      - :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/fmcjesdadc1>`
    * - imageon
      - :git-hdl:`hdl_2022_r2 <hdl_2022_r2:projects/imageon>`
+
+.. _projects resource-utilization:
+
+Resource utilization
+-------------------------------------------------------------------------------
+
+The following tables contain information about the resource utilization per
+each project, per FPGA carrier.
+
+.. _projects resources-daq3-zc706:
+.. table:: daq3_zc706
+
+   =============== =============== =============== =============== =========== =========== ==========
+   LUT             FF              DSP             RAMB/FIFO       BUFG        MMCM        PLL
+   =============== =============== =============== =============== =========== =========== ==========
+   40089 (18.34%)  49527 (11.33%)  25 (2.78%)      279.5 (51.28%)  10 (31.25%) 4 (50%)     1 (12.5%)
+   =============== =============== =============== =============== =========== =========== ==========
+
+.. _projects resources-daq3-zcu102:
+.. table:: daq3_zcu102
+
+   =============== =============== =============== =============== =========== =========== ==========
+   LUT             FF              DSP             RAMB/FIFO       BUFG        MMCM        PLL
+   =============== =============== =============== =============== =========== =========== ==========
+   24632 (8.99%)   30046 (5.48%)   16 (0.63%)      262 (28.73%)    4 (0.99%)   4 (50%)     0
+   =============== =============== =============== =============== =========== =========== ==========
