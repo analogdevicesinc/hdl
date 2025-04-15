@@ -28,14 +28,14 @@ Contents
    AD411x-AD717x <ad411x_ad717x/index>
    AD4134-FMC <ad4134_fmc/index>
    AD4170-ASDZ <ad4170_asdz/index>
-   AD4630-FMC/AD4030-FMC/ADAQ4224-FMC <ad4630_fmc/index>
+   AD4630-FMC <ad4630_fmc/index>
    AD469X-EVB <ad469x_evb/index>
    AD485X-FMCZ <ad485x_fmcz/index>
    AD5758-SDZ <ad5758_sdz/index>
    AD5766-SDZ <ad5766_sdz/index>
    AD57XX-ARDZ <ad57xx_ardz/index>
    AD6676EVB <ad6676evb/index>
-   AD7124-4-ASDZ/AD7124-8-ASDZ <ad7124_asdz/index>
+   AD7124-ASDZ <ad7124_asdz/index>
    AD7134-FMC <ad7134_fmc/index>
    AD719X-ASDZ <ad719x_asdz/index>
    AD738X-FMC <ad738x_fmc/index>
