@@ -85,10 +85,10 @@ module system_top (
   assign spi_fmc_en = 1'b0;
 
   // PL SPI connected to axi_quad_spi because they share the same SPI lines
-  assign spi_fmc_dac = spi_csn[0];      // FMC_CS1
-  assign spi_fmc_hmc7044 = spi_csn[1];  // FMC_CS2
-  assign spi_fmc_adf4372 = spi_csn[2];  // FMC_CS3
-  assign spi_fmc_amp = spi_csn[3];      // FMC_CS4
+  assign spi_csn_dac = spi_csn[0];      // FMC_CS1
+  assign spi_csn_hmc7044 = spi_csn[1];  // FMC_CS2
+  assign spi_csn_adf4372 = spi_csn[2];  // FMC_CS3
+  assign spi_csn_amp = spi_csn[3];      // FMC_CS4
 
   ad_3w_spi #(
     .NUM_OF_SLAVES (1)
