@@ -100,10 +100,14 @@ module system_top (
   inout         gain_sel0,
   inout         gain_sel1,
   input         gain_sel2,
+  input         gain_sel3,
 
-  inout         fsel,
+  inout         freq_sel0,
+  inout         freq_sel1,
   inout         gpio_1p8vd_en,
   input         gpio_1p8va_en,
+  input         trig,
+  input         apd_supp_en,
 
   // ADC SPI
 
@@ -151,8 +155,11 @@ module system_top (
     .dio_t(gpio_t[35:32]),
     .dio_i(gpio_o[35:32]),
     .dio_o(gpio_i[35:32]),
-    .dio_p({gpio_1p8vd_en,
-            fsel,
+    .dio_p({apd_supp_en,
+            trig,
+            gpio_1p8vd_en,
+            freq_sel1,
+            freq_sel0,
             gain_sel1,
             gain_sel0}));
 
