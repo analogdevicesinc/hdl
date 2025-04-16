@@ -20,6 +20,7 @@ GENERIC_DEPS += axi_ada4355.v
 GENERIC_DEPS += axi_ada4355_if.v
 GENERIC_DEPS += axi_ada4355_regmap.v
 
+XILINX_DEPS += axi_ada4355_constr.ttcl
 XILINX_DEPS += ../util_cdc/sync_bits.v
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v

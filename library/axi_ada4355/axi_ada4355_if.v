@@ -76,8 +76,7 @@ module axi_ada4355_if #(
   output [15:0]                      adc_data,
   (* mark_debug = "true" *) output                             adc_valid,
   output                             adc_pn_err,
-  output  [31:0]                     adc_config_ctrl,
-  input   [31:0]                     enable_error
+  input   [ 2:0]                     enable_error
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -89,7 +88,8 @@ module axi_ada4355_if #(
                     FRAME_SHIFTED = 3'h2,
                     RESET = 3'h3;
   localparam [ 7:0] pattern_value = 8'hF0;
-  localparam [31:0] expected_pattern = 32'hFFFFFFFC;
+  localparam [16:0] expected_pattern_lane_0 = 16'hAAA8;
+  localparam [16:0] expected_pattern_lane_1 = 16'h5554;
 
   wire                 clk_in_s;
   wire                 out_ibufmrce_clock;
@@ -97,7 +97,6 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  //wire [31:0]          enable_error_sync;
   (* mark_debug = "true" *) wire [ 7:0]          data_0;
   (* mark_debug = "true" *) wire [ 7:0]          data_1;
   wire [NUM_LANES-2:0] data_in_p;
@@ -136,10 +135,12 @@ module axi_ada4355_if #(
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
   (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
-  (* mark_debug = "true" *) reg [31:0] adc_config_ctrl_r;
   (* mark_debug = "true" *) reg        adc_pn_err_r;
   reg        frame_err_r;
-  reg        data_err_r;
+  reg        data_err_lane_0_r;
+  reg        data_err_lane_1_r;
+  reg        lane_0_mask = 16'hAAAA;
+  reg        lane_1_mask = 16'h5555;
   reg [31:0] test_pattern;
 
   IBUFGDS i_clk_in_ibuf(
@@ -285,28 +286,9 @@ module axi_ada4355_if #(
     end
   end
 
-
-  /*sync_bits #(
-    .NUM_OF_BITS (32),
-    .ASYNC_CLK (0)
-  ) i_offload_enable_sync (
-    .in_bits (enable_error),
-    .out_resetn (adc_rst),
-    .out_clk (adc_clk_div),
-    .out_bits (enable_error_sync)); */
-
-  /*sync_data #(
-    .NUM_OF_BITS (32),
-    .ASYNC_CLK (1)
-  ) i_cdc_status (
-    .in_clk (up_clk),
-    .in_data (enable_error),
-    .out_clk (adc_clk_div),
-    .out_data (enable_error_sync));
-*/
   assign adc_clk = adc_clk_div;
-  assign adc_pn_err = ((frame_err_r & enable_error[0]) | (data_err_r & enable_error[1]));
-  assign adc_config_ctrl = adc_config_ctrl_r;
+  assign adc_pn_err = ((frame_err_r & enable_error[0]) | (data_err_lane_0_r & enable_error[1]) |
+                      (data_err_lane_1_r & enable_error[2]));
 
   assign data_in_p = {d1a_p, d0a_p};
   assign data_in_n = {d1a_n, d0a_n};
@@ -373,10 +355,15 @@ module axi_ada4355_if #(
           state <= CNT_UPDATE;
         end else begin
           frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
-          if (expected_pattern == test_pattern) begin
-            data_err_r <= 1'b0;
+          if (expected_pattern_lane_0 == (test_pattern & lane_0_mask)) begin
+            data_err_lane_0_r <= 1'b0;
           end else begin
-            data_err_r <= 1'b1;
+            data_err_lane_0_r <= 1'b1;
+          end
+          if (expected_pattern_lane_1 == (test_pattern & lane_1_mask)) begin
+            data_err_lane_1_r <= 1'b0;
+          end else begin
+            data_err_lane_1_r <= 1'b1;
           end
           state <= INIT;
         end
@@ -397,7 +384,8 @@ module axi_ada4355_if #(
           shift_cnt <= 0;
           state <= INIT;
           frame_err_r <= 1'b0;
-          data_err_r <= 1'b0;
+          data_err_lane_0_r <= 1'b0;
+          data_err_lane_1_r <= 1'b0;
       end
       default :
         state <= INIT;
