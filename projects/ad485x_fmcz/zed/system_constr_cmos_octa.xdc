@@ -13,7 +13,7 @@ set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25}                        
 set_property -dict {PACKAGE_PIN R20 IOSTANDARD LVCMOS25}                          [get_ports csck]         ; ##  D14  FMC_LPC_LA09_P
 set_property -dict {PACKAGE_PIN L17 IOSTANDARD LVCMOS25}                          [get_ports csdio]        ; ##  D17  FMC_LPC_LA13_P
 set_property -dict {PACKAGE_PIN M17 IOSTANDARD LVCMOS25}                          [get_ports cs_n]         ; ##  D18  FMC_LPC_LA13_N
-set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25}                          [get_ports csd0]         ; ##  D27  FMC_LPC_LA26_N
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS25}                          [get_ports csdo]         ; ##  D27  FMC_LPC_LA26_N
 
 set_property -dict {PACKAGE_PIN B19 IOSTANDARD LVCMOS25} [get_ports scki]         ; ##  D20  FMC_LPC_LA17_CC_P     # scko+
 set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVCMOS25} [get_ports scko]         ; ##  D21  FMC_LPC_LA17_CC_N     # scko-
@@ -25,6 +25,13 @@ set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25} [get_ports sdo[4]]     
 set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports sdo[5]]       ; ##  C26  FMC_LPC_LA27_P        # SD0+
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS25} [get_ports sdo[6]]       ; ##  D12  FMC_LPC_LA05_N        # SD0-
 set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25} [get_ports sdo[7]]       ; ##  C27  FMC_LPC_LA27_N
+
+# spi pmod JA1
+
+set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33}                         [get_ports pmod_cs_n]    ; ## JA1
+set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33}                         [get_ports pmod_sdo]     ; ## JA2
+set_property -dict {PACKAGE_PIN Y10  IOSTANDARD LVCMOS33}                         [get_ports pmod_sdi]     ; ## JA3
+set_property -dict {PACKAGE_PIN AA9  IOSTANDARD LVCMOS33}                         [get_ports pmod_sck]     ; ## JA4
 
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {scko_IBUF}]
 
