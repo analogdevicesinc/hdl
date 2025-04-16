@@ -91,10 +91,15 @@ module system_top (
   output                  pd,
   output                  lvds_cmos_n,
 
-  input                   csd0, //spiad_sdo
+  input                   csdo, //spiad_sdo
   output  reg             csck, //spiad_sck
   output  reg             csdio,//spiad_sdi
-  output  reg             cs_n  //spiad_csn
+  output  reg             cs_n, //spiad_csn
+
+  input                   pmod_sdi,
+  output                  pmod_sck,
+  output                  pmod_sdo,
+  output                  pmod_cs_n
 );
 
   // internal signals
@@ -210,18 +215,18 @@ module system_top (
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (csd0),
-    .spi0_sdo_i (csd0),
+    .spi0_sdi_i (csdo),
+    .spi0_sdo_i (csdo),
     .spi0_sdo_o (spiad_sdi_s),
-    .spi1_clk_i (1'b0),
-    .spi1_clk_o (),
-    .spi1_csn_0_o (),
+    .spi1_clk_i (pmod_sck),
+    .spi1_clk_o (pmod_sck),
+    .spi1_csn_0_o (pmod_cs_n),
     .spi1_csn_1_o (),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (1'b0),
-    .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (),
+    .spi1_sdi_i (pmod_sdi),
+    .spi1_sdo_i (pmod_sdo),
+    .spi1_sdo_o (pmod_sdo),
     .scki (scki),
     .scko (scko),
     .adc_lane_0 (sdo[0]),
