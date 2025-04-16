@@ -9,6 +9,7 @@
 | Part name                                   | Description                                      |
 |---------------------------------------------|--------------------------------------------------|
 | [AD4170-4](https://www.analog.com/ad4170-4) | 24-bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise Precision Sigma-Delta ADC with PGA |
+| [AD4190-4](https://www.analog.com/ad4190-4) | 24-Bit, 62.5kSPS, Multichannel, Low-Noise Precision Sigma-Delta ADC |
 
 ## Building the project
 
