@@ -17,6 +17,13 @@ Supported boards
 
 - :adi:`ADRV9026/ADRV9029 <EVAL-ADRV9026>`
 
+Supported devices
+-------------------------------------------------------------------------------
+
+- :adi:`ADRV9026`
+- :adi:`ADRV9029`
+- ADRV9025 (OBSOLETE)
+
 Supported carriers
 -------------------------------------------------------------------------------
 
@@ -31,11 +38,11 @@ Supported carriers
      - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - FMCA
    * -
-     - :xilinx:`ZCU102`
-     - FMC HPC1
-   * -
      - :xilinx:`VCU118`
      - FMCP
+   * -
+     - :xilinx:`ZCU102`
+     - FMC HPC1
 
 Block design
 -------------------------------------------------------------------------------
