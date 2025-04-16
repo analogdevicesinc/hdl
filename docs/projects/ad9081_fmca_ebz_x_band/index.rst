@@ -9,8 +9,7 @@ X-Band Platform HDL project
    on the specific extensions made for this system.
 
    For a more detailed description of the configuration parameters and system
-   capabilities, check the
-   :ref:`AD9081/AD9082/AD9986/AD9988 HDL project page <ad9081_fmca_ebz>`.
+   capabilities, check the :ref:`ad9081_fmca_ebz` documentation.
 
 Overview
 -------------------------------------------------------------------------------
@@ -38,23 +37,13 @@ Supported boards
 - :adi:`X-Band Phased Array Platform <x-band-development-platform>`
 - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
 - :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
-- :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
+- :dokuwiki:`ADXUD1AEBZ <resources/eval/user-guides/xud1a>`
 
 Supported devices
 -------------------------------------------------------------------------------
+
 - :adi:`AD9081`
 - :adi:`ADAR1000`
-- :adi:`ADTR1107`
-- :adi:`HMC652LP2E`
-- :adi:`HMC773ALC3B`
-- :adi:`ADL8111`
-- :adi:`HMC8411`
-- :adi:`HMC963`
-- :adi:`HMC383LC4`
-- :adi:`ADF4371`
-- :adi:`ADRF5020`
-- :adi:`HMC903LP3E`
-- :adi:`LT8653S`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -333,22 +322,11 @@ Hardware related
 
   - :adi:`AD9081`
   - :adi:`ADAR1000`
-  - :adi:`ADTR1107`
-  - :adi:`HMC652LP2E`
-  - :adi:`HMC773ALC3B`
-  - :adi:`ADL8111`
-  - :adi:`HMC8411`
-  - :adi:`HMC963`
-  - :adi:`HMC383LC4`
-  - :adi:`ADF4371`
-  - :adi:`ADRF5020`
-  - :adi:`HMC903LP3E`
-  - :adi:`LT8653S`
 
-- :dokuwiki:`[Wiki] X-Band Platform Hardware  <resources/eval/user-guides/x-band-platform/hardware>`
+- :dokuwiki:`[Wiki] X-Band Platform Hardware <resources/eval/user-guides/x-band-platform/hardware>`
 - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
 - :dokuwiki:`ADAR1000EVAL1Z (Stingray) <resources/eval/user-guides/stingray>`
-- :dokuwiki:`ADXUD1AEBZ  <resources/eval/user-guides/xud1a>`
+- :dokuwiki:`ADXUD1AEBZ <resources/eval/user-guides/xud1a>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
