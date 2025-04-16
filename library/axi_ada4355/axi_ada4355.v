@@ -109,7 +109,7 @@ module axi_ada4355 #(
   wire        adc_pn_err_s;
   wire        up_adc_pn_err_s;
   wire        up_adc_pn_oos_s;
-  wire [31:0] enable_error_s;
+  wire [ 2:0] enable_error_s;
 
   wire        up_rstn;
   wire        up_clk;
@@ -244,7 +244,7 @@ module axi_ada4355 #(
     .up_drp_ready(1'd0),
     .up_drp_locked(1'd1),
     .adc_config_wr(),
-    .adc_config_ctrl(adc_config_ctrl_r),
+    .adc_config_ctrl(),
     .adc_config_rd('d0),
     .adc_ctrl_status('d0),
     .up_usr_chanmax_out(),
@@ -289,7 +289,6 @@ module axi_ada4355 #(
     .adc_valid(adc_valid),
     .aresetn(up_rstn),
     .adc_pn_err(adc_pn_err_s),
-    .adc_config_ctrl(adc_config_ctrl_r),
     .enable_error(enable_error_s),
     .sync_n(sync_n));
 
@@ -318,18 +317,19 @@ module axi_ada4355 #(
     .up_rack(up_rack_s[2]));
 
   axi_ada4355_regmap i_regmap(
-    .up_rstn (up_rstn),
-    .up_clk (up_clk),
-    .up_wreq (up_wreq_s),
-    .up_waddr (up_waddr_s),
-    .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s[3]),
-    .up_rreq (up_rreq_s),
-    .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s[3]),
-    .up_rack (up_rack_s[3]),
-    .clk_div (adc_clk),
-    .enable_error_sync(enable_error_s));
+    .up_rstn(up_rstn),
+    .up_clk(up_clk),
+    .up_wreq(up_wreq_s),
+    .up_waddr(up_waddr_s),
+    .up_wdata(up_wdata_s),
+    .up_wack(up_wack_s[3]),
+    .up_rreq(up_rreq_s),
+    .up_raddr(up_raddr_s),
+    .up_rdata(up_rdata_s[3]),
+    .up_rack(up_rack_s[3]),
+    .clk_div(adc_clk_s),
+    .enable_error_sync(enable_error_s),
+    .adc_rst(adc_rst_s));
 
   // up bus interface
 

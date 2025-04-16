@@ -49,12 +49,13 @@ module axi_ada4355_regmap (
   output reg  [31:0]      up_rdata,
   output reg              up_rack,
   input                   clk_div,
-  output                  enable_error_sync
+  output      [ 2:0]      enable_error_sync,
+  input                   adc_rst
 );
 
   // internal registers
 
-reg [31:0]  up_enable_error = 'd0;
+reg [ 2:0]  up_enable_error = 'd0;
 
   // processor write interface
 
@@ -65,7 +66,7 @@ always @(posedge up_clk) begin
         end else begin
           up_wack <= up_wreq;
           if ((up_wreq == 1'b1) && (up_waddr == 14'h0)) begin
-                up_enable_error <= up_wdata;
+                up_enable_error <= up_wdata[2:0];
           end
         end
 end
@@ -80,7 +81,7 @@ always @(posedge up_clk) begin
           up_rack <= up_rreq;
           if (up_rreq == 1'b1) begin
                 case (up_raddr)
-                14'h0: up_rdata <= up_enable_error;
+                14'h0: up_rdata <= {29'd0, up_enable_error};
                 default: up_rdata <= 0;
                 endcase
           end else begin
@@ -90,22 +91,12 @@ always @(posedge up_clk) begin
 end
 
 sync_bits #(
-  .NUM_OF_BITS (32),
-  .ASYNC_CLK (0)
-) i_offload_enable_sync (
+  .NUM_OF_BITS (3),
+  .ASYNC_CLK (1)
+) i_enable_sync (
   .in_bits (up_enable_error),
-  .out_resetn (up_rstn),
+  .out_resetn (adc_rst),
   .out_clk (clk_div),
   .out_bits (enable_error_sync));
-
-/*sync_data #(
-  .NUM_OF_BITS (32),
-  .ASYNC_CLK (1)
-) i_cdc_status (
-  .in_clk (up_clk),
-  .in_data (up_enable_error),
-  .out_clk (clk_out),
-  .out_data (enable_error_sync));
-*/
 
 endmodule
