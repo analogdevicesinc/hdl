@@ -361,9 +361,7 @@ Content on this topic
             
   <section id="axi-ltc235x">
 <span id="id1"></span><h1>AXI LTC235X<a class="headerlink" href="#axi-ltc235x" title="Permalink to this heading"></a></h1>
-<div><section id="hdl-component-diagram">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 276" width="516" class="no-background"><rect x="18" y="18" width="480" height="240" rx="18" stroke="#666" fill="none" stroke-width="3" stroke-dasharray="8 16" stroke-linecap="round"/><text style="font: 64px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="94.4">?</text><text style="font: 16px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="150.4">axi_ltc235x IP-XACT not found.</text><text style="font: 12.0px sans-serif" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="178.4">Generate it and the documentation:</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="198.4">(cd library/axi_ltc235x; make)</text><text style="font: 12.0px monospace" fill="#666" text-anchor="middle" dominant-baseline="middle" x="258.0" y="218.4">(cd docs; make html)</text></svg></section>
-</div><p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x">AXI LTC235X</a> IP core can be used to
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_ltc235x">AXI LTC235X</a> IP core can be used to
 interface the <a class="icon adi reference external" href="https://www.analog.com/LTC2358-18">LTC2358-18</a>, <a class="icon adi reference external" href="https://www.analog.com/LTC2358-16">LTC2358-16</a>, and similar devices
 using an FPGA. The core has a AXI Memory Map interface for configuration,
 supports the CMOS and LVDS interfaces of the device, and has a simple
@@ -426,34 +424,243 @@ familiar with the device for a complete and better understanding.</p>
 </section>
 <section id="configuration-parameters">
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
-<div><section id="hdl-parameters">
-<div class="table-wrapper docutils container">
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+<col style="width: 10.0%" />
+<col style="width: 30.0%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
 <th class="head"><p>Description</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Choices/Range</p></th>
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>ID</p></td>
+<td><p>Core ID should be unique for each IP in the system</p></td>
+<td><p>0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>XILINX_INTEL_N</p></td>
+<td><p>IP Core Compatibility</p></td>
+<td><p>0</p></td>
+<td><p>FPGAS: 0 for Intel, 1 for Xilinx</p></td>
+</tr>
+<tr class="row-even"><td><p>LVDS_CMOS_N</p></td>
+<td><p>Selects physical interface type</p></td>
+<td><p>0</p></td>
+<td><p>Interface: 0 for CMOS, 1 for LVDS</p></td>
+</tr>
+<tr class="row-odd"><td><p>LTC235X_FAMILY</p></td>
+<td><p>Selects chip family</p></td>
+<td><p>0</p></td>
+<td><p>0 for 2358-18, 1 for 2358-16, 2 for 2357-18, 3 for 2357-16, 4 for 2353-18, 5 for 2353-16</p></td>
+</tr>
+<tr class="row-even"><td><p>LANE_0_ENABLE</p></td>
+<td><p>Lane 0 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_1_ENABLE</p></td>
+<td><p>Lane 1 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>LANE_2_ENABLE</p></td>
+<td><p>Lane 2 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_3_ENABLE</p></td>
+<td><p>Lane 3 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>LANE_4_ENABLE</p></td>
+<td><p>Lane 4 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_5_ENABLE</p></td>
+<td><p>Lane 5 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>LANE_6_ENABLE</p></td>
+<td><p>Lane 6 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>LANE_7_ENABLE</p></td>
+<td><p>Lane 7 Enable, if set lane signal is connected</p></td>
+<td><p>1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>EXTERNAL_CLK</p></td>
+<td><p>Enables external_clk input pin</p></td>
+<td><p>0</p></td>
+<td><p>If 1, uses an external clock</p></td>
+</tr>
+<tr class="row-odd"><td><p>NUM_CHANNELS</p></td>
+<td><p>Select number of ADC channels</p></td>
+<td><p>8</p></td>
+<td><p>8 for LTC2358, 4 for LTC2357, 2 for LTC2353</p></td>
+</tr>
+<tr class="row-even"><td><p>DATA_WIDTH</p></td>
+<td><p>Select width of data in bits</p></td>
+<td><p>18</p></td>
+<td><p>18 or 16 based on the part</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 </section>
-</div></section>
 <section id="interface">
 <span id="axi-ltc235x-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
-<div><div class="table-wrapper docutils container">
+<div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 40.0%" />
+</colgroup>
 <thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
+<tr class="row-odd"><th class="head"><p>Interface</p></th>
+<th class="head"><p>Pin</p></th>
+<th class="head"><p>Type</p></th>
 <th class="head"><p>Description</p></th>
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>Input data interface</p></td>
+<td></td>
+<td></td>
+<td><p>ADC data interface signals</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>busy</p></td>
+<td><p>input</p></td>
+<td><p>Indicates that a conversion is in progress. This pin transitions lowto-high at the start of each conversion and stays high until the conversion is complete</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>lvds_cmos_n</p></td>
+<td><p>output</p></td>
+<td><p>I/O mode select</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>external_clk</p></td>
+<td><p>input</p></td>
+<td><p>external clock</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td><p>CMOS signals</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>scki</p></td>
+<td><p>output</p></td>
+<td><p>Serial clock input of device</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>scko</p></td>
+<td><p>input</p></td>
+<td><p>Serial clock output of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>sdi</p></td>
+<td><p>output</p></td>
+<td><p>Serial data input of device</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>sdo</p></td>
+<td><p>input [7:0]</p></td>
+<td><p>Serial data output of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td><p>LVDS signals</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>scki_p</p></td>
+<td><p>output</p></td>
+<td><p>Positive serial clock input of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>scki_n</p></td>
+<td><p>output</p></td>
+<td><p>Negative serial clock input of device</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>scko_p</p></td>
+<td><p>input</p></td>
+<td><p>Positive serial clock output of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>scko_n</p></td>
+<td><p>input</p></td>
+<td><p>Negative serial clock output of device</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>sdi_p</p></td>
+<td><p>output</p></td>
+<td><p>Positive serial data input of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>sdi_n</p></td>
+<td><p>output</p></td>
+<td><p>Negative serial data input of device</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>sdo_p</p></td>
+<td><p>input</p></td>
+<td><p>Positive serial data output of device</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>sdo_n</p></td>
+<td><p>input</p></td>
+<td><p>Negative serial data output of device</p></td>
+</tr>
+<tr class="row-even"><td><p>s axi_*</p></td>
+<td></td>
+<td></td>
+<td><p>AXI Slave Memory Map interface</p></td>
+</tr>
+<tr class="row-odd"><td><p>adc fifo</p></td>
+<td></td>
+<td></td>
+<td><p>FIFO interface for connecting to the DMA</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>adc_dovf</p></td>
+<td><p>input</p></td>
+<td><p>Data overflow, must be connected to the DMA.</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>adc_enable_*</p></td>
+<td><p>output</p></td>
+<td><p>If set, the channel is enabled. One for each channel</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>adc_valid_*</p></td>
+<td><p>output</p></td>
+<td><p>Indicates valid data at the current channel. One for each channel</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>adc_data_*</p></td>
+<td><p>output [31:0]</p></td>
+<td><p>Received data output. One for each channel</p></td>
+</tr>
 </tbody>
 </table>
 </div>
-</div></section>
+</section>
 <section id="detailed-architecture">
 <h2>Detailed Architecture<a class="headerlink" href="#detailed-architecture" title="Permalink to this heading"></a></h2>
 <a class="reference internal image-reference" href="../../_images/axi_ltc235x_architecture.svg"><img alt="AXI LTC235X Detailed Architecture" class="align-center" src="../../_images/axi_ltc235x_architecture.svg" width="800" /></a>
