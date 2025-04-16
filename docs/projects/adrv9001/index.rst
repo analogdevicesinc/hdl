@@ -298,10 +298,10 @@ Software related
    - :git-linux:`adrv9002 ZedBoard Linux device 2rx2tx tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adrv9002-rx2tx2.dts>`
    - :git-linux:`adrv9002 ZC706 Linux device tree  <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9002.dts>`
    - :git-linux:`adrv9002 ZC706 Linux device 2rx2tx tree <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9002-rx2tx2.dts>`
-   - :git-linux:`adrv9002 ZCU102 (rev10) Linux device tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002.dts>`
-   - :git-linux:`adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree <arch/arm/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-rx2tx2.dts>`
+   - :git-linux:`adrv9002 ZCU102 (rev10) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002.dts>`
+   - :git-linux:`adrv9002 ZCU102 (rev10) Linux device 2rx2tx tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-adrv9002-rx2tx2.dts>`
    - :git-linux:`adrv9002 A10SoC Linux device tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9002.dts>`
-   - :git-linux:`adrv9002 A10SoC Linux device 2rx2tx tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9002-rx2tx2.dts>`
+   - :git-linux:`adrv9002 A10SoC Linux device 2rx2tx tree <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9002_rx2tx2.dts>`
 
 .. include:: ../common/more_information.rst
 
