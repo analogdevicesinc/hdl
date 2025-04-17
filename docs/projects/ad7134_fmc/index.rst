@@ -295,8 +295,8 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-no-os:`AD7134-FMC No-OS project source code <projects/ad713x_fmcz>`
-- :git-no-os:`AD4134/AD7134 No-OS Driver source code <drivers/adc/ad713x>`
-- :dokuwiki:`AD4134/AD7134 No-OS Driver documentation <resources/tools-software/uc-drivers/ad713x>`
+- :git-no-os:`AD7134 No-OS Driver source code <drivers/adc/ad713x>`
+- :dokuwiki:`AD7134 No-OS Driver documentation <resources/tools-software/uc-drivers/ad713x>`
 
 .. include:: ../common/more_information.rst
 
