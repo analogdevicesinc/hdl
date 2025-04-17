@@ -106,8 +106,8 @@ module system_top (
   inout         freq_sel1,
   inout         gpio_1p8vd_en,
   input         gpio_1p8va_en,
-  input         trig,
-  input         apd_supp_en,
+  inout         trig,
+  inout         apd_supp_en,
 
   // ADC SPI
 
@@ -119,7 +119,6 @@ module system_top (
   input         miso_pot,
   output        sclk_pot,
   output        mosi_pot,
-  output        csb_ld_pot,
   output        csb_apd_pot
 );
 
@@ -136,10 +135,10 @@ module system_top (
   wire [ 1:0] iic_mux_sda_o_s;
   wire        iic_mux_sda_t_s;
 
-  assign gpio_i[36]     = gain_sel2;
-  assign gpio_i[37]     = gpio_1p8va_en;
+  assign gpio_i[39]     = gain_sel2;
+  assign gpio_i[40]     = gpio_1p8va_en;
 
-  assign gpio_i[63:38]  = gpio_o[63:38];
+  assign gpio_i[63:41]  = gpio_o[63:41];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -150,11 +149,11 @@ module system_top (
     .dio_p({gpio_bd[31:0]}));
 
   ad_iobuf #(
-    .DATA_WIDTH(4)
+    .DATA_WIDTH(7)
   ) i_iobuf_ada4355_gpio (
-    .dio_t(gpio_t[35:32]),
-    .dio_i(gpio_o[35:32]),
-    .dio_o(gpio_i[35:32]),
+    .dio_t(gpio_t[38:32]),
+    .dio_i(gpio_o[38:32]),
+    .dio_o(gpio_i[38:32]),
     .dio_p({apd_supp_en,
             trig,
             gpio_1p8vd_en,
@@ -235,8 +234,8 @@ module system_top (
     .spi0_sdo_o (ada4355_mosi),
     .spi1_clk_i (1'b0),
     .spi1_clk_o (sclk_pot),
-    .spi1_csn_0_o ( csb_apd_pot),
-    .spi1_csn_1_o (csb_ld_pot),
+    .spi1_csn_0_o (csb_apd_pot),
+    .spi1_csn_1_o (),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
     .spi1_sdi_i (miso_pot),

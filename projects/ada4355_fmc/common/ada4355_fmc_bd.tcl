@@ -3,6 +3,11 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
+# system level parameter
+
+set BUFMRCE_EN $ad_project_params(BUFMRCE_EN)
+puts "build parameters: BUFMRCE_EN: $BUFMRCE_EN"
+
 # ada4355 interface
 
 create_bd_port -dir I dco_p
@@ -18,6 +23,7 @@ create_bd_port -dir I frame_n
 # axi_ada4355
 
 ad_ip_instance axi_ada4355 axi_ada4355_adc
+ad_ip_parameter axi_ada4355_adc CONFIG.BUFMRCE_EN $BUFMRCE_EN
 
 # dma for rx data
 

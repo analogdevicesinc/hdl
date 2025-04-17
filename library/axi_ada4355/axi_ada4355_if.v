@@ -41,7 +41,8 @@ module axi_ada4355_if #(
   parameter IODELAY_CTRL = 1,
   parameter DRP_WIDTH = 5,
   parameter NUM_LANES = 3,  // 2 lanes of data, 1 frame
-  parameter FPGA_FAMILY = 1
+  parameter FPGA_FAMILY = 1,
+  parameter BUFMRCE_EN = 0
 ) (
 
   // device interface
@@ -74,7 +75,7 @@ module axi_ada4355_if #(
 
   // Output data
   output [15:0]                      adc_data,
-  (* mark_debug = "true" *) output                             adc_valid,
+  output                             adc_valid,
   output                             adc_pn_err,
   input   [ 2:0]                     enable_error
 );
@@ -97,8 +98,8 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  (* mark_debug = "true" *) wire [ 7:0]          data_0;
-  (* mark_debug = "true" *) wire [ 7:0]          data_1;
+  wire [ 7:0]          data_0;
+  wire [ 7:0]          data_1;
   wire [NUM_LANES-2:0] data_in_p;
   wire [NUM_LANES-2:0] data_in_n;
 
@@ -111,31 +112,31 @@ module axi_ada4355_if #(
   wire [NUM_LANES-2:0] data_s6;
   wire [NUM_LANES-2:0] data_s7;
 
-  (* mark_debug = "true" *) wire frame_s0;
-  (* mark_debug = "true" *) wire frame_s1;
-  (* mark_debug = "true" *) wire frame_s2;
-  (* mark_debug = "true" *) wire frame_s3;
-  (* mark_debug = "true" *) wire frame_s4;
-  (* mark_debug = "true" *) wire frame_s5;
-  (* mark_debug = "true" *) wire frame_s6;
-  (* mark_debug = "true" *) wire frame_s7;
+  wire frame_s0;
+  wire frame_s1;
+  wire frame_s2;
+  wire frame_s3;
+  wire frame_s4;
+  wire frame_s5;
+  wire frame_s6;
+  wire frame_s7;
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
   reg [ 1:0] serdes_valid = 2'b00;
-  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
-  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
-  (* mark_debug = "true" *) reg [4:0] delay = 5'd0;
-  (* mark_debug = "true" *) reg [15:0] serdes_data;
-  (* mark_debug = "true" *) reg [15:0] serdes_data_d;
-  (* mark_debug = "true" *) reg [ 7:0] serdes_frame;
-  (* mark_debug = "true" *) reg [ 7:0] serdes_frame_d;
-  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
-  (* mark_debug = "true" *) reg [ 7:0] frame_shifted;
+  reg [ 1:0] serdes_valid_d = 2'b00;
+  reg [ 2:0] shift_cnt = 3'd0;
+  reg [ 4:0] delay = 5'd0;
+  reg [15:0] serdes_data;
+  reg [15:0] serdes_data_d;
+  reg [ 7:0] serdes_frame;
+  reg [ 7:0] serdes_frame_d;
+  reg [15:0] adc_data_shifted;
+  reg [ 7:0] frame_shifted;
   reg [ 2:0] reg_test;
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
-  (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
-  (* mark_debug = "true" *) reg        adc_pn_err_r;
+  reg [ 2:0] state = 3'h0;
+  reg        adc_pn_err_r;
   reg        frame_err_r;
   reg        data_err_lane_0_r;
   reg        data_err_lane_1_r;
@@ -149,19 +150,14 @@ module axi_ada4355_if #(
     .O(clk_in_s));
 
   generate
-    if(FPGA_TECHNOLOGY == FPGA_FAMILY) begin
-
-      BUFMRCE i_bufmrce (
-        .I(clk_in_s),
-        .O(out_ibufmrce_clock),
-        .CE(bufr_alignment));
-
+  if(FPGA_TECHNOLOGY == FPGA_FAMILY) begin  
+    if (BUFMRCE_EN == 0) begin
       BUFIO i_clk_buf(
-        .I(out_ibufmrce_clock),
+        .I(clk_in_s),
         .O(adc_clk_in_fast));
 
       BUFIO i_clk_buf_frame(
-        .I(out_ibufmrce_clock),
+        .I(clk_in_s),
         .O(adc_clk_in_fast_frame));
 
       BUFR #(
@@ -169,9 +165,35 @@ module axi_ada4355_if #(
       ) i_div_clk_buf (
         .CLR(bufr_alignment_bufr),
         .CE(1'b1),
-        .I(out_ibufmrce_clock),
+        .I(clk_in_s),
         .O(adc_clk_div));
 
+      BUFR #(
+        .BUFR_DIVIDE("4")
+      ) i_div_clk_buf_frame (
+        .CLR(bufr_alignment_bufr),
+        .CE(1'b1),
+        .I(clk_in_s),
+        .O(adc_clk_div_frame));
+
+    end else begin 
+      BUFMRCE i_bufmrce (
+        .I(clk_in_s),
+        .O(out_ibufmrce_clock),
+        .CE(bufr_alignment));
+      BUFIO i_clk_buf(
+        .I(out_ibufmrce_clock),
+        .O(adc_clk_in_fast));
+      BUFIO i_clk_buf_frame(
+        .I(out_ibufmrce_clock),
+        .O(adc_clk_in_fast_frame));
+      BUFR #(
+        .BUFR_DIVIDE("4")
+      ) i_div_clk_buf (
+        .CLR(bufr_alignment_bufr),
+        .CE(1'b1),
+        .I(out_ibufmrce_clock),
+        .O(adc_clk_div));
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf_frame (
@@ -180,6 +202,7 @@ module axi_ada4355_if #(
         .I(out_ibufmrce_clock),
         .O(adc_clk_div_frame));
     end
+  end
   endgenerate
 
   //serdes for data
