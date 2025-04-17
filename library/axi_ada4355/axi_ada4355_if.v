@@ -150,33 +150,35 @@ module axi_ada4355_if #(
     .O(clk_in_s));
 
   generate
-  if(FPGA_TECHNOLOGY == FPGA_FAMILY) begin  
+  if(FPGA_TECHNOLOGY == FPGA_FAMILY) begin
     if (BUFMRCE_EN == 0) begin
       BUFIO i_clk_buf(
         .I(clk_in_s),
         .O(adc_clk_in_fast));
+    assign adc_clk_in_fast_frame = adc_clk_in_fast;
+//      BUFIO i_clk_buf_frame(
+//       .I(clk_in_s),
+//        .O(adc_clk_in_fast_frame));
 
-      BUFIO i_clk_buf_frame(
-        .I(clk_in_s),
-        .O(adc_clk_in_fast_frame));
+//      BUFR #(
+//        .BUFR_DIVIDE("4")
+//      ) i_div_clk_buf (
+//        .CLR(bufr_alignment_bufr),
+//        .CE(1'b1),
+//        .I(clk_in_s),
+//        .O(adc_clk_div));
 
-      BUFR #(
-        .BUFR_DIVIDE("4")
-      ) i_div_clk_buf (
-        .CLR(bufr_alignment_bufr),
-        .CE(1'b1),
-        .I(clk_in_s),
-        .O(adc_clk_div));
+      assign adc_clk_div = adc_clk_div_frame;
 
       BUFR #(
         .BUFR_DIVIDE("4")
       ) i_div_clk_buf_frame (
-        .CLR(bufr_alignment_bufr),
+        .CLR(0),
         .CE(1'b1),
         .I(clk_in_s),
         .O(adc_clk_div_frame));
 
-    end else begin 
+    end else begin
       BUFMRCE i_bufmrce (
         .I(clk_in_s),
         .O(out_ibufmrce_clock),
