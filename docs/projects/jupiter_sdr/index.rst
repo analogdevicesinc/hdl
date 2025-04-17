@@ -7,7 +7,7 @@ Overview
 -------------------------------------------------------------------------------
 
 This design allows controlling, receiving and transmitting sample stream
-from/to an ADRV9001/ADRV9002 device through two independent source-synchronous
+from/to an :adi:`ADRV9002 <ADRV9002>` device through two independent source-synchronous
 interfaces.
 Supports both CMOS and LVDS interface, but not at the same time.
 The selection of the I/O standard must be done by setting a parameter before
@@ -21,7 +21,7 @@ The complete list of supported modes can be consulted in the
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`JUPITER_SDR <AD-JUPITER-EBZ>`
+- :adi:`ADRV9002 <ADRV9002>`
 
 Block design
 -------------------------------------------------------------------------------
