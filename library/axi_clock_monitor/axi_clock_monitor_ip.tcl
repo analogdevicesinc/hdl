@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -51,6 +51,9 @@ set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CL
 set_property enablement_dependency {spirit:decode(id('MODELPARAM_VALUE.NUM_OF_CLOCKS')) > 15} \
   [ipx::get_ports *_15* -of_objects $cc]
 
+adi_init_bd_tcl
+adi_ip_bd axi_clock_monitor "bd/bd.tcl"
+
 set_property widget {textEdit} [ipgui::get_guiparamspec -name "NUM_OF_CLOCKS" -component [ipx::current_core] ]
 set_property -dict [list \
   "value_validation_type" "range_long" \
@@ -60,4 +63,7 @@ set_property -dict [list \
 
 ipx::infer_bus_interface reset xilinx.com:signal:reset_rtl:1.0 $cc
 
+adi_add_auto_fpga_spec_params
+
+ipx::create_xgui_files $cc
 ipx::save_core $cc
