@@ -17,8 +17,20 @@ adi_project ada4355_fmc_zed 0 [list \
 
 adi_project_files ada4355_fmc_zed [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" \
-  "system_constr.xdc" \
-  "system_top.v" ]
+  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" ]
+
+
+switch $BUFMRCE_EN {
+  0 {
+    adi_project_files ad7606x_fmc_zed [list \
+      "system_constr.xdc" \
+      "system_top.v" ]
+  }
+  1 {
+    adi_project_files ad7606x_fmc_zed [list \
+      "system_constr_old.xdc" \
+      "system_top_old.v" ]
+  }
+}
 
 adi_project_run ada4355_fmc_zed
