@@ -99,13 +99,13 @@ module system_top (
 
   inout         gain_sel0,
   inout         gain_sel1,
-  input         gain_sel2,
-  input         gain_sel3,
+  inout         gain_sel2,
+  inout         gain_sel3,
 
   inout         freq_sel0,
   inout         freq_sel1,
   inout         gpio_1p8vd_en,
-  input         gpio_1p8va_en,
+  inout         gpio_1p8va_en,
   inout         trig,
   inout         apd_supp_en,
 
@@ -135,10 +135,7 @@ module system_top (
   wire [ 1:0] iic_mux_sda_o_s;
   wire        iic_mux_sda_t_s;
 
-  assign gpio_i[39]     = gain_sel2;
-  assign gpio_i[40]     = gpio_1p8va_en;
-
-  assign gpio_i[63:41]  = gpio_o[63:41];
+  assign gpio_i[63:42]  = gpio_o[63:42];
 
   ad_iobuf #(
     .DATA_WIDTH(32)
@@ -149,16 +146,19 @@ module system_top (
     .dio_p({gpio_bd[31:0]}));
 
   ad_iobuf #(
-    .DATA_WIDTH(7)
+    .DATA_WIDTH(10)
   ) i_iobuf_ada4355_gpio (
-    .dio_t(gpio_t[38:32]),
-    .dio_i(gpio_o[38:32]),
-    .dio_o(gpio_i[38:32]),
+    .dio_t(gpio_t[41:32]),
+    .dio_i(gpio_o[41:32]),
+    .dio_o(gpio_i[41:32]),
     .dio_p({apd_supp_en,
             trig,
             gpio_1p8vd_en,
+            gpio_1p8va_en,
             freq_sel1,
             freq_sel0,
+            gain_sel3,
+            gain_sel2,
             gain_sel1,
             gain_sel0}));
 
