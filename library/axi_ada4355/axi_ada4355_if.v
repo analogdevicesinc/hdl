@@ -136,7 +136,6 @@ module axi_ada4355_if #(
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
   reg [ 2:0] state = 3'h0;
-  reg        adc_pn_err_r;
   reg        frame_err_r;
   reg        data_err_lane_0_r;
   reg        data_err_lane_1_r;
@@ -302,8 +301,8 @@ module axi_ada4355_if #(
   end
 
   assign adc_clk = adc_clk_div;
-  assign adc_pn_err = ((frame_err_r & enable_error[0]) | (data_err_lane_0_r & enable_error[1]) |
-                      (data_err_lane_1_r & enable_error[2]));
+  assign adc_pn_err = ((data_err_lane_0_r & enable_error[0]) | (data_err_lane_1_r & enable_error[1]) |
+                       (frame_err_r & enable_error[2]));
 
   assign data_in_p = {d1a_p, d0a_p};
   assign data_in_n = {d1a_n, d0a_n};
@@ -387,6 +386,9 @@ module axi_ada4355_if #(
         if (shift_cnt == 3'b111) begin
           frame_err_r <= 1'b1;
           state <= RESET;
+        end
+        else begin
+           frame_err_r <= 1'b0;
         end
         shift_cnt <= shift_cnt + 1;
         state <= FRAME_SHIFTED;
