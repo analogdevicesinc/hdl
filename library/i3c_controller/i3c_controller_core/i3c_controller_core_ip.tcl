@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -89,13 +89,6 @@ set_property -dict [list \
  ] \
  [ipx::get_user_parameters MAX_DEVS -of_objects $cc]
 
-## CLK_MOD
-set_property -dict [list \
-	"value_validation_type" "pairs" \
-	"value_validation_pairs" {"8" 0 "4" 1} \
-] \
-[ipx::get_user_parameters CLK_MOD -of_objects $cc]
-
 ## I2C_MOD
 set_property -dict [list \
   "value_validation_type" "list" \
@@ -120,13 +113,6 @@ set_property -dict [list \
   "display_name" "Maximum number of peripherals" \
   "tooltip" "\[MAX_DEVS\] Maximum number of peripherals in the bus, counting the controller" \
 ] [ipgui::get_guiparamspec -name "MAX_DEVS" -component $cc]
-
-ipgui::add_param -name "CLK_MOD" -component $cc -parent $general_group
-set_property -dict [list \
-	"widget" "comboBox" \
-	"display_name" "Clock cycles per bit" \
-  "tooltip" "\[CLK_MOD\] Adjust clock cycles required to modulate the lane bus bits. Set 8 to achieve 12.5MHz at 100Mhz input clock, and 4 at 50MHz." \
-] [ipgui::get_guiparamspec -name "CLK_MOD" -component $cc]
 
 ipgui::add_param -name "I2C_MOD" -component $cc -parent $general_group
 set_property -dict [list \

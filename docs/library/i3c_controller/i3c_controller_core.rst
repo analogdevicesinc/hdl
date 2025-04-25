@@ -33,16 +33,11 @@ Configuration Parameters
 
 .. hdl-parameters::
 
-   * - CLK_MOD
-     - Clock cycles per bus bit at maximun speed (12.5MHz), set to:
-
-       * 0: 8 clock cycles at 100MHz input clock.
-       * 1: 4 clock cycles at 50MHz input clock.
    * - I2C_MOD
      - Further divide open drain speed by power of two,
        to support slow I2C devices.
 
-       For example, with input clock 100MHz and CLK_MOD=0:
+       For example, with input clock 100MHz:
 
        * 0: 1.5626MHz (no division).
        * 2 390.6kHz.

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -64,8 +64,7 @@
 `include "i3c_controller_word.vh"
 
 module i3c_controller_framing #(
-  parameter MAX_DEVS = 16,
-  parameter CLK_MOD = 0
+  parameter MAX_DEVS = 16
 ) (
   input         clk,
   input         reset_n,
@@ -117,7 +116,7 @@ module i3c_controller_framing #(
 
   // Defines the bus available condition width (> 1us for target)
   // Setting around 0.64us for the controller.
-  localparam BUS_AVAIL = CLK_MOD ? 4 : 5;
+  localparam BUS_AVAIL = 5;
 
   localparam [2:0] SM_SETUP       = 0;
   localparam [2:0] SM_VALIDATE    = 1;
