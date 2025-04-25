@@ -97,12 +97,7 @@ module system_top (
   input                   csdo, //spiad_sdo
   output  reg             csck, //spiad_sck
   output  reg             csdio,//spiad_sdi
-  output  reg             cs_n, //spiad_csn
-
-  input                   pmod_sdi,
-  output                  pmod_sck,
-  output                  pmod_sdo,
-  output                  pmod_cs_n
+  output  reg             cs_n  //spiad_csn
 );
 
   // internal signals
@@ -220,15 +215,6 @@ module system_top (
     .spi0_sdi_i (csdo),
     .spi0_sdo_i (csdo),
     .spi0_sdo_o (spiad_sdi_s),
-    .spi1_clk_i (pmod_sck),
-    .spi1_clk_o (pmod_sck),
-    .spi1_csn_0_o (pmod_cs_n),
-    .spi1_csn_1_o (),
-    .spi1_csn_2_o (),
-    .spi1_csn_i (1'b1),
-    .spi1_sdi_i (pmod_sdi),
-    .spi1_sdo_i (pmod_sdo),
-    .spi1_sdo_o (pmod_sdo),
     .scki_p (scki_p),
     .scki_n (scki_n),
     .scko_p (scko_p),

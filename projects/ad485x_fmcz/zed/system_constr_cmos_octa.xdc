@@ -26,13 +26,6 @@ set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVCMOS25} [get_ports sdo[5]]     
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS25} [get_ports sdo[6]]       ; ##  D12  FMC_LPC_LA05_N        # SD0-
 set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVCMOS25} [get_ports sdo[7]]       ; ##  C27  FMC_LPC_LA27_N
 
-# spi pmod JA1
-
-set_property -dict {PACKAGE_PIN Y11  IOSTANDARD LVCMOS33}                         [get_ports pmod_sdi]     ; ## JA1
-set_property -dict {PACKAGE_PIN AA11 IOSTANDARD LVCMOS33}                         [get_ports pmod_cs_n]    ; ## JA2
-set_property -dict {PACKAGE_PIN Y10  IOSTANDARD LVCMOS33}                         [get_ports pmod_sck]     ; ## JA3
-set_property -dict {PACKAGE_PIN AA9  IOSTANDARD LVCMOS33}                         [get_ports pmod_sdo]     ; ## JA4
-
 set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets {scko_IBUF}]
 
 create_clock -name scko_cmos       -period  10 [get_ports scko]
