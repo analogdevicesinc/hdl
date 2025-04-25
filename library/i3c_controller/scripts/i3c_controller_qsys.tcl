@@ -1,9 +1,9 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-proc i3c_controller_create {{name "i3c_controller"} {async_clk 0} {clk_mod 1} {i2c_mod 0} {offload 1} {max_devs 16}} {
+proc i3c_controller_create {{name "i3c_controller"} {async_clk 0} {i2c_mod 0} {offload 1} {max_devs 16}} {
   add_instance ${name}_host_interface i3c_controller_host_interface
 
   set_instance_parameter_value ${name}_host_interface {ASYNC_CLK} $async_clk
@@ -12,7 +12,6 @@ proc i3c_controller_create {{name "i3c_controller"} {async_clk 0} {clk_mod 1} {i
   add_instance ${name}_core i3c_controller_core
 
   set_instance_parameter_value ${name}_core {MAX_DEVS} $max_devs
-  set_instance_parameter_value ${name}_core {CLK_MOD} $clk_mod
   set_instance_parameter_value ${name}_core {I2C_MOD} $i2c_mod
 
   add_connection ${name}_host_interface.sdo  ${name}_core.sdo
