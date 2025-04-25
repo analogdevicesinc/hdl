@@ -19,6 +19,7 @@ Contents
    :maxdepth: 1
 
    AD-GMSL2ETH-SL <ad_gmsl2eth_sl/index>
+   AD-QUADMXFE1-EBZ <ad_quadmxfe1_ebz/index>
    AD353XR <ad353xr/index>
    AD35XXR-EVB <ad35xxr_evb/index>
    AD4052-ARDZ <ad4052_ardz/index>
@@ -44,7 +45,7 @@ Contents
    AD7768-1-EVB <ad77681evb/index>
    AD7768-EVB <ad7768evb/index>
    AD777X-ARDZ <ad777x_ardz/index>
-   AD9081/AD9082/AD9986/AD9988 <ad9081_fmca_ebz/index>
+   AD9081-FMCA-EBZ <ad9081_fmca_ebz/index>
    AD9081-FMCA-EBZ-X-BAND <ad9081_fmca_ebz_x_band/index>
    AD9083-EVB <ad9083_evb/index>
    AD9208-DUAL-EBZ <ad9208_dual_ebz/index>
@@ -58,15 +59,18 @@ Contents
    AD9694-FMC <ad9694_fmc/index>
    AD9695-FMC <ad9695_fmc/index>
    AD9783-EBZ <ad9783_ebz/index>
+   ADA4355-FMC <ada4355_fmc/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
-   ADRV9364Z7020 <adrv9364z7020/index>
-   ADRV9371x <adrv9371x/index>
+   ADRV9001 <adrv9001/index>
+   ADRV9001-DUAL <adrv9001_dual/index>
    ADRV9009 <adrv9009/index>
+   ADRV9009-ZU11EG <adrv9009zu11eg/index>
    ADRV9026 <adrv9026/index>
    ADRV904x <adrv904x/index>
-   ADRV9009-ZU11EG <adrv9009zu11eg/index>
    ADRV9361Z7035 <adrv9361z7035/index>
+   ADRV9364Z7020 <adrv9364z7020/index>
+   ADRV9371x <adrv9371x/index>
    ADV7511 <adv7511/index>
    ADV7513 <adv7513/index>
    ARRADIO <arradio/index>
@@ -83,10 +87,12 @@ Contents
    FMCOMMS5 <fmcomms5/index>
    FMCOMMS8 <fmcomms8/index>
    FMCOMMS11 <fmcomms11/index>
+   JUPITER-SDR <jupiter_sdr/index>
+   M2K <m2k/index>
    MAX96724 <max96724/index>
    PLUTO <pluto/index>
    PULSAR-ADC <pulsar_adc/index>
-   PULSAR-LVDS <pulsar_lvds/index>
+   PULSAR-LVDS-ADC <pulsar_lvds_adc/index>
 
 Obsolete projects
 -------------------------------------------------------------------------------
@@ -94,6 +100,7 @@ Obsolete projects
    :maxdepth: 1
 
    AD9739A-FMC (OBSOLETE) <ad9739a_fmc/index>
+   AD-FMCLIDAR1-EBZ (OBSOLETE) <ad_fmclidar1_ebz/index>
    FMCADC2 (OBSOLETE) <fmcadc2/index>
    FMCADC5 (OBSOLETE) <fmcadc5/index>
    FMCJESDADC1 (OBSOLETE) <fmcjesdadc1/index>

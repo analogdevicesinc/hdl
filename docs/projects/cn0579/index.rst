@@ -274,9 +274,9 @@ Software related
    - :git-pyadi-iio:`PyADI-IIO CN0579 example <examples/cn0579/cn0579_example.py>`
 
 - CN0579 on Cora Z7s Linux device tree
-   :git-linux:`arch/arm/boot/dts/zynq-coraz7s-cn0579_i2c.dts`
+   :git-linux:`arch/arm/boot/dts/dts/xilinx/zynq-coraz7s-cn0579_i2c.dts`
 - CN0579 on DE-10Nano Linux device tree
-   :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0579_i2c.dts`
+   :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_cn0579_i2c.dts`
 - AD7768 Linux driver :git-linux:`ad7768.c <drivers/iio/adc/ad7768.c>`
 
 .. include:: ../common/more_information.rst

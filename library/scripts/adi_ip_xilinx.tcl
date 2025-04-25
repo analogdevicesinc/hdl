@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -602,8 +602,8 @@ proc adi_if_ports {dir width name {type none} {default_value none}} {
 
   ipx::add_bus_abstraction_port $name [ipx::current_busabs]
   set m_intf [ipx::get_bus_abstraction_ports $name -of_objects [ipx::current_busabs]]
-  set_property master_presence required $m_intf
-  set_property slave_presence  required $m_intf
+  set_property master_presence optional $m_intf
+  set_property slave_presence  optional $m_intf
   set_property master_width $width $m_intf
   set_property slave_width  $width $m_intf
 
