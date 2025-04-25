@@ -1,5 +1,5 @@
 ##############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -17,13 +17,9 @@ delete_bd_objs [get_bd_nets spi1_clk_i_1] \
                [get_bd_nets sys_ps7_SPI1_SS1_O] \
                [get_bd_nets sys_ps7_SPI1_SS2_O]
 
+# Connect SPI1 to MIO pins JE1 PMOD
 ad_ip_parameter sys_ps7 PCW_SPI1_SPI1_IO {MIO 10 .. 15}
 ad_ip_parameter sys_ps7 PCW_QSPI_GRP_SINGLE_SS_ENABLE 1
-
-#set_property -dict [list \
-#  CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE {1} \
-#  CONFIG.PCW_SPI1_SPI1_IO {MIO 10 .. 15} \
-#] [get_bd_cells sys_ps7]
 
 #system ID
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9

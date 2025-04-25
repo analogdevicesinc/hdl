@@ -147,6 +147,15 @@ SPI connections
      - SPI 0
      - AD485x
      - 0
+   * - SPI type
+     - SPI manager instance
+     - SPI subordinate
+     - CS
+   * - PS
+     - SPI 1
+     - PMOD SPI
+     - 0
+
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
