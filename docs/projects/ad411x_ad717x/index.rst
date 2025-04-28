@@ -6,10 +6,10 @@ AD411x-AD717x HDL project
 Overview
 ----------------------------------------------------------------------------------
 
-The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4415`/ :adi:`AD4116` is
+The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4115`/ :adi:`AD4116` is
 a low power, low noise, 24-bit, sigma-delta (Σ-Δ) analog-to-digital converter
 (ADC), high impedance (≥1 MΩ) bipolar, ±10 V voltage inputs, and 0 mA to 20 mA
-current inputs. The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4415` /
+current inputs. The :adi:`AD4111` /:adi:`AD4112` /:adi:`AD4114` /:adi:`AD4115` /
 :adi:`AD4116` also integrates key analog and digital signal conditioning blocks
 to configure eight individual setups for each analog input channel in use.
 
