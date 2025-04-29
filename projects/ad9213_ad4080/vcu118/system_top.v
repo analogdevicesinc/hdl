@@ -185,12 +185,19 @@ module system_top (
   wire            filter_data_ready_n;
   wire  [1:0]     hmc7044_adf4371_csn;
   wire            ad4080_sync_n;
+  wire            sync_capture_ctrl;
+  wire            sync_capture;
 
-  assign adf4371_csb    = hmc7044_adf4371_csn[1];
-  assign hmc7044_csb    = hmc7044_adf4371_csn[0];
-  assign ad4080_sync_n  = 1'b1;
-  assign iic_rstn       = 1'b1;
+  assign adf4371_csb       = hmc7044_adf4371_csn[1];
+  assign hmc7044_csb       = hmc7044_adf4371_csn[0];
+  assign sync_capture_ctrl = gpio_i[56];
+  assign ad4080_sync_n     = 1'b1;
+  assign iic_rstn          = 1'b1;
+
   assign gpio_i[63:57]  = gpio_o[63:57];
+
+  assign sync_capture = (sync_capture_ctrl) ? ~cnv_in_p : 1'b1;
+
 
   ad_iobuf #(
     .DATA_WIDTH(11)
@@ -456,6 +463,6 @@ module system_top (
     .db_n (db_n),
     .sync_n(ad4080_sync_n),
     .filter_data_ready_n(filter_data_ready_n),
-    .sync_capture(~cnv_in_p));
+    .sync_capture(sync_capture));
 
 endmodule
