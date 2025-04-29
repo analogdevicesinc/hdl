@@ -75,9 +75,9 @@ module axi_ada4355_if #(
 
   // Output data
   output [15:0]                      adc_data,
-  output                             adc_valid,
+  (* mark_debug = "true" *) output                             adc_valid,
   output                             adc_pn_err,
-  input   [ 2:0]                     enable_error
+  (* mark_debug = "true" *) input   [ 2:0]                     enable_error
 );
 
   // Use always DDR mode for SERDES, useful for SDR mode to adjust capture
@@ -89,8 +89,8 @@ module axi_ada4355_if #(
                     FRAME_SHIFTED = 3'h2,
                     RESET = 3'h3;
   localparam [ 7:0] pattern_value = 8'hF0;
-  localparam [16:0] expected_pattern_lane_0 = 16'hAAA8;
-  localparam [16:0] expected_pattern_lane_1 = 16'h5554;
+  localparam [15:0] expected_pattern_lane_0 = 16'h5554;
+  localparam [15:0] expected_pattern_lane_1 = 16'hAAA8;
 
   wire                 clk_in_s;
   wire                 out_ibufmrce_clock;
@@ -98,8 +98,8 @@ module axi_ada4355_if #(
   wire                 adc_clk_in_fast_frame;
   wire                 adc_clk_div;
   wire                 adc_clk_div_frame;
-  wire [ 7:0]          data_0;
-  wire [ 7:0]          data_1;
+  (* mark_debug = "true" *) wire [ 7:0]          data_0;
+  (* mark_debug = "true" *) wire [ 7:0]          data_1;
   wire [NUM_LANES-2:0] data_in_p;
   wire [NUM_LANES-2:0] data_in_n;
 
@@ -112,36 +112,36 @@ module axi_ada4355_if #(
   wire [NUM_LANES-2:0] data_s6;
   wire [NUM_LANES-2:0] data_s7;
 
-  wire frame_s0;
-  wire frame_s1;
-  wire frame_s2;
-  wire frame_s3;
-  wire frame_s4;
-  wire frame_s5;
-  wire frame_s6;
-  wire frame_s7;
+  (* mark_debug = "true" *) wire frame_s0;
+  (* mark_debug = "true" *) wire frame_s1;
+  (* mark_debug = "true" *) wire frame_s2;
+  (* mark_debug = "true" *) wire frame_s3;
+  (* mark_debug = "true" *) wire frame_s4;
+  (* mark_debug = "true" *) wire frame_s5;
+  (* mark_debug = "true" *) wire frame_s6;
+  (* mark_debug = "true" *) wire frame_s7;
 
   reg [ 9:0] serdes_reset = 10'b0000000110;
   reg [ 1:0] serdes_valid = 2'b00;
-  reg [ 1:0] serdes_valid_d = 2'b00;
-  reg [ 2:0] shift_cnt = 3'd0;
-  reg [ 4:0] delay = 5'd0;
-  reg [15:0] serdes_data;
-  reg [15:0] serdes_data_d;
-  reg [ 7:0] serdes_frame;
-  reg [ 7:0] serdes_frame_d;
-  reg [15:0] adc_data_shifted;
-  reg [ 7:0] frame_shifted;
+  (* mark_debug = "true" *) reg [ 1:0] serdes_valid_d = 2'b00;
+  (* mark_debug = "true" *) reg [ 2:0] shift_cnt = 3'd0;
+  (* mark_debug = "true" *) reg [ 4:0] delay = 5'd0;
+  (* mark_debug = "true" *) reg [15:0] serdes_data;
+  (* mark_debug = "true" *) reg [15:0] serdes_data_d;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_frame;
+  (* mark_debug = "true" *) reg [ 7:0] serdes_frame_d;
+  (* mark_debug = "true" *) reg [15:0] adc_data_shifted;
+  (* mark_debug = "true" *) reg [ 7:0] frame_shifted;
   reg [ 2:0] reg_test;
   reg        bufr_alignment;
   reg        bufr_alignment_bufr;
-  reg [ 2:0] state = 3'h0;
-  reg        frame_err_r;
-  reg        data_err_lane_0_r;
-  reg        data_err_lane_1_r;
-  reg        lane_0_mask = 16'hAAAA;
-  reg        lane_1_mask = 16'h5555;
-  reg [31:0] test_pattern;
+  (* mark_debug = "true" *) reg [ 2:0] state = 3'h0;
+  (* mark_debug = "true" *) reg        frame_err_r;
+  (* mark_debug = "true" *) reg        data_err_lane_0_r;
+  (* mark_debug = "true" *) reg        data_err_lane_1_r;
+  (* mark_debug = "true" *) reg [15:0] lane_0_mask = 16'h5555;
+  (* mark_debug = "true" *) reg [15:0] lane_1_mask = 16'hAAAA;
+  (* mark_debug = "true" *) reg [15:0] test_pattern;
 
   IBUFGDS i_clk_in_ibuf(
     .I(dco_p),
@@ -307,34 +307,34 @@ module axi_ada4355_if #(
   assign data_in_p = {d1a_p, d0a_p};
   assign data_in_n = {d1a_n, d0a_n};
 
-  assign {data_0[0],data_1[0]} = data_s0;  // f-e latest bit received
-  assign {data_0[1],data_1[1]} = data_s1;  // r-e
-  assign {data_0[2],data_1[2]} = data_s2;  // f-e
-  assign {data_0[3],data_1[3]} = data_s3;  // r-e
-  assign {data_0[4],data_1[4]} = data_s4;  // f-e
-  assign {data_0[5],data_1[5]} = data_s5;  // r-e
-  assign {data_0[6],data_1[6]} = data_s6;  // f-e
-  assign {data_0[7],data_1[7]} = data_s7;  // r-e oldest bit received
+  assign {data_1[0],data_0[0]} = data_s0;  // f-e latest bit received
+  assign {data_1[1],data_0[1]} = data_s1;  // r-e
+  assign {data_1[2],data_0[2]} = data_s2;  // f-e
+  assign {data_1[3],data_0[3]} = data_s3;  // r-e
+  assign {data_1[4],data_0[4]} = data_s4;  // f-e
+  assign {data_1[5],data_0[5]} = data_s5;  // r-e
+  assign {data_1[6],data_0[6]} = data_s6;  // f-e
+  assign {data_1[7],data_0[7]} = data_s7;  // r-e oldest bit received
 
   // For DDR dual lane interleave the two sedres outputs;
 
   always @(posedge adc_clk_div) begin
-    serdes_data = {data_0[7],
-                   data_1[7],
-                   data_0[6],
+    serdes_data = {data_1[7],
+                   data_0[7],
                    data_1[6],
-                   data_0[5],
+                   data_0[6],
                    data_1[5],
-                   data_0[4],
+                   data_0[5],
                    data_1[4],
-                   data_0[3],
+                   data_0[4],
                    data_1[3],
-                   data_0[2],
+                   data_0[3],
                    data_1[2],
-                   data_0[1],
+                   data_0[2],
                    data_1[1],
-                   data_0[0],
-                   data_1[0]};
+                   data_0[1],
+                   data_1[0],
+                   data_0[0]};
 
     serdes_frame = {frame_s7,
                     frame_s6,
