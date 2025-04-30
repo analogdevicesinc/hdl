@@ -94,16 +94,18 @@
 <li><a class="reference internal" href="#supported-carriers">Supported carriers</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
-<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
 <li><a class="reference internal" href="#clock-scheme">Clock scheme</a><ul>
 <li><a class="reference internal" href="#limitations">Limitations</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#configuration-modes">Configuration modes</a></li>
+<li><a class="reference internal" href="#detailed-description">Detailed description</a></li>
 <li><a class="reference internal" href="#cpu-memory-interconnects-addresses">CPU/Memory interconnects addresses</a></li>
 <li><a class="reference internal" href="#i2c-connections">I2C connections</a></li>
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#resource-utilization">Resource utilization</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
@@ -278,14 +280,14 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../ad411x_ad717x/index.html">AD411x-AD717x</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4134_fmc/index.html">AD4134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad4170_asdz/index.html">AD4170-ASDZ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC/AD4030-FMC/ADAQ4224-FMC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad4630_fmc/index.html">AD4630-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad469x_evb/index.html">AD469X-EVB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad485x_fmcz/index.html">AD485X-FMCZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5758_sdz/index.html">AD5758-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad5766_sdz/index.html">AD5766-SDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad57xx_ardz/index.html">AD57XX-ARDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad6676evb/index.html">AD6676EVB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-4-ASDZ/AD7124-8-ASDZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ad7124_asdz/index.html">AD7124-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad7134_fmc/index.html">AD7134-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad719x_asdz/index.html">AD719X-ASDZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ad738x_fmc/index.html">AD738X-FMC</a></li>
@@ -428,54 +430,11 @@ Content on this topic
 </tbody>
 </table>
 </div>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
-<col style="width: 30.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Evaluation board</p></th>
-<th class="head"><p>Carrier</p></th>
-<th class="head"><p>FMC slot</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">EVAL-AD9082</a></p></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCK190">VCK190</a></p></td>
-<td><p>FMC0</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/VCU118">VCU118</a></p></td>
-<td><p>FMC+</p></td>
-</tr>
-<tr class="row-even"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
-<td><p>FMC HPC0</p></td>
-</tr>
-<tr class="row-odd"><td></td>
-<td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
-<td><p>FMC HPC</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
-<p>The 4 MxFE RX and TX links are connected to a single transceiver block,
-having 16x RX and 16x TX lanes in total (4 * L).</p>
-<p>The 4 RX links merge into a single receive Link Layer, and a single
-Transport Layer, having a compatible configuration as detailed below.
-Similarly, the single transmit Link Layer and Transport Layer handle the
-four TX links.</p>
-<ul class="simple">
-<li><p>JESD204B with lane rate 10Gbps</p></li>
-<li><p>RX, TX: L=4, M=8, S=1, NP=16, NUM_LINKS=4</p></li>
-</ul>
 <p>The data path and clock domains are depicted in the below diagram:</p>
 <a class="reference internal image-reference" href="../../_images/ad_quadmxfe1_ebz_jesd204b_block_diagram.svg"><img alt="AD-QUADMXFE1-EBZ/VCU118 JESD204B block diagram" class="align-center" src="../../_images/ad_quadmxfe1_ebz_jesd204b_block_diagram.svg" width="1000" /></a>
 <div class="admonition important">
@@ -572,39 +531,6 @@ parameters:</p>
 </div>
 </div>
 </div></section>
-<section id="configuration-modes">
-<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The following are the parameters of this project that can be configured:</p>
-<ul class="simple">
-<li><p>JESD_MODE: used link layer encoder mode</p>
-<ul>
-<li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical Layer</p></li>
-<li><p>8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical Layer</p></li>
-</ul>
-</li>
-<li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)</p></li>
-<li><p>TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)</p></li>
-<li><p>REF_CLK_RATE: the rate of the reference clock</p></li>
-<li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
-<li><p>[RX/TX]_JESD_L: number of lanes per link</p></li>
-<li><p>[RX/TX]_JESD_S: number of samples per frame</p></li>
-<li><p>[RX/TX]_JESD_NP: number of bits per sample</p></li>
-<li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
-<li><p>[RX/TX]_TPL_WIDTH</p></li>
-<li><p>TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1</p></li>
-<li><p>SHARED_DEVCLK</p></li>
-<li><p>TDD_CHANNEL_CNT</p></li>
-<li><p>TDD_SYNC_WIDTH</p></li>
-<li><p>TDD_SYNC_INT</p></li>
-<li><p>TDD_SYNC_EXT</p></li>
-<li><p>TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added</p></li>
-<li><p>[RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
-kilosamples per converter (M)</p></li>
-<li><p>[ADC/DAC]_DO_MEM_TYPE</p></li>
-<li><p>Check out this guide on more details regarding these parameters:
-<a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></li>
-</ul>
-</section>
 <section id="clock-scheme">
 <h3>Clock scheme<a class="headerlink" href="#clock-scheme" title="Permalink to this heading"></a></h3>
 <ul class="simple">
@@ -638,6 +564,74 @@ every clock cycle, representing 4 samples per converter. The two receive
 chains are merged together and transferred to the DDR with a single DMA.</p>
 </section>
 </section>
+<section id="configuration-modes">
+<h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
+<p>The following are the parameters of this project that can be configured:</p>
+<ul class="simple">
+<li><p>JESD_MODE: used link layer encoder mode</p>
+<ul>
+<li><p>64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical Layer</p></li>
+<li><p>8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical Layer</p></li>
+</ul>
+</li>
+<li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)</p></li>
+<li><p>TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)</p></li>
+<li><p>REF_CLK_RATE: the rate of the reference clock</p></li>
+<li><p>[RX/TX]_JESD_M: number of converters per link</p></li>
+<li><p>[RX/TX]_JESD_L: number of lanes per link</p></li>
+<li><p>[RX/TX]_JESD_S: number of samples per frame</p></li>
+<li><p>[RX/TX]_JESD_NP: number of bits per sample</p></li>
+<li><p>[RX/TX]_NUM_LINKS: number of links</p></li>
+<li><p>[RX/TX]_TPL_WIDTH</p></li>
+<li><p>TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1</p></li>
+<li><p>SHARED_DEVCLK</p></li>
+<li><p>TDD_CHANNEL_CNT</p></li>
+<li><p>TDD_SYNC_WIDTH</p></li>
+<li><p>TDD_SYNC_INT</p></li>
+<li><p>TDD_SYNC_EXT</p></li>
+<li><p>TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added</p></li>
+<li><p>[RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+kilosamples per converter (M)</p></li>
+<li><p>[ADC/DAC]_DO_MEM_TYPE</p></li>
+<li><p>Check out this guide on more details regarding these parameters:
+<a class="reference internal" href="../../library/axi_tdd/index.html#axi-tdd"><span class="std std-ref">AXI TDD</span></a></p></li>
+</ul>
+</section>
+<section id="detailed-description">
+<h3>Detailed description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h3>
+<p>The design has one JESD204B receive chain and one transmit chain, each with
+8 lanes.</p>
+<p>Each chain consists of a transport layer represented by a JESD TPL module,
+a link layer represented by a JESD LINK module, and a shared among chains
+physical layer, represented by an XCVR module. The HDL project in its current
+state, has <strong>the link operating in subclass 0</strong>.</p>
+<ul class="simple">
+<li><p>Rx device clock - 122.88 MHz</p></li>
+<li><p>Tx device clock - 245.76 MHz</p></li>
+<li><p>JESD204B Rx Lane Rate - 4.9152 Gbps</p></li>
+<li><p>JESD204B Tx Lane Rate - 9.8304 Gbps</p></li>
+</ul>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="c7b3b435fe2a705dfa68cbe893b5ef4d86969349" name="c7b3b435fe2a705dfa68cbe893b5ef4d86969349" type="checkbox"></input><label for="c7b3b435fe2a705dfa68cbe893b5ef4d86969349"><p>JESD204 Physical layer</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="bbdfbcb70c67ffc4c377c57cadd398034bfc1af1" name="bbdfbcb70c67ffc4c377c57cadd398034bfc1af1" type="checkbox"></input><label for="bbdfbcb70c67ffc4c377c57cadd398034bfc1af1"><p>JESD204 Link layer</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="cc54c04c0fa69a7041464afcd5107e24232d398b" name="cc54c04c0fa69a7041464afcd5107e24232d398b" type="checkbox"></input><label for="cc54c04c0fa69a7041464afcd5107e24232d398b"><p>JESD204 Transport layer</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="ddb0795108f85487d64da743ba285427788cac54" name="ddb0795108f85487d64da743ba285427788cac54" type="checkbox"></input><label for="ddb0795108f85487d64da743ba285427788cac54"><p>Top file</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+</div>
+</div>
+</div></section>
 <section id="cpu-memory-interconnects-addresses">
 <h3>CPU/Memory interconnects addresses<a class="headerlink" href="#cpu-memory-interconnects-addresses" title="Permalink to this heading"></a></h3>
 <p>The addresses are dependent on the architecture of the FPGA, having an offset
@@ -847,141 +841,6 @@ some IPs are instantiated and some are not.</p>
 <p>You have many ways of writing this table: as a list-table or really to draw
 it. Take a look in the .rst of this page to see how they’re written and
 which suits best your case.</p>
-<div class="table-wrapper colwidths-given docutils container">
-<table class="docutils align-default">
-<colgroup>
-<col style="width: 30.0%" />
-<col style="width: 10.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-<col style="width: 15.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Instance name</p></th>
-<th class="head"><p>HDL</p></th>
-<th class="head"><p>Linux Zynq</p></th>
-<th class="head"><p>Actual Zynq</p></th>
-<th class="head"><p>Linux ZynqMP</p></th>
-<th class="head"><p>Actual ZynqMP</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>15</p></td>
-<td><p>59</p></td>
-<td><p>91</p></td>
-<td><p>111</p></td>
-<td><p>143</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>14</p></td>
-<td><p>58</p></td>
-<td><p>90</p></td>
-<td><p>110</p></td>
-<td><p>142</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>13</p></td>
-<td><p>57</p></td>
-<td><p>89</p></td>
-<td><p>109</p></td>
-<td><p>141</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>12</p></td>
-<td><p>56</p></td>
-<td><p>88</p></td>
-<td><p>108</p></td>
-<td><p>140</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>11</p></td>
-<td><p>55</p></td>
-<td><p>87</p></td>
-<td><p>107</p></td>
-<td><p>139</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>10</p></td>
-<td><p>54</p></td>
-<td><p>86</p></td>
-<td><p>106</p></td>
-<td><p>138</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>9</p></td>
-<td><p>53</p></td>
-<td><p>85</p></td>
-<td><p>105</p></td>
-<td><p>137</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>8</p></td>
-<td><p>52</p></td>
-<td><p>84</p></td>
-<td><p>104</p></td>
-<td><p>136</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>7</p></td>
-<td><p>36</p></td>
-<td><p>68</p></td>
-<td><p>96</p></td>
-<td><p>128</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>6</p></td>
-<td><p>35</p></td>
-<td><p>67</p></td>
-<td><p>95</p></td>
-<td><p>127</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>5</p></td>
-<td><p>34</p></td>
-<td><p>66</p></td>
-<td><p>94</p></td>
-<td><p>126</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>4</p></td>
-<td><p>33</p></td>
-<td><p>65</p></td>
-<td><p>93</p></td>
-<td><p>125</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>3</p></td>
-<td><p>32</p></td>
-<td><p>64</p></td>
-<td><p>92</p></td>
-<td><p>124</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>2</p></td>
-<td><p>31</p></td>
-<td><p>63</p></td>
-<td><p>91</p></td>
-<td><p>123</p></td>
-</tr>
-<tr class="row-even"><td><p>—</p></td>
-<td><p>1</p></td>
-<td><p>30</p></td>
-<td><p>62</p></td>
-<td><p>90</p></td>
-<td><p>122</p></td>
-</tr>
-<tr class="row-odd"><td><p>—</p></td>
-<td><p>0</p></td>
-<td><p>29</p></td>
-<td><p>61</p></td>
-<td><p>89</p></td>
-<td><p>121</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1160,6 +1019,12 @@ which suits best your case.</p>
 </tbody>
 </table>
 </div>
+</section>
+<section id="resource-utilization">
+<h3>Resource utilization<a class="headerlink" href="#resource-utilization" title="Permalink to this heading"></a></h3>
+<p>To see the resources utilization, please go to
+<span class="xref std std-ref">projects resources-daq3-zc706</span>. A simplified version of that table can
+be found below.</p>
 </section>
 </section>
 <section id="building-the-hdl-project">
