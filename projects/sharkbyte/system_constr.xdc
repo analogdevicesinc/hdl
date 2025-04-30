@@ -5,69 +5,69 @@
 
 # hmcad15xx, 1st ADC
 
-# checkpoint, switch P & N
-set_property  -dict {PACKAGE_PIN H12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[0]]; # A1DP1A IO_L1N_T0_34
-set_property  -dict {PACKAGE_PIN G11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[0]]; # A1DN1A IO_L1P_T0_34
+# switch P & N
+set_property  -dict {PACKAGE_PIN N14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[0]]; # A1DP1A IO_L7N_T1_34
+set_property  -dict {PACKAGE_PIN N13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[0]]; # A1DN1A IO_L7P_T1_34
 
-set_property  -dict {PACKAGE_PIN H13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[1]]; # A1DP1B IO_L2N_T0_34
-set_property  -dict {PACKAGE_PIN G12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[1]]; # A1DN1B IO_L2P_T0_34
+set_property  -dict {PACKAGE_PIN M15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[1]]; # A1DP1B IO_L8N_T1_34
+set_property  -dict {PACKAGE_PIN L15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[1]]; # A1DN1B IO_L8P_T1_34
 
-set_property  -dict {PACKAGE_PIN H14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[2]]; # A1DP2A IO_L3N_T0_DQS_34
-set_property  -dict {PACKAGE_PIN G14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[2]]; # A1DN2A IO_L3N_T0_DQS_PUDC_B_34
+set_property  -dict {PACKAGE_PIN K15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[2]]; # A1DP2A IO_L4N_T0_34
+set_property  -dict {PACKAGE_PIN J15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[2]]; # A1DN2A IO_L4P_T0_34
 
-set_property  -dict {PACKAGE_PIN K15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[3]]; # A1DP2B IO_L4N_T0_34
-set_property  -dict {PACKAGE_PIN J15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[3]]; # A1DN2B IO_L4P_T0_34
+set_property  -dict {PACKAGE_PIN J14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[3]]; # A1DP2B IO_L5N_T0_34
+set_property  -dict {PACKAGE_PIN J13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[3]]; # A1DN2B IO_L5P_T0_34
 
-set_property  -dict {PACKAGE_PIN J14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[4]]; # A1DP3A IO_L5N_T0_34
-set_property  -dict {PACKAGE_PIN J13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[4]]; # A1DN3A IO_L5P_T0_34
+set_property  -dict {PACKAGE_PIN J11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[4]]; # A1DP3A IO_L6N_T0_VREF_34
+set_property  -dict {PACKAGE_PIN H11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[4]]; # A1DN3A IO_L6P_T0_34
 
-set_property  -dict {PACKAGE_PIN J11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[5]]; # A1DP3B IO_L6N_T0_VREF_34
-set_property  -dict {PACKAGE_PIN H11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[5]]; # A1DN3B IO_L6P_T0_34
+set_property  -dict {PACKAGE_PIN H14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[5]]; # A1DP3B IO_L3N_T0_DQS_34
+set_property  -dict {PACKAGE_PIN G14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[5]]; # A1DN3B IO_L3P_T0_DQS_PUDC_B_34
 
-set_property  -dict {PACKAGE_PIN N14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[6]]; # A1DP4A IO_L7N_T1_34
-set_property  -dict {PACKAGE_PIN N13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[6]]; # A1DN4A IO_L7P_T1_34
+set_property  -dict {PACKAGE_PIN H13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[6]]; # A1DP4A IO_L2N_T0_34
+set_property  -dict {PACKAGE_PIN G12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[6]]; # A1DN4A IO_L2P_T0_34
 
-set_property  -dict {PACKAGE_PIN M15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[7]]; # A1DP4B IO_L8N_T1_34
-set_property  -dict {PACKAGE_PIN L15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[7]]; # A1DN4B IO_L8P_T1_34
+set_property  -dict {PACKAGE_PIN H12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_n[7]]; # A1DP4B IO_L1N_T0_34
+set_property  -dict {PACKAGE_PIN G11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a1_p[7]]; # A1DN4B IO_L1P_T0_34
 
-set_property  -dict {PACKAGE_PIN K11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a1_p];     # A1LCLKP IO_L11P_T1_SRCC_34
 set_property  -dict {PACKAGE_PIN K12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a1_n];     # A1LCLKN IO_L11N_T1_SRCC_34
+set_property  -dict {PACKAGE_PIN K11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a1_p];     # A1LCLKP IO_L11P_T1_SRCC_34
 
-set_property  -dict {PACKAGE_PIN L12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a1_p];       # A1FCLKP IO_L12P_T1_MRCC_34
 set_property  -dict {PACKAGE_PIN M12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a1_n];       # A1FCLKN IO_L12N_T1_MRCC_34
+set_property  -dict {PACKAGE_PIN L12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a1_p];       # A1FCLKP IO_L12P_T1_MRCC_34
 
 # hmcad15xx, 2nd ADC
 
-set_property  -dict {PACKAGE_PIN R13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[0]]; # A2DP1A IO_L17N_T2_34
-set_property  -dict {PACKAGE_PIN R12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[0]]; # A2DN1A IO_L17P_T2_34
+set_property  -dict {PACKAGE_PIN N7 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[0]];  # A2DP1A IO_L22P_T3_34
+set_property  -dict {PACKAGE_PIN N8 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[0]];  # A2DN1A IO_L22N_T3_34
 
-set_property  -dict {PACKAGE_PIN P14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[1]]; # A2DP1B IO_L18N_T2_34
-set_property  -dict {PACKAGE_PIN P13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[1]]; # A2DN1B IO_L18P_T2_34
+set_property  -dict {PACKAGE_PIN M9 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[1]];  # A2DP1B IO_L19P_T3_34
+set_property  -dict {PACKAGE_PIN N9 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[1]];  # A2DN1B IO_L19N_T3_VREF_34
 
-set_property  -dict {PACKAGE_PIN N9 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[2]]; # A2DP2A IO_L19N_T3_VREF_34
-set_property  -dict {PACKAGE_PIN M9 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[2]]; # A2DN2A IO_L19P_T3_34
+set_property  -dict {PACKAGE_PIN M10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[2]]; # A2DP2A IO_L21P_T3_DQS_34
+set_property  -dict {PACKAGE_PIN M11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[2]]; # A2DN2A IO_L21N_T3_DQS_34
 
-set_property  -dict {PACKAGE_PIN R8 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[3]]; # A2DP2B IO_L20N_T3_34
-set_property  -dict {PACKAGE_PIN R7 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[3]]; # A2DN2B IO_L20P_T3_34
+set_property  -dict {PACKAGE_PIN R7 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[3]]; # A2DP2B IO_L20P_T3_34
+set_property  -dict {PACKAGE_PIN R8 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[3]]; # A2DN2B IO_L20N_T3_34
 
-set_property  -dict {PACKAGE_PIN M11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[4]]; # A2DP3A IO_L21N_T3_DQS_34
-set_property  -dict {PACKAGE_PIN M10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[4]]; # A2DN3A IO_L21P_T3_DQS_34
+set_property  -dict {PACKAGE_PIN P8 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[4]];  # A2DP3A IO_L23P_T3_34
+set_property  -dict {PACKAGE_PIN P9 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[4]];  # A2DN3A IO_L23N_T3_34
 
-set_property  -dict {PACKAGE_PIN N8 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[5]]; # A2DP3B IO_L22N_T3_34
-set_property  -dict {PACKAGE_PIN N7 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[5]]; # A2DN3B IO_L22P_T3_34
+set_property  -dict {PACKAGE_PIN R10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[5]]; # A2DP3B IO_L24N_T3_34
+set_property  -dict {PACKAGE_PIN P10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[5]]; # A2DN3B IO_L24P_T3_34
 
-set_property  -dict {PACKAGE_PIN P9 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[6]]; # A2DP4A IO_L23N_T3_34
-set_property  -dict {PACKAGE_PIN P8 IOSTANDARD  LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[6]]; # A2DN4A IO_L23P_T3_34
+set_property  -dict {PACKAGE_PIN R12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[6]]; # A2DP4A IO_L17P_T2_34
+set_property  -dict {PACKAGE_PIN R13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[6]]; # A2DN4A IO_L17N_T2_34
 
-set_property  -dict {PACKAGE_PIN R10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[7]]; # A2DP4B IO_L24N_T3_34
-set_property  -dict {PACKAGE_PIN P10 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[7]]; # A2DN4B IO_L24P_T3_34
+set_property  -dict {PACKAGE_PIN P13 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_p[7]]; # A2DP4B IO_L18P_T2_34
+set_property  -dict {PACKAGE_PIN P14 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports data_in_a2_n[7]]; # A2DN4B IO_L18N_T2_34
 
 # switch LCLK with FCLK according to the datasheet
-set_property  -dict {PACKAGE_PIN P15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a2_p];     # A2LCLKP IO_L15P_T2_DQS_34 -> should be changed after switch
-set_property  -dict {PACKAGE_PIN R15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a2_n];     # A2LCLKN IO_L15N_T2_DQS_34 -> should be changed after switch
+set_property  -dict {PACKAGE_PIN P15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a2_p];       # A2FCLKP IO_L15P_T2_DQS_34
+set_property  -dict {PACKAGE_PIN R15 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports fclk_a2_n];       # A2FCLKN IO_L15N_T2_DQS_34
 
-set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_p];       # A2FCLKP IO_L13P_T2_MRCC_34 -> should be changed after switch
-set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_n];       # A2FCLKN IO_L13N_T2_MRCC_34 -> should be changed after switch
+set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_p];     # A2LCLKP IO_L13P_T2_MRCC_34
+set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_n];     # A2LCLKN IO_L13N_T2_MRCC_34
 
 
 create_clock -name ref_clk_a1        -period 4   [get_ports clk_in_a1_p]
