@@ -252,8 +252,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`AD7768-1 Linux driver source code <drivers/iio/adc/ad7768-1.c>`
-- AD7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-ad7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad7768-1-evb.dts>`
-- ADAQ7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-adaq7768-1-evb.dts <arch/arm/boot/dts/zynq-zed-adv7511-adaq7768-1-evb.dts>`
+- AD7768-1 Linux device tree :git-linux:`zynq-zed-adv7511-ad7768-1-evb.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7768-1-evb.dts>`
 
 .. include:: ../common/more_information.rst
 
