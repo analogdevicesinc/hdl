@@ -31,10 +31,10 @@ Supported carriers
 -------------------------------------------------------------------------------
 
  - :adi:`ADRV1CRR-BOB`
- - :adi:`ADRV1CRR-PACKRF`
+ - :dokuwiki:`ADRV1CRR-FMC <resources/eval/user-guides/pzsdr/carriers/packrf>`
  - :adi:`ADRV1CRR-FMC`
- - :adi:`ADRV1CRR-PCI` (OBSOLETE)
- - :adi:`ADRV1CRR-USB` (OBSOLETE)
+ - ADRV1CRR-PCI (OBSOLETE)
+ - ADRV1CRR-USB (OBSOLETE)
 
 Block design
 -------------------------------------------------------------------------------
