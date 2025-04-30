@@ -261,7 +261,7 @@ Software related
   - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
   - `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/examples/ad4080_example.py>`__
   - `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/adi/ad4080.py>`__
-  - AD4080-FMC-EVB Linux device tree :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-ad4080.dts`
+  - AD4080-FMC-EVB Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4080.dts`
   - AD4080 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst
