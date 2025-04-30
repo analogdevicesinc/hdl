@@ -176,4 +176,4 @@ create_generated_clock -name adl5580_spi_clk -source [get_pins i_system_wrapper/
 
 create_generated_clock -name hmc7044_spi_clk -source [get_pins i_system_wrapper/system_i/hmc7044_spi/ext_spi_clk] -divide_by 2 [get_pins i_system_wrapper/system_i/hmc7044_spi/sck_o]
 
-
+set_false_path -through [get_nets i_system_wrapper/gpio_o[56]]

@@ -190,7 +190,7 @@ module system_top (
 
   assign adf4371_csb       = hmc7044_adf4371_csn[1];
   assign hmc7044_csb       = hmc7044_adf4371_csn[0];
-  assign sync_capture_ctrl = gpio_i[56];
+  assign sync_capture_ctrl = gpio_o[56];
   assign ad4080_sync_n     = 1'b1;
   assign iic_rstn          = 1'b1;
 
