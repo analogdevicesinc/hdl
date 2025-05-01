@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2023, 2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -85,7 +85,7 @@ module daq3_spi (
     end
   end
 
-  // io butter
+  // i/o buffer
 
   assign spi_miso = spi_sdio;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;

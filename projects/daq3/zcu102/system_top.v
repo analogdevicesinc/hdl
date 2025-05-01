@@ -98,9 +98,9 @@ module system_top (
 
   // spi
 
-  assign spi_csn_adc = spi_csn[2];
-  assign spi_csn_dac = spi_csn[1];
-  assign spi_csn_clk = spi_csn[0];
+  assign spi_csn_clk = spi_csn[0]; // AD9528 CLKD_SPI_CSB
+  assign spi_csn_dac = spi_csn[1]; // AD9152 DAC_SPI_CSB
+  assign spi_csn_adc = spi_csn[2]; // AD9680 ADC_SPI_CSB
 
   // instantiations
 

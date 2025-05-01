@@ -83,11 +83,14 @@ set_property  -dict {PACKAGE_PIN  F1  } [get_ports rx_data_n[2]]                
 set_property  -dict {PACKAGE_PIN  J4  } [get_ports rx_data_p[3]]                                      ; ## A02  FMC_HPC0_DP1_M2C_P
 set_property  -dict {PACKAGE_PIN  J3  } [get_ports rx_data_n[3]]                                      ; ## A03  FMC_HPC0_DP1_M2C_N
 
-set_property  -dict {PACKAGE_PIN  K6  } [get_ports tx_data_p[0]]                                      ; ## A30  FMC_HPC0_DP3_C2M_P  (tx_data_p[0])
-set_property  -dict {PACKAGE_PIN  K5  } [get_ports tx_data_n[0]]                                      ; ## A31  FMC_HPC0_DP3_C2M_N  (tx_data_n[0])
-set_property  -dict {PACKAGE_PIN  G4  } [get_ports tx_data_p[1]]                                      ; ## C02  FMC_HPC0_DP0_C2M_P  (tx_data_p[3])
-set_property  -dict {PACKAGE_PIN  G3  } [get_ports tx_data_n[1]]                                      ; ## C03  FMC_HPC0_DP0_C2M_N  (tx_data_n[3])
-set_property  -dict {PACKAGE_PIN  F6  } [get_ports tx_data_p[2]]                                      ; ## A26  FMC_HPC0_DP2_C2M_P  (tx_data_p[1])
-set_property  -dict {PACKAGE_PIN  F5  } [get_ports tx_data_n[2]]                                      ; ## A27  FMC_HPC0_DP2_C2M_N  (tx_data_n[1])
-set_property  -dict {PACKAGE_PIN  H6  } [get_ports tx_data_p[3]]                                      ; ## A22  FMC_HPC0_DP1_C2M_P  (tx_data_p[2])
-set_property  -dict {PACKAGE_PIN  H5  } [get_ports tx_data_n[3]]                                      ; ## A23  FMC_HPC0_DP1_C2M_N  (tx_data_n[2])
+set_property  -dict {PACKAGE_PIN  K6  } [get_ports tx_data_p[0]]                                      ; ## A30  FMC_HPC0_DP3_C2M_P  (SERDIN0)
+set_property  -dict {PACKAGE_PIN  K5  } [get_ports tx_data_n[0]]                                      ; ## A31  FMC_HPC0_DP3_C2M_N  (SERDIN0)
+
+set_property  -dict {PACKAGE_PIN  G4  } [get_ports tx_data_p[1]]                                      ; ## C02  FMC_HPC0_DP0_C2M_P  (SERDIN3)
+set_property  -dict {PACKAGE_PIN  G3  } [get_ports tx_data_n[1]]                                      ; ## C03  FMC_HPC0_DP0_C2M_N  (SERDIN3)
+
+set_property  -dict {PACKAGE_PIN  F6  } [get_ports tx_data_p[2]]                                      ; ## A26  FMC_HPC0_DP2_C2M_P  (SERDIN1)
+set_property  -dict {PACKAGE_PIN  F5  } [get_ports tx_data_n[2]]                                      ; ## A27  FMC_HPC0_DP2_C2M_N  (SERDIN1)
+
+set_property  -dict {PACKAGE_PIN  H6  } [get_ports tx_data_p[3]]                                      ; ## A22  FMC_HPC0_DP1_C2M_P  (SERDIN2)
+set_property  -dict {PACKAGE_PIN  H5  } [get_ports tx_data_n[3]]                                      ; ## A23  FMC_HPC0_DP1_C2M_N  (SERDIN2)
