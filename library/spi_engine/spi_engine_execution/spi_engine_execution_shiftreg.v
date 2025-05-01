@@ -175,7 +175,7 @@ module spi_engine_execution_shiftreg #(
         // intended LATCH
         always @(negedge echo_sclk) begin
           if (latch_sdi)
-            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]} & ((1 << word_length) - 1);
         end
       end
 
@@ -207,7 +207,7 @@ module spi_engine_execution_shiftreg #(
         // intended LATCH
         always @(posedge echo_sclk) begin
           if (latch_sdi)
-            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]};
+            sdi_data_latch[i*DATA_WIDTH+:DATA_WIDTH] <= {data_sdi_shift, sdi[i]} & ((1 << word_length) - 1);
         end
       end
 
@@ -270,7 +270,7 @@ module spi_engine_execution_shiftreg #(
         end
       end
 
-      assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift;
+      assign sdi_data[i*DATA_WIDTH+:DATA_WIDTH] = data_sdi_shift & ((1 << word_length) - 1);
 
     end
 
