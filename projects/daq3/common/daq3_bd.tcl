@@ -141,7 +141,10 @@ ad_xcvrpll  axi_ad9152_xcvr/up_pll_rst util_daq3_xcvr/up_qpll_rst_*
 ad_xcvrpll  axi_ad9680_xcvr/up_pll_rst util_daq3_xcvr/up_cpll_rst_*
 
 # connections (dac)
-
+# mapping the link layer lanes to the physical layer lanes
+# logical lanes 0-3 are mapped to physical lanes {0 2 3 1}
+# | logical lane  | 0 | 1 | 2 | 3 |
+# | physical lane | 0 | 2 | 3 | 1 |
 ad_xcvrcon  util_daq3_xcvr axi_ad9152_xcvr axi_ad9152_jesd {0 2 3 1} {} {} $MAX_TX_NUM_OF_LANES
 ad_connect  util_daq3_xcvr/tx_out_clk_0 axi_ad9152_tpl_core/link_clk
 ad_connect  axi_ad9152_jesd/tx_data axi_ad9152_tpl_core/link
