@@ -122,18 +122,22 @@ base address to the registers relative address.
      - 0x0000
      - BASE
      - See the `Base <#hdl-regmap-COMMON>`__ table for more details.
-   * - 0x0000
-     - 0x0000
-     - RX COMMON
+   * - 0x0010
+     - 0x0040
+     - ADC COMMON
      - See the `ADC Common <#hdl-regmap-ADC_COMMON>`__ table for more details.
-   * - 0x0000
-     - 0x0000
-     - RX CHANNELS
+   * - 0x0100
+     - 0x0400
+     - ADC CHANNELS
      - See the `ADC Channel <#hdl-regmap-ADC_CHANNEL>`__ table for more details.
-   * - 0x0000
+   * - 0x0200
      - 0x0800
      - IO_DELAY_CNTRL
      - See the `I/O Delay Control <#hdl-regmap-IO_DELAY_CNTRL>`__ table for more details.
+
+.. hdl-regmap::
+   :name: AXI_ADA4355
+   :no-type-info:
 
 .. hdl-regmap::
    :name: COMMON
