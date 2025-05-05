@@ -1,4 +1,8 @@
-# QUAD-MxFE HDL Project
+<!-- no_no_os -->
+
+# AD-QUADMXFE1-EBZ HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -17,7 +21,7 @@ All of the RX/TX link modes can be found in the [AD9081 data sheet](https://www.
 
 The overwritable parameters from the environment:
 
-- JESD_MODE - link layer encoder mode used; 
+- JESD_MODE - link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical layer
   - 64B66B - 64b66b link layer defined in JESD204C, uses Xilinx IP as Physical layer
 - [RX/TX]_LANE_RATE - lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
