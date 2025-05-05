@@ -13,9 +13,9 @@ there is one counter for each pulse.
 Features
 --------------------------------------------------------------------------------
 
-* Up to 16 configurable signals (period, width, offset)
-* External synchronization
-* External clock
+- Up to 16 configurable signals (period, width, offset)
+- External synchronization
+- External clock
 
 Files
 --------------------------------------------------------------------------------
@@ -51,21 +51,22 @@ Configuration Parameters
 
 .. note::
 
-   The pulse period, width and offset are set in number of clock cycles.
-   The clock is the axi clock or if activated, the external clock.
+   The pulse period, width and offset are set in **number of clock cycles**.
+   The clock is the AXI clock or if activated, the external clock.
 
 .. hdl-parameters::
 
    * - ID
-     - Core ID should be unique for each IP in the system.
+     - Core ID should be unique for each IP in the system
    * - ASYNC_CLK_EN
-     - Use external clock, asynchronous to s_axi_aclk.
+       Use external clock, asynchronous to s_axi_aclk (1). Otherwise, use
+       internal clock, s_axi_aclk (0).
    * - N_PWMS
-     - Number of pulses/pwms.
+     - Number of pulses/pwms
    * - PWM_EXT_SYNC
-     - PWM offset counter uses external sync.
+     - PWM offset counter uses external sync
    * - EXT_ASYNC_SYNC
-     - The external sync for pulse 0 is asynchronous.
+     - The external sync for pulse 0 is asynchronous
    * - SOFTWARE_BRINGUP
      - Require software, to bring the core out if reset
    * - EXT_SYNC_PHASE_ALIGN
@@ -91,24 +92,19 @@ Interface
 
 Detailed Description
 --------------------------------------------------------------------------------
-Let's start with some base notions:
+
+Let's start with some basic notions:
 
 - The pulse generators are based on incrementing counters.
-
 - The pulse period starts on the high level interval and ends on the low level.
-
 - By default, all counters start at the same time. When a different phase (delay)
   is needed between the pulses, we can set an offset.
-
 - The offset feature can synchronize channels 0 to 15 relative to an offset
   counter.
-
 - The offset counter will wait for a HIGH -> LOW transition of the
   synchronization pulse (''load_config'' or ''ext_sync'').
   For more info see the below channel phase alignment feature.
-
 - To **disable a PWM channel**, write 0 to its ``period`` register.
-
 - The duty cycle is the ratio between pulse width over pulse period.
 
 The following features can be enabled by setting a flag in the
@@ -121,7 +117,7 @@ The AXI PWM Generator core can be synchronized by an external signal on the
 HIGH -> LOW transition of the ext_sync signal.
 
 The external sync can be used in two modes, based on the external sync align
-feature.
+feature:
 
 - external_sync_align flag is set(1) the ext_sync will trigger a phase align
   at each neg-edge.
@@ -143,16 +139,17 @@ periods end. Software overwritable at runtime.
 
 Start at sync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 If active, the pulses will start after the trigger event.
 Otherwise each pulse will start after a period equal to the one for which
 it is set. Software over writable at runtime.
 
 This flags are software overwritable at runtime. Default value is given at build time.
 
--  software bringup = 1
--  start at sync = 1
--  force align = 0
--  ext sync align = 0
+- software bringup = 1
+- start at sync = 1
+- force align = 0
+- ext sync align = 0
 
 Timing Diagrams and examples
 --------------------------------------------------------------------------------
@@ -165,10 +162,10 @@ Timing Diagrams and examples
 
 .. warning::
 
-  The relationship between the offset and channel counters is not 100% accurate.
-  It is meant to highlight the functionality, by helping the reader track the
-  pwm waveforms. If you are interested in the exact timing you will have to
-  simulate the IP.
+   The relationship between the offset and channel counters is not 100% accurate.
+   It is meant to highlight the functionality, by helping the reader track the
+   pwm waveforms. If you are interested in the exact timing you will have to
+   simulate the IP.
 
 The timing diagram below, shows the ``load_config`` functionality with
 force align and start at sync disabled.
@@ -294,5 +291,5 @@ Register Map
 References
 --------------------------------------------------------------------------------
 
-* HDL IP core at :git-hdl:`library/axi_pwm_gen`
-* :dokuwiki:`AXI PWM GEN on wiki <resources/fpga/docs/axi_pwm_gen>`
+- HDL IP core at :git-hdl:`library/axi_pwm_gen`
+- :dokuwiki:`AXI PWM GEN on wiki <resources/fpga/docs/axi_pwm_gen>`
