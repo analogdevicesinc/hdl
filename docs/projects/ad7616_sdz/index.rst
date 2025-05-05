@@ -79,29 +79,20 @@ AD7616_SDZ parallel interface
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The INTF configuration parameter defines the interface type (Serial or
-Parallel). By default it is set to Parallel (0). Depending on the required interface mode,
-some hardware modifications need to be done on the board and/or make command:
+The following are the parameters of this project that can be configured:
+- INTF: specifies the type of interface used;
+  - 0 - parallel (default)
+  - 1 - serial
+- NUM_OF_SDI: number of SDI lines used, **only in serial interface mode**;
+  - 1 - one SDI line
+  - 2 - two SDI lines (default)
 
-In case of the **PARALLEL** interface:
-
-.. shell:: bash
-
-   $make INTF=0
-
-In case of the **SERIAL** interface:
-
-.. shell:: bash
-
-   $make INTF=1
-
-.. note::
-
-   This switch is a *hardware* switch. Please rebuild the  design if the
-   variable has been changed.
-
-   - SL5 - unmounted - Parallel interface
-   - SL5 - mounted - Serial interface
+Depending on the required interface mode, some hardware modifications need to
+be done on the board:
+  - SL5 - unmounted - Parallel interface
+  - SL5 - mounted - Serial interface
+  This switch is a *hardware* switch. Please rebuild the design if the variable
+  has been changed.
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -268,20 +259,18 @@ the HDL repository, and then build the project as follows:.
 .. shell::
 
    $cd hdl/projects/ad7616_sdz/zed
-   $make INTF=0
-
-The default configuration is Parallel Mode (0).
+   $make INTF=1 NUM_OF_SDI=2
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used:
 
 if the following command was run
 
-``make INTF=0``
+``make INTF=1 NUM_OF_SDI=2``
 
 then the folder name will be:
 
-``INTF0``
+``INTF1_NUMOFSDI2``
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
