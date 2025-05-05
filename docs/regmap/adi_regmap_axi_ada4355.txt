@@ -1,0 +1,37 @@
+TITLE
+AXI_ADA4355 (axi_ada4355_adc)
+AXI_ADA4355
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0032
+ENABLE_ERROR
+ENABLE ERROR MASK
+ENDREG
+
+FIELD
+[2] 0x00000000
+ENABLE_FRAME_ERROR
+RW
+If set, enable frame error
+ENDFIELD
+
+FIELD
+[1] 0x00000000
+ENABLE_LANE_1_ERROR
+RW
+If set, enable lane 1 error
+ENDFIELD
+
+FIELD
+[0] 0x00000000
+ENABLE_LANE_0_ERROR
+RW
+If set, enable lane 0 error
+ENDFIELD
+
+############################################################################################
+############################################################################################
