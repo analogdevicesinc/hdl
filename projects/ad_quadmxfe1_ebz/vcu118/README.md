@@ -32,7 +32,7 @@ The overwritable parameters from the environment:
 - [RX/TX]_JESD_S - [RX/TX] number of samples per converter per frame
 - [RX/TX]_JESD_NP - [RX/TX] number of bits per sample, only 16 is supported
 - [RX/TX]_NUM_LINKS - [RX/TX] number of links, which matches the number of MxFE devices
-- RX_KS_PER_CHANNEL: RX number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
+- [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
 - TX_KS_PER_CHANNEL: TX number of samples loaded for each channel in a block RAM for a contiguous cyclic streaming
 - DAC_TPL_XBAR_ENABLE: Enable NxN crossbar functionality at the transport layer, where N is the number of channels
 
