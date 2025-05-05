@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 ##--------------------------------------------------------------
@@ -7,7 +7,10 @@
 # system level parameter
 
 set INTF $ad_project_params(INTF)
+set NUM_OF_SDI $ad_project_params(NUM_OF_SDI)
+
 puts "build parameters: INTF: $INTF"
+puts "build parameters: NUM_OF_SDI: $NUM_OF_SDI"
 
 # control lines
 
@@ -51,13 +54,13 @@ if {$INTF == 1} {
   set data_width    16
   set async_spi_clk 1
   set num_cs        1
-  set num_sdi       2
+  set num_sdi       $NUM_OF_SDI
   set sdi_delay     1
   set hier_spi_engine spi_ad7616
 
   spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $sdi_delay
 
-  ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC 32
+  ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC [expr $data_width * $num_sdi]
   ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_SRC 1
   ad_ip_parameter axi_ad7616_dma CONFIG.SYNC_TRANSFER_START 0
   ad_ip_parameter axi_ad7616_dma CONFIG.AXI_SLICE_SRC 0
