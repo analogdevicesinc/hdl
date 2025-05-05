@@ -84,10 +84,11 @@ Loads the new values written in the config registers.
 ENDFIELD
 
 FIELD
-[0] 0x0
+[0] 0x1
 RESET
 RW
-Reset, default is (0x0).
+Reset, default is (0x1). The default value can be changed by HDL at build time, 
+using SOFTWARE_BRINGUP parameter.
 ENDFIELD
 
 ############################################################################################
@@ -101,10 +102,11 @@ ENDREG
 
 FIELD
 [2] 0x0
-EXT_SYNC_ALIGN
+EXT_SYNC_PHASE_ALIGN
 RW
-If active the ext_sync will trigger a phase align at each neg-edge.
+If active, the ext_sync will trigger a phase align at each neg-edge.
 Otherwise the phase align will be armed by a load config toggle.
+This is set by default in HDL, but can be overwritten by software.
 ENDFIELD
 
 FIELD
@@ -135,8 +137,8 @@ Number of pulses
 ENDREG
 
 FIELD
-[31:0] 0x0000
-NB_PULSES
+[31:0] 0x0001
+N_PWMS
 RO
 Number of configurable pulses.
 ENDFIELD
@@ -152,7 +154,7 @@ Pulse n period
 ENDREG
 
 FIELD
-[31:0] 0x0000
+[31:0] 0x000A
 PULSE_PERIOD
 RW
 Pulse duration, defined in number of clock cycles.
@@ -169,7 +171,7 @@ Pulse n width
 ENDREG
 
 FIELD
-[31:0] 0x0000
+[31:0] 0x0007
 PULSE_WIDTH
 RW
 Pulse width (high time), defined in number of clock cycles.
