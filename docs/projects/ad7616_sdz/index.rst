@@ -103,6 +103,9 @@ In case of the **SERIAL** interface:
    - SL5 - unmounted - Parallel interface
    - SL5 - mounted - Serial interface
 
+The NUM_OF_SDI configuration parameter defines the number of SDI lines used:
+**{1, 2}**. By default is set to 2.
+
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
