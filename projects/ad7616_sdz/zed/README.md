@@ -1,4 +1,4 @@
-# Ed7616-SDZ/Zed HDL Project
+# AD7616-SDZ/Zed HDL Project
 
 ## Building the project
 
@@ -14,6 +14,10 @@ The overwritable parameter from the environment:
 - INTF - specifies the interface to be used; 
   - 0 - Parallel interface
   - 1 - Serial interface
+
+- NUM_OF_SDI - specifies the number of SDI lines used when serial interface is set
+  - 1 - One SDI line
+  - 2 - Two SDI lines
 
 Depending on the required interface mode, some hardware modifications need to be done.
   - SL5 - unmounted - Parallel interface
@@ -33,7 +37,8 @@ make INTF=0
 #### Serial interface
 
 ```
-make INTF=1
+make INTF=1 NUM_OF_SDI=1
+make INTF=1 NUM_OF_SDI=2
 ```
 
 Corresponding No-OS project for both configurations: [ad7616-sdz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7616-sdz)
