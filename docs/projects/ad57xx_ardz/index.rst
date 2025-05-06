@@ -194,7 +194,7 @@ The Software GPIO number is calculated as follows:
    * - ad57xx_ardz_ldacb
      - INOUT
      - 34
-     - 17
+     - 18
    * - ad57xx_ardz_clrb
      - INOUT
      - 33
