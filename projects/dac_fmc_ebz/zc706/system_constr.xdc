@@ -37,8 +37,6 @@ set_property  -dict {PACKAGE_PIN  AJ19  IOSTANDARD LVCMOS25} [get_ports spi_mosi
 set_property  -dict {PACKAGE_PIN  AJ20  IOSTANDARD LVCMOS25} [get_ports spi_miso]                     ; ## H10  FMC_HPC_LA04_P                  IO_L15P_T2_DQS_11_AJ20
 set_property  -dict {PACKAGE_PIN  AK20  IOSTANDARD LVCMOS25} [get_ports spi_csn_dac]                  ; ## H11  FMC_HPC_LA04_N                  IO_L15N_T2_DQS_11_AK20
 set_property  -dict {PACKAGE_PIN  AH23  IOSTANDARD LVCMOS25} [get_ports spi_csn_clk]                  ; ## D11  FMC_HPC_LA05_P                  IO_L5P_T0_11_AH23
-# For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  AD21  IOSTANDARD LVCMOS25} [get_ports spi_csn_clk2]                 ; ## D14  FMC_HPC_LA09_P                  IO_L10P_T1_11
 
 # For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  AJ23  IOSTANDARD LVCMOS25} [get_ports dac_ctrl[0]]                  ; ## H13  FMC_HPC_LA07_P                  IO_L4P_T0_11_AJ23
@@ -47,9 +45,6 @@ set_property  -dict {PACKAGE_PIN  AJ24  IOSTANDARD LVCMOS25} [get_ports dac_ctrl
 # For AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  AG22  IOSTANDARD LVCMOS25} [get_ports dac_ctrl[1]]                  ; ## C10  FMC_HPC_LA06_P                  IO_L6P_T0_11_AG22
 set_property  -dict {PACKAGE_PIN  AH22  IOSTANDARD LVCMOS25} [get_ports dac_ctrl[2]]                  ; ## C11  FMC_HPC_LA06_N                  IO_L6P_T0_11_AG22
-
-# For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  AE21  IOSTANDARD LVCMOS25} [get_ports dac_ctrl[4]]                   ; ## D15  FMC_HPC_LA09_P                  IO_L10N_T1_11
 
 # PMOD 1 header
 set_property  -dict {PACKAGE_PIN  AJ21  IOSTANDARD LVCMOS25} [get_ports pmod_spi_clk]                 ; ## PMOD1_0_LS                           IO_L3P_T0_DQS_11_AJ21
