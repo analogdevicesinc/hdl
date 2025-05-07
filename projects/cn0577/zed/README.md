@@ -7,4 +7,4 @@ cd projects/cn0577/zed
 make
 ```
 
-Corresponding device tree: [xilinx/zynq-zed-adv7511-cn0577.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0577.dts)
+Corresponding device tree: [zynq-zed-adv7511-cn0577.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0577.dts)
