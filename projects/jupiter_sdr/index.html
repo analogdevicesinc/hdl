@@ -87,6 +87,7 @@
           <ul>
 <li><a class="reference internal" href="#">JUPITER-SDR HDL Project</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#supported-boards">Supported boards</a></li>
 <li><a class="reference internal" href="#supported-devices">Supported devices</a></li>
 <li><a class="reference internal" href="#block-design">Block design</a><ul>
 <li><a class="reference internal" href="#block-diagram">Block diagram</a></li>
@@ -319,6 +320,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../cn0579/index.html">CN0579</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dac_fmc_ebz/index.html">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../daq3/index.html">DAQ3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dc2677a/index.html">DC2677A</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms2/index.html">FMCOMMS2/3/4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../fmcomms5/index.html">FMCOMMS5</a></li>
@@ -364,8 +366,8 @@ Content on this topic
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p>This design allows controlling, receiving and transmitting sample stream
-from/to an ADRV9001/ADRV9002 device through two independent source-synchronous
-interfaces.
+from/to an <a class="icon adi reference external" href="https://www.analog.com/ADRV9002">ADRV9002</a> device through two independent
+source-synchronous interfaces.
 Supports both CMOS and LVDS interface, but not at the same time.
 The selection of the I/O standard must be done by setting a parameter before
 building the project.</p>
@@ -374,10 +376,16 @@ in LVDS mode with 1 or 2 lanes. This is runtime configurable.
 The complete list of supported modes can be consulted in the
 <a class="reference internal" href="../../library/axi_adrv9001/index.html#axi-adrv9001"><span class="std std-ref">AXI ADRV9001</span></a> Interface Core documentation.</p>
 </section>
+<section id="supported-boards">
+<h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-JUPITER-EBZ">JUPITER_SDR</a></p></li>
+</ul>
+</section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD-JUPITER-EBZ">JUPITER_SDR</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9002">ADRV9002</a></p></li>
 </ul>
 </section>
 <section id="block-design">

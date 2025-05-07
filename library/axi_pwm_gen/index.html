@@ -312,6 +312,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0579/index.html">CN0579</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/cn0585/index.html">CN0585</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/dac_fmc_ebz/index.html">DAC-FMC-EBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/daq3/index.html">DAQ3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/dc2677a/index.html">DC2677A</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms2/index.html">FMCOMMS2/3/4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/fmcomms5/index.html">FMCOMMS5</a></li>
@@ -414,8 +415,8 @@ there is one counter for each pulse.</p>
 <h2>Configuration Parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this heading"></a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pulse period, width and offset are set in number of clock cycles.
-The clock is the axi clock or if activated, the external clock.</p>
+<p>The pulse period, width and offset are set in <strong>number of clock cycles</strong>.
+The clock is the AXI clock or if activated, the external clock.</p>
 </div>
 <div><section id="hdl-parameters">
 <div class="table-wrapper docutils container">
@@ -430,7 +431,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 <tbody>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
 <td class="description"><section>
-<p>Core ID should be unique for each IP in the system.</p>
+<p>Core ID should be unique for each IP in the system</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -438,7 +439,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ASYNC_CLK_EN</span></code></td>
 <td class="description"><section>
-<p>Use external clock, asynchronous to s_axi_aclk.</p>
+<p>Use external clock, asynchronous to s_axi_aclk (1). Otherwise, use internal clock, s_axi_aclk (0).</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">True</span></code></td>
@@ -446,7 +447,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">N_PWMS</span></code></td>
 <td class="description"><section>
-<p>Number of pulses/pwms.</p>
+<p>Number of pulses/pwms</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
@@ -454,7 +455,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">PWM_EXT_SYNC</span></code></td>
 <td class="description"><section>
-<p>PWM offset counter uses external sync.</p>
+<p>PWM offset counter uses external sync</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -462,7 +463,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </tr>
 <tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">EXT_ASYNC_SYNC</span></code></td>
 <td class="description"><section>
-<p>The external sync for pulse 0 is asynchronous.</p>
+<p>The external sync for pulse 0 is asynchronous</p>
 </section>
 </td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
@@ -979,7 +980,7 @@ The clock is the axi clock or if activated, the external clock.</p>
 </div></section>
 <section id="detailed-description">
 <h2>Detailed Description<a class="headerlink" href="#detailed-description" title="Permalink to this heading"></a></h2>
-<p>Let’s start with some base notions:</p>
+<p>Let’s start with some basic notions:</p>
 <ul class="simple">
 <li><p>The pulse generators are based on incrementing counters.</p></li>
 <li><p>The pulse period starts on the high level interval and ends on the low level.</p></li>
@@ -1000,7 +1001,7 @@ register REG_UP_CONTROL(0x18):</p>
 <p>The AXI PWM Generator core can be synchronized by an external signal on the
 HIGH -&gt; LOW transition of the ext_sync signal.</p>
 <p>The external sync can be used in two modes, based on the external sync align
-feature.</p>
+feature:</p>
 <ul class="simple">
 <li><p>external_sync_align flag is set(1) the ext_sync will trigger a phase align
 at each neg-edge.</p></li>
@@ -1186,9 +1187,10 @@ force align and start at sync enabled.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RESET</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x1</span></code></td>
 <td class="description"><section>
-<p>Reset, default is (0x0).</p>
+<p>Reset, default is (0x1). The default value can be changed by HDL at build time, 
+using SOFTWARE_BRINGUP parameter.</p>
 </section>
 </td>
 </tr>
@@ -1202,12 +1204,13 @@ force align and start at sync enabled.</p>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[2]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_ALIGN</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">EXT_SYNC_PHASE_ALIGN</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x0</span></code></td>
 <td class="description"><section>
-<p>If active the ext_sync will trigger a phase align at each neg-edge.
-Otherwise the phase align will be armed by a load config toggle.</p>
+<p>If active, the ext_sync will trigger a phase align at each neg-edge.
+Otherwise the phase align will be armed by a load config toggle.
+This is set by default in HDL, but can be overwritten by software.</p>
 </section>
 </td>
 </tr>
@@ -1244,9 +1247,9 @@ Default valew can be overwritten at build time through parameters.</p>
 </tr>
 <tr class="row-odd"><td colspan="2"><p></p></td>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
-<td><code class="docutils literal notranslate"><span class="pre">NB_PULSES</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">N_PWMS</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RO</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000001</span></code></td>
 <td class="description"><section>
 <p>Number of configurable pulses.</p>
 </section>
@@ -1265,7 +1268,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PULSE_PERIOD</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x0000000a</span></code></td>
 <td class="description"><section>
 <p>Pulse duration, defined in number of clock cycles.</p>
 </section>
@@ -1284,7 +1287,7 @@ Where n is from 0 to 15.</p>
 <td><code class="docutils literal notranslate"><span class="pre">[31:0]</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">PULSE_WIDTH</span></code></td>
 <td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
-<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000000</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000007</span></code></td>
 <td class="description"><section>
 <p>Pulse width (high time), defined in number of clock cycles.</p>
 </section>
