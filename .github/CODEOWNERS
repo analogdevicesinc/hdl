@@ -79,6 +79,9 @@
 /projects/ad9083_evb/       andrei.grozav@analog.com  iulia.moldovan@analog.com
 /projects/ad9083_vna/       andrei.grozav@analog.com  iulia.moldovan@analog.com
 
+# Code owners for ad916x folder
+/projects/ad916x_fmc/       cristianmihai.popa@analog.com  paul.pop@analog.com
+
 # Code owners for ad9208_dual_ebz folder
 /projects/ad9208_dual_ebz/  andrei.dragomir@analog.com  iulia.moldovan@analog.com
 
