@@ -309,25 +309,30 @@ module spi_engine_execution #(
   end
 
   always @(posedge clk) begin
-    if (idle == 1'b1 || (cs_sleep_counter_compare && !cs_sleep_repeat && inst_d1 == CMD_CHIPSELECT)) begin
+    if (idle == 1'b1) begin
       bit_counter <= 'h0;
       transfer_counter <= 'h0;
-      sleep_counter <= 'h0;
       ntx_rx  <= 1'b0;
       sleep_counter_increment <= 1'b0;
-    end else if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
-      if (last_bit && transfer_active && ntx_rx) begin
-        bit_counter <= 'h0;
-        transfer_counter <= transfer_counter + 1;
-        ntx_rx <= ~ntx_rx;
-      end else begin
-        if (transfer_active) begin
-          bit_counter <= bit_counter + ntx_rx;
+      sleep_counter <= 'h0;
+    end else begin
+      if (clk_div_last == 1'b1 && wait_for_io == 1'b0) begin
+        if (last_bit && transfer_active && ntx_rx) begin
+          bit_counter <= 'h0;
+          transfer_counter <= transfer_counter + 1;
           ntx_rx <= ~ntx_rx;
         end else begin
-          sleep_counter_increment <= ~sleep_counter_increment;
-          sleep_counter <= sleep_counter + sleep_counter_increment;
+          if (transfer_active) begin
+            bit_counter <= bit_counter + ntx_rx;
+            ntx_rx <= ~ntx_rx;
+          end else begin
+            sleep_counter_increment <= ~sleep_counter_increment;
+            sleep_counter <= sleep_counter + sleep_counter_increment;
+          end
         end
+      end
+      if (cs_sleep_counter_compare && !cs_sleep_repeat && inst_d1 == CMD_CHIPSELECT) begin
+        sleep_counter <= 'h0;
       end
     end
   end
