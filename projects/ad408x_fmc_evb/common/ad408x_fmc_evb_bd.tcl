@@ -22,6 +22,7 @@ create_bd_port -dir I fpga_100_clk
 
 ad_ip_instance axi_clock_monitor ad408x_clock_monitor
 ad_ip_parameter ad408x_clock_monitor CONFIG.NUM_OF_CLOCKS 2
+ad_ip_parameter ad408x_clock_monitor CONFIG.DIV_RATE 4
 
 ad_connect fpga_ref_clk  ad408x_clock_monitor/clock_0
 ad_connect fpga_100_clk  ad408x_clock_monitor/clock_1
