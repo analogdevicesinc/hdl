@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -83,40 +83,6 @@ set params(AD9152,07) {2 1 1 4 0 16 16}
 set params(AD9152,09) {1 2 1 1 1 16 16}
 set params(AD9152,10) {1 1 1 2 0 16 16}
 set params(AD9152,device_code) 2
-
-# AD9161/2/3/4
-#                 Mode M L S F HD N NP
-set params(AD9161,01) {2 1 1 4 1 16 16}
-set params(AD9161,02) {2 2 2 2 1 16 16}
-set params(AD9161,03) {2 3 3 4 1 16 16}
-set params(AD9161,04) {2 4 1 1 1 16 16}
-set params(AD9161,06) {2 6 3 2 1 16 16}
-set params(AD9161,08) {2 8 2 1 1 16 16}
-set params(AD9161,device_code) 3
-#                 Mode M L S F HD N NP
-set params(AD9162,01) {2 1 1 4 1 16 16}
-set params(AD9162,02) {2 2 2 2 1 16 16}
-set params(AD9162,03) {2 3 3 4 1 16 16}
-set params(AD9162,04) {2 4 1 1 1 16 16}
-set params(AD9162,06) {2 6 3 2 1 16 16}
-set params(AD9162,08) {2 8 2 1 1 16 16}
-set params(AD9162,device_code) 3
-#                 Mode M L S F HD N NP
-set params(AD9163,01) {2 1 1 4 1 16 16}
-set params(AD9163,02) {2 2 2 2 1 16 16}
-set params(AD9163,03) {2 3 3 4 1 16 16}
-set params(AD9163,04) {2 4 1 1 1 16 16}
-set params(AD9163,06) {2 6 3 2 1 16 16}
-set params(AD9163,08) {2 8 2 1 1 16 16}
-set params(AD9163,device_code) 3
-#                 Mode M L S F HD N NP
-set params(AD9164,01) {2 1 1 4 1 16 16}
-set params(AD9164,02) {2 2 2 2 1 16 16}
-set params(AD9164,03) {2 3 3 4 1 16 16}
-set params(AD9164,04) {2 4 1 1 1 16 16}
-set params(AD9164,06) {2 6 3 2 1 16 16}
-set params(AD9164,08) {2 8 2 1 1 16 16}
-set params(AD9164,device_code) 3
 
 # AD9171
 #                 Mode M L S F HD N NP

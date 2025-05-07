@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -97,13 +97,12 @@ module system_top #(
 
   output          spi_csn_dac,
   output          spi_csn_clk,
-  output          spi_csn_clk2,
   input           spi_miso,
   output          spi_mosi,
   output          spi_clk,
   output          spi_en,
 
-  inout   [ 4:0]  dac_ctrl,
+  inout   [ 3:0]  dac_ctrl,
 
   output          pmod_spi_clk,
   output          pmod_spi_csn,
@@ -117,27 +116,24 @@ module system_top #(
   wire    [94:0]  gpio_i;
   wire    [94:0]  gpio_o;
   wire    [94:0]  gpio_t;
-  wire    [ 2:0]  spi0_csn;
+  wire    [ 1:0]  spi0_csn;
   wire    [ 2:0]  spi1_csn;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
-  wire            tx_sysref_loc;
-
   // spi
 
   // spi_en is active ...
   //   ... high for AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ,
-  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ, AD9161-FMC-EBZ, AD9162-FMC-EBZ, AD9163-FMC-EBZ, AD9164-FMC-EBZ
+  //   ... low for AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
   // If you are planning to build a bitstream for just one of those boards you
   // can hardwire the logic level here.
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  //                                      AD9135/9144/9172   AD916(1,2,3,4)
+  //                                        9135/9144/9172
   assign spi_csn_dac  = spi0_csn[1];
-  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044          AD9508
-  assign spi_csn_clk2 = spi0_csn[2];    //   NC               ADF4355
+  assign spi_csn_clk  = spi0_csn[0];    //   HMC7044
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk (
@@ -164,24 +160,23 @@ module system_top #(
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(4)
   ) i_iobuf (
-    .dio_t (gpio_t[21+:5]),
-    .dio_i (gpio_o[21+:5]),
-    .dio_o (gpio_i[21+:5]),
+    .dio_t (gpio_t[21+:4]),
+    .dio_i (gpio_o[21+:4]),
+    .dio_o (gpio_i[21+:4]),
     .dio_p ({
-      dac_ctrl           /* 25 - 21 */
+      dac_ctrl           /* 24 - 21 */
     }));
 
   /*
   * Control signals for different FMC boards:
   *
-  * dac_ctrl  FMC   9144 like    9162 like       9172 like
-  *        0  H13   FMC_TXEN_0   FMC_TXEN_0      FMC_PE_CTRL
-  *        1  C10   NC           NC              FMC_TXEN_0
-  *        2  C11   NC           NC              FMC_TXEN_1
-  *        3  H14   FMC_TXEN_1   NC              NC
-  *        4  D15   NC           FMC_HMC849VCTL  NC
+  * dac_ctrl  FMC   9144 like    9172 like
+  *        0  H13   FMC_TXEN_0   FMC_PE_CTRL
+  *        1  C10   NC           FMC_TXEN_0
+  *        2  C11   NC           FMC_TXEN_1
+  *        3  H14   FMC_TXEN_1   NC
   */
 
   assign dac_fifo_bypass = gpio_o[40];
@@ -238,10 +233,6 @@ module system_top #(
     .tx_ref_clk_0 (tx_ref_clk),
     .tx_ref_clk_4 (tx_ref_clk),
     .tx_sync_0 (tx_sync[NUM_LINKS-1:0]),
-    .tx_sysref_0 (tx_sysref_loc));
-
-  // AD9161/2/4-FMC-EBZ works only in single link,
-  // The FMC connector instead of SYNC1 has SYSREF connected to it
-  assign tx_sysref_loc = (DEVICE_CODE == 3) ? tx_sync[1] : tx_sysref;
+    .tx_sysref_0 (tx_sysref));
 
 endmodule
