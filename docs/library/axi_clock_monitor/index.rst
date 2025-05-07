@@ -35,10 +35,16 @@ Configuration Parameters
 --------------------------------------------------------------------------------
 
 .. hdl-parameters::
-   :path: library/axi_clock_monitor
 
-.. _axi_clock_monitor interface:
-
+   * - ID
+     - Core ID should be unique for each IP in the system.
+   * - FPGA_TECHNOLOGY
+     - Encoded value describing the technology/generation of the FPGA device (7series,ultrascale,ultradcale+,versal).
+   * - NUM_OF_CLOCKS
+     - Select number of CLOCKS.
+   * - DIV_RATE
+     - This parameter can take the following values: 1, 2, 4, 8.
+     
 Interface
 --------------------------------------------------------------------------------
 
