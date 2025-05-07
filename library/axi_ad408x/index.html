@@ -276,6 +276,7 @@ Content on this topic
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz/index.html">AD9081-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9081_fmca_ebz_x_band/index.html">AD9081-FMCA-EBZ-X-BAND</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9083_evb/index.html">AD9083-EVB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../projects/ad916x_fmc/index.html">AD916x-FMC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9208_dual_ebz/index.html">AD9208-DUAL-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9209_fmca_ebz/index.html">AD9209-FMCA-EBZ</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../projects/ad9213_dual_ebz/index.html">AD9213-DUAL-EBZ</a></li>
@@ -2475,33 +2476,41 @@ the interface module.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>BITSLIP_ENABLE</p></td>
+<tr class="row-even"><td><p>SYNC *</p></td>
 <td><p>0x44 (ADC Common)</p></td>
 <td><p>3</p></td>
-<td><p>Enables the sync process.</p></td>
+<td><p>This bit enables capture synchronization. When activated, it initiates
+an HDL process that aligns the sample’s most significant bit (MSB) based
+solely on the captured data, without considering the AD4080’s CNV signal.
+This bit is self-clearing and should be toggled whenever synchronization
+is needed (e.g., at boot or after updating the sampling rate).</p></td>
 </tr>
-<tr class="row-odd"><td><p>NUM_LANES</p></td>
+<tr class="row-odd"><td><p>NUM_LANES *</p></td>
 <td><p>0x44 (ADC Common)</p></td>
 <td><p>[12:8]</p></td>
-<td><p>Controls the number of lanes enabled.</p></td>
+<td><p>This field specifies the number of data lanes utilized for data transfer,
+which can be either 1 or 2.</p></td>
 </tr>
 <tr class="row-even"><td><p>FILTER_ENABLE</p></td>
 <td><p>0x4C (ADC Common)</p></td>
 <td><p>0</p></td>
-<td><p>Controls the filter status.</p></td>
+<td><p>Setting this bit configures the sample capture to occur at each falling
+edge of the Filter Result Ready pin of the AD4080, as opposed to
+continuous mode when the digital filter feature is disabled.</p></td>
 </tr>
-<tr class="row-odd"><td><p>SELF_SYNC</p></td>
-<td><p>0x4C (ADC Common)</p></td>
-<td><p>1</p></td>
-<td><p>Controls if the data capture synchronization is done through CNV signal or bit-slip.</p></td>
-</tr>
-<tr class="row-even"><td><p>SYNC_STATUS</p></td>
+<tr class="row-odd"><td><p>SYNC_STATUS *</p></td>
 <td><p>0x68 (ADC Common)</p></td>
 <td><p>0</p></td>
-<td><p>States the synchronization status.</p></td>
+<td><p>This bit indicates whether the sample’s MSB alignment has been correctly
+performed and the capture is synchronized. If successful, this bit will
+be set to 1.</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>* The register already exist in ADC Common. This is just a detailed explanation.</p>
 </div>
 </section>
 <section id="software-suppport">
