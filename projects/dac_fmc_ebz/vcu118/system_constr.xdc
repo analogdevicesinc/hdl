@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,8 +18,6 @@ set_property  -dict {PACKAGE_PIN  AR37 IOSTANDARD LVCMOS18} [get_ports spi_miso]
 set_property  -dict {PACKAGE_PIN  AT40 IOSTANDARD LVCMOS18} [get_ports spi_mosi]                         ; ## G10  FMCP_HSPC_LA03_N          IO_L4N_T0U_N7_DBC_AD7N_43
 set_property  -dict {PACKAGE_PIN  AT39 IOSTANDARD LVCMOS18} [get_ports spi_clk]                          ; ## G09  FMCP_HSPC_LA03_P          IO_L4P_T0U_N6_DBC_AD7P_43
 set_property  -dict {PACKAGE_PIN  AR38 IOSTANDARD LVCMOS18} [get_ports spi_en]                           ; ## D12  FMCP_HSPC_LA05_N          IO_L1N_T0L_N1_DBC_43
-# For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  AJ33 IOSTANDARD LVCMOS18} [get_ports spi_csn_clk2]                     ; ## D14  FMCP_HSPC_LA09_P          IO_L19P_T3L_N0_DBC_AD9P_43 
 
 # For AD9135-FMC-EBZ, AD9136-FMC-EBZ, AD9144-FMC-EBZ, AD9152-FMC-EBZ, AD9154-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  AP36 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[0]]                      ; ## H13  FMCP_HSPC_LA07_P          IO_L5P_T0U_N8_AD14P_43
@@ -28,8 +26,6 @@ set_property  -dict {PACKAGE_PIN  AP37 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[
 # For AD9171-FMC-EBZ, AD9172-FMC-EBZ, AD9173-FMC-EBZ
 set_property  -dict {PACKAGE_PIN  AT35 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[1]]                      ; ## C10  FMCP_HSPC_LA06_P          IO_L2P_T0L_N2_43
 set_property  -dict {PACKAGE_PIN  AT36 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[2]]                      ; ## C11  FMCP_HSPC_LA06_N          IO_L2N_T0L_N3_43
-# For AD916(1,2,3,4)-FMC-EBZ
-set_property  -dict {PACKAGE_PIN  AK33 IOSTANDARD LVCMOS18} [get_ports dac_ctrl[4]]                      ; ## D15  FMCP_HSPC_LA09_N          IO_L19N_T3L_N1_DBC_AD9N_43
 
 set_property  -dict {PACKAGE_PIN  AK38} [get_ports tx_ref_clk_121_p]                                     ; ## D04  FMCP_HSPC_GBT0_0_P        MGTREFCLK0P_121
 set_property  -dict {PACKAGE_PIN  AK39} [get_ports tx_ref_clk_121_n]                                     ; ## D05  FMCP_HSPC_GBT0_0_N        MGTREFCLK0N_121

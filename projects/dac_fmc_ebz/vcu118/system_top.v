@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -90,13 +90,12 @@ module system_top #(
 
   output                  spi_csn_dac,
   output                  spi_csn_clk,
-  output                  spi_csn_clk2,
   input                   spi_miso,
   output                  spi_mosi,
   output                  spi_clk,
   output                  spi_en,
 
-  inout       [ 4:0]      dac_ctrl
+  inout       [ 3:0]      dac_ctrl
 );
 
   // internal signals
@@ -104,11 +103,10 @@ module system_top #(
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  wire    [ 2:0]  spi_csn;
+  wire    [ 1:0]  spi_csn;
   wire            tx_ref_clk;
   wire            tx_sysref;
   wire    [ 1:0]  tx_sync;
-  wire            tx_sysref_loc;
 
   assign iic_rstn = 1'b1;
   // spi
@@ -121,10 +119,8 @@ module system_top #(
   //
   assign spi_en = (DEVICE_CODE <= 2);
 
-  //                                        9135/9144/9172    916(1,2,3,4)
-  assign spi_csn_dac  = spi_csn[1];
-  assign spi_csn_clk  = spi_csn[0];    //   HMC7044          AD9508
-  assign spi_csn_clk2 = spi_csn[2];    //   NC               ADF4355
+  assign spi_csn_dac  = spi_csn[1];    //   AD9135/9144/9172
+  assign spi_csn_clk  = spi_csn[0];    //   HMC7044
 
   /* JESD204 clocks and control signals */
   IBUFDS_GTE4 i_ibufds_tx_ref_clk_121 (
@@ -158,24 +154,23 @@ module system_top #(
 
   /* FMC GPIOs */
   ad_iobuf #(
-    .DATA_WIDTH(5)
+    .DATA_WIDTH(4)
   ) i_iobuf (
-    .dio_t (gpio_t[21+:5]),
-    .dio_i (gpio_o[21+:5]),
-    .dio_o (gpio_i[21+:5]),
+    .dio_t (gpio_t[21+:4]),
+    .dio_i (gpio_o[21+:4]),
+    .dio_o (gpio_i[21+:4]),
     .dio_p ({
-      dac_ctrl           /* 25 - 21 */
+      dac_ctrl           /* 24 - 21 */
     }));
 
   /*
   * Control signals for different FMC boards:
   *
-  * dac_ctrl  FMC   9144 like    9162 like       9172 like
-  *        0  H13   FMC_TXEN_0   FMC_TXEN_0      FMC_PE_CTRL
-  *        1  C10   NC           NC              FMC_TXEN_0
-  *        2  C11   NC           NC              FMC_TXEN_1
-  *        3  H14   FMC_TXEN_1   NC              NC
-  *        4  D15   NC           FMC_HMC849VCTL  NC
+  * dac_ctrl  FMC   9144 like    9172 like
+  *        0  H13   FMC_TXEN_0   FMC_PE_CTRL
+  *        1  C10   NC           FMC_TXEN_0
+  *        2  C11   NC           FMC_TXEN_1
+  *        3  H14   FMC_TXEN_1   NC
   */
 
   assign dac_fifo_bypass = gpio_o[40];
@@ -258,9 +253,5 @@ module system_top #(
     .uart_sin (uart_sin),
     .uart_sout (uart_sout),
     .dac_fifo_bypass (dac_fifo_bypass));
-
-  // AD9161/2/4-FMC-EBZ works only in single link,
-  // The FMC connector instead of SYNC1 has SYSREF connected to it
-  assign tx_sysref_loc = (DEVICE_CODE == 3) ? tx_sync[1] : tx_sysref;
 
 endmodule
