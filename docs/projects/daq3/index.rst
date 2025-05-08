@@ -211,6 +211,16 @@ parameters:
         - :ref:`util_upack2`
         - ---
 
+Evaluation board block diagram
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The data path and clock domains in the evaluation board are depicted in the below diagram:
+
+.. image:: daq3_fmc_card.svg
+   :width: 800
+   :align: center
+   :alt: DAQ3 evaluation board block diagram
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
