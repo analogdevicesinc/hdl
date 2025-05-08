@@ -356,22 +356,17 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`CN0506 MII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-mii.dtsi>`
-- :git-linux:`CN0506 RGMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rgmii.dtsi>`
-- :git-linux:`CN0506 RMII dtsi source code (arm32) <arch/arm/boot/dts/adi-cn0506-rmii.dtsi>`
-- :git-linux:`CN0506 MII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-mii.dtsi>`
-- :git-linux:`CN0506 RGMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rgmii.dtsi>`
-- :git-linux:`CN0506 RMII dtsi source code (arm64) <arch/arm64/boot/dts/xilinx/adi-cn0506-rmii.dtsi>`
-- :git-linux:`CN0506 MII - A10SOC dts source code (arm32) <arch/arm/boot/dts/socfpga_arria10_socdk_cn0506_mii.dts>`
+- :git-linux:`CN0506 MII - A10SOC dts source code (arm32) <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_cn0506_mii.dts>`
+- :git-linux:`CN0506 RGMII - A10SOC dts source code (arm32) <arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_cn0506_rgmii.dts>`
 - :git-linux:`CN0506 MII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-mii.dts>`
 - :git-linux:`CN0506 RGMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rgmii.dts>`
 - :git-linux:`CN0506 RMII - ZCU102 dts source code (arm64) <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-cn0506-rmii.dts>`
-- :git-linux:`CN0506 MII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-mii.dts>`
-- :git-linux:`CN0506 RGMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rgmii.dts>`
-- :git-linux:`CN0506 RMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/zynq-zc706-adv7511-cn0506-rmii.dts>`
-- :git-linux:`CN0506 MII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-mii.dts>`
-- :git-linux:`CN0506 RGMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rgmii.dts>`
-- :git-linux:`CN0506 RMII - ZED dts source code (arm32) <arch/arm/boot/dts/zynq-zed-adv7511-cn0506-rmii.dts>`
+- :git-linux:`CN0506 MII - ZC706 dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-cn0506-mii.dts>`
+- :git-linux:`CN0506 RGMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-cn0506-rgmii.dts>`
+- :git-linux:`CN0506 RMII - ZC706 dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-cn0506-rmii.dts>`
+- :git-linux:`CN0506 MII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-mii.dts>`
+- :git-linux:`CN0506 RGMII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-rgmii.dts>`
+- :git-linux:`CN0506 RMII - ZED dts source code (arm32) <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-cn0506-rmii.dts>`
 - :dokuwiki:`ADIN1300 driver docs <resources/tools-software/linux-drivers/net-phy/adin>`
 
 .. include:: ../common/more_information.rst
