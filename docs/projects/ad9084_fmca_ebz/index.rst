@@ -85,8 +85,9 @@ Block design
 .. important::
 
   The Apollo chip is split into two sides, each side having up to 12 JESD lanes and 4 converters:
-    - Side A
-    - Side B
+
+  - Side A
+  - Side B
 
   The ``ASYMMETRIC_A_B_MODE`` parameter is used to enable the asymmetric A/B mode
   where each Apollo side has a separate JESD link inside the block design.
@@ -95,36 +96,46 @@ Block design
   the two sides into a single link.
 
   Given the following JESD204 configuration and assuming that **ASYMMETRIC_A_B_MODE = 0**:
-    - L = 8
-    - M = 4
-    - S = 1
-    - N = NP = 16
-    - **NUM_LINKS = 2**
 
-  The resulted design will configure each Apollo side with the following parameters, but will merge the two sides into a single JESD link inside the design:
-    - L = 8
-    - M = 4
-    - S = 1
-    - N = NP = 16
+  - L = 8
+  - M = 4
+  - S = 1
+  - N = NP = 16
+  - **NUM_LINKS = 2**
 
-  If however, **NUM_LINKS = 1**, the design will configure each side with the following parameters:
-    - L = 4
-    - M = 2
-    - S = 1
-    - N = NP = 16
+  The resulted design will configure each Apollo side with the following
+  parameters, but will merge the two sides into a single JESD link inside the
+  design:
 
-  Given the following JESD204 configuration and assuming that **ASYMMETRIC_A_B_MODE = 1**:
-    - L = 8
-    - M = 4
-    - S = 1
-    - N = NP = 16
-    - **NUM_LINKS is ignored**
+  - L = 8
+  - M = 4
+  - S = 1
+  - N = NP = 16
 
-  The resulted design will configure each Apollo side with the following parameters, each having it's own JESD link inside the design:
-    - L = 8
-    - M = 4
-    - S = 1
-    - N = NP = 16
+  If however, **NUM_LINKS = 1**, the design will configure each side with the
+  following parameters:
+
+  - L = 4
+  - M = 2
+  - S = 1
+  - N = NP = 16
+
+  Given the following JESD204 configuration and assuming that
+  **ASYMMETRIC_A_B_MODE = 1**:
+
+  - L = 8
+  - M = 4
+  - S = 1
+  - N = NP = 16
+  - **NUM_LINKS is ignored**
+
+  The resulted design will configure each Apollo side with the following
+  parameters, each having it's own JESD link inside the design:
+
+  - L = 8
+  - M = 4
+  - S = 1
+  - N = NP = 16
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,6 +157,7 @@ Example block design for ASYMMETRIC_A_B_MODE=0; M=4; L=8; NUM_LINKS=2; JESD204C
    The project must be built with the following parameters:
 
    .. shell:: bash
+      :no-path:
 
       $make JESD_MODE=64B66B  \
       $     RX_LANE_RATE=20.625 \
@@ -199,6 +211,7 @@ Example block design for ASYMMETRIC_A_B_MODE=1; M=4; L=8; JESD204C
    The project must be built with the following parameters:
 
    .. shell:: bash
+      :no-path:
 
       $make JESD_MODE=64B66B  \
       $     RX_LANE_RATE=20.625 \
@@ -248,9 +261,8 @@ Configuration modes
 
 The block design supports configuration of parameters and scales.
 
-We have listed a couple of examples at section
-`Building the HDL project`_ and the default modes
-for each project.
+We have listed a couple of examples at section :ref:`ad9084_fmca_ebz build` and
+the default modes for each project.
 
 .. note::
 
@@ -585,6 +597,8 @@ axi_apollo_rx_b_jesd 2   2                86
 axi_apollo_tx_b_jesd 1   1                85
 ==================== === ================ ============
 
+.. _ad9084_fmca_ebz build:
+
 Building the HDL project
 -------------------------------------------------------------------------------
 
@@ -630,11 +644,11 @@ for that project (ad9084_fmca_ebz/$carrier).
 
 .. collapsible:: Default values of the make parameters for AD9084-FMCA-EBZ
 
-   +---------------------+----------+--------+--------+--------+-------+
+   +---------------------+---------------------------------------------+
    | Parameter           | Default value of the parameters             |
    |                     +--------+--------+---------+--------+--------+
    |                     |  FM87  | VCU118 | VCU128  | VCK190 | VPK180 |
-   +---------------------+--------+--------+---------+--------+--------+
+   +=====================+========+========+=========+========+========+
    | JESD_MODE           | 64B66B | 64B66B |  64B66B | 64B66B | 64B66B |
    +---------------------+--------+--------+---------+--------+--------+
    | ENABLE_HSCI         |:red:`-`|      1 | :red:`-`|     1* |     1* |
@@ -702,7 +716,7 @@ for that project (ad9084_fmca_ebz/$carrier).
    | DAC_DO_MEM_TYPE     |    --- |    --- |       2 |    --- |    --- |
    +---------------------+--------+--------+---------+--------+--------+
 
- .. admonition:: Legend
+   .. admonition:: Legend
       :class: note
 
       :red:`-` --- this feature is not supported
