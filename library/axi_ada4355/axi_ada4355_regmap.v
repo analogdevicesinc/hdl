@@ -38,56 +38,56 @@ module axi_ada4355_regmap (
 
   // processor interface
 
-  input                   up_rstn,
-  input                   up_clk,
-  input                   up_wreq,
-  input       [13:0]      up_waddr,
-  input       [31:0]      up_wdata,
-  output reg              up_wack,
-  input                   up_rreq,
-  input       [13:0]      up_raddr,
-  output reg  [31:0]      up_rdata,
-  output reg              up_rack,
-  input                   clk_div,
-  output      [ 2:0]      enable_error_sync,
-  input                   adc_rst
+  input             up_rstn,
+  input             up_clk,
+  input             up_wreq,
+  input      [13:0] up_waddr,
+  input      [31:0] up_wdata,
+  output reg        up_wack,
+  input             up_rreq,
+  input      [13:0] up_raddr,
+  output reg [31:0] up_rdata,
+  output reg        up_rack,
+  input             clk_div,
+  output     [ 2:0] enable_error_sync,
+  input             adc_rst
 );
 
   // internal registers
 
   reg [ 2:0]  up_enable_error = 'd0;
 
-    // processor write interface
+  // processor write interface
 
   always @(posedge up_clk) begin
-        if (up_rstn == 0) begin
-          up_wack <= 'd0;
-          up_enable_error <= 'd0;
-        end else begin
-          up_wack <= up_wreq;
-          if ((up_wreq == 1'b1) && (up_waddr[6:0] == 7'h32)) begin
-                up_enable_error <= up_wdata[2:0];
-          end
-        end
+    if (up_rstn == 0) begin
+      up_wack <= 'd0;
+      up_enable_error <= 'd0;
+    end else begin
+      up_wack <= up_wreq;
+      if ((up_wreq == 1'b1) && (up_waddr[6:0] == 7'h32)) begin
+        up_enable_error <= up_wdata[2:0];
+      end
+    end
   end
 
   // processor read interface
 
   always @(posedge up_clk) begin
-        if (up_rstn == 0) begin
-          up_rack <= 'd0;
-          up_rdata <= 'd0;
-        end else begin
-          up_rack <= up_rreq;
-          if (up_rreq == 1'b1) begin
-                case (up_raddr)
-                7'h32: up_rdata <= {29'd0, up_enable_error};
-                default: up_rdata <= 0;
-                endcase
-          end else begin
-                up_rdata <= 32'd0;
-          end
-        end
+    if (up_rstn == 0) begin
+      up_rack <= 'd0;
+      up_rdata <= 'd0;
+    end else begin
+      up_rack <= up_rreq;
+      if (up_rreq == 1'b1) begin
+        case (up_raddr)
+          7'h32: up_rdata <= {29'd0, up_enable_error};
+          default: up_rdata <= 0;
+        endcase
+      end else begin
+        up_rdata <= 32'd0;
+      end
+    end
   end
 
   sync_bits #(
