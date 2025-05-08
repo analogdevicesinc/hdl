@@ -164,7 +164,6 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADV7513 driver source code <drivers/gpu/drm/bridge/adv7511>`
-- :git-linux:`ADV7513 - DE10-Nano Base dtsi source code (arm32) <arch/arm/boot/dts/socfpga_cyclone5_de10nano_hps.dtsi>`
 - :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
 
 .. include:: ../common/more_information.rst
