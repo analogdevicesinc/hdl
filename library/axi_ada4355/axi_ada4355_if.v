@@ -90,6 +90,8 @@ module axi_ada4355_if #(
   localparam [ 7:0] pattern_value = 8'hF0;
   localparam [15:0] expected_pattern_lane_0 = 16'h5554;
   localparam [15:0] expected_pattern_lane_1 = 16'hAAA8;
+  localparam [15:0] lane_0_mask = 16'h5555;
+  localparam [15:0] lane_1_mask = 16'hAAAA;
 
   wire                 clk_in_s;
   wire                 out_ibufmrce_clock;
@@ -123,8 +125,8 @@ module axi_ada4355_if #(
   reg [ 9:0] serdes_reset = 10'b0000000110;
   reg [ 1:0] serdes_valid = 2'b00;
   reg [ 1:0] serdes_valid_d = 2'b00;
-  reg [ 2:0] shift_cnt = 3'd0;
-  reg [ 4:0] delay = 5'd0;
+  reg [ 2:0] shift_cnt = 3'h0;
+  reg [ 4:0] delay = 5'h0;
   reg [15:0] serdes_data;
   reg [15:0] serdes_data_d;
   reg [ 7:0] serdes_frame;
@@ -138,8 +140,6 @@ module axi_ada4355_if #(
   reg        frame_err_r;
   reg        data_err_lane_0_r;
   reg        data_err_lane_1_r;
-  reg [15:0] lane_0_mask = 16'h5555;
-  reg [15:0] lane_1_mask = 16'hAAAA;
   reg [15:0] test_pattern;
 
   IBUFGDS i_clk_in_ibuf(
@@ -254,10 +254,10 @@ module axi_ada4355_if #(
   always @(posedge adc_clk_div or negedge sync_n) begin
     if(~sync_n) begin
       serdes_reset <= 10'b0000000110;
-        end else begin
-          serdes_reset <= {serdes_reset[8:0],1'b0};
-        end
+    end else begin
+      serdes_reset <= {serdes_reset[8:0],1'b0};
     end
+  end
 
   assign serdes_reset_s = serdes_reset[5];
   assign serdes_reset_d = serdes_reset[9];
@@ -349,48 +349,47 @@ module axi_ada4355_if #(
       frame_shifted <= serdes_frame;
     end else begin
       case (state)
-      INIT : begin
-        if (frame_shifted != pattern_value) begin
-          state <= CNT_UPDATE;
-        end else begin
+        INIT : begin
+          if (frame_shifted != pattern_value) begin
+            state <= CNT_UPDATE;
+          end else begin
+            frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
+            if (expected_pattern_lane_0 == (test_pattern & lane_0_mask)) begin
+              data_err_lane_0_r <= 1'b0;
+            end else begin
+              data_err_lane_0_r <= 1'b1;
+            end
+            if (expected_pattern_lane_1 == (test_pattern & lane_1_mask)) begin
+              data_err_lane_1_r <= 1'b0;
+            end else begin
+              data_err_lane_1_r <= 1'b1;
+            end
+            state <= INIT;
+          end
+        end
+        CNT_UPDATE : begin
+          if (shift_cnt == 3'b111) begin
+            frame_err_r <= 1'b1;
+            state <= RESET;
+          end
+          else begin
+            frame_err_r <= 1'b0;
+          end
+          shift_cnt <= shift_cnt + 1;
+          state <= FRAME_SHIFTED;
+        end
+        FRAME_SHIFTED : begin
           frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
-          if (expected_pattern_lane_0 == (test_pattern & lane_0_mask)) begin
-            data_err_lane_0_r <= 1'b0;
-          end else begin
-            data_err_lane_0_r <= 1'b1;
-          end
-          if (expected_pattern_lane_1 == (test_pattern & lane_1_mask)) begin
-            data_err_lane_1_r <= 1'b0;
-          end else begin
-            data_err_lane_1_r <= 1'b1;
-          end
           state <= INIT;
         end
-      end
-      CNT_UPDATE : begin
-        if (shift_cnt == 3'b111) begin
-          frame_err_r <= 1'b1;
-          state <= RESET;
-        end
-        else begin
-           frame_err_r <= 1'b0;
-        end
-        shift_cnt <= shift_cnt + 1;
-        state <= FRAME_SHIFTED;
-      end
-      FRAME_SHIFTED : begin
-         frame_shifted <= {serdes_frame, serdes_frame_d} >> shift_cnt;
-         state <= INIT;
-      end
-      RESET : begin
+        RESET : begin
           shift_cnt <= 0;
           state <= INIT;
           frame_err_r <= 1'b0;
           data_err_lane_0_r <= 1'b0;
           data_err_lane_1_r <= 1'b0;
-      end
-      default :
-        state <= INIT;
+        end
+        default: state <= INIT;
       endcase
     end
   end
