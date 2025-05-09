@@ -13,10 +13,15 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #   Use over-writable parameters from the environment.
 #
 # Parameter description:
-#   [TX/RX/RX_OS]_JESD_M : Number of converters per link
-#   [TX/RX/RX_OS]_JESD_L : Number of lanes per link
-#   [TX/RX/RX_OS]_JESD_S : Number of samples per frame
-#   [TX/RX/RX_OS]_JESD_NP : Number of bits per sample
+#   JESD_MODE: link layer encoder mode used;
+#      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
+#      8B10B - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
+#   [RX/TX]_LANE_RATE - lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
+#   [RX/TX]_JESD_M - [RX/TX] number of converters per link
+#   [RX/TX]_JESD_L - [RX/TX] number of lanes per link
+#   [RX/TX]_JESD_S - [RX/TX] number of samples per converter per frame
+#   [RX/TX]_JESD_NP - [RX/TX] number of bits per sample
+#   [RX/TX]_NUM_LINKS - [RX/TX] number of links, which matches the number of MxFE devices
 
 adi_project adrv904x_zcu102 0 [list \
   JESD_MODE       [get_env_param JESD_MODE     64B66B] \
