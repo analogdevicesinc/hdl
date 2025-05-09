@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -37,8 +37,10 @@
 
 module axi_clock_monitor #(
 
+  parameter   FPGA_TECHNOLOGY = 0,
   parameter   ID = 0,
-  parameter   NUM_OF_CLOCKS = 1
+  parameter   NUM_OF_CLOCKS = 1,
+  parameter   DIV_RATE = 1
 ) (
 
   // clocks
@@ -90,6 +92,17 @@ module axi_clock_monitor #(
   // local parameters
 
   localparam  PCORE_VERSION = 1;
+  localparam [7:0] DIV_VALUE = (DIV_RATE == 4'd1) ? "1" :
+                               (DIV_RATE == 4'd2) ? "2" :
+                               (DIV_RATE == 4'd3) ? "3" :
+                               (DIV_RATE == 4'd4) ? "4" :
+                               (DIV_RATE == 4'd5) ? "5" :
+                               (DIV_RATE == 4'd6) ? "6" :
+                               (DIV_RATE == 4'd7) ? "7" :
+                               (DIV_RATE == 4'd8) ? "8" : "0";
+  localparam  SEVEN_SERIES    = 1;
+  localparam  ULTRASCALE      = 2;
+  localparam  ULTRASCALE_PLUS = 3;
 
   // internal registers
 
@@ -108,10 +121,10 @@ module axi_clock_monitor #(
   wire         up_rreq_s;
   wire         up_waddr_s;
   wire         up_raddr_s;
-
-  wire         clock         [0:15];
-  wire [20:0]  clk_mon_count [0:15];
-
+  wire         clock          [0:15];
+  wire [20:0]  clk_mon_count  [0:15];
+  wire         clock_div      [0:15];
+  wire [7:0]   div_rate_s;
   wire [13:0]  up_waddr_i_s;
   wire [31:0]  up_wdata_i_s;
   wire         up_wack_o_s;
@@ -183,6 +196,7 @@ module axi_clock_monitor #(
           5'h01: up_rdata_int <= ID;
 
           /* Core configuration */
+          5'h02: up_rdata_int <= {14'h00, div_rate_s};
           5'h03: up_rdata_int <= NUM_OF_CLOCKS;
           5'h04: up_rdata_int <= {31'h00, up_reset_core};
 
@@ -212,8 +226,33 @@ module axi_clock_monitor #(
 
   // clock monitors
 
+  assign div_rate_s = (FPGA_TECHNOLOGY == SEVEN_SERIES || FPGA_TECHNOLOGY ==  ULTRASCALE || FPGA_TECHNOLOGY ==  ULTRASCALE_PLUS) ?   DIV_RATE : 8'b1;
+
   generate
     for (n = 0; n < NUM_OF_CLOCKS; n = n + 1) begin: clk_mon
+      if(FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+        BUFR #(
+          .BUFR_DIVIDE(DIV_VALUE),
+          .SIM_DEVICE("7SERIES")
+        ) BUFR_inst (
+          .CLR(1'b0),
+          .CE(1'b1),
+          .I(clock[n]),
+          .O(clock_div[n]));
+      end else if(FPGA_TECHNOLOGY == ULTRASCALE || FPGA_TECHNOLOGY == ULTRASCALE_PLUS) begin
+        BUFGCE_DIV #(
+          .BUFGCE_DIVIDE(DIV_RATE),
+          .IS_CE_INVERTED(1'b0),
+          .IS_CLR_INVERTED(1'b0),
+          .IS_I_INVERTED(1'b0)
+        ) i_div_clk_buf (
+          .O(clock_div[n]),
+          .CE(1'b1),
+          .CLR(1'b0),
+          .I(clock[n]));
+      end else begin
+        assign clock_div[n] = clock[n];
+      end
       up_clock_mon #(
         .TOTAL_WIDTH(21)
       ) i_clock_mon (
@@ -221,11 +260,12 @@ module axi_clock_monitor #(
         .up_clk(up_clk),
         .up_d_count(clk_mon_count[n]),
         .d_rst(1'b0),
-        .d_clk(clock[n]));
+        .d_clk(clock_div[n]));
     end
     for (n = NUM_OF_CLOCKS; n < 16; n = n + 1) begin: clk_mon_z
       assign clk_mon_count[n] = 21'd0;
     end
+
   endgenerate
 
   // axi interface
