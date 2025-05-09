@@ -24,6 +24,11 @@ The :adi:`AD9545` Quad Input, 10-Output, Dual DPLL/IEEE 1588, 1 pps Synchronizer
 Jitter Cleaner is used to generate the required clocks for the 10 Gb Ethernet interface
 and the PTP logic.
 
+Supported boards
+-------------------------------------------------------------------------------
+
+- :adi:`AD-GMSL2ETH-SL`
+
 Supported devices
 -------------------------------------------------------------------------------
 
