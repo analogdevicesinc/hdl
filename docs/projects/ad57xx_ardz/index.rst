@@ -317,7 +317,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD57XX Linux driver ad57xx.c <drivers/iio/adc/ad57xx.c>`
+- :git-linux:`AD57XX Linux device tree socfpga_cyclone5_de10_nano_ad5791.dts <arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_ad5791.dts>`
+- :git-linux:`AD57XX Linux driver ad5791.c <drivers/iio/dac/ad5791.c>`
 
 .. include:: ../common/more_information.rst
 
