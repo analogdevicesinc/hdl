@@ -350,7 +350,7 @@ Software related
 
 - Linux driver :git-linux:`drivers/iio/adc/ad6676.c`
 - AD6676EVB VC707 Linux device tree :git-linux:`arch/microblaze/boot/dts/vc707_ad6676evb.dts`
-- AD6676EVB ZC706 Linux device tree :git-linux:`arch/microblaze/boot/dts/zynq-zc706-adv7511-ad6676-fmc.dts`
+- AD6676EVB ZC706 Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad6676-fmc.dts`
 - :dokuwiki:`AD6676 Linux device driver documentation <resources/tools-software/linux-drivers/iio-adc/ad6676>`
 - AD6676 no-OS driver :git-no-os:`drivers/adc/ad6676`
 - AD6676 no-OS project :git-no-os:`projects/ad6676-ebz`
