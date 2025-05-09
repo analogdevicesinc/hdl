@@ -253,7 +253,7 @@ Design Guidelines
 --------------------------------------------------------------------------------
 
 .. note::
-  Please refer to :dokuwiki:`AMD Xilinx FPGAs Transceivers Wizard <resources/fpga/docs/xgt_wizard>`
+  Please refer to :ref:`Xilinx FPGAs Transceivers Wizard <xgt_wizard>`
   to generate the optimal parameters needed to configure the transceivers for
   your project.
 

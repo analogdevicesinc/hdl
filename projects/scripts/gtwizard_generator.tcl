@@ -437,7 +437,7 @@ proc ad_gth_generator { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} } {
 ## This output should then overwrite the existing instance in the system_bd.tcl.
 ## The output products can be found at <project_name>.gen/sources_1/ip (*_cfng.txt)
 ## It must be called inside a Ultrascale or Ultrascale+ project.
-## Wiki documentation: wiki.analog.com/resources/fpga/docs/xgt_wizard
+## GitHub documentation: https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
 ##
 ###############################################################################
 proc get_diff_params { {lane_rate_l {}} {pll_type {}}  {ref_clk_l {}} {keep_ip "true"} } {
