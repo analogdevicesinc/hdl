@@ -39,16 +39,29 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- JESD_MODE - link layer encoder mode used; 
-  - 8B10B - 8b10b link layer defined in JESD204B, uses ADI IP as Physical layer
-  - 64B66B - 64b66b link layer defined in JESD204C, uses Xilinx IP as Physical layer
-- [RX/TX]_LANE_RATE - lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
-- [RX/TX]_JESD_M - [RX/TX] number of converters per link
-- [RX/TX]_JESD_L - [RX/TX] number of lanes per link
-- [RX/TX]_JESD_S - [RX/TX] number of samples per converter per frame
-- [RX/TX]_JESD_NP - [RX/TX] number of bits per sample, only 16 is supported
-- [RX/TX]_NUM_LINKS - [RX/TX] number of links, which matches the number of MxFE devices
-- [RX/TX]_TPL_WIDTH - [RX/TX] transport layer data width
+- JESD_MODE: link layer encoder mode used; 
+  - 8B10B - 8b10b link layer defined in JESD204B
+  - 64B66B - 64b66b link layer defined in JESD204C
+- [RX/TX]_LANE_RATE: lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
+- REF_CLK_RATE: frequency of the reference clock in MHz used in 64B66B mode (LANE_RATE/66) or 8B10B mode (LANE_RATE/40)
+- [RX/TX]_JESD_M: [RX/TX] number of converters per link
+- [RX/TX]_JESD_L: [RX/TX] number of lanes per link
+- [RX/TX]_JESD_S: [RX/TX] number of samples per converter per frame
+- [RX/TX]_JESD_NP: [RX/TX] number of bits per sample, only 16 is supported
+- [RX/TX]_NUM_LINKS: [RX/TX] number of links, which matches the number of MxFE devices
+- [RX/TX]_TPL_WIDTH: [RX/TX] transport layer data width
+- [RX/TX]_KS_PER_CHANNEL: [RX/TX] number of samples stored in internal buffers in kilosamples per converter (M), for each channel in a block RAM, for a contiguous capture
+- [ADC/DAC]_DO_MEM_TYPE: [ADC/DAC] Data Offload memory type;
+  - 0 - internal storage instance (BRAMs)
+  - 1 - bridge instance for the external **DDR** memory controller
+  - 2 - bridge instance for the external **HBM** memory controller
+- TDD_SUPPORT: enables external synchronization through TDD; if enabled, then SHARED_DEVCLK must be enabled as well
+- SHARED_DEVCLK: if the device clock is shared among devices
+- TDD_CHANNEL_CNT
+- TDD_SYNC_WIDTH
+- TDD_SYNC_INT
+- TDD_SYNC_EXT
+- TDD_SYNC_EXT_CDC: adds the CDC circuitry for the external sync signal
 
 ### Example configurations
 
