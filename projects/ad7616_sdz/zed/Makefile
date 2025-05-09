@@ -1,12 +1,13 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 PROJECT_NAME := ad7616_sdz_zed
 
-M_DEPS += serial_if_constr.xdc
+M_DEPS += serial_if_constr_spi_1.xdc
+M_DEPS += serial_if_constr_spi_2.xdc
 M_DEPS += parallel_if_constr.xdc
 M_DEPS += ../common/ad7616_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl

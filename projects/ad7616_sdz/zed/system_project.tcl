@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -18,11 +18,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    e.g.
 #      make INTF=0
 #
-#    INTF  - Defines the interface type (serial OR parallel)
-#          - Default value is 0
-#
-# LEGEND: Serial    - 1
-#         Parallel  - 0
+# INTF  - Defines the interface type (serial OR parallel)
+#       - Default value is 0
+#  - Options: Serial    - 1
+#             Parallel  - 0
+# NUM_OF_SDI - Number of SDI lines used
+#  - Options: 1, 2
 #
 # NOTE : This switch is a 'hardware' switch. Please rebuild the design if the
 # variable has been changed.
@@ -32,9 +33,11 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 
 set INTF [get_env_param INTF 0]
+set NUM_OF_SDI [get_env_param NUM_OF_SDI 2]
 
 adi_project ad7616_sdz_zed 0 [list \
    INTF $INTF \
+   NUM_OF_SDI $NUM_OF_SDI \
 ]
 
 adi_project_files ad7616_sdz_zed [list \
@@ -43,10 +46,18 @@ adi_project_files ad7616_sdz_zed [list \
 
 switch $INTF {
   1 {
-    adi_project_files ad7616_sdz_zed [list \
-      "system_top_si.v" \
-      "serial_if_constr.xdc"
-    ]
+    switch $NUM_OF_SDI {
+      1 {
+        adi_project_files ad7616_sdz_zed [list \
+        "system_top_si.v" \
+        "serial_if_constr_spi_1.xdc"]
+      }
+      2 {
+        adi_project_files ad7616_sdz_zed [list \
+        "system_top_si.v" \
+        "serial_if_constr_spi_2.xdc"]
+      }
+    }
   }
   0 {
     adi_project_files ad7616_sdz_zed [list \
