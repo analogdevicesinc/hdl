@@ -6,38 +6,35 @@ AD4170_ASDZ HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD4170-4`, :adi:`AD4170-8`, and
-:adi:`AD4190-4` provides a high resolution, 24-Bit, Multichannel, Low Noise,
-Precision Sigma-Delta ADC with PGA.
+The HDL reference design for the :adi:`AD4170-4` :adi:`AD4190-4`provides
+a high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel,
+Low Noise Precision Sigma-Delta ADC with PGA.
 
-The data acquisition board incorporates the AD4170-4 or AD4170-8, a DC to 50 kHz
+The data acquisition board incorporates the AD4170-4, a DC to 50 kHz
 input bandwidth, low noise, high speed, completely integrated analog front end
 for high precision measurement applications.
 
-The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS, while the
+The AD4170-4 offers output data rates from 7.6 SPS up to 500 kSPS, while the
 AD4190-4 offers output data rates from 3.8 SPS up to 62.5 kSPS. The devices
-contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC), and can be
-configured to have 4 differential inputs or 8 single-ended or pseudodifferential
-inputs. The on-chip low noise gain stage ensures that signals of small amplitude 
-can be interfaced directly to the devices.
+contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC),
+and can be configured to have 4 differential inputs or 8 single-ended or
+pseudodifferential inputs. The on-chip low noise gain stage ensures that signals
+of small amplitude can be interfaced directly to the devices.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD4170-4/8 or AD4190-4 24-bit precision ADC. This instance provides support for
-capturing continuous samples at the maximum sample rate.
+the AD4170-4  or AD4190-4 24-bit precision ADC. This instance provides support
+for capturing continuous samples at the maximum sample rate.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- EVAL-AD4170-ASDZ
+- :adi:`EVAL-AD4170-ASDZ`
 - EVAL-AD4190-ARDZ
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD4170`
 - :adi:`AD4170-4`
-- :adi:`AD4171`
-- :adi:`AD4172`
 - :adi:`AD4190-4`
 
 Supported carriers
@@ -65,15 +62,15 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
-========================  =================
-Instance                  Zynq*/DE10-Nano**
-========================  =================
+========================  ===============
+Instance                  Zynq/DE10-Nano
+========================  ===============
 spi_ad4170_axi_regmap*    0x44A0_0000
 axi_ad4170_dma*           0x44A3_0000
 spi_clkgen*               0x44A7_0000
 axi_dmac_0**              0x0002_0000
 axi_spi_engine_0**        0x0003_0000
-========================  =================
+========================  ===============
 
 .. admonition:: Legend
    :class: note
@@ -282,7 +279,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD4170 Linux driver ad4170.c <drivers/iio/adc/ad4170.c>`
+- :git-no-os:`AD4170 no-OS driver ad4170.c <drivers/iio/adc/ad4170/ad4170.c>`
 
 .. include:: ../common/more_information.rst
 
