@@ -1,13 +1,13 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 18Mb - 1M samples
-set dac_fifo_address_width 17
+## Offload attributes
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 2*1024*1024]  ; ## 2 MB
 
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
