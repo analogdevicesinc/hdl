@@ -9,8 +9,8 @@ set_property	PACKAGE_PIN	BK5 	  [get_ports sys_clk_n]
 set_property	PACKAGE_PIN	BK6	    [get_ports sys_clk_p]
 
 # Define SPI clock
-create_clock -name spi0_clk      -period 40  [get_pins -hier */EMIOSPI0SCLKO]
-create_clock -name spi1_clk      -period 40  [get_pins -hier */EMIOSPI1SCLKO]
+create_clock -name spi0_clk      -period 40  [get_pins -hier */EMIOSPI0SCLKO*]
+create_clock -name spi1_clk      -period 40  [get_pins -hier */EMIOSPI1SCLKO*]
 
 # GPIOs
 # (switches, leds and such)
