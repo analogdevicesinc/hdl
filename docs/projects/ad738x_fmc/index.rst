@@ -46,11 +46,10 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7380FMCZ`
-- :adi:`EVAL-AD7381FMCZ`
-- :adi:`EVAL-AD7386FMCZ`
-- :adi:`EVAL-AD7383FMCZ`
 - :adi:`EVAL-AD7380-4FMCZ`
+- :adi:`EVAL-AD7383FMCZ`
+- :adi:`EVAL-AD7386FMCZ`
+- :adi:`EVAL-AD738xFMCZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -368,6 +367,7 @@ Software related
 
 - :git-no-os:`AD738X_FMC No-OS project <projects/ad738x_fmcz>`
 - :dokuwiki:`AD738X_FMC - No-OS Driver [Wiki] <resources/eval/user-guides/ad738x>`
+- AD7380 ZED Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad7380.dts`
 
 .. include:: ../common/more_information.rst
 
