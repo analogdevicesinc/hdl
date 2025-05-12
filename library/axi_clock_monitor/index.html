@@ -403,15 +403,37 @@ time.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
-<td class="description"><p>Id.</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">FPGA_TECHNOLOGY</span></code></td>
+<td class="description"><section>
+<p>Encoded value describing the technology/generation of the FPGA device (7series,ultrascale,ultradcale+,versal).</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
+<td class="range"><p>Unknown (0), 7series (1), ultrascale (2), ultrascale+ (3), versal (4)</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ID</span></code></td>
+<td class="description"><section>
+<p>Core ID should be unique for each IP in the system.</p>
+</section>
+</td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0</span></code></td>
 <td class="range"><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_CLOCKS</span></code></td>
-<td class="description"><p>Num Of Clocks.</p></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">NUM_OF_CLOCKS</span></code></td>
+<td class="description"><section>
+<p>Select number of CLOCKS.</p>
+</section>
+</td>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
 <td class="range"><p>From 1 to 16.</p></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">DIV_RATE</span></code></td>
+<td class="description"><section>
+<p>This parameter can take the following values: 1, 2, 4, 8.</p>
+</section>
+</td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">1</span></code></td>
+<td class="range"><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -419,7 +441,7 @@ time.</p>
 </section>
 </div></section>
 <section id="interface">
-<span id="axi-clock-monitor-interface"></span><h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
+<h2>Interface<a class="headerlink" href="#interface" title="Permalink to this heading"></a></h2>
 <div><section id="bus-interface-s_axi">
 <div class="collapsible docutils container">
 <input class="collapsible_input" id="37f18fe99662196227259b5587aac43bfd22ae48" name="37f18fe99662196227259b5587aac43bfd22ae48" type="checkbox"></input><label for="37f18fe99662196227259b5587aac43bfd22ae48"><div><p>s_axi</p>
@@ -738,6 +760,24 @@ components</p></li>
 <td class="default"><code class="docutils literal notranslate"><span class="pre">0x00000008</span></code></td>
 <td class="description"><section>
 <p>Number of clock inputs</p>
+</section>
+</td>
+</tr>
+<tr class="row-odd"><td class="bold"><code class="docutils literal notranslate"><span class="pre">0x2</span></code></td>
+<td class="bold"><code class="docutils literal notranslate"><span class="pre">0x8</span></code></td>
+<td class="bold" colspan="4"><code class="docutils literal notranslate"><span class="pre">DIV_RATE</span></code></td>
+<td class="description bold"><section>
+<p>Divider Rate Registers</p>
+</section>
+</td>
+</tr>
+<tr class="row-even"><td colspan="2"><p></p></td>
+<td><code class="docutils literal notranslate"><span class="pre">[7:0]</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">DIV_RATE</span></code></td>
+<td><code class="docutils literal notranslate"><span class="pre">RW</span></code></td>
+<td class="default"><code class="docutils literal notranslate"><span class="pre">0x01</span></code></td>
+<td class="description"><section>
+<p>Number of divider rate</p>
 </section>
 </td>
 </tr>
