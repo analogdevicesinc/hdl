@@ -26,8 +26,8 @@
 # Code owners for ad4630_fmc folder
 /projects/ad4630_fmc/      liviu.adace@analog.com  sergiu.arpadi@analog.com
 
-# Code owners for ad469x_fmc folder
-/projects/ad469x_fmc/      pop.ioan-daniel@analog.com  sergiu.arpadi@analog.com
+# Code owners for ad469x_evb folder
+/projects/ad469x_evb/      pop.ioan-daniel@analog.com  sergiu.arpadi@analog.com
 
 # Code owners for ad4858_fmcz folder
 /projects/ad4858_fmcz/     andrei.grozav@analog.com  adrian.costina@analog.com
