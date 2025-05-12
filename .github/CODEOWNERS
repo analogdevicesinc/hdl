@@ -38,6 +38,9 @@
 # Code owners for ad5766_sdz folder
 /projects/ad5766_sdz/      stanca.pop@analog.com  sergiu.arpadi@analog.com
 
+# Code owners for ad57xx_ardz folder
+/projects/ad57xx_ardz/     laez.barbosa@analog.com  sergiu.arpadi@analog.com
+
 # Code owners for ad6676evb folder
 /projects/ad6676evb/       iulia.moldovan@analog.com  andrei.dragomir@analog.com
 
