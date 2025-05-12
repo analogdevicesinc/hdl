@@ -63,11 +63,15 @@ module ad_dcfilter #(
   reg     [15:0]  dcfilt_coeff_d = 'd0;
   reg     [47:0]  dc_offset = 'd0;
   reg     [47:0]  dc_offset_d = 'd0;
+  reg     [47:0]  dc_offset_2d = 'd0;
   reg             valid_d = 'd0;
   reg     [15:0]  data_d = 'd0;
-  reg             valid_2d = 'd0;
   reg     [15:0]  data_2d = 'd0;
+  reg     [15:0]  data_3d = 'd0;
+  reg             valid_2d = 'd0;
+  reg             valid_3d = 'd0;
   reg     [15:0]  data_dcfilt = 'd0;
+  reg     [15:0]  data_dcfilt_d = 'd0;
   reg             valid_int = 'd0;
   reg     [15:0]  data_int = 'd0;
 
@@ -98,19 +102,23 @@ module ad_dcfilter #(
   always @(posedge clk) begin
     dc_offset   <= dc_offset_s;
     dc_offset_d <= dc_offset;
+    dc_offset_2d <= dc_offset_d;
     valid_d <= valid;
     if (valid == 1'b1) begin
       data_d <= data + dcfilt_offset;
+      data_2d  <= data_d;
     end
     valid_2d <= valid_d;
-    data_2d  <= data_d;
-    data_dcfilt <= data_d - dc_offset[32:17];
+    valid_3d <= valid_2d;
+    data_3d  <= data_2d;
+    data_dcfilt <= data_2d - dc_offset_d[32:17];
+    data_dcfilt_d <= data_dcfilt;
     if (dcfilt_enb == 1'b1) begin
-      valid_int <= valid_2d;
-      data_int  <= data_dcfilt;
+      valid_int <= valid_3d;
+      data_int  <= data_dcfilt_d;
     end else begin
-      valid_int <= valid_2d;
-      data_int  <= data_2d;
+      valid_int <= valid_3d;
+      data_int  <= data_3d;
     end
   end
 
@@ -144,10 +152,10 @@ module ad_dcfilter #(
     .USE_SIMD ("ONE48")
   ) i_dsp48e1 (
     .CLK (clk),
-    .A ({{14{dc_offset_s[32]}}, dc_offset_s[32:17]}),
+    .A ({{14{dc_offset[32]}}, dc_offset[32:17]}),
     .B ({{2{dcfilt_coeff_d[15]}}, dcfilt_coeff_d}),
-    .C (dc_offset_d),
-    .D ({{9{data_d[15]}}, data_d}),
+    .C (dc_offset_2d),
+    .D ({{9{data_2d[15]}}, data_2d}),
     .MULTSIGNIN (1'd0),
     .CARRYIN (1'd0),
     .CARRYCASCIN (1'd0),
