@@ -54,13 +54,24 @@ module ad_mem #(
   (* ram_style = "block" *)
   reg         [(DATA_WIDTH-1):0]      m_ram[0:((2**ADDRESS_WIDTH)-1)];
 
-  integer i;
-  initial
-    for (i = 0; i < 2 ** ADDRESS_WIDTH; i = i+1)
-      m_ram[i] = {DATA_WIDTH{1'b0}};
+  integer i, j;
+  initial begin
+    if (ADDRESS_WIDTH > 10) begin
+      for (i = 0; i < 2 ** 10; i = i+1) begin
+        for (j = 0; j < 2 ** (ADDRESS_WIDTH-10); j = j+1) begin
+          m_ram[i * 2 ** (ADDRESS_WIDTH-10) + j] = {DATA_WIDTH{1'b0}};
+        end
+      end
+    end else begin
+      for (i = 0; i < 2 ** ADDRESS_WIDTH; i = i+1) begin
+        m_ram[i] = {DATA_WIDTH{1'b0}};
+      end
+    end
+  end
 
-  initial
+  initial begin
     doutb <= {DATA_WIDTH{1'b0}};
+  end
 
   always @(posedge clka) begin
     if (wea == 1'b1) begin
