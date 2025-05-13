@@ -162,6 +162,7 @@ axi_adrv9009_fmc_rx_jesd  0x85A5_0000
 axi_adrv9009_fmc_obs_jesd 0x85A7_0000
 axi_adrv9009_fmc_rx_dma   0x9D42_0000
 axi_adrv9009_fmc_tx_dma   0x9D40_0000
+adrv9009_fmc_data_offload 0x9D41_0000
 axi_adrv9009_fmc_obs_dma  0x9D44_0000
 ========================= ===========
 
