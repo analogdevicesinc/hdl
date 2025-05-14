@@ -236,6 +236,7 @@ module axi_ad9361 #(
   // internal signals
 
   wire            adc_ddr_edgesel_s;
+  wire            adc_rst_s;
   wire            adc_valid_s;
   wire            adc_valid_i0_s;
   wire            adc_valid_q0_s;
@@ -352,7 +353,7 @@ module axi_ad9361 #(
     .tx_data_out (tx_data_out),
     .enable (enable),
     .txnrx (txnrx),
-    .rst (rst),
+    .rst (if_rst),
     .clk (clk),
     .l_clk (l_clk),
     .adc_valid (adc_valid_s),
@@ -424,7 +425,7 @@ module axi_ad9361 #(
     .tx_data_out_n (tx_data_out_n),
     .enable (enable),
     .txnrx (txnrx),
-    .rst (rst),
+    .rst (if_rst),
     .clk (clk),
     .l_clk (l_clk),
     .adc_valid (adc_valid_s),
@@ -528,7 +529,7 @@ module axi_ad9361 #(
     .LEVEL_OR_PULSE_N(1)
   ) i_tdd_if (
     .clk (clk),
-    .rst (rst),
+    .rst (tdd_rst),
     .tdd_rx_vco_en (tdd_rx_vco_en_s),
     .tdd_tx_vco_en (tdd_tx_vco_en_s),
     .tdd_rx_rf_en (tdd_rx_rf_en_s),
@@ -539,7 +540,7 @@ module axi_ad9361 #(
 
   axi_ad9361_tdd i_tdd (
     .clk (clk),
-    .rst (rst),
+    .rst (tdd_rst),
     .tdd_rx_vco_en (tdd_rx_vco_en_s),
     .tdd_tx_vco_en (tdd_tx_vco_en_s),
     .tdd_rx_rf_en (tdd_rx_rf_en_s),
@@ -570,7 +571,7 @@ module axi_ad9361 #(
     // GPS's PPS receiver
     ad_pps_receiver i_pps_receiver (
       .clk (clk),
-      .rst (rst),
+      .rst (tdd_rst),
       .gps_pps (gps_pps),
       .up_clk (up_clk),
       .up_rstn (up_rstn),
@@ -588,6 +589,25 @@ module axi_ad9361 #(
     assign gps_pps_irq = 1'b0;
   end
   endgenerate
+
+  reg if_rst  = 0;
+  reg tdd_rst = 0;
+  reg out_rst = 0;
+
+  // reduce high fan-out
+  always @(posedge clk) begin
+    if (adc_rst_s == 1) begin
+      if_rst <= 1;
+      tdd_rst <= 1;
+      out_rst <= 1;
+    end else begin
+      if_rst <= 0;
+      tdd_rst <= 0;
+      out_rst <= 0;
+    end
+  end
+
+  assign rst = out_rst;
 
   // receive
 
@@ -607,7 +627,7 @@ module axi_ad9361 #(
     .IQCORRECTION_DISABLE (ADC_IQCORRECTION_DISABLE_INT)
   ) i_rx (
     .mmcm_rst (mmcm_rst),
-    .adc_rst (rst),
+    .adc_rst (adc_rst_s),
     .adc_clk (clk),
 
     .adc_valid (adc_valid_s),
