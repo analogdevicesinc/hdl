@@ -1,7 +1,7 @@
 # CN0577 HDL Project
 
 - Evaluation board product page: [EVAL-CN0577](https://www.analog.com/cn0577)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0577 
+- System documentation: https://analogdevicesinc.github.io/documentation/solutions/reference-designs/eval-cn0577-fmcz/index.html
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/cn0577/index.html
 
 ## Supported parts
