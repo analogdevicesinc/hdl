@@ -147,6 +147,12 @@ module axi_ad9361_tx #(
   reg             up_rack_int = 'd0;
   reg     [31:0]  up_rdata_int = 'd0;
 
+  reg dac_rst_ch0 = 0;
+  reg dac_rst_ch1 = 0;
+  reg dac_rst_ch2 = 0;
+  reg dac_rst_ch3 = 0;
+  reg dac_rst_rate = 0;
+
   // internal clock and resets
 
   wire            dac_rst;
@@ -173,7 +179,7 @@ module axi_ad9361_tx #(
   // rate counters and data sync signals
 
   always @(posedge dac_clk) begin
-    if (dac_rst == 1'b1) begin
+    if (dac_rst_rate == 1'b1) begin
       dac_rate_cnt <= 16'b0;
     end else begin
       if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
@@ -219,6 +225,22 @@ module axi_ad9361_tx #(
     end
   end
 
+  always @(posedge dac_clk) begin
+    if (dac_rst == 1'b1) begin
+      dac_rst_ch0 <= 1;
+      dac_rst_ch1 <= 1;
+      dac_rst_ch2 <= 1;
+      dac_rst_ch3 <= 1;
+      dac_rst_rate <= 0;
+    end else begin
+      dac_rst_ch0 <= 0;
+      dac_rst_ch1 <= 0;
+      dac_rst_ch2 <= 0;
+      dac_rst_ch3 <= 0;
+      dac_rst_rate <= 0;
+    end
+  end
+
   // dac channel
 
   axi_ad9361_tx_channel #(
@@ -234,7 +256,7 @@ module axi_ad9361_tx #(
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
   ) i_tx_channel_0 (
     .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
+    .dac_rst (dac_rst_ch0),
     .dac_valid (dac_valid_int),
     .dma_data (dac_data_i0),
     .adc_data (adc_data[11:0]),
@@ -270,7 +292,7 @@ module axi_ad9361_tx #(
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
   ) i_tx_channel_1 (
     .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
+    .dac_rst (dac_rst_ch1),
     .dac_valid (dac_valid_int),
     .dma_data (dac_data_q0),
     .adc_data (adc_data[23:12]),
@@ -306,7 +328,7 @@ module axi_ad9361_tx #(
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
   ) i_tx_channel_2 (
     .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
+    .dac_rst (dac_rst_ch2),
     .dac_valid (dac_valid_int),
     .dma_data (dac_data_i1),
     .adc_data (adc_data[35:24]),
@@ -342,7 +364,7 @@ module axi_ad9361_tx #(
     .IQCORRECTION_DISABLE (IQCORRECTION_DISABLE)
   ) i_tx_channel_3 (
     .dac_clk (dac_clk),
-    .dac_rst (dac_rst),
+    .dac_rst (dac_rst_ch2),
     .dac_valid (dac_valid_int),
     .dma_data (dac_data_q1),
     .adc_data (adc_data[47:36]),
