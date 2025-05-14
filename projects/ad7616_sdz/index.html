@@ -442,32 +442,29 @@ Framework</p></li>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>The INTF configuration parameter defines the interface type (Serial or
-Parallel). By default it is set to Parallel (0). Depending on the required interface mode,
-some hardware modifications need to be done on the board and/or make command:</p>
-<p>In case of the <strong>PARALLEL</strong> interface:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">0</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>In case of the <strong>SERIAL</strong> interface:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">1</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This switch is a <em>hardware</em> switch. Please rebuild the  design if the
-variable has been changed.</p>
+<p>The following are the parameters of this project that can be configured:
+- INTF: specifies the type of interface used;</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>0 - parallel (default)</p></li>
+<li><p>1 - serial</p></li>
+</ul>
+</div></blockquote>
 <ul class="simple">
+<li><p>NUM_OF_SDI: number of SDI lines used, <strong>only in serial interface mode</strong>;
+- 1 - one SDI line
+- 2 - two SDI lines (default)</p></li>
+</ul>
+<p>Depending on the required interface mode, some hardware modifications need to
+be done on the board:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>SL5 - unmounted - Parallel interface</p></li>
 <li><p>SL5 - mounted - Serial interface</p></li>
 </ul>
-</div>
+<p>This switch is a <em>hardware</em> switch. Please rebuild the design if the variable
+has been changed.</p>
+</div></blockquote>
 </section>
 <section id="jumper-setup">
 <h3>Jumper setup<a class="headerlink" href="#jumper-setup" title="Permalink to this heading"></a></h3>
@@ -749,16 +746,15 @@ the HDL repository, and then build the project as follows:.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad7616_sdz/zed$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">0</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">INTF</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">NUM_OF_SDI</span><span class="o">=</span><span class="m">2</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>The default configuration is Parallel Mode (0).</p>
-<p>The result of the build, if parameters were used, will be in a folder named
+<div class="clear-left"></div></div></div><p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used:</p>
 <p>if the following command was run</p>
-<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF=0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">INTF=1</span> <span class="pre">NUM_OF_SDI=2</span></code></p>
 <p>then the folder name will be:</p>
-<p><code class="docutils literal notranslate"><span class="pre">INTF0</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">INTF1_NUMOFSDI2</span></code></p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 <section id="connections-and-hardware-changes">
 <h3>Connections and hardware changes<a class="headerlink" href="#connections-and-hardware-changes" title="Permalink to this heading"></a></h3>
