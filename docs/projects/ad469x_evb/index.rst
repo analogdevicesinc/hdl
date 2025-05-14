@@ -371,8 +371,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD469X_FMCZ no-OS driver source code <drivers/adc/ad469x>`
-- :git-no-os:`AD469X_FMCZ no-OS project source code <projects/ad469x_fmcz>`
+- :git-linux:`AD469X_EVB - ZED dts source code <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4696.dts>`
+- :git-no-os:`AD469X_EVB no-OS driver source code <drivers/adc/ad469x>`
+- :git-no-os:`AD469X_EVB no-OS project source code <projects/ad469x_evb>`
 
 .. include:: ../common/more_information.rst
 
