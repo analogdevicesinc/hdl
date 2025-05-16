@@ -155,12 +155,19 @@ module axi_dmac_regmap_request #(
   reg [1:0] up_transfer_id_eot_d = 'h0;
   wire up_bl_partial;
 
+  reg up_dma_cyclic_d = 1'b0;
+  wire cyclic_transfer_s;
+  wire request_valid_sot;
+  wire response_valid_eot;
+
   assign request_dest_address = up_dma_dest_address;
   assign request_src_address = up_dma_src_address;
   assign request_x_length = up_dma_x_length;
   assign request_sync_transfer_start = SYNC_TRANSFER_START ? 1'b1 : 1'b0;
   assign request_last = up_dma_last;
   assign request_cyclic = up_dma_cyclic;
+  assign request_valid_sot = up_dma_req_valid & up_dma_req_ready;
+  assign response_valid_eot = response_valid & response_ready & response_eot;
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
@@ -175,7 +182,7 @@ module axi_dmac_regmap_request #(
       if (ctrl_enable == 1'b1) begin
         if (up_wreq == 1'b1 && up_waddr == 9'h102) begin
           up_dma_req_valid <= up_dma_req_valid | up_wdata[0];
-        end else if (up_sot == 1'b1) begin
+        end else if ((up_sot || up_dma_cyclic_d) && !up_dma_cyclic) begin
           up_dma_req_valid <= 1'b0;
         end
       end else begin
@@ -353,9 +360,40 @@ module axi_dmac_regmap_request #(
   end
   endgenerate
 
+  generate
+  if (DMA_CYCLIC == 1) begin
+    // Cyclic transfer handling
+    reg [2:0] cyclic_queued = 3'h0;
+    wire [2:0] cyclic_queued_next;
+
+    assign cyclic_queued_next = (request_valid_sot && !response_valid_eot) ? cyclic_queued + 1'b1 :
+                                (response_valid_eot && !request_valid_sot) ? cyclic_queued - 1'b1 :
+                                cyclic_queued;
+    assign cyclic_transfer_s = (cyclic_queued != 3'h0) && (cyclic_queued_next != 3'h0);
+
+    always @(posedge clk) begin
+      if (ctrl_enable == 1'b0) begin
+        cyclic_queued <= 3'h0;
+      end else if (up_dma_cyclic == 1'b1 || cyclic_queued != 3'h0) begin
+        cyclic_queued <= cyclic_queued_next;
+      end
+    end
+  end else begin
+    assign cyclic_transfer_s = 1'b0;
+  end
+  endgenerate
+
+  always @(posedge clk) begin
+    if (ctrl_enable == 1'b0) begin
+      up_dma_cyclic_d <= 1'b0;
+    end else begin
+      up_dma_cyclic_d <= up_dma_cyclic;
+    end
+  end
+
   // In cyclic mode the same transfer is submitted over and over again
-  assign up_sot = (up_dma_cyclic && !ctrl_hwdesc) ? 1'b0 : up_dma_req_valid & up_dma_req_ready;
-  assign up_eot = (up_dma_cyclic && !ctrl_hwdesc) ? 1'b0 : response_eot & response_valid & response_ready;
+  assign up_sot = (cyclic_transfer_s && !ctrl_hwdesc) ? 1'b0 : request_valid_sot;
+  assign up_eot = (cyclic_transfer_s && !ctrl_hwdesc) ? 1'b0 : response_valid_eot;
 
   assign request_valid = up_dma_req_valid;
   assign up_dma_req_ready = request_ready;

@@ -44,7 +44,7 @@ module axi_dmac_regmap #(
   parameter BYTES_PER_BURST_WIDTH = 7,
   parameter DMA_TYPE_DEST = 0,
   parameter DMA_TYPE_SRC = 2,
-  parameter DMA_AXI_ADDR_WIDTH = 64,
+  parameter DMA_AXI_ADDR_WIDTH = 32,
   parameter DMA_LENGTH_WIDTH = 24,
   parameter DMA_LENGTH_ALIGN = 3,
   parameter DMA_CYCLIC = 0,
@@ -147,7 +147,7 @@ module axi_dmac_regmap #(
   input [31:0] dbg_ids1
 );
 
-  localparam PCORE_VERSION = 'h00040565;
+  localparam PCORE_VERSION = 'h00040661;
   localparam HAS_ADDR_HIGH = DMA_AXI_ADDR_WIDTH > 32;
   localparam ADDR_LOW_MSB = HAS_ADDR_HIGH ? 31 : DMA_AXI_ADDR_WIDTH-1;
 
