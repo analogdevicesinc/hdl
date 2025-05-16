@@ -368,25 +368,27 @@ Content on this topic
 <span id="ad4170"></span><h1>AD4170_ASDZ HDL project<a class="headerlink" href="#ad4170-asdz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The HDL reference design for the <a class="icon adi reference external" href="https://www.analog.com/AD4170-4">AD4170-4</a> and <a class="icon adi reference external" href="https://www.analog.com/AD4170-8">AD4170-8</a> provides a
-high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel, Low Noise
+<p>The HDL reference design for the <a class="icon adi reference external" href="https://www.analog.com/AD4170-4">AD4170-4</a>, <a class="icon adi reference external" href="https://www.analog.com/AD4170-8">AD4170-8</a>, and
+<a class="icon adi reference external" href="https://www.analog.com/AD4190-4">AD4190-4</a> provides a high resolution, 24-Bit, Multichannel, Low Noise,
 Precision Sigma-Delta ADC with PGA.</p>
 <p>The data acquisition board incorporates the AD4170-4 or AD4170-8, a DC to 50 kHz
 input bandwidth, low noise, high speed, completely integrated analog front end
 for high precision measurement applications.</p>
-<p>The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS.
-The device contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC),
-and can be configured to have 4 differential inputs or 8 single-ended or
-pseudodifferential inputs. The on-chip low noise gain stage ensures that signals
-of small amplitude can be interfaced directly to the AD4170-4/8.</p>
+<p>The AD4170-4/8 offers output data rates from 7.6 SPS up to 500 kSPS, while the
+AD4190-4 offers output data rates from 3.8 SPS up to 62.5 kSPS. The devices
+contains a low noise, 24-bit Σ-Δ analog-to-digital converter (ADC), and can be
+configured to have 4 differential inputs or 8 single-ended or pseudodifferential
+inputs. The on-chip low noise gain stage ensures that signals of small amplitude
+can be interfaced directly to the devices.</p>
 <p>This project has a <a class="reference internal" href="../../library/spi_engine/index.html#spi-engine"><span class="std std-ref">SPI Engine</span></a> instance to control and acquire data from
-the AD4170-4/8 24-bit precision ADC. This instance provides support for
+the AD4170-4/8 or AD4190-4 24-bit precision ADC. This instance provides support for
 capturing continuous samples at the maximum sample rate.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>EVAL-AD4170-ASDZ</p></li>
+<li><p>EVAL-AD4190-ARDZ</p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -396,6 +398,7 @@ capturing continuous samples at the maximum sample rate.</p>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4170-4">AD4170-4</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4171">AD4171</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD4172">AD4172</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD4190-4">AD4190-4</a></p></li>
 </ul>
 </section>
 <section id="supported-carriers">
@@ -696,6 +699,7 @@ the HDL repository, and then build the project as follows:</p>
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD4170-4">AD4170-4</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD4190-4">AD4190-4</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
