@@ -58,14 +58,14 @@ module request_generator #(
   output completion_req_last,
   output [1:0] completion_transfer_id,
 
-  input req_valid,
-  output reg req_ready,
-  input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
+  (* mark_debug = "true" *) input req_valid,
+  (* mark_debug = "true" *) output reg req_ready,
+  (* mark_debug = "true" *) input [BURSTS_PER_TRANSFER_WIDTH-1:0] req_burst_count,
   input req_xlast,
 
   input enable,
 
-  output eot
+  (* mark_debug = "true" *) output eot
 );
 
   `include "inc_id.vh"
@@ -96,7 +96,7 @@ module request_generator #(
    * care that only the requested ammount of bytes is transfered.
    */
 
-  reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
+  (* mark_debug = "TRUE" *) reg [BURSTS_PER_TRANSFER_WIDTH-1:0] burst_count = 'h00;
   reg [BURSTS_PER_TRANSFER_WIDTH-1:0] cur_burst_length = 'h00;
   reg [ID_WIDTH-1:0] id;
   wire [ID_WIDTH-1:0] id_next = inc_id(id);

@@ -64,11 +64,11 @@ module spi_engine_offload #(
   input spi_clk,
   input spi_resetn,
 
-  input trigger,
+  (* mark_debug = "TRUE" *) input trigger,
 
-  output cmd_valid,
-  input cmd_ready,
-  output [15:0] cmd,
+  (* mark_debug = "TRUE" *) output cmd_valid,
+  (* mark_debug = "TRUE" *) input cmd_ready,
+  (* mark_debug = "TRUE" *) output [15:0] cmd,
 
   output sdo_data_valid,
   input sdo_data_ready,
@@ -86,9 +86,9 @@ module spi_engine_offload #(
   output sync_ready,
   input [7:0] sync_data,
 
-  output offload_sdi_valid,
-  input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
+  (* mark_debug = "TRUE" *) output offload_sdi_valid,
+  (* mark_debug = "TRUE" *) input offload_sdi_ready,
+  (* mark_debug = "TRUE" *) output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
 
   output interconnect_dir
 );

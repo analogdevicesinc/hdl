@@ -68,11 +68,11 @@ module spi_engine_execution #(
   output [7:0] sync,
 
   input echo_sclk,
-  output reg sclk,
-  output reg sdo,
+  (* mark_debug = "TRUE" *) output reg sclk,
+  (* mark_debug = "TRUE" *) output reg sdo,
   output reg sdo_t,
-  input [NUM_OF_SDI-1:0] sdi,
-  output reg [NUM_OF_CS-1:0] cs,
+  (* mark_debug = "TRUE" *) input [NUM_OF_SDI-1:0] sdi,
+  (* mark_debug = "TRUE" *) output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
 
@@ -125,7 +125,7 @@ module spi_engine_execution #(
 
   assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
-  reg [15:0] cmd_d1;
+  (* mark_debug = "TRUE" *) reg [15:0] cmd_d1;
 
   reg cpha = DEFAULT_SPI_CFG[0];
   reg cpol = DEFAULT_SPI_CFG[1];
