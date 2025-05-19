@@ -325,6 +325,8 @@ Board design and capabilities
 AMD platforms
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The board files of these carriers can be found :git-hdl:`here <projects/common>`.
+
 .. list-table::
    :widths: 16 16 18 18 16 16
    :header-rows: 1
@@ -341,36 +343,24 @@ AMD platforms
      - ---
      - 3.3V/**\*2.5V**/1.8V
      - Artix-7
-   * - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+   * - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - SD card
      - ---
      - ---
      - ---
      - Zynq-7000
-   * - :xilinx:`KC705`
-     - JTAG
-     - HPC (4 GTX @ 10.3125 Gbps)
-     - LPC (1 GTX @ 10.3125 Gbps)
-     - 3.3V/**\*2.5V**/1.8V
-     - Kintex-7
    * - :xilinx:`KCU105`
      - JTAG
      - HPC (8 GTH @ 16.3 Gbps)
      - LPC (1 GTH @ 16.3 Gbps)
      - **\*1.8V**/1.5V/1.2V
      - Kintex UltraScale
-   * - `Microzed <http://zedboard.org/product/microzed>`__ **
+   * - `Microzed <https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed>`__ **
      - JTAG
      - ---
      - ---
      - ---
      - Zynq-7000
-   * - :xilinx:`VC707`
-     - JTAG
-     - HPC (8 GTX @ 12.5 Gbps)
-     - HPC (8 GTX @ 12.5 Gbps)
-     - **\*1.8V**/1.5V/1.2V
-     - Virtex-7
    * - :xilinx:`VC709` **
      - JTAG
      - HPC (10 GTH @ 13.1 Gbps)
@@ -389,12 +379,6 @@ AMD platforms
      - LPC
      - **\*1.8V**/1.5V/1.2V
      - Virtex UltraScale+
-   * - :xilinx:`VCU128`
-     - JTAG
-     - FMC+ (24 GTY @ 28.21 Gbps)
-     - ---
-     - **\*1.8V**/1.5V/1.2V
-     - Virtex UltraScale+ HBM
    * - :xilinx:`VMK180`
      - SD card
      - FMC+ (12 GTY @ 28.21 Gbps)
@@ -413,19 +397,13 @@ AMD platforms
      - LPC
      - 3.3V/**\*2.5V**/1.8V
      - Zynq-7000
-   * - :xilinx:`ZC706`
-     - SD card
-     - HPC (8 GTX @ 10.3125 Gbps)
-     - LPC (1 GTX @ 10.3125 Gbps)
-     - 3.3V/**\*2.5V**/1.8V
-     - Zynq-7000
    * - :xilinx:`ZCU102`
      - SD card
      - HPC (8 GTH @ 16.3 Gbps)
      - HPC (8 GTH @ 16.3 Gbps)
      - **\*1.8V**/1.5V/1.2V
      - Zynq UltraScale+ MP SoC
-   * - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+   * - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - SD card
      - LPC
      - ---
@@ -456,6 +434,47 @@ AMD platforms
    FMC1 & FMC2 columns -> depending on the power supply of the device
    connected to the FMC, the custom VADJ will have the value supported by
    both the carrier and the device(s)
+
+Discontinued AMD platforms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Projects with these carriers can still be found on our repository, as well as
+their :git-hdl:`board files <projects/common>`.
+
+.. list-table::
+   :widths: 16 16 18 18 16 16
+   :header-rows: 1
+
+   * - Board name
+     - Boots from
+     - FMC connector 1
+     - FMC connector 2
+     - VADJ FMC connector
+     - Family
+   * - :xilinx:`KC705`
+     - JTAG
+     - HPC (4 GTX @ 10.3125 Gbps)
+     - LPC (1 GTX @ 10.3125 Gbps)
+     - 3.3V/**\*2.5V**/1.8V
+     - Kintex-7
+   * - :xilinx:`VC707`
+     - JTAG
+     - HPC (8 GTX @ 12.5 Gbps)
+     - HPC (8 GTX @ 12.5 Gbps)
+     - **\*1.8V**/1.5V/1.2V
+     - Virtex-7
+   * - :xilinx:`VCU128`
+     - JTAG
+     - FMC+ (24 GTY @ 28.21 Gbps)
+     - ---
+     - **\*1.8V**/1.5V/1.2V
+     - Virtex UltraScale+ HBM
+   * - :xilinx:`ZC706`
+     - SD card
+     - HPC (8 GTX @ 10.3125 Gbps)
+     - LPC (1 GTX @ 10.3125 Gbps)
+     - 3.3V/**\*2.5V**/1.8V
+     - Zynq-7000
 
 .. _architecture intel-platforms:
 
