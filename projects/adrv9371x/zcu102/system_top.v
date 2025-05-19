@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -199,7 +199,6 @@ module system_top (
   assign spi_csn_ad9371 =  spi_csn[1];
 
   system_wrapper i_system_wrapper (
-    .dac_fifo_bypass (gpio_o[60]),
     .adc_fir_filter_active (gpio_o[61]),
     .dac_fir_filter_active (gpio_o[62]),
     .gpio_i (gpio_i),
