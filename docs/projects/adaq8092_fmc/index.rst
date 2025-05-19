@@ -229,6 +229,10 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver </resources/tools-software/linux-drivers/iio-adc/adaq8092>`
+- :git-linux:`Linux driver adaq8092.c <drivers/iio/adc/adaq8092.c>`
+- :git-linux:`Linux device tree zynq-zed-adv7511-adaq8092.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq8092.dts>`
+- :git-no-os:`No-Os device driver <drivers/adc/adaq8092>`
+- :git-no-os:`No-Os project <projects/adaq8092_fmc>`
 
 - Python support :
 
