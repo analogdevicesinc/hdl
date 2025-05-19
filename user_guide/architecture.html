@@ -111,6 +111,7 @@
 </li>
 <li><a class="reference internal" href="#board-design-and-capabilities">Board design and capabilities</a><ul>
 <li><a class="reference internal" href="#amd-platforms">AMD platforms</a></li>
+<li><a class="reference internal" href="#discontinued-amd-platforms">Discontinued AMD platforms</a></li>
 <li><a class="reference internal" href="#intel-platforms">Intel platforms</a><ul>
 <li><a class="reference internal" href="#vadj-values">VADJ values</a></li>
 </ul>
@@ -850,6 +851,7 @@ might be used in the base design of the carrier!</p>
 <h2>Board design and capabilities<a class="headerlink" href="#board-design-and-capabilities" title="Permalink to this heading"></a></h2>
 <section id="amd-platforms">
 <span id="architecture-amd-platforms"></span><h3>AMD platforms<a class="headerlink" href="#amd-platforms" title="Permalink to this heading"></a></h3>
+<p>The board files of these carriers can be found <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">here</a>.</p>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -877,40 +879,26 @@ might be used in the base design of the carrier!</p>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Artix-7</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-1qlaz7n.html">Cora Z7S</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development">Cora Z7S</a></p></td>
 <td><p>SD card</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KC705">KC705</a></p></td>
-<td><p>JTAG</p></td>
-<td><p>HPC (4 GTX &#64; 10.3125 Gbps)</p></td>
-<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
-<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
-<td><p>Kintex-7</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
 <td><p>JTAG</p></td>
 <td><p>HPC (8 GTH &#64; 16.3 Gbps)</p></td>
 <td><p>LPC (1 GTH &#64; 16.3 Gbps)</p></td>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Kintex UltraScale</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="http://zedboard.org/product/microzed">Microzed</a> **</p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.avnet.com/americas/products/avnet-boards/avnet-board-families/microzed">Microzed</a> **</p></td>
 <td><p>JTAG</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>—</p></td>
 <td><p>Zynq-7000</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a></p></td>
-<td><p>JTAG</p></td>
-<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
-<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
-<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
-<td><p>Virtex-7</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VC709">VC709</a> **</p></td>
 <td><p>JTAG</p></td>
@@ -933,38 +921,24 @@ might be used in the base design of the carrier!</p>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Virtex UltraScale+</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VCU128">VCU128</a></p></td>
-<td><p>JTAG</p></td>
-<td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
-<td><p>—</p></td>
-<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
-<td><p>Virtex UltraScale+ HBM</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VMK180">VMK180</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VMK180">VMK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p>FMC+ (12 GTY &#64; 28.21 Gbps)</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Prime Series</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VPK180">VPK180</a></p></td>
 <td><p>SD card</p></td>
 <td><p>FMC+ (8 GTYP &#64; 32.75 Gbps)</p></td>
 <td><p>—</p></td>
 <td><p><strong>*1.5V</strong>/1.2V</p></td>
 <td><p>Versal Premium</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/ZC702">ZC702</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC702">ZC702</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>LPC</p></td>
-<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
-<td><p>Zynq-7000</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
-<td><p>SD card</p></td>
-<td><p>HPC (8 GTX &#64; 10.3125 Gbps)</p></td>
-<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
 <td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
 <td><p>Zynq-7000</p></td>
 </tr>
@@ -975,7 +949,7 @@ might be used in the base design of the carrier!</p>
 <td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
 <td><p>Zynq UltraScale+ MP SoC</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/products/boards-and-kits/1-8dyf-11.html">ZedBoard</a></p></td>
+<tr class="row-odd"><td><p><a class="reference external" href="https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board">ZedBoard</a></p></td>
 <td><p>SD card</p></td>
 <td><p>LPC</p></td>
 <td><p>—</p></td>
@@ -1010,6 +984,62 @@ in older releases</p>
 FMC1 &amp; FMC2 columns -&gt; depending on the power supply of the device
 connected to the FMC, the custom VADJ will have the value supported by
 both the carrier and the device(s)</p>
+</div>
+</section>
+<section id="discontinued-amd-platforms">
+<h3>Discontinued AMD platforms<a class="headerlink" href="#discontinued-amd-platforms" title="Permalink to this heading"></a></h3>
+<p>Projects with these carriers can still be found on our repository, as well as
+their <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/common">board files</a>.</p>
+<div class="table-wrapper colwidths-given docutils container">
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+<col style="width: 18.0%" />
+<col style="width: 18.0%" />
+<col style="width: 16.0%" />
+<col style="width: 16.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Board name</p></th>
+<th class="head"><p>Boots from</p></th>
+<th class="head"><p>FMC connector 1</p></th>
+<th class="head"><p>FMC connector 2</p></th>
+<th class="head"><p>VADJ FMC connector</p></th>
+<th class="head"><p>Family</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/KC705">KC705</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (4 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Kintex-7</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/VC707">VC707</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
+<td><p>HPC (8 GTX &#64; 12.5 Gbps)</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Virtex-7</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://www.xilinx.com/VCU128">VCU128</a></p></td>
+<td><p>JTAG</p></td>
+<td><p>FMC+ (24 GTY &#64; 28.21 Gbps)</p></td>
+<td><p>—</p></td>
+<td><p><strong>*1.8V</strong>/1.5V/1.2V</p></td>
+<td><p>Virtex UltraScale+ HBM</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
+<td><p>SD card</p></td>
+<td><p>HPC (8 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>LPC (1 GTX &#64; 10.3125 Gbps)</p></td>
+<td><p>3.3V/<strong>*2.5V</strong>/1.8V</p></td>
+<td><p>Zynq-7000</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="intel-platforms">
