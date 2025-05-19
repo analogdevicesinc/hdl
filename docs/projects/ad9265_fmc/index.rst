@@ -203,6 +203,9 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`Linux device tree zynq-zc706-adv7511-ad9265-fmc-125ebz.dts <arch/arm/boot/dts/zynq-zc706-adv7511-ad9265-fmc-125ebz.dts>`
+- :git-linux:`Linux device tree zynq-zed-adv7511-ad9265-fmc-125ebz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad9265-fmc-125ebz.dts>`
+- :git-no-os:`No-Os device driver <drivers/adc/ad9265>`
+- :git-no-os:`No-Os project <projects/ad9265-fmc-125ebz>`
 - :git-linux:`Linux driver ad9467.c <drivers/iio/adc/ad9467.c>`
   (used for AD9265-FMC as well)
 
