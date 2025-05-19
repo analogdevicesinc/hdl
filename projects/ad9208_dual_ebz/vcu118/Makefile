@@ -1,12 +1,12 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
 
 PROJECT_NAME := ad9208_dual_ebz_vcu118
 
-M_DEPS += ../common/dual_ad9208_bd.tcl
+M_DEPS += ../common/ad9208_dual_ebz_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../daq3/common/daq3_spi.v
 M_DEPS += ../../common/xilinx/adcfifo_bd.tcl

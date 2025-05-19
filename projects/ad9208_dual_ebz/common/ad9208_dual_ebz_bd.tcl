@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,7 +10,6 @@ set RX_SAMPLES_PER_FRAME 2 ; # S
 set RX_SAMPLE_WIDTH 16     ; # N/NP
 
 set RX_SAMPLES_PER_CHANNEL 8 ; # L * 32 / (M * N)
-
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
@@ -148,7 +147,6 @@ ad_connect  glbl_clk_0 rx_ad9208_1_tpl_core/link_clk
 ad_connect  glbl_clk_0 util_ad9208_cpack/clk
 ad_connect  glbl_clk_0 axi_ad9208_fifo/adc_clk
 
-
 # dma clock domain
 ad_connect  $sys_cpu_clk axi_ad9208_fifo/dma_clk
 ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
@@ -157,7 +155,6 @@ ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
 ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
 ad_connect  glbl_clk_0_rstgen/peripheral_reset util_ad9208_cpack/reset
 ad_connect  $sys_cpu_resetn axi_ad9208_dma/m_dest_axi_aresetn
-
 
 # connect dataflow
 ad_connect  axi_ad9208_0_jesd/rx_sof rx_ad9208_0_tpl_core/link_sof
@@ -208,6 +205,3 @@ ad_mem_hp0_interconnect $sys_cpu_clk axi_ad9208_dma/m_dest_axi
 ad_cpu_interrupt ps-12 mb-12 axi_ad9208_dma/irq
 ad_cpu_interrupt ps-11 mb-13 axi_ad9208_0_jesd/irq
 ad_cpu_interrupt ps-10 mb-14 axi_ad9208_1_jesd/irq
-
-
-

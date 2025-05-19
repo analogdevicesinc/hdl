@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2023, 2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -8,7 +8,7 @@ set adc_fifo_address_width 13
 
 source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
-source ../common/dual_ad9208_bd.tcl
+source ../common/ad9208_dual_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
