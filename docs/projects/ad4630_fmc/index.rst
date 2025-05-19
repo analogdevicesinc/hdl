@@ -429,7 +429,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-linux:`AD4630_FMC Linux driver source code <analogdevicesinc/linux/blob/main/drivers/iio/adc/ad4630.c>`
+- :git-linux:`AD4630_FMC Linux driver source code <drivers/iio/adc/ad4630.c>`
 - :git-no-os:`AD463x_FMC No-OS project source code <projects/ad463x_fmcz>`
 - :dokuwiki:`AD4630 ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad4630>`
 - :dokuwiki:`AD463X ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad463x>`
