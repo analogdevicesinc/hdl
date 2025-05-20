@@ -182,10 +182,10 @@ module axi_ad9361_tx #(
     if (dac_rst_rate == 1'b1) begin
       dac_rate_cnt <= 16'b0;
     end else begin
-      if ((dac_data_sync == 1'b1) || (dac_rate_cnt == 16'd0)) begin
-        dac_rate_cnt <= dac_datarate_s;
+      if ((dac_data_sync == 1'b1) || (dac_rate_cnt == dac_datarate_s)) begin
+        dac_rate_cnt <= 16'd0;
       end else begin
-        dac_rate_cnt <= dac_rate_cnt - 1'b1;
+        dac_rate_cnt <= dac_rate_cnt + 1'b1;
       end
     end
   end
