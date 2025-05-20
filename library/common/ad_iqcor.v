@@ -71,6 +71,13 @@ module ad_iqcor #(
 
   reg     [15:0]  iqcor_coeff_1_r = 'd0;
   reg     [15:0]  iqcor_coeff_2_r = 'd0;
+  reg     [15:0]  iqcor_coeff_1_d = 'd0;
+  reg     [15:0]  iqcor_coeff_2_d = 'd0;
+
+  reg                   valid_d;
+  reg     [DPW*CR-1:0]  data_in_d;
+  reg     [DPW*CR-1:0]  data_iq_d;
+
 
   // internal signals
   wire [DPW-1:0]    valid_int_loc;
@@ -91,8 +98,14 @@ module ad_iqcor #(
   // coefficients are flopped to remove warnings from vivado
 
   always @(posedge clk) begin
-    iqcor_coeff_1_r <= iqcor_coeff_1;
-    iqcor_coeff_2_r <= iqcor_coeff_2;
+    iqcor_coeff_1_d <= iqcor_coeff_1;
+    iqcor_coeff_2_d <= iqcor_coeff_2;
+    iqcor_coeff_1_r <= iqcor_coeff_1_d;
+    iqcor_coeff_2_r <= iqcor_coeff_2_d;
+
+    valid_d <= valid;
+    data_in_d <= data_in;
+    data_iq_d <= data_iq;
   end
 
   genvar i;
@@ -115,8 +128,8 @@ module ad_iqcor #(
       reg     [CR-1:0]  data_int = 'd0;
 
       // swap i & q
-      assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq[i*CR+:CR] : data_in[i*CR+:CR];
-      assign data_q_s = (Q_OR_I_N == 1) ? data_in[i*CR+:CR] : data_iq[i*CR+:CR];
+      assign data_i_s = (Q_OR_I_N == 1 && SCALE_ONLY == 1'b0) ? data_iq_d[i*CR+:CR] : data_in_d[i*CR+:CR];
+      assign data_q_s = (Q_OR_I_N == 1) ? data_in_d[i*CR+:CR] : data_iq_d[i*CR+:CR];
 
       // scaling functions - i
 
@@ -127,7 +140,7 @@ module ad_iqcor #(
         .data_a ({data_i_s[CR-1], data_i_s, {16-CR{1'b0}}}),
         .data_b ({iqcor_coeff_1_r[15], iqcor_coeff_1_r}),
         .data_p (p1_data_p_i_s),
-        .ddata_in ({valid, data_i_s}),
+        .ddata_in ({valid_d, data_i_s}),
         .ddata_out ({p1_valid_s, p1_data_i_s}));
 
       if (SCALE_ONLY == 0) begin
