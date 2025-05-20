@@ -305,6 +305,10 @@ module axi_ad9361 #(
   wire            adc_up_pps_irq_mask_s;
   wire            dac_up_pps_irq_mask_s;
 
+  reg if_rst  = 0;
+  reg tdd_rst = 0;
+  reg out_rst = 0;
+
   // signal name changes
 
   assign up_clk = s_axi_aclk;
@@ -589,10 +593,6 @@ module axi_ad9361 #(
     assign gps_pps_irq = 1'b0;
   end
   endgenerate
-
-  reg if_rst  = 0;
-  reg tdd_rst = 0;
-  reg out_rst = 0;
 
   // reduce high fan-out
   always @(posedge clk) begin
