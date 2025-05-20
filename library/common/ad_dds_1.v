@@ -62,6 +62,11 @@ module ad_dds_1 #(
   wire    [ DDS_D_DW-1:0] sine_s;
   wire    [DDS_D_DW+17:0] s1_data_s;
 
+  // registers
+
+  reg     [         15:0] scale_d;
+  reg     [ DDS_D_DW-1:0] sine_d;
+
   // sine
 
   generate
@@ -90,6 +95,11 @@ module ad_dds_1 #(
     end
   endgenerate
 
+  always @(posedge clk) begin
+    sine_d <= sine_s;
+    scale_d <= scale;
+  end
+
   // scale for a sine generator
 
   ad_mul #(
@@ -98,8 +108,8 @@ module ad_dds_1 #(
     .DELAY_DATA_WIDTH(1)
   ) i_dds_scale (
     .clk (clk),
-    .data_a ({sine_s[DDS_D_DW-1], sine_s}),
-    .data_b ({scale[15], scale}),
+    .data_a ({sine_d[DDS_D_DW-1], sine_d}),
+    .data_b ({scale_d[15], scale_d}),
     .data_p (s1_data_s),
     .ddata_in (1'b0),
     .ddata_out ());
