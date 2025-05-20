@@ -126,7 +126,7 @@ set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx
 # I2C
 
 set_property  -dict {PACKAGE_PIN M14 IOSTANDARD LVCMOS25} [get_ports iic_scl];       # SCL IO_L9N_T1_DQS_34
-set_property  -dict {PACKAGE_PIN L14 IOSTANDARD LVCMOS25} [get_ports iic_sca];       # SDA IO_L9P_T1_DQS_34
+set_property  -dict {PACKAGE_PIN L14 IOSTANDARD LVCMOS25} [get_ports iic_sca];       # SCA IO_L9P_T1_DQS_34
 
 # GPIOs
 
@@ -146,7 +146,7 @@ set_property  -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS25} [get_ports ad9696_ldac
 set_property  -dict {PACKAGE_PIN F12 IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_a1_csn]; # CSN_A1 IO_L1P_T0_AD0P_35
 set_property  -dict {PACKAGE_PIN E13 IOSTANDARD LVCMOS25  PULLTYPE PULLUP} [get_ports spi_a2_csn]; # CSN_A2 IO_L1N_T0_AD0N_35
 set_property  -dict {PACKAGE_PIN E11 IOSTANDARD LVCMOS25} [get_ports spi_clk];                     # SCLK IO_L2P_T0_AD8P_35
-set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS25} [get_ports spi_sdata];                   # SDIO IO_L2N_T0_AD8N_35
+set_property  -dict {PACKAGE_PIN E12 IOSTANDARD LVCMOS25} [get_ports spi_sdata];                   # SDI  IO_L2N_T0_AD8N_35
 
 # probably gone in 2016.4
 
