@@ -75,6 +75,10 @@ module ad_dcfilter #(
   reg             valid_int = 'd0;
   reg     [15:0]  data_int = 'd0;
 
+  reg             dcfilt_enb_d;
+  reg     [15:0]  dcfilt_coeff_2d;
+  reg     [15:0]  dcfilt_offset_d;
+
   // internal signals
 
   wire    [47:0]  dc_offset_s;
@@ -94,7 +98,11 @@ module ad_dcfilter #(
   // dcfilt_coeff is flopped so to remove warnings from vivado
 
   always @(posedge clk) begin
+    dcfilt_enb_d <= dcfilt_enb;
+    dcfilt_offset_d <= dcfilt_offset;
+
     dcfilt_coeff_d <= dcfilt_coeff;
+    dcfilt_coeff_2d <= dcfilt_coeff_d;
   end
 
   // removing dc offset
@@ -105,7 +113,7 @@ module ad_dcfilter #(
     dc_offset_2d <= dc_offset_d;
     valid_d <= valid;
     if (valid == 1'b1) begin
-      data_d <= data + dcfilt_offset;
+      data_d <= data + dcfilt_offset_d;
       data_2d  <= data_d;
     end
     valid_2d <= valid_d;
@@ -113,7 +121,7 @@ module ad_dcfilter #(
     data_3d  <= data_2d;
     data_dcfilt <= data_2d - dc_offset_d[32:17];
     data_dcfilt_d <= data_dcfilt;
-    if (dcfilt_enb == 1'b1) begin
+    if (dcfilt_enb_d == 1'b1) begin
       valid_int <= valid_3d;
       data_int  <= data_dcfilt_d;
     end else begin
@@ -153,7 +161,7 @@ module ad_dcfilter #(
   ) i_dsp48e1 (
     .CLK (clk),
     .A ({{14{dc_offset[32]}}, dc_offset[32:17]}),
-    .B ({{2{dcfilt_coeff_d[15]}}, dcfilt_coeff_d}),
+    .B ({{2{dcfilt_coeff_2d[15]}}, dcfilt_coeff_2d}),
     .C (dc_offset_2d),
     .D ({{9{data_2d[15]}}, data_2d}),
     .MULTSIGNIN (1'd0),
