@@ -578,7 +578,7 @@ the following reworks are required:</p>
 <p>The data path and clock domains are depicted in the below diagrams:</p>
 <section id="example-block-design-for-single-link-m-8-l-4">
 <h4>Example block design for Single link; M=8; L=4<a class="headerlink" href="#example-block-design-for-single-link-m-8-l-4" title="Permalink to this heading"></a></h4>
-<a class="reference internal image-reference" href="../../_images/ad9081_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_204b_M8L4.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9081_204b_M8L4.svg"><img alt="AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram" class="align-center" src="../../_images/ad9081_204b_M8L4.svg" width="1000" /></a>
 <p>The Rx links (ADC Path) operate with the following parameters:</p>
 <ul class="simple">
 <li><p>Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16 (Quick Config 0x0A)</p></li>
@@ -599,6 +599,10 @@ the following reworks are required:</p>
 <li><p>JESD204B Lane Rate: 10Gbps</p></li>
 <li><p>QPLL0 or CPLL</p></li>
 </ul>
+<p>If AD9081-FMCA-EBZ has an 122.88MHz local oscillator, then the Lane rate will
+be 9.8304 Gbps and the Global clocks = 245.76 MHz.</p>
+<p>Corresponding device tree:
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081.dts">zynqmp-zcu102-rev10-ad9081.dts</a>.</p>
 </section>
 <section id="example-block-design-for-single-link-m-4-l-8">
 <h4>Example block design for Single link; M=4; L=8<a class="headerlink" href="#example-block-design-for-single-link-m-4-l-8" title="Permalink to this heading"></a></h4>
