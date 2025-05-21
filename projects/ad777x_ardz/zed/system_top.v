@@ -48,13 +48,10 @@ module system_top (
   input                   spi_miso,
   output                  start_n,
   output                  sync_adc_mosi,
-  input                   sync_adc_miso,
   input                   alert,
   output                  sdp_convst,
   output                  sdp_mclk,
   output                  reset_n,
-  inout                   gpio0,
-  inout                   gpio1,
   inout                   gpio2,
 
   inout       [14:0]      ddr_addr,
@@ -142,10 +139,7 @@ module system_top (
     .dio_i (gpio_o[38:36]),
     .dio_o (gpio_i[38:36]),
     .dio_t (gpio_t[38:36]),
-    .dio_p ({
-             gpio2,        //38
-             gpio1,        //37
-             gpio0}));     //36
+    .dio_p (gpio2));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -168,7 +162,6 @@ module system_top (
     .adc_ready(adc_ready_in),
     .adc_data_in(adc_data_in),
     .sync_adc_mosi(sync_adc_mosi),
-    .sync_adc_miso(sync_adc_miso),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
