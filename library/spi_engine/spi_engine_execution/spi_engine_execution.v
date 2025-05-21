@@ -57,7 +57,7 @@ module spi_engine_execution #(
 
   input sdo_data_valid,
   output sdo_data_ready,
-  input [(DATA_WIDTH-1):0] sdo_data,
+  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_data,
 
   input sdi_data_ready,
   output sdi_data_valid,
@@ -69,7 +69,7 @@ module spi_engine_execution #(
 
   input echo_sclk,
   output reg sclk,
-  output reg sdo,
+  output reg [NUM_OF_SDI-1:0] sdo,
   output reg sdo_t,
   input [NUM_OF_SDI-1:0] sdi,
   output reg [NUM_OF_CS-1:0] cs,
@@ -123,8 +123,6 @@ module spi_engine_execution #(
   reg [7:0] last_bit_count = DATA_WIDTH-1;
   reg [7:0] left_aligned = 8'b0;
 
-  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
-
   reg [15:0] cmd_d1;
 
   reg cpha = DEFAULT_SPI_CFG[0];
@@ -139,7 +137,7 @@ module spi_engine_execution #(
   wire sdo_enabled_io;
   wire sdi_enabled_io;
 
-  wire sdo_int_s;
+  wire [NUM_OF_SDI-1:0] sdo_int_s;
 
   wire last_bit;
   wire echo_last_bit;
@@ -173,6 +171,8 @@ module spi_engine_execution #(
   wire sdo_io_ready;
 
   (* direct_enable = "yes" *) wire cs_gen;
+  
+  assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),

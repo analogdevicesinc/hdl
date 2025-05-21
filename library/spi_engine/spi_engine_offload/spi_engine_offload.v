@@ -51,7 +51,7 @@ module spi_engine_offload #(
   input [15:0] ctrl_cmd_wr_data,
 
   input ctrl_sdo_wr_en,
-  input [(DATA_WIDTH-1):0] ctrl_sdo_wr_data,
+  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] ctrl_sdo_wr_data,
 
   input ctrl_enable,
   output ctrl_enabled,
@@ -72,15 +72,15 @@ module spi_engine_offload #(
 
   output sdo_data_valid,
   input sdo_data_ready,
-  output [(DATA_WIDTH-1):0] sdo_data,
+  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_data,
 
-  input [(DATA_WIDTH-1):0] s_axis_sdo_data,
+  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] s_axis_sdo_data,
   output  s_axis_sdo_ready,
   input   s_axis_sdo_valid,
 
   input sdi_data_valid,
   output sdi_data_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
   input sync_valid,
   output sync_ready,
@@ -88,7 +88,7 @@ module spi_engine_offload #(
 
   output offload_sdi_valid,
   input offload_sdi_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] offload_sdi_data,
+  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] offload_sdi_data,
 
   output interconnect_dir
 );
@@ -104,7 +104,7 @@ module spi_engine_offload #(
   reg [SDO_MEM_ADDRESS_WIDTH-1:0] spi_sdo_rd_addr = 'h00;
 
   reg [15:0] cmd_mem[0:2**CMD_MEM_ADDRESS_WIDTH-1];
-  reg [(DATA_WIDTH-1):0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
+  reg [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_mem[0:2**SDO_MEM_ADDRESS_WIDTH-1];
   reg sdo_mem_valid;
 
   reg trigger_last_reg;
