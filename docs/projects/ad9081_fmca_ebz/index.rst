@@ -174,7 +174,7 @@ Example block design for Single link; M=8; L=4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: ad9081_204b_M8L4.svg
-   :width: 800
+   :width: 1000
    :align: center
    :alt: AD9081-FMCA-EBZ JESD204B M=8 L=4 block diagram
 
@@ -197,6 +197,12 @@ The Tx links (DAC Path) operate with the following parameters:
 - REF_CLK: 500MHz (Lane Rate/20)
 - JESD204B Lane Rate: 10Gbps
 - QPLL0 or CPLL
+
+If AD9081-FMCA-EBZ has an 122.88MHz local oscillator, then the Lane rate will
+be 9.8304 Gbps and the Global clocks = 245.76 MHz.
+
+Corresponding device tree:
+:git-linux:`zynqmp-zcu102-rev10-ad9081.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9081.dts>`.
 
 Example block design for Single link; M=4; L=8
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
