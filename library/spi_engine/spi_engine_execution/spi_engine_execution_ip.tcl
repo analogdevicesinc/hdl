@@ -11,6 +11,7 @@ adi_ip_files spi_engine_execution [list \
   "spi_engine_execution_constr.ttcl" \
   "spi_engine_execution.v" \
   "spi_engine_execution_shiftreg.v" \
+  "spi_engine_execution_shiftreg_data_assemble.v" \
 ]
 
 adi_ip_properties_lite spi_engine_execution
@@ -41,6 +42,14 @@ adi_add_bus "ctrl" "slave" \
     {"sync" "sync_data"} \
   }
 adi_add_bus_clock "clk" "ctrl" "resetn"
+
+adi_add_bus "s_offload_active_ctrl" "slave" \
+	"analog.com:interface:spi_engine_interconnect_ctrl_rtl:1.0" \
+	"analog.com:interface:spi_engine_interconnect_ctrl:1.0" \
+	{ \
+		{"s_offload_active" "interconnect_dir"} \
+	}
+adi_add_bus_clock "clk" "s_offload_active_ctrl" "resetn"
 
 adi_add_bus "spi" "master" \
   "analog.com:interface:spi_engine_rtl:1.0" \
