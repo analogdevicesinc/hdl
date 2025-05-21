@@ -12,8 +12,11 @@ ad_ip_files axi_spi_engine [list\
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v \
   $ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v \
   $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/sync_data.v \
+  $ad_hdl_dir/library/util_cdc/sync_event.v \
   $ad_hdl_dir/library/util_cdc/sync_gray.v \
   $ad_hdl_dir/library/common/ad_mem.v \
+  $ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v \
   $ad_hdl_dir/library/common/up_axi.v \
   $ad_hdl_dir/library/common/ad_rst.v \
   $ad_hdl_dir/library/intel/common/up_rst_constr.sdc \
@@ -33,7 +36,7 @@ ad_ip_parameter OFFLOAD0_CMD_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter OFFLOAD0_SDO_MEM_ADDRESS_WIDTH INTEGER 4
 ad_ip_parameter ID INTEGER 0
 ad_ip_parameter DATA_WIDTH INTEGER 8
-ad_ip_parameter NUM_OF_SDI INTEGER 1
+ad_ip_parameter NUM_OF_SDIO INTEGER 1
 
 proc p_elaboration {} {
 
@@ -41,7 +44,7 @@ proc p_elaboration {} {
 
   set mm_if_type [get_parameter_value "MM_IF_TYPE"]
 
-  set num_of_sdi [get_parameter_value NUM_OF_SDI]
+  set num_of_sdi [get_parameter_value NUM_OF_SDIO]
   set data_width [get_parameter_value DATA_WIDTH]
   set offload_en [get_parameter_value OFFLOAD_EN]
 
