@@ -440,7 +440,7 @@ module axi_spi_engine #(
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
   assign sdo_fifo_in_data = up_wdata_s[DATA_WIDTH-1:0];
 
-  util_axis_fifo #(
+   util_axis_fifo #(
     .DATA_WIDTH(DATA_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
@@ -526,6 +526,7 @@ module axi_spi_engine #(
     .s_axis_tkeep(sdi_fifo_tkeep),
     .s_axis_full(),
     .s_axis_almost_full(sdi_fifo_almost_full),
+    
     .m_axis_aclk(clk),
     .m_axis_aresetn(up_sw_resetn),
     .m_axis_ready(sdi_fifo_out_ready || find_next_valid_fifo_value),

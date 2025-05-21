@@ -141,7 +141,7 @@ module spi_engine_execution #(
 
   wire [NUM_OF_SDIO-1:0] sdo_int_s;
 
-  wire last_bit;
+  reg last_bit;
   wire echo_last_bit;
   reg first_bit;
   wire end_of_word;
@@ -184,6 +184,7 @@ module spi_engine_execution #(
 
   spi_engine_execution_shiftreg #(
     .DEFAULT_SPI_CFG(DEFAULT_SPI_CFG),
+    .ALL_ACTIVE_LANE_MASK(ALL_ACTIVE_LANE_MASK),
     .DATA_WIDTH(DATA_WIDTH),
     .NUM_OF_SDIO(NUM_OF_SDIO),
     .SDI_DELAY(SDI_DELAY),
@@ -229,6 +230,7 @@ module spi_engine_execution #(
     if (exec_transfer_cmd) begin
       sdo_enabled <= cmd[8];
       sdi_enabled <= cmd[9];
+      num_of_transfers <= cmd[7:0];
     end
   end
   assign sdo_enabled_io = (exec_transfer_cmd) ? cmd[8] : sdo_enabled;
