@@ -11,7 +11,8 @@ ad_ip_create spi_engine_execution {SPI Engine Execution}
 set_module_property ELABORATION_CALLBACK p_elaboration
 ad_ip_files spi_engine_execution [list\
   spi_engine_execution.v \
-  spi_engine_execution_shiftreg.v]
+  spi_engine_execution_shiftreg.v \
+  spi_engine_execution_shiftreg_data_assemble.v]
 
 # parameters
 
@@ -35,6 +36,13 @@ proc p_elaboration {} {
   ad_interface reset   resetn  input 1 if_clk
 
   ad_interface signal active output 1
+
+  # interconnect direction interface
+
+  add_interface s_interconnect_ctrl conduit end
+  add_interface_port s_interconnect_ctrl s_interconnect_dir interconnect_dir input 1
+  set_interface_property s_interconnect_ctrl associatedClock if_clk
+  set_interface_property s_interconnect_ctrl associatedReset if_resetn
 
   # command interface
 

@@ -43,7 +43,8 @@ module spi_engine_interconnect #(
   input clk,
   input resetn,
 
-  input interconnect_dir,
+  input s_interconnect_dir,
+  output m_offload_active,
 
   output m_cmd_valid,
   input m_cmd_ready,
@@ -94,8 +95,9 @@ module spi_engine_interconnect #(
   output [7:0] s1_sync
 );
 
-  `define spi_engine_interconnect_mux(s0, s1) (interconnect_dir == 1'b1 ? s0 : s1)
+  `define spi_engine_interconnect_mux(s0, s1) (s_interconnect_dir == 1'b1 ? s0 : s1)
 
+  assign m_offload_active = s_interconnect_dir;
   assign m_cmd_data   = `spi_engine_interconnect_mux(s0_cmd_data, s1_cmd_data);
   assign m_cmd_valid  = `spi_engine_interconnect_mux(s0_cmd_valid, s1_cmd_valid);
   assign s0_cmd_ready = `spi_engine_interconnect_mux(m_cmd_ready, 1'b0);
