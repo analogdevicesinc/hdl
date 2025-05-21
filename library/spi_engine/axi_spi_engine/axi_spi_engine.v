@@ -106,11 +106,11 @@ module axi_spi_engine #(
 
   input sdo_data_ready,
   output sdo_data_valid,
-  output [(DATA_WIDTH-1):0] sdo_data,
+  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_data,
 
   output sdi_data_ready,
   input sdi_data_valid,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_data,
+  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
   output sync_ready,
   input sync_valid,
@@ -122,7 +122,7 @@ module axi_spi_engine #(
   output [15:0] offload0_cmd_wr_data,
 
   output offload0_sdo_wr_en,
-  output [(DATA_WIDTH-1):0] offload0_sdo_wr_data,
+  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] offload0_sdo_wr_data,
 
   output offload0_mem_reset,
   output offload0_enable,
@@ -152,7 +152,7 @@ module axi_spi_engine #(
   wire sdo_fifo_almost_empty;
   wire up_sdo_fifo_almost_empty;
 
-  wire [(DATA_WIDTH-1):0] sdo_fifo_in_data;
+  wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_fifo_in_data;
   wire sdo_fifo_in_ready;
   wire sdo_fifo_in_valid;
 
@@ -161,7 +161,7 @@ module axi_spi_engine #(
   wire sdi_fifo_almost_full;
   wire up_sdi_fifo_almost_full;
 
-  wire [(NUM_OF_SDI * DATA_WIDTH-1):0] sdi_fifo_out_data;
+  wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_fifo_out_data;
   wire sdi_fifo_out_ready;
   wire sdi_fifo_out_valid;
 
@@ -443,10 +443,10 @@ module axi_spi_engine #(
     .m_axis_level());
 
   assign sdo_fifo_in_valid = up_wreq_s == 1'b1 && up_waddr_s == 8'h39;
-  assign sdo_fifo_in_data = up_wdata_s[(DATA_WIDTH-1):0];
+  assign sdo_fifo_in_data = {NUM_OF_SDI{up_wdata_s[(DATA_WIDTH-1):0]}}; //TODO: improve this value replication
 
   util_axis_fifo #(
-    .DATA_WIDTH(DATA_WIDTH),
+    .DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
     .ASYNC_CLK(ASYNC_SPI_CLK),
     .ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
     .M_AXIS_REGISTERED(0),
@@ -555,10 +555,10 @@ module axi_spi_engine #(
 
     // synchronization FIFO for the offload SDO interface
     wire up_offload0_sdo_wr_en_s;
-    wire [DATA_WIDTH-1:0] up_offload0_sdo_wr_data_s;
+    wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] up_offload0_sdo_wr_data_s;
 
     util_axis_fifo #(
-      .DATA_WIDTH(DATA_WIDTH),
+      .DATA_WIDTH(NUM_OF_SDI * DATA_WIDTH),
       .ASYNC_CLK(ASYNC_SPI_CLK),
       .ADDRESS_WIDTH(SYNC_FIFO_ADDRESS_WIDTH),
       .M_AXIS_REGISTERED(0)
@@ -579,7 +579,7 @@ module axi_spi_engine #(
       .m_axis_empty());
 
     assign up_offload0_sdo_wr_en_s = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
-    assign up_offload0_sdo_wr_data_s = up_wdata_s[DATA_WIDTH-1:0];
+    assign up_offload0_sdo_wr_data_s = {NUM_OF_SDI{up_wdata_s[DATA_WIDTH-1:0]}}; //TODO: improve this value replication
 
     // synchronization FIFO for the Offload SYNC interface
     util_axis_fifo #(
@@ -613,7 +613,7 @@ module axi_spi_engine #(
       assign offload0_cmd_wr_data = up_wdata_s[15:0];
 
       assign offload0_sdo_wr_en = up_wreq_s == 1'b1 && up_waddr_s == 8'h45;
-      assign offload0_sdo_wr_data = up_wdata_s[DATA_WIDTH-1:0];
+      assign offload0_sdo_wr_data = {NUM_OF_SDI{up_wdata_s[DATA_WIDTH-1:0]}}; //TODO: improve this value replication
 
       assign offload_sync_fifo_valid = offload_sync_valid;
       assign offload_sync_fifo_data = offload_sync_data;
