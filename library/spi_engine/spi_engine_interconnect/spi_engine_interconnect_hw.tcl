@@ -29,7 +29,7 @@ proc p_elaboration {} {
   # interconnect direction interface
 
   add_interface s_interconnect_ctrl conduit end
-  add_interface_port s_interconnect_ctrl interconnect_dir interconnect_dir input 1
+  add_interface_port s_interconnect_ctrl s_interconnect_dir interconnect_dir input 1
   set_interface_property s_interconnect_ctrl associatedClock if_clk
   set_interface_property s_interconnect_ctrl associatedReset if_resetn
 
