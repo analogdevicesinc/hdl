@@ -71,6 +71,7 @@ proc spi_engine_create {{name "spi_engine"} {data_width 32} {async_spi_clk 1} {n
   ad_connect $offload/trigger trigger
 
   ad_connect $execution/spi m_spi
+  ad_connect $interconnect/m_offload_active_ctrl $execution/s_offload_active_ctrl
 
    if {$sdo_streaming == 1} {
     ad_connect $offload/s_axis_sdo s_axis_sample
