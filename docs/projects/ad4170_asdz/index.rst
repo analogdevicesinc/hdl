@@ -6,7 +6,7 @@ AD4170_ASDZ HDL project
 Overview
 --------------------------------------------------------------------------------
 
-The HDL reference design for the :adi:`AD4170-4` :adi:`AD4190-4`provides
+The HDL reference design for the :adi:`AD4170-4` and :adi:`AD4190-4` provides
 a high resolution, 24-Bit, DC to 50 kHz Input Bandwidth, Multichannel,
 Low Noise Precision Sigma-Delta ADC with PGA.
 
@@ -22,7 +22,7 @@ pseudodifferential inputs. The on-chip low noise gain stage ensures that signals
 of small amplitude can be interfaced directly to the devices.
 
 This project has a :ref:`spi_engine` instance to control and acquire data from
-the AD4170-4  or AD4190-4 24-bit precision ADC. This instance provides support
+the AD4170-4 or AD4190-4 24-bit precision ADC. This instance provides support
 for capturing continuous samples at the maximum sample rate.
 
 Supported boards
@@ -225,8 +225,10 @@ Resources
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheet: :adi:`AD4170-4`
-- Product datasheet: :adi:`AD4190-4`
+- Products datasheet:
+
+  - :adi:`AD4170-4`
+  - :adi:`AD4190-4`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
