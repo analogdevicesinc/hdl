@@ -81,18 +81,23 @@ Configuration modes
 
 The following are the parameters of this project that can be configured:
 - INTF: specifies the type of interface used;
+
   - 0 - parallel (default)
   - 1 - serial
+
 - NUM_OF_SDI: number of SDI lines used, **only in serial interface mode**;
+
   - 1 - one SDI line
   - 2 - two SDI lines (default)
 
 Depending on the required interface mode, some hardware modifications need to
 be done on the board:
+
   - SL5 - unmounted - Parallel interface
   - SL5 - mounted - Serial interface
-  This switch is a *hardware* switch. Please rebuild the design if the variable
-  has been changed.
+
+This switch is a *hardware* switch. Please rebuild the design if the variable
+has been changed.
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
