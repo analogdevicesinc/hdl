@@ -89,7 +89,7 @@ Signal and Interface Pins
    * - link
      - link_data: JESD204 link data interface (link layer interface).
    * - link_clk
-     - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+     - :ref:`Device clock <jesd204 glossary>`
        for the JESD204B interface of the Link Layer Interface. Must
        be line clock/40 for correct 204B operation. Must be line
        clock/66 for correct 64b66b 204C operation.
@@ -343,7 +343,7 @@ More Information
 --------------------------------------------------------------------------------
 
 -  :ref:`JESD204 Interface Framework <jesd204>`
--  :dokuwiki:`Glossary of terms <resources/fpga/peripherals/jesd204/jesd204_glossary>`
+-  :ref:`Glossary of terms <jesd204 glossary>`
 -  :ref:`HDL User Guide <user_guide>`
 
 Technical Support
