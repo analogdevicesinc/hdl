@@ -200,7 +200,6 @@ command.
    ============= ===============================================
    ccbob_cmos    ADRV9364Z7020-SOM (CMOS Mode) + ADRV1CRR-BOB
    ccbob_lvds    ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-BOB
-   ccpackrf_lvds ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-PACKRF
    ccusb_lvds    ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-USB
    ============= ===============================================
    
@@ -211,7 +210,6 @@ command.
    =========================== =====================================
    common/adrv9364z7020_bd.tcl ADRV9364Z7020-SOM board design file.
    common/ccbob_bd.tcl         carrier, break out board design file.
-   common/ccpackrf_bd.tcl      carrier, pack rf board design file.
    common/ccusb_bd.tcl         carrier, usb board design file.
    =========================== =====================================
    
@@ -235,9 +233,6 @@ command.
    | adrv9364z7020_constr_lvds.xdc | constraints file.                    |
    +-------------------------------+--------------------------------------+
    | common/ccbob_constr.xdc       | carrier, break out board constraints |
-   |                               | file.                                |
-   +-------------------------------+--------------------------------------+
-   | common/ccpackrf_constr.xdc    | carrier, packrf board constraints    |
    |                               | file.                                |
    +-------------------------------+--------------------------------------+
    | common/ccusb_constr.xdc       | carrier, usb board constraints file. |
@@ -285,9 +280,6 @@ HDL related
    * - AXI_GPREG
      - :git-hdl:`library/axi_gpreg` *
      - ---
-   * - AXI_I2S_ADI
-     - :git-hdl:`library/axi_i2s_adi` **
-     - ---
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
@@ -317,14 +309,12 @@ HDL related
    :class: note
 
    - ``*`` only used for ccbob_cmos (ADRV1CRR-BOB) & ccfmc_lvds (ADRV1CRR-FMC)  
-   - ``**`` only used for ccpackrf_lvds (ADRV1CRR-PACKRF)
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADRV9364-Z7020 ccbob_cmos Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob-cmos.dts>`
 - :git-linux:`ADRV9364-Z7020 ccbob_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob.dts>`
-- :git-linux:`ADRV9364-Z7020 ccpackrf_lvds Linux device tree <arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-packrf.dts>`
 
 - :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
 
