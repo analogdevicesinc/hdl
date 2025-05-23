@@ -17,18 +17,18 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #      make RX_JESD_L=8 RX_JESD_M=4 RX_JESD_S=1
 
 # Parameter description:
-#   JESD_MODE : Used link layer encoder mode
+#   JESD_MODE: Used link layer encoder mode
 #      64B66B - 64b66b link layer defined in JESD 204C, uses Xilinx IP as Physical layer
 #      8B10B  - 8b10b link layer defined in JESD 204B, uses ADI IP as Physical layer
 #
-#   RX_LANE_RATE :  Line rate of the Rx link ( MxFE to FPGA )
-#   REF_CLK_RATE : Frequency of reference clock in MHz used in 64B66B mode
-#   RX_JESD_M : Number of converters per link
-#   RX_JESD_L : Number of lanes per link
-#   RX_JESD_S : Number of samples per frame
-#   RX_JESD_NP : Number of bits per sample, only 16 is supported
-#   RX_NUM_LINKS : Number of links, matches numer of MxFE devices
-#   RX_KS_PER_CHANNEL : Number of samples stored in internal buffers in kilosamples per converter (M)
+#   RX_LANE_RATE:  Lane rate of the Rx link (MxFE to FPGA)
+#   REF_CLK_RATE: Frequency of reference clock in MHz used in 64B66B mode
+#   RX_JESD_M: Number of converters per link
+#   RX_JESD_L: Number of lanes per link
+#   RX_JESD_S: Number of samples per frame
+#   RX_JESD_NP: Number of bits per sample, only 16 is supported
+#   RX_NUM_LINKS: Number of links, matches the number of MxFE devices
+#   RX_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
 
 #      make JESD_MODE=64B66B RX_LANE_RATE=24.75 RX_JESD_M=4 RX_JESD_L=4 RX_JESD_S=2 RX_JESD_NP=12
 
