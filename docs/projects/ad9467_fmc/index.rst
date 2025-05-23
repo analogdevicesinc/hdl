@@ -210,8 +210,8 @@ Hardware related
 
 - Product datasheet: :adi:`AD9467`
 - The schematic of the board can be found
-  :dokuwiki:`here <resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`,
-  or :dokuwiki:`here <resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`
+  :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/02-041710-01-c-1.pdf>`,
+  or :dokuwiki:`here <_media/resources/fpga/xilinx/fmc/9467fmc01c_sch.pdf>`
   for older versions.
 
 HDL related
