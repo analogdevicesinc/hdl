@@ -6,8 +6,8 @@ AD9209-FMCA-EBZ HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9209-FMCA-EBZ` reference design is a processor-based embedded
-system. This reference design works with :adi:`AD9209-FMCA-EBZ`/
+The :git-hdl:`AD9209-FMCA-EBZ <projects/ad9209_fmca_ebz>` reference design is
+a processor-based embedded system. This reference design works with
 :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` (RX only) /
 :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>` (RX only) / :adi:`EVAL-AD9986` (RX only) /
 :adi:`EVAL-AD9988` (RX only).
@@ -28,7 +28,6 @@ All cores from the receive chain are programmable through an AXI-Lite interface.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD9209-FMCA-EBZ`
 - :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>` *
 - :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>` *
 - :adi:`EVAL-AD9988` *
@@ -36,7 +35,7 @@ Supported boards
 
 .. note::
 
-   **\*** - only the RX path would be used!
+   **\*** - only the RX path is used!
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -254,8 +253,10 @@ Example for building the project with parameters:
 .. shell::
 
    $cd hdl/projects/ad9209_fmca_ebz/vck190
-   $make RX_LANE_RATE=16.5 RX_JESD_L=8 \
-   $     RX_JESD_M=4 RX_JESD_S=1 \
+   $make RX_LANE_RATE=16.5 \
+   $     RX_JESD_L=8 \
+   $     RX_JESD_M=4 \
+   $     RX_JESD_S=1 \
    $     RX_JESD_NP=16
 
 The following dropdowns contain tables with the parameters that can be used to
@@ -390,6 +391,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- AD9209/VCK190 Linux device tree at :git-linux:`arch/arm64/boot/dts/xilinx/versal-vck190-reva-ad9209.dts`
 - :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
   applies to the AD9209-FMCA-EBZ board as well, just the RX side
 - Python support:
