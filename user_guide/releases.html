@@ -368,9 +368,10 @@ the Intel and AMD Xilinx cores. If you must still do this, note the
 following:</p>
 <p>First, disable the version check of the scripts.</p>
 <p>The ADI build scripts are making sure that the releases are being run on
-the validated tool version. It will promptly notify the user if he or
-she trying to use an unsupported version of tools. You need to disable
-this check by setting the environment variable <code class="docutils literal notranslate"><span class="pre">ADI_IGNORE_VERSION_CHECK</span></code>.</p>
+the validated tool version. It will promptly notify the user if he/she is
+trying to use an unsupported version of tools. You need to disable
+this check by setting the environment variable <strong>ADI_IGNORE_VERSION_CHECK</strong>:
+<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">ADI_IGNORE_VERSION_CHECK=1</span></code>.</p>
 <p>Second, make Intel and AMD IP cores version change.</p>
 <p>The Intel projects should automatically be changed by Quartus. The
 Vivado projects are a bit tricky. The GUI automatically updates the
@@ -379,8 +380,8 @@ cores, but the <strong>Tcl flow does not</strong>.</p>
 first, then opening it with the new version.
 After which, update the Tcl scripts accordingly.</p>
 <p>The versions are specified in the following format.</p>
-<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="nv">add_instance</span><span class="w"> </span>sys_cpu<span class="w"> </span>altera_nios2_gen2<span class="w"> </span><span class="mf">16.0</span>
-<span class="linenos">2</span><span class="k">set</span><span class="w"> </span>sys_mb<span class="w"> </span><span class="k">[</span><span class="nv">create_bd_cell</span><span class="w"> </span><span class="o">-</span>type<span class="w"> </span>ip<span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>xilinx.com:ip:microblaze:9.5<span class="w"> </span>sys_mb<span class="k">]</span>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nv">add_instance</span><span class="w"> </span>sys_cpu<span class="w"> </span>altera_nios2_gen2<span class="w"> </span><span class="mf">16.0</span>
+<span class="k">set</span><span class="w"> </span>sys_mb<span class="w"> </span><span class="k">[</span><span class="nv">create_bd_cell</span><span class="w"> </span><span class="o">-</span>type<span class="w"> </span>ip<span class="w"> </span><span class="o">-</span>vlnv<span class="w"> </span>xilinx.com:ip:microblaze:9.5<span class="w"> </span>sys_mb<span class="k">]</span>
 </pre></div>
 </div>
 <p>You should now be able to build the design and test things out. In most
@@ -408,9 +409,9 @@ incremental update and debug accordingly.</p>
 <tbody>
 <tr class="row-even"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/">main</a></p></td>
 <td><p>Quartus Pro 24.2</p></td>
-<td><p>Vivado 2023.2</p></td>
-<td></td>
-<td></td>
+<td><p>Vivado 2024.2</p></td>
+<td><p>—</p></td>
+<td><p>—</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2023_r2/">hdl_2023_r2</a></p></td>
 <td><p>Quartus Pro 23.2</p></td>

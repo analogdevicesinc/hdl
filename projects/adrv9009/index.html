@@ -103,6 +103,7 @@
 <li><a class="reference internal" href="#spi-connections">SPI connections</a></li>
 <li><a class="reference internal" href="#gpios">GPIOs</a></li>
 <li><a class="reference internal" href="#interrupts">Interrupts</a></li>
+<li><a class="reference internal" href="#microblaze">Microblaze</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#building-the-hdl-project">Building the HDL project</a></li>
@@ -413,14 +414,18 @@ independent DMA cores for the transmit, receive and observation/sniffer paths.</
 <td><p>FMCA</p></td>
 </tr>
 <tr class="row-odd"><td></td>
+<td><p><a class="reference external" href="https://www.xilinx.com/KCU105">KCU105</a></p></td>
+<td><p>FMC_HPC</p></td>
+</tr>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html">S10SoC</a></p></td>
 <td><p>FMCA</p></td>
 </tr>
-<tr class="row-even"><td></td>
+<tr class="row-odd"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZC706">ZC706</a></p></td>
 <td><p>FMC_HPC</p></td>
 </tr>
-<tr class="row-odd"><td></td>
+<tr class="row-even"><td></td>
 <td><p><a class="reference external" href="https://www.xilinx.com/ZCU102">ZCU102</a></p></td>
 <td><p>FMC HPC1</p></td>
 </tr>
@@ -527,7 +532,7 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 <table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>Instance</p></th>
-<th class="head"><p>Zynq</p></th>
+<th class="head"><p>Zynq/Microblaze</p></th>
 <th class="head"><p>ZynqMP</p></th>
 </tr>
 </thead>
@@ -770,6 +775,45 @@ added to the base address from HDL (see more at <a class="reference internal" hr
 </table>
 </div>
 </section>
+<section id="microblaze">
+<h3>Microblaze<a class="headerlink" href="#microblaze" title="Permalink to this heading"></a></h3>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Instance name</p></th>
+<th class="head"><p>HDL</p></th>
+<th class="head"><p>Microblaze</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>axi_adrv9009_rx_os_jesd</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9009_tx_jesd</p></td>
+<td><p>7</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9009_rx_jesd</p></td>
+<td><p>15</p></td>
+<td><p>15</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9009_rx_os_dma</p></td>
+<td><p>14</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p>axi_adrv9009_tx_dma</p></td>
+<td><p>13</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-odd"><td><p>axi_adrv9009_rx_dma</p></td>
+<td><p>12</p></td>
+<td><p>12</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="building-the-hdl-project">
 <h2>Building the HDL project<a class="headerlink" href="#building-the-hdl-project" title="Permalink to this heading"></a></h2>
@@ -798,7 +842,7 @@ by typing in your command prompt:</p>
 <div class="clear-left"></div></div></div><p>The following dropdowns contain tables with the parameters that can be used to
 configure this project, depending on the carrier used.</p>
 <div><div class="collapsible docutils container">
-<input class="collapsible_input" id="888d6d2012b33c971f58ce375c5c483143286f90" name="888d6d2012b33c971f58ce375c5c483143286f90" type="checkbox"></input><label for="888d6d2012b33c971f58ce375c5c483143286f90"><p>Default values of the make parameters for ADRV9009</p>
+<input class="collapsible_input" id="0bc269092b6205517cdd7d07de7b3db318594ef5" name="0bc269092b6205517cdd7d07de7b3db318594ef5" type="checkbox"></input><label for="0bc269092b6205517cdd7d07de7b3db318594ef5"><p>Default values of the make parameters for ADRV9009</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -807,7 +851,7 @@ configure this project, depending on the carrier used.</p>
 <th class="head"><p>Default value of the parameters depending on carrier</p></th>
 </tr>
 <tr class="row-even"><th class="head"></th>
-<th class="head"><p>A10SoC/S10SoC/ZC706/ZCU102</p></th>
+<th class="head"><p>A10SoC/KCU105/S10SoC/ZC706/ZCU102</p></th>
 </tr>
 </thead>
 <tbody>
