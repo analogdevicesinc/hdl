@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2023-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2023-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -17,15 +17,6 @@ set conf_dir $ad_hdl_dir/projects/common/lfcpnx/ipcfg
 # <project_name>/<project_name>/<.lib|lib>/<module|ip>/<instance_name><version>
 # folder to configure an IP. For that you have to use the -ip_params option.
 # set ip_download_path ${env(USERPROFILE)}/PropelIPLocal # by default on windows
-
-ip_catalog_install -vlnv {latticesemi.com:ip:riscv_rtos:2.4.0}
-ip_catalog_install -vlnv {latticesemi.com:ip:axi_interconnect:2.0.1}
-ip_catalog_install -vlnv {latticesemi.com:ip:gpio:1.6.2}
-ip_catalog_install -vlnv {latticesemi.com:ip:spi_controller:2.1.0}
-ip_catalog_install -vlnv {latticesemi.com:ip:i2c_controller:2.0.1}
-ip_catalog_install -vlnv {latticesemi.com:ip:axi2apb_bridge:1.1.1}
-ip_catalog_install -vlnv {latticesemi.com:ip:axi2ahb_bridge:1.1.1}
-ip_catalog_install -vlnv {latticesemi.com:ip:gp_timer:1.3.1}
 
 ## configure ip components and add to design. #################################
 adi_ip_instance -vlnv {latticesemi.com:ip:cpu0:2.4.0} \
