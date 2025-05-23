@@ -43,6 +43,7 @@ Block Diagram
 .. image:: ad_ip_jesd204_transport_dac.svg
    :width: 700
    :align: center
+   :alt: DAC JESD204 Transport Layer
 
 Synthesis Configuration Parameters
 --------------------------------------------------------------------------------
