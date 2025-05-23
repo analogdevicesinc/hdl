@@ -5,17 +5,20 @@ JESD204B/C Link Receive Peripheral
 
 .. hdl-component-diagram::
 
-The Analog Devices JESD204B/C Link Receive Peripheral implements the link layer
+The :adi:`ADI <>` JESD204B/C Link Receive Peripheral implements the Link layer
 handling of a JESD204 receive logic device. Implements the 8B/10B based link
-layer defined in JESD204C standard that is similar to the link layer defined in
-JESD204B. This includes handling of the SYSREF and SYNC~ and controlling the
-:ref:`link state machine <axi_jesd204_rx_8b10b_link_state_machine>` accordingly
+layer defined in JESD204C standard that is similar to the Link layer defined in
+JESD204B.
+
+This includes handling of the SYSREF and SYNC~ and controlling the
+:ref:`link state machine <axi_jesd204_rx_8b10b_link_state_machine>` accordingly,
 as well as performing per lane descrambling and character replacement.
-Implements the 64B/66B based link layer defined in the JESD204C standard. This
+
+It implements the 64B/66B-based Link layer defined in the JESD204C standard. This
 includes handling of the SYSREF, per lane decoding of sync header,
 descrambling, CRC checking of data blocks and error monitoring.
 
-The type of link layer is selectable during implementation phase through the
+The type of Link layer is selectable during implementation phase through the
 ``LINK_MODE`` synthesis parameter.
 
 It has been designed for interoperability with
@@ -27,18 +30,18 @@ To form a complete JESD204 receive logic device, it has to be combined with a
 Features
 --------------------------------------------------------------------------------
 
--  Backwards compatibility with JESD204B;
--  64B/66B link layer defined in JESD204C;
--  Subclass 0 and Subclass 1 support;
--  Deterministic Latency (for Subclass 1 operation);
--  Runtime reconfigurability through memory-mapped register interface
-   (AXI4-Lite);
--  Interrupts for event notification;
--  Diagnostics;
--  Max Lanerate with 8B/10B mode: 15 Gbps;
--  Max Lanerate with 64B/66B mode: 32 Gbps;
--  Low Latency;
--  Independent per lane enable/disable.
+- Backwards compatibility with JESD204B;
+- 64B/66B Link layer defined in JESD204C;
+- Subclass 0 and Subclass 1 support;
+- Deterministic Latency (for Subclass 1 operation);
+- Runtime reconfigurability through memory-mapped register interface
+  (AXI4-Lite);
+- Interrupts for event notification;
+- Diagnostics;
+- Max Lanerate with 8B/10B mode: 15 Gbps;
+- Max Lanerate with 64B/66B mode: 32 Gbps;
+- Low Latency;
+- Independent per lane enable/disable.
 
 ..
    Utilization
@@ -89,7 +92,7 @@ Files
 
    To use this wrapper in your project, you need to use the procedure
    :git-hdl:`adi_tpl_jesd204_rx_create <library/jesd204/scripts/jesd204.tcl#L84>`
-   to instantiate it. 
+   to instantiate it.
 
 .. list-table::
    :header-rows: 1
@@ -174,12 +177,12 @@ AXI JESD204 RX Signal and Interface Pins
       - Interrupt output of the module. Is asserted when at least one of the
         modules interrupt is pending and enabled.
     * - device_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+      - :ref:`Device clock <jesd204 glossary>`
         for the JESD204 interface. Its frequency must be link clock
         \* ``DATA_PATH_WIDTH`` / ``TPL_DATA_PATH_WIDTH``
     * - device_reset
       - Reset active high synchronous with the
-        :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
+        :ref:`Device clock <jesd204 glossary>`.
 
 JESD204 RX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -188,12 +191,12 @@ JESD204 RX Signal and Interface Pins
     :path: library/jesd204/jesd204_rx
 
     * - clk
-      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+      - :ref:`Link clock <jesd204 glossary>`
         for the JESD204 interface. Must be line clock/40 for correct operation
         in 8B/10B mode, line clock/66 in 64B/66B mode.
     * - reset
       - Reset active high synchronous with the
-        :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+        :ref:`Link clock <jesd204 glossary>`
     * - rx_data
       - Received data.
     * - sync
@@ -220,15 +223,18 @@ Register Map
 Theory of Operation
 --------------------------------------------------------------------------------
 
-The JESD204B/C receive peripheral consists of two main components. The register
-map and the link processor. Both components are fully asynchronous and are
-clocked by independent clocks. The register map is in the ``s_axi_aclk`` clock
-domain, while the link processor is in the ``clk`` and ``device_clk`` clock
-domain.
+The JESD204B/C receive peripheral consists of **two main components**:
+the register map and the link processor.
 
-The register map is used to configure the operational parameters of the link
-processor as well as to query the current state of the link processor. The link
-processor itself is responsible for handling the JESD204 link layer protocol.
+Both components are fully asynchronous and are clocked by independent clocks.
+The register map is in the ``s_axi_aclk`` clock domain, while the
+link processor is in the ``clk`` and ``device_clk`` clock domain.
+
+The **register map** is used to configure the operational parameters of the link
+processor as well as to query the current state of the link processor.
+
+The **link processor** itself is responsible for handling the JESD204 link layer
+protocol.
 
 Interfaces and Signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -601,23 +607,23 @@ depending on the selected decoder.
 
 Possible values for a 8B/10B link are:
 
--  RESET (0x0): The link is currently disabled;
--  WAIT FOR PHY (0x1): The controller waits for the PHY level component to be
-   ready;
--  CGS (0x2): The controller is waiting for one or more lanes to complete the
-   CGS phase;
--  DATA (0x3): All lanes are in the data phase and the link is properly
-   established.
+- RESET (**0x0**): The link is currently disabled;
+- WAIT FOR PHY (**0x1**): The controller waits for the PHY level component to be
+  ready;
+- CGS (**0x2**): The controller is waiting for one or more lanes to complete the
+  CGS phase;
+- DATA (**0x3**): All lanes are in the data phase and the link is properly
+  established.
 
 Possible values for a 64B/66B link are:
 
--  RESET (0x0): The link is currently disabled;
--  WAIT BLOCK SYNC (0x1): The controller waits for all enabled lanes to reach
-   sync header alignment;
--  BLOCK SYNC (0x2): All enabled lanes from the PHY reached sync header
-   alignment phase;
--  DATA (0x3): All enabled lanes reached the multi-block synchronization phase,
-   elastic buffer released the data and the link is properly established.
+- RESET (**0x0**): The link is currently disabled;
+- WAIT BLOCK SYNC (**0x1**): The controller waits for all enabled lanes to reach
+  sync header alignment;
+- BLOCK SYNC (**0x2**): All enabled lanes from the PHY reached sync header
+  alignment phase;
+- DATA (**0x3**): All enabled lanes reached the multi-block synchronization phase,
+  elastic buffer released the data and the link is properly established.
 
 The state of each individual lane can be queried from the
 :ref:`lane status <axi_jesd204_rx_lane_status>` registers.
@@ -636,10 +642,10 @@ indicates the current state of the lane.
 The ``CGS_STATE`` (``[1:0]``) indicates the current state of the lane code group
 synchronization:
 
--  INIT (0x0): Lane is not synchronized;
--  CHECK (0x1): Lane is in the process of synchronizing, at least some /K/
-   synchronization characters have been observed;
--  DATA (0x2): Lane is synchronized and ready to receive data.
+- INIT (**0x0**): Lane is not synchronized;
+- CHECK (**0x1**): Lane is in the process of synchronizing, at least some /K/
+  synchronization characters have been observed;
+- DATA (**0x2**): Lane is synchronized and ready to receive data.
 
 The ``IFS_READY`` (``[4]``) bit indicates that initial frame synchronization has
 completed for the lane and the lane is receiving either ILAS data or user data.
@@ -655,12 +661,12 @@ valid data if the ``IFS_READY`` bit of the ``LANEn_STATUS`` register is set.
 The ``EMB_STATE`` (``[10:8]``) indicates the current state of the Extended
 Multi-Block alignment state machine:
 
--  EMB_INIT (3'b001): Wait for sync header alignment and for an end of extended
-   multiblock (EoEMB) indicator;
--  EMB_HUNT (3'b010): Keep track and monitor consecutive EoEMBs until a
-   threshold is reached;
--  EMB_LOCK (3'b100): Asserted by receiver to indicate that extended multiblock
-   alignment has been achieved.
+- EMB_INIT (**3'b001**): Wait for sync header alignment and for an end of extended
+  multiblock (EoEMB) indicator;
+- EMB_HUNT (**3'b010**): Keep track and monitor consecutive EoEMBs until a
+  threshold is reached;
+- EMB_LOCK (**3'b100**): Asserted by receiver to indicate that extended multiblock
+  alignment has been achieved.
 
 8B/10B Link ILAS Configuration Data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -796,16 +802,20 @@ should be ignored.
 In a multi-endpoint configuration one link receive peripheral connects to
 several endpoints/converter devices. In such cases the link is established
 only when all enabled endpoints reach the DATA phase. For that all endpoints
-must pass through CGS and ILAS stages. Depending on the software
-implementation that controls the converter devices the endpoints can be
-enabled at different moments. The link receive peripheral will receive the CGS
-characters and do character alignment until for all enabled endpoints lanes
-succeeds that and signalize that through the de-assertion of ``SYNC~`` signal.
+must pass through CGS and ILAS stages.
+
+Depending on the software implementation that controls the converter devices
+the endpoints can be enabled at different moments. The link receive peripheral
+will receive the CGS characters and do character alignment until for all enabled
+endpoints lanes succeeds that and signalize that through the de-assertion
+of ``SYNC~`` signal.
+
 In the below example we have a multi-point link of four endpoints
 (``NUM_LINKS`` = 4):
 
 .. image:: quadmxfe_linkbringup_204b_adc.svg
    :align: center
+   :width: 700
 
 .. note::
 
@@ -981,8 +991,8 @@ TPL_DATA_PATH_WIDTH synthesis parameter.
 
 The following rules apply:
 
--  TPL_DATA_PATH_WIDTH >= DATA_PATH_WIDTH;
--  TPL_DATA_PATH_WIDTH = m x F; where m is a positive integer, power of 2.
+- TPL_DATA_PATH_WIDTH >= DATA_PATH_WIDTH;
+- TPL_DATA_PATH_WIDTH = m x F; where m is a positive integer, power of 2.
 
 The link clock and device clock ratio should be the inverse of the
 DATA_PATH_WIDTH : TPL_DATA_PATH_WIDTH ratio.
@@ -1010,17 +1020,18 @@ to set the register ``BUFFER_DELAY`` (0x240) from all parallel Rx links if
 exists based on the following formula:
 
 .. math::
-   Buffer Delay = \frac{(F*K - min(latency regs) + 32)}{TPLDW} + 4
+
+   Buffer Delay = \frac{(F*K - min(LatencyRegs) + 32)}{TPLDW} + 4
 
 Where:
 
--  Buffer Delay - register 0x240 of the core;
--  F*K - is the size of a multiframe in octets;
--  ‘latency regs’ - is the measured latency of each lane observed during
-   consecutive link bring-ups measured for all Rx links, see regs (0x304 +
-   n*0x20) where n = 0..L-1 ; L is number of lanes;
--  TPLDW - TPL datapath width in octets. Can be read from the
-   ``SYNTH_DATA_PATH_WIDTH`` (0x14) reg ``TPL_DATA_PATH_WIDTH`` field.
+- Buffer Delay - register 0x240 of the core;
+- F*K - is the size of a multiframe in octets;
+- LatencyRegs - is the measured latency of each lane observed during
+  consecutive link bring-ups measured for all Rx links, see regs (0x304 +
+  n*0x20) where n = 0..L-1 ; L is number of lanes;
+- TPLDW - TPL datapath width in octets. Can be read from the
+  ``SYNTH_DATA_PATH_WIDTH`` (0x14) reg ``TPL_DATA_PATH_WIDTH`` field.
 
 **This value it the absolute minimum. It is recommended to increase it
 slightly to have a better margin against power-up to power-up latency
@@ -1030,52 +1041,56 @@ Software Support
 --------------------------------------------------------------------------------
 
 .. warning::
+
    To ensure correct operation it is highly recommended to use the
    Analog Devices provided JESD204 software packages for interfacing the
    peripheral. Analog Devices is not able to provide support in case issues arise
    from using custom low-level software for interfacing the peripheral.
 
--  :dokuwiki:`JESD204 Receive Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`
+- :dokuwiki:`JESD204 Receive Linux Driver Support <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`
 
 .. _axi_jesd204_rx restrictions:
 
 Restrictions
 --------------------------------------------------------------------------------
 
-During the design of the peripheral the deliberate decision was made to support
+During the design of the peripheral, the deliberate decision was made to support
 only a subset of the features mandated by the JESD204 standard for receiver
-logic devices. The reasoning here is that the peripheral has been designed to
-interface to Analog Devices JESD204 ADC converter devices and features that are
+logic devices.
+
+The reasoning here is that the peripheral has been designed to interface to
+:adi:`Analog Devices <>` JESD204 ADC converter devices and features that are
 either not required or not supported by those converter devices would otherwise
-lie dormant in peripheral and never be used. Instead the decision was made to
-not implement those unneeded features even when the JESD204 standard requires
-them for general purpose JESD204 receiver logic devices. As Analog Devices ADC
-converter devices with new requirements are released the peripheral will be
-adjusted accordingly.
+lie dormant in peripheral and never be used.
+
+Instead, the decision was made to not implement those unneeded features, even
+when the JESD204 standard requires them for general purpose JESD204 receiver
+logic devices. As :adi:`Analog Devices <>` ADC converter devices with new
+requirements are released the peripheral will be adjusted accordingly.
 
 This approach allows for a leaner design using less resources, allowing for
 lower pipeline latency and a higher maximum device clock frequency.
 
 The following lists where the peripheral deviates from the standard:
 
--  No subclass 2 support. JESD204 subclass 2 has due to its implementation
-   details restricted applicability and is seldom a viable option for a modern
-   high-speed data converter system. To achieve deterministic latency it is
-   recommend to use subclass 1 mode;
--  Reduced number of octets-per-frame settings. The JESD204 standard allows for
-   any value between 1 and 256 to be used for the number of octets-per-frame;
--  The following octets-per-frame are supported by the peripheral: 1, 2, 4 and
-   1. (No longer applies starting from 1.07.a);
--  Reduced number of frames-per-multi-frame settings. The following values are
-   supported by the peripheral: 1-32, with the additional requirement that F*K
-   is a multiple of 4. In addition F*K needs to be in the range of 4-256;
--  No support for alignment character replacement when scrambling is disabled.
-   (No longer applies starting from 1.07.a).
+- No subclass 2 support. JESD204 subclass 2 has, due to its implementation
+  details, restricted applicability and is seldom a viable option for a modern
+  high-speed data converter system. To achieve deterministic latency, it is
+  recommend to use subclass 1 mode;
+- Reduced number of octets-per-frame settings. The JESD204 standard allows for
+  any value between 1 and 256 to be used for the number of octets-per-frame;
+- The following octets-per-frame are supported by the peripheral: 1, 2, 4 and
+  1. (No longer applies starting from 1.07.a);
+- Reduced number of frames-per-multi-frame settings. The following values are
+  supported by the peripheral: 1-32, with the additional requirement that F*K
+  is a multiple of 4. In addition F*K needs to be in the range of 4-256;
+- No support for alignment character replacement when scrambling is disabled.
+  (No longer applies starting from 1.07.a).
 
 Additional Information
 --------------------------------------------------------------------------------
 
--  :dokuwiki:`JESD204 Glossary <resources/fpga/peripherals/jesd204/jesd204_glossary>`
+- :ref:`JESD204 Glossary <jesd204 glossary>`
 
 .. _axi_jesd204_rx_supported_devices:
 
@@ -1085,69 +1100,54 @@ Supported Devices
 JESD204B Analog-to-Digital Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD6673`: 80 MHz Bandwidth, Dual IF Receiver
--  :adi:`AD6674`: 385 MHz BW IF Diversity Receiver
--  :adi:`AD6676`: Wideband IF Receiver Subsystem
--  :adi:`AD6677`: 80 MHz Bandwidth, IF Receiver
--  :adi:`AD6684`: 135 MHz Quad IF Receiver
--  :adi:`AD6688`: RF Diversity and 1.2GHz BW Observation
-   Receiver
--  :adi:`AD9207`: 12-Bit, 6 GSPS, JESD204B/JESD204C
-   Dual Analog-to-Digital Converter
--  :adi:`AD9208`: 14-Bit, 3GSPS, JESD204B,
-   Dual Analog-to-Digital Converter
--  :adi:`AD9209`: 12-Bit, 4GSPS, JESD204B/C, Quad
-   Analog-to-Digital Converter
--  :adi:`AD9213`: 12-Bit, 10.25 GSPS, JESD204B, RF
-   Analog-to-Digital Converter
--  :adi:`AD9234`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
-   Analog-to-Digital Converter
--  :adi:`AD9250`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
-   Analog-to-Digital Converter
--  :adi:`AD9625`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
-   1.3 V/2.5 V Analog-to-Digital Converter
--  :adi:`AD9656`: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
-   Analog-to-Digital Converter
--  :adi:`AD9680`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
-   MSPS JESD204B, Dual Analog-to-Digital Converter
--  :adi:`AD9683`: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
-   Analog-to-Digital Converter
--  :adi:`AD9690`: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
-   Analog-to-Digital Converter
--  :adi:`AD9691`: 14-Bit, 1.25 GSPS JESD204B,
-   Dual Analog-to-Digital Converter
--  :adi:`AD9694`: 14-Bit, 500 MSPS JESD204B, Quad
-   Analog-to-Digital Converter
--  :adi:`AD9695`: 14-Bit, 1300 MSPS/625 MSPS,
-   JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter
--  :adi:`AD9083`: 16-Channel, 125 MHz Bandwidth, JESD204B
-   Analog-to-Digital Converter
--  :adi:`AD9094`: 8-Bit, 1 GSPS, JESD204B, Quad
-   Analog-to-Digital Converter
+- :adi:`AD6673`: 80 MHz Bandwidth, Dual IF Receiver
+- :adi:`AD6674`: 385 MHz BW IF Diversity Receiver
+- :adi:`AD6676`: Wideband IF Receiver Subsystem
+- :adi:`AD6677`: 80 MHz Bandwidth, IF Receiver
+- :adi:`AD6684`: 135 MHz Quad IF Receiver
+- :adi:`AD6688`: RF Diversity and 1.2GHz BW Observation Receiver
+- :adi:`AD9207`: 12-Bit, 6 GSPS, JESD204B/JESD204C
+  Dual Analog-to-Digital Converter
+- :adi:`AD9208`: 14-Bit, 3GSPS, JESD204B, Dual Analog-to-Digital Converter
+- :adi:`AD9209`: 12-Bit, 4GSPS, JESD204B/C, Quad Analog-to-Digital Converter
+- :adi:`AD9213`: 12-Bit, 10.25 GSPS, JESD204B, RF Analog-to-Digital Converter
+- :adi:`AD9234`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
+  Analog-to-Digital Converter
+- :adi:`AD9250`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
+  Analog-to-Digital Converter
+- :adi:`AD9625`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
+  1.3 V/2.5 V Analog-to-Digital Converter
+- :adi:`AD9656`: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
+  Analog-to-Digital Converter
+- :adi:`AD9680`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
+  MSPS JESD204B, Dual Analog-to-Digital Converter
+- :adi:`AD9683`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Analog-to-Digital Converter
+- :adi:`AD9690`: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
+  Analog-to-Digital Converter
+- :adi:`AD9691`: 14-Bit, 1.25 GSPS JESD204B, Dual Analog-to-Digital Converter
+- :adi:`AD9694`: 14-Bit, 500 MSPS JESD204B, Quad Analog-to-Digital Converter
+- :adi:`AD9695`: 14-Bit, 1300 MSPS/625 MSPS,
+  JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter
+- :adi:`AD9083`: 16-Channel, 125 MHz Bandwidth, JESD204B
+  Analog-to-Digital Converter
+- :adi:`AD9094`: 8-Bit, 1 GSPS, JESD204B, Quad Analog-to-Digital Converter
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with
-   Observation Path
--  :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with
-   Observation Path and DPD
--  :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver
-   with Observation Path
--  :adi:`ADRV9008-1`: SDR Integrated, Dual RF Receiver
--  :adi:`ADRV9008-2`: SDR Integrated, Dual RF
-   Transmitter with Observation Path
+- :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with Observation Path
+- :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with Observation Path and DPD
+- :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver with Observation Path
+- :adi:`ADRV9008-1`: SDR Integrated, Dual RF Receiver
+- :adi:`ADRV9008-2`: SDR Integrated, Dual RF Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
-   Quad, 12-Bit, 4GSPS RFADC
--  :adi:`AD9082`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
-   DUAL, 12-Bit, 6GSPS RFADC
--  :adi:`AD9986`: 4T2R Direct RF Transmitter and
-   Observation Receiver
--  :adi:`AD9988`: 4T4R Direct RF Receiver and Transmitter
+- :adi:`AD9081`: MxFE Quad, 16-Bit, 12GSPS RFDAC and Quad, 12-Bit, 4GSPS RFADC
+- :adi:`AD9082`: MxFE QUAD, 16-Bit, 12GSPS RFDAC and DUAL, 12-Bit, 6GSPS RFADC
+- :adi:`AD9986`: 4T2R Direct RF Transmitter and Observation Receiver
+- :adi:`AD9988`: 4T4R Direct RF Receiver and Transmitter
 
 Technical Support
 --------------------------------------------------------------------------------
@@ -1163,4 +1163,5 @@ encounter.
 More Information
 --------------------------------------------------------------------------------
 
--  :ref:`JESD204 High-Speed Serial Interface Support <jesd204>`
+- :ref:`JESD204 High-Speed Serial Interface Support <jesd204>`
+- :ref:`HDL User Guide <user_guide>`
