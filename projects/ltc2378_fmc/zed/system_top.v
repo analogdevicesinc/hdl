@@ -190,7 +190,7 @@ system_wrapper i_system_wrapper (
     .ltc2378_spi_sdo (ltc237_spi_sdo),
     .ltc2378_spi_sdo_t (),
     .ltc2378_spi_sdi (ltc2378_spi_sdi),
-    //.ltc2378_spi_cs (/**/),
+    .ltc2378_spi_cs (/**/),
     .ltc2378_spi_sclk (ltc2378_spi_sclk),
     .ltc2378_spi_busy(ltc2378_spi_busy),
     .ltc2378_spi_cnv(ltc2378_spi_cnv),
