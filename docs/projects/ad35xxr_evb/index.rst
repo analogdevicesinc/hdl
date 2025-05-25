@@ -6,16 +6,16 @@ AD35XXR-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD3542R <EVAL-AD3542R>` is an evaluation board for the
-:adi:`AD3542R <AD3542R>`, a dual-channel, 16-bit fast precision
+The :adi:`EVAL-AD3542R` is an evaluation board for the
+:adi:`AD3542R`, a dual-channel, 16-bit fast precision
 digital-to-analog converter (DAC). The same eval board can be used to
-evaluate the :adi:`AD3541R <AD3541R>`, the single channel part.
+evaluate the :adi:`AD3541R`, the single channel part.
 
-The :adi:`EVAL-AD3552R <EVAL-AD3552R>` is an evaluation board for the
-:adi:`AD3552R <AD3552R>`, a dual-channel, 16-bit fast precision
+The :adi:`EVAL-AD3552R` is an evaluation board for the
+:adi:`AD3552R`, a dual-channel, 16-bit fast precision
 digital-to-analog converter (DAC). The same eval board can be used to evaluate
-the :adi:`AD3551R <AD3551R>`, the single channel part. Each channel of the
-:adi:`AD3552R <AD3552R>` is equipped with a different transimpedance
+the :adi:`AD3551R`, the single channel part. Each channel of the
+:adi:`AD3552R` is equipped with a different transimpedance
 amplifier: Channel 0 has a fast amplifier that achieves the optimal dynamic
 performance and Channel 1 has a precision amplifier that guarantees the
 optimal DC precision over temperature.
@@ -39,16 +39,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-.. list-table::
-   :widths: 35 35 30
-   :header-rows: 1
-
-   * - Evaluation board
-     - Carrier
-     - FMC slot
-   * - :adi:`EVAL-AD3552R <EVAL-AD3552R>`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
-     - FMC-LPC
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC-LPC
 
 Block design
 -------------------------------------------------------------------------------
@@ -66,6 +57,25 @@ The data path and clock domains are depicted in the below diagram:
    :width: 800
    :align: center
    :alt: EVAL-AD35XXR/ZedBoard block diagram
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI_DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - ---
+      * - UTIL_UPACK
+        - :git-hdl:`util_upack2 <library/util_pack/util_upack2>`
+        - :ref:`util_upack2`
+        - ---
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
