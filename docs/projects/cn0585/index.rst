@@ -18,8 +18,8 @@ together to build a development system setup.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`CN0585 <CN0585>`
-- :adi:`CN0584 <CN0584>`
+- :adi:`CN0585`
+- :adi:`CN0584`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`CN0585 <CN0585>` + :adi:`CN0584 <CN0584>`
+   * - :adi:`CN0585` + :adi:`CN0584`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC-LPC
 
