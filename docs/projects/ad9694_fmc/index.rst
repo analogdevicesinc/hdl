@@ -57,9 +57,9 @@ Configuration modes
 
 The only parameters of this project that can be configured are:
 
-- ``RX_JESD_L``: number of lanes {2, 4}
-- ``RX_JESD_M``: number of converters {2, 4, 8}
-- ``RX_JESD_S``: number of samples per frame {1, 2}
+- RX_JESD_L: number of lanes {2, 4}
+- RX_JESD_M: number of converters {2, 4, 8}
+- RX_JESD_S: number of samples per frame {1, 2}
 
 More details on these values, in the `Limitations`_ section.
 
@@ -77,8 +77,8 @@ given at J200. For more details, check the
 Limitations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The :adi:`AD9694` has two JESD204B links. The JESD204B lane rates are in
-range 1.6875 Gbps-15 Gbps.
+The :adi:`AD9694` has two JESD204B links which operate in **subclass 1**.
+The JESD204B lane rates are in range 1.6875 Gbps-15 Gbps.
 
 To have the **multichip synchronization**, meaning the two channels
 synchronized, they are *treated as a single link*, thus the ``L`` and ``M``
@@ -106,15 +106,15 @@ is 1 in the formula :math:`f_{OUT} = \frac{f_{ADC}}{Decim.}`
 The JESD receive chain consists of a physical layer represented by an
 XCVR module, a link layer represented by an RX JESD LINK module and
 transport layer represented by a RX JESD TPL module. The link operates
-in Subclass 1.
+in subclass 1.
 
 The link is set for full bandwidth mode and operate with the following
 parameters:
 
 - Used link layer encoder mode is 8B10B, defined in JESD204B, which uses ADI
   IP as Physical Layer
-- RX_LANE_RATE: lane rate of the Rx link: 10 Gbps
-- REF_CLK_RATE: the rate of the reference clock: 250 MHz
+- L: 4 lanes, 2 per link
+- M: 4 converters, 2 per link
 - S: 1 sample per converter per frame
 - NP: 16 bits per sample, and converter resolution: 16 (N)
 - F: 2 octets per frame
