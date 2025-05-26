@@ -43,7 +43,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`CN0579`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - Arduino headers
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`

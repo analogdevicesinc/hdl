@@ -40,13 +40,13 @@ Supported carriers
      - Carrier
      - FMC slot
    * - EVAL-AD7770-ARDZ
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - PMOD-JA, PMOD-JB, PMOD-JC
    * - EVAL-AD7771-ARDZ
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - PMOD-JA, PMOD-JB, PMOD-JC
    * - EVAL-AD7779-ARDZ
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - PMOD-JA, PMOD-JB, PMOD-JC
    * - EVAL-AD7770-ARDZ
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
