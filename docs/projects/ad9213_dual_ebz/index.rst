@@ -72,7 +72,7 @@ parameters:
 - GLBLCLK - 312.5 MHz (Lane Rate/40)
 - REFCLK - 312.5 MHz (Lane Rate/40)
 - SYSREF - 6.25 MHz (DEVCLK/2000)
-- DEVCLK - 10 GHz (Lane Rate/40)
+- DEVCLK - 10 GHz
 - JESD204B Lane Rate - 12.5 Gbps
 
 The transport layer component presents on its output 1024 bits at once on every
