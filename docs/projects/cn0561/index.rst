@@ -47,8 +47,8 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
-- :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>` on Arduino type headers
+- `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__ on FMC slot
+- `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__ on Arduino type headers
 - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
   on Arduino type headers
 

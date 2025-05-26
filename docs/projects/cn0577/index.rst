@@ -34,7 +34,7 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__ on FMC slot
 
 Block design
 -------------------------------------------------------------------------------

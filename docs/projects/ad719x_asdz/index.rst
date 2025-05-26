@@ -45,31 +45,31 @@ Supported carriers
      - Carrier
      - Connector
    * - :adi:`EVAL-AD7190ASDZ`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - PMOD JA/Arduino shield
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
    * - :adi:`EVAL-AD7192ASDZ`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - PMOD JA/Arduino shield
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
    * - :adi:`EVAL-AD7193ASDZ`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - PMOD JA/Arduino shield
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
    * - :adi:`EVAL-AD7194ASDZ`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - PMOD JA/Arduino shield
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
      - Arduino shield
    * - :adi:`EVAL-AD7195ASDZ`
-     - :xilinx:`Cora Z7S <products/boards-and-kits/1-1qlaz7n.html>`
+     - `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__
      - PMOD JA/Arduino shield
    * -
      - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`

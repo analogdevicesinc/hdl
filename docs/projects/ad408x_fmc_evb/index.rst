@@ -55,7 +55,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`EVAL-AD4080-FMC`
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 
 Block design
