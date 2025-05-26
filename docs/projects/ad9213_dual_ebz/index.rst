@@ -6,11 +6,13 @@ AD9213-DUAL-EBZ HDL Project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9213-DUAL-EBZ <EVAL-AD9213>`  platform includes two :adi:`AD9213`
+The :adi:`EVAL-AD9213-DUAL-EBZ` platform includes two :adi:`AD9213`
 single, 12-bit, 10 GSPS, radio frequency (RF) analog-to-digital converters (ADC)
 with the JESD204B interface. The two 10 GSPS data converters are interleaved to
 sample at 20 GSPS enabled by their built-in multi-chip synchronization
-capability. The :adi:`ADF4377`, high performance, ultra-low jitter, dual output
+capability.
+
+The :adi:`ADF4377`, high performance, ultra-low jitter, dual output
 integer-N phased locked loop (PLL) with an integrated voltage-controlled
 oscillator (VCO), supports the interleaving. The :adi:`LTC6955`, low jitter,
 fanout clock buffer, and the :adi:`LTC6952` JESD204B clock generation and
@@ -20,27 +22,21 @@ scalability.
 The reference design is a processor based (e.g. ARM) embedded system. The device
 interfaces to the FPGA transceivers followed by the individual JESD204B and ADC
 cores. The cores are programmable through an AXI-Lite interface. The samples are
-initially captured UTIL_ADC_FIFO and then passed to the system memory (DDR). The
-user can capture up to 1048576 samples per channel, if both channels are
-selected or 2097152 per channel if only one channel is selected or in the case
-the data is considered single channel interposed. The platform allows users to
-direct sample L, S, and C bands, all while supporting up to 8GHz of IBW per
-channel.
+initially captured by :git-hdl:`UTIL_ADCFIFO <library/util_adcfifo>` and then
+passed to the system memory (DDR). The user can capture up to 1048576 samples
+per channel, if both channels are selected or 2097152 per channel if only
+one channel is selected or in the case the data is considered single
+channel interposed. The platform allows users to direct sample L, S, and
+C bands, all while supporting up to 8GHz of IBW per channel.
 
 Features:
 
-- 20GSPS sample rate through interleaving supporting up to 8 GHz of instantaneous BW
-- Multi-chip synchronization (MCS) at 10GSPS using a scalable reference distribution architecture
+- 20GSPS sample rate through interleaving supporting up to 8 GHz of
+  instantaneous BW
+- Multi-chip synchronization (MCS) at 10GSPS using a scalable reference
+  distribution architecture
 - Input network supporting a wde analog frequency range DC - 9GHz
 - Compact layout scheme that can be quickly adopted into a customer application
-
-Applications
-
-- EW
-- ECM/ECCM
-- Radar
-- Instrumentation
-- Multi-channel wideband receivers
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -60,29 +56,31 @@ Supported carriers
 Block design
 -------------------------------------------------------------------------------
 
-The design has two JESD receive chains each having 16 lanes at rate of 12.5Gbps.
-The JESD receive chain consists of a physical layer represented by an XCVR
-module, a link layer represented by an RX JESD LINK module. The transport layer
-is common and is represented by a RX JESD TPL module. The links operate in
-Subclass 1 by using the SYSREF signal to edge align the internal local
-multiframe clock and to release the received data in the same moment from all
-lanes, therefore ensuring that data from all channels is synchronized at the
-application layer.
+The design has two JESD receive chains, each having 16 lanes at rates of up
+to 12.5Gbps. The JESD receive chain consists of a Physical layer, represented
+by an XCVR module, a Link layer represented by an RX JESD LINK module.
+The Transport layer is common and is represented by a RX JESD TPL module.
+The links operate in Subclass 1 by using the SYSREF signal to edge-align the
+internal Local Multi-Frame Clock and to release the received data in the same
+moment from all lanes, therefore ensuring that data from all channels is
+synchronized at the Application layer.
 
-Both links are set for full bandwidth mode and operate with the following parameters:
+Both links are set for full bandwidth mode and operate with the following
+parameters:
 
-- Deframer paramaters:  L=32, M=2, F=2, S=16, NP=16
-- GLBLCLK - 312.5MHz (Lane Rate/40)
-- REFCLK - 312.5MHz (Lane Rate/20)
-- SYSREF - 1.46MHz (DEVCLK/2048)
-- DEVCLK - 10000MHz
-- JESD204B Lane Rate - 12.5Gbps
+- Deframer paramaters: L=16, M=1, F=2, S=16, NP=16
+- GLBLCLK - 312.5 MHz (Lane Rate/40)
+- REFCLK - 312.5 MHz (Lane Rate/40)
+- SYSREF - 6.25 MHz (DEVCLK/2000)
+- DEVCLK - 10 GHz (Lane Rate/40)
+- JESD204B Lane Rate - 12.5 Gbps
 
 The transport layer component presents on its output 1024 bits at once on every
-clock cycle, representing 16 samples per converter. The typical AXI_PACK IP does
-not meet timing in this design, so a custom one was implemented in the
-system_top.v module. An ADC buffer is used to store 1024k samples per converter
-in the fabric before transferring it with the DMA.
+clock cycle, representing 16 samples per converter.
+The typical UTIL CPACK/UPACK IP does not meet timing in this design, so a
+custom one was implemented in the *system_top.v* module. An ADC buffer is
+used to store 1024k samples per converter in the fabric before transferring
+it with the DMA.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,23 +90,22 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad9213_dual_ebz_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD9213-DUAL-EBZ/S10Soc block diagram
+   :alt: AD9213-DUAL-EBZ/S10SoC block diagram
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This project **supports only one JESD204 configuration**, as follows (the
+This project **supports only one JESD204B configuration**, as follows (the
 values cannot be changed):
 
 - JESD204B subclass 1, uses ADI IP as Physical Layer
 - RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
-- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
 - REF_CLK_RATE: the rate of the reference clock
-- L: number of lanes per link: 8
-- M: number of converters per link: 2
-- S: number of samples per frame: 2
+- L: number of lanes per link: 16
+- M: number of converters per link: 1
+- S: number of samples per frame: 16
 - NP: number of bits per sample: 16
-- F: octets per frame: 1
+- F: octets per frame: 2
 - K: frames per multiframe: 32
 
 Clocking scheme
@@ -120,7 +117,7 @@ Clocking scheme
    :alt: AD9213-DUAL-EBZ/S10SoC clocking scheme
 
 Both physical layer transceiver modules receive two reference clocks from
-LTC6952 OUT4-7 outputs. The global device clock (LaneRate/40) it is received
+LTC6952 OUT4-7 outputs. The global device clock (LaneRate/40) is received
 directly from the OUT8 output and SYSREF is received from OUT9 output of the
 LTC6952. Internally to the FPGA, REFCLK1 for both transceivers (from OUT5 and
 OUT7 of the eval pcb) is unused and not connected.
@@ -295,15 +292,10 @@ Systems related
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Product datasheets:
+- Product datasheet: :adi:`AD9213`
 
-  - :adi:`AD9213`
-  - :adi:`ADF4377`
-  - :adi:`LTC6955`
-  - :adi:`LTC6952`
-  - :adi:`LTC6946`
-
-- Schematic for the evaluation board can be found `here <https://wiki.analog.com/_media/resources/eval/02_049155d_top.pdf>`__
+- The schematic for the evaluation board can be found
+  :dokuwiki:`here <_media/resources/eval/02_049155d_top.pdf>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -350,5 +342,3 @@ Software related
 .. include:: ../common/more_information.rst
 
 .. include:: ../common/support.rst
-
-.. _S10SoC: https://www.intel.com/content/www/us/en/products/details/fpga/development-kits/stratix/10-sx.html
