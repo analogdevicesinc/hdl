@@ -15,10 +15,12 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 #    e.g.
 #      make RX_JESD_L=4 RX_JESD_M=4
 
+# To have multichip synchronization, we will be treating the two links as one,
+# thus L and M parameters are doubled!
 # Parameter description:
-#   RX_JESD_M : Number of converters per link
-#   RX_JESD_L : Number of lanes per link
-#   RX_JESD_S : Number of samples per frame
+#   RX_JESD_M: number of converters
+#   RX_JESD_L: number of lanes
+#   RX_JESD_S: number of samples per frame
 
 adi_project ad9694_fmc_zcu102 0 [list \
   RX_JESD_M    [get_env_param RX_JESD_M    4 ] \
