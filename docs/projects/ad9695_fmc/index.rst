@@ -6,26 +6,28 @@ AD9695-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9695` is a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
+The :adi:`EVAL-AD9695` is a fully-featured evaluation board for the
+:adi:`AD9695`, a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
 featuring an on-chip buffer and a sample-and-hold circuit designed for
 low power, small size, and ease of use. The dual ADC cores feature a
 multistage, differential pipelined architecture with integrated output
 error correction logic. Each ADC features wide bandwidth inputs supporting
-a variety of user-selectable input ranges.
+a variety of user-selectable input ranges. The JESD204B links operate in
+subclass 1, with lane rates up to 16 Gbps.
 
-The AD9695-FMC reference design is a processor based (e.g. Microblaze)
-embedded system. The design consists of a receive chain that transports the
-captured samples from the ADC to the system memory (DDR).
+The :git-hdl:`AD9695-FMC <projects/ad9695_fmc>` reference design is a
+processor-based embedded system. The design consists of a receive chain that
+transports the captured samples from the ADC to the system memory (DDR).
 
 All cores from the receive chain are programmable through an AXI-Lite interface.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD9695-1300EBZ`
+- :adi:`EVAL-AD9695` with 1300MSPS
 
 For the 625MSPS variant, additional changes need to be done, which currently
-are not supported by our reference design.
+**are not supported by our reference design**.
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -50,7 +52,7 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagram:
 
-.. image:: ./ad9695_fmc_block_diagram.svg
+.. image:: ad9695_fmc_block_diagram.svg
    :width: 800
    :align: center
    :alt: AD9695-EBZ/ZCU102 block diagram
@@ -58,7 +60,7 @@ The data path and clock domains are depicted in the below diagram:
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. image:: ./ad9695_clock_scheme.svg
+.. image:: ad9695_clock_scheme.svg
    :width: 600
    :align: center
    :alt: AD9695-EBZ/ZCU102 clock scheme
@@ -235,9 +237,9 @@ Example for building with parameters:
 
 Default values of the ``make`` parameters for AD9695-FMC:
 
-- ``RX_JESD_M``: 2
-- ``RX_JESD_L``: 4
-- ``RX_JESD_S``: 1
+- RX_JESD_M: 2
+- RX_JESD_L: 4
+- RX_JESD_S: 1
 
 The result of the build, if parameters were used, will be in a folder named
 by the configuration used.
@@ -261,7 +263,7 @@ Only the channels presented in the clocking selection are relevant.
 For the rest, you can either disable them or just put a divided frequency
 of the source clock.
 
-.. image:: ./synchrona_settings.png
+.. image:: synchrona_settings.png
    :width: 1000
    :align: center
    :alt: AD-SYNCHRONA14-EBZ output configuration
