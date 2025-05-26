@@ -217,7 +217,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD9467_FMC HDL project source code <project/ad467_fmc>`
+- :git-hdl:`AD9467_FMC HDL project source code <projects/ad9467_fmc>`
 
 .. list-table::
    :widths: 30 35 35
