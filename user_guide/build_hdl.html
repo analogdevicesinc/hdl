@@ -1404,8 +1404,32 @@ implementation.</p>
 unknown compatibility reason. You can use Cygwin on Windows or a normal
 Linux installation.</p>
 </div>
-<p>The Lattice build is in a very early version. It does not support any ADI
-library builds, yet. We’re just starting to develop the library build part.
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Automatic IP download does not work properly in <strong>Propel Builder 2024.2</strong>.
+Please make sure you download the necessary IPs manually in Propel Builder
+GUI following the error messages in the <strong>$(PROJECT_NAME)_propel_builder.log</strong>
+file.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can set the LATTICE_EXTERNAL_LIBS environment variable to include
+custom Lattice IPs in the design like:</p>
+<div class="code-shell"><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>export LATTICE_EXTERNAL_LIBS=&quot;&lt;your_lib_path_0&gt; &lt;your_lib_path_1&gt; &lt;...&gt;&quot;
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Optionally you can set the LATTICE_DEFAULT_PATHS environment variable to 1
+to generate the IPs and IP interfaces in the default IP download directory of
+Propel Builder. This way they will be accessible from Propel Builder GUI.</p>
+<div class="code-shell"><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>export LATTICE_DEFAULT_PATHS=1
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+<p>The Lattice build is in a very early version. We are just adding the first
+version of library infrastructure support.
 Currently, we only have a single early-version base design that builds almost
 like the other ones. For Lattice, there are separate tools for creating
 a block design <strong>(Propel Builder)</strong> and building an HDL design <strong>(Radiant)</strong>.</p>

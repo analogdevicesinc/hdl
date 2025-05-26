@@ -102,6 +102,13 @@
 <li><a class="reference internal" href="#id2">Makefile</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#lattice">Lattice</a><ul>
+<li><a class="reference internal" href="#id3">TCL File</a></li>
+<li><a class="reference internal" href="#namespace-for-lattice-ip-packaging">Namespace for Lattice IP packaging</a></li>
+<li><a class="reference internal" href="#example-for-creating-an-ip">Example for creating an IP</a></li>
+<li><a class="reference internal" href="#id4">Makefile</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -771,6 +778,361 @@ Yet, here is the Makefile for the example mentioned before:</p>
 </div>
 <p>This example was made starting from the axi_ad9361 IP found in our repo, under the library directory:
 <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/ibrary/axi_ad9361">ibrary/axi_ad9361</a>.</p>
+</section>
+</section>
+<section id="lattice">
+<h2>Lattice<a class="headerlink" href="#lattice" title="Permalink to this heading"></a></h2>
+<section id="id3">
+<h3>TCL File<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>The tcl file which creates the IP must be named by the following standard:
+<code class="docutils literal notranslate"><span class="pre">&lt;top_module_name&gt;_ltt.tcl</span></code>. We set the <code class="docutils literal notranslate"><span class="pre">LIBRARY_NAME</span> <span class="pre">:=</span> <span class="pre">&lt;top_module_name&gt;</span></code>
+in the Makefile and run the tcl script based on that naming standard.</p>
+<p>The tcl file must start with two tcl dependencies:</p>
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>..<span class="o">/</span>scripts<span class="o">/</span>adi_env.tcl
+<span class="nb">source</span><span class="w"> </span><span class="nv">$ad_hdl_dir</span><span class="o">/</span>library<span class="o">/</span>scripts<span class="o">/</span>adi_ip_lattice.tcl
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">adi_env.tcl</span></code> sets some build related and versioning variables, and the
+default hdl directory variable. The <code class="docutils literal notranslate"><span class="pre">adi_ip_lattice.tcl</span></code> file contains all the
+procedures for creating IPs in the <code class="docutils literal notranslate"><span class="pre">ipl</span></code> namespace. The IP procedures can be
+called like: <code class="docutils literal notranslate"><span class="pre">ipl::&lt;procedure_name&gt;</span></code>.</p>
+</section>
+<section id="namespace-for-lattice-ip-packaging">
+<h3>Namespace for Lattice IP packaging<a class="headerlink" href="#namespace-for-lattice-ip-packaging" title="Permalink to this heading"></a></h3>
+<p>There are two main parts of procedures and structures in this namespace:</p>
+<ol class="arabic simple">
+<li><p><strong>IP related procedures and descriptors for users:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$::ipl::ip</span></code> - This describes an IP itself. It is used to set a new IP
+instance like: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">ip</span> <span class="pre">$::ipl::ip</span></code>. After the instance is correctly
+configured, it is used to generate an actual IP on a specified path.
+This instance is updated by every IP related procedure like:
+<code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">ip</span> <span class="pre">[&lt;some_ip_procedure&gt;</span> <span class="pre">-ip</span> <span class="pre">$ip]</span></code> except the
+<code class="docutils literal notranslate"><span class="pre">ipl::generate_ip</span></code> and <code class="docutils literal notranslate"><span class="pre">ipl::parse_module</span></code>. You will see later on in
+example.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::general</span></code> - Sets the IP structure with the specified general IP
+parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::parse_module</span></code> - This module is used to parse the data of the IP top
+module, it’s input parameter is the file path of the top module and it
+returns a structure with the top module’s data which is parameter for
+other procedures.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_ports_from_module</span></code> - It is used to set the IP structure with
+the port’s data from the module data which is set by <code class="docutils literal notranslate"><span class="pre">ipl::parse_module</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_memory_map</span></code> - Sets the IP structure with a new memory map,
+the name of this memory map must be used for slave memory mapped interface
+configuration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_address_space</span></code> - Sets the IP structure with an address space,
+the name of this address space must be used for master memory mapped
+interface configuration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_axi_interfaces</span></code> - Automatically adds AXI interfaces based on
+parsed module data from top module.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_interface</span></code> - Sets the IP structure with an interface instance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_interface_by_prefix</span></code> - Sets the IP structure with an interface
+by filtering ports by prefix from module data parsed with
+<code class="docutils literal notranslate"><span class="pre">ipl::parse_module</span></code> when a naming standard like
+<code class="docutils literal notranslate"><span class="pre">&lt;verilog_prefix&gt;_&lt;standard_port_name&gt;</span></code> is used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_ip_files</span></code> - Sets the IP structure with IP file dependencies</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::add_ip_files_auto</span></code> - Sets the IP structure with the specified file
+dependencies by searching them in the specified <code class="docutils literal notranslate"><span class="pre">-spath</span></code> folder
+<code class="docutils literal notranslate"><span class="pre">-sdepth</span></code> deep.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::set_parameter</span></code> - Sets the IP structure with a configuration
+parameter which will appear in the IP GUI also.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::ignore_ports</span></code> - Ignores/Hides a list of ports by a Python
+expression which usually depends on the value of a Verilog parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::ignore_ports_by_prefix</span></code> - Ignores/Hides ports which are matching
+with a specified prefix from the ports’ names in the parsed ports from
+the top module, by a Python expression which usually depends on the value of
+a Verilog parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::generate_ip</span></code> - Generates the IP on specified path, if no path
+parameter then in default IP download directory of Lattice Propel Builder.</p></li>
+</ul>
+</li>
+<li><p><strong>Custom IP interface related descriptors and procedures for users:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">$::ipl::if</span></code> - This describes an IP interface structure, it is used to
+set a new interface instance like: <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">if</span> <span class="pre">$::ipl::if</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::create_interface</span></code> - Creates a custom interface.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ipl::generate_interface</span></code> - Generates a custom interface from the
+structure set by <code class="docutils literal notranslate"><span class="pre">ipl::create_interface</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="example-for-creating-an-ip">
+<h3>Example for creating an IP<a class="headerlink" href="#example-for-creating-an-ip" title="Permalink to this heading"></a></h3>
+<p>The following section is a generic example for creating IPs which is
+trying to simulate most of the available options when creating a new IP.</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="d72ff231fd1945980deeb0fec546523011b24c63" name="d72ff231fd1945980deeb0fec546523011b24c63" type="checkbox"></input><label for="d72ff231fd1945980deeb0fec546523011b24c63"><p>Detailed template for the &lt;top_module_name&gt;_ltt.tcl file</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>source ../../scripts/adi_env.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_lattice.tcl
+
+# Parsing ports and parameters from top module.
+# In order to this procedure to work correctly please define your top module
+# by following the HDL coding guideline.
+set mod_data [ipl::parse_module ./&lt;top_module_name&gt;.v]
+
+# Initializing the IP structure.
+set ip $::ipl::ip
+
+# Adding all the ports to the IP from $mod_data.
+set ip [ipl::add_ports_from_module -ip $ip -mod_data $mod_data]
+
+# Adding parameters from the $mod_data. This procedure automatically adds
+# all the parameters found in top module, but it is useful only if we use
+# them as they are and the ordering and grouping of them does not count.
+# NOTE: Do not use it if you want to organize the GUI parameters, in that
+# case you should add the parameters manually by the following
+# ipl::set_parameter procedure.
+set ip [ipl::add_parameters_from_module -ip $ip -mod_data $mod_data]
+
+#Getting the name of the top module. &lt;top_module_name&gt;
+set mod_name [dict get $mod_data mod_name]
+
+# Setting the general IP parameters.
+# There are two optional parameters for this procedure: -max_radiant_version
+#                                                       -max_esi_version
+set ip [ipl::general \
+   -vlnv &quot;analog.com:ip:$mod_name:1.0&quot; \
+   -display_name &quot;&lt;Display name of the IP&gt;&quot; \
+   -supported_products {*} \
+   -supported_platforms {esi radiant} \
+   -category &quot;&lt;IP Category&gt;&quot; \
+   -keywords &quot;&lt;keywords related to the IP&gt;&quot; \
+   -min_radiant_version &quot;2023.2&quot; \
+   -min_esi_version &quot;2023.2&quot; \
+   -href &quot;&lt;https://example_webpage/ip&gt;&quot; \
+   -ip $ip]
+
+# If the IP has AXI interfaces and the naming standard
+# &lt;interface_name&gt;_&lt;standard_ip_portname&gt; is used then you can use the
+# following procedure to add all the AXI interfaces to the IP.
+# The supported interfaces are AXI4, AXI4-Lite and AXI4-Stream.
+set ip [ipl::add_axi_interfaces -ip $ip -mod_data $mod_data]
+
+# You can define memory maps for every slave memory mapped interface.
+# You must use its name in the following &#39;ipl::add_interface&#39; procedure at
+# &#39;-mem_map_ref&#39; option, then the memory map defined here will be used
+# for the memory mapped interface we are following to define.
+set ip [ipl::add_memory_map -ip $ip \
+   -name &quot;&lt;interface_name&gt;_mem_map&quot; \
+   -description &quot;&lt;interface description&gt;&quot; \
+   -baseAddress 0 \
+   -range 65536 \
+   -width 32]
+
+# You can add interface manually by defining it with a portmap.
+# Make sure that the standard port names match the port names in defined
+# interfaces. You must define a &#39;-mem_map_ref&#39; anytime you add a memory mapped
+# interface, otherwise the option is not used. If no memory map with that
+# reference is created the procedure creates a default memory map
+# automatically with the specified &#39;-mem_map_ref&#39;.
+set ip [ipl::add_interface -ip $ip \
+   -inst_name &lt;interface_name&gt; \
+   -display_name &quot;&lt;interface display name&gt;&quot; \
+   -description &quot;&lt;interface description&gt;&quot; \
+   -master_slave slave \
+   -portmap [list {&quot;s_apb_paddr&quot; &quot;PADDR&quot;} \
+                  {&quot;s_apb_penable&quot; &quot;PENABLE&quot;} \
+                  {&quot;s_apb_prdata&quot; &quot;PRDATA&quot;} \
+                  {&quot;s_apb_pready&quot; &quot;PREADY&quot;} \
+                  {&quot;s_apb_pselx&quot; &quot;PSELx&quot;} \
+                  {&quot;s_apb_pslverr&quot; &quot;PSLVERR&quot;} \
+                  {&quot;s_apb_pwdata&quot; &quot;PWDATA&quot;} \
+                  {&quot;s_apb_pwrite&quot; &quot;PWRITE&quot;}] \
+   -mem_map_ref &lt;interface_name&gt;_mem_map \
+   -vlnv {amba.com:AMBA3:APB:r1p0}]
+# In most of the cases the containing folder names are describing the vlnv
+# for the existing interfaces as in the following example:
+# lscc/propel/&lt;tool_version&gt;/builder/rtf/ip/interfaces/amba.com/AMBA3/APB/r1p0
+
+# If you want to update a memory map you can use this anytime.
+# The identifier of a memory map is its &#39;-name&#39; which is referred as
+# &#39;-mem_map_ref&#39; at ipl::add_interface procedure.
+set ip [ipl::add_memory_map -ip $ip \
+   -name &quot;&lt;interface_name&gt;_mem_map&quot; \
+   -description &quot;&lt;interface description&gt;&quot; \
+   -baseAddress 0 \
+   -range 65536 \
+   -width 32]
+
+# When you add a master memory mapped interface you can define a memory map
+# for it. If you do not define it separately it will be created automatically
+# when you add the interface and specify the &#39;-addr_space_ref&#39; option
+# at ipl::add_interface procedure.
+set ip [ipl::add_address_space -ip $ip \
+   -name &quot;&lt;interface_name&gt;_aspace&quot; \
+   -range 0x100000000 \
+   -width 32]
+
+# Example adding a master memory mapped interface.
+set ip [ipl::add_interface -ip $ip \
+   -inst_name &lt;interface_name&gt; \
+   -display_name &quot;&lt;interface display name&gt;&quot; \
+   -description &quot;&lt;interface description&gt;&quot; \
+   -master_slave master \
+   -portmap [list {&quot;s_apb_paddr&quot; &quot;PADDR&quot;} \
+                  {&quot;s_apb_penable&quot; &quot;PENABLE&quot;} \
+                  {&quot;s_apb_prdata&quot; &quot;PRDATA&quot;} \
+                  {&quot;s_apb_pready&quot; &quot;PREADY&quot;} \
+                  {&quot;s_apb_pselx&quot; &quot;PSELx&quot;} \
+                  {&quot;s_apb_pslverr&quot; &quot;PSLVERR&quot;} \
+                  {&quot;s_apb_pwdata&quot; &quot;PWDATA&quot;} \
+                  {&quot;s_apb_pwrite&quot; &quot;PWRITE&quot;}] \
+   -addr_space_ref &lt;interface_name&gt;_aspace \
+   -vlnv {amba.com:AMBA3:APB:r1p0}]
+
+# Example adding parameters to the IP.
+# You must use the Verilog parameter name at &#39;-id&#39; option.
+# You can check the Lattice Propel IP Packager documentation for parameter
+# use cases as Setting Nodes at:
+#                https://www.latticesemi.com/view_document?document_id=54003
+# The same options in the tables are used here as options for the procedure.
+# If you want parameters to appear in the same &lt;Subgoup&gt; in the same &lt;Tabgroup&gt;
+# you must add them one after another in the preferred order.
+set ip [ipl::set_parameter -ip $ip \
+   -id &lt;verilog_parameter&gt; \
+   -type param \
+   -value_type int \
+   -conn_mod &lt;verilog_module_name&gt; \
+   -title {&lt;Title&gt;} \
+   -options {[(&#39;Option 1&#39;, 0), (&#39;Option 2&#39;, 1), (&#39;Option 3&#39;, 2)]} \
+   -editable {(&lt;some_parameter&gt; == 0)} \
+   -default 0 \
+   -output_formatter nostr \
+   -group1 {&lt;Subgoup&gt;} \
+   -group2 {&lt;Tabgroup&gt;}]
+set ip [ipl::set_parameter -ip $ip \
+   -id DATA_WIDTH \
+   -type param \
+   -value_type int \
+   -conn_mod &lt;verilog_module_name&gt; \
+   -title {&lt;Title&gt;} \
+   -options {[16, 32, 64, 128, 256, 512, 1024, 2048]} \
+   -default 64 \
+   -output_formatter nostr \
+   -group1 {&lt;Subgoup&gt;} \
+   -group2 {&lt;Tabgroup&gt;}]
+set ip [ipl::set_parameter -ip $ip \
+   -id ENABLE \
+   -type param \
+   -value_type int \
+   -conn_mod &lt;verilog_module_name&gt; \
+   -title {&lt;Title&gt;} \
+   -options {[(True, 1), (False, 0)]} \
+   -default 0 \
+   -output_formatter nostr \
+   -group1 {&lt;Subgoup&gt;} \
+   -group2 {&lt;Tabgroup&gt;}]
+
+# Two options to ignore and hide ports in the GUI.
+set ip [ipl::ignore_ports_by_prefix -ip $ip \
+   -mod_data $mod_data \
+   -v_prefix s_apb \
+   -expression {(ENABLE == 0)}]
+set ip [ipl::ignore_ports -ip $ip \
+   -portlist {s_apb_paddr s_apb_pwdata} \
+   -expression {(ENABLE == 0)}]
+
+# Defining the rtl file dependencies. The files defined here will be copied
+# to &#39;rtl&#39; folder in the generated IP directory. The &#39;rtl&#39; output directory
+# must be used for the rtl files.
+# For constraint files the &#39;ldc&#39; folder must be used at &#39;-dpath&#39; option.
+# The following are the standard directories by purpose:
+# eval, plugin, doc, rtl, testbench, driver, ldc.
+# You can check the Lattice Propel IP Packager documentation for more
+# information at: https://www.latticesemi.com/view_document?document_id=54003
+set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
+   &quot;&lt;path&gt;/&lt;dependency0&gt;.v&quot; \
+   &quot;&lt;path&gt;/&lt;dependency1&gt;.sv&quot;]
+
+# You can also create your own interfaces.
+# The options for ports are the following:
+#     -n &lt;logical_name&gt;
+#     -d &lt;in/out&gt; #direction
+#     -p &lt;required/optional&gt; #presence
+#     -w &lt;port_width&gt;
+#     -q &lt;clock/reset/data/address&gt; #qualifier #default is data
+# We usually put these in a separate script for make, but you can use it here.
+set if [ipl::create_interface
+   -vlnv {analog.com:ADI:fifo_wr:1.0}
+   -directConnection true \
+   -isAddressable false \
+   -description &quot;ADI fifo wr interface&quot; \
+   -ports {
+      {-n DATA -d out -p required}
+      {-n EN -d out -p required -w 1}
+      {-n OVERFLOW -w 1 -p optional -d in}
+      {-n SYNC -p optional -w 1 -d out}
+      {-n XFER_REQ -p optional -w 1 -d in}
+   }]
+# This will generate the interface in ./&lt;vendor&gt; directory and in
+# the default interface directory of Lattice Propel Builder
+# (~/PropelIPLocal/interfaces) if the LATTICE_DEFAULT_PATHS env variable
+# is exported like: &#39;export LATTICE_DEFAULT_PATHS=1&#39; before running the
+# script or running make.
+# You can remove it by deleting the interface folder from this directory.
+# You can use a second path parameter to generate it on a specified path.
+# For make it is a dedicated file for generating interfaces namely
+# &#39;library/interfaces_ltt/interfaces_ltt.tcl&#39; where you can add new
+# interfaces and edit the &#39;library/interfaces_ltt/Makefile&#39; to work
+# correspondingly.
+ipl::generate_interface $if
+
+# You can add it to the IP.
+set ip [ipl::add_interface -ip $ip \
+-inst_name fifo_wr \
+-display_name fifo_wr \
+-description fifo_wr \
+-master_slave slave \
+-portmap { \
+   {&quot;fifo_wr_en&quot; &quot;EN&quot;} \
+   {&quot;fifo_wr_din&quot; &quot;DATA&quot;} \
+   {&quot;fifo_wr_overflow&quot; &quot;OVERFLOW&quot;} \
+   {&quot;fifo_wr_xfer_req&quot; &quot;XFER_REQ&quot;} \
+} \
+-vlnv {analog.com:ADI:fifo_wr:1.0}]
+
+# Generating the IP given as first parameter on the path given as the second
+# parameter. Without the second parameter the IP will be generated in
+# ./ltt directory and  in the default IP download directory of
+# Lattice Propel Builder (~/PropelIPLocal) if the LATTICE_DEFAULT_PATHS
+# env variable is exported like:
+# &#39;export LATTICE_DEFAULT_PATHS=1&#39; before running the script or running make.
+ipl::generate_ip $ip
+</pre></div>
+</div>
+</div>
+</div>
+</div></section>
+<section id="id4">
+<h3>Makefile<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<p>In this file you will also have to change/add paths to every file dependency for
+the IP, using <code class="docutils literal notranslate"><span class="pre">GENERIC_DEPS</span></code> for generic dependencies, <code class="docutils literal notranslate"><span class="pre">LATTICE_DEPS</span></code> for
+Lattice specific file dependencies, <code class="docutils literal notranslate"><span class="pre">LATTICE_INTERFACE_DEPS</span></code> for Lattice
+interface dependencies. We set the Lattice interface dependencies when we need
+custom interfaces to <code class="docutils literal notranslate"><span class="pre">LATTICE_INTERFACE_DEPS</span> <span class="pre">:=</span> <span class="pre">interfaces_ltt</span></code> where
+<code class="docutils literal notranslate"><span class="pre">interfaces_ltt</span></code> means the <code class="docutils literal notranslate"><span class="pre">hdl/library/interfaces_ltt</span></code> directory where the
+make script will enter in order to generate the interfaces defined there. If you
+want to add a new interface, you can add it to
+<code class="docutils literal notranslate"><span class="pre">hdl/library/interfaces_ltt/interfaces_ltt.tcl</span></code> file then update the
+<code class="docutils literal notranslate"><span class="pre">hdl/library/interfaces_ltt/Makefile</span></code> correspondingly.
+Make sure you set the <code class="docutils literal notranslate"><span class="pre">LIBRARY_NAME</span></code> correctly.</p>
+<p>The following is an example for <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>:</p>
+<div class="highlight-makefile notranslate"><div class="highlight"><pre><span></span><span class="nv">LIBRARY_NAME</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span>&lt;top_module_name&gt;
+
+<span class="nv">GENERIC_DEPS</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>../common/up_axi.v
+<span class="nv">GENERIC_DEPS</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>&lt;top_module_name&gt;.v
+
+<span class="nv">LATTICE_DEPS</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>&lt;top_module_name&gt;_ltt.tcl
+<span class="nv">LATTICE_INTERFACE_DEPS</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span>interfaces_ltt
+
+<span class="cp">include ../scripts/library.mk</span>
+</pre></div>
+</div>
+<p>Now you can run <code class="docutils literal notranslate"><span class="pre">make</span></code> from the IP directory.
+After that the IP will be accessible in Lattice Propel Builder.</p>
 </section>
 </section>
 </section>
