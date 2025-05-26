@@ -6,7 +6,7 @@ M2K HDL Project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`ADALM2000 <ADALM2000>` (M2K), is built around the XC7Z010 Xilinx Zynq FPGA.
+The :adi:`ADALM2000` (M2K), is built around the XC7Z010 Xilinx Zynq FPGA.
 
 Booting is done from a 32MB QSPI FLASH, connected directly to the PS7 block.
 

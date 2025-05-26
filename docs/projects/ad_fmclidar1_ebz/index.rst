@@ -12,7 +12,7 @@ AD-FMCLIDAR1-EBZ HDL project (OBSOLETE)
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD-FMCLIDAR1-EBZ <AD-FMCLIDAR1-EBZ>` is a prototyping platform for
+The :adi:`AD-FMCLIDAR1-EBZ` is a prototyping platform for
 LiDAR applications that can be used on FPGA development boards enabled with FMC
 HPC connector and JESD204B support capability. It offers developers a
 working-out-of-box platform that can be used for developing software and
@@ -24,7 +24,7 @@ Board, and the AFE Receiver Board.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`AD-FMCLIDAR1-EBZ <AD-FMCLIDAR1-EBZ>`
+- :adi:`AD-FMCLIDAR1-EBZ`
 
 Supported carriers
 -------------------------------------------------------------------------------

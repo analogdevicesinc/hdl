@@ -270,69 +270,69 @@ Supported Devices
 JESD204B Analog-to-Digital Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD6673 <en/products/AD6673>`: 80 MHz Bandwidth, Dual IF Receiver
--  :adi:`AD6674 <en/products/AD6674>`: 385 MHz BW IF Diversity Receiver
--  :adi:`AD6676 <en/products/AD6676>`: Wideband IF Receiver Subsystem
--  :adi:`AD6677 <en/products/AD6677>`: 80 MHz Bandwidth, IF Receiver
--  :adi:`AD6684 <en/products/AD6684>`: 135 MHz Quad IF Receiver
--  :adi:`AD6688 <en/products/AD6688>`: RF Diversity and 1.2GHz BW Observation
+-  :adi:`AD6673`: 80 MHz Bandwidth, Dual IF Receiver
+-  :adi:`AD6674`: 385 MHz BW IF Diversity Receiver
+-  :adi:`AD6676`: Wideband IF Receiver Subsystem
+-  :adi:`AD6677`: 80 MHz Bandwidth, IF Receiver
+-  :adi:`AD6684`: 135 MHz Quad IF Receiver
+-  :adi:`AD6688`: RF Diversity and 1.2GHz BW Observation
    Receiver
--  :adi:`AD9207 <en/products/AD9207>`: 12-Bit, 6 GSPS, JESD204B/JESD204C
+-  :adi:`AD9207`: 12-Bit, 6 GSPS, JESD204B/JESD204C
    Dual Analog-to-Digital Converter
--  :adi:`AD9208 <en/products/AD9208>`: 14-Bit, 3GSPS, JESD204B,
+-  :adi:`AD9208`: 14-Bit, 3GSPS, JESD204B,
    Dual Analog-to-Digital Converter
--  :adi:`AD9209 <en/products/AD9209>`: 12-Bit, 4GSPS, JESD204B/C, Quad
+-  :adi:`AD9209`: 12-Bit, 4GSPS, JESD204B/C, Quad
    Analog-to-Digital Converter
--  :adi:`AD9213 <en/products/AD9213>`: 12-Bit, 10.25 GSPS, JESD204B, RF
+-  :adi:`AD9213`: 12-Bit, 10.25 GSPS, JESD204B, RF
    Analog-to-Digital Converter
--  :adi:`AD9234 <en/products/AD9234>`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
+-  :adi:`AD9234`: 12-Bit, 1 GSPS/500 MSPS JESD204B, Dual
    Analog-to-Digital Converter
--  :adi:`AD9250 <en/products/AD9250>`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
+-  :adi:`AD9250`: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual
    Analog-to-Digital Converter
--  :adi:`AD9625 <en/products/AD9625>`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
+-  :adi:`AD9625`: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS,
    1.3 V/2.5 V Analog-to-Digital Converter
--  :adi:`AD9656 <en/products/AD9656>`: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
+-  :adi:`AD9656`: Quad, 16-Bit, 125 MSPS JESD204B 1.8 V
    Analog-to-Digital Converter
--  :adi:`AD9680 <en/products/AD9680>`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
+-  :adi:`AD9680`: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500
    MSPS JESD204B, Dual Analog-to-Digital Converter
--  :adi:`AD9683 <en/products/AD9683>`: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
+-  :adi:`AD9683`: 14-Bit, 170 MSPS/250 MSPS, JESD204B,
    Analog-to-Digital Converter
--  :adi:`AD9690 <en/products/AD9690>`: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
+-  :adi:`AD9690`: 14-Bit, 500 MSPS / 1 GSPS JESD204B,
    Analog-to-Digital Converter
--  :adi:`AD9691 <en/products/AD9691>`: 14-Bit, 1.25 GSPS JESD204B,
+-  :adi:`AD9691`: 14-Bit, 1.25 GSPS JESD204B,
    Dual Analog-to-Digital Converter
--  :adi:`AD9694 <en/products/AD9694>`: 14-Bit, 500 MSPS JESD204B, Quad
+-  :adi:`AD9694`: 14-Bit, 500 MSPS JESD204B, Quad
    Analog-to-Digital Converter
--  :adi:`AD9695 <en/products/AD9695>`: 14-Bit, 1300 MSPS/625 MSPS,
+-  :adi:`AD9695`: 14-Bit, 1300 MSPS/625 MSPS,
    JESD204B, Dual Analog-to-Digital Converter Analog-to-Digital Converter
--  :adi:`AD9083 <en/products/AD9083>`: 16-Channel, 125 MHz Bandwidth, JESD204B
+-  :adi:`AD9083`: 16-Channel, 125 MHz Bandwidth, JESD204B
    Analog-to-Digital Converter
--  :adi:`AD9094 <en/products/AD9094>`: 8-Bit, 1 GSPS, JESD204B, Quad
+-  :adi:`AD9094`: 8-Bit, 1 GSPS, JESD204B, Quad
    Analog-to-Digital Converter
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with
+-  :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with
    Observation Path
--  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with
+-  :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with
    Observation Path and DPD
--  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver
+-  :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver
    with Observation Path
--  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver
--  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF
+-  :adi:`ADRV9008-1`: SDR Integrated, Dual RF Receiver
+-  :adi:`ADRV9008-2`: SDR Integrated, Dual RF
    Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+-  :adi:`AD9081`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
    Quad, 12-Bit, 4GSPS RFADC
--  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+-  :adi:`AD9082`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
    DUAL, 12-Bit, 6GSPS RFADC
--  :adi:`AD9986 <en/products/AD9986>`: 4T2R Direct RF Transmitter and
+-  :adi:`AD9986`: 4T2R Direct RF Transmitter and
    Observation Receiver
--  :adi:`AD9988 <en/products/AD9988>`: 4T4R Direct RF Receiver and Transmitter
+-  :adi:`AD9988`: 4T4R Direct RF Receiver and Transmitter
 
 More Information
 --------------------------------------------------------------------------------

@@ -6,16 +6,16 @@ AD35XXR-EVB HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD3542R <EVAL-AD3542R>` is an evaluation board for the
-:adi:`AD3542R <AD3542R>`, a dual-channel, 16-bit fast precision
+The :adi:`EVAL-AD3542R` is an evaluation board for the
+:adi:`AD3542R`, a dual-channel, 16-bit fast precision
 digital-to-analog converter (DAC). The same eval board can be used to
-evaluate the :adi:`AD3541R <AD3541R>`, the single channel part.
+evaluate the :adi:`AD3541R`, the single channel part.
 
-The :adi:`EVAL-AD3552R <EVAL-AD3552R>` is an evaluation board for the
-:adi:`AD3552R <AD3552R>`, a dual-channel, 16-bit fast precision
+The :adi:`EVAL-AD3552R` is an evaluation board for the
+:adi:`AD3552R`, a dual-channel, 16-bit fast precision
 digital-to-analog converter (DAC). The same eval board can be used to evaluate
-the :adi:`AD3551R <AD3551R>`, the single channel part. Each channel of the
-:adi:`AD3552R <AD3552R>` is equipped with a different transimpedance
+the :adi:`AD3551R`, the single channel part. Each channel of the
+:adi:`AD3552R` is equipped with a different transimpedance
 amplifier: Channel 0 has a fast amplifier that achieves the optimal dynamic
 performance and Channel 1 has a precision amplifier that guarantees the
 optimal DC precision over temperature.
@@ -46,7 +46,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD3552R <EVAL-AD3552R>`
+   * - :adi:`EVAL-AD3552R`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC-LPC
 
@@ -77,8 +77,8 @@ added to the base address from HDL (see more at :ref:`architecture cpu-intercon-
 Instance              Zynq/Microblaze
 ====================  ===============
 axi_ad35xxr_dac       0x44A7_0000
-axi_dac_dma           0x44A3_0000 
-axi_clkgen            0x44B0_0000    
+axi_dac_dma           0x44A3_0000
+axi_clkgen            0x44B0_0000
 ====================  ===============
 
 GPIOs
