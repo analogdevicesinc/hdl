@@ -12,26 +12,26 @@ AD9739A-FMC HDL project (OBSOLETE)
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`AD9739A <AD9739A>` is a 14-bit, 2.5 GSPS high performance RF DAC
+The :adi:`AD9739A` is a 14-bit, 2.5 GSPS high performance RF DAC
 capable of synthesizing wideband signals with up to 1.25GHz of bandwidth, from
 DC up to 3 GHz.
 
 This reference design includes a single tone sine generator (DDS) and allows
 programming the device and monitoring its internal status registers. It also
-programs the :adi:`ADF4350 <ADF4350>` clock chip which can generate a 1.6G Hz
-to 2.5 GHz clock for the :adi:`AD9739A <AD9739A>` from the on-board 25MHz
-crystal. An alternate clock path using an :adi:`ADCLK914 <ADCLK914>` is
+programs the :adi:`ADF4350` clock chip which can generate a 1.6G Hz
+to 2.5 GHz clock for the :adi:`AD9739A` from the on-board 25MHz
+crystal. An alternate clock path using an :adi:`ADCLK914` is
 available for driving the clock externally.
 
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD9739A <EVAL-AD9739A>`
+- :adi:`EVAL-AD9739A`
 
 Supported devices
 -------------------------------------------------------------------------------
 
-- :adi:`AD9739A <AD9739A>`
+- :adi:`AD9739A`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -69,10 +69,10 @@ AD9739A FMC Card block diagram
 
 The DDS consists of a Xilinx DDS IP core and a DDR based data generator. The
 core generates 6 samples at every fDAC/3 clock cycles for each port of
-:adi:`AD9739A <AD9739A>`.
+:adi:`AD9739A`.
 
-The SPI interface allows programming the :adi:`ADF4350 <ADF4350>` and/or
-:adi:`AD9739A <AD9739A>`. The provided SDK software shows the initial setup
+The SPI interface allows programming the :adi:`ADF4350` and/or
+:adi:`AD9739A`. The provided SDK software shows the initial setup
 required for both the devices for a 2.5GHz DAC clock with a 300MHz single tone
 DDS.
 
@@ -80,23 +80,23 @@ Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Two clock paths are available to drive the clock input on the
-:adi:`AD9739A <AD9739A>`:
+:adi:`AD9739A`:
 
-- The factory default option connects the :adi:`ADF4350 <ADF4350>` to
-  the :adi:`AD9739A <AD9739A>`. The :adi:`ADF4350 <ADF4350>` is able to
+- The factory default option connects the :adi:`ADF4350` to
+  the :adi:`AD9739A`. The :adi:`ADF4350` is able to
   synthesize a clock over the entire specified range of
-  the :adi:`AD9739A <AD9739A>` (1.6GHz to 2.5GHz)
+  the :adi:`AD9739A` (1.6GHz to 2.5GHz)
 
-  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350 <ADF4350>`
+  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADF4350`
     position
 
 - Alternatively, an external clock can be provided via the SMA CLKIN (J3) jack
 
-  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914 <ADCLK914>`
+  - Jumper CLOCK SOURCE (S1) must be moved to the :adi:`ADCLK914`
     position. C102 and C99 on the back of the board also need to be removed
     from their default position, and then soldered into the vertical position
     from the large square pad they were previously soldered to and the narrow
-    pads closer to the :adi:`ADCLK914 <ADCLK914>` (U3). Observe the
+    pads closer to the :adi:`ADCLK914` (U3). Observe the
     orientation of the caps before removing them; they must be soldered with
     their narrow edge against the PCB, and not the wide side as is common
     with most components.

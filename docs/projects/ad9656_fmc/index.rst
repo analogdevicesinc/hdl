@@ -46,7 +46,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD9656 <EVAL-AD9656>`
+   * - :adi:`EVAL-AD9656`
      - :xilinx:`ZCU102`
      - FMC HPC0
 

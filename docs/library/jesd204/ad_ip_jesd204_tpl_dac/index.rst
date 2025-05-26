@@ -231,60 +231,60 @@ Supported Devices
 JESD204B Digital-to-Analog Converters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9135 <en/products/AD9135>`: Dual, 11-Bit, high dynamic, 2.8 GSPS,
+-  :adi:`AD9135`: Dual, 11-Bit, high dynamic, 2.8 GSPS,
    TxDAC+® Digital-to-Analog Converter
--  :adi:`AD9136 <en/products/AD9136>`: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
+-  :adi:`AD9136`: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
    Digital-to-Analog Converter
--  :adi:`AD9144 <en/products/AD9144>`: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
+-  :adi:`AD9144`: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
    Digital-to-Analog Converter
--  :adi:`AD9152 <en/products/AD9152>`: Dual, 16-Bit, 2.25 GSPS, TxDAC+
+-  :adi:`AD9152`: Dual, 16-Bit, 2.25 GSPS, TxDAC+
    Digital-to-Analog Converter
--  :adi:`AD9154 <en/products/AD9154>`: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
+-  :adi:`AD9154`: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
    Digital-to-Analog Converter
--  :adi:`AD9161 <en/products/AD9161>`: 11-Bit, 12 GSPS, RF Digital-to-Analog
+-  :adi:`AD9161`: 11-Bit, 12 GSPS, RF Digital-to-Analog
    Converter
--  :adi:`AD9162 <en/products/AD9162>`: 16-Bit, 12 GSPS, RF Digital-to-Analog
+-  :adi:`AD9162`: 16-Bit, 12 GSPS, RF Digital-to-Analog
    Converter
--  :adi:`AD9163 <en/products/AD9163>`: 16-Bit, 12 GSPS, RF DAC and Digital
+-  :adi:`AD9163`: 16-Bit, 12 GSPS, RF DAC and Digital
    Upconverter
--  :adi:`AD9164 <AD9164>`: 16-Bit, 12 GSPS, RF DAC and Direct Digital
+-  :adi:`AD9164`: 16-Bit, 12 GSPS, RF DAC and Direct Digital
    Synthesizer
--  :adi:`AD9172 <en/products/AD9172>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+-  :adi:`AD9172`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Channelizers
--  :adi:`AD9173 <en/products/AD9173>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+-  :adi:`AD9173`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Channelizers
--  :adi:`AD9174 <en/products/AD9174>`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
+-  :adi:`AD9174`: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
    Digital Synthesizer
--  :adi:`AD9175 <en/products/AD9175>`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
+-  :adi:`AD9175`: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
    Wideband Channelizers
--  :adi:`AD9176 <en/products/AD9176>`: Dual, 16-Bit, 12.6 GSPS RF DAC with
+-  :adi:`AD9176`: Dual, 16-Bit, 12.6 GSPS RF DAC with
    Wideband Channelizers
--  :adi:`AD9177 <en/products/AD9177>`: Quad, 16-Bit, 12 GSPS RF DAC with
+-  :adi:`AD9177`: Quad, 16-Bit, 12 GSPS RF DAC with
    Wideband Channelizers
 
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9371 <en/products/AD9371>`: SDR Integrated, Dual RF Transceiver with
+-  :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with
    Observation Path
--  :adi:`AD9375 <en/products/AD9375>`: SDR Integrated, Dual RF Transceiver with
+-  :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with
    Observation Path and DPD
--  :adi:`ADRV9009 <en/products/ADRV9009>`: SDR Integrated, Dual RF Transceiver
+-  :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver
    with Observation Path
--  :adi:`ADRV9008-1 <en/products/ADRV9008-1>`: SDR Integrated, Dual RF Receiver
--  :adi:`ADRV9008-2 <en/products/ADRV9008-2>`: SDR Integrated, Dual RF
+-  :adi:`ADRV9008-1`: SDR Integrated, Dual RF Receiver
+-  :adi:`ADRV9008-2`: SDR Integrated, Dual RF
    Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :adi:`AD9081 <en/products/AD9081>`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
+-  :adi:`AD9081`: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
    Quad, 12-Bit, 4GSPS RFADC
--  :adi:`AD9082 <en/products/AD9082>`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
+-  :adi:`AD9082`: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
    DUAL, 12-Bit, 6GSPS RFADC
--  :adi:`AD9986 <en/products/AD9986>`: 4T2R Direct RF Transmitter and
+-  :adi:`AD9986`: 4T2R Direct RF Transmitter and
    Observation Receiver
--  :adi:`AD9988 <en/products/AD9988>`: 4T4R Direct RF Receiver and Transmitter
+-  :adi:`AD9988`: 4T4R Direct RF Receiver and Transmitter
 
 More Information
 --------------------------------------------------------------------------------

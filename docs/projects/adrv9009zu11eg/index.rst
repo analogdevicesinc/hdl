@@ -39,7 +39,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
    * - :adi:`ADRV9009-ZU11EG RF-SOM <ADRV9009-ZU11EG>`
-     - :adi:`ADRV2CRR-FMC <ADRV2CRR-FMC>`
+     - :adi:`ADRV2CRR-FMC`
 
 Block design
 -------------------------------------------------------------------------------

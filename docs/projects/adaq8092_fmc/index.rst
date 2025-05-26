@@ -6,17 +6,17 @@ ADAQ8092-FMC HDL project
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-ADAQ8092 <EVAL-ADAQ8092>` evaluates the :adi:`ADAQ8092`, a
+The :adi:`EVAL-ADAQ8092` evaluates the :adi:`ADAQ8092`, a
 14-bit, 105MSPS , high-speed dual-channel data acquisition uModule solution.
 This device uses the System-in-Package (SiP) that integrates three common signal
 processing and conditioning blocks.
 
-This :adi:`EVAL-ADAQ8092 <EVAL-ADAQ8092>` board does not need an external power
+This :adi:`EVAL-ADAQ8092` board does not need an external power
 supply to operate and requires a very small jitter in the clock source. We
 recommend to use the :adi:`DC1075B` to improve the clock signal source. For
 full details on the  :adi:`ADAQ8092`, see the  :adi:`ADAQ8092` data sheet,
 which must be consulted in conjunction with this user guide when using the
-:adi:`EVAL-ADAQ8092 <EVAL-ADAQ8092>`.
+:adi:`EVAL-ADAQ8092`.
 
 Supported boards
 -------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-ADAQ8092 <EVAL-ADAQ8092>`
+   * - :adi:`EVAL-ADAQ8092`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC-LPC
 

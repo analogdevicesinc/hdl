@@ -54,7 +54,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD4080-FMC <EVAL-AD4080-FMC>`
+   * - :adi:`EVAL-AD4080-FMC`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC-LPC
 

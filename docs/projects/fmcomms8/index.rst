@@ -33,7 +33,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`AD-FMCOMMS8-EBZ <AD-FMCOMMS8-EBZ>`
+   * - :adi:`AD-FMCOMMS8-EBZ`
      - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`
      - FMCA
    * -
