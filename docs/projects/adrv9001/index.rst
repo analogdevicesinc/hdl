@@ -46,7 +46,7 @@ Supported carriers
      - :xilinx:`ZCU102`
      - FMC HPC0
    * -
-     - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+     - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC LPC
    * -
      - :intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`

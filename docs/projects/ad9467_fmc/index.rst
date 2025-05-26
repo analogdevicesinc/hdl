@@ -29,7 +29,7 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :xilinx:`KC705` LPC slot
-- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
+- `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
 
 Block design
 -------------------------------------------------------------------------------

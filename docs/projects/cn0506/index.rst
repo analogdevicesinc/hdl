@@ -38,7 +38,7 @@ Supported carriers
 - :intel:`A10SOC <content/www/us/en/products/details/fpga/arria/10/sx.html>` on FMC_A HPC *
 - :xilinx:`ZCU102` on FMC HPC1
 - :xilinx:`ZC706` on FMC LPC
-- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__ on FMC slot
 
 .. admonition:: Legend
    :class: note

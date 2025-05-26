@@ -57,8 +57,8 @@ Supported devices
 Supported carriers
 -------------------------------------------------------------------------------
 
-- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC
-- :xilinx:`Cora Z7-07S <products/boards-and-kits/1-1qlaz7n.html>` on GPIOs
+- `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__ on FMC
+- `Cora Z7S <https://digilent.com/shop/cora-z7-zynq-7000-single-core-for-arm-fpga-soc-development>`__ on GPIOs
 - :intel:`DE10-Nano <content/www/us/en/partner/showcase/offering/a5b3b0000004cbwAAA/de10nano-kit.html>` on GPIOs
 
 Block design
