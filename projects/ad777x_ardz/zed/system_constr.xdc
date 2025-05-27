@@ -36,5 +36,5 @@ set_input_delay -clock adc_clk -min  $fall_min  [get_ports adc_data_in[*]] -cloc
 set_input_delay -clock adc_clk -min  $fall_min  [get_ports adc_ready_in  ] -clock_fall -add_delay;
 set_input_delay -clock adc_clk -min  $fall_min  [get_ports adc_ready_in  ] -clock_fall -add_delay;
 
-set_input_delay -clock adc_clk -min  $fall_min  [get_ports sync_adc_miso ] -clock_fall -add_delay;
-set_input_delay -clock adc_clk -min  $fall_min  [get_ports sync_adc_miso ] -clock_fall -add_delay;
+# set_input_delay -clock adc_clk -min  $fall_min  [get_ports sync_adc_miso ] -clock_fall -add_delay;
+# set_input_delay -clock adc_clk -min  $fall_min  [get_ports sync_adc_miso ] -clock_fall -add_delay;

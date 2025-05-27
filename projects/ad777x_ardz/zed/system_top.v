@@ -134,11 +134,11 @@ module system_top (
     .dio_p (gpio_bd[14:0]));
 
   ad_iobuf #(
-    .DATA_WIDTH(3)
+    .DATA_WIDTH(1)
   ) iobuf_gpio_chip (
-    .dio_i (gpio_o[38:36]),
-    .dio_o (gpio_i[38:36]),
-    .dio_t (gpio_t[38:36]),
+    .dio_i (gpio_o[38]),
+    .dio_o (gpio_i[38]),
+    .dio_t (gpio_t[38]),
     .dio_p (gpio2));
 
   ad_iobuf #(
