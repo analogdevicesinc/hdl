@@ -7,7 +7,7 @@
 
 set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ltc2378_spi_sclk]; ## G6   FMC_LA00_CC_P   IO_L13P_T2_MRCC_34
 set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ltc2378_spi_sdi];  ## H7   FMC_LA02_P      IO_L20P_T3_34
-set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ltc2378_spi_sdo];  ## C11  FMC_LA06_N      IO_L10N_T1_34
+set_property -dict {PACKAGE_PIN L22 IOSTANDARD LVCMOS25} [get_ports ltc2378_spi_sdo];           ## C11  FMC_LA06_N      IO_L10N_T1_34
 set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ltc2378_spi_cnv];           ## D8   FMC_LA01_CC_P   IO_L14P_T2_SRCC_34
 
 # set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports adc_quart_clk];           ## H4   FMC_CLK0_M2C_P  IO_L12P_T1_MRCC_34   // internal 100MHz clock

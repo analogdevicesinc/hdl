@@ -22,18 +22,18 @@ set hier_spi_engine spi_ltc2378
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $num_sdo $sdi_delay $echo_sclk
 
-# clkgen - 200 MHz
+# clkgen - 180 MHz
 ad_ip_instance axi_clkgen spi_clkgen
-ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 1
+ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
 ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 2
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 9
 
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
 # pwm generator
 ad_ip_instance axi_pwm_gen ltc2378_trigger_gen
-ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_PERIOD 200
+ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_PERIOD 180
 ad_ip_parameter ltc2378_trigger_gen CONFIG.PULSE_0_WIDTH 1
 
 # trigger to BUSY's negative edge
