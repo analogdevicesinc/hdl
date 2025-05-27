@@ -115,11 +115,6 @@ are:
   - **04 (default)**
   - can vary from 00 to 21 depending on the selected device (ADI_DAC_DEVICE)
 
-- **ADI_LANE_RATE**: specifies the lane rate (**supported only on the ZCU102 carrier**)
-
-  - **15.4 GHz(default)**
-  - 12.5 GHz
-
 If the desired parameters are not listed in any of the supported modes the user can
 configure them trough ``make`` parameters:
 
@@ -462,31 +457,8 @@ command should be run:
    $cd hdl/projects/dac_fmc_ebz/zcu102
    $make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
 
-Example: if the AD9152 device is needed and there is a need for a custom mode,
-the following commands should be run:
-
-.. shell:: bash
-
-   $make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 M=1 L=8 S=4 NP=16
-
-or:
-
-.. shell:: bash
-
-   $make ADI_DAC_DEVICE=AD9152 ADI_LANE_RATE=12.5 ADI_DAC_MODE=09 M=1 S=4
-
-With either of these two options, the design will be built in the same
-configuration:
-
-**ADI_DAC_DEVICE=AD9152 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16**
-
-The result of the build, if parameters were used, will be in a folder named
-by the configuration used:
-
-- if the following command was run ``make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09``
-  then the folder name will be: ``ADIDACDEVICEAD9152_ADIDACMODE09``
-- if the following command was run ``make ADI_DAC_DEVICE=AD9152 ADI_DAC_MODE=09
-  ADI_LANE_RATE=12.5`` then the folder name will be: ``ADIDACDEVICEAD9152_ADIDACMODE09_ADILANERATE12_5``
+Based on the parameters used above, the build will be in a folder named
+after the configuration called: ``ADIDACDEVICEAD9152_ADIDACMODE09``.
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
 
@@ -587,7 +559,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :dokuwiki:`[Wiki] AD917X DAC Linux Driver wiki page <resources/tools-software/linux-drivers/iio-dds/ad9172>`
-- :dokuwiki:`[Wiki] AXI DAC HDL Linux Driver wiki page <tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
+- :dokuwiki:`[Wiki] AXI DAC HDL Linux Driver wiki page <resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
 
 .. include:: ../common/more_information.rst
 
