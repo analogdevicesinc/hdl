@@ -4,14 +4,14 @@
 ###############################################################################
 
 create_bd_intf_port -mode Master -vlnv analog.com:interface:spi_engine_rtl:1.0 ad713x_di
-create_bd_port -dir O ad713x_odr
+create_bd_port -dir I ad713x_odr
 create_bd_port -dir O ad713x_sdpclk
 
 # create a SPI Engine architecture for the parallel data interface of AD713x
 # this design supports AD7132/AD7134/AD7136
 
 source $ad_hdl_dir/library/spi_engine/scripts/spi_engine.tcl
- 
+
 set data_width    32
 set async_spi_clk 1
 set num_cs        1
@@ -55,8 +55,9 @@ ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
 ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
 
 ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
-ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
-ad_connect odr_generator/pwm_1 ad713x_odr
+ad_connect ad713x_odr $hier_spi_engine/trigger
+#ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
+#ad_connect odr_generator/pwm_1 ad713x_odr
 
 # sdpclk clock - 50 MHz
 
@@ -65,7 +66,7 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA2_PERIPHERAL_FREQMHZ 50.0
 ad_connect ad713x_sdpclk sys_ps7/FCLK_CLK2
 
 ad_connect  axi_ad7134_clkgen/clk_0 $hier_spi_engine/spi_clk
-ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk 
+ad_connect  $sys_cpu_clk axi_ad7134_clkgen/clk
 ad_connect  $sys_cpu_clk $hier_spi_engine/clk
 ad_connect  axi_ad7134_clkgen/clk_0 axi_ad7134_dma/s_axis_aclk
 ad_connect  sys_cpu_resetn $hier_spi_engine/resetn

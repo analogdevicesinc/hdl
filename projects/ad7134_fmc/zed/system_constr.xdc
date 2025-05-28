@@ -11,6 +11,8 @@ set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25} [get_ports ad713x_spi_s
 set_property -dict {PACKAGE_PIN J18 IOSTANDARD LVCMOS25} [get_ports ad713x_spi_cs[0]];       ## FMC_LPC_LA05_P
 set_property -dict {PACKAGE_PIN K18 IOSTANDARD LVCMOS25} [get_ports ad713x_spi_cs[1]];       ## FMC_LPC_LA05_N
 
+#set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVCMOS25} [get_ports ad713x_ext_trigger];       ## FMC_LPC_LA33_N
+
 # ad713x data interface
 
 set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports ad713x_dclk];   ## FMC_LPC_CLK0_M2C_P

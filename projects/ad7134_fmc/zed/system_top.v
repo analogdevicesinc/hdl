@@ -94,7 +94,8 @@ module system_top (
 
   output        ad713x_dclk,
   input  [ 7:0] ad713x_din,
-  output        ad713x_odr,
+  input         ad713x_odr,
+//  output        ad713x_odr,
 
   // ad713x GPIO lines
 
@@ -105,6 +106,8 @@ module system_top (
   inout  [ 1:0] ad713x_dclkio,
   inout         ad713x_pinbspi,
   inout         ad713x_dclkmode,
+
+//  input         ad713x_ext_trigger,
 
   // ad713x reference clock (not used by default)
 
@@ -234,6 +237,7 @@ module system_top (
     .ad713x_di_sclk (ad713x_dclk),
     .ad713x_odr (ad713x_odr),
     .ad713x_sdpclk (ad713x_sdpclk),
+//    .ad713x_ext_trigger (ad713x_ext_trigger),
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif));
 
