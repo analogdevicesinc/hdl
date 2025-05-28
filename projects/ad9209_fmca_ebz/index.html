@@ -378,8 +378,8 @@ Content on this topic
 <span id="ad9209-fmca-ebz"></span><h1>AD9209-FMCA-EBZ HDL project<a class="headerlink" href="#ad9209-fmca-ebz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a> reference design is a processor-based embedded
-system. This reference design works with <a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a>/
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9209_fmca_ebz">AD9209-FMCA-EBZ</a> reference design is
+a processor-based embedded system. This reference design works with
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> (RX only) /
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a> (RX only) / <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9986">EVAL-AD9986</a> (RX only) /
 <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> (RX only).</p>
@@ -397,7 +397,6 @@ is selected or 64k samples per channel, if all channels are selected.</p>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9209-FMCA-EBZ">AD9209-FMCA-EBZ</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9081">AD9081-FMCA-EBZ</a> *</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9082">AD9082-FMCA-EBZ</a> *</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9988">EVAL-AD9988</a> *</p></li>
@@ -405,7 +404,7 @@ is selected or 64k samples per channel, if all channels are selected.</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><strong>*</strong> - only the RX path would be used!</p>
+<p><strong>*</strong> - only the RX path is used!</p>
 </div>
 </section>
 <section id="supported-devices">
@@ -678,8 +677,10 @@ the HDL repository.</p>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl/projects/ad9209_fmca_ebz/vck190$
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">RX_LANE_RATE</span><span class="o">=</span><span class="m">16</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_M</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">RX_JESD_S</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
 <span class="w">     </span><span class="nv">RX_JESD_NP</span><span class="o">=</span><span class="m">16</span>
 </pre></div>
 </div>
@@ -873,6 +874,7 @@ accordingly.</p>
 <section id="software-related">
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
+<li><p>AD9209/VCK190 Linux device tree at <a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm64/boot/dts/xilinx/versal-vck190-reva-ad9209.dts">arch/arm64/boot/dts/xilinx/versal-vck190-reva-ad9209.dts</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-mxfe/ad9081">[Wiki] AD9081-FMCA-EBZ Linux driver wiki page</a>
 applies to the AD9209-FMCA-EBZ board as well, just the RX side</p></li>
 <li><p>Python support:</p>

@@ -373,24 +373,26 @@ Content on this topic
 <span id="ad9695-fmc"></span><h1>AD9695-FMC HDL project<a class="headerlink" href="#ad9695-fmc-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9695">AD9695</a> is a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9695">EVAL-AD9695</a> is a fully-featured evaluation board for the
+<a class="icon adi reference external" href="https://www.analog.com/AD9695">AD9695</a>, a dual 14-bit, 1300/625MSPS analog-to-digital converter (ADC)
 featuring an on-chip buffer and a sample-and-hold circuit designed for
 low power, small size, and ease of use. The dual ADC cores feature a
 multistage, differential pipelined architecture with integrated output
 error correction logic. Each ADC features wide bandwidth inputs supporting
-a variety of user-selectable input ranges.</p>
-<p>The AD9695-FMC reference design is a processor based (e.g. Microblaze)
-embedded system. The design consists of a receive chain that transports the
-captured samples from the ADC to the system memory (DDR).</p>
+a variety of user-selectable input ranges. The JESD204B links operate in
+subclass 1, with lane rates up to 16 Gbps.</p>
+<p>The <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/projects/ad9695_fmc">AD9695-FMC</a> reference design is a
+processor-based embedded system. The design consists of a receive chain that
+transports the captured samples from the ADC to the system memory (DDR).</p>
 <p>All cores from the receive chain are programmable through an AXI-Lite interface.</p>
 </section>
 <section id="supported-boards">
 <h2>Supported boards<a class="headerlink" href="#supported-boards" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9695-1300EBZ">AD9695-1300EBZ</a></p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9695">EVAL-AD9695</a> with 1300MSPS</p></li>
 </ul>
 <p>For the 625MSPS variant, additional changes need to be done, which currently
-are not supported by our reference design.</p>
+<strong>are not supported by our reference design</strong>.</p>
 </section>
 <section id="supported-devices">
 <h2>Supported devices<a class="headerlink" href="#supported-devices" title="Permalink to this heading"></a></h2>
@@ -673,9 +675,9 @@ the HDL repository.</p>
 </div>
 <div class="clear-left"></div></div></div><p>Default values of the <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters for AD9695-FMC:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_M</span></code>: 2</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_L</span></code>: 4</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_S</span></code>: 1</p></li>
+<li><p>RX_JESD_M: 2</p></li>
+<li><p>RX_JESD_L: 4</p></li>
+<li><p>RX_JESD_S: 1</p></li>
 </ul>
 <p>The result of the build, if parameters were used, will be in a folder named
 by the configuration used.</p>

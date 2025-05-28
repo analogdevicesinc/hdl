@@ -421,9 +421,9 @@ multiband receivers</p></li>
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
 <p>The only parameters of this project that can be configured are:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_L</span></code>: number of lanes {2, 4}</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_M</span></code>: number of converters {2, 4, 8}</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RX_JESD_S</span></code>: number of samples per frame {1, 2}</p></li>
+<li><p>RX_JESD_L: number of lanes {2, 4}</p></li>
+<li><p>RX_JESD_M: number of converters {2, 4, 8}</p></li>
+<li><p>RX_JESD_S: number of samples per frame {1, 2}</p></li>
 </ul>
 <p>More details on these values, in the <a class="reference internal" href="#limitations">Limitations</a> section.</p>
 </section>
@@ -437,8 +437,8 @@ given at J200. For more details, check the
 <a class="reference external" href="https://wiki.analog.com/_media/eval/9694_board_files_ce04.zip">schematic</a>.</p>
 <section id="limitations">
 <h4>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h4>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9694">AD9694</a> has two JESD204B links. The JESD204B lane rates are in
-range 1.6875 Gbps-15 Gbps.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/AD9694">AD9694</a> has two JESD204B links which operate in <strong>subclass 1</strong>.
+The JESD204B lane rates are in range 1.6875 Gbps-15 Gbps.</p>
 <p>To have the <strong>multichip synchronization</strong>, meaning the two channels
 synchronized, they are <em>treated as a single link</em>, thus the <code class="docutils literal notranslate"><span class="pre">L</span></code> and <code class="docutils literal notranslate"><span class="pre">M</span></code>
 parameters <strong>are doubled</strong>
@@ -464,14 +464,14 @@ is 1 in the formula <span class="math notranslate nohighlight">\(f_{OUT} = \frac
 <p>The JESD receive chain consists of a physical layer represented by an
 XCVR module, a link layer represented by an RX JESD LINK module and
 transport layer represented by a RX JESD TPL module. The link operates
-in Subclass 1.</p>
+in subclass 1.</p>
 <p>The link is set for full bandwidth mode and operate with the following
 parameters:</p>
 <ul class="simple">
 <li><p>Used link layer encoder mode is 8B10B, defined in JESD204B, which uses ADI
 IP as Physical Layer</p></li>
-<li><p>RX_LANE_RATE: lane rate of the Rx link: 10 Gbps</p></li>
-<li><p>REF_CLK_RATE: the rate of the reference clock: 250 MHz</p></li>
+<li><p>L: 4 lanes, 2 per link</p></li>
+<li><p>M: 4 converters, 2 per link</p></li>
 <li><p>S: 1 sample per converter per frame</p></li>
 <li><p>NP: 16 bits per sample, and converter resolution: 16 (N)</p></li>
 <li><p>F: 2 octets per frame</p></li>

@@ -370,11 +370,12 @@ Content on this topic
 <span id="ad9213-dual-ebz"></span><h1>AD9213-DUAL-EBZ HDL Project<a class="headerlink" href="#ad9213-dual-ebz-hdl-project" title="Permalink to this heading"></a></h1>
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
-<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9213">AD9213-DUAL-EBZ</a>  platform includes two <a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/EVAL-AD9213-DUAL-EBZ">EVAL-AD9213-DUAL-EBZ</a> platform includes two <a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a>
 single, 12-bit, 10 GSPS, radio frequency (RF) analog-to-digital converters (ADC)
 with the JESD204B interface. The two 10 GSPS data converters are interleaved to
 sample at 20 GSPS enabled by their built-in multi-chip synchronization
-capability. The <a class="icon adi reference external" href="https://www.analog.com/ADF4377">ADF4377</a>, high performance, ultra-low jitter, dual output
+capability.</p>
+<p>The <a class="icon adi reference external" href="https://www.analog.com/ADF4377">ADF4377</a>, high performance, ultra-low jitter, dual output
 integer-N phased locked loop (PLL) with an integrated voltage-controlled
 oscillator (VCO), supports the interleaving. The <a class="icon adi reference external" href="https://www.analog.com/LTC6955">LTC6955</a>, low jitter,
 fanout clock buffer, and the <a class="icon adi reference external" href="https://www.analog.com/LTC6952">LTC6952</a> JESD204B clock generation and
@@ -383,26 +384,20 @@ scalability.</p>
 <p>The reference design is a processor based (e.g. ARM) embedded system. The device
 interfaces to the FPGA transceivers followed by the individual JESD204B and ADC
 cores. The cores are programmable through an AXI-Lite interface. The samples are
-initially captured UTIL_ADC_FIFO and then passed to the system memory (DDR). The
-user can capture up to 1048576 samples per channel, if both channels are
-selected or 2097152 per channel if only one channel is selected or in the case
-the data is considered single channel interposed. The platform allows users to
-direct sample L, S, and C bands, all while supporting up to 8GHz of IBW per
-channel.</p>
+initially captured by <a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_adcfifo">UTIL_ADCFIFO</a> and then
+passed to the system memory (DDR). The user can capture up to 1048576 samples
+per channel, if both channels are selected or 2097152 per channel if only
+one channel is selected or in the case the data is considered single
+channel interposed. The platform allows users to direct sample L, S, and
+C bands, all while supporting up to 8GHz of IBW per channel.</p>
 <p>Features:</p>
 <ul class="simple">
-<li><p>20GSPS sample rate through interleaving supporting up to 8 GHz of instantaneous BW</p></li>
-<li><p>Multi-chip synchronization (MCS) at 10GSPS using a scalable reference distribution architecture</p></li>
+<li><p>20GSPS sample rate through interleaving supporting up to 8 GHz of
+instantaneous BW</p></li>
+<li><p>Multi-chip synchronization (MCS) at 10GSPS using a scalable reference
+distribution architecture</p></li>
 <li><p>Input network supporting a wde analog frequency range DC - 9GHz</p></li>
 <li><p>Compact layout scheme that can be quickly adopted into a customer application</p></li>
-</ul>
-<p>Applications</p>
-<ul class="simple">
-<li><p>EW</p></li>
-<li><p>ECM/ECCM</p></li>
-<li><p>Radar</p></li>
-<li><p>Instrumentation</p></li>
-<li><p>Multi-channel wideband receivers</p></li>
 </ul>
 </section>
 <section id="supported-boards">
@@ -425,47 +420,48 @@ channel.</p>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
-<p>The design has two JESD receive chains each having 16 lanes at rate of 12.5Gbps.
-The JESD receive chain consists of a physical layer represented by an XCVR
-module, a link layer represented by an RX JESD LINK module. The transport layer
-is common and is represented by a RX JESD TPL module. The links operate in
-Subclass 1 by using the SYSREF signal to edge align the internal local
-multiframe clock and to release the received data in the same moment from all
-lanes, therefore ensuring that data from all channels is synchronized at the
-application layer.</p>
-<p>Both links are set for full bandwidth mode and operate with the following parameters:</p>
+<p>The design has two JESD receive chains, each having 16 lanes at rates of up
+to 12.5Gbps. The JESD receive chain consists of a Physical layer, represented
+by an XCVR module, a Link layer represented by an RX JESD LINK module.
+The Transport layer is common and is represented by a RX JESD TPL module.
+The links operate in Subclass 1 by using the SYSREF signal to edge-align the
+internal Local Multi-Frame Clock and to release the received data in the same
+moment from all lanes, therefore ensuring that data from all channels is
+synchronized at the Application layer.</p>
+<p>Both links are set for full bandwidth mode and operate with the following
+parameters:</p>
 <ul class="simple">
-<li><p>Deframer paramaters:  L=32, M=2, F=2, S=16, NP=16</p></li>
-<li><p>GLBLCLK - 312.5MHz (Lane Rate/40)</p></li>
-<li><p>REFCLK - 312.5MHz (Lane Rate/20)</p></li>
-<li><p>SYSREF - 1.46MHz (DEVCLK/2048)</p></li>
-<li><p>DEVCLK - 10000MHz</p></li>
-<li><p>JESD204B Lane Rate - 12.5Gbps</p></li>
+<li><p>Deframer paramaters: L=16, M=1, F=2, S=16, NP=16</p></li>
+<li><p>GLBLCLK - 312.5 MHz (Lane Rate/40)</p></li>
+<li><p>REFCLK - 312.5 MHz (Lane Rate/40)</p></li>
+<li><p>SYSREF - 6.25 MHz (DEVCLK/2000)</p></li>
+<li><p>DEVCLK - 10 GHz (Lane Rate/40)</p></li>
+<li><p>JESD204B Lane Rate - 12.5 Gbps</p></li>
 </ul>
 <p>The transport layer component presents on its output 1024 bits at once on every
-clock cycle, representing 16 samples per converter. The typical AXI_PACK IP does
-not meet timing in this design, so a custom one was implemented in the
-system_top.v module. An ADC buffer is used to store 1024k samples per converter
-in the fabric before transferring it with the DMA.</p>
+clock cycle, representing 16 samples per converter.
+The typical UTIL CPACK/UPACK IP does not meet timing in this design, so a
+custom one was implemented in the <em>system_top.v</em> module. An ADC buffer is
+used to store 1024k samples per converter in the fabric before transferring
+it with the DMA.</p>
 <section id="block-diagram">
 <h3>Block diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h3>
 <p>The data path and clock domains are depicted in the below diagram:</p>
-<a class="reference internal image-reference" href="../../_images/ad9213_dual_ebz_block_diagram.svg"><img alt="AD9213-DUAL-EBZ/S10Soc block diagram" class="align-center" src="../../_images/ad9213_dual_ebz_block_diagram.svg" width="800" /></a>
+<a class="reference internal image-reference" href="../../_images/ad9213_dual_ebz_block_diagram.svg"><img alt="AD9213-DUAL-EBZ/S10SoC block diagram" class="align-center" src="../../_images/ad9213_dual_ebz_block_diagram.svg" width="800" /></a>
 </section>
 <section id="configuration-modes">
 <h3>Configuration modes<a class="headerlink" href="#configuration-modes" title="Permalink to this heading"></a></h3>
-<p>This project <strong>supports only one JESD204 configuration</strong>, as follows (the
+<p>This project <strong>supports only one JESD204B configuration</strong>, as follows (the
 values cannot be changed):</p>
 <ul class="simple">
 <li><p>JESD204B subclass 1, uses ADI IP as Physical Layer</p></li>
 <li><p>RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)</p></li>
-<li><p>TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)</p></li>
 <li><p>REF_CLK_RATE: the rate of the reference clock</p></li>
-<li><p>L: number of lanes per link: 8</p></li>
-<li><p>M: number of converters per link: 2</p></li>
-<li><p>S: number of samples per frame: 2</p></li>
+<li><p>L: number of lanes per link: 16</p></li>
+<li><p>M: number of converters per link: 1</p></li>
+<li><p>S: number of samples per frame: 16</p></li>
 <li><p>NP: number of bits per sample: 16</p></li>
-<li><p>F: octets per frame: 1</p></li>
+<li><p>F: octets per frame: 2</p></li>
 <li><p>K: frames per multiframe: 32</p></li>
 </ul>
 </section>
@@ -473,7 +469,7 @@ values cannot be changed):</p>
 <h3>Clocking scheme<a class="headerlink" href="#clocking-scheme" title="Permalink to this heading"></a></h3>
 <a class="reference internal image-reference" href="../../_images/ad9213_dual_ebz_clocks.svg"><img alt="AD9213-DUAL-EBZ/S10SoC clocking scheme" class="align-center" src="../../_images/ad9213_dual_ebz_clocks.svg" width="800" /></a>
 <p>Both physical layer transceiver modules receive two reference clocks from
-LTC6952 OUT4-7 outputs. The global device clock (LaneRate/40) it is received
+LTC6952 OUT4-7 outputs. The global device clock (LaneRate/40) is received
 directly from the OUT8 output and SYSREF is received from OUT9 output of the
 LTC6952. Internally to the FPGA, REFCLK1 for both transceivers (from OUT5 and
 OUT7 of the eval pcb) is unused and not connected.</p>
@@ -798,16 +794,9 @@ command.</p>
 <section id="hardware-related">
 <h3>Hardware related<a class="headerlink" href="#hardware-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p>Product datasheets:</p>
-<ul>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADF4377">ADF4377</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC6955">LTC6955</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC6952">LTC6952</a></p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/LTC6946">LTC6946</a></p></li>
-</ul>
-</li>
-<li><p>Schematic for the evaluation board can be found <a class="reference external" href="https://wiki.analog.com/_media/resources/eval/02_049155d_top.pdf">here</a></p></li>
+<li><p>Product datasheet: <a class="icon adi reference external" href="https://www.analog.com/AD9213">AD9213</a></p></li>
+<li><p>The schematic for the evaluation board can be found
+<a class="reference external" href="https://wiki.analog.com/_media/resources/eval/02_049155d_top.pdf">here</a></p></li>
 </ul>
 </section>
 <section id="hdl-related">
