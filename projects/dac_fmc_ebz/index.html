@@ -496,12 +496,6 @@ are:</p>
 <li><p>can vary from 00 to 21 depending on the selected device (ADI_DAC_DEVICE)</p></li>
 </ul>
 </li>
-<li><p><strong>ADI_LANE_RATE</strong>: specifies the lane rate (<strong>supported only on the ZCU102 carrier</strong>)</p>
-<ul>
-<li><p><strong>15.4 GHz(default)</strong></p></li>
-<li><p>12.5 GHz</p></li>
-</ul>
-</li>
 </ul>
 <p>If the desired parameters are not listed in any of the supported modes the user can
 configure them trough <code class="docutils literal notranslate"><span class="pre">make</span></code> parameters:</p>
@@ -1499,32 +1493,8 @@ command should be run:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ADI_DAC_DEVICE</span><span class="o">=</span>AD9152<span class="w"> </span><span class="nv">ADI_DAC_MODE</span><span class="o">=</span><span class="m">09</span>
 </pre></div>
 </div>
-<div class="clear-left"></div></div></div><p>Example: if the AD9152 device is needed and there is a need for a custom mode,
-the following commands should be run:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ADI_DAC_DEVICE</span><span class="o">=</span>AD9152<span class="w"> </span><span class="nv">ADI_LANE_RATE</span><span class="o">=</span><span class="m">12</span>.5<span class="w"> </span><span class="nv">M</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">L</span><span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="nv">S</span><span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="nv">NP</span><span class="o">=</span><span class="m">16</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>or:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">ADI_DAC_DEVICE</span><span class="o">=</span>AD9152<span class="w"> </span><span class="nv">ADI_LANE_RATE</span><span class="o">=</span><span class="m">12</span>.5<span class="w"> </span><span class="nv">ADI_DAC_MODE</span><span class="o">=</span><span class="m">09</span><span class="w"> </span><span class="nv">M</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">S</span><span class="o">=</span><span class="m">4</span>
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>With either of these two options, the design will be built in the same
-configuration:</p>
-<p><strong>ADI_DAC_DEVICE=AD9152 LANE_RATE=12.5GHz M=1 L=8 S=4 F=1 HD=1 N=16 NP=16</strong></p>
-<p>The result of the build, if parameters were used, will be in a folder named
-by the configuration used:</p>
-<ul class="simple">
-<li><p>if the following command was run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ADI_DAC_DEVICE=AD9152</span> <span class="pre">ADI_DAC_MODE=09</span></code>
-then the folder name will be: <code class="docutils literal notranslate"><span class="pre">ADIDACDEVICEAD9152_ADIDACMODE09</span></code></p></li>
-<li><p>if the following command was run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">ADI_DAC_DEVICE=AD9152</span> <span class="pre">ADI_DAC_MODE=09</span>
-<span class="pre">ADI_LANE_RATE=12.5</span></code> then the folder name will be: <code class="docutils literal notranslate"><span class="pre">ADIDACDEVICEAD9152_ADIDACMODE09_ADILANERATE12_5</span></code></p></li>
-</ul>
+<div class="clear-left"></div></div></div><p>Based on the parameters used above, the build will be in a folder named
+after the configuration called: <code class="docutils literal notranslate"><span class="pre">ADIDACDEVICEAD9152_ADIDACMODE09</span></code>.</p>
 <p>A more comprehensive build guide can be found in the <a class="reference internal" href="../../user_guide/build_hdl.html#build-hdl"><span class="std std-ref">Build an HDL project</span></a> user guide.</p>
 </section>
 <section id="software-considerations">
@@ -1669,7 +1639,7 @@ following table:</p>
 <h3>Software related<a class="headerlink" href="#software-related" title="Permalink to this heading"></a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/ad9172">[Wiki] AD917X DAC Linux Driver wiki page</a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl">[Wiki] AXI DAC HDL Linux Driver wiki page</a></p></li>
+<li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl">[Wiki] AXI DAC HDL Linux Driver wiki page</a></p></li>
 </ul>
 </section>
 </section>
