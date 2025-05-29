@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2018-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2018-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -41,5 +41,5 @@ ad_ip_parameter axi_adrv9009_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_rx_os_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9009_tx_dma CONFIG.FIFO_SIZE 32
 
-ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 80
-ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_REFCLK_DIV 1
+# ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_FBDIV 80
+# ad_ip_parameter util_adrv9009_xcvr CONFIG.QPLL_REFCLK_DIV 1
