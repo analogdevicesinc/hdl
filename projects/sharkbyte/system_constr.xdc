@@ -116,6 +116,9 @@ set_input_delay -clock $a2_input_clock -min $a2_dv_afe                          
 set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 
+set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
+set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
+
 # JTAG
 
 # set_property  -dict {PACKAGE_PIN G9 IOSTANDARD LVCMOS18} [get_ports jtag_tck];     # JTAG_TCK TCK_0

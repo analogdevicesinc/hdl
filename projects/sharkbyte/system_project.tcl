@@ -15,7 +15,7 @@ adi_project_files sharkbyte [list \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/library/common/ad_3w_spi.v"]
 
-set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+# set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
 
 set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
 adi_project_run sharkbyte

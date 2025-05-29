@@ -40,7 +40,8 @@ module axi_hmcad15xx_if #(
   parameter          NUM_LANES = 9,  // Data lanes + frame lane
   parameter          FPGA_TECHNOLOGY = 0,
   parameter          IODELAY_CTRL = 1,
-  parameter          IO_DELAY_GROUP = "adc_if_delay_group"
+  parameter          IO_DELAY_GROUP = "adc_if_delay_group",
+  parameter          REFCLK_FREQUENCY = 200
 ) (
 
   // device-interface
@@ -76,24 +77,57 @@ module axi_hmcad15xx_if #(
 
 
 wire clk_in_s;
+wire clk_in_s_idelay;
 wire adc_clk_in_fast;
 wire adc_clk_div;
+
+//wire adc_clk_in_fast_idelay_s;
 
 IBUFDS i_clk_in_ibuf(
   .I (clk_in_p),
   .IB(clk_in_n),
   .O(clk_in_s));
 
-BUFIO i_clk_buf(
-  .I(clk_in_s),
-  .O(adc_clk_in_fast));
+// BUFIO i_clk_buf(
+//   .I(clk_in_s),
+//   .O(adc_clk_in_fast));
+
+// add IODELAY2 for clock path
+
+  // BUFIO i_clk_buf2(
+  // .I(clk_in_s),
+  // .O(clk_in_s_buf));
+
+ IDELAYE2 # (
+  .CINVCTRL_SEL ("FALSE"),
+  .DELAY_SRC ("IDATAIN"),
+  .HIGH_PERFORMANCE_MODE ("FALSE"),
+  .IDELAY_TYPE ("VAR_LOAD"),
+  .IDELAY_VALUE (0),
+  .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+  .PIPE_SEL ("FALSE"),
+  .SIGNAL_PATTERN ("CLOCK")
+ ) i_delay_clk (
+  .C (up_clk),
+  .CE (1'b0),
+  .CINVCTRL (1'b0),
+  .CNTVALUEIN (up_dwdata[DRP_WIDTH]),
+  .CNTVALUEOUT (up_drdata[DRP_WIDTH]),
+  .DATAIN (1'b0),
+  .IDATAIN (clk_in_s),
+  .DATAOUT (clk_in_s_idelay),
+  .INC (1'b0),
+  .LD (up_dld[DRP_WIDTH]),
+  .LDPIPEEN (1'b0),
+  .REGRST (1'b0)
+ );
 
  BUFR #(
    .BUFR_DIVIDE("4")
  ) i_div_clk_buf (
    .CLR(1'b0),
    .CE(1'b1),
-   .I(clk_in_s),
+   .I(clk_in_s_idelay),
    .O(adc_clk_div));
 
 
@@ -148,7 +182,7 @@ ad_serdes_in # (
 ) ad_serdes_data_inst (
   .rst(serdes_reset_s),
   .ext_serdes_rst(serdes_reset_s),
-  .clk(adc_clk_in_fast),
+  .clk(clk_in_s_idelay),
   .div_clk(adc_clk_div),
   .data_s0(data_s0),
   .data_s1(data_s1),
@@ -168,9 +202,6 @@ ad_serdes_in # (
   .delay_rst(delay_rst),
   .delay_locked(delay_locked)
 );
-
-
-
 
   wire [7:0] frame_data;
   wire [7:0] serdes_data [0:7];
