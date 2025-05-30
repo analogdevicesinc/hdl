@@ -143,10 +143,11 @@ add_connection sys_dma_clk.clk axi_dmac_0.m_dest_axi_clock
 
 # resets
 
-add_connection sys_clk.clk_reset ad469x_trigger_gen.s_axi_reset
-
+add_connection sys_clk.clk_reset spi_clk_pll.reset
+add_connection sys_clk.clk_reset spi_clk_pll_reconfig.mgmt_reset
 add_connection sys_clk.clk_reset axi_spi_engine_0.s_axi_reset
 add_connection sys_clk.clk_reset axi_dmac_0.s_axi_reset
+add_connection sys_clk.clk_reset ad469x_trigger_gen.s_axi_reset
 
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_execution_0.if_resetn
 add_connection axi_spi_engine_0.if_spi_resetn spi_engine_interconnect_0.if_resetn
