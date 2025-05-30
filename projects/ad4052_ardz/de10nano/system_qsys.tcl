@@ -14,5 +14,5 @@ set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "$mem_init_sys_file_path/m
 
 sysid_gen_sys_init_file
 
-# Set a lower limit than the default of 4 for pipeline stages on the memnory-mapped interconnect
+# Set a lower limit than the default of 4 for pipeline stages on the memory-mapped interconnect
 set_interconnect_requirement {$system} {qsys_mm.maxAdditionalLatency} {1}
