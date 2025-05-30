@@ -37,6 +37,10 @@ set_instance_parameter_value spi_engine_interconnect_0 {NUM_OF_SDI} {1}
 
 # bridges
 
+add_instance clock_bridge_0 altera_clock_bridge
+set_instance_parameter_value clock_bridge_0 {EXPLICIT_CLOCK_RATE} {0.0}
+set_instance_parameter_value clock_bridge_0 {NUM_CLOCK_OUTPUTS} {1}
+
 add_instance reset_bridge_0 altera_reset_bridge
 set_instance_parameter_value reset_bridge_0 {ACTIVE_LOW_RESET} {1}
 set_instance_parameter_value reset_bridge_0 {NUM_RESET_OUTPUTS} {1}
@@ -122,7 +126,7 @@ add_connection axi_spi_engine_0.if_spi_resetn reset_bridge_0.in_reset
 # clocks
 
 add_interface ad469x_spi_clk            clock source
-set_interface_property ad469x_spi_clk   EXPORT_OF spi_clk_pll.outclk0
+set_interface_property ad469x_spi_clk   EXPORT_OF clock_bridge_0.out_clk
 
 
 add_connection sys_clk.clk spi_clk_pll.refclk
@@ -138,6 +142,7 @@ add_connection spi_clk_pll.outclk0 axi_spi_engine_0.if_spi_clk
 add_connection spi_clk_pll.outclk0 spi_engine_offload_0.if_ctrl_clk
 add_connection spi_clk_pll.outclk0 spi_engine_offload_0.if_spi_clk
 add_connection spi_clk_pll.outclk0 axi_dmac_0.if_s_axis_aclk
+add_connection spi_clk_pll.outclk0 clock_bridge_0.in_clk
 
 add_connection sys_dma_clk.clk axi_dmac_0.m_dest_axi_clock
 
