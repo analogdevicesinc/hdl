@@ -63,7 +63,7 @@ set_property  -quiet -dict {PACKAGE_PIN AL31 IOSTANDARD LVDS                    
 set_property  -quiet -dict {PACKAGE_PIN AL30 IOSTANDARD LVDS                                         } [get_ports fpga_syncout_p[0]         ]    ; ## IO_L16P_T2U_N6_QBC_AD3P_43
 set_property  -quiet -dict {PACKAGE_PIN AT36 IOSTANDARD LVDS                                         } [get_ports fpga_syncout_n[1]         ]    ; ## IO_L2N_T0L_N3_43
 set_property  -quiet -dict {PACKAGE_PIN AT35 IOSTANDARD LVDS                                         } [get_ports fpga_syncout_p[1]         ]    ; ## IO_L2P_T0L_N2_43
-set_property         -dict {PACKAGE_PIN AG32 IOSTANDARD LVCMOS18                                     } [get_ports gpio[0]                   ]    ; ## IO_L24P_T3U_N10_43
+set_property         -dict {PACKAGE_PIN AG32 IOSTANDARD LVCMOS18                                     } [get_ports gpio0                     ]    ; ## IO_L24P_T3U_N10_43
 set_property         -dict {PACKAGE_PIN AG33 IOSTANDARD LVCMOS18                                     } [get_ports gpio[1]                   ]    ; ## IO_L24N_T3U_N11_43
 set_property         -dict {PACKAGE_PIN N33  IOSTANDARD LVCMOS18                                     } [get_ports gpio[2]                   ]    ; ## IO_L22P_T3U_N6_DBC_AD0P_45
 set_property         -dict {PACKAGE_PIN M33  IOSTANDARD LVCMOS18                                     } [get_ports gpio[3]                   ]    ; ## IO_L22N_T3U_N7_DBC_AD0N_45
@@ -95,5 +95,24 @@ set_property         -dict {PACKAGE_PIN AK33 IOSTANDARD LVCMOS18                
 
 set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP                     } [get_ports vadj_1v8_pgood            ]    ; ## IO_T1U_N12_43_AK35 
 
+# PMOD0 connections (NCO Sync and DMA Sync Start signals)
+set_property         -dict {PACKAGE_PIN AY14  IOSTANDARD LVCMOS18                                    } [get_ports nco_sync                  ]    ; ## PMOD0_0 J52.1
+set_property         -dict {PACKAGE_PIN AY15  IOSTANDARD LVCMOS18                                    } [get_ports dma_start                 ]    ; ## PMOD0_1 J52.3
+# set_property         -dict {PACKAGE_PIN AW15  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_2                   ]    ; ## PMOD0_2 J52.5
+# set_property         -dict {PACKAGE_PIN AV15  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_3                   ]    ; ## PMOD0_3 J52.7
 
+# set_property         -dict {PACKAGE_PIN AV16  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_4                   ]    ; ## PMOD0_4 J52.2
+# set_property         -dict {PACKAGE_PIN AU16  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_5                   ]    ; ## PMOD0_5 J52.4
+# set_property         -dict {PACKAGE_PIN AT15  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_6                   ]    ; ## PMOD0_6 J52.6
+# set_property         -dict {PACKAGE_PIN AT16  IOSTANDARD LVCMOS18                                    } [get_ports pmod0_7                   ]    ; ## PMOD0_7 J52.8
 
+# PMOD1 AD-SYNCHRONA14-EBZ Control
+set_property         -dict {PACKAGE_PIN N28  IOSTANDARD LVCMOS12                                     } [get_ports ext_hmc7044_sclk           ]    ; ## PMOD1_0 J53.1
+set_property         -dict {PACKAGE_PIN M30  IOSTANDARD LVCMOS12                                     } [get_ports ext_hmc7044_slen           ]    ; ## PMOD1_1 J53.3
+set_property         -dict {PACKAGE_PIN N30  IOSTANDARD LVCMOS12                                     } [get_ports ext_hmc7044_sdata          ]    ; ## PMOD1_2 J53.5
+set_property         -dict {PACKAGE_PIN P30  IOSTANDARD LVCMOS12                                     } [get_ports ext_hmc7044_miso           ]    ; ## PMOD1_3 J53.7
+
+# set_property  -dict {PACKAGE_PIN P29   IOSTANDARD LVCMOS12                      } [get_ports pmod1_5045_v2              ]; ## PMOD1_4 J53.2
+# set_property  -dict {PACKAGE_PIN L31   IOSTANDARD LVCMOS12                      } [get_ports pmod1_5045_v1              ]; ## PMOD1_5 J53.4
+# set_property  -dict {PACKAGE_PIN M31   IOSTANDARD LVCMOS12                      } [get_ports pmod1_ctrl_ind             ]; ## PMOD1_6 J53.6
+# set_property  -dict {PACKAGE_PIN R29   IOSTANDARD LVCMOS12                      } [get_ports pmod1_ctrl_rx_combined     ]; ## PMOD1_7 J53.8

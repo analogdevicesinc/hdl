@@ -143,3 +143,31 @@ if {$ad_project_params(JESD_MODE) == "64B66B"} {
   }
 
 }
+
+# Second SPI controller
+create_bd_port -dir O spi_2_csn_o
+create_bd_port -dir I spi_2_csn_i
+create_bd_port -dir I spi_2_clk_i
+create_bd_port -dir O spi_2_clk_o
+create_bd_port -dir I spi_2_sdo_i
+create_bd_port -dir O spi_2_sdo_o
+create_bd_port -dir I spi_2_sdi_i
+
+ad_ip_instance axi_quad_spi axi_spi_2
+ad_ip_parameter axi_spi_2 CONFIG.C_USE_STARTUP 0
+ad_ip_parameter axi_spi_2 CONFIG.C_NUM_SS_BITS 1
+ad_ip_parameter axi_spi_2 CONFIG.C_SCK_RATIO 8
+
+ad_connect spi_2_csn_i axi_spi_2/ss_i
+ad_connect spi_2_csn_o axi_spi_2/ss_o
+ad_connect spi_2_clk_i axi_spi_2/sck_i
+ad_connect spi_2_clk_o axi_spi_2/sck_o
+ad_connect spi_2_sdo_i axi_spi_2/io0_i
+ad_connect spi_2_sdo_o axi_spi_2/io0_o
+ad_connect spi_2_sdi_i axi_spi_2/io1_i
+
+ad_connect sys_cpu_clk axi_spi_2/ext_spi_clk
+
+ad_cpu_interrupt ps-15 mb-7 axi_spi_2/ip2intc_irpt
+
+ad_cpu_interconnect 0x44AA0000 axi_spi_2

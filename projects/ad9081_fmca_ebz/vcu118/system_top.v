@@ -81,6 +81,9 @@ module system_top #(
 
   input         vadj_1v8_pgood,
 
+  input         nco_sync,
+  input         dma_start,
+
   // FMC HPC IOs
   input  [1:0]  agc0,
   input  [1:0]  agc1,
@@ -102,7 +105,8 @@ module system_top #(
   input  [TX_NUM_LINKS-1:0]  fpga_syncin_p,
   output [RX_NUM_LINKS-1:0]  fpga_syncout_n,
   output [RX_NUM_LINKS-1:0]  fpga_syncout_p,
-  inout  [10:0] gpio,
+  output        gpio0,
+  inout  [10:1] gpio,
   inout         hmc_gpio1,
   output        hmc_sync,
   input  [1:0]  irqb,
@@ -115,6 +119,10 @@ module system_top #(
   output        spi1_csb,
   output        spi1_sclk,
   inout         spi1_sdio,
+  output        ext_hmc7044_sclk,
+  output        ext_hmc7044_slen,
+  inout         ext_hmc7044_sdata,
+  input         ext_hmc7044_miso,
   input         sysref2_n,
   input         sysref2_p,
   output [1:0]  txen
@@ -143,6 +151,23 @@ module system_top #(
   wire            clkin8;
   wire            tx_device_clk;
   wire            rx_device_clk;
+
+  wire            spi_2_clk;
+  wire            spi_2_csn;
+  wire            spi_2_mosi;
+  wire            spi_2_miso;
+
+  wire            ext_sync_at_sysref;
+  wire            sysref_edge;
+  wire            ext_sync_edge;
+
+  reg             ext_sync_d1 = 1'b0;
+  reg             ext_sync_d2 = 1'b0;
+  reg             ext_sync_d3 = 1'b0;
+  reg             sysref_d1 = 1'b0;
+  reg             sysref_d2 = 1'b0;
+  reg             sysref_d3 = 1'b0;
+  reg             sync_pendign = 1'b0;
 
   assign iic_rstn = 1'b1;
 
@@ -215,6 +240,11 @@ module system_top #(
   assign spi_miso = ~spi_csn[0] ? spi0_miso :
                     ~spi_csn[1] ? spi1_miso : 1'b0;
 
+  assign ext_hmc7044_slen = spi_2_csn;
+  assign ext_hmc7044_sclk = spi_2_clk;
+
+  assign spi_2_miso = ~spi_2_csn ? ext_hmc7044_miso : 1'b0;
+
   ad_3w_spi #(
     .NUM_OF_SLAVES(1)
   ) i_spi (
@@ -225,16 +255,24 @@ module system_top #(
     .spi_sdio (spi1_sdio),
     .spi_dir ());
 
+  ad_3w_spi #(.NUM_OF_SLAVES(1)) i_spi_ext_hmc (
+    .spi_csn (spi_2_csn),
+    .spi_clk (spi_2_clk),
+    .spi_mosi (spi_2_mosi),
+    .spi_miso (),
+    .spi_sdio (ext_hmc7044_sdata),
+    .spi_dir ());
+
   // gpios
 
   ad_iobuf #(
-    .DATA_WIDTH(12)
+    .DATA_WIDTH(11)
   ) i_iobuf (
-    .dio_t (gpio_t[43:32]),
-    .dio_i (gpio_o[43:32]),
-    .dio_o (gpio_i[43:32]),
+    .dio_t (gpio_t[43:33]),
+    .dio_i (gpio_o[43:33]),
+    .dio_o (gpio_i[43:33]),
     .dio_p ({hmc_gpio1,       // 43
-             gpio[10:0]}));   // 42-32
+             gpio[10:1]}));   // 42-33
 
   assign gpio_i[44] = agc0[0];
   assign gpio_i[45] = agc0[1];
@@ -253,6 +291,7 @@ module system_top #(
   assign rxen[1]          = gpio_o[57];
   assign txen[0]          = gpio_o[58];
   assign txen[1]          = gpio_o[59];
+  assign gpio0            = nco_sync;
 
   ad_iobuf #(
     .DATA_WIDTH(17)
@@ -304,6 +343,13 @@ module system_top #(
     .spi_sdi_i (spi_miso),
     .spi_sdo_i (spi_mosi),
     .spi_sdo_o (spi_mosi),
+    .spi_2_clk_i (spi_2_clk),
+    .spi_2_clk_o (spi_2_clk),
+    .spi_2_csn_i (spi_2_csn),
+    .spi_2_csn_o (spi_2_csn),
+    .spi_2_sdi_i (spi_2_miso),
+    .spi_2_sdo_i (spi_2_mosi),
+    .spi_2_sdo_o (spi_2_mosi),
     .gpio0_i (gpio_i[31:0]),
     .gpio0_o (gpio_o[31:0]),
     .gpio0_t (gpio_t[31:0]),
@@ -347,6 +393,7 @@ module system_top #(
     .ref_clk_q1 (ref_clk_replica),
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
+    .ext_sync_in (ext_sync_at_sysref),
     .rx_sync_0 (rx_syncout),
     .tx_sync_0 (tx_syncin),
     .rx_sysref_0 (sysref),
@@ -354,5 +401,29 @@ module system_top #(
 
   assign tx_data_p[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_p_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
   assign tx_data_n[TX_JESD_L*TX_NUM_LINKS-1:0] = tx_data_n_loc[TX_JESD_L*TX_NUM_LINKS-1:0];
+
+  assign sysref_edge = sysref_d2 & ~sysref_d3;
+
+  always @(posedge rx_device_clk) begin
+    sysref_d1 <= sysref;
+    sysref_d2 <= sysref_d1;
+    sysref_d3 <= sysref_d2;
+    ext_sync_d1 <= dma_start;
+    ext_sync_d2 <= ext_sync_d1;
+    ext_sync_d3 <= ext_sync_d2;
+  end
+
+  assign ext_sync_edge = ext_sync_d2 & ~ext_sync_d3;
+
+  // assumption is the ext_sync is not edge aligned with sysref
+  always @(posedge rx_device_clk) begin
+    if (ext_sync_edge) begin
+      sync_pendign <= 1'b1;
+    end else if (sysref_edge) begin
+      sync_pendign <= 1'b0;
+    end
+  end
+
+  assign ext_sync_at_sysref = sync_pendign & sysref_edge;
 
 endmodule
