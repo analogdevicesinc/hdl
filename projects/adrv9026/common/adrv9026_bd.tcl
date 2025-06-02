@@ -3,8 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# Link sharing mode
-set LINK_SHARING $ad_project_params(LINK_SHARING)      ; # 0 = NLS ; 1 = LS
+set ORX_ENABLE $ad_project_params(ORX_ENABLE)      ; # 0 = Disabled ; 1 = Enabled
+set LINK_SHARING $ad_project_params(LINK_SHARING)  ; # 0 = Non-LinkSharing ; 1 = LinkSharing
 
 set DATAPATH_WIDTH 4
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
@@ -53,7 +53,7 @@ set RX_OS_NUM_OF_CONVERTERS [expr $RX_OS_JESD_M * $RX_OS_NUM_LINKS] ; # M
 set RX_OS_SAMPLES_PER_FRAME $ad_project_params(RX_OS_JESD_S)        ; # S
 set RX_OS_SAMPLE_WIDTH 16                                           ; # N/NP
 
-if {!$LINK_SHARING} {
+if {$ORX_ENABLE} {
   set RX_OS_DATAPATH_WIDTH [adi_jesd204_calc_tpl_width $DATAPATH_WIDTH $RX_OS_NUM_OF_LANES $RX_OS_NUM_OF_CONVERTERS $RX_OS_SAMPLES_PER_FRAME $RX_OS_SAMPLE_WIDTH]
   set RX_OS_SAMPLES_PER_CHANNEL [expr $RX_OS_NUM_OF_LANES * 8 * $RX_OS_DATAPATH_WIDTH / ($RX_OS_NUM_OF_CONVERTERS * $RX_OS_SAMPLE_WIDTH)]
 }
@@ -173,26 +173,26 @@ ad_ip_parameter axi_adrv9026_rx_dma CONFIG.DMA_DATA_WIDTH_DEST 128
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.FIFO_SIZE 32
 ad_ip_parameter axi_adrv9026_rx_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
-if {!$LINK_SHARING} {
+if {$ORX_ENABLE} {
   # adc-obs peripherals
+  if {!$LINK_SHARING} {
+    ad_ip_instance axi_clkgen axi_adrv9026_rx_os_clkgen
+    ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.ID 2
+    ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.CLKIN_PERIOD 4
+    ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.VCO_DIV 1
+    ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.VCO_MUL 4
+    ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.CLK0_DIV 4
 
-  ad_ip_instance axi_clkgen axi_adrv9026_rx_os_clkgen
-  ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.ID 2
-  ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.CLKIN_PERIOD 4
-  ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.VCO_DIV 1
-  ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.VCO_MUL 4
-  ad_ip_parameter axi_adrv9026_rx_os_clkgen CONFIG.CLK0_DIV 4
+    ad_ip_instance axi_adxcvr axi_adrv9026_rx_os_xcvr
+    ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.NUM_OF_LANES $RX_OS_NUM_OF_LANES
+    ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.QPLL_ENABLE 0
+    ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.TX_OR_RX_N 0
+    ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.SYS_CLK_SEL 0
+    ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.OUT_CLK_SEL 3
 
-  ad_ip_instance axi_adxcvr axi_adrv9026_rx_os_xcvr
-  ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.NUM_OF_LANES $RX_OS_NUM_OF_LANES
-  ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.QPLL_ENABLE 0
-  ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.TX_OR_RX_N 0
-  ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.SYS_CLK_SEL 0
-  ad_ip_parameter axi_adrv9026_rx_os_xcvr CONFIG.OUT_CLK_SEL 3
-
-  adi_axi_jesd204_rx_create axi_adrv9026_rx_os_jesd $RX_OS_NUM_OF_LANES
-  ad_ip_parameter axi_adrv9026_rx_os_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_OS_DATAPATH_WIDTH
-
+    adi_axi_jesd204_rx_create axi_adrv9026_rx_os_jesd $RX_OS_NUM_OF_LANES
+    ad_ip_parameter axi_adrv9026_rx_os_jesd/rx CONFIG.TPL_DATA_PATH_WIDTH $RX_OS_DATAPATH_WIDTH
+  }
   ad_ip_instance util_cpack2 util_adrv9026_rx_os_cpack [list \
     NUM_OF_CHANNELS $RX_OS_NUM_OF_CONVERTERS \
     SAMPLES_PER_CHANNEL $RX_OS_SAMPLES_PER_CHANNEL \
@@ -273,10 +273,10 @@ for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
   ad_xcvrpll  axi_adrv9026_rx_xcvr/up_pll_rst util_adrv9026_xcvr/up_cpll_rst_$ch
 }
 
-if {!$LINK_SHARING} {
+if {$ORX_ENABLE && !$LINK_SHARING} {
 # Rx - OBS
-   ad_connect adrv9026_rx_os_device_clk axi_adrv9026_rx_os_clkgen/clk_0
-   ad_connect core_clk axi_adrv9026_rx_os_clkgen/clk
+  ad_connect adrv9026_rx_os_device_clk axi_adrv9026_rx_os_clkgen/clk_0
+  ad_connect core_clk axi_adrv9026_rx_os_clkgen/clk
   ad_xcvrcon  util_adrv9026_xcvr axi_adrv9026_rx_os_xcvr axi_adrv9026_rx_os_jesd {} adrv9026_rx_os_device_clk {} $RX_OS_NUM_OF_LANES
   for {set i 0} {$i < $RX_OS_NUM_OF_LANES} {incr i} {
     set ch [expr $RX_NUM_OF_LANES + $i]
@@ -289,6 +289,7 @@ if {!$LINK_SHARING} {
   ad_connect rx_os_sync axi_adrv9026_rx_os_jesd_sync
   ad_connect rx_os_sysref sysref_3
 }
+
 # connections (dac)
 ad_connect  adrv9026_tx_device_clk tx_adrv9026_tpl_core/link_clk
 ad_connect  axi_adrv9026_tx_jesd/tx_data tx_adrv9026_tpl_core/link
@@ -342,14 +343,27 @@ ad_connect  adrv9026_rx_device_clk axi_adrv9026_rx_dma/fifo_wr_clk
 ad_connect  util_adrv9026_rx_cpack/packed_fifo_wr axi_adrv9026_rx_dma/fifo_wr
 ad_connect  util_adrv9026_rx_cpack/packed_sync axi_adrv9026_rx_dma/sync
 
-if {!$LINK_SHARING} {
-  # connections (adc-obs)
-  ad_connect  adrv9026_rx_os_device_clk rx_os_adrv9026_tpl_core/link_clk
-  ad_connect  axi_adrv9026_rx_os_jesd/rx_sof rx_os_adrv9026_tpl_core/link_sof
-  ad_connect  axi_adrv9026_rx_os_jesd/rx_data_tdata rx_os_adrv9026_tpl_core/link_data
-  ad_connect  axi_adrv9026_rx_os_jesd/rx_data_tvalid rx_os_adrv9026_tpl_core/link_valid
-  ad_connect  adrv9026_rx_os_device_clk util_adrv9026_rx_os_cpack/clk
-  ad_connect  adrv9026_rx_os_device_clk_rstgen/peripheral_reset util_adrv9026_rx_os_cpack/reset
+if {$ORX_ENABLE} {
+  if {!$LINK_SHARING} {
+    # connections (adc-obs)
+    ad_connect  adrv9026_rx_os_device_clk rx_os_adrv9026_tpl_core/link_clk
+    ad_connect  axi_adrv9026_rx_os_jesd/rx_sof rx_os_adrv9026_tpl_core/link_sof
+    ad_connect  axi_adrv9026_rx_os_jesd/rx_data_tdata rx_os_adrv9026_tpl_core/link_data
+    ad_connect  axi_adrv9026_rx_os_jesd/rx_data_tvalid rx_os_adrv9026_tpl_core/link_valid
+
+    ad_connect  adrv9026_rx_os_device_clk util_adrv9026_rx_os_cpack/clk
+    ad_connect  adrv9026_rx_os_device_clk_rstgen/peripheral_reset util_adrv9026_rx_os_cpack/reset
+    ad_connect  adrv9026_rx_os_device_clk axi_adrv9026_rx_os_dma/fifo_wr_clk
+  } else {
+    ad_connect  adrv9026_rx_device_clk rx_os_adrv9026_tpl_core/link_clk
+    ad_connect  axi_adrv9026_rx_jesd/rx_sof rx_os_adrv9026_tpl_core/link_sof
+    ad_connect  axi_adrv9026_rx_jesd/rx_data_tdata rx_os_adrv9026_tpl_core/link_data
+    ad_connect  axi_adrv9026_rx_jesd/rx_data_tvalid rx_os_adrv9026_tpl_core/link_valid
+
+    ad_connect  adrv9026_rx_device_clk util_adrv9026_rx_os_cpack/clk
+    ad_connect  adrv9026_rx_device_clk_rstgen/peripheral_reset util_adrv9026_rx_os_cpack/reset
+    ad_connect  adrv9026_rx_device_clk axi_adrv9026_rx_os_dma/fifo_wr_clk
+  }
 
   for {set i 0} {$i < $RX_OS_NUM_OF_CONVERTERS} {incr i} {
     ad_connect  rx_os_adrv9026_tpl_core/adc_enable_$i util_adrv9026_rx_os_cpack/enable_$i
@@ -360,11 +374,9 @@ if {!$LINK_SHARING} {
   ad_connect  rx_os_adrv9026_tpl_core/adc_valid_0 util_adrv9026_rx_os_cpack/fifo_wr_en
   ad_connect  rx_os_adrv9026_tpl_core/adc_dovf util_adrv9026_rx_os_cpack/fifo_wr_overflow
 
-  ad_connect  adrv9026_rx_os_device_clk axi_adrv9026_rx_os_dma/fifo_wr_clk
   ad_connect  util_adrv9026_rx_os_cpack/packed_fifo_wr axi_adrv9026_rx_os_dma/fifo_wr
   ad_connect  util_adrv9026_rx_os_cpack/packed_sync axi_adrv9026_rx_os_dma/sync
 }
-
 # interconnect (cpu)
 
 ad_cpu_interconnect 0x44A00000 rx_adrv9026_tpl_core
@@ -377,12 +389,14 @@ ad_cpu_interconnect 0x44AA0000 axi_adrv9026_rx_jesd
 ad_cpu_interconnect 0x7C400000 axi_adrv9026_rx_dma
 ad_cpu_interconnect 0x43C10000 axi_adrv9026_rx_clkgen
 ad_cpu_interconnect 0x43C00000 axi_adrv9026_tx_clkgen
-if {!$LINK_SHARING} {
+if {$ORX_ENABLE} {
   ad_cpu_interconnect 0x44A08000 rx_os_adrv9026_tpl_core
-  ad_cpu_interconnect 0x45A60000 axi_adrv9026_rx_os_xcvr
-  ad_cpu_interconnect 0x45AA0000 axi_adrv9026_rx_os_jesd
   ad_cpu_interconnect 0x7C800000 axi_adrv9026_rx_os_dma
-  ad_cpu_interconnect 0x43C20000 axi_adrv9026_rx_os_clkgen
+  if {!$LINK_SHARING} {
+    ad_cpu_interconnect 0x43C20000 axi_adrv9026_rx_os_clkgen
+    ad_cpu_interconnect 0x45A60000 axi_adrv9026_rx_os_xcvr
+    ad_cpu_interconnect 0x45AA0000 axi_adrv9026_rx_os_jesd
+  }
 }
 
 # interconnect (mem/dac)
@@ -390,7 +404,7 @@ if {!$LINK_SHARING} {
 ad_mem_hp0_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP0
 ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9026_rx_xcvr/m_axi
 
-if {!$LINK_SHARING} {
+if {$ORX_ENABLE && !$LINK_SHARING} {
   ad_mem_hp0_interconnect $sys_cpu_clk axi_adrv9026_rx_os_xcvr/m_axi
 }
 
@@ -399,7 +413,7 @@ if {$CACHE_COHERENCY} {
   ad_mem_hpc0_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
   ad_mem_hpc1_interconnect $sys_dma_clk sys_ps8/S_AXI_HPC1
   ad_mem_hpc1_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
-  if {!$LINK_SHARING} {
+  if {$ORX_ENABLE} {
     ad_mem_hpc1_interconnect $sys_dma_clk axi_adrv9026_rx_os_dma/m_dest_axi
   }
 } else {
@@ -407,7 +421,7 @@ if {$CACHE_COHERENCY} {
   ad_mem_hp2_interconnect $sys_dma_clk axi_adrv9026_rx_dma/m_dest_axi
   ad_mem_hp3_interconnect $sys_dma_clk sys_ps7/S_AXI_HP3
   ad_mem_hp3_interconnect $sys_dma_clk axi_adrv9026_tx_dma/m_src_axi
-  if {!$LINK_SHARING} {
+  if {$ORX_ENABLE} {
     ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
     ad_mem_hp1_interconnect $sys_dma_clk axi_adrv9026_rx_os_dma/m_dest_axi
   }
@@ -419,7 +433,9 @@ ad_cpu_interrupt ps-10 mb-7  axi_adrv9026_tx_jesd/irq
 ad_cpu_interrupt ps-11 mb-8  axi_adrv9026_rx_jesd/irq
 ad_cpu_interrupt ps-13 mb-12 axi_adrv9026_tx_dma/irq
 ad_cpu_interrupt ps-14 mb-13 axi_adrv9026_rx_dma/irq
-if {!$LINK_SHARING} {
-  ad_cpu_interrupt ps-12 mb-15 axi_adrv9026_rx_os_jesd/irq
+if {$ORX_ENABLE} {
+  if {!$LINK_SHARING} {
+    ad_cpu_interrupt ps-12 mb-15 axi_adrv9026_rx_os_jesd/irq
+  }
   ad_cpu_interrupt ps-15 mb-14 axi_adrv9026_rx_os_dma/irq
 }
