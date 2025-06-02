@@ -159,6 +159,7 @@ module system_top #(
 );
 
   localparam      CLK_FWD_PAT = 8'h55;
+  localparam      SYNC_W = (ASYMMETRIC_A_B_MODE == 1)? 2 : RX_NUM_LINKS;
 
   // internal signals
 
@@ -178,12 +179,12 @@ module system_top #(
   wire            apollo_spi_sdio;
 
   // wire    [ 5:0]  ref_clk_loc;
-  wire            ref_clk;
-  wire            ref_clk_replica;
-  wire            sysref;
-  wire            sysref_loc;
-  wire    [TX_NUM_LINKS-1:0]  tx_syncin;
-  wire    [RX_NUM_LINKS-1:0]  rx_syncout;
+  wire              ref_clk;
+  wire              ref_clk_replica;
+  wire              sysref;
+  wire              sysref_loc;
+  wire [SYNC_W-1:0] tx_syncin;
+  wire [SYNC_W-1:0] rx_syncout;
 
   wire            clkin0;
   wire            clkin1;
@@ -598,8 +599,10 @@ module system_top #(
     .hsci_vtc_rdy_bsc_rx (hsci_vtc_rdy_bsc_rx),
     .hsci_dly_rdy_bsc_rx (hsci_dly_rdy_bsc_rx),
 
-    .rx_sync_0 (rx_syncout),
-    .tx_sync_0 (tx_syncin),
+    .rx_sync_0 (rx_syncout[0]),
+    .tx_sync_0 (tx_syncin[0]),
+    .rx_sync_12 (rx_syncout[1]),
+    .tx_sync_12 (tx_syncin[1]),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref_loc),

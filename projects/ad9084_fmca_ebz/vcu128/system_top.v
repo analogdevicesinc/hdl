@@ -146,6 +146,8 @@ module system_top #(
   output         resetb
 );
 
+  localparam SYNC_W = (ASYMMETRIC_A_B_MODE == 1) ? 2 : RX_NUM_LINKS;;
+
   // internal signals
 
   wire    [63:0]  gpio_i;
@@ -163,13 +165,13 @@ module system_top #(
   wire            apollo_spi_sdo;
   wire            apollo_spi_sdio;
 
-  wire            ref_clk_124;
-  wire            ref_clk_126;
-  wire            ref_clk_128;
-  wire            sysref;
-  wire            sysref_loc;
-  wire    [TX_NUM_LINKS-1:0]  tx_syncin;
-  wire    [RX_NUM_LINKS-1:0]  rx_syncout;
+  wire              ref_clk_124;
+  wire              ref_clk_126;
+  wire              ref_clk_128;
+  wire              sysref;
+  wire              sysref_loc;
+  wire [SYNC_W-1:0] tx_syncin;
+  wire [SYNC_W-1:0] rx_syncout;
 
   wire            clkin0;
   wire            clkin1;
@@ -514,8 +516,10 @@ module system_top #(
     .rx_b_device_clk (rx_b_device_clk),
     .tx_b_device_clk (tx_b_device_clk),
 
-    .rx_sync_0 (rx_syncout),
-    .tx_sync_0 (tx_syncin),
+    .rx_sync_0 (rx_syncout[0]),
+    .tx_sync_0 (tx_syncin[0]),
+    .rx_sync_12 (rx_syncout[1]),
+    .tx_sync_12 (tx_syncin[1]),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref_loc),
