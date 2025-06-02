@@ -38,7 +38,8 @@
 
 module system_top #(
     parameter TX_NUM_LINKS = 1,
-    parameter RX_NUM_LINKS = 1
+    parameter RX_NUM_LINKS = 1,
+    parameter ASYMMETRIC_A_B_MODE = 0
   ) (
 
   input           sys_clk_n,
@@ -158,6 +159,8 @@ module system_top #(
   output         resetb
 );
 
+  localparam SYNC_W = (ASYMMETRIC_A_B_MODE == 1)? 2 : RX_NUM_LINKS;
+
   // internal signals
 
   wire    [95:0]  gpio_i;
@@ -175,10 +178,10 @@ module system_top #(
   wire            apollo_spi_sdo;
   wire            apollo_spi_sdio;
 
-  wire            ref_clk;
-  wire            sysref;
-  wire    [TX_NUM_LINKS-1:0]  tx_syncin;
-  wire    [RX_NUM_LINKS-1:0]  rx_syncout;
+  wire              ref_clk;
+  wire              sysref;
+  wire [SYNC_W-1:0] tx_syncin;
+  wire [SYNC_W-1:0] rx_syncout;
 
   wire            clkin0;
   wire            clkin1;
@@ -472,8 +475,10 @@ module system_top #(
     .data_from_fabric (data_from_fabric),
     .data_to_fabric (data_to_fabric),
 
-    .rx_sync_0 (rx_syncout),
-    .tx_sync_0 (tx_syncin),
+    .rx_sync_0 (rx_syncout[0]),
+    .tx_sync_0 (tx_syncin[0]),
+    .rx_sync_12 (rx_syncout[1]),
+    .tx_sync_12 (tx_syncin[1]),
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref),

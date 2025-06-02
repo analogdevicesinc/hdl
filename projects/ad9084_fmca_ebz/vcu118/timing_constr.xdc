@@ -60,15 +60,15 @@ set_clock_groups -group rx_device_clk -group tx_device_clk -asynchronous
 # set ASYMMETRIC_A_B_MODE [get_env_param ASYMMETRIC_A_B_MODE 1]
 
 # if {$ASYMMETRIC_A_B_MODE} {
-  create_clock -name rx_b_device_clk     -period  $rx_device_clk_period [get_ports ref_clk_p[1]]
-  create_clock -name tx_b_device_clk     -period  $tx_device_clk_period [get_ports ref_clk_p[2]]
+  # create_clock -name rx_b_device_clk     -period  $rx_device_clk_period [get_ports ref_clk_p[1]]
+  # create_clock -name tx_b_device_clk     -period  $tx_device_clk_period [get_ports ref_clk_p[2]]
 
-  set_input_delay -clock [get_clocks rx_b_device_clk] \
-    [get_property PERIOD [get_clocks rx_b_device_clk]] \
-    [get_ports {sysref_in*}]
-  set_input_delay -clock [get_clocks tx_b_device_clk] -add_delay\
-    [get_property PERIOD [get_clocks tx_b_device_clk]] \
-    [get_ports {sysref_in*}]
+  # set_input_delay -clock [get_clocks rx_b_device_clk] \
+  #   [get_property PERIOD [get_clocks rx_b_device_clk]] \
+  #   [get_ports {sysref_in*}]
+  # set_input_delay -clock [get_clocks tx_b_device_clk] -add_delay\
+  #   [get_property PERIOD [get_clocks tx_b_device_clk]] \
+  #   [get_ports {sysref_in*}]
   set_clock_groups -group rx_b_device_clk -group tx_b_device_clk -asynchronous
 # }
 

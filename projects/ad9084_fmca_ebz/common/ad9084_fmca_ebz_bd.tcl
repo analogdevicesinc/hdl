@@ -720,6 +720,17 @@ if {$ADI_PHY_SEL} {
 
     ad_connect $sys_cpu_clk jesd204_phy_b/s_axi_clk
     ad_connect $sys_cpu_resetn jesd204_phy_b/s_axi_resetn
+    create_bd_port -dir O -from [expr $RX_NUM_LINKS - 1] -to 0 rx_sync_12
+    if {$JESD_MODE == "8B10B"} {
+    ad_connect axi_apollo_rx_b_jesd/phy_en_char_align jesd204_phy_b/en_char_align
+    ad_connect axi_apollo_rx_b_jesd/sync rx_sync_12
+    } else {
+      ad_connect GND jesd204_phy_b/en_char_align
+    }
+    create_bd_port -dir I -from [expr $TX_NUM_LINKS - 1] -to 0 tx_sync_12
+    if {$JESD_MODE == "8B10B"} {
+      ad_connect axi_apollo_tx_b_jesd/sync tx_sync_0
+    }
   }
 
   # Export serial interfaces
@@ -797,6 +808,7 @@ if {$ASYMMETRIC_A_B_MODE} {
   if {$ADI_PHY_SEL} {
     ad_xcvrcon  util_apollo_xcvr axi_apollo_rx_xcvr axi_apollo_rx_jesd $max_lane_map {} rx_device_clk $MAX_RX_LANES
     create_bd_port -dir I rx_sysref_12
+    create_bd_port -dir O rx_sync_12
   }
 }
 
@@ -827,6 +839,7 @@ if {$ASYMMETRIC_A_B_MODE} {
   if {$ADI_PHY_SEL} {
     ad_xcvrcon  util_apollo_xcvr axi_apollo_tx_xcvr axi_apollo_tx_jesd $max_lane_map {} tx_device_clk $MAX_TX_LANES
     create_bd_port -dir I tx_sysref_12
+    create_bd_port -dir I tx_sync_12
   }
 }
 
