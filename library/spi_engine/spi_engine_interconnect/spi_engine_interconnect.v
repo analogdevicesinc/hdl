@@ -51,7 +51,7 @@ module spi_engine_interconnect #(
 
   output m_sdo_valid,
   input m_sdo_ready,
-  output [(NUM_OF_SDI * DATA_WIDTH-1):0] m_sdo_data,
+  output [(DATA_WIDTH-1):0] m_sdo_data,
 
   input m_sdi_valid,
   output m_sdi_ready,
@@ -67,7 +67,7 @@ module spi_engine_interconnect #(
 
   input s0_sdo_valid,
   output s0_sdo_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] s0_sdo_data,
+  input [(DATA_WIDTH-1):0] s0_sdo_data,
 
   output s0_sdi_valid,
   input s0_sdi_ready,
@@ -83,7 +83,7 @@ module spi_engine_interconnect #(
 
   input s1_sdo_valid,
   output s1_sdo_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH-1):0] s1_sdo_data,
+  input [(DATA_WIDTH-1):0] s1_sdo_data,
 
   output s1_sdi_valid,
   input s1_sdi_ready,
