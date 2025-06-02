@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright 2025 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -35,67 +35,46 @@
 
 `timescale 1ns/100ps
 
-
 module system_top #(
     parameter TX_NUM_LINKS = 1,
     parameter RX_NUM_LINKS = 1,
     parameter ASYMMETRIC_A_B_MODE = 0
   ) (
-
-  input           sys_clk_n,
-  input           sys_clk_p,
-
-  output  [ 5:0]  ch0_lpddr4_trip1_ca_a,
-  output  [ 5:0]  ch0_lpddr4_trip1_ca_b,
-  output          ch0_lpddr4_trip1_ck_c_a,
-  output          ch0_lpddr4_trip1_ck_c_b,
-  output          ch0_lpddr4_trip1_ck_t_a,
-  output          ch0_lpddr4_trip1_ck_t_b,
-  output          ch0_lpddr4_trip1_cke_a,
-  output          ch0_lpddr4_trip1_cke_b,
-  output          ch0_lpddr4_trip1_cs_a,
-  output          ch0_lpddr4_trip1_cs_b,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dmi_a,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dmi_b,
-  inout   [15:0]  ch0_lpddr4_trip1_dq_a,
-  inout   [15:0]  ch0_lpddr4_trip1_dq_b,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dqs_c_a,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dqs_c_b,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dqs_t_a,
-  inout   [ 1:0]  ch0_lpddr4_trip1_dqs_t_b,
-  output          ch0_lpddr4_trip1_reset_n,
-  output  [ 5:0]  ch1_lpddr4_trip1_ca_a,
-  output  [ 5:0]  ch1_lpddr4_trip1_ca_b,
-  output          ch1_lpddr4_trip1_ck_c_a,
-  output          ch1_lpddr4_trip1_ck_c_b,
-  output          ch1_lpddr4_trip1_ck_t_a,
-  output          ch1_lpddr4_trip1_ck_t_b,
-  output          ch1_lpddr4_trip1_cke_a,
-  output          ch1_lpddr4_trip1_cke_b,
-  output          ch1_lpddr4_trip1_cs_a,
-  output          ch1_lpddr4_trip1_cs_b,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dmi_a,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dmi_b,
-  inout   [15:0]  ch1_lpddr4_trip1_dq_a,
-  inout   [15:0]  ch1_lpddr4_trip1_dq_b,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dqs_c_a,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dqs_c_b,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dqs_t_a,
-  inout   [ 1:0]  ch1_lpddr4_trip1_dqs_t_b,
-  output          ch1_lpddr4_trip1_reset_n,
-
+  input          sys_clk_n,
+  input          sys_clk_p,
+  output         ddr4_act_n,
+  output  [16:0] ddr4_adr,
+  output  [ 1:0] ddr4_ba,
+  output  [ 1:0] ddr4_bg,
+  output         ddr4_ck_c,
+  output         ddr4_ck_t,
+  output         ddr4_cke,
+  output         ddr4_cs_n,
+  inout   [ 7:0] ddr4_dm_n,
+  inout   [63:0] ddr4_dq,
+  inout   [ 7:0] ddr4_dqs_c,
+  inout   [ 7:0] ddr4_dqs_t,
+  output         ddr4_odt,
+  output         ddr4_reset_n,
   // GPIOs
-  output  [ 3:0]  gpio_led,
-  input   [ 3:0]  gpio_dip_sw,
-  input   [ 1:0]  gpio_pb,
+  output  [ 3:0] gpio_led,
+  input   [ 3:0] gpio_dip_sw,
+  input   [ 1:0] gpio_pb,
 
-  // FMC HPC+ IOs
+  // // FMC HPC+ IOs
+  output  [ 7:0] srxb_p,
+  output  [ 7:0] srxb_n,
+  output  [ 3:0] srxa_p,
+  output  [ 3:0] srxa_n,
+  // output  [11:0] srx_p,
+  // output  [11:0] srx_n,
 
-  output [ 7:0] srx_p,
-  output [ 7:0] srx_n,
-  input  [ 7:0] stx_p,
-  input  [ 7:0] stx_n,
-
+  input   [ 7:0] stxb_p,
+  input   [ 7:0] stxb_n,
+  input   [ 3:0] stxa_p,
+  input   [ 3:0] stxa_n,
+  // input   [11:0] stx_p,
+  // input   [11:0] stx_n,
 
   inout  [30:15] gpio,
   inout          aux_gpio,
@@ -118,8 +97,12 @@ module system_top #(
   inout          syncoutb_b1_p_gpio,
   inout          syncoutb_b1_n_gpio,
 
-  input          ref_clk_p,
-  input          ref_clk_n,
+  input  [ 0:0]  ref_clk_p,
+  input  [ 0:0]  ref_clk_n,
+  // input          ref_clk_replica_p,
+  // input          ref_clk_replica_n,
+  // input          ads10_ref_clk_p,
+  // input          ads10_ref_clk_n,
 
   output         sysref_a_p,
   output         sysref_a_n,
@@ -143,14 +126,14 @@ module system_top #(
   input  [ 1:0]  clk_m2c_p,
   input  [ 1:0]  clk_m2c_n,
 
-  output         hsci_ckin_p,
-  output         hsci_ckin_n,
-  output         hsci_din_p,
-  output         hsci_din_n,
-  input          hsci_cko_p,
-  input          hsci_cko_n,
-  input          hsci_do_p,
-  input          hsci_do_n,
+ output         hsci_ckin_p,
+ output         hsci_ckin_n,
+ output         hsci_din_p,
+ output         hsci_din_n,
+ input          hsci_cko_p,
+ input          hsci_cko_n,
+ input          hsci_do_p,
+ input          hsci_do_n,
 
   output [ 1:0]  trig_a,
   output [ 1:0]  trig_b,
@@ -179,6 +162,7 @@ module system_top #(
   wire            apollo_spi_sdio;
 
   wire              ref_clk;
+  wire              ref_clk_replica;
   wire              sysref;
   wire [SYNC_W-1:0] tx_syncin;
   wire [SYNC_W-1:0] rx_syncout;
@@ -196,6 +180,7 @@ module system_top #(
   wire    [ 7:0]  data_to_fabric;
   wire    [ 7:0]  hsci_data_in;
 
+  assign iic_rstn = 1'b1;
   wire gt_reset;
   wire rx_reset_pll_and_datapath;
   wire tx_reset_pll_and_datapath;
@@ -212,17 +197,17 @@ module system_top #(
   wire tx_b_resetdone;
   wire gt_powergood;
 
-  wire [7:0] rx_data_p_loc;
-  wire [7:0] rx_data_n_loc;
-  wire [7:0] tx_data_p_loc;
-  wire [7:0] tx_data_n_loc;
+  wire [11:0] rx_data_p_loc;
+  wire [11:0] rx_data_n_loc;
+  wire [11:0] tx_data_p_loc;
+  wire [11:0] tx_data_n_loc;
 
   // instantiations
 
   IBUFDS_GTE5 i_ibufds_ref_clk (
-    .CEB (1'b0),
-    .I (ref_clk_p),
-    .IB (ref_clk_n),
+    .CEB (1'd0),
+    .I (ref_clk_p[0]),
+    .IB (ref_clk_n[0]),
     .O (ref_clk),
     .ODIV2 ());
 
@@ -288,7 +273,7 @@ module system_top #(
   assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;
 
-  ad9084_fmca_ebz_spi #(
+  ad9084_ebz_spi #(
     .NUM_OF_SLAVES(2)
   ) i_spi (
     .spi_csn (spi_csn[1:0]),
@@ -351,7 +336,7 @@ module system_top #(
     .dio_p (gpio_bd));
 
   assign gpio_i[95:80] = gpio_o[95:80];
-  assign gpio_i[62:54] = gpio_o[62:54];
+  assign gpio_i[63:55] = gpio_o[63:55];
   assign gpio_i[31:27] = gpio_o[31:27];
 
   assign fifo_rd_en = ~fifo_empty & intf_rdy;
@@ -359,48 +344,23 @@ module system_top #(
   assign hsci_data_in = (intf_rdy) ? {data_to_fabric[0], data_to_fabric[1], data_to_fabric[2], data_to_fabric[3], data_to_fabric[4], data_to_fabric[5], data_to_fabric[6], data_to_fabric[7]} : 8'h0;
 
   system_wrapper i_system_wrapper (
-    .lpddr4_clk1_clk_n (sys_clk_n),
-    .lpddr4_clk1_clk_p (sys_clk_p),
-
-    .ch0_lpddr4_trip1_ca_a (ch0_lpddr4_trip1_ca_a),
-    .ch0_lpddr4_trip1_ca_b (ch0_lpddr4_trip1_ca_b),
-    .ch0_lpddr4_trip1_ck_c_a (ch0_lpddr4_trip1_ck_c_a),
-    .ch0_lpddr4_trip1_ck_c_b (ch0_lpddr4_trip1_ck_c_b),
-    .ch0_lpddr4_trip1_ck_t_a (ch0_lpddr4_trip1_ck_t_a),
-    .ch0_lpddr4_trip1_ck_t_b (ch0_lpddr4_trip1_ck_t_b),
-    .ch0_lpddr4_trip1_cke_a (ch0_lpddr4_trip1_cke_a),
-    .ch0_lpddr4_trip1_cke_b (ch0_lpddr4_trip1_cke_b),
-    .ch0_lpddr4_trip1_cs_a (ch0_lpddr4_trip1_cs_a),
-    .ch0_lpddr4_trip1_cs_b (ch0_lpddr4_trip1_cs_b),
-    .ch0_lpddr4_trip1_dmi_a (ch0_lpddr4_trip1_dmi_a),
-    .ch0_lpddr4_trip1_dmi_b (ch0_lpddr4_trip1_dmi_b),
-    .ch0_lpddr4_trip1_dq_a (ch0_lpddr4_trip1_dq_a),
-    .ch0_lpddr4_trip1_dq_b (ch0_lpddr4_trip1_dq_b),
-    .ch0_lpddr4_trip1_dqs_c_a (ch0_lpddr4_trip1_dqs_c_a),
-    .ch0_lpddr4_trip1_dqs_c_b (ch0_lpddr4_trip1_dqs_c_b),
-    .ch0_lpddr4_trip1_dqs_t_a (ch0_lpddr4_trip1_dqs_t_a),
-    .ch0_lpddr4_trip1_dqs_t_b (ch0_lpddr4_trip1_dqs_t_b),
-    .ch0_lpddr4_trip1_reset_n (ch0_lpddr4_trip1_reset_n),
-    .ch1_lpddr4_trip1_ca_a (ch1_lpddr4_trip1_ca_a),
-    .ch1_lpddr4_trip1_ca_b (ch1_lpddr4_trip1_ca_b),
-    .ch1_lpddr4_trip1_ck_c_a (ch1_lpddr4_trip1_ck_c_a),
-    .ch1_lpddr4_trip1_ck_c_b (ch1_lpddr4_trip1_ck_c_b),
-    .ch1_lpddr4_trip1_ck_t_a (ch1_lpddr4_trip1_ck_t_a),
-    .ch1_lpddr4_trip1_ck_t_b (ch1_lpddr4_trip1_ck_t_b),
-    .ch1_lpddr4_trip1_cke_a (ch1_lpddr4_trip1_cke_a),
-    .ch1_lpddr4_trip1_cke_b (ch1_lpddr4_trip1_cke_b),
-    .ch1_lpddr4_trip1_cs_a (ch1_lpddr4_trip1_cs_a),
-    .ch1_lpddr4_trip1_cs_b (ch1_lpddr4_trip1_cs_b),
-    .ch1_lpddr4_trip1_dmi_a (ch1_lpddr4_trip1_dmi_a),
-    .ch1_lpddr4_trip1_dmi_b (ch1_lpddr4_trip1_dmi_b),
-    .ch1_lpddr4_trip1_dq_a (ch1_lpddr4_trip1_dq_a),
-    .ch1_lpddr4_trip1_dq_b (ch1_lpddr4_trip1_dq_b),
-    .ch1_lpddr4_trip1_dqs_c_a (ch1_lpddr4_trip1_dqs_c_a),
-    .ch1_lpddr4_trip1_dqs_c_b (ch1_lpddr4_trip1_dqs_c_b),
-    .ch1_lpddr4_trip1_dqs_t_a (ch1_lpddr4_trip1_dqs_t_a),
-    .ch1_lpddr4_trip1_dqs_t_b (ch1_lpddr4_trip1_dqs_t_b),
-    .ch1_lpddr4_trip1_reset_n (ch1_lpddr4_trip1_reset_n),
-    .spi0_csn  (spi_csn),
+    .ddr4_dimm1_sma_clk_clk_n (sys_clk_n),
+    .ddr4_dimm1_sma_clk_clk_p (sys_clk_p),
+    .ddr4_dimm1_act_n (ddr4_act_n),
+    .ddr4_dimm1_adr (ddr4_adr),
+    .ddr4_dimm1_ba (ddr4_ba),
+    .ddr4_dimm1_bg (ddr4_bg),
+    .ddr4_dimm1_ck_c (ddr4_ck_c),
+    .ddr4_dimm1_ck_t (ddr4_ck_t),
+    .ddr4_dimm1_cke (ddr4_cke),
+    .ddr4_dimm1_cs_n (ddr4_cs_n),
+    .ddr4_dimm1_dm_n (ddr4_dm_n),
+    .ddr4_dimm1_dq (ddr4_dq),
+    .ddr4_dimm1_dqs_c (ddr4_dqs_c),
+    .ddr4_dimm1_dqs_t (ddr4_dqs_t),
+    .ddr4_dimm1_odt (ddr4_odt),
+    .ddr4_dimm1_reset_n (ddr4_reset_n),
+    .spi0_csn (spi_csn),
     .spi0_miso (spi_sdo),
     .spi0_mosi (spi_sdio),
     .spi0_sclk (spi_clk),
@@ -424,16 +384,18 @@ module system_top #(
     .gpio2_t (gpio_t[95:64]),
 
     // FMC HPC
-    // Apollo A-side
-    .tx_0_p (tx_data_p_loc[3:0]),
-    .tx_0_n (tx_data_n_loc[3:0]),
-    .rx_0_p (rx_data_p_loc[3:0]),
-    .rx_0_n (rx_data_n_loc[3:0]),
-    // Apollo B-Side
-    .tx_1_p (tx_data_p_loc[7:4]),
-    .tx_1_n (tx_data_n_loc[7:4]),
-    .rx_1_p (rx_data_p_loc[7:4]),
-    .rx_1_n (rx_data_n_loc[7:4]),
+    .tx_0_p (tx_data_p_loc[ 3:0]),
+    .tx_0_n (tx_data_n_loc[ 3:0]),
+    .rx_0_p (rx_data_p_loc[ 3:0]),
+    .rx_0_n (rx_data_n_loc[ 3:0]),
+    .tx_1_p (tx_data_p_loc[ 7:4]),
+    .tx_1_n (tx_data_n_loc[ 7:4]),
+    .rx_1_p (rx_data_p_loc[ 7:4]),
+    .rx_1_n (rx_data_n_loc[ 7:4]),
+    .tx_2_p (tx_data_p_loc[11:8]),
+    .tx_2_n (tx_data_n_loc[11:8]),
+    .rx_2_p (rx_data_p_loc[11:8]),
+    .rx_2_n (rx_data_n_loc[11:8]),
 
     .gt_powergood (gt_powergood),
     .gt_reset (gt_reset & gt_powergood),
@@ -484,10 +446,18 @@ module system_top #(
     .rx_sysref_12 (sysref),
     .tx_sysref_12 (sysref)
   );
+  assign rx_data_p_loc[11:8] = stxb_p[7:4];
+  assign rx_data_p_loc[ 7:4] = stxa_p[3:0];
+  assign rx_data_p_loc[ 3:0] = stxb_p[3:0];
+  assign rx_data_n_loc[11:8] = stxb_n[7:4];
+  assign rx_data_n_loc[ 7:4] = stxa_n[3:0];
+  assign rx_data_n_loc[ 3:0] = stxb_n[3:0];
 
-  assign rx_data_p_loc = stx_p;
-  assign rx_data_n_loc = stx_n;
-  assign srx_p         = tx_data_p_loc;
-  assign srx_n         = tx_data_n_loc;
+  assign srxb_p[7:4] = tx_data_p_loc[11:8];
+  assign srxa_p[3:0] = tx_data_p_loc[ 7:4];
+  assign srxb_p[3:0] = tx_data_p_loc[ 3:0];
+  assign srxb_n[7:4] = tx_data_n_loc[11:8];
+  assign srxa_n[3:0] = tx_data_n_loc[ 7:4];
+  assign srxb_n[3:0] = tx_data_n_loc[ 3:0];
 
 endmodule

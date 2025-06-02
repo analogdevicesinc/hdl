@@ -46,7 +46,7 @@ source ../../../../hdl/projects/scripts/adi_board.tcl
 #     2 - HBM
 #
 
-adi_project ad9084_fmca_ebz_vcu128 0 [list \
+adi_project ad9084_ebz_vcu128 0 [list \
   JESD_MODE           [get_env_param JESD_MODE           64B66B ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE       10.3125 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE       10.3125 ] \
@@ -79,11 +79,11 @@ adi_project ad9084_fmca_ebz_vcu128 0 [list \
   DAC_DO_MEM_TYPE     [get_env_param DAC_DO_MEM_TYPE         2 ] \
 ]
 
-adi_project_files ad9084_fmca_ebz_vcu128 [list \
+adi_project_files ad9084_ebz_vcu128 [list \
   "system_top.v" \
   "system_constr.xdc"\
   "timing_constr.xdc"\
-  "../common/ad9084_fmca_ebz_spi.v"\
+  "../common/ad9084_ebz_spi.v"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
   "$ad_hdl_dir/projects/common/vcu128/vcu128_system_constr.xdc" ]
 
@@ -95,4 +95,4 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
 
 set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
-adi_project_run ad9084_fmca_ebz_vcu128
+adi_project_run ad9084_ebz_vcu128

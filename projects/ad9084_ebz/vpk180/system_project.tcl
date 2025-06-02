@@ -40,7 +40,7 @@ source ../../../../hdl/projects/scripts/adi_board.tcl
 #   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
 #
 
-adi_project ad9084_fmca_ebz_vpk180 0 [list \
+adi_project ad9084_ebz_vpk180 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   ENABLE_HSCI         [get_env_param ENABLE_HSCI          1 ] \
@@ -73,11 +73,11 @@ adi_project ad9084_fmca_ebz_vpk180 0 [list \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 64 ] \
 ]
 
-adi_project_files ad9084_fmca_ebz_vpk180 [list \
+adi_project_files ad9084_ebz_vpk180 [list \
   "system_top.v" \
   "system_constr.xdc" \
   "timing_constr.tcl" \
-  "../common/ad9084_fmca_ebz_spi.v" \
+  "../common/ad9084_ebz_spi.v" \
   "../common/versal_transceiver.tcl" \
   "../common/versal_hsci_phy.tcl" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
@@ -91,4 +91,4 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
 
 set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
-adi_project_run ad9084_fmca_ebz_vpk180
+adi_project_run ad9084_ebz_vpk180

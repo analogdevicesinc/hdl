@@ -37,7 +37,7 @@ set_interface_property ref_clk_in EXPORT_OF systemclk.refclk_fgt
 
 set HSCI_ENABLE 0
 set ASYMMETRIC_A_B_MODE 0
-source $ad_hdl_dir/projects/ad9084_fmca_ebz/common/ad9084_fmca_ebz_qsys.tcl
+source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_qsys.tcl
 
 # Apollo spi
 add_instance apollo_spi altera_avalon_spi

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2025 Analog Devices, Inc. All rights reserved.
+// Copyright 2025 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -26,7 +26,7 @@
 //
 //   2. An ADI specific BSD license, which can be found in the top level directory
 //      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
+//      https://github.com/analogdevicesinc/hdl/blob/master/LICENSE_ADIBSD
 //      This will allow to generate bit files and not release the source code,
 //      as long as it attaches to an ADI device.
 //
@@ -55,11 +55,11 @@ module system_top #(
   output        ddr4_ck_p,
   output        ddr4_ck_n,
   output [ 0:0] ddr4_cke,
-  output [ 1:0] ddr4_cs_n,
-  inout  [ 8:0] ddr4_dm_n,
-  inout  [71:0] ddr4_dq,
-  inout  [ 8:0] ddr4_dqs_p,
-  inout  [ 8:0] ddr4_dqs_n,
+  output [ 0:0] ddr4_cs_n,
+  inout  [ 7:0] ddr4_dm_n,
+  inout  [63:0] ddr4_dq,
+  inout  [ 7:0] ddr4_dqs_p,
+  inout  [ 7:0] ddr4_dqs_n,
   output [ 0:0] ddr4_odt,
   output        ddr4_reset_n,
 
@@ -67,18 +67,17 @@ module system_top #(
   inout         mdio_mdio,
   input         phy_clk_p,
   input         phy_clk_n,
+  output        phy_rst_n,
   input         phy_rx_p,
   input         phy_rx_n,
   output        phy_tx_p,
   output        phy_tx_n,
-  input         phy_dummy_port_in,
 
-  inout  [ 7:0] gpio_bd,
+  inout  [16:0] gpio_bd,
 
+  output        iic_rstn,
   inout         iic_scl,
   inout         iic_sda,
-
-  input         vadj_1v8_pgood,
 
   // FMC HPC+ IOs
   output  [11:0] srxa_p,
@@ -100,22 +99,26 @@ module system_top #(
   output         syncinb_a0_n,
   output         syncinb_b0_p,
   output         syncinb_b0_n,
-//   inout          syncinb_a1_p_gpio,
-//   inout          syncinb_a1_n_gpio,
-//   inout          syncinb_b1_p_gpio,
-//   inout          syncinb_b1_n_gpio,
+  inout          syncinb_a1_p_gpio,
+  inout          syncinb_a1_n_gpio,
+  inout          syncinb_b1_p_gpio,
+  inout          syncinb_b1_n_gpio,
 
   input          syncoutb_a0_p,
   input          syncoutb_a0_n,
   input          syncoutb_b0_p,
   input          syncoutb_b0_n,
-//   inout          syncoutb_a1_p_gpio,
-//   inout          syncoutb_a1_n_gpio,
-//   inout          syncoutb_b1_p_gpio,
-//   inout          syncoutb_b1_n_gpio,
+  inout          syncoutb_a1_p_gpio,
+  inout          syncoutb_a1_n_gpio,
+  inout          syncoutb_b1_p_gpio,
+  inout          syncoutb_b1_n_gpio,
 
-  input  [ 4:0]  ref_clk_n,
-  input  [ 4:0]  ref_clk_p,
+  input  [ 2:0]  ref_clk_p,
+  input  [ 2:0]  ref_clk_n,
+  input          ref_clk_replica_p,
+  input          ref_clk_replica_n,
+  // input          ads10_ref_clk_p,
+  // input          ads10_ref_clk_n,
 
   output         sysref_a_p,
   output         sysref_a_n,
@@ -139,6 +142,15 @@ module system_top #(
   input  [ 1:0]  clk_m2c_p,
   input  [ 1:0]  clk_m2c_n,
 
+  output         hsci_ckin_p,
+  output         hsci_ckin_n,
+  output         hsci_din_p,
+  output         hsci_din_n,
+  input          hsci_cko_p,
+  input          hsci_cko_n,
+  input          hsci_do_p,
+  input          hsci_do_n,
+
   output [ 1:0]  trig_a,
   output [ 1:0]  trig_b,
 
@@ -146,7 +158,8 @@ module system_top #(
   output         resetb
 );
 
-  localparam SYNC_W = (ASYMMETRIC_A_B_MODE == 1) ? 2 : RX_NUM_LINKS;;
+  localparam      CLK_FWD_PAT = 8'h55;
+  localparam      SYNC_W = (ASYMMETRIC_A_B_MODE == 1)? 2 : RX_NUM_LINKS;
 
   // internal signals
 
@@ -165,9 +178,9 @@ module system_top #(
   wire            apollo_spi_sdo;
   wire            apollo_spi_sdio;
 
-  wire              ref_clk_124;
-  wire              ref_clk_126;
-  wire              ref_clk_128;
+  // wire    [ 5:0]  ref_clk_loc;
+  wire              ref_clk;
+  wire              ref_clk_replica;
   wire              sysref;
   wire              sysref_loc;
   wire [SYNC_W-1:0] tx_syncin;
@@ -182,27 +195,41 @@ module system_top #(
   wire            tx_b_device_clk;
   wire            rx_b_device_clk;
 
+  wire            tmp_sync;
+
+  wire            pll_inclk;
+  wire            hsci_pll_reset;
+  wire            hsci_pclk;
+  wire            hsci_pll_locked;
+  wire            hsci_vtc_rdy_bsc_tx;
+  wire            hsci_dly_rdy_bsc_tx;
+  wire            hsci_vtc_rdy_bsc_rx;
+  wire            hsci_dly_rdy_bsc_rx;
+  wire            hsci_rst_seq_done;
+
+  wire            selectio_clk_in;
+  wire    [ 7:0]  hsci_menc_clk;
+  wire    [ 7:0]  hsci_data_in;
+  wire    [ 7:0]  hsci_data_out;
+
+  // wire            trig_rstn;
+  // wire            trig;
+  assign iic_rstn = 1'b1;
+
   // instantiations
 
-  IBUFDS_GTE4 i_ibufds_ref_clk_124 (
+  IBUFDS_GTE4 i_ibufds_ref_clk (
     .CEB (1'd0),
     .I (ref_clk_p[0]),
     .IB (ref_clk_n[0]),
-    .O (ref_clk_124),
+    .O (ref_clk),
     .ODIV2 ());
 
-  IBUFDS_GTE4 i_ibufds_ref_clk_126 (
+  IBUFDS_GTE4 i_ibufds_ref_clk_replica (
     .CEB (1'd0),
-    .I (ref_clk_p[2]),
-    .IB (ref_clk_n[2]),
-    .O (ref_clk_126),
-    .ODIV2 ());
-
-  IBUFDS_GTE4 i_ibufds_ref_clk_128 (
-    .CEB (1'd0),
-    .I (ref_clk_p[4]),
-    .IB (ref_clk_n[4]),
-    .O (ref_clk_128),
+    .I (ref_clk_replica_p),
+    .IB (ref_clk_replica_n),
+    .O (ref_clk_replica),
     .ODIV2 ());
 
   IBUFDS i_ibufds_sysref_in (
@@ -242,8 +269,8 @@ module system_top #(
     .ODIV2 (clkin2));
 
   IBUFDS_GTE4 i_ibufds_tx_b_device_clk (
-    .I (ref_clk_p[3]),
-    .IB (ref_clk_n[3]),
+    .I (ref_clk_p[2]),
+    .IB (ref_clk_n[2]),
     .CEB(1'b0),
     .ODIV2 (clkin3));
 
@@ -283,12 +310,15 @@ module system_top #(
     .I (clkin3),
     .O (tx_b_device_clk));
 
+  BUFG i_selectio_clk_in(
+    .I (selectio_clk_in),
+    .O (pll_inclk));
   // spi
 
   assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;
 
-  ad9084_fmca_ebz_spi #(
+  ad9084_ebz_spi #(
     .NUM_OF_SLAVES(2)
   ) i_spi (
     .spi_csn (spi_csn[1:0]),
@@ -321,14 +351,14 @@ module system_top #(
   assign trig_b[1]  = gpio_o[61];
   assign resetb     = gpio_o[62];
 
-  ad_iobuf #(.DATA_WIDTH(8)) i_iobuf_bd (
-    .dio_t (gpio_t[7:0]),
-    .dio_i (gpio_o[7:0]),
-    .dio_o (gpio_i[7:0]),
+  ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
+    .dio_t (gpio_t[16:0]),
+    .dio_i (gpio_o[16:0]),
+    .dio_o (gpio_i[16:0]),
     .dio_p (gpio_bd));
 
   assign gpio_i[63:54] = gpio_o[63:54];
-  assign gpio_i[31:8] = gpio_o[31:8];
+  assign gpio_i[31:17] = gpio_o[31:17];
 
   generate
     if (ASYMMETRIC_A_B_MODE == 1)
@@ -336,6 +366,44 @@ module system_top #(
     else
       assign sysref_loc = 0;
   endgenerate
+
+  // trigger_generator trig_i (
+  //   .sysref     (sysref),
+  //   .device_clk (rx_device_clk),
+  //   .gpio       (aux_gpio),
+  //   .rstn       (trig_rstn),
+  //   .trigger    (trig)
+  // );
+
+  hsci_phy_top hsci_phy_top(
+    .pll_inclk       (pll_inclk),
+    .hsci_pll_reset  (hsci_pll_reset),
+
+    .hsci_pclk       (hsci_pclk),
+    .hsci_mosi_d_p   (hsci_din_p),
+    .hsci_mosi_d_n   (hsci_din_n),
+
+    .hsci_miso_d_p   (hsci_do_p),
+    .hsci_miso_d_n   (hsci_do_n),
+
+    .hsci_pll_locked (hsci_pll_locked),
+
+    .hsci_mosi_clk_p (hsci_ckin_p),
+    .hsci_mosi_clk_n (hsci_ckin_n),
+
+    .hsci_miso_clk_p (hsci_cko_p),
+    .hsci_miso_clk_n (hsci_cko_n),
+
+    .hsci_menc_clk   (hsci_menc_clk),
+    .hsci_mosi_data  (hsci_data_out),
+    .hsci_miso_data  (hsci_data_in),
+
+    .vtc_rdy_bsc_tx  (hsci_vtc_rdy_bsc_tx),
+    .dly_rdy_bsc_tx  (hsci_dly_rdy_bsc_tx),
+    .vtc_rdy_bsc_rx  (hsci_vtc_rdy_bsc_rx),
+    .dly_rdy_bsc_rx  (hsci_dly_rdy_bsc_rx),
+    .rst_seq_done    (hsci_rst_seq_done)
+ );
 
   system_wrapper i_system_wrapper (
     .sys_rst (sys_rst),
@@ -356,7 +424,7 @@ module system_top #(
     .ddr4_odt (ddr4_odt),
     .ddr4_reset_n (ddr4_reset_n),
     .phy_sd (1'b1),
-    .phy_dummy_port_in (phy_dummy_port_in),
+    .phy_rst_n (phy_rst_n),
     .sgmii_rxn (phy_rx_n),
     .sgmii_rxp (phy_rx_p),
     .sgmii_txn (phy_tx_n),
@@ -393,24 +461,24 @@ module system_top #(
     .gpio1_t (gpio_t[63:32]),
     // FMC HPC+
     // quad 125
-    .tx_data_0_n  (srxa_n[5]),
-    .tx_data_0_p  (srxa_p[5]),
-    .tx_data_1_n  (srxa_n[1]),
-    .tx_data_1_p  (srxa_p[1]),
-    .tx_data_2_n  (srxa_n[3]),
-    .tx_data_2_p  (srxa_p[3]),
-    .tx_data_3_n  (srxa_n[7]),
-    .tx_data_3_p  (srxa_p[7]),
+    .tx_data_0_n  (srxa_n[10]),
+    .tx_data_0_p  (srxa_p[10]),
+    .tx_data_1_n  (srxa_n[8]),
+    .tx_data_1_p  (srxa_p[8]),
+    .tx_data_2_n  (srxa_n[9]),
+    .tx_data_2_p  (srxa_p[9]),
+    .tx_data_3_n  (srxa_n[11]),
+    .tx_data_3_p  (srxa_p[11]),
+    // quad 126
+    .tx_data_4_n  (srxa_n[5]),
+    .tx_data_4_p  (srxa_p[5]),
+    .tx_data_5_n  (srxa_n[1]),
+    .tx_data_5_p  (srxa_p[1]),
+    .tx_data_6_n  (srxa_n[3]),
+    .tx_data_6_p  (srxa_p[3]),
+    .tx_data_7_n  (srxa_n[7]),
+    .tx_data_7_p  (srxa_p[7]),
     // quad 127
-    .tx_data_4_n  (srxa_n[10]),
-    .tx_data_4_p  (srxa_p[10]),
-    .tx_data_5_n  (srxa_n[8]),
-    .tx_data_5_p  (srxa_p[8]),
-    .tx_data_6_n  (srxa_n[9]),
-    .tx_data_6_p  (srxa_p[9]),
-    .tx_data_7_n  (srxa_n[11]),
-    .tx_data_7_p  (srxa_p[11]),
-    // quad 128
     .tx_data_8_n  (srxa_n[4]),
     .tx_data_8_p  (srxa_p[4]),
     .tx_data_9_n  (srxa_n[6]),
@@ -420,53 +488,53 @@ module system_top #(
     .tx_data_11_n (srxa_n[0]),
     .tx_data_11_p (srxa_p[0]),
 
-    // quad 124
-    .tx_data_12_n (srxb_n[1]),
-    .tx_data_12_p (srxb_p[1]),
-    .tx_data_13_n (srxb_n[7]),
-    .tx_data_13_p (srxb_p[7]),
-    .tx_data_14_n (srxb_n[10]),
-    .tx_data_14_p (srxb_p[10]),
-    .tx_data_15_n (srxb_n[3]),
-    .tx_data_15_p (srxb_p[3]),
-    // quad 126
-    .tx_data_16_n (srxb_n[5]),
-    .tx_data_16_p (srxb_p[5]),
-    .tx_data_17_n (srxb_n[8]),
-    .tx_data_17_p (srxb_p[8]),
-    .tx_data_18_n (srxb_n[9]),
-    .tx_data_18_p (srxb_p[9]),
-    .tx_data_19_n (srxb_n[11]),
-    .tx_data_19_p (srxb_p[11]),
-    // quad 129
-    .tx_data_20_n (srxb_n[4]),
-    .tx_data_20_p (srxb_p[4]),
-    .tx_data_21_n (srxb_n[6]),
-    .tx_data_21_p (srxb_p[6]),
-    .tx_data_22_n (srxb_n[2]),
-    .tx_data_22_p (srxb_p[2]),
-    .tx_data_23_n (srxb_n[0]),
-    .tx_data_23_p (srxb_p[0]),
+    // quad 120
+    .tx_data_12_n (srxb_n[4]),
+    .tx_data_12_p (srxb_p[4]),
+    .tx_data_13_n (srxb_n[6]),
+    .tx_data_13_p (srxb_p[6]),
+    .tx_data_14_n (srxb_n[2]),
+    .tx_data_14_p (srxb_p[2]),
+    .tx_data_15_n (srxb_n[0]),
+    .tx_data_15_p (srxb_p[0]),
+    // quad 121
+    .tx_data_16_n (srxb_n[1]),
+    .tx_data_16_p (srxb_p[1]),
+    .tx_data_17_n (srxb_n[7]),
+    .tx_data_17_p (srxb_p[7]),
+    .tx_data_18_n (srxb_n[10]),
+    .tx_data_18_p (srxb_p[10]),
+    .tx_data_19_n (srxb_n[3]),
+    .tx_data_19_p (srxb_p[3]),
+    // quad 122
+    .tx_data_20_n (srxb_n[5]),
+    .tx_data_20_p (srxb_p[5]),
+    .tx_data_21_n (srxb_n[8]),
+    .tx_data_21_p (srxb_p[8]),
+    .tx_data_22_n (srxb_n[9]),
+    .tx_data_22_p (srxb_p[9]),
+    .tx_data_23_n (srxb_n[11]),
+    .tx_data_23_p (srxb_p[11]),
 
     // quad 125
-    .rx_data_0_n  (stxa_n[11]),
-    .rx_data_0_p  (stxa_p[11]),
-    .rx_data_1_n  (stxa_n[3]),
-    .rx_data_1_p  (stxa_p[3]),
-    .rx_data_2_n  (stxa_n[8]),
-    .rx_data_2_p  (stxa_p[8]),
-    .rx_data_3_n  (stxa_n[9]),
-    .rx_data_3_p  (stxa_p[9]),
+    .rx_data_0_n  (stxa_n[7]),
+    .rx_data_0_p  (stxa_p[7]),
+    .rx_data_1_n  (stxa_n[5]),
+    .rx_data_1_p  (stxa_p[5]),
+    .rx_data_2_n  (stxa_n[1]),
+    .rx_data_2_p  (stxa_p[1]),
+    .rx_data_3_n  (stxa_n[2]),
+    .rx_data_3_p  (stxa_p[2]),
+    // quad 126
+    .rx_data_4_n  (stxa_n[11]),
+    .rx_data_4_p  (stxa_p[11]),
+    .rx_data_5_n  (stxa_n[3]),
+    .rx_data_5_p  (stxa_p[3]),
+    .rx_data_6_n  (stxa_n[8]),
+    .rx_data_6_p  (stxa_p[8]),
+    .rx_data_7_n  (stxa_n[9]),
+    .rx_data_7_p  (stxa_p[9]),
     // quad 127
-    .rx_data_4_n  (stxa_n[7]),
-    .rx_data_4_p  (stxa_p[7]),
-    .rx_data_5_n  (stxa_n[5]),
-    .rx_data_5_p  (stxa_p[5]),
-    .rx_data_6_n  (stxa_n[1]),
-    .rx_data_6_p  (stxa_p[1]),
-    .rx_data_7_n  (stxa_n[2]),
-    .rx_data_7_p  (stxa_p[2]),
-    // quad 128
     .rx_data_8_n  (stxa_n[10]),
     .rx_data_8_p  (stxa_p[10]),
     .rx_data_9_n  (stxa_n[6]),
@@ -476,45 +544,60 @@ module system_top #(
     .rx_data_11_n (stxa_n[0]),
     .rx_data_11_p (stxa_p[0]),
 
-    // quad 124
-    .rx_data_12_n (stxb_n[3]),
-    .rx_data_12_p (stxb_p[3]),
-    .rx_data_13_n (stxb_n[2]),
-    .rx_data_13_p (stxb_p[2]),
-    .rx_data_14_n (stxb_n[5]),
-    .rx_data_14_p (stxb_p[5]),
-    .rx_data_15_n (stxb_n[7]),
-    .rx_data_15_p (stxb_p[7]),
-    // quad 126
-    .rx_data_16_n (stxb_n[8]),
-    .rx_data_16_p (stxb_p[8]),
-    .rx_data_17_n (stxb_n[1]),
-    .rx_data_17_p (stxb_p[1]),
-    .rx_data_18_n (stxb_n[11]),
-    .rx_data_18_p (stxb_p[11]),
-    .rx_data_19_n (stxb_n[9]),
-    .rx_data_19_p (stxb_p[9]),
-    // quad 129
-    .rx_data_20_n (stxb_n[10]),
-    .rx_data_20_p (stxb_p[10]),
-    .rx_data_21_n (stxb_n[6]),
-    .rx_data_21_p (stxb_p[6]),
-    .rx_data_22_n (stxb_n[4]),
-    .rx_data_22_p (stxb_p[4]),
-    .rx_data_23_n (stxb_n[0]),
-    .rx_data_23_p (stxb_p[0]),
+    // quad 120
+    .rx_data_12_n (stxb_n[10]),
+    .rx_data_12_p (stxb_p[10]),
+    .rx_data_13_n (stxb_n[6]),
+    .rx_data_13_p (stxb_p[6]),
+    .rx_data_14_n (stxb_n[4]),
+    .rx_data_14_p (stxb_p[4]),
+    .rx_data_15_n (stxb_n[0]),
+    .rx_data_15_p (stxb_p[0]),
+    // quad 121
+    .rx_data_16_n (stxb_n[3]),
+    .rx_data_16_p (stxb_p[3]),
+    .rx_data_17_n (stxb_n[2]),
+    .rx_data_17_p (stxb_p[2]),
+    .rx_data_18_n (stxb_n[5]),
+    .rx_data_18_p (stxb_p[5]),
+    .rx_data_19_n (stxb_n[7]),
+    .rx_data_19_p (stxb_p[7]),
+    // quad 122
+    .rx_data_20_n (stxb_n[8]),
+    .rx_data_20_p (stxb_p[8]),
+    .rx_data_21_n (stxb_n[1]),
+    .rx_data_21_p (stxb_p[1]),
+    .rx_data_22_n (stxb_n[11]),
+    .rx_data_22_p (stxb_p[11]),
+    .rx_data_23_n (stxb_n[9]),
+    .rx_data_23_p (stxb_p[9]),
 
-    .ref_clk_q0 (ref_clk_126),
-    .ref_clk_q1 (ref_clk_126),
-    .ref_clk_q2 (ref_clk_128),
-    .ref_clk_q3 (ref_clk_124),
-    .ref_clk_q4 (ref_clk_126),
-    .ref_clk_q5 (ref_clk_128),
+    .ref_clk_q0 (ref_clk_replica),
+    .ref_clk_q1 (ref_clk_replica),
+    .ref_clk_q2 (ref_clk_replica),
+    .ref_clk_q3 (ref_clk),
+    .ref_clk_q4 (ref_clk),
+    .ref_clk_q5 (ref_clk),
 
     .rx_device_clk (rx_device_clk),
     .tx_device_clk (tx_device_clk),
     .rx_b_device_clk (rx_b_device_clk),
     .tx_b_device_clk (tx_b_device_clk),
+
+    // .rx_device_clk_rstn(trig_rstn),
+
+    .selectio_clk_in (selectio_clk_in),
+    .hsci_menc_clk (hsci_menc_clk),
+    .hsci_data_out (hsci_data_out),
+    .hsci_data_in (hsci_data_in),
+    .hsci_pclk (hsci_pclk),
+    .hsci_pll_reset (hsci_pll_reset),
+    .hsci_rst_seq_done(hsci_rst_seq_done),
+    .hsci_pll_locked (hsci_pll_locked),
+    .hsci_vtc_rdy_bsc_tx (hsci_vtc_rdy_bsc_tx),
+    .hsci_dly_rdy_bsc_tx (hsci_dly_rdy_bsc_tx),
+    .hsci_vtc_rdy_bsc_rx (hsci_vtc_rdy_bsc_rx),
+    .hsci_dly_rdy_bsc_rx (hsci_dly_rdy_bsc_rx),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),
@@ -527,3 +610,6 @@ module system_top #(
   );
 
 endmodule
+
+// ***************************************************************************
+// ***************************************************************************
