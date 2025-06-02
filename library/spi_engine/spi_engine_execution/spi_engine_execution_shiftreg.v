@@ -53,7 +53,7 @@ module spi_engine_execution_shiftreg #(
   input                     echo_sclk,
 
   // spi data
-  input   [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_data,
+  input   [(DATA_WIDTH)-1:0]              sdo_data,
   input                                   sdo_data_valid,
   output                                  sdo_data_ready,
 
@@ -103,6 +103,8 @@ module spi_engine_execution_shiftreg #(
     end
   end
 
+
+  //TODO: create logic around here to split data into the aligned_sdo_data arrays
   genvar i;
   for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdo_shift_reg
 
@@ -112,7 +114,7 @@ module spi_engine_execution_shiftreg #(
         sdo_data_reg <= 'h0;
       end else begin
         if (sdo_data_ready && sdo_data_valid) begin
-          sdo_data_reg <= sdo_data[i*DATA_WIDTH+:DATA_WIDTH];
+          sdo_data_reg <= sdo_data;
         end
       end
     end

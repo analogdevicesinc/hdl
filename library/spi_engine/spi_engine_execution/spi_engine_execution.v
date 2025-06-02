@@ -57,7 +57,7 @@ module spi_engine_execution #(
 
   input sdo_data_valid,
   output sdo_data_ready,
-  input [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdo_data,
+  input [(DATA_WIDTH)-1:0] sdo_data,
 
   input sdi_data_ready,
   output sdi_data_valid,
