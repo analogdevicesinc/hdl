@@ -4,20 +4,16 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad9084_fmca_ebz_vcu118
+PROJECT_NAME := ad9084_ebz_vcu128
 
 M_DEPS += timing_constr.xdc
 M_DEPS += ../common/versal_hsci_phy.tcl
-M_DEPS += ../common/ad9084_fmca_ebz_spi.v
+M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
-M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
-M_DEPS += ../../common/xilinx/adcfifo_bd.tcl
-M_DEPS += ../../common/vcu118/vcu118_system_constr.xdc
-M_DEPS += ../../common/vcu118/vcu118_system_bd.tcl
-M_DEPS += ../../ad9084_fmca_ebz/common/ad9084_fmca_ebz_bd.tcl
-M_DEPS += ../../../library/xilinx/common/ad_rst_constr.xdc
+M_DEPS += ../../common/vcu128/vcu128_system_constr.xdc
+M_DEPS += ../../common/vcu128/vcu128_system_bd.tcl
+M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
-M_DEPS += ../../../library/common/ad_rst.v
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../../hdl/projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../../hdl/library/jesd204/scripts/jesd204.tcl
@@ -37,8 +33,6 @@ LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += jesd204/jesd204_versal_gt_adapter_rx
 LIB_DEPS += jesd204/jesd204_versal_gt_adapter_tx
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_adcfifo
-LIB_DEPS += util_dacfifo
 LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2

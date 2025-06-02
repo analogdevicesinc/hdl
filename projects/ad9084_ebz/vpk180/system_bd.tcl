@@ -29,11 +29,11 @@ set HSCI_BANKS 1
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
 
-adi_project_files ad9084_fmca_ebz_vpk180 [list \
+adi_project_files ad9084_ebz_vpk180 [list \
   "../../../../hdl/library/util_cdc/sync_bits.v" \
 ]
 
-source $ad_hdl_dir/projects/ad9084_fmca_ebz/common/ad9084_fmca_ebz_bd.tcl
+source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2

@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module ad9084_fmca_ebz_spi #(
+module ad9084_ebz_spi #(
 
   parameter NUM_OF_SLAVES = 8
 ) (

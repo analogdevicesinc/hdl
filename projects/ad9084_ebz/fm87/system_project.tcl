@@ -42,7 +42,7 @@ source ../../../../hdl/projects/scripts/adi_project_intel.tcl
 # !!! Requires the following hdl branch: https://github.com/analogdevicesinc/hdl/tree/dev_fm87_avlfifo
 #
 
-adi_project ad9084_fmca_ebz_fm87 [list \
+adi_project ad9084_ebz_fm87 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   DEVICE_CLK_RATE     [get_env_param DEVICE_CLK_RATE  312.5 ] \
@@ -70,7 +70,7 @@ source $ad_hdl_dir/projects/common/fm87/fm87_plddr_system_assign.tcl
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_3w_spi.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/library/common/ad_iobuf.v
 set_global_assignment -name VERILOG_FILE $ad_hdl_dir/projects/common/fm87/gpio_slave.v
-set_global_assignment -name VERILOG_FILE ../common/ad9084_fmca_ebz_spi.v
+set_global_assignment -name VERILOG_FILE ../common/ad9084_ebz_spi.v
 
 set_instance_assignment -name IO_STANDARD "CURRENT MODE LOGIC (CML)"    -to fpga_refclk_in
 set_instance_assignment -name IO_STANDARD "True Differential Signaling" -to syncinb_a0

@@ -4,9 +4,9 @@
 ## Auto-generated, do not modify!
 ####################################################################################
 
-PROJECT_NAME := ad9084_fmca_ebz_fm87
+PROJECT_NAME := ad9084_ebz_fm87
 
-M_DEPS += ../common/ad9084_fmca_ebz_spi.v
+M_DEPS += ../common/ad9084_ebz_spi.v
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/intel/adcfifo_qsys.tcl
 M_DEPS += ../../common/fm87/system_qsys.tcl
@@ -15,7 +15,7 @@ M_DEPS += ../../common/fm87/fm87_system_qsys.tcl
 M_DEPS += ../../common/fm87/fm87_system_assign.tcl
 M_DEPS += ../../common/fm87/fm87_plddr_system_assign.tcl
 M_DEPS += ../../common/fm87/fm87_plddr_dacfifo_qsys.tcl
-M_DEPS += ../../ad9084_fmca_ebz/common/ad9084_fmca_ebz_qsys.tcl
+M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_qsys.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 

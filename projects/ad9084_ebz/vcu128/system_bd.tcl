@@ -18,12 +18,37 @@ if {$ASYMMETRIC_A_B_MODE == 1} {
   set dac_b_fifo_samples_per_converter [expr $ad_project_params(TX_B_KS_PER_CHANNEL)*1024]
 }
 
-source $ad_hdl_dir/projects/common/vcu118/vcu118_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
+source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
+ad_create_hbm HBM "8GB"
 
-source $ad_hdl_dir/projects/ad9084_fmca_ebz/common/ad9084_fmca_ebz_bd.tcl
+set ENABLE_HSCI 0
+
+source $ad_hdl_dir/projects/common/vcu128/vcu128_system_bd.tcl
+source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
+
+ad_connect_hbm HBM apollo_rx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 0
+ad_connect_hbm HBM apollo_tx_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 4
+
+ad_ip_parameter $adc_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+ad_ip_parameter $dac_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+
+ad_connect HBM/HBM_REF_CLK_0 $sys_cpu_clk
+ad_connect HBM/APB_0_PCLK $sys_cpu_clk
+ad_connect HBM/APB_0_PRESET_N $sys_cpu_resetn
+
+ad_connect HBM/HBM_REF_CLK_1 $sys_cpu_clk
+ad_connect HBM/APB_1_PCLK $sys_cpu_clk
+ad_connect HBM/APB_1_PRESET_N $sys_cpu_resetn
+
+if {$ASYMMETRIC_A_B_MODE} {
+
+  ad_connect_hbm HBM apollo_rx_b_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 8
+  ad_connect_hbm HBM apollo_tx_b_data_offload/storage_unit $sys_hbm_clk $sys_hbm_resetn 12
+
+  ad_ip_parameter $adc_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+  ad_ip_parameter $dac_b_data_offload_name/i_data_offload CONFIG.HAS_BYPASS false
+}
 
 ad_ip_parameter axi_apollo_rx_jesd/rx CONFIG.NUM_INPUT_PIPELINE 2
 ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
@@ -173,5 +198,3 @@ ad_connect sys_cpu_clk axi_spi_2/ext_spi_clk
 ad_cpu_interrupt ps-0 mb-16 axi_spi_2/ip2intc_irpt
 
 ad_cpu_interconnect 0x44A80000 axi_spi_2
-
-set_property range 256K [get_bd_addr_segs {sys_mb/Data/SEG_data_axi_hsci_0}]
