@@ -365,6 +365,10 @@ if {$ADI_PHY_SEL} {
   create_bd_port -dir I tx_sysref_0
   create_bd_port -dir I rx_sysref_12
   create_bd_port -dir I tx_sysref_12
+  create_bd_port -dir O rx_sync_12
+  create_bd_port -dir I tx_sync_12
+  create_bd_port -dir O -from [expr $RX_NUM_LINKS - 1] -to 0 rx_sync_0
+  create_bd_port -dir I -from [expr $RX_NUM_LINKS - 1] -to 0 tx_sync_0
 
   set REF_CLK_RATE $ad_project_params(REF_CLK_RATE)
   # instantiate versal phy
@@ -689,19 +693,17 @@ if {$ADI_PHY_SEL} {
   ad_connect $sys_cpu_clk jesd204_phy/s_axi_clk
   ad_connect $sys_cpu_resetn jesd204_phy/s_axi_resetn
 
-  create_bd_port -dir O -from [expr $RX_NUM_LINKS - 1] -to 0 rx_sync_0
   if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_rx_jesd/phy_en_char_align jesd204_phy/en_char_align
     ad_connect axi_apollo_rx_jesd/sync rx_sync_0
   } else {
     ad_connect GND jesd204_phy/en_char_align
   }
-  create_bd_port -dir I -from [expr $TX_NUM_LINKS - 1] -to 0 tx_sync_0
   if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_tx_jesd/sync tx_sync_0
   }
 
-  if ($ASYMMETRIC_A_B_MODE) {
+  if {$ASYMMETRIC_A_B_MODE} {
     ad_connect ref_clk_b jesd204_phy_b/GT_REFCLK
 
     for {set j 0} {$j < $RX_B_NUM_OF_LANES} {incr j} {
@@ -720,14 +722,12 @@ if {$ADI_PHY_SEL} {
 
     ad_connect $sys_cpu_clk jesd204_phy_b/s_axi_clk
     ad_connect $sys_cpu_resetn jesd204_phy_b/s_axi_resetn
-    create_bd_port -dir O -from [expr $RX_NUM_LINKS - 1] -to 0 rx_sync_12
     if {$JESD_MODE == "8B10B"} {
     ad_connect axi_apollo_rx_b_jesd/phy_en_char_align jesd204_phy_b/en_char_align
     ad_connect axi_apollo_rx_b_jesd/sync rx_sync_12
     } else {
       ad_connect GND jesd204_phy_b/en_char_align
     }
-    create_bd_port -dir I -from [expr $TX_NUM_LINKS - 1] -to 0 tx_sync_12
     if {$JESD_MODE == "8B10B"} {
       ad_connect axi_apollo_tx_b_jesd/sync tx_sync_0
     }
