@@ -14,7 +14,7 @@ The design implements a high-speed receive chain using JESD204B.
 The receive chain transports the captured samples from ADC to the system
 memory (DDR). Before transferring the data to DDR the samples are stored
 in a buffer implemented on block rams from the FPGA fabric
-(:git-hdl:`util_adcfifo <library/util_adcfifo>`).
+(:git-hdl:`data_offload <library/data_offload>`).
 
 All cores from the receive chain are programmable through
 an AXI-Lite interface.
@@ -94,6 +94,7 @@ axi_ad9213_xcvr       0x44A6_0000
 rx_ad9213_tpl_core    0x44A1_0000
 axi_ad9213_jesd       0x44A9_0000
 axi_ad9213_dma        0x7C42_0000
+ad9213_data_offload   0x7C43_0000
 ====================  ===============
 
 SPI connections
@@ -204,6 +205,9 @@ HDL related
    * - AXI_DMAC
      - :git-hdl:`library/axi_dmac`
      - :ref:`axi_dmac`
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - AXI_SYSID
      - :git-hdl:`library/axi_sysid`
      - :ref:`axi_sysid`
