@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -11,6 +11,7 @@ M_DEPS += ../common/daq2_bd.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
+M_DEPS += ../../common/zc706/zc706_plddr3_data_offload_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
