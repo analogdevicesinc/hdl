@@ -98,29 +98,30 @@ IBUFDS i_clk_in_ibuf(
   // .I(clk_in_s),
   // .O(clk_in_s_buf));
 
- IDELAYE2 # (
-  .CINVCTRL_SEL ("FALSE"),
-  .DELAY_SRC ("IDATAIN"),
-  .HIGH_PERFORMANCE_MODE ("FALSE"),
-  .IDELAY_TYPE ("VAR_LOAD"),
-  .IDELAY_VALUE (0),
-  .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
-  .PIPE_SEL ("FALSE"),
-  .SIGNAL_PATTERN ("CLOCK")
- ) i_delay_clk (
-  .C (up_clk),
-  .CE (1'b0),
-  .CINVCTRL (1'b0),
-  .CNTVALUEIN (up_dwdata[DRP_WIDTH]),
-  .CNTVALUEOUT (up_drdata[DRP_WIDTH]),
-  .DATAIN (1'b0),
-  .IDATAIN (clk_in_s),
-  .DATAOUT (clk_in_s_idelay),
-  .INC (1'b0),
-  .LD (up_dld[DRP_WIDTH]),
-  .LDPIPEEN (1'b0),
-  .REGRST (1'b0)
- );
+  (* IODELAY_GROUP  = IO_DELAY_GROUP *)
+  IDELAYE2 # (
+    .CINVCTRL_SEL ("FALSE"),
+    .DELAY_SRC ("IDATAIN"),
+    .HIGH_PERFORMANCE_MODE ("FALSE"),
+    .IDELAY_TYPE ("VAR_LOAD"),
+    .IDELAY_VALUE (0),
+    .REFCLK_FREQUENCY (REFCLK_FREQUENCY),
+    .PIPE_SEL ("FALSE"),
+    .SIGNAL_PATTERN ("CLOCK")
+  ) i_delay_clk (
+    .C (up_clk),
+    .CE (1'b0),
+    .CINVCTRL (1'b0),
+    .CNTVALUEIN (up_dwdata[DRP_WIDTH]),
+    .CNTVALUEOUT (up_drdata[DRP_WIDTH]),
+    .DATAIN (1'b0),
+    .IDATAIN (clk_in_s),
+    .DATAOUT (clk_in_s_idelay),
+    .INC (1'b0),
+    .LD (up_dld[DRP_WIDTH]),
+    .LDPIPEEN (1'b0),
+    .REGRST (1'b0)
+  );
 
  BUFR #(
    .BUFR_DIVIDE("4")

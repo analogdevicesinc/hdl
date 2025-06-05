@@ -70,8 +70,8 @@ set_property  -dict {PACKAGE_PIN N11 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports 
 set_property  -dict {PACKAGE_PIN N12 IOSTANDARD LVDS_25 DIFF_TERM 0} [get_ports clk_in_a2_n];     # A2LCLKN IO_L13N_T2_MRCC_34
 
 
-create_clock -name ref_clk_a1        -period 4   [get_ports clk_in_a1_p]
-create_clock -name ref_clk_a2        -period 4   [get_ports clk_in_a2_p]
+create_clock -name ref_clk_a1        -period 2   [get_ports clk_in_a1_p]
+create_clock -name ref_clk_a2        -period 2   [get_ports clk_in_a2_p]
 
 # input                  ____________________
 # clock    _____________|                    |_____________
@@ -83,7 +83,7 @@ create_clock -name ref_clk_a2        -period 4   [get_ports clk_in_a2_p]
 #
 
 set a1_input_clock          ref_clk_a1;      # Name of input clock
-set a1_input_clock_period   4;    # Period of input clock (full-period)
+set a1_input_clock_period   2;    # Period of input clock (full-period)
 set a1_tdata                0.050; # adc clock to valid data (from datasheet, T_data)
 set a1_tlvds                [expr $a1_input_clock_period/2];    # LVDS bit period TODO: change constraints to take into account tLVDS max and min (LVDS bit clock duty cycle ranges from 45 to 55%)
 set a1_dv_bre               [expr $a1_tlvds/2 - $a1_tdata]; # Data valid before the rising clock edge
@@ -93,7 +93,7 @@ set a1_dv_afe               [expr $a1_tlvds/2];             # Data valid after t
 set a1_input_ports          "data_in_a1_p[*]";     # List of input ports
 
 set a2_input_clock          ref_clk_a2;      # Name of input clock
-set a2_input_clock_period   4;    # Period of input clock (full-period)
+set a2_input_clock_period   2;    # Period of input clock (full-period)
 set a2_tdata                0.050; # adc clock to valid data (from datasheet, T_data)
 set a2_tlvds                [expr $a2_input_clock_period/2];    # LVDS bit period TODO: change constraints to take into account tLVDS max and min (LVDS bit clock duty cycle ranges from 45 to 55%)
 set a2_dv_bre               [expr $a2_tlvds/2 - $a2_tdata]; # Data valid before the rising clock edge
@@ -113,11 +113,11 @@ set_input_delay -clock $a2_input_clock -min $a2_dv_are                          
 set_input_delay -clock $a2_input_clock -max [expr $a2_input_clock_period/2 - $a2_dv_bre]    [get_ports $a2_input_ports] -clock_fall -add_delay;
 set_input_delay -clock $a2_input_clock -min $a2_dv_afe                                      [get_ports $a2_input_ports] -clock_fall -add_delay;
 
-set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
-set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
+set_property IDELAY_VALUE 3 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
+set_property IDELAY_VALUE 3 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/ad_serdes_data_inst/g_data[*].i_idelay]
 
-set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
-set_property IDELAY_VALUE 10 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
+set_property IDELAY_VALUE 4 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a1_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
+set_property IDELAY_VALUE 4 [get_cells  i_system_wrapper/system_i/axi_hmcad15xx_a2_adc/inst/i_axi_hmcad15xx_if/i_delay_clk]
 
 # JTAG
 
