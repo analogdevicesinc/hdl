@@ -1561,7 +1561,7 @@
          y="63.643162"
          x="-175.44029"
          id="tspan5790-5"
-         sodipodi:role="line">UTIL_ADC FIFO</tspan></text>
+         sodipodi:role="line">DATA_OFFLOAD</tspan></text>
     <g
        transform="matrix(0.26458333,0,0,0.26458333,1.514374,132.33104)"
        style="display:inline;opacity:1;shape-rendering:crispEdges;enable-background:new"
