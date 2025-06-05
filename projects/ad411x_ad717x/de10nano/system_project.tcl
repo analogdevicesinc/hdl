@@ -47,4 +47,7 @@ set_location_assignment PIN_AH9   -to i2c_sda;   ## Arduino_IO14
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_scl
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to i2c_sda
 
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c_scl
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to i2c_sda
+
 execute_flow -compile
