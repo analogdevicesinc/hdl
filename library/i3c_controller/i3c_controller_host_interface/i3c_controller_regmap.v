@@ -126,13 +126,12 @@ module i3c_controller_regmap #(
   reg        up_wack_ff  = 1'b0;
   reg        up_rack_ff  = 1'b0;
 
-  // Holds DAA trigger High until sdo_fifo_empty goes Low,
-  // meaning DA got written.
-  reg        daa_trigger_lock;
-
-  reg        daa_pending;
+  reg        cmdr_fifo_valid_r;
+  reg        ibi_fifo_valid_r;
+  reg        daa_trigger_r;
   reg        cmdr_pending;
   reg        ibi_pending;
+  reg        daa_pending;
 
   reg  [`I3C_REGMAP_IRQ_WIDTH:0] up_irq_mask = 8'h0;
   reg  [6:0] ops;
@@ -522,37 +521,34 @@ module i3c_controller_regmap #(
 
   always @(posedge s_axi_aclk) begin
     if (up_sw_resetn == 1'b0) begin
-      daa_trigger_lock <= 1'b0;
       daa_pending <= 1'b0;
       cmdr_pending <= 1'b0;
       ibi_pending <= 1'b0;
     end else begin
-      if (cmdr_fifo_valid == 1'b1) begin
+      if (cmdr_fifo_valid == 1'b1 && cmdr_fifo_valid_r == 1'b0) begin
         cmdr_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_CMDR_PENDING] == 1'b1) begin
         cmdr_pending <= 1'b0;
       end
-      if (ibi_fifo_valid == 1'b1) begin
+      if (ibi_fifo_valid == 1'b1 && ibi_fifo_valid_r == 1'b0) begin
         ibi_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_IBI_PENDING] == 1'b1) begin
         ibi_pending <= 1'b0;
       end
-      if (daa_trigger_lock == 1'b1) begin
+      if (daa_trigger == 1'b1 && daa_trigger_r == 1'b0) begin
         daa_pending <= 1'b1;
       end else if (up_wreq_s == 1'b1 &&
         up_waddr_s[7:0] == `I3C_REGMAP_IRQ_PENDING &&
         up_wdata_s[`I3C_REGMAP_IRQ_DAA_PENDING] == 1'b1) begin
         daa_pending <= 1'b0;
       end
-      if (daa_trigger) begin
-        daa_trigger_lock <= 1'b1;
-      end else if (sdo_valid_w) begin
-        daa_trigger_lock <= 1'b0;
-      end
+      cmdr_fifo_valid_r <= cmdr_fifo_valid;
+      ibi_fifo_valid_r <= ibi_fifo_valid;
+      daa_trigger_r <= daa_trigger;
     end
   end
 
