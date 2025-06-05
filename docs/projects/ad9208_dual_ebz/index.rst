@@ -80,8 +80,8 @@ Both links are set for full bandwidth mode and operate with the following parame
 Both transport layer components present on their output 256 bits at once
 on every clock cycle, representing 8 samples per converter. The two receive
 chains are merged together and transferred to the DDR with a single DMA. An
-ADC buffer is used to store 65k samples per converter in the fabric before
-transferring it with the DMA.
+ADC buffer (:git-hdl:`data_offload <library/data_offload>`) is used to store
+65k samples per converter in the fabric before transferring it with the DMA.
 
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,6 +138,7 @@ axi_ad9208_1_xcvr    0x44B6_0000     0x84B6_0000 0xA4B6_00000
 rx_ad9208_1_tpl_core 0x44B1_0000     0x84B1_0000 0xA4B1_00000
 axi_ad9208_1_jesd    0x44B9_0000     0x84B9_0000 0xA4B9_00000
 axi_ad9208_dma       0x7C42_0000     0x9C42_0000 0xBC42_00000
+ad9208_data_offload  0x7C43_0000     0x9C43_0000 0xBC43_00000
 ==================== =============== =========== ============
 
 SPI connections
@@ -316,9 +317,9 @@ HDL related
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`util_cpack2`
-   * - UTIL_ADCFIFO
-     - :git-hdl:`library/util_adcfifo`
-     - ---
+   * - DATA_OFFLOAD
+     - :git-hdl:`library/data_offload`
+     - :ref:`data_offload`
    * - UTIL_ADXCVR for AMD
      - :git-hdl:`library/xilinx/util_adxcvr`
      - :ref:`util_adxcvr`
