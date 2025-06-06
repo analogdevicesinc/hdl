@@ -20,6 +20,8 @@ if {$ASYMMETRIC_A_B_MODE} {
   set TX_B_LANE_RATE $ad_project_params(TX_B_LANE_RATE)
 }
 
+set AION_ENABLE [ expr { [info exists ad_project_params(AION_ENABLE)] \
+                          ? $ad_project_params(AION_ENABLE) : 1 } ]
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
@@ -183,6 +185,26 @@ create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
 create_bd_port -dir I rx_b_device_clk
 create_bd_port -dir I tx_b_device_clk
+
+##AXI_ADF4030 IP
+if {$AION_ENABLE} {
+  create_bd_port -dir IO adf4030_bsync_p
+  create_bd_port -dir IO adf4030_bsync_n
+  create_bd_port -dir I adf4030_clk
+  create_bd_port -dir I adf4030_trigger
+  create_bd_port -dir O adf4030_sysref
+  create_bd_port -dir O -from 1 -to 0 adf4030_trig_channel
+
+  ad_ip_instance axi_adf4030 axi_adf4030_0
+  ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 2
+
+  ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
+  ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n
+  ad_connect axi_adf4030_0/device_clk adf4030_clk
+  ad_connect axi_adf4030_0/trigger adf4030_trigger
+  ad_connect axi_adf4030_0/sysref adf4030_sysref
+  ad_connect axi_adf4030_0/trig_channel adf4030_trig_channel
+}
 
 ##AXI_HSCI IP
 if {$HSCI_ENABLE} {
@@ -1008,6 +1030,10 @@ ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
 if {$HSCI_ENABLE} {
   ad_cpu_interconnect 0x44ad0000 axi_hsci_clkgen
   ad_cpu_interconnect 0x7c500000 axi_hsci_0
+}
+
+if {$AION_ENABLE} {
+  ad_cpu_interconnect 0x7c600000 axi_adf4030_0
 }
 # Reserved for TDD! 0x7c460000
 

@@ -126,8 +126,8 @@ module system_top #(
   output         sysref_b_n,
   input          sysref_p,
   input          sysref_n,
-  input          sysref_in_p,
-  input          sysref_in_n,
+  inout          sysref_in_p,
+  inout          sysref_in_n,
 
   output         spi2_sclk,
   inout          spi2_sdio,
@@ -153,6 +153,9 @@ module system_top #(
 
   output [ 1:0]  trig_a,
   output [ 1:0]  trig_b,
+
+  output         nco_sync,
+  output         dma_start,
 
   input          trig_in,
   output         resetb
@@ -212,8 +215,8 @@ module system_top #(
   wire    [ 7:0]  hsci_data_in;
   wire    [ 7:0]  hsci_data_out;
 
-  // wire            trig_rstn;
-  // wire            trig;
+  wire    [ 1:0]  trig_channel;
+
   assign iic_rstn = 1'b1;
 
   // instantiations
@@ -319,9 +322,9 @@ module system_top #(
   assign spi2_sclk    = spi_clk;
 
   ad9084_ebz_spi #(
-    .NUM_OF_SLAVES(2)
+    .NUM_OF_SLAVES(6)
   ) i_spi (
-    .spi_csn (spi_csn[1:0]),
+    .spi_csn (spi_csn),
     .spi_clk (spi_clk),
     .spi_mosi (spi_sdio),
     .spi_miso (spi_sdo),
@@ -345,10 +348,12 @@ module system_top #(
 
   assign gpio_i[53] = trig_in;
 
-  assign trig_a[0]  = gpio_o[58];
-  assign trig_a[1]  = gpio_o[59];
-  assign trig_b[0]  = gpio_o[60];
-  assign trig_b[1]  = gpio_o[61];
+  assign trig_a[0]  = trig_channel[0];
+  assign trig_a[1]  = trig_channel[0];
+  assign trig_b[0]  = trig_channel[0];
+  assign trig_b[1]  = trig_channel[0];
+  assign nco_sync   = trig_channel[0];
+  assign dma_start  = trig_channel[1];
   assign resetb     = gpio_o[62];
 
   ad_iobuf #(.DATA_WIDTH(17)) i_iobuf_bd (
@@ -366,14 +371,6 @@ module system_top #(
     else
       assign sysref_loc = 0;
   endgenerate
-
-  // trigger_generator trig_i (
-  //   .sysref     (sysref),
-  //   .device_clk (rx_device_clk),
-  //   .gpio       (aux_gpio),
-  //   .rstn       (trig_rstn),
-  //   .trigger    (trig)
-  // );
 
   hsci_phy_top hsci_phy_top(
     .pll_inclk       (pll_inclk),
@@ -598,6 +595,13 @@ module system_top #(
     .hsci_dly_rdy_bsc_tx (hsci_dly_rdy_bsc_tx),
     .hsci_vtc_rdy_bsc_rx (hsci_vtc_rdy_bsc_rx),
     .hsci_dly_rdy_bsc_rx (hsci_dly_rdy_bsc_rx),
+
+    .adf4030_bsync_p      (sysref_in_p),
+    .adf4030_bsync_n      (sysref_in_n),
+    .adf4030_clk          (rx_device_clk),
+    .adf4030_trigger      (aux_gpio),
+    .adf4030_sysref       (sysref),
+    .adf4030_trig_channel (trig_channel),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),

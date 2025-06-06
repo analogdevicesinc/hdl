@@ -1,0 +1,162 @@
+###############################################################################
+## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+
+set_property ASYNC_REG TRUE \
+  [get_cells -hier {*cdc_sync_stage1_reg*}] \
+  [get_cells -hier {*cdc_sync_stage2_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg/C}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/bsync_counter_reg[*]/R}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_reset_reg_replica}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[1]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_sw_resetn_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_disable_internal_bsync_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/i_control_signals/cdc_sync_stage1_reg[0]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/cdc_hold_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/out_data_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_en/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/cdc_hold_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/out_data_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/cdc_hold_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/out_data_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_state/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/cdc_hold_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/out_data_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_ratio/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/cdc_hold_reg*}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/out_data_reg*}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_bsync_delay/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_channel_phase/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_toggle_d1_reg_replica}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_in/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/in_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_out/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/cdc_hold_reg[*]}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_data_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_enable_misalign_check_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_manual_trig_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_manual_trig/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/b_captured_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_debug_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/calib_done_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_debug_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/bsync_misaligned_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_debug_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_direction_reg_replica_1}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_bsync_gen/i_control_signals/cdc_sync_stage1_reg[0]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_disable_internal_bsync_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_select_trig_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_debug_trig_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/up_enable_debug_trig_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/i_control_signals/cdc_sync_stage1_reg[*]}]
+
+set_false_path \
+  -from [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/out_toggle_d1_reg}] \
+  -to [get_cells -hierarchical * -filter {NAME=~*i_regmap/*i_trig_state/i_sync_in/cdc_sync_stage1_reg[*]}]
