@@ -394,15 +394,13 @@ with production volume.</p>
 </section>
 <section id="supported-carriers">
 <h2>Supported carriers<a class="headerlink" href="#supported-carriers" title="Permalink to this heading"></a></h2>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV1CRR-BOB">ADRV1CRR-BOB</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/pzsdr/carriers/packrf">ADRV1CRR-FMC</a></p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV1CRR-FMC">ADRV1CRR-FMC</a></p></li>
 <li><p>ADRV1CRR-PCI (OBSOLETE)</p></li>
 <li><p>ADRV1CRR-USB (OBSOLETE)</p></li>
 </ul>
-</div></blockquote>
 </section>
 <section id="block-design">
 <h2>Block design<a class="headerlink" href="#block-design" title="Permalink to this heading"></a></h2>
@@ -633,7 +631,7 @@ command.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="0802edc35f4d8a5dd6941a1cb1c00ff4842b1f04" name="0802edc35f4d8a5dd6941a1cb1c00ff4842b1f04" type="checkbox"></input><label for="0802edc35f4d8a5dd6941a1cb1c00ff4842b1f04"><p>Supported SOM &amp; Carriers</p>
+<input class="collapsible_input" id="613ddb0ea74f4ea4f4b663edd24671d5067810a8" name="613ddb0ea74f4ea4f4b663edd24671d5067810a8" type="checkbox"></input><label for="613ddb0ea74f4ea4f4b663edd24671d5067810a8"><p>Supported SOM &amp; Carriers</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -650,7 +648,7 @@ command.</p>
 <td><p>ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-BOB</p></td>
 </tr>
 <tr class="row-even"><td><p>ccpackrf_lvds</p></td>
-<td><p>ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF</p></td>
+<td><p>ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF*</p></td>
 </tr>
 <tr class="row-odd"><td><p>ccfmc_lvds</p></td>
 <td><p>ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-FMC</p></td>
@@ -664,10 +662,17 @@ command.</p>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> removed; last release that supported the project is
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/adrv9361z7035/ccpackrf_lvds">hdl_2021_r2</a></p></li>
+</ul>
+</div>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="98d6d3ba2c32bae828975ac32414d45495c6f63e" name="98d6d3ba2c32bae828975ac32414d45495c6f63e" type="checkbox"></input><label for="98d6d3ba2c32bae828975ac32414d45495c6f63e"><p>Board Design Files (Vivado IPI)</p>
+<input class="collapsible_input" id="5cbd2fd151c90b9ba6a3b7138a4e88a746437af4" name="5cbd2fd151c90b9ba6a3b7138a4e88a746437af4" type="checkbox"></input><label for="5cbd2fd151c90b9ba6a3b7138a4e88a746437af4"><p>Board Design Files (Vivado IPI)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -683,16 +688,13 @@ command.</p>
 <tr class="row-odd"><td><p>common/ccbob_bd.tcl</p></td>
 <td><p>carrier, break out board design file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpackrf_bd.tcl</p></td>
-<td><p>carrier, pack rf board design file.</p></td>
-</tr>
-<tr class="row-odd"><td><p>common/ccfmc_bd.tcl</p></td>
+<tr class="row-even"><td><p>common/ccfmc_bd.tcl</p></td>
 <td><p>carrier, fmc board design file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpci_bd.tcl</p></td>
+<tr class="row-odd"><td><p>common/ccpci_bd.tcl</p></td>
 <td><p>carrier, pci-e board design file.</p></td>
 </tr>
-<tr class="row-odd"><td><p>common/ccusb_bd.tcl</p></td>
+<tr class="row-even"><td><p>common/ccusb_bd.tcl</p></td>
 <td><p>carrier, usb board design file.</p></td>
 </tr>
 </tbody>
@@ -706,7 +708,7 @@ testing.</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="402dc67970830bb566ab57d50e0e0c872a31c384" name="402dc67970830bb566ab57d50e0e0c872a31c384" type="checkbox"></input><label for="402dc67970830bb566ab57d50e0e0c872a31c384"><p>Board Constraint Files (pin-out &amp; io-standard)</p>
+<input class="collapsible_input" id="7cd63655d86a7c191c3b4a20bc10cc465709f2e7" name="7cd63655d86a7c191c3b4a20bc10cc465709f2e7" type="checkbox"></input><label for="7cd63655d86a7c191c3b4a20bc10cc465709f2e7"><p>Board Constraint Files (pin-out &amp; io-standard)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -735,18 +737,14 @@ constraints file.</p></td>
 <td><p>carrier, break out board constraints
 file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpackrf_constr.xdc</p></td>
-<td><p>carrier, packrf board constraints
-file.</p></td>
-</tr>
-<tr class="row-odd"><td><p>common/ccfmc_constr.xdc</p></td>
+<tr class="row-even"><td><p>common/ccfmc_constr.xdc</p></td>
 <td><p>carrier, fmc board constraints file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpci_constr.xdc</p></td>
+<tr class="row-odd"><td><p>common/ccpci_constr.xdc</p></td>
 <td><p>carrier, pci-e board constraints
 file.</p></td>
 </tr>
-<tr class="row-odd"><td><p>common/ccusb_constr.xdc</p></td>
+<tr class="row-even"><td><p>common/ccusb_constr.xdc</p></td>
 <td><p>carrier, usb board constraints file.</p></td>
 </tr>
 </tbody>
@@ -816,7 +814,7 @@ testing.</p>
 <td><p><a class="reference internal" href="../../library/axi_hdmi_tx/index.html#axi-hdmi-tx"><span class="std std-ref">AXI HDMI TX</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a> ***</p></td>
+<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a> *</p></td>
 <td><p>—</p></td>
 </tr>
 <tr class="row-even"><td><p>AXI_SPDIF_TX</p></td>
@@ -867,7 +865,6 @@ testing.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only used for ccfmc_lvds (ADRV1CRR-FMC)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only used for ccbob_cmos (ADRV1CRR-BOB), ccbob_lvds (ADRV1CRR-BOB), ccfmc_lvds (ADRV1CRR-FMC)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">***</span></code> only used for ccfmc_lvds (ADRV1CRR-FMC), ccpackrf_lvds (ADRV1CRR-PACKRF)</p></li>
 </ul>
 </div>
 </section>
@@ -879,7 +876,6 @@ testing.</p>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc.dts">ADRV9361-Z7035 ccfmc_lvds Linux device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-userspace.dts">ADRV9361-Z7035 ccfmc_lvds Linux device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc-rfcard-tdd.dts">ADRV9361-Z7035 ccfmc_lvds Linux device tree - TDD mode</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-packrf.dts">ADRV9361-Z7035 ccpackrf_lvds Linux device tree</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/eval/user-guides/adrv936x_rfsom/user-guide/software">[Wiki] ADRV9361-Z7035 User Guide - Software documentation</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361">[Wiki] AD9361 Linux device driver documentation</a></p></li>
 </ul>

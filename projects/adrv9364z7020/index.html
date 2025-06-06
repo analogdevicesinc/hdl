@@ -629,7 +629,7 @@ command.</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="43bf4f9a9fc1759875442d7b82ee8638447f709c" name="43bf4f9a9fc1759875442d7b82ee8638447f709c" type="checkbox"></input><label for="43bf4f9a9fc1759875442d7b82ee8638447f709c"><p>Supported SOM &amp; Carriers</p>
+<input class="collapsible_input" id="830b61520e50b737c108e082f7a5c68838b9e084" name="830b61520e50b737c108e082f7a5c68838b9e084" type="checkbox"></input><label for="830b61520e50b737c108e082f7a5c68838b9e084"><p>Supported SOM &amp; Carriers</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -645,19 +645,26 @@ command.</p>
 <tr class="row-odd"><td><p>ccbob_lvds</p></td>
 <td><p>ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-BOB</p></td>
 </tr>
-<tr class="row-even"><td><p>ccpackrf_lvds</p></td>
-<td><p>ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-PACKRF</p></td>
-</tr>
-<tr class="row-odd"><td><p>ccusb_lvds</p></td>
+<tr class="row-even"><td><p>ccusb_lvds</p></td>
 <td><p>ADRV9364Z7020-SOM (LVDS Mode) + ADRV1CRR-USB</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccpackrf_lvds</p></td>
+<td><p>ADRV9361Z7035-SOM (LVDS Mode) + ADRV1CRR-PACKRF*</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="note admonition">
+<p class="admonition-title">Legend</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> removed, last release that supported the project is
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/hdl_2021_r2/projects/adrv9361z7035/ccpackrf_lvds">hdl_2021_r2</a></p></li>
+</ul>
+</div>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="29ceb8582997f949945d55d92a81c1f5b324687a" name="29ceb8582997f949945d55d92a81c1f5b324687a" type="checkbox"></input><label for="29ceb8582997f949945d55d92a81c1f5b324687a"><p>Board Design Files (Vivado IPI)</p>
+<input class="collapsible_input" id="462fbe294f98247a5a63bea0d06d0cca12550d88" name="462fbe294f98247a5a63bea0d06d0cca12550d88" type="checkbox"></input><label for="462fbe294f98247a5a63bea0d06d0cca12550d88"><p>Board Design Files (Vivado IPI)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -673,10 +680,7 @@ command.</p>
 <tr class="row-odd"><td><p>common/ccbob_bd.tcl</p></td>
 <td><p>carrier, break out board design file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpackrf_bd.tcl</p></td>
-<td><p>carrier, pack rf board design file.</p></td>
-</tr>
-<tr class="row-odd"><td><p>common/ccusb_bd.tcl</p></td>
+<tr class="row-even"><td><p>common/ccusb_bd.tcl</p></td>
 <td><p>carrier, usb board design file.</p></td>
 </tr>
 </tbody>
@@ -690,7 +694,7 @@ testing.</p>
 </div>
 </div>
 </div><div><div class="collapsible docutils container">
-<input class="collapsible_input" id="9767d4039f0432832ba856dbefcbef42af3ca9b2" name="9767d4039f0432832ba856dbefcbef42af3ca9b2" type="checkbox"></input><label for="9767d4039f0432832ba856dbefcbef42af3ca9b2"><p>Board Constraint Files (pin-out &amp; io-standard)</p>
+<input class="collapsible_input" id="3b9bd8437ae23be2e41b5815f97cfe9cbed861a2" name="3b9bd8437ae23be2e41b5815f97cfe9cbed861a2" type="checkbox"></input><label for="3b9bd8437ae23be2e41b5815f97cfe9cbed861a2"><p>Board Constraint Files (pin-out &amp; io-standard)</p>
 <div class="icon"></div></label><div class="collapsible_content docutils container">
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
@@ -719,11 +723,7 @@ constraints file.</p></td>
 <td><p>carrier, break out board constraints
 file.</p></td>
 </tr>
-<tr class="row-even"><td><p>common/ccpackrf_constr.xdc</p></td>
-<td><p>carrier, packrf board constraints
-file.</p></td>
-</tr>
-<tr class="row-odd"><td><p>common/ccusb_constr.xdc</p></td>
+<tr class="row-even"><td><p>common/ccusb_constr.xdc</p></td>
 <td><p>carrier, usb board constraints file.</p></td>
 </tr>
 </tbody>
@@ -784,39 +784,35 @@ testing.</p>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_gpreg">library/axi_gpreg</a> *</p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>AXI_I2S_ADI</p></td>
-<td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_i2s_adi">library/axi_i2s_adi</a> **</p></td>
-<td><p>—</p></td>
-</tr>
-<tr class="row-even"><td><p>AXI_SYSID</p></td>
+<tr class="row-odd"><td><p>AXI_SYSID</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/axi_sysid">library/axi_sysid</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SYSID_ROM</p></td>
+<tr class="row-even"><td><p>SYSID_ROM</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/sysid_rom">library/sysid_rom</a></p></td>
 <td><p><a class="reference internal" href="../../library/axi_sysid/index.html#axi-sysid"><span class="std std-ref">AXI System ID</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_CPACK2</p></td>
+<tr class="row-odd"><td><p>UTIL_CPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_cpack2">library/util_pack/util_cpack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_cpack2.html#util-cpack2"><span class="std std-ref">Channel CPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_RFIFO</p></td>
+<tr class="row-even"><td><p>UTIL_RFIFO</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_rfifo">library/util_rfifo</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_rfifo/index.html#util-rfifo"><span class="std std-ref">Util RFIFO</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_TDD_SYNC</p></td>
+<tr class="row-odd"><td><p>UTIL_TDD_SYNC</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_tdd_sync">library/util_tdd_sync</a></p></td>
 <td><p>—</p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_UPACK2</p></td>
+<tr class="row-even"><td><p>UTIL_UPACK2</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_pack/util_upack2">library/util_pack/util_upack2</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_pack/util_upack2.html#util-upack2"><span class="std std-ref">Channel UPACK Utility</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>UTIL_WFIFO</p></td>
+<tr class="row-odd"><td><p>UTIL_WFIFO</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/util_wfifo">library/util_wfifo</a></p></td>
 <td><p><a class="reference internal" href="../../library/util_wfifo/index.html#util-wfifo"><span class="std std-ref">Util WFIFO</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>UTIL_CLKDIV</p></td>
+<tr class="row-even"><td><p>UTIL_CLKDIV</p></td>
 <td><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/xilinx/util_clkdiv">library/xilinx/util_clkdiv</a></p></td>
 <td><p>—</p></td>
 </tr>
@@ -827,7 +823,6 @@ testing.</p>
 <p class="admonition-title">Legend</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> only used for ccbob_cmos (ADRV1CRR-BOB) &amp; ccfmc_lvds (ADRV1CRR-FMC)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">**</span></code> only used for ccpackrf_lvds (ADRV1CRR-PACKRF)</p></li>
 </ul>
 </div>
 </section>
@@ -836,7 +831,6 @@ testing.</p>
 <ul class="simple">
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob-cmos.dts">ADRV9364-Z7020 ccbob_cmos Linux device tree</a></p></li>
 <li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-bob.dts">ADRV9364-Z7020 ccbob_lvds Linux device tree</a></p></li>
-<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/linux/tree/main/arch/arm/boot/dts/xilinx/zynq-adrv9364-z7020-packrf.dts">ADRV9364-Z7020 ccpackrf_lvds Linux device tree</a></p></li>
 <li><p><a class="reference external" href="https://wiki.analog.com/resources/tools-software/linux-drivers/iio-transceiver/ad9361">[Wiki] AD9361 Linux device driver documentation</a></p></li>
 </ul>
 </section>
