@@ -87,7 +87,7 @@ module ad9084_ebz_spi #(
 
   // io buffer
 
-  assign spi_miso = (spi_csn[0] == 1'b0) ? spi_miso_in : spi_sdio;
+  assign spi_miso = (spi_csn[0] == 1'b0 || spi_csn[4] == 1'b0) ? spi_miso_in : spi_sdio;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule

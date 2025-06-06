@@ -25,6 +25,7 @@ M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_hsci
+LIB_DEPS += axi_adf4030
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
 LIB_DEPS += data_offload
