@@ -12,8 +12,9 @@ set RX_SAMPLE_WIDTH 16     ; # N/NP
 set RX_SAMPLES_PER_CHANNEL 8 ; # L * 32 / (M * N)
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 
-set adc_fifo_name axi_ad9208_fifo
+set adc_offload_name ad9208_data_offload
 set adc_data_width 512
 set adc_dma_data_width 512
 
@@ -76,7 +77,23 @@ ad_ip_instance util_cpack2 util_ad9208_cpack [list \
   SAMPLE_DATA_WIDTH $RX_SAMPLE_WIDTH \
 ]
 
-ad_adcfifo_create $adc_fifo_name $adc_data_width $adc_dma_data_width $adc_fifo_address_width
+ad_data_offload_create $adc_offload_name \
+                       0 \
+                       $adc_offload_type \
+                       $adc_offload_size \
+                       $adc_data_width \
+                       $adc_dma_data_width
+
+ad_ip_parameter $adc_offload_name/i_data_offload CONFIG.SYNC_EXT_ADD_INTERNAL_CDC 0
+ad_connect $adc_offload_name/sync_ext GND
+
+ad_ip_instance util_vector_logic rx_do_rstout_logic
+ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
+ad_ip_parameter rx_do_rstout_logic config.c_size {1}
+
+ad_ip_instance util_vector_logic cpack_reset_logic
+ad_ip_parameter cpack_reset_logic config.c_operation {or}
+ad_ip_parameter cpack_reset_logic config.c_size {1}
 
 ad_ip_instance axi_dmac axi_ad9208_dma
 ad_ip_parameter axi_ad9208_dma CONFIG.DMA_TYPE_SRC 1
@@ -145,15 +162,18 @@ ad_connect  glbl_clk_0 rx_ad9208_0_tpl_core/link_clk
 ad_connect  glbl_clk_0 rx_ad9208_1_tpl_core/link_clk
 
 ad_connect  glbl_clk_0 util_ad9208_cpack/clk
-ad_connect  glbl_clk_0 axi_ad9208_fifo/adc_clk
+ad_connect  glbl_clk_0 $adc_offload_name/s_axis_aclk
 
 # dma clock domain
-ad_connect  $sys_cpu_clk axi_ad9208_fifo/dma_clk
+ad_connect  $sys_cpu_clk $adc_offload_name/m_axis_aclk
 ad_connect  $sys_cpu_clk axi_ad9208_dma/s_axis_aclk
 
 # connect resets
-ad_connect  glbl_clk_0_rstgen/peripheral_reset axi_ad9208_fifo/adc_rst
-ad_connect  glbl_clk_0_rstgen/peripheral_reset util_ad9208_cpack/reset
+ad_connect  glbl_clk_0_rstgen/peripheral_aresetn $adc_offload_name/s_axis_aresetn
+ad_connect  glbl_clk_0_rstgen/peripheral_reset cpack_reset_logic/op1
+ad_connect  rx_do_rstout_logic/res cpack_reset_logic/op2
+ad_connect  cpack_reset_logic/res util_ad9208_cpack/reset
+ad_connect  $sys_cpu_resetn $adc_offload_name/m_axis_aresetn
 ad_connect  $sys_cpu_resetn axi_ad9208_dma/m_dest_axi_aresetn
 
 # connect dataflow
@@ -176,13 +196,14 @@ for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
 ad_connect rx_ad9208_0_tpl_core/adc_dovf util_ad9208_cpack/fifo_wr_overflow
 ad_connect rx_ad9208_1_tpl_core/adc_dovf util_ad9208_cpack/fifo_wr_overflow
 
-ad_connect  util_ad9208_cpack/packed_fifo_wr_data axi_ad9208_fifo/adc_wdata
-ad_connect  util_ad9208_cpack/packed_fifo_wr_en axi_ad9208_fifo/adc_wr
+ad_connect  util_ad9208_cpack/packed_fifo_wr_data $adc_offload_name/s_axis_tdata
+ad_connect  util_ad9208_cpack/packed_fifo_wr_en $adc_offload_name/s_axis_tvalid
+ad_connect  $adc_offload_name/s_axis_tlast GND
+ad_connect  $adc_offload_name/s_axis_tkeep VCC
+ad_connect  $adc_offload_name/s_axis_tready rx_do_rstout_logic/op1
 
-ad_connect  axi_ad9208_fifo/dma_wr axi_ad9208_dma/s_axis_valid
-ad_connect  axi_ad9208_fifo/dma_wdata axi_ad9208_dma/s_axis_data
-ad_connect  axi_ad9208_fifo/dma_wready axi_ad9208_dma/s_axis_ready
-ad_connect  axi_ad9208_fifo/dma_xfer_req axi_ad9208_dma/s_axis_xfer_req
+ad_connect  $adc_offload_name/m_axis axi_ad9208_dma/s_axis
+ad_connect  $adc_offload_name/init_req axi_ad9208_dma/s_axis_xfer_req
 
 # interconnect (cpu)
 
@@ -193,6 +214,7 @@ ad_cpu_interconnect 0x44b10000 rx_ad9208_1_tpl_core
 ad_cpu_interconnect 0x44a90000 axi_ad9208_0_jesd
 ad_cpu_interconnect 0x44b90000 axi_ad9208_1_jesd
 ad_cpu_interconnect 0x7c420000 axi_ad9208_dma
+ad_cpu_interconnect 0x7c430000 $adc_offload_name
 
 # interconnect (gt/adc)
 
