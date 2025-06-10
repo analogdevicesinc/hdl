@@ -45,33 +45,99 @@ Block diagram
 
 The data path and clock domains are depicted in the below diagrams:
 
-Example block design for Single link; M=8; L=4
+Example block design for Single link and RX OBS disabled
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: adrv9026_zcu102_jesd204b.svg
+.. image:: adrv9026_block_diagram.svg
    :width: 800
    :align: center
    :alt: ADRV9026 JESD204B M=8 L=4 block diagram
 
 The Rx links (ADC Path) operate with the following parameters:
 
-- Rx Deframer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 250 MSPS
+- Rx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
-- RX_DEVICE_CLK: 250 MHz (Lane Rate/40)
-- REF_CLK: 500MHz (Lane Rate/20)
-- JESD204B Lane Rate: 10Gbps
-- QPLL0 or CPLL
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
 
 The Tx links (DAC Path) operate with the following parameters:
 
-- Tx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
-- Sample Rate: 250 MSPS
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
 - Dual link: No
-- TX_DEVICE_CLK: 250 MHz (Lane Rate/40)
-- REF_CLK: 500MHz (Lane Rate/20)
-- JESD204B Lane Rate: 10Gbps
-- QPLL0 or CPLL
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
+
+Example block design for Single link and RX OBS in LinkSharing mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9026_ls_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9026 JESD204B LS block diagram
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Framer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
+
+Example block design for Single link and RX OBS in Non-LinkSharing mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: adrv9026_nls_block_diagram.svg
+   :width: 800
+   :align: center
+   :alt: ADRV9026 JESD204B NLS block diagram
+
+The Rx links (ADC Path) operate with the following parameters:
+
+- Rx Framer parameters: L=2, M=4, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The ORx links (ADC Obs Path) operate with the following parameters:
+
+- Rx Obs Framer parameters: L=2, M=4, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- RX_OS_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- CPLL
+
+The Tx links (DAC Path) operate with the following parameters:
+
+- Tx Deramer parameters: L=4, M=8, F=4, S=1, NP=16, N=16
+- Sample Rate: 245.76 MSPS
+- Dual link: No
+- TX_DEVICE_CLK: 245.76 MHz (Lane Rate/40)
+- REF_CLK: 245.76 MHz (Lane Rate/40)
+- JESD204B Lane Rate: 9.83 Gbps
+- QPLL0
 
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,17 +159,20 @@ for each project.
 
 The following are the parameters of this project that can be configured:
 
-- JESD_MODE: used link layer encoder mode
-
+- JESD_MODE: Used link layer encoder mode
    - 64B66B - 64b66b link layer defined in JESD204C
    - 8B10B - 8b10b link layer defined in JESD204B
 
-- LINK_SHARING: enable link sharing between RX & ORX
-   - 0 - NLS mode
-   - 1 - LS mode (used also for non-ORX use cases)
+- ORX_ENABLE: Additional data path for RX-OS
+   - 0 - Disabled (used for profiles with RX-OS disabled)
+   - 1 - Enabled (used for profiles with RX-OS enabled)
 
-- RX_LANE_RATE: lane rate of the Rx link
-- TX_LANE_RATE: lane rate of the Tx link
+- LINK_SHARING: Choose between NLS and LS mode
+   - 0 - Non-LinkSharing (RX and RX-OS have separate link layers)
+   - 1 - LinkSharing (RX and RX-OS share the same link layer)
+
+- TX_LANE_RATE: Transceiver line rate of the TX link
+- RX_LANE_RATE: Transceiver line rate of the RX link
 - [RX/TX/RX_OS]_JESD_M: number of converters per link
 - [RX/TX/RX_OS]_JESD_L: number of lanes per link
 - [RX/TX/RX_OS]_JESD_S: number of samples per frame
@@ -124,7 +193,7 @@ The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture cpu-intercon-addr`).
 
 ========================= =============== ===========
-Instance                  Zynq/Microblaze ZynqMP     
+Instance                  Zynq/Microblaze ZynqMP
 ========================= =============== ===========
 rx_adrv9026_tpl_core      0x44A0_0000     0x84A0_0000
 tx_adrv9026_tpl_core      0x44A0_4000     0x84A0_4000
@@ -413,7 +482,9 @@ configure this project, depending on the carrier used.
    +===================+===========================+==========================+
    | JESD_MODE         |          8B10B            |           8B10B          |
    +-------------------+---------------------------+--------------------------+
-   | LINK_SHARING      |             1             |                          |
+   | ORX_ENABLE        |             0             |                          |
+   +-------------------+---------------------------+--------------------------+
+   | LINK_SHARING      |             0             |                          |
    +-------------------+---------------------------+--------------------------+
    | RX_LANE_RATE      |           9.83            |            9.83          |
    +-------------------+---------------------------+--------------------------+
