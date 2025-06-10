@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -338,6 +338,88 @@ proc adi_project_files {project_name project_files} {
 
   # NOTE: top file name is always system_top
   set_property top system_top [current_fileset]
+}
+
+## Function to execute a `make` command for xcvr_wizard project within another project.
+#
+# \param[project_name] - project name for which you want to run make
+# \param[parameters_for_make] - parameters for the make command
+#
+proc adi_xcvr_project {parameters_for_make} {
+
+  global ad_hdl_dir
+
+  set project_name "xcvr_wizard"
+  set current_dir [pwd]
+  set carrier_name [file tail $current_dir]
+
+  switch $carrier_name {
+    "zc706" {
+      set xcvr_type GTXE2
+    }
+    "kc705" {
+      set xcvr_type GTXE2
+    }
+    "zed" {
+      set xcvr_type GTXE2
+    }
+    "vc707" {
+      set xcvr_type GTXE2
+    }
+    "kcu105" {
+      set xcvr_type GTHE3
+    }
+    "zcu102" {
+      set xcvr_type GTHE4
+    }
+    "vcu118" {
+      set xcvr_type GTYE4
+    }
+    "vcu128" {
+      set xcvr_type GTYE4
+    }
+    default {
+      puts "ERROR adi_project_make: Unsupported carrier (device)."
+      return 1
+    }
+  }
+
+  set parameters_dir_name {}
+  set make_command "make"
+  set adi_project_dir_path [file join $ad_hdl_dir/projects $project_name $carrier_name]
+  cd $adi_project_dir_path
+
+  if {[llength $parameters_for_make] > 0} {
+
+    set formatted_params {}
+
+    foreach {key value} $parameters_for_make {
+        lappend formatted_params "$key=$value"
+        set key_parsed [string map {"LANE_" "" "_" ""} $key]
+        set value_parrsed [string map {. _} $value]
+        set ad_project_make_params($key) $value_parrsed
+        lappend parameters_dir_name "${key_parsed}${value_parrsed}"
+    }
+
+    append make_command " " [join $formatted_params " "]
+    set parameters_dir_name [join  $parameters_dir_name "_"]
+    set config_parser_dir_name "${xcvr_type}_${ad_project_make_params(PLL_TYPE)}_${ad_project_make_params(LANE_RATE)}_${ad_project_make_params(REF_CLK)}"
+    set file_local_param [string tolower $config_parser_dir_name]
+    append file_local_param "_common.v"
+  }
+
+  eval exec $make_command
+  cd $current_dir
+
+  append adi_project_dir_path "/$parameters_dir_name/${project_name}_${carrier_name}.gen/sources_1/ip/${xcvr_type}_cfng.txt"
+  set config_dir_path [file dirname $adi_project_dir_path]
+
+  set file_local_param_path ""
+  if {$xcvr_type == "GTXE2"} {
+    set file_local_param_path [file join $config_dir_path $config_parser_dir_name $file_local_param]
+  }
+
+  return [dict create "cfng_file_path" $adi_project_dir_path "param_file_path" $file_local_param_path]
 }
 
 ## Run an existing project (generate bit stream).

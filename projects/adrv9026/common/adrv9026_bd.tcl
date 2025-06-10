@@ -140,24 +140,21 @@ create_bd_port -dir I $rx_ref_clk
 
 # common cores
 
-ad_ip_instance util_adxcvr util_adrv9026_xcvr
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_NUM_OF_LANES $RX_NUM_OF_LANES
-ad_ip_parameter util_adrv9026_xcvr CONFIG.LINK_MODE $ENCODER_SEL
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_RATE $RX_LANE_RATE
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_RATE $TX_LANE_RATE
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_OUT_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_NUM_OF_LANES $TX_NUM_OF_LANES
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_OUT_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV 4
-ad_ip_parameter util_adrv9026_xcvr CONFIG.CPLL_FBDIV_4_5 5
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CLK25_DIV 10
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_CLK25_DIV 10
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_PMA_CFG 0x001E7080
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_CDR_CFG 0x0b000023ff10400020
-ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_FBDIV 40
-ad_ip_parameter util_adrv9026_xcvr CONFIG.QPLL_REFCLK_DIV 1
-ad_ip_parameter util_adrv9026_xcvr CONFIG.TX_LANE_INVERT 6
-ad_ip_parameter util_adrv9026_xcvr CONFIG.RX_LANE_INVERT 15
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
+
+global xcvr_config_paths
+
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+  LINK_MODE $ENCODER_SEL \
+  RX_LANE_RATE $RX_LANE_RATE \
+  TX_LANE_RATE $TX_LANE_RATE \
+  TX_LANE_INVERT 6 \
+  RX_LANE_INVERT 15 \
+  RX_NUM_OF_LANES $RX_NUM_OF_LANES \
+  TX_NUM_OF_LANES $TX_NUM_OF_LANES\
+]]
+
+ad_ip_instance util_adxcvr util_adrv9026_xcvr $util_adxcvr_parameters
 
 ad_connect  $sys_cpu_resetn util_adrv9026_xcvr/up_rstn
 ad_connect  $sys_cpu_clk util_adrv9026_xcvr/up_clk

@@ -47,6 +47,7 @@ set dac_dma_data_width [expr $TX_SAMPLE_WIDTH * $TX_NUM_OF_CONVERTERS * $TX_SAMP
 
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/projects/common/xilinx/adi_fir_filter_bd.tcl
+source $ad_hdl_dir/library/xilinx/scripts/xcvr_automation.tcl
 
 # ad9371
 
@@ -203,16 +204,14 @@ ad_ip_parameter axi_ad9371_rx_os_dma CONFIG.CACHE_COHERENT $CACHE_COHERENCY
 
 # common cores
 
-ad_ip_instance util_adxcvr util_ad9371_xcvr
-ad_ip_parameter util_ad9371_xcvr CONFIG.RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES]
-ad_ip_parameter util_ad9371_xcvr CONFIG.TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES
-ad_ip_parameter util_ad9371_xcvr CONFIG.TX_OUT_DIV 2
-ad_ip_parameter util_ad9371_xcvr CONFIG.CPLL_FBDIV 4
-ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CLK25_DIV 5
-ad_ip_parameter util_ad9371_xcvr CONFIG.TX_CLK25_DIV 5
-ad_ip_parameter util_ad9371_xcvr CONFIG.RX_PMA_CFG 0x00018480
-ad_ip_parameter util_ad9371_xcvr CONFIG.RX_CDR_CFG 0x03000023ff20400020
-ad_ip_parameter util_ad9371_xcvr CONFIG.QPLL_FBDIV 0x120
+global xcvr_config_paths
+
+set util_adxcvr_parameters [adi_xcvr_parameters $xcvr_config_paths [list \
+  RX_NUM_OF_LANES [expr $MAX_RX_NUM_OF_LANES+$MAX_RX_OS_NUM_OF_LANES] \
+  TX_NUM_OF_LANES $MAX_TX_NUM_OF_LANES\
+]]
+
+ad_ip_instance util_adxcvr util_ad9371_xcvr $util_adxcvr_parameters
 
 # xcvr interfaces
 
@@ -410,3 +409,4 @@ ad_cpu_interrupt ps-10 mb-15 axi_ad9371_rx_jesd/irq
 ad_cpu_interrupt ps-11 mb-14 axi_ad9371_rx_os_dma/irq
 ad_cpu_interrupt ps-12 mb-13- axi_ad9371_tx_dma/irq
 ad_cpu_interrupt ps-13 mb-12 axi_ad9371_rx_dma/irq
+
