@@ -1,0 +1,17 @@
+###############################################################################
+## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
+
+<: set ComponentName [getComponentNameString] :>
+<: setOutputDirectory "./" :>
+<: setFileName [ttcl_add $ComponentName "_constr"] :>
+<: setFileExtension ".xdc" :>
+<: setFileProcessingOrder late :>
+
+set_property ASYNC_REG TRUE \
+  [get_cells -hier {*cdc_sync_stage1_reg*}] \
+  [get_cells -hier {*cdc_sync_stage2_reg*}]
+
+set_false_path \
+  -to [get_cells -hierarchical -filter {NAME=~*/i_regmap/*fsrc_enable_sync/cdc_sync_stage1_reg* && IS_SEQUENTIAL}]
