@@ -27,6 +27,9 @@ if {![info exists ADI_PHY_SEL]} {
 source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
 source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 source $ad_hdl_dir/library/axi_tdd/scripts/axi_tdd.tcl
+source $ad_hdl_dir/library/axi_fsrc/axi_fsrc.tcl
+
+set ENABLE_FSRC 1
 
 if {![info exists INTF_CFG]} {
   set INTF_CFG RXTX
@@ -159,6 +162,11 @@ if {!$ADI_PHY_SEL} {
   create_bd_port -dir I tx_sync_0
 }
 
+create_bd_port -dir I fsrc_sysref
+create_bd_port -dir I fsrc_trig_in
+create_bd_port -dir O fsrc_trig_out
+create_bd_port -dir O -from 39 -to 0 fsrc_ctrl
+
 # common xcvr
 if {$ADI_PHY_SEL == 1} {
   ad_ip_instance util_adxcvr util_mxfe_xcvr
@@ -289,6 +297,12 @@ if {$INTF_CFG != "TX"} {
     SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
   ]
 
+  if {$ENABLE_FSRC} {
+    adi_axi_fsrc_rx_create fsrc_rx $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_DATAPATH_WIDTH $RX_DMA_SAMPLE_WIDTH
+    ad_connect fsrc_rx/axi_fsrc_rx/link_data axi_mxfe_rx_jesd/rx_data_tdata
+    ad_connect fsrc_rx/axi_fsrc_rx/link_valid axi_mxfe_rx_jesd/rx_data_tvalid
+  }
+
   set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
   ad_data_offload_create $adc_data_offload_name \
                         0 \
@@ -351,6 +365,27 @@ if {$INTF_CFG != "RX"} {
                                             $TX_DMA_SAMPLE_WIDTH
 
   ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.IQCORRECTION_DISABLE 0
+
+  if {$ENABLE_FSRC} {
+    ad_ip_instance axi_fsrc_tx fsrc_tx
+    ad_ip_parameter fsrc_tx CONFIG.DATA_WIDTH  $dac_data_width
+    ad_ip_parameter fsrc_tx CONFIG.NP          $TX_DMA_SAMPLE_WIDTH
+    ad_ip_parameter fsrc_tx CONFIG.MAX_CONV    $TX_NUM_OF_CONVERTERS
+    ad_ip_parameter fsrc_tx CONFIG.ACCUM_WIDTH 64
+
+    ad_ip_instance axi_fsrc_sequencer fsrc_ctrl
+    ad_ip_parameter fsrc_ctrl CONFIG.CTRL_WIDTH 40
+    ad_ip_parameter fsrc_ctrl CONFIG.COUNTER_WIDTH 16
+    ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 1
+
+    ad_connect tx_device_clk fsrc_ctrl/clk
+    ad_connect fsrc_sysref   fsrc_ctrl/sysref
+    ad_connect fsrc_trig_in  fsrc_ctrl/trig_in
+    ad_connect fsrc_trig_out fsrc_ctrl/trig_out
+    ad_connect fsrc_ctrl     fsrc_ctrl/ctrl
+
+    ad_connect fsrc_tx/tx_data_start fsrc_ctrl/tx_data_start
+  }
 
   ad_ip_instance util_upack2 util_mxfe_upack [list \
     NUM_OF_CHANNELS $TX_NUM_OF_CONVERTERS \
@@ -463,10 +498,21 @@ if {$INTF_CFG != "TX"} {
   ad_connect  axi_mxfe_rx_jesd/rx_data_tdata rx_mxfe_tpl_core/link_data
   ad_connect  axi_mxfe_rx_jesd/rx_data_tvalid rx_mxfe_tpl_core/link_valid
 
-  ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
-  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
-    ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+  if {$ENABLE_FSRC} {
+    ad_connect rx_device_clk fsrc_rx/link_clk
+    ad_connect rx_mxfe_tpl_core/adc_valid_0 fsrc_rx/adc_data_in_valid
+    for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
+      ad_connect fsrc_rx/adc_data_in_${i}  rx_mxfe_tpl_core/adc_data_$i
+      ad_connect fsrc_rx/adc_data_out_${i} util_mxfe_cpack/fifo_wr_data_$i
+      ad_connect rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
+    }
+    ad_connect fsrc_rx/adc_data_out_valid util_mxfe_cpack/fifo_wr_en
+  } else {
+    ad_connect rx_mxfe_tpl_core/adc_valid_0 util_mxfe_cpack/fifo_wr_en
+    for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_mxfe_tpl_core/adc_enable_$i util_mxfe_cpack/enable_$i
+      ad_connect  rx_mxfe_tpl_core/adc_data_$i util_mxfe_cpack/fifo_wr_data_$i
+    }
   }
 
   ad_connect  util_mxfe_cpack/fifo_wr_overflow rx_mxfe_tpl_core/adc_dovf
@@ -531,8 +577,14 @@ if {$INTF_CFG != "RX"} {
   }
 
   ad_connect $dac_data_offload_name/s_axis axi_mxfe_tx_dma/m_axis
+  if {$ENABLE_FSRC} {
+    ad_connect tx_device_clk fsrc_tx/clk
 
-  ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
+    ad_connect $dac_data_offload_name/m_axis fsrc_tx/s_axis
+    ad_connect util_mxfe_upack/s_axis      fsrc_tx/m_axis
+  } else {
+    ad_connect  util_mxfe_upack/s_axis $dac_data_offload_name/m_axis
+  }
 
   ad_connect $dac_data_offload_name/init_req axi_mxfe_tx_dma/m_axis_xfer_req
   ad_connect tx_mxfe_tpl_core/dac_dunf GND
@@ -559,6 +611,12 @@ if {$INTF_CFG != "RX"} {
   # Interrupts
   ad_cpu_interrupt ps-12 mb-13 axi_mxfe_tx_dma/irq
   ad_cpu_interrupt ps-10 mb-15 axi_mxfe_tx_jesd/irq
+}
+
+if {$ENABLE_FSRC} {
+  ad_cpu_interconnect 0x44500000 fsrc_rx
+  ad_cpu_interconnect 0x44510000 fsrc_tx
+  ad_cpu_interconnect 0x44540000 fsrc_ctrl
 }
 
 # Dummy outputs for unused lanes
@@ -643,7 +701,13 @@ if {$INTF_CFG != "TX"} {
 
   ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
   ad_connect cpack_rst_logic/res util_mxfe_cpack/reset
+
+  if {$ENABLE_FSRC} {
+    ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
+    ad_connect cpack_rst_logic/res fsrc_rx/cpack_reset
+  }
 }
+
 if {$INTF_CFG != "RX"} {
   # DAC (Tx) external sync
   ad_ip_parameter tx_mxfe_tpl_core/dac_tpl_core CONFIG.EXT_SYNC 1
@@ -668,6 +732,11 @@ if {$INTF_CFG != "RX"} {
 
   ad_connect upack_reset_sources/dout upack_rst_logic/op1
   ad_connect upack_rst_logic/res util_mxfe_upack/reset
+
+  if {$ENABLE_FSRC} {
+    ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_ctrl/reset
+    ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_tx/reset
+  }
 }
 
 if {$TDD_SUPPORT} {
