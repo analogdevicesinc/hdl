@@ -185,7 +185,6 @@ module i3c_controller_framing #(
       // Delay DAA trigger one word to match last SDI byte.
       cmdp_daa_trigger <= 1'b0;
       if (cmdw_ready) begin
-        daa_trigger <= 1'b0;
         cmdp_daa_trigger <= daa_trigger;
       end
 
@@ -281,13 +280,14 @@ module i3c_controller_framing #(
               `CMDW_DAA_DEV_CHAR: begin
                 dev_char_len <= dev_char_len - 1;
                 if (~|dev_char_len) begin
-                  st  <= `CMDW_DYN_ADDR;
+                  st <= `CMDW_DYN_ADDR;
                   sm <= SM_SETUP_SDO;
                   daa_trigger <= 1'b1;
                 end
               end
               `CMDW_DYN_ADDR: begin
                 st <= j == MAX_DEVS - 1 ? `CMDW_STOP_OD : `CMDW_START;
+                daa_trigger <= 1'b0;
               end
               `CMDW_MSG_SR: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Be aware of RnW here
