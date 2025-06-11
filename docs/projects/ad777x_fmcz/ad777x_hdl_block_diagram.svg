@@ -7,7 +7,7 @@
    viewBox="0 0 571.57733 366.8143"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    sodipodi:docname="ad777x_hdl_block_diagram.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -23,15 +23,17 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.26173516"
-     inkscape:cx="1491.9661"
-     inkscape:cy="282.72854"
+     inkscape:zoom="0.60102732"
+     inkscape:cx="1188.7979"
+     inkscape:cy="558.2109"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="581"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2">
     <marker
@@ -697,9 +699,9 @@
        transform="scale(1.0247942,0.97580567)"><tspan
          x="63.720039"
          y="112.19315"
-         id="tspan47765"><tspan
+         id="tspan5"><tspan
            style="font-weight:bold;font-size:14.3119px;line-height:1.25;-inkscape-font-specification:'Arial Bold';fill-opacity:1"
-           id="tspan47763">AXI_AD777X</tspan></tspan></text>
+           id="tspan4">AXI_AD777X</tspan></tspan></text>
     <path
        sodipodi:nodetypes="cccsccccc"
        inkscape:connector-curvature="0"
@@ -1587,15 +1589,12 @@
     <text
        transform="matrix(0,-0.90409775,1.1060751,0,0,0)"
        id="text4491"
-       y="338.96707"
-       x="-292.84164"
-       style="font-style:normal;font-weight:normal;font-size:9.09274px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.21662px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       y="342.15109"
+       x="-224.67358"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.217;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.2602px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.21662px"
-         y="338.96707"
-         x="-292.84164"
-         id="tspan4493"
-         sodipodi:role="line">ARDUINO SHIELD  CONNECTORS\PMODS</tspan></text>
+         sodipodi:role="line"
+         id="tspan10">FMC CONNECTOR</tspan></text>
     <path
        style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.649256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        d="M 21.144596,12.83227 H -148.14732"
@@ -1638,22 +1637,16 @@
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
        id="text4482"
-       y="11.4842"
-       x="258.00912"
-       style="font-style:normal;font-weight:normal;font-size:11.0653px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:0.302525px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       y="18.460434"
+       x="221.34094"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:0.302525px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        xml:space="preserve"
        transform="scale(1.0564806,0.94653891)"
        inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD7768\AD7768_BLOCK_DIAGRAM_new.png"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.4423px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:0.302525px"
-         y="11.4842"
-         x="258.00912"
          sodipodi:role="line"
-         id="tspan15395">De10Nano</tspan><tspan
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.4423px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:0.302525px"
-         y="34.537075"
-         x="258.00912"
-         sodipodi:role="line"
-         id="tspan15401">ZedBoard</tspan></text>
+         id="tspan9"
+         x="221.34094"
+         y="18.460434">ZedBoard</tspan></text>
     <rect
        style="display:inline;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:0.536625;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
        id="rect5652-1"
@@ -1852,28 +1845,33 @@
          x="291.03406"
          y="213.293"
          style="stroke-width:0.0105833">sync_adc_mosi</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:8.46667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';display:inline;stroke-width:0.0105833;stroke-miterlimit:4;stroke-dasharray:0.0211667, 0.0211667;stroke-dashoffset:0"
-       x="290.90381"
-       y="228.59669"
-       id="text19119-6-4"><tspan
-         sodipodi:role="line"
-         id="tspan19117-9-0"
-         x="290.90381"
-         y="228.59669"
-         style="stroke-width:0.0105833">sync_adc_miso</tspan></text>
     <path
        style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#000000;stroke-width:0.714375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker11405-6)"
        d="m 269.74056,216.65577 c 87.3125,0 87.3125,0 87.3125,0"
        id="path16851-5" />
     <path
-       style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#000000;stroke-width:0.714375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1-7-8)"
-       d="m 270.7989,231.47244 c 87.3125,0 87.3125,0 87.3125,0"
-       id="path16851-0-6" />
-    <path
        style="display:inline;fill:#c8c8c8;fill-opacity:1;stroke:#000000;stroke-width:0.714375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1-5)"
        d="m 271.29546,182.21181 c 87.3125,0 87.3125,0 87.3125,0"
        id="path16851-1" />
+    <circle
+       id="path7"
+       style="fill:#000000;stroke:#000000;stroke-width:0.264583"
+       cx="370.71271"
+       cy="24.370409"
+       r="0.13464849" />
+    <text
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       id="text4482-0"
+       y="-38.071632"
+       x="208.31343"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:0.302525px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       transform="scale(1.0564806,0.94653891)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD7768\AD7768_BLOCK_DIAGRAM_new.png"><tspan
+         sodipodi:role="line"
+         id="tspan3"
+         x="208.31343"
+         y="-38.071632">AD777x-FMCZ</tspan></text>
   </g>
 </svg>
