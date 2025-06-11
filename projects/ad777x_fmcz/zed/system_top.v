@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,13 +48,10 @@ module system_top (
   input                   spi_miso,
   output                  start_n,
   output                  sync_adc_mosi,
-  input                   sync_adc_miso,
   input                   alert,
   output                  sdp_convst,
   output                  sdp_mclk,
   output                  reset_n,
-  inout                   gpio0,
-  inout                   gpio1,
   inout                   gpio2,
 
   inout       [14:0]      ddr_addr,
@@ -122,10 +119,9 @@ module system_top (
   assign start_n    = gpio_o[33];
   assign sdp_convst = gpio_o[34];
   assign sdp_mclk   = gpio_o[35];
-  assign reset_n    = gpio_o[39];
+  assign reset_n    = gpio_o[36];
 
-  assign gpio_i[63:39] = gpio_o[63:39];
-  assign gpio_i[35:33] = gpio_o[35:33];
+  assign gpio_i[63:38] = gpio_o[63:38];
   assign gpio_i[31:15] = gpio_o[31:15];
 
   ad_iobuf #(
@@ -137,15 +133,12 @@ module system_top (
     .dio_p (gpio_bd[14:0]));
 
   ad_iobuf #(
-    .DATA_WIDTH(3)
+    .DATA_WIDTH(1)
   ) iobuf_gpio_chip (
-    .dio_i (gpio_o[38:36]),
-    .dio_o (gpio_i[38:36]),
-    .dio_t (gpio_t[38:36]),
-    .dio_p ({
-             gpio2,        //38
-             gpio1,        //37
-             gpio0}));     //36
+    .dio_i (gpio_o[37]),
+    .dio_o (gpio_i[37]),
+    .dio_t (gpio_t[37]),
+    .dio_p (gpio2));
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -168,7 +161,6 @@ module system_top (
     .adc_ready(adc_ready_in),
     .adc_data_in(adc_data_in),
     .sync_adc_mosi(sync_adc_mosi),
-    .sync_adc_miso(sync_adc_miso),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
