@@ -21,7 +21,6 @@ XILINX_LIB_DEPS += util_cdc
 LATTICE_DEPS += ../util_cdc/sync_bits.v
 LATTICE_DEPS += ../util_cdc/sync_data.v
 LATTICE_DEPS += ../util_cdc/sync_event.v
-LATTICE_DEPS += ../util_cdc/sync_gray.v
 LATTICE_DEPS += axi_pulse_gen_ltt.tcl
 
 include ../scripts/library.mk
