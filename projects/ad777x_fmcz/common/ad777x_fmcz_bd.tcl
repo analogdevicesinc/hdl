@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -65,7 +65,7 @@ ad_cpu_interrupt ps-10 mb-10  ad777x_dma/irq
 
 # cpu / memory interconnects
 
-ad_cpu_interconnect 0x43c00000 axi_ad777x_adc 
+ad_cpu_interconnect 0x43c00000 axi_ad777x_adc
 ad_cpu_interconnect 0x7c480000 ad777x_dma
 
 ad_mem_hp1_interconnect sys_cpu_clk    sys_ps7/S_AXI_HP1
