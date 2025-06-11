@@ -157,8 +157,8 @@ References
 -------------------------------------------------------------------------------
 
 * HDL IP core at :git-hdl:`library/axi_ad777x`
-* HDL project at :git-hdl:`projects/ad777x_ardz`
-* HDL project documentation at :ref:`ad777x_ardz`
+* HDL project at :git-hdl:`projects/ad777x_fmcz`
+* HDL project documentation at :ref:`ad777x_fmcz`
 * :adi:`AD7770`
 * :adi:`AD7771`
 * :adi:`AD7779`
