@@ -1,12 +1,12 @@
-.. _ad777x_ardz:
+.. _ad777x_fmcz:
 
-AD777X-ARDZ HDL project
+AD777X-FMCZ HDL project
 ===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-AD7770-ARDZ / EVAL-AD7771-ARDZ / EVAL-AD7779-ARDZ evaluation kit
+The EVAL-AD7770 / EVAL-AD7771 / EVAL-AD7779 evaluation kit
 features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).
 
@@ -20,7 +20,7 @@ range of the signal chain.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7770/1/9-ARDZ <EVAL-AD7770-AD7779>`
+- :adi:`EVAL-AD7770/1/9 <EVAL-AD7770-AD7779>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -41,22 +41,13 @@ Supported carriers
      - FMC slot
    * - EVAL-AD7770-ARDZ
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
-     - PMOD-JA, PMOD-JB, PMOD-JC
+     - FMC LPC
    * - EVAL-AD7771-ARDZ
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
-     - PMOD-JA, PMOD-JB, PMOD-JC
+     - FMC LPC
    * - EVAL-AD7779-ARDZ
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
-     - PMOD-JA, PMOD-JB, PMOD-JC
-   * - EVAL-AD7770-ARDZ
-     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
-     - Arduino shield connector
-   * - EVAL-AD7771-ARDZ
-     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
-     - Arduino shield connector
-   * - EVAL-AD7779-ARDZ
-     - :intel:`DE10-Nano <content/www/us/en/developer/topic-technology/edge-5g/hardware/fpga-de10-nano.html>`
-     - Arduino shield connector
+     - FMC LPC
 
 Block design
 -------------------------------------------------------------------------------
@@ -69,7 +60,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad777x_hdl_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD777X/ZedBoard/DE10-Nano block diagram
+   :alt: AD777X/ZedBoard block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,12 +73,12 @@ Clock scheme
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-==============  =========== ===========
-Instance        Zynq        DE10-Nano
-==============  =========== ===========
-axi_ad777x_adc  0x43C0_0000 0x0002_0000
-ad777x_dma      0x7C48_0000 0x0003_0000
-==============  =========== ===========
+==============  ===========
+Instance        Zynq
+==============  ===========
+axi_ad777x_adc  0x43C0_0000
+ad777x_dma      0x7C48_0000
+==============  ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,94 +91,59 @@ SPI connections
      - SPI manager instance
      - SPI subordinate
      - CS
-   * - PS*
+   * - PS
      - SPI 0
      - AD777x
      - 0
-   * - PL**
-     - sys_spi
-     - AD777x
-     - 0
-
-.. admonition:: Legend
-   :class: note
-
-   - ``*``  only for ZedBoard
-   - ``**`` only for DE10-Nano
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 25 20 20 20 15
+   :widths: 25 25 25 25
    :header-rows: 2
 
    * - GPIO signal
      - Direction
      - HDL GPIO EMIO
      - Software GPIO
-     - Software GPIO
    * -
      - (from FPGA view)
      -
      - Zynq-7000
-     - Cyclone V
    * - RESET_N
      - OUT
      - 39
      - 93
-     - 7
    * - GPIO2
      - INOUT
      - 38
      - 92
-     - 6
-   * - GPIO1
-     - INOUT
-     - 37
-     - 91
-     - 5
-   * - GPIO0
-     - INOUT
-     - 36
-     - 90
-     - 4
    * - SDP_MCLK
      - OUT
      - 35
      - 89
-     - 3
    * - SDP_CONVST
      - OUT
      - 34
      - 88
-     - 2
    * - START_N
      - OUT
      - 33
      - 87
-     - 1
    * - ALERT
      - IN
      - 32
      - 86
-     - 0
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================ === ========== =========== =============== ================
-Instance name    HDL Linux Zynq Actual Zynq Linux DE10-Nano Actual DE10-Nano
-================ === ========== =========== =============== ================
-ad777x_dma*      10  54         86          ---             ---
-ad777x_dma**     5   ---        ---         45              77
-================ === ========== =========== =============== ================
-
-.. admonition:: Legend
-   :class: note
-
-   - ``*``  only for ZedBoard
-   - ``**`` only for DE10-Nano
+================ === ========== ===========
+Instance name    HDL Linux Zynq Actual Zynq
+================ === ========== ===========
+ad777x_dma       10  54         86
+================ === ========== ===========
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -206,14 +162,7 @@ Building the ZedBoard project:
 
 .. shell::
 
-   $cd hdl/projects/ad777x_ardz/zed
-   $make
-
-Building the DE10-Nano project:
-
-.. shell::
-
-   $cd hdl/projects/ad777x_ardz/de10nano
+   $cd hdl/projects/ad777x_fmcz/zed
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -233,7 +182,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD777X-ARDZ HDL project source code <projects/ad777x_ardz>`
+- :git-hdl:`AD777X-FMCZ HDL project source code <projects/ad777x_fmcz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -245,7 +194,7 @@ HDL related
    * - AXI_AD777x
      - :git-hdl:`library/axi_ad777x`
      - :ref:`axi_ad777x`
-   * - AXI_CLKGEN*
+   * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`axi_clkgen`
    * - AXI_DMAC
@@ -254,10 +203,10 @@ HDL related
    * - AXI_HDMI_TX
      - :git-hdl:`library/axi_hdmi_tx`
      - :ref:`axi_hdmi_tx`
-   * - AXI_I2S_ADI*
+   * - AXI_I2S_ADI
      - :git-hdl:`library/axi_i2s_adi`
      - —
-   * - AXI_SPDIF_TX*
+   * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - 	—
    * - AXI_SYSID
@@ -266,17 +215,12 @@ HDL related
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
-   * - UTIL_I2C_MIXER*
+   * - UTIL_I2C_MIXER
      - :git-hdl:`library/util_i2c_mixer`
      - 	—
    * - UTIL_CPACK2
      - :git-hdl:`library/util_pack/util_cpack2`
      - :ref:`util_cpack2`
-
-.. admonition:: Legend
-   :class: note
-
-   - ``*``  only for ZedBoard
 
 .. include:: ../common/more_information.rst
 
