@@ -1,8 +1,8 @@
-# AD777X-ARDZ HDL Project
+# AD777X-FMCZ HDL Project
 
-- Evaluation board product page: [EVAL-AD7770/1/9-ARDZ](https://www.analog.com/eval-ad7770-ad7779.html)
+- Evaluation board product page: [EVAL-AD7770/1/9](https://www.analog.com/eval-ad7770-ad7779.html)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad777x_ardz/index.html
+- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad777x_fmcz/index.html
 
 ## Supported parts
 
