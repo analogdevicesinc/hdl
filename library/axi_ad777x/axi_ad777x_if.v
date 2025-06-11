@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -114,6 +114,7 @@ module axi_ad777x_if (
   reg      [ 7:0]       adc_status_6_s = 'd0;
   reg      [ 7:0]       adc_status_7_s = 'd0;
   reg      [ 7:0]       adc_crc_ch_mismatch_s = 'd0;
+  reg                   adc_cnt_enable_s_d    = 'b0;
 
   // internal signals
 
@@ -332,12 +333,13 @@ module axi_ad777x_if (
   assign adc_cnt_enable_s = (adc_cnt_p < adc_cnt_value) ? 1'b1 : 1'b0;
 
   always @(negedge adc_clk) begin
+    adc_cnt_enable_s_d <= adc_cnt_enable_s;
     if (adc_ready_in_s == 1'b1) begin
       adc_cnt_p <= 'h000;
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
-     if (adc_cnt_p == adc_cnt_value) begin
+     if (adc_cnt_p == adc_cnt_value && adc_cnt_enable_s_d == 1'b1) begin
       adc_valid_p <= 1'b1;
     end else begin
       adc_valid_p <= 1'b0;
