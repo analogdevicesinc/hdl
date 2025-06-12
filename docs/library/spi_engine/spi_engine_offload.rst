@@ -80,3 +80,5 @@ Signal and Interface Pins
    * - s_axis_sdo
      - Streaming AXI peripheral
        Input stream for SPI data to be sent. Only present when ``SDO_STREAMING`` parameter is set to 1.
+   * - m_interconnect_ctrl
+     - | Defines whether offload mode is active or not (active high).

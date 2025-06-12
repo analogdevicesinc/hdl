@@ -8,14 +8,14 @@ SPI Engine Interconnect Module
 The :git-hdl:`SPI Engine Interconnect <library/spi_engine/spi_engine_interconnect>`
 allows connecting multiple :ref:`spi_engine control-interface` managers to a single
 :ref:`spi_engine control-interface` subordinate.
-This enables multiple command stream generators to connect to a single
-:ref:`spi_engine execution` and consequential give them access to the same SPI bus.
-The interconnect modules take care of properly arbitrating between the different
-command streams.
+This enables two command stream generators to connect to a single
+:ref:`spi_engine execution` and consequentially give them access to the same SPI bus.
+The interconnect module is responsible for proper arbitration between the command
+streams.
 
-Combining multiple command stream generators in a design and connecting them to
-a single execution module allows for the creation of flexible and efficient
-designs using standard components.
+Combining two command stream generators in a design and connecting them to a single
+execution module allows the creation of an efficient and flexible design by using
+standard components.
 
 Files
 --------------------------------------------------------------------------------
@@ -50,33 +50,33 @@ Signal and Interface Pins
 .. hdl-interfaces::
 
    * - clk
-     - A signals of the module are synchronous to this clock.
+     - |
    * - resetn
-     - Synchronous active-low reset.
-       Resets the internal state of the module.
+     - | Synchronous active-low reset.
+       | Resets the internal state of the module.
    * - s0_ctrl
      - | :ref:`spi_engine control-interface` subordinate.
-       | Connects to the first control interface manager.
+       | Connects to the offload control interface manager.
    * - s1_ctrl
      - | :ref:`spi_engine control-interface` subordinate.
-       | Connects to the second control interface manager.
+       | Connects to the fifo control interface manager.
    * - m_ctrl
      - | :ref:`spi_engine control-interface` manager.
        | Connects to the control interface subordinate.
+   * - s_interconnect_ctrl
+     - | m_interconnect_ctrl (:ref:`spi_engine offload`) subordinate.
+       | Defines whether offload mode is active or not (active high).
+   * - m_offload_active_ctrl
+     - | Forwards the signals of the s_interconnect_ctrl interface.
+       | Defines whether offload mode is active or not (active high).
 
 Theory of Operation
 --------------------------------------------------------------------------------
 
-The SPI Engine Interconnect module has multiple
-:ref:`spi_engine control-interface` subordinate ports and a single
-:ref:`spi_engine control-interface` manager port.
-It can be used to connect multiple command stream generators to a single command
-execution engine. Arbitration between the streams is done on a priority
-basis, streams with a lower index have higher priority. This means if commands
-are present on two streams arbitration will be granted to the one with the lower
-index. Once arbitration has been granted the port it was granted to stays in
-control until it sends a SYNC command. When the interconnect module sees a SYNC
-command arbitration will be re-evaluated after the SYNC command has been
-completed. This makes sure that once a SPI transaction consisting of multiple
-commands has been started it is able to complete without being interrupted by a
-higher priority stream.
+The SPI Engine Interconnect module has two :ref:`spi_engine control-interface`
+subordinate ports and a single :ref:`spi_engine control-interface` manager
+port. It can be used to connect two command stream generators to a single
+command execution engine. Arbitration between streams is done based on the
+``s_interconnect_ctrl`` interface, there is a copy of this interface to
+``m_offload_active_ctrl`` to indicate whether the stream belongs to offload (s0) or
+fifo mode (s1).
