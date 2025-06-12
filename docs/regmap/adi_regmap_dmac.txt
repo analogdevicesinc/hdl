@@ -19,13 +19,13 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00000005
+[15:8] 0x00000006
 VERSION_MINOR
 RO
 ENDFIELD
 
 FIELD
-[7:0] 0x00000064
+[7:0] 0x00000061
 VERSION_PATCH
 RO
 ENDFIELD
@@ -343,8 +343,8 @@ FIELD
 CYCLIC
 RW
 Setting this field to 1 puts the DMA transfer into cyclic mode. In cyclic mode
-the controller will re-start a transfer again once it has finished. In cyclic
-mode no end-of-transfer interrupts will be generated.
+the controller will re-start a transfer again once it has finished. Setting this
+field to 0 ends the cyclic transfer.
 If ``AUTORUN`` is set, the default value of the field is ``AUTORUN_FLAGS[0]``.
 ENDFIELD
 
