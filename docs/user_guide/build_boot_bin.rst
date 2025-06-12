@@ -6,7 +6,9 @@ Build the boot image BOOT.BIN
 .. caution::
 
    :red:`This flow is not supported by us in Cygwin!` Use Linux terminal or
-   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install>`__ instead.
+   `WSL <https://learn.microsoft.com/en-us/windows/wsl/install>`__ instead, or
+   the **not recommended** option ->
+   :ref:`Building the BOOT.BIN in Vivado GUI <build_hdl cygwin>`.
 
 The boot image ``BOOT.BIN`` is built using the
 :xilinx:`AMD Xilinx Bootgen tool <support/documents/sw_manuals/xilinx2022_2/ug1283-bootgen-user-guide.pdf>`
