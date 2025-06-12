@@ -38,14 +38,20 @@
 module spi_engine_execution_shiftreg #(
 
   parameter DEFAULT_SPI_CFG = 0,
+  parameter DEFAULT_MASK_SPI_LANE = 255,
   parameter DATA_WIDTH = 8,
   parameter NUM_OF_SDI = 1,
   parameter [1:0] SDI_DELAY = 2'b00,
   parameter ECHO_SCLK = 0,
-  parameter [2:0]CMD_TRANSFER = 3'b000
+  parameter [2:0] CMD_TRANSFER = 3'b000,
+  parameter [2:0] CMD_WRITE = 3'b010,
+  parameter [1:0] REG_SPI_LANE_CONFIG = 3'b011
 ) (
   input   clk,
   input   resetn,
+
+  //interconnect interface
+  input s_interconnect_dir,
 
   // spi io
   input   [NUM_OF_SDI-1:0]  sdi,
@@ -68,6 +74,7 @@ module spi_engine_execution_shiftreg #(
   input           sdo_idle_state,
   input   [ 7:0]  left_aligned,
   input   [ 7:0]  word_length,
+  input   [ 7:0]  spi_lane_mask,
 
   // timing from main fsm
   output      sdo_io_ready,
@@ -81,68 +88,59 @@ module spi_engine_execution_shiftreg #(
 
   reg [             7:0] sdi_counter    = 8'b0;
   reg [   SDI_DELAY+1:0] trigger_rx_d   = {(SDI_DELAY+2){1'b0}};
-  reg  data_sdo_v;
+  wire  data_sdo_v;
   wire sdo_toshiftreg;
   wire last_sdi_bit;
   wire trigger_rx_s;
   wire [2:0] current_instr = current_cmd[14:12];
+  wire sdo_data_ready_int;
 
   // sdo data handshake
-  assign sdo_data_ready = (!data_sdo_v) || sdo_toshiftreg;
+  assign sdo_data_ready_int = ((!data_sdo_v) || (sdo_toshiftreg)) && (s_interconnect_dir || current_instr == CMD_TRANSFER);
+  assign sdo_data_ready = sdo_data_ready_int;
   assign sdo_io_ready = data_sdo_v;
 
-  always @(posedge clk) begin
-    if (resetn == 1'b0) begin
-      data_sdo_v <= 1'b0;
-    end else begin
-      if (sdo_data_ready && sdo_data_valid) begin
-        data_sdo_v <= 1'b1;
-      end else if (sdo_toshiftreg) begin
-        data_sdo_v <= 1'b0;
-      end
-    end
-  end
+  wire [(NUM_OF_SDI * DATA_WIDTH)-1:0] aligned_sdo_data;
+  spi_engine_execution_shiftreg_data_assemble #(
+    .DEFAULT_MASK_SPI_LANE(DEFAULT_MASK_SPI_LANE),
+    .DATA_WIDTH(DATA_WIDTH),
+    .NUM_OF_SDI(NUM_OF_SDI),
+    .CMD_WRITE(CMD_WRITE),
+    .REG_SPI_LANE_CONFIG(REG_SPI_LANE_CONFIG)
+  ) sdo_data_assemble (
+    .clk (clk),
+    .resetn (resetn),
+    .data (sdo_data),
+    .data_ready (sdo_data_ready_int),
+    .data_valid (sdo_data_valid),
+    .current_cmd (current_cmd),
+    .lane_mask (spi_lane_mask),
+    .idle_state (sdo_idle_state),
+    .left_aligned (left_aligned),
+    .transfer_active (transfer_active),
+    .trigger_tx (trigger_tx),
+    .first_bit (first_bit),
+    .sdo_enabled(sdo_enabled),
+    .data_assembled (aligned_sdo_data),
+    .last_handshake (data_sdo_v)
+  );
 
-
-  //TODO: create logic around here to split data into the aligned_sdo_data arrays
   genvar i;
-  for (i=0; i<NUM_OF_SDI; i=i+1) begin: g_sdo_shift_reg
-
-    reg [(DATA_WIDTH-1):0] aligned_sdo_data, sdo_data_reg;
-    always @(posedge clk) begin
-      if (resetn == 1'b0) begin
-        sdo_data_reg <= 'h0;
-      end else begin
-        if (sdo_data_ready && sdo_data_valid) begin
-          sdo_data_reg <= sdo_data;
-        end
-      end
-    end
-
-    // pipelined shifter for sdo_data
-    always @(posedge clk ) begin
-      if (resetn == 1'b0) begin
-        aligned_sdo_data <= 0;
-      end else begin
-        aligned_sdo_data <= sdo_data_reg << left_aligned;
-      end
-    end
-
-    // Load the SDO parallel data into the SDO shift register. In case of a custom
-    // data width, additional bit shifting must done at load.
+  for (i = 0; i < NUM_OF_SDI; i = i + 1) begin: g_sdo_shift_reg
+    // Load the SDO parallel data into the SDO shift register.
     reg [(DATA_WIDTH-1):0] data_sdo_shift = 'h0;
     always @(posedge clk) begin
       if (!sdo_enabled || (current_instr != CMD_TRANSFER)) begin
         data_sdo_shift <= {DATA_WIDTH{sdo_idle_state}};
       end else if (transfer_active == 1'b1 && trigger_tx == 1'b1) begin
         if (first_bit == 1'b1) begin
-          data_sdo_shift <= aligned_sdo_data;
+          data_sdo_shift <= aligned_sdo_data[i * DATA_WIDTH+:DATA_WIDTH];
         end else begin
           data_sdo_shift <= {data_sdo_shift[(DATA_WIDTH-2):0], 1'b0};
         end
       end
     end
-
+    
     assign sdo_int[i] = data_sdo_shift[DATA_WIDTH-1];
   end
 
