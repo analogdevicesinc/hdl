@@ -30,7 +30,12 @@ Features
 Files
 --------------------------------------------------------------------------------
 
-:git-hdl:`ad_ip_jesd204_tpl_dac.v <library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v>`
+.. important::
+
+   To instantiate it, you need to use the procedure
+   :git-hdl:`adi_tpl_jesd204_tx_create <library/jesd204/scripts/jesd204.tcl#L176>`
+
+- :git-hdl:`ad_ip_jesd204_tpl_dac.v <library/jesd204/ad_ip_jesd204_tpl_dac/ad_ip_jesd204_tpl_dac.v>`
 
 Block Diagram
 --------------------------------------------------------------------------------
