@@ -27,10 +27,15 @@ Features
 Files
 --------------------------------------------------------------------------------
 
-:git-hdl:`ad_ip_jesd204_tpl_adc.v <library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v>`
+.. important::
+
+   To instantiate it, you need to use the procedure
+   :git-hdl:`adi_tpl_jesd204_rx_create <library/jesd204/scripts/jesd204.tcl#L305>`
+
+- :git-hdl:`ad_ip_jesd204_tpl_adc.v <library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v>`
 
 Block Diagram
--------------
+--------------------------------------------------------------------------------
 
 .. image:: ad_ip_jesd204_transport_adc.svg
    :width: 700
