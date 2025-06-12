@@ -10,7 +10,9 @@ JESD204 Interface Framework
    JESD204B/C Link Receive Peripheral <axi_jesd204_rx/index>
    ADC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_adc/index>
    DAC JESD204B/C Transport Peripheral <ad_ip_jesd204_tpl_dac/index>
+   Generic JESD204 block designs <generic_jesd_bds/index>
    Xilinx FPGAs Transceivers Wizard <xgt_wizard/index>
+   Troubleshooting JESD204 TX links <troubleshoot/troubleshoot_jesd204_tx>
 
 The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
 standard was created through the JEDEC committee to standardize and reduce the
@@ -183,7 +185,7 @@ Tutorial
 
 #. :dokuwiki:`Introduction <resources/fpga/peripherals/jesd204/tutorial/introduction>`
 #. :dokuwiki:`System Architecture <resources/fpga/peripherals/jesd204/tutorial/system_architecture>`
-#. :dokuwiki:`Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`.
+#. :ref:`generic_jesd_bds`.
    This will help you understand the generic blocks for the next steps.
 #. Checkout the :ref:`HDL Source <build_hdl>`, and then build either one of:
 
