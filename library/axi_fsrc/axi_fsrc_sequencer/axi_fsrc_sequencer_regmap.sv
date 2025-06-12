@@ -52,9 +52,6 @@ module axi_fsrc_sequencer_regmap #(
   output [15:0] reg_o_seq_tx_accum_reset_cnt,
 
   output        reg_o_seq_ext_trig_en,
-  output        reg_o_seq_ext_trig,
-  output        reg_o_sma_j2_sel,
-  output        reg_o_seq_debug,
 
   output [COUNTER_WIDTH-1:0] reg_o_seq_rx_delay_cnt,
 
@@ -170,68 +167,62 @@ module axi_fsrc_sequencer_regmap #(
     end
   end
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_ctrl_1_sync (
-    .in_data(up_seq_ctrl_1_s),
+    .in_bits(up_seq_ctrl_1_s),
     .out_clk(clk),
     //.out_resetn(~reset),
-    .out_data(seq_ctrl_1));
+    .out_bits(seq_ctrl_1));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_ctrl_2_sync (
-    .in_data(up_seq_ctrl_2_s),
+    .in_bits(up_seq_ctrl_2_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(seq_ctrl_2));
+    .out_bits(seq_ctrl_2));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_ctrl_3_sync (
-    .in_data(up_seq_ctrl_3_s),
+    .in_bits(up_seq_ctrl_3_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(seq_ctrl_3));
+    .out_bits(seq_ctrl_3));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_ctrl_4_sync (
-    .in_data(up_seq_ctrl_4_s),
+    .in_bits(up_seq_ctrl_4_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(seq_ctrl_4));
+    .out_bits(seq_ctrl_4));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_gpio_w_1_sync (
-    .in_data(up_seq_gpio_w_1_s),
+    .in_bits(up_seq_gpio_w_1_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(seq_gpio_w_1));
+    .out_bits(seq_gpio_w_1));
 
-    sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) seq_gpio_w_2_sync (
-    .in_data(up_seq_gpio_w_2_s),
+    .in_bits(up_seq_gpio_w_2_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(seq_gpio_w_2));
+    .out_bits(seq_gpio_w_2));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) trig_ctrl_sync (
-    .in_data(up_trig_ctrl_s),
+    .in_bits(up_trig_ctrl_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(trig_ctrl));
+    .out_bits(trig_ctrl));
 
   assign reg_o_seq_gpio_change_cnt = seq_ctrl_1;
 
@@ -249,9 +240,6 @@ module axi_fsrc_sequencer_regmap #(
   assign reg_o_seq_tx_accum_reset_cnt         = seq_ctrl_3[16+:COUNTER_WIDTH];
 
   assign reg_o_seq_ext_trig_en  = seq_ctrl_4[0];
-  assign reg_o_seq_ext_trig     = seq_ctrl_4[4];
-  assign reg_o_sma_j2_sel       = seq_ctrl_4[8];
-  assign reg_o_seq_debug        = seq_ctrl_4[12];
   assign reg_o_seq_rx_delay_cnt = seq_ctrl_4[16+:COUNTER_WIDTH];
 
   assign reg_o_dut_seq_gpio_w = {seq_gpio_w_2, seq_gpio_w_1};
