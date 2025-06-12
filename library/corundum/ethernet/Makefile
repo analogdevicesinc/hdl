@@ -2,6 +2,9 @@ LIBRARY_NAME := ethernet
 
 XILINX_DEPS += ethernet_ip.tcl
 
+GENERIC_DEPS += ethernet_core_k26.v
+GENERIC_DEPS += ethernet_core_vcu118.v
+
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/rtl/mqnic_core_axi.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/rtl/mqnic_core.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/rtl/mqnic_dram_if.v
@@ -47,7 +50,13 @@ EXTERNAL_DEPS += ../../../../corundum/fpga/common/rtl/tdma_ber.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/common/rtl/tdma_ber_ch.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/eth_mac_10g.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_64.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_rx_32.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_64.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/axis_xgmii_tx_32.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/mac_ctrl_rx.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/mac_ctrl_tx.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_rx.v
+EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/mac_pause_ctrl_tx.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/lfsr.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/ptp_clock.v
 EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/ptp_clock_cdc.v
@@ -115,6 +124,8 @@ XILINX_DEPS  += ../interfaces/if_qspi.xml
 XILINX_DEPS  += ../interfaces/if_qspi_rtl.xml
 XILINX_DEPS  += ../interfaces/if_qsfp.xml
 XILINX_DEPS  += ../interfaces/if_qsfp_rtl.xml
+XILINX_DEPS  += ../interfaces/if_sfp.xml
+XILINX_DEPS  += ../interfaces/if_sfp_rtl.xml
 XILINX_DEPS  += ../interfaces/if_i2c.xml
 XILINX_DEPS  += ../interfaces/if_i2c_rtl.xml
 
