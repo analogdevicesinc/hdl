@@ -96,6 +96,18 @@ adi_if_ports  input  -1   intl        none    0
 adi_if_ports  output -1   lpmode      none    0
 adi_if_ports  output -1   gtpowergood none    0
 
+adi_if_define if_sfp
+adi_if_ports  output -1   tx_p         none    0
+adi_if_ports  output -1   tx_n         none    0
+adi_if_ports  input  -1   rx_p         none    0
+adi_if_ports  input  -1   rx_n         none    0
+adi_if_ports  input  -1   mgt_refclk_p none    0
+adi_if_ports  input  -1   mgt_refclk_n none    0
+adi_if_ports  output -1   tx_disable   none    0
+adi_if_ports  input  -1   tx_fault     none    0
+adi_if_ports  input  -1   rx_los       none    0
+adi_if_ports  input  -1   mod_abs      none    0
+
 adi_if_define if_i2c
 adi_if_ports  input   1   scl_i none    0
 adi_if_ports  output  1   scl_o none    0
