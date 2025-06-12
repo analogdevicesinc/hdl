@@ -74,6 +74,8 @@ module axi_fsrc_sequencer #(
   input                   s_axi_rready
 );
 
+  assign seq_debug = 1'b0;
+
   localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
                                     8'h01,        /* MINOR */
                                     8'h00};       /* PATCH */
@@ -98,7 +100,7 @@ module axi_fsrc_sequencer #(
   wire [COUNTER_WIDTH-1:0] fsrc_accum_reset_cnt;
   wire [COUNTER_WIDTH-1:0] fsrc_rx_delay_cnt;
   wire                     fsrc_seq_ext_trig_en;
-  wire                     fsrc_start;
+  wire                     fsrc_reg_start;
   wire                     seq_en;
   wire                     fsrc_trig_in;
   wire [NUM_TRIG-1:0]      fsrc_trig_out;
@@ -153,15 +155,12 @@ module axi_fsrc_sequencer #(
 
     .reg_o_seq_gpio_change_cnt (fsrc_ctrl_change_cnt),
 
-    .reg_o_seq_start (fsrc_start),
+    .reg_o_seq_start (fsrc_reg_start),
     .reg_o_seq_en (seq_en),
     .reg_o_tx_sequencer_non_fsrc_delay_en (tx_sequencer_non_fsrc_delay_en),
     .reg_o_seq_tx_accum_reset_cnt (fsrc_accum_reset_cnt),
 
     .reg_o_seq_ext_trig_en (fsrc_seq_ext_trig_en),
-    .reg_o_seq_ext_trig (seq_ext_trig),
-    .reg_o_sma_j2_sel (sma_j2_sel),
-    .reg_o_seq_debug (seq_debug),
     .reg_o_seq_rx_delay_cnt (fsrc_rx_delay_cnt),
 
     .reg_o_dut_seq_gpio_w (fsrc_next_ctrl_value),
@@ -184,7 +183,7 @@ module axi_fsrc_sequencer #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
   ) fsrc_trig_sync (
-    .in_bits(seq_ext_trig_s | seq_ext_trig),
+    .in_bits(seq_ext_trig_s),
     .out_clk(clk),
     .out_resetn(~reset),
     .out_bits(fsrc_trig_in));
@@ -197,7 +196,7 @@ module axi_fsrc_sequencer #(
     .clk (clk),
     .reset (reset),
     .sysref_int (sysref),
-    .start (fsrc_start),
+    .reg_start (fsrc_reg_start),
     .next_ctrl_value (fsrc_next_ctrl_value),
     .ctrl_change_cnt (fsrc_ctrl_change_cnt),
     .first_trig_cnt (fsrc_first_trig_cnt),
@@ -211,6 +210,6 @@ module axi_fsrc_sequencer #(
     .tx_data_start (tx_data_start),
     .ctrl (ctrl));
 
-  assign seq_ext_trig_s = sma_j2_sel ? trig_in : 0'b0;
+  assign seq_ext_trig_s = trig_in;
 
 endmodule
