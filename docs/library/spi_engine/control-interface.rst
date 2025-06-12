@@ -76,7 +76,7 @@ Signal Pins
      - ``sdi_valid``
      - Input
      - Valid signal of the SDI stream
-   * - [(NUM_OF_SDI*DATA_WIDTH-1):0]
+   * - [(NUM_OF_SDIO*DATA_WIDTH-1):0]
      - ``sdi_data``
      - Input
      - Data signal of the SDI stream
