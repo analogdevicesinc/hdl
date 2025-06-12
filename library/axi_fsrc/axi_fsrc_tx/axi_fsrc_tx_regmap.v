@@ -144,52 +144,47 @@ module axi_fsrc_tx_regmap #(
     end
   end
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) jesd204b_tx_config_sync (
-    .in_data(up_jesd204b_tx_config_s),
+    .in_bits(up_jesd204b_tx_config_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(jesd204b_tx_config));
+    .out_bits(jesd204b_tx_config));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) ctrl_transmit_sync (
-    .in_data(up_ctrl_transmit_s),
+    .in_bits(up_ctrl_transmit_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(ctrl_transmit));
+    .out_bits(ctrl_transmit));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) link_ctrl_sync (
-    .in_data(up_link_ctrl_s),
+    .in_bits(up_link_ctrl_s),
     .out_clk(clk),
-    //.out_resetn(~reset),
-    .out_data(link_ctrl));
+    .out_bits(link_ctrl));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (64),
     .ASYNC_CLK (1)
   ) fsrc_accum_add_val_sync (
-    .in_clk (up_clk),
-    .in_data({up_fsrc_accum_add_val_2_s, up_fsrc_accum_add_val_s}),
+    .in_bits({up_fsrc_accum_add_val_2_s, up_fsrc_accum_add_val_s}),
     .out_clk(clk),
-    .out_data(fsrc_accum_add_val));
+    .out_bits(fsrc_accum_add_val));
 
-  sync_data #(
+  sync_bits #(
     .NUM_OF_BITS (64),
     .ASYNC_CLK (1)
   ) fsrc_accum_set_val_sync (
-    .in_clk (up_clk),
-    .in_data({up_fsrc_accum_set_val_2_s, up_fsrc_accum_set_val_s}),
+    .in_bits({up_fsrc_accum_set_val_2_s, up_fsrc_accum_set_val_s}),
     .out_clk(clk),
-    .out_data(fsrc_accum_set_val));
+    .out_bits(fsrc_accum_set_val));
 
-  assign tx_fsrc_en          = jesd204b_tx_config[8];
+  assign tx_fsrc_en          = jesd204b_tx_config[0];
   assign transmit_start      = ctrl_transmit[1];
   assign transmit_stop       = ctrl_transmit[3];
   assign tx_fsrc_stop        = ctrl_transmit[4];

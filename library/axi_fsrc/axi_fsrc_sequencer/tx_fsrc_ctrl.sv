@@ -25,22 +25,21 @@ module tx_fsrc_ctrl #(
 )(
   input  wire                                      clk,
   input  wire                                      reset,
-  input  wire                                      sysref_int,           // Single-cycle pulse input
-  input  wire                                      start,                // Single-cycle pulse input
+  input  wire                                      sysref_int,
+  input  wire                                      reg_start,            // Regmap alternative start
   input  wire [CTRL_WIDTH-1:0]                     next_ctrl_value,      // Set before start is asserted, hold the value until ctrl value is changed
   input  wire [COUNTER_WIDTH-1:0]                  ctrl_change_cnt,
   input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   first_trig_cnt,
-  input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   second_trig_cnt,
-  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,      // Must be greater than first_trig_cnt and second_trig_cnt
-  input  wire [COUNTER_WIDTH-1:0]                  rx_delay_cnt,
+  input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   second_trig_cnt, // TODO remove, it is useless
+  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> tx_data_start    // Must be greater than first_trig_cnt and second_trig_cnt
+  input  wire [COUNTER_WIDTH-1:0]                  rx_delay_cnt, // -> rx_data_start // TODO remove, it is useless.
   input  wire                                      seq_trig_in,
   input  wire                                      seq_ext_trig_en,
 
-  output logic [NUM_TRIG-1:0]                      trig_out,
-  output logic                                     rx_data_start,
+  output logic [NUM_TRIG-1:0]                      trig_out, // first|second_trig_cnt
+  output logic                                     rx_data_start, // TODO remove, it is useless.
   output logic                                     tx_data_start,
-  output logic [CTRL_WIDTH-1:0]                    ctrl
-  // TODO: need to set TX FSRC NS value here?
+  output logic [CTRL_WIDTH-1:0]                    ctrl // TODO remove, it sets unused GPIOs
 );
 
   localparam TRIG_PULSE_WIDTH = 4;
@@ -50,8 +49,8 @@ module tx_fsrc_ctrl #(
   logic                                         delay_count_en;
   logic [NUM_TRIG-1:0]                          trig_pulse;
   logic [NUM_TRIG-1:0] [TRIG_PULSE_WIDTH-1:0]   trig_shift;
-  logic [COUNTER_WIDTH-1:0]                     count;
-  logic [COUNTER_WIDTH-1:0]                     delay_count;
+  logic [COUNTER_WIDTH-1:0]                     count; // -> tx_data_start ; trig_out
+  logic [COUNTER_WIDTH-1:0]                     delay_count; // -> rx_data_start
   logic                                         seq_trig_in_mask;
   logic                                         seq_trig_in_d;
   logic                                         seq_trig_re;
@@ -74,8 +73,8 @@ module tx_fsrc_ctrl #(
 
   assign seq_trig_re = seq_trig_in & ~seq_trig_in_d;
 
-  // If seq_ext_trig_en enabled use seq_trig_re else use seq_start.
-  assign trig_start_pulse = seq_ext_trig_en ? seq_trig_re : start;
+  // If seq_ext_trig_en enabled use seq_trig_re else use regmap start.
+  assign trig_start_pulse = seq_ext_trig_en ? seq_trig_re : reg_start;
 
   pulse_sync trig_start_sync(
       .dout        (trig_start),
@@ -88,20 +87,20 @@ module tx_fsrc_ctrl #(
 
   // Counter and count enable for tx_data_start and trigs
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       count_en <= 1'b0;
       count <= '0;
     end else begin
-      if(trig_start) begin
+      if (trig_start) begin
         count_en <= 1'b1;
         count <= '0;
-      end else if(count_en) begin
+      end else if (count_en) begin
         // Disable counter when it reaches accum_reset_cnt
-        if(count == accum_reset_cnt) begin
+        if (count == accum_reset_cnt) begin
           count_en <= 1'b0;
           count <= '0;
         end
-        if(sysref_int) begin
+        if (sysref_int) begin
           count <= count + 1'b1;
         end
       end
@@ -114,16 +113,16 @@ module tx_fsrc_ctrl #(
       delay_count_en <= 1'b0;
       delay_count <= '0;
     end else begin
-      if(trig_start) begin
+      if (trig_start) begin
         delay_count_en <= 1'b1;
         delay_count <= '0;
-      end else if(delay_count_en) begin
+      end else if (delay_count_en) begin
         // Disable counter when it reaches rx_delay_cnt
-        if(delay_count == rx_delay_cnt) begin
+        if (delay_count == rx_delay_cnt) begin
           delay_count_en <= 1'b0;
           delay_count <= '0;
         end
-        if(sysref_int) begin
+        if (sysref_int) begin
           delay_count <= delay_count + 1'b1;
         end
       end
@@ -138,7 +137,7 @@ module tx_fsrc_ctrl #(
       rx_data_start <= 1'b0;
       if (rx_delay_cnt==0) begin
         rx_data_start <= 1'b1;
-      end else if(sysref_int_d && (delay_count == rx_delay_cnt)) begin
+      end else if (sysref_int_d && (delay_count == rx_delay_cnt)) begin
         rx_data_start <= 1'b1;
       end
     end
@@ -146,13 +145,13 @@ module tx_fsrc_ctrl #(
 
   // Pulse tx_data_start when count equals accum_reset_cnt
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       tx_data_start <= 1'b0;
     end else begin
       tx_data_start <= 1'b0;
-      if (accum_reset_cnt==0) begin
+      if (accum_reset_cnt == 0) begin
         tx_data_start <= 1'b1;
-      end else if(sysref_int_d && (count == accum_reset_cnt)) begin
+      end else if (sysref_int_d && (count == accum_reset_cnt)) begin
         tx_data_start <= 1'b1;
       end
     end
@@ -160,10 +159,10 @@ module tx_fsrc_ctrl #(
 
   // Set ctrl output
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       ctrl <= '0;
     end else begin
-      if(sysref_int_d && (count == ctrl_change_cnt)) begin
+      if (sysref_int_d && (count == ctrl_change_cnt)) begin
         ctrl <= next_ctrl_value;
       end
     end
@@ -187,7 +186,7 @@ module tx_fsrc_ctrl #(
 
    // Stretch trig pulse to TRIG_PULSE_WIDTH cycles
    always_ff @(posedge clk) begin
-      if(reset) begin
+      if (reset) begin
          trig_shift[ii] <= '0;
       end else begin
          trig_shift[ii] <= {trig_shift[ii][TRIG_PULSE_WIDTH-2:0], trig_pulse[ii]};
