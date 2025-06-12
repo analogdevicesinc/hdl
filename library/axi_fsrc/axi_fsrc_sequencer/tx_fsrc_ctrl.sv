@@ -4,13 +4,12 @@
 // Engineer:   MBB
 // Controls sequence for TX FSRC.
 // Sequence:
-//  User sets next_ctrl_value, first_trig_cnt, second_trig_cnt
+//  User sets next_ctrl_value, first_trig_cnt
 //  User asserts start
 //  tx_data_start asserted
 //  Counter start at 0, increments when sysref_int is asserted
 //  When counter equals ctrl_change_cnt, set ctrl = next_ctrl_value
 //  When counter equals first_trig_cnt, pulse trig
-//  When counter equals second_trig_cnt, pulse trig
 //  When counter equals accum_reset_cnt, tx_data_start deasserted
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -31,12 +30,12 @@ module tx_fsrc_ctrl #(
   input  wire [COUNTER_WIDTH-1:0]                  ctrl_change_cnt,
   input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   first_trig_cnt,
   input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   second_trig_cnt, // TODO remove, it is useless
-  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> tx_data_start    // Must be greater than first_trig_cnt and second_trig_cnt
+  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> tx_data_start    // Must be greater than first_trig_cnt
   input  wire [COUNTER_WIDTH-1:0]                  rx_delay_cnt, // -> rx_data_start // TODO remove, it is useless.
   input  wire                                      seq_trig_in,
   input  wire                                      seq_ext_trig_en,
 
-  output logic [NUM_TRIG-1:0]                      trig_out, // first|second_trig_cnt
+  output logic [NUM_TRIG-1:0]                      trig_out, // first
   output logic                                     rx_data_start, // TODO remove, it is useless.
   output logic                                     tx_data_start,
   output logic [CTRL_WIDTH-1:0]                    ctrl // TODO remove, it sets unused GPIOs
@@ -46,12 +45,9 @@ module tx_fsrc_ctrl #(
 
   logic                                         sysref_int_d;
   logic                                         count_en;
-  logic                                         delay_count_en;
   logic [NUM_TRIG-1:0]                          trig_pulse;
   logic [NUM_TRIG-1:0] [TRIG_PULSE_WIDTH-1:0]   trig_shift;
   logic [COUNTER_WIDTH-1:0]                     count; // -> tx_data_start ; trig_out
-  logic [COUNTER_WIDTH-1:0]                     delay_count; // -> rx_data_start
-  logic                                         seq_trig_in_mask;
   logic                                         seq_trig_in_d;
   logic                                         seq_trig_re;
   logic                                         trig_start_pulse;
@@ -107,42 +103,6 @@ module tx_fsrc_ctrl #(
     end
   end
 
-    // Counter and count enable for rx_data_start
-  always_ff @(posedge clk) begin
-    if(reset) begin
-      delay_count_en <= 1'b0;
-      delay_count <= '0;
-    end else begin
-      if (trig_start) begin
-        delay_count_en <= 1'b1;
-        delay_count <= '0;
-      end else if (delay_count_en) begin
-        // Disable counter when it reaches rx_delay_cnt
-        if (delay_count == rx_delay_cnt) begin
-          delay_count_en <= 1'b0;
-          delay_count <= '0;
-        end
-        if (sysref_int) begin
-          delay_count <= delay_count + 1'b1;
-        end
-      end
-    end
-  end
-
-  // Pulse rx_data_start when count is reached
-  always_ff @(posedge clk) begin
-    if(reset) begin
-      rx_data_start <= 1'b0;
-    end else begin
-      rx_data_start <= 1'b0;
-      if (rx_delay_cnt==0) begin
-        rx_data_start <= 1'b1;
-      end else if (sysref_int_d && (delay_count == rx_delay_cnt)) begin
-        rx_data_start <= 1'b1;
-      end
-    end
-  end
-
   // Pulse tx_data_start when count equals accum_reset_cnt
   always_ff @(posedge clk) begin
     if (reset) begin
@@ -157,28 +117,20 @@ module tx_fsrc_ctrl #(
     end
   end
 
-  // Set ctrl output
-  always_ff @(posedge clk) begin
-    if (reset) begin
-      ctrl <= '0;
-    end else begin
-      if (sysref_int_d && (count == ctrl_change_cnt)) begin
-        ctrl <= next_ctrl_value;
-      end
-    end
-  end
 
-  // TRIG_OUT ctrl
+  assign ctrl = 'b0;
+  assign rx_data_start = 'b0;
+
   genvar ii;
   for (ii=0; ii<NUM_TRIG; ii=ii+1) begin
 
-   // Pulse trigger when count equals first_trig_cnt or second_trig_cnt
+   // Pulse trigger when count equals first_trig_cnt
    always_ff @(posedge clk) begin
       if(reset) begin
          trig_pulse[ii] <= 1'b0;
       end else begin
          trig_pulse[ii] <= 1'b0;
-         if(sysref_int_d && ((count == first_trig_cnt[ii]) || (count == second_trig_cnt[ii]))) begin
+         if (sysref_int_d && ((count == first_trig_cnt[ii]))) begin
          trig_pulse[ii] <= 1'b1;
          end
       end
