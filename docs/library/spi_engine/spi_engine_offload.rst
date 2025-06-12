@@ -45,8 +45,8 @@ Configuration Parameters
    * - DATA_WIDTH
      - Data width of the parallel data stream. Will define the transaction's
        granularity. Supported values: 8/16/24/32
-   * - NUM_OF_SDI
-     - Number of multiple SDI lines, (min: 1, max: 8)
+   * - NUM_OF_SDIO
+     - Number of multiple SDI/SDO lines, (min: 1, max: 8)
    * - SDO_STREAMING
      - Enables the s_axis_sdo interface. This allows for sourcing the SDO data
        stream from a DMA or other similar sources, useful for DACs.
@@ -80,3 +80,5 @@ Signal and Interface Pins
    * - s_axis_sdo
      - Streaming AXI peripheral
        Input stream for SPI data to be sent. Only present when ``SDO_STREAMING`` parameter is set to 1.
+   * - m_interconnect_ctrl
+     - | Defines whether offload mode is active or not (active high).
