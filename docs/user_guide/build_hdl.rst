@@ -213,45 +213,6 @@ For Lattice:
 3b. Windows environment setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cygwin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Because GNU Make is not supported on Windows, you need to install
-`Cygwin <https://www.cygwin.com/>`__, which is a UNIX-like environment
-and command-line interface for Microsoft Windows.
-
-.. caution::
-
-   Change the path and the tool version accordingly to your installation!
-
-For AMD Xilinx Vivado:
-
-.. shell:: bash
-
-   ~/hdl
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-   $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
-
-For Intel Quartus:
-
-.. shell:: bash
-
-   ~/hdl
-   $export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
-
-For Lattice:
-
-.. shell:: bash
-
-   ~/hdl
-   $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
-   $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
 
 WSL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -382,9 +343,125 @@ current environment, for example:
    $which make
     /usr/bin/make
    $which vivado
-    /opt/Xilinx/Vivado/2023.2/bin/vivado
+    /opt/Xilinx/Vivado/2024.2/bin/vivado
    $which quartus
     /opt/intelFPGA/24.2/quartus/bin/quartus
+
+.. _build_hdl cygwin:
+
+Cygwin (NOT RECOMMENDED)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Using `Cygwin <https://www.cygwin.com/>`__ is not recommended anymore, and if
+one encounters issues with this flow, we will not offer support for this.
+
+:red:`We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!`
+
+Please note, that using Cygwin to build the HDL project has limitations!
+One cannot build the boot file needed for the setup, but instead should use
+the Vivado Tcl console building mode to build the BOOT.BIN (see
+"Building the BOOT.BIN in Vivado GUI").
+
+.. collapsible:: Installation paths for tools in Cygwin
+
+   .. caution::
+
+      Change the path and the tool version accordingly to your installation!
+
+   For AMD Xilinx Vivado:
+
+   .. shell:: bash
+
+      ~/hdl
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+      $export PATH=$PATH:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+
+   For Intel Quartus:
+
+   .. shell:: bash
+
+      ~/hdl
+      $export PATH=$PATH:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+
+   For Lattice:
+
+   .. shell:: bash
+
+      ~/hdl
+      $export PATH=$PATH:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+      $export PATH=$PATH:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+
+.. collapsible::  Building the libraries and the project in Vivado GUI
+
+   #. Open Vivado GUI
+   #. In the Tcl console, run ``pwd`` to see the location you're at
+   #. Go to the project folder using the ``cd`` Linux command. For example,
+
+      :code:`cd c:/github/hdl/projects/ad9081_fmca_ebz/zcu102`
+
+   #. Now you need to source the script
+
+      :code:`source ../../scripts/adi_make.tcl`
+
+      This will give you access to two commands (adi_make::lib and
+      adi_make::boot_bin).
+
+   Prior to building the project, the necessary libraries must be built, so please
+   follow thoroughly these steps!
+
+   To build all the libraries on which the project depends on, run
+
+   :code:`adi_make::lib all`
+
+   To build only one specific library, you need to
+   specify its name, for example :code:`adi_make::lib axi_dmac` or
+   :code:`adi_make::lib jesd204/jesd204_rx`.
+
+   To build the project itself, you need to run
+
+   :code:`source ./system_project.tcl`
+
+   Then go on to the next step of building the boot file, BOOT.BIN.
+
+.. collapsible:: Building the BOOT.BIN in Vivado GUI
+
+   This requires either having the project built with ``make`` command
+   (:ref:`build_hdl build-amd-project`), or with the flow
+   "Building the libraries and the project in Vivado GUI".
+   To check if you are prepared to build the BOOT.BIN, verify in the project
+   folder if you have an ``*.sdk/system_top.xsa`` file (for example,
+   hdl/projects/ad9081_fmca_ebz/zcu102/ad9081_fmca_ebz_zcu102.sdk/system_top.xsa).
+
+   If you do, then proceed with the following:
+
+   #. Open Vivado GUI
+   #. In the Tcl console, run ``pwd`` to see the location you're at
+   #. Go to the project folder using the ``cd`` Linux command. For example,
+
+      :code:`cd c:/github/hdl/projects/ad9081_fmca_ebz/zcu102`
+
+   #. Now you need to source the script
+
+      :code:`source ../../scripts/adi_make.tcl`
+
+   #. Run :code:`adi_make::boot_bin`. Wait up to 5 minutes.
+   #. The BOOT.BIN will be found in a folder called "output".
+
+.. collapsible:: Example for building the AD9081-FMCA-EBZ/ZCU102 project and its BOOT.BIN
+
+   .. code-block:: tcl
+
+      cd c:/github/hdl/projects/ad9081_fmca_ebz/zcu102
+      source ../../scripts/adi_make.tcl
+      adi_make::lib all
+      source ./system_project.tcl
+      adi_make::boot_bin
 
 .. _build_hdl build:
 
@@ -415,8 +492,10 @@ or in Cygwin. For more details, please read the rest of the documentation.
 
 To clean only a project or an IP core before building it again,
 run ``make clean``.
-To clean both the already built IP cores which the project depends on and the project,
-run ``make clean-all``.
+To clean both the already built IP cores which the project depends on and the
+project, run ``make clean-all``.
+
+.. _build_hdl build-amd-project:
 
 4a. Building an AMD project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
