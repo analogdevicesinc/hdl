@@ -40,8 +40,8 @@ Configuration Parameters
    * - DATA_WIDTH
      - Data width of the parallel data stream. Will define the transaction's
        granularity. Supported values: 8/16/24/32
-   * - NUM_OF_SDI
-     - Number of multiple SDI lines, (min: 1, max: 8)
+   * - NUM_OF_SDIO
+     - Number of multiple SDI/SDO lines, (min: 1, max: 8)
 
 Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -56,6 +56,8 @@ Signal and Interface Pins
      - :ref:`spi_engine control-interface` subordinate.
        SPI Engine Control stream that contains commands and data for the
        execution module.
+   * - s_offload_active_ctrl
+     - | Defines whether offload mode is active or not (active high).
    * - spi
      - :ref:`spi_engine spi-bus-interface` controller.
        Low-level SPI bus interface that is controlled by peripheral.
@@ -74,6 +76,11 @@ Internally the SPI Engine execution module consists of an instruction encoder
 that translates the incoming commands into an internal control signal, a
 multi-function counter and compares unit that is responsible for handling the
 timing and a shift register which holds the received and transmitted SPI data.
+
+The shift register has a different behavior for offload and FIFO mode. Offload
+mode needs to have all of its lanes active for allowing prefetch of data,
+otherwise it is going to wait for the write instruction. That is controlled
+through the ``s_offload_active_ctrl`` interface.
 
 The module has an optional programmable pre-scaler register that can be used to
 divide the external clock to the counter and compare unit.
