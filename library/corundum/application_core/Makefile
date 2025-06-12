@@ -9,11 +9,6 @@ LIBRARY_NAME := application_core
 XILINX_DEPS += application_core_ip.tcl
 
 GENERIC_DEPS += application_core.v
-GENERIC_DEPS += ../../common/ad_rst.v
-GENERIC_DEPS += ../../common/up_axi.v
-
-XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += application_core_constr.ttcl
 
 XILINX_DEPS += ../interfaces/if_ptp.xml
 XILINX_DEPS += ../interfaces/if_ptp_rtl.xml
@@ -31,10 +26,6 @@ XILINX_DEPS += ../interfaces/if_dma_ram.xml
 XILINX_DEPS += ../interfaces/if_dma_ram_rtl.xml
 XILINX_DEPS += ../interfaces/if_axis_stat.xml
 XILINX_DEPS += ../interfaces/if_axis_stat_rtl.xml
-
-XILINX_LIB_DEPS += util_cdc
-XILINX_LIB_DEPS += util_axis_fifo
-XILINX_LIB_DEPS += util_axis_fifo_asym
 
 XILINX_INTERFACE_DEPS += corundum/interfaces
 

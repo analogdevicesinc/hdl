@@ -13,22 +13,11 @@ adi_ip_create application_core
 # Corundum sources
 adi_ip_files application_core [list \
   "application_core.v" \
-  "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/common/ad_rst.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "application_core_constr.ttcl" \
-  "$ad_hdl_dir/library/common/ad_mem.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_gray.v" \
-  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
-  "$ad_hdl_dir/library/util_axis_fifo_asym/util_axis_fifo_asym.v" \
-  "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v" \
-  "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v" \
 ]
 
 set_property verilog_define {APP_CUSTOM_PARAMS_ENABLE APP_CUSTOM_PORTS_ENABLE} [current_fileset]
 
 adi_ip_properties_lite application_core
-adi_ip_ttcl application_core "application_core_constr.ttcl"
 
 set_property company_url {https://analogdevicesinc.github.io/hdl/library/corundum} [ipx::current_core]
 
