@@ -252,7 +252,7 @@ Detailed description
 The design has one JESD204B receive chain and one transmit chain, each with
 8 lanes.
 
-Each chain consists of a transport layer represented by a JESD TPL module, 
+Each chain consists of a transport layer represented by a JESD TPL module,
 a link layer represented by a JESD LINK module, and a shared among chains
 physical layer, represented by an XCVR module. The HDL project in its current
 state, has **the link operating in subclass 0**.
@@ -456,18 +456,19 @@ Instance name    HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP S10SoC Li
 
 Resource utilization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To see the resources utilization, please go to
-:ref:`projects resources-daq3-zc706`. A simplified version of that table can
-be found below.
+..
+  To see the resources utilization, please go to
+  :ref:`projects resources-daq3-zc706`. A simplified version of that table can
+  be found below.
 
 ..
   ADAPT THE PATH BELOW SUCH THAT IT POINTS TO THE index.rst from
   hdl/docs/projects/index.rst
 
-.. literalinclude:: ../../projects/index.rst
-  :start-at: daq3_zc706
-  :end-before: daq3_zcu102
+..
+  .. literalinclude:: ../../projects/index.rst
+    :start-at: daq3_zc706
+    :end-before: daq3_zcu102
 
 Building the HDL project
 -------------------------------------------------------------------------------
