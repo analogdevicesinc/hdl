@@ -1,0 +1,2462 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="206.4052mm"
+   height="177.24677mm"
+   viewBox="0 0 206.40519 177.24675"
+   version="1.1"
+   id="svg29591"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="ad488x_fmc_evb_zed_block_diagram.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview29593"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.3701494"
+     inkscape:cx="-667.29812"
+     inkscape:cy="407.94339"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs29588">
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM-7-1"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4660-1-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker9011"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path9009"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-5"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-6"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-0-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-3-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-0-3-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-3-7-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker30716"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path30714"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM-2-8"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4669-5-5"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM-7"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4660-1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM-2"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4669-5"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleInM"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path4660"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(-0.4)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutM"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4669"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="scale(0.4)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <rect
+       x="505.75934"
+       y="440.80817"
+       width="91.509193"
+       height="18.625698"
+       id="rect4760" />
+    <rect
+       x="505.75934"
+       y="440.80817"
+       width="91.509193"
+       height="18.625698"
+       id="rect4760-6" />
+    <rect
+       x="298.96634"
+       y="469.9407"
+       width="124.17132"
+       height="41.072052"
+       id="rect24670" />
+    <rect
+       x="298.96634"
+       y="469.9407"
+       width="124.17132"
+       height="41.072052"
+       id="rect24670-6" />
+    <marker
+       style="overflow:visible"
+       id="TriangleInM-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42185" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker51146"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path51144" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInM-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42185-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker51146-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path51144-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-1-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-3-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45-7-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03-3-3" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-1-9-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-3-6-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-1-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-3-0" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45-3-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03-5-4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-45-3-2-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-03-5-4-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-1-7-6-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-3-0-2-2" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-38" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleOutM-6-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42194-3-36" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-51"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-4"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-71"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-8"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-515"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-4-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-51-9"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-6-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-4-0"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <rect
+       x="505.75934"
+       y="440.80817"
+       width="91.509193"
+       height="18.625698"
+       id="rect4760-7" />
+    <rect
+       x="505.75934"
+       y="440.80817"
+       width="91.509193"
+       height="18.625698"
+       id="rect4760-6-7" />
+    <rect
+       x="298.96634"
+       y="469.9407"
+       width="124.17132"
+       height="41.072052"
+       id="rect24670-7" />
+    <rect
+       x="298.96634"
+       y="469.9407"
+       width="124.17132"
+       height="41.072052"
+       id="rect24670-6-6" />
+    <marker
+       style="overflow:visible"
+       id="TriangleInM-3-8"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42185-5" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker51146-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path51144-4" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInM-0-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path42185-3-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker51146-9-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path51144-3-9" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-71-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM"
+       inkscape:collect="always">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-8-5"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-9-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-7-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2-8"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94-1-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2-8-6"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94-1-4-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2-8-6-9"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94-1-4-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2-8-6-0"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker1216-9-94-1-4-5-7"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1214-1-2-8-6-0-7"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-4.3267717,-5.0751486)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.740833;stroke-linecap:round;stroke-linejoin:round"
+       id="rect24699"
+       width="206.4052"
+       height="177.24677"
+       x="4.3267717"
+       y="5.0751486"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:#000000;stroke-width:0.330549;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect4477"
+       width="194.24043"
+       height="170.50319"
+       x="8.4500179"
+       y="10.807824"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path4518"
+       d="M 133.92972,32.483769 V 27.414255"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM);marker-end:url(#TriangleOutM);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path4518-5"
+       d="M 140.83982,32.482029 V 27.438861"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7);marker-end:url(#TriangleOutM-2);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path4518-5-9"
+       d="M 147.74991,32.476303 V 27.406847"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.396875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1);marker-end:url(#TriangleOutM-2-8);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       transform="scale(-1,1)"
+       style="display:inline;fill:#ebebeb;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.500933;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges"
+       id="rect4136"
+       width="111.22163"
+       height="19.844805"
+       x="-165.19052"
+       y="33.673855"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 157.90504,33.850088 v 19.71424"
+       id="path4179"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 151.12367,33.850088 v 19.71424"
+       id="path4179-9"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 123.99817,33.850088 v 19.71424"
+       id="path4179-0"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 130.77955,33.850088 v 19.71424"
+       id="path4179-4"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 137.56092,33.850088 v 19.71424"
+       id="path4179-7"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 144.34229,33.850088 v 19.71424"
+       id="path4179-41"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="display:inline;fill:#a2dcea;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;shape-rendering:crispEdges"
+       d="m 117.2168,33.850088 v 19.71424"
+       id="path4179-0-3"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4229"
+       y="143.04726"
+       x="-49.41568"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="143.04726"
+         x="-49.41568"
+         id="tspan4231"
+         sodipodi:role="line">Ethernet</tspan></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4233"
+       y="149.60823"
+       x="-47.498642"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="149.60823"
+         x="-47.498642"
+         id="tspan4235"
+         sodipodi:role="line">UART</tspan></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4237"
+       y="136.43639"
+       x="-47.431786"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="136.43639"
+         x="-47.431786"
+         id="tspan4239"
+         sodipodi:role="line">DDRx</tspan></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4241"
+       y="163.26862"
+       x="-45.642647"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="163.26862"
+         x="-45.642647"
+         id="tspan4243"
+         sodipodi:role="line">SPI</tspan></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4245"
+       y="156.79454"
+       x="-45.625206"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="156.79454"
+         x="-45.625206"
+         id="tspan4247"
+         sodipodi:role="line">I<tspan
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;font-family:Arial;-inkscape-font-specification:'Arial Bold';baseline-shift:super;stroke-width:0.264583px"
+   id="tspan4485">2</tspan>C</tspan></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4251"
+       y="129.40582"
+       x="-50.263016"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="129.40582"
+         x="-50.263016"
+         id="tspan4253"
+         sodipodi:role="line">Interrupts</tspan></text>
+    <text
+       transform="scale(0.9928299,1.0072219)"
+       id="text4311"
+       y="27.874945"
+       x="82.596695"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         y="27.874945"
+         x="82.596695"
+         id="tspan4313"
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.96875px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px" /></text>
+    <text
+       transform="matrix(0,-1.0072219,0.99282989,0,0,0)"
+       id="text4301"
+       y="122.31175"
+       x="-47.358391"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.97656px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="122.31175"
+         x="-47.358391"
+         id="tspan4303"
+         sodipodi:role="line">Timer</tspan></text>
+    <rect
+       style="display:inline;vector-effect:none;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+       id="rect4589"
+       width="3.9288628"
+       height="4.2094946"
+       x="53.640251"
+       y="23.501108"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="58.663082"
+       y="26.529573"
+       id="text4595"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.30729px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.264583px"
+         sodipodi:role="line"
+         id="tspan4597"
+         x="58.663082"
+         y="26.529573">Receive path</tspan></text>
+    <rect
+       style="display:inline;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.486876;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+       id="rect4487"
+       width="6.6456137"
+       height="90.898842"
+       x="14.622308"
+       y="75.585739"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.88056px;line-height:0%;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="-145.71025"
+       y="19.334003"
+       id="text4489"
+       transform="rotate(-90)"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         sodipodi:role="line"
+         id="tspan4491"
+         x="-145.71025"
+         y="19.334003"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.88056px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583px">MEMORY INTERCONNECT</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:0.858696;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="179.98653"
+       y="44.225689"
+       id="text4482"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         sodipodi:role="line"
+         x="179.98653"
+         y="44.225689"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.29167px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.858696;stroke-width:0.264583px"
+         id="tspan3725">ZedBoard</tspan></text>
+    <rect
+       style="display:inline;vector-effect:none;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:0.423667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.423667, 1.271;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect6078"
+       width="158.19185"
+       height="118.12597"
+       x="43.164425"
+       y="59.58049"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <rect
+       style="display:inline;vector-effect:none;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.459227;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect4488"
+       width="7.645824"
+       height="106.23577"
+       x="198.63475"
+       y="61.679832"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       x="-125.37051"
+       y="204.2204"
+       id="text4491"
+       transform="rotate(-90)"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         sodipodi:role="line"
+         id="tspan4493"
+         x="-125.37051"
+         y="204.2204"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px">FMC CONNECTOR</tspan></text>
+    <rect
+       style="display:inline;fill:none;fill-opacity:1;stroke:#3f4b55;stroke-width:0.538112;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.538112, 1.61435;stroke-dashoffset:0;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       id="rect6057"
+       width="27.030113"
+       height="116.83631"
+       x="12.452978"
+       y="60.050694"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <rect
+       y="73.144989"
+       x="36.993958"
+       height="94.558296"
+       width="9.149436"
+       id="rect5786"
+       style="display:inline;vector-effect:none;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:0.225601;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <rect
+       y="80.504799"
+       x="62.293724"
+       height="79.222527"
+       width="34.168762"
+       id="rect5786-1"
+       style="display:inline;vector-effect:none;fill:#ffcccc;fill-opacity:1;fill-rule:nonzero;stroke:#a01414;stroke-width:0.225601;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png" />
+    <text
+       transform="rotate(-90)"
+       id="text5788"
+       y="43.225876"
+       x="-125.85468"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:0.264583px;stroke-opacity:1"
+         y="43.225876"
+         x="-125.85468"
+         id="tspan5790"
+         sodipodi:role="line">DMA</tspan></text>
+    <text
+       transform="rotate(-0.31795285)"
+       id="text5788-4"
+       y="124.14346"
+       x="71.168358"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#28170b;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.63021px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#28170b;stroke:none;stroke-width:0.264583px;stroke-opacity:1"
+         y="124.14346"
+         x="71.168358"
+         id="tspan5790-7"
+         sodipodi:role="line">CPACK</tspan></text>
+    <text
+       transform="scale(0.99282989,1.0072219)"
+       id="text4311-0"
+       y="44.636169"
+       x="69.884613"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.96875px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583px"
+         y="44.636169"
+         x="69.884613"
+         id="tspan4313-9"
+         sodipodi:role="line">ARM (Zynq) </tspan></text>
+    <g
+       id="g5654"
+       style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.91193;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       transform="matrix(0.32827811,0,0,0.26434798,-19.695839,-24.135676)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5656"
+         d="m 130.73937,546.2302 10.03208,14.84925 v -6.80591 l 20.46375,-3e-5 c 0,-16.08362 0,0 0,-16.08362 l -20.46375,3e-5 v -6.80591 l -10.03208,14.84925"
+         style="fill:#a01414;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.91193px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         sodipodi:nodetypes="cccccccc" />
+    </g>
+    <g
+       id="g5654-3"
+       style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.74793;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       transform="matrix(0.4762859,0,0,0.27086297,-15.602972,-27.890617)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5656-0"
+         d="m 130.73937,546.2302 10.03208,14.84925 v -6.80591 l 20.46375,-3e-5 c 0,-16.08362 0,0 0,-16.08362 l -20.46375,3e-5 v -6.80591 l -10.03208,14.84925"
+         style="fill:#a01414;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.74793px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+         sodipodi:nodetypes="cccccccc" />
+    </g>
+    <g
+       id="g5654-2"
+       style="display:inline;fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       transform="matrix(0.46245287,0,0,0.26458333,24.934835,-101.65513)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text11366-4-8"
+       y="76.660919"
+       x="112.0732"
+       style="font-style:normal;font-weight:normal;font-size:3.175px;line-height:0%;font-family:Arial;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;shape-rendering:crispEdges;enable-background:new"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         id="tspan11370-7-5"
+         y="76.660919"
+         x="112.0732"
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.30729px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';text-align:center;text-anchor:middle;stroke-width:0.264583px" /></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206"
+       d="M 198.39343,82.075765 H 160.98307"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9"
+       d="M 198.66335,87.208081 H 161.25301"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401"
+       y="84.135178"
+       x="168.36563"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="84.135178"
+         x="168.36563"
+         id="tspan2399"
+         sodipodi:role="line">DA1_p</tspan></text>
+    <text
+       id="text2401-0"
+       y="89.950729"
+       x="168.4097"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="89.950729"
+         x="168.4097"
+         id="tspan2399-27"
+         sodipodi:role="line">DA1_n</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-5"
+       d="M 198.38955,97.429305 H 160.9792"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-4);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-1"
+       d="M 198.65947,102.5616 H 161.24913"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-6);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401-7"
+       y="100.16891"
+       x="168.36203"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="100.16891"
+         x="168.36203"
+         id="tspan2399-4"
+         sodipodi:role="line">DB1_p</tspan></text>
+    <text
+       id="text2401-0-2"
+       y="105.98444"
+       x="168.4061"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="105.98444"
+         x="168.4061"
+         id="tspan2399-27-7"
+         sodipodi:role="line">DB1_n</tspan></text>
+    <g
+       style="display:inline;shape-rendering:crispEdges;enable-background:new"
+       id="ddr"
+       transform="matrix(0.37593397,0,0,0.37593391,-16.913329,-145.6534)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8406"
+         width="29.358675"
+         height="11.248666"
+         x="-453.55264"
+         y="391.80267"
+         transform="rotate(-90)" />
+      <rect
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.67501;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.673913"
+         id="rect8408"
+         width="4.6139379"
+         height="6.8413563"
+         x="-451.4805"
+         y="394.00632"
+         transform="rotate(-90)" />
+      <rect
+         y="394.00632"
+         x="-444.69791"
+         height="6.8413563"
+         width="4.6139379"
+         id="rect8410"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.67501;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.673913"
+         transform="rotate(-90)" />
+      <rect
+         y="394.00632"
+         x="-431.13275"
+         height="6.8413563"
+         width="4.6139379"
+         id="rect8414"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.67501;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.673913"
+         transform="rotate(-90)" />
+      <rect
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.67501;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.673913"
+         id="rect8416"
+         width="4.6139379"
+         height="6.8413563"
+         x="-437.91531"
+         y="394.00632"
+         transform="rotate(-90)" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.5506;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 402.9495,451.34818 h 3.46837 v -24.7395 h -3.63159"
+         id="path8420"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,449.00384 H 404.6091"
+         id="path8422"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8424"
+         d="M 406.04958,430.92913 H 404.6091"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,433.33004 H 404.6091"
+         id="path8426"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8428"
+         d="M 406.04958,435.45913 H 404.6091"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,437.86003 H 404.6091"
+         id="path8430"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8432"
+         d="M 406.04958,439.98913 H 404.6091"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,442.34471 H 404.6091"
+         id="path8434"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8436"
+         d="M 406.04958,444.51915 H 404.6091"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,446.82944 H 404.6091"
+         id="path8438"
+         inkscape:connector-curvature="0" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 406.04958,430.92913 H 404.6091"
+         id="path8440"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path8450"
+         d="M 406.04958,428.80003 H 404.6091"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.067;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       style="display:inline;shape-rendering:crispEdges;enable-background:new"
+       id="g8892"
+       transform="matrix(0.26458333,0,0,0.26458333,40.437995,-97.248346)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <rect
+         y="431.09491"
+         x="366.68005"
+         height="23.063002"
+         width="26.832939"
+         id="rect8762"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.33851;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="rect8764"
+         d="m 371.84168,433.47704 h 16.31637 c 1.2826,0 2.31516,1.03257 2.31516,2.31517 v 13.22948 c 0,1.28259 -1.03256,2.31515 -2.31516,2.31515 h -16.31637 c -1.2826,0 -2.31516,-1.03256 -2.31516,-2.31515 v -13.22948 c 0,-1.2826 1.03256,-2.31517 2.31516,-2.31517 z"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <g
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+         transform="matrix(1.2472877,0,0,1.2472877,-94.749819,-45.663902)"
+         id="g8811">
+        <path
+           id="rect8801"
+           d="m 371.16019,393.86166 h 6.77743 v 5.24892 h -6.77743 z"
+           style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.479248;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+        <path
+           id="rect8809"
+           d="m 383.3136,393.86166 h 6.77743 v 5.24892 h -6.77743 z"
+           style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.479248;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path8818"
+         d="m 369.52814,445.26083 h 5.8318 v 2.82613 h 1.54776 v 3.24584"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 390.47422,445.29053 h -5.89282 v 2.80734 h -1.56397 v 3.22427"
+         id="path8820"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+      <rect
+         y="447.10886"
+         x="369.1405"
+         height="3.8938534"
+         width="4.5168324"
+         id="rect8824"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.973;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.973;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8826"
+         width="4.5168324"
+         height="3.8938534"
+         x="386.27451"
+         y="447.10886" />
+      <rect
+         y="433.60046"
+         x="371.85117"
+         height="5.1640501"
+         width="1.2438545"
+         id="rect8828"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8830"
+         width="1.2438545"
+         height="5.1640501"
+         x="384.39578"
+         y="433.60046" />
+      <rect
+         y="433.60046"
+         x="381.88687"
+         height="5.1640501"
+         width="1.2438545"
+         id="rect8832"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8834"
+         width="1.2438545"
+         height="5.1640501"
+         x="379.37793"
+         y="433.60046" />
+      <rect
+         y="433.60046"
+         x="376.86902"
+         height="5.1640501"
+         width="1.2438545"
+         id="rect8836"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8838"
+         width="1.2438545"
+         height="5.1640501"
+         x="374.36008"
+         y="433.60046" />
+      <rect
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.308598;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8840"
+         width="1.2438545"
+         height="5.1640501"
+         x="386.90469"
+         y="433.60046" />
+    </g>
+    <g
+       id="uart"
+       transform="matrix(0,-0.10973853,0.10973855,0,103.34147,77.55856)"
+       style="display:inline;stroke-width:2.41103;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36">
+      <rect
+         ry="4.5"
+         y="388.11218"
+         x="490.75"
+         height="28.75"
+         width="70"
+         id="rect8910"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="sssssssss"
+         inkscape:connector-curvature="0"
+         id="rect8912"
+         d="m 507.25,394.11218 h 37 c 2.493,0 5.47668,2.20628 4.5,4.5 l -3.3,7.75 c -0.97668,2.29372 -3.507,4.5 -6,4.5 h -27.8 c -2.493,0 -4.37391,-2.22795 -5.4,-4.5 l -3.5,-7.75 c -1.02609,-2.27205 2.007,-4.5 4.5,-4.5 z"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         r="3.1875"
+         cy="402.48718"
+         cx="497.5126"
+         id="path8915"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <circle
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="circle8917"
+         cx="554.13763"
+         cy="402.48718"
+         r="3.1875" />
+      <ellipse
+         ry="1.0625"
+         rx="1"
+         cy="399.79968"
+         cx="513.7403"
+         id="path8919"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <ellipse
+         ry="1.0625"
+         rx="1"
+         cy="399.79968"
+         cx="537.7403"
+         id="ellipse8923"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <ellipse
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="ellipse8925"
+         cx="531.7403"
+         cy="399.79968"
+         rx="1"
+         ry="1.0625" />
+      <ellipse
+         ry="1.0625"
+         rx="1"
+         cy="399.79968"
+         cx="525.7403"
+         id="ellipse8927"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <ellipse
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="ellipse8929"
+         cx="519.7403"
+         cy="399.79968"
+         rx="1"
+         ry="1.0625" />
+      <ellipse
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="ellipse8921"
+         cx="516.7403"
+         cy="405.79968"
+         rx="1"
+         ry="1.0625" />
+      <ellipse
+         ry="1.0625"
+         rx="1"
+         cy="405.79968"
+         cx="534.7403"
+         id="ellipse8931"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <ellipse
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="ellipse8933"
+         cx="528.7403"
+         cy="405.79968"
+         rx="1"
+         ry="1.0625" />
+      <ellipse
+         ry="1.0625"
+         rx="1"
+         cy="405.79968"
+         cx="522.7403"
+         id="ellipse8935"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.41103;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.268639;shape-rendering:crispEdges;enable-background:new"
+       x="25.74227"
+       y="123.67651"
+       id="text2401-61-1-54-8"
+       transform="scale(1.0162353,0.98402408)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan2399-9-2-70-3"
+         x="25.74227"
+         y="123.67651"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.268639">64</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none;shape-rendering:crispEdges;enable-background:new"
+       x="51.42366"
+       y="123.2982"
+       id="text2401-61-1-54-8-3"
+       transform="scale(1.0162353,0.98402408)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan2399-9-2-70-3-9"
+         x="51.42366"
+         y="123.2982"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.43958px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.269;stroke-miterlimit:4;stroke-dasharray:none">64</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect19131"
+       width="26.529829"
+       height="13.626906"
+       x="130.64497"
+       y="82.556091"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426002, 0.0426002;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect19131-2"
+       width="26.529829"
+       height="3.6373949"
+       x="129.91284"
+       y="112.3062"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958"
+       width="10.024403"
+       height="6.8542814"
+       x="145.87386"
+       y="88.030754"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-1"
+       width="12.205807"
+       height="8.1842365"
+       x="130.64609"
+       y="98.350143"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.0954441,0,0,0.07735464,98.299642,56.475776)"
+       id="text4758"
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760);stroke-width:3.07925"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="505.75977"
+         y="453.41916"
+         id="tspan25244">ad_serdes_in</tspan></text>
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-2"
+       width="10.024403"
+       height="6.8542814"
+       x="131.9803"
+       y="87.959953"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.0954441,0,0,0.07735464,86.183747,56.515798)"
+       id="text4758-5"
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-6);stroke-width:3.07925"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="505.75977"
+         y="453.41916"
+         id="tspan25246">ad_pack</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.63777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="127.98454"
+       y="91.234436"
+       id="text21502"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan21500"
+         style="stroke-width:0.264583"
+         x="127.98454"
+         y="91.234436">ad408x_phy</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.08783843,0,0,0.07735464,105.62205,65.57295)"
+       id="text24668"
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670);stroke-width:3.2098"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="298.9668"
+         y="484.35348"
+         id="tspan25248">ADC COMMON</tspan></text>
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-1-1"
+       width="12.205807"
+       height="8.1842365"
+       x="144.4581"
+       y="98.276237"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.08783843,0,0,0.07735464,119.43405,65.499062)"
+       id="text24668-1"
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-6);stroke-width:3.2098"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="298.9668"
+         y="484.35348"
+         id="tspan25250">ADC CHANNEL</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.63777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="130.05638"
+       y="122.28669"
+       id="text41823"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan41821"
+         style="stroke-width:0.264583"
+         x="130.05638"
+         y="122.28669">UP_AXI</tspan></text>
+    <path
+       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-3);marker-end:url(#marker51146)"
+       d="m 151.02244,107.78375 c 0,3.28676 0,3.16036 0,3.16036"
+       id="path42520-2"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-0);marker-end:url(#marker51146-9)"
+       d="m 136.25134,107.80489 c 0,3.28677 0,3.16036 0,3.16036"
+       id="path42520-2-7"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#071414;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:75.5906;stroke-opacity:1"
+       id="rect46745"
+       width="32.332851"
+       height="39.648827"
+       x="126.81845"
+       y="77.625374"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       style="font-size:1.97832px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="128.42044"
+       y="85.926407"
+       id="text49535"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan49533"
+         style="font-size:1.97832px;stroke-width:0.264583"
+         x="128.42044"
+         y="85.926407">AXI-AD408X IP </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+       x="13.360975"
+       y="175.72833"
+       id="text41772"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan41770"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="13.360975"
+         y="175.72833">DMA_CLK=100MHz</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+       x="44.984196"
+       y="175.84045"
+       id="text41772-4"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan41770-2"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
+         x="44.984196"
+         y="175.84045">REF_CLK= DCO_CLK(400MHz) / 4 </tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-6"
+       d="M 198.38955,108.86611 H 160.9792"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-71);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-12"
+       d="M 198.65949,113.99842 H 161.24913"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401-3"
+       y="112.1125"
+       x="166.88876"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="112.1125"
+         x="166.88876"
+         id="tspan2399-3"
+         sodipodi:role="line">DCO1_p</tspan></text>
+    <text
+       id="text2401-0-8"
+       y="117.92797"
+       x="166.93283"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="117.92797"
+         x="166.93283"
+         id="tspan2399-27-77"
+         sodipodi:role="line">DCO1_n</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-1"
+       d="M 198.36871,125.98561 H 160.95835"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-3);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4"
+       d="M 198.63863,131.11793 H 161.22829"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4-6"
+       d="M 126.37654,90.791427 H 98.322673"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94-1);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4-6-7"
+       d="M 126.53083,96.341941 H 98.47697"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94-1-4);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="106.28091"
+       y="95.303329"
+       id="text59898-5-01"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896-7-68"
+         style="font-size:2.64583px;stroke-width:0.264583"
+         x="106.28091"
+         y="95.303329">adc_valid</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="104.98835"
+       y="100.12487"
+       id="text59898-5-01-1"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896-7-68-9"
+         style="font-size:2.64583px;stroke-width:0.264583"
+         x="104.98835"
+         y="100.12487">adc_enable</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4-6-7-00"
+       d="M 126.70953,101.22769 H 98.655671"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94-1-4-5);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="104.98835"
+       y="141.01016"
+       id="text59898-5-01-1-2"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896-7-68-9-2"
+         style="font-size:2.64583px;stroke-width:0.264583"
+         x="104.98835"
+         y="141.01016">adc_enable</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4-6-7-00-2"
+       d="M 126.29964,142.11298 H 98.245776"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94-1-4-5-7);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-4-6-7-0"
+       d="M 126.17343,137.14647 H 98.119572"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-94-1-4-0);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401-5"
+       y="129.99048"
+       x="168.34196"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="129.99048"
+         x="168.34196"
+         id="tspan2399-5"
+         sodipodi:role="line">DA2_p</tspan></text>
+    <text
+       id="text2401-0-0"
+       y="135.80603"
+       x="168.38603"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="135.80603"
+         x="168.38603"
+         id="tspan2399-27-2"
+         sodipodi:role="line">DA2_n</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-5-9"
+       d="M 198.36483,141.3392 H 160.95448"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-4-8);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-1-5"
+       d="M 198.63475,146.47151 H 161.22441"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-6-2);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401-7-0"
+       y="146.02431"
+       x="168.33836"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="146.02431"
+         x="168.33836"
+         id="tspan2399-4-7"
+         sodipodi:role="line">DB2_p</tspan></text>
+    <text
+       id="text2401-0-2-4"
+       y="151.83984"
+       x="168.38243"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="151.83984"
+         x="168.38243"
+         id="tspan2399-27-7-0"
+         sodipodi:role="line">DB2_n</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect19131-0"
+       width="26.529829"
+       height="13.626906"
+       x="130.62025"
+       y="126.46612"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426002, 0.0426002;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect19131-2-4"
+       width="26.529829"
+       height="3.6373949"
+       x="129.88814"
+       y="156.21626"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-3"
+       width="10.024403"
+       height="6.8542814"
+       x="145.84914"
+       y="131.94081"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-1-2"
+       width="12.205807"
+       height="8.1842365"
+       x="130.62137"
+       y="142.26019"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.0954441,0,0,0.07735464,98.274922,100.38562)"
+       id="text4758-2"
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-7);stroke-width:3.07925"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="505.75977"
+         y="453.41916"
+         id="tspan25252">ad_serdes_in</tspan></text>
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-2-7"
+       width="10.024403"
+       height="6.8542814"
+       x="131.95558"
+       y="131.87001"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.0954441,0,0,0.07735464,86.159027,100.42564)"
+       id="text4758-5-5"
+       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-6-7);stroke-width:3.07925"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="505.75977"
+         y="453.41916"
+         id="tspan25254">ad_pack</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.63777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="127.96134"
+       y="138.02536"
+       id="text21502-6"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan21500-1"
+         style="stroke-width:0.264583"
+         x="127.96134"
+         y="138.02536">ad408x_phy</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.08783843,0,0,0.07735464,105.59733,109.48279)"
+       id="text24668-7"
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-7);stroke-width:3.2098"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="298.9668"
+         y="484.35348"
+         id="tspan25256">ADC COMMON</tspan></text>
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect958-1-1-6"
+       width="12.205807"
+       height="8.1842365"
+       x="144.43338"
+       y="142.18631"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.08783843,0,0,0.07735464,119.40933,109.4089)"
+       id="text24668-1-9"
+       style="font-size:16px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect24670-6-6);stroke-width:3.2098"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         x="298.9668"
+         y="484.35348"
+         id="tspan25258">ADC CHANNEL</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.63777px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="130.03319"
+       y="169.07762"
+       id="text41823-3"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan41821-1"
+         style="stroke-width:0.264583"
+         x="130.03319"
+         y="169.07762">UP_AXI</tspan></text>
+    <path
+       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-3-8);marker-end:url(#marker51146-5)"
+       d="m 150.99772,151.69366 c 0,3.28676 0,3.16036 0,3.16036"
+       id="path42520-2-1"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       style="fill:#a01414;fill-opacity:1;stroke:#a01414;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:20;stroke-opacity:1;marker-start:url(#TriangleInM-0-1);marker-end:url(#marker51146-9-0)"
+       d="m 136.22662,151.7148 c 0,3.28677 0,3.16036 0,3.16036"
+       id="path42520-2-7-1"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#071414;stroke-width:0.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:75.5906;stroke-opacity:1"
+       id="rect46745-4"
+       width="32.332851"
+       height="39.648827"
+       x="126.79372"
+       y="121.53537"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       style="font-size:1.97832px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="128.39725"
+       y="132.71733"
+       id="text49535-5"
+       transform="scale(1.065612,0.93842788)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan49533-1"
+         style="font-size:1.97832px;stroke-width:0.264583"
+         x="128.39725"
+         y="132.71733">AXI-AD408X IP </tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-6-8"
+       d="M 198.36483,152.77602 H 160.95448"
+       style="fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-71-1);shape-rendering:crispEdges"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path1206-9-12-9"
+       d="M 198.63477,157.90833 H 161.22441"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.529167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1216-9-9-1);shape-rendering:crispEdges;enable-background:new"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       id="text2401-3-7"
+       y="157.96785"
+       x="166.8651"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="157.96785"
+         x="166.8651"
+         id="tspan2399-3-0"
+         sodipodi:role="line">DCO2_p</tspan></text>
+    <text
+       id="text2401-0-8-6"
+       y="163.78339"
+       x="166.90916"
+       style="font-style:normal;font-weight:normal;font-size:4.42089px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;shape-rendering:crispEdges"
+       xml:space="preserve"
+       transform="scale(1.0443046,0.95757502)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         style="font-size:3.68407px;stroke-width:0.264583"
+         y="163.78339"
+         x="166.90916"
+         id="tspan2399-27-77-0"
+         sodipodi:role="line">DCO2_n</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.765;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInM-7-1);marker-end:url(#marker9011)"
+       d="m 161.96028,55.891378 -0.0814,13.444073 34.3415,-0.07082 v 0 0"
+       id="path54607"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.11667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="164.46185"
+       y="67.427681"
+       id="text59898"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896"
+         style="font-size:2.11667px;stroke-width:0.264583"
+         x="164.46185"
+         y="67.427681">AD4080/ADF4350/AD9508 SPI</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="103.10733"
+       y="89.593117"
+       id="text59898-5"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896-7"
+         style="font-size:2.64583px;stroke-width:0.264583"
+         x="103.10733"
+         y="89.593117">adc_data[31:0]</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:2.64583px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="103.10733"
+       y="136.14142"
+       id="text59898-5-0"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\AD4880\AD44880_BLOCK_DIAGRAM.png"
+       inkscape:export-xdpi="224.36"
+       inkscape:export-ydpi="224.36"><tspan
+         sodipodi:role="line"
+         id="tspan59896-7-6"
+         style="font-size:2.64583px;stroke-width:0.264583"
+         x="103.10733"
+         y="136.14142">adc_data[31:0]</tspan></text>
+  </g>
+</svg>
