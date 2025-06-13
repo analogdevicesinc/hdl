@@ -1,12 +1,12 @@
-.. _ad777x_ardz:
+.. _ad777x_fmcz:
 
-AD777X-ARDZ HDL project
+AD777X-FMCZ HDL project
 ===============================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The EVAL-AD7770-ARDZ / EVAL-AD7771-ARDZ / EVAL-AD7779-ARDZ evaluation kit
+The EVAL-AD7770 / EVAL-AD7771 / EVAL-AD7779 evaluation kit
 features the :adi:`AD7770`, :adi:`AD7771`, and :adi:`AD7779` 24-bit,
 analog-to-digital converters (ADCs).
 
@@ -20,7 +20,7 @@ range of the signal chain.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD7770/1/9-ARDZ <EVAL-AD7770-AD7779>`
+- :adi:`EVAL-AD7770/1/9 <EVAL-AD7770-AD7779>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ The data path and clock domains are depicted in the below diagram:
 .. image:: ad777x_hdl_block_diagram.svg
    :width: 800
    :align: center
-   :alt: AD777X/ZedBoard/DE10-Nano block diagram
+   :alt: AD777X/ZedBoard block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,12 +82,12 @@ Clock scheme
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-==============  =========== ===========
-Instance        Zynq        DE10-Nano
-==============  =========== ===========
-axi_ad777x_adc  0x43C0_0000 0x0002_0000
-ad777x_dma      0x7C48_0000 0x0003_0000
-==============  =========== ===========
+==============  ===========
+Instance        Zynq
+==============  ===========
+axi_ad777x_adc  0x43C0_0000
+ad777x_dma      0x7C48_0000
+==============  ===========
 
 SPI connections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,20 +100,10 @@ SPI connections
      - SPI manager instance
      - SPI subordinate
      - CS
-   * - PS*
+   * - PS
      - SPI 0
      - AD777x
      - 0
-   * - PL**
-     - sys_spi
-     - AD777x
-     - 0
-
-.. admonition:: Legend
-   :class: note
-
-   - ``*``  only for ZedBoard
-   - ``**`` only for DE10-Nano
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,16 +132,6 @@ GPIOs
      - 38
      - 92
      - 6
-   * - GPIO1
-     - INOUT
-     - 37
-     - 91
-     - 5
-   * - GPIO0
-     - INOUT
-     - 36
-     - 90
-     - 4
    * - SDP_MCLK
      - OUT
      - 35
@@ -176,18 +156,12 @@ GPIOs
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-================ === ========== =========== =============== ================
-Instance name    HDL Linux Zynq Actual Zynq Linux DE10-Nano Actual DE10-Nano
-================ === ========== =========== =============== ================
-ad777x_dma*      10  54         86          ---             ---
-ad777x_dma**     5   ---        ---         45              77
-================ === ========== =========== =============== ================
-
-.. admonition:: Legend
-   :class: note
-
-   - ``*``  only for ZedBoard
-   - ``**`` only for DE10-Nano
+================ === ========== ===========
+Instance name    HDL Linux Zynq Actual Zynq
+================ === ========== ===========
+ad777x_dma       10  54         86
+ad777x_dma       5   ---        ---
+================ === ========== ===========
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -206,14 +180,7 @@ Building the ZedBoard project:
 
 .. shell::
 
-   $cd hdl/projects/ad777x_ardz/zed
-   $make
-
-Building the DE10-Nano project:
-
-.. shell::
-
-   $cd hdl/projects/ad777x_ardz/de10nano
+   $cd hdl/projects/ad777x_fmcz/zed
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -233,7 +200,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`AD777X-ARDZ HDL project source code <projects/ad777x_ardz>`
+- :git-hdl:`AD777X-FMCZ HDL project source code <projects/ad777x_fmcz>`
 
 .. list-table::
    :widths: 30 35 35
