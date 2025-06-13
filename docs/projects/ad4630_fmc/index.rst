@@ -119,6 +119,15 @@ included in the SD card image that is provided with the evaluation board.
    :align: center
    :alt: AD4630_FMC SPI mode - transfer zone 1 block diagram
 
+For 1 SDI (ad4030) or 2 SDIs (ad4630) a special mode can be build that bypass 
+the spi_axis_reorder IP and connects the SPI Engine Offload directly to DMA. 
+For other number of SDIs this special mode is not expected to work.
+
+.. image:: ad463x_hdl_cm0_cz1_no_reorder.svg
+   :width: 800
+   :align: center
+   :alt: AD4630_FMC SPI mode - transfer zone 1 block diagram without spi_axis_reorder IP
+   
 SPI mode - transfer zone 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
