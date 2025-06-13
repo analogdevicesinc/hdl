@@ -107,7 +107,6 @@ module axi_fsrc_sequencer #(
   wire [NUM_TRIG-1:0]      seq_trig_out;
 
   wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0] fsrc_first_trig_cnt;
-  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0] fsrc_second_trig_cnt;
 
   assign trig_out = seq_en ? fsrc_trig_out : seq_trig_out;
 
