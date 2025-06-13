@@ -9,7 +9,7 @@
 
 module tx_fsrc #(
   parameter NP = 16,
-  parameter DATA_WIDTH = 1024,
+  parameter DATA_WIDTH = 256,
   parameter MAX_CONV = 8,
   parameter ACCUM_WIDTH = 64,
   localparam NUM_SAMPLES = DATA_WIDTH/NP
@@ -18,7 +18,8 @@ module tx_fsrc #(
   input  wire                                         reset,
 
   input  wire                                         fsrc_en,
-  input  wire                                         fsrc_data_en,
+  input  wire                                         fsrc_data_start,
+  input  wire                                         fsrc_stop,
   input  wire  [MAX_CONV-1:0]                         conv_mask,
   input  wire  [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0]     accum_set_val,
   input  wire                                         accum_set,
@@ -40,7 +41,6 @@ module tx_fsrc #(
   logic [MAX_CONV-1:0]                        in_fifo_out_valid;
   logic [MAX_CONV-1:0]                        in_fifo_out_valid_next;
   logic                                       fsrc_in_single_valid;
-  logic [MAX_CONV-1:0][(NP*NUM_SAMPLES)-1:0]  fsrc_in_data;
   logic                                       fsrc_in_single_ready;
   logic                                       fsrc_out_valid;
   logic [MAX_CONV-1:0][(NP*NUM_SAMPLES)-1:0]  fsrc_out_data;
@@ -51,12 +51,24 @@ module tx_fsrc #(
   logic [MAX_CONV-1:0]                        out_fifo_in_valid;
   logic                                       accum_en;
   logic                                       holes_ready;
-  logic                                       holes_valid;
   logic [NUM_SAMPLES-1:0]                     holes_n;
   logic [NUM_SAMPLES-1:0]                     holes_data;
+  logic                                       fsrc_data_en;
   genvar ii;
 
-  for(ii = 0; ii < MAX_CONV; ii=ii+1) begin :  in_fifo_gen
+  always @(posedge clk) begin
+    if (reset) begin
+      fsrc_data_en <= 1'b0;
+    end else begin
+      if (~fsrc_en || fsrc_stop) begin
+        fsrc_data_en <= 1'b0;
+      end else if (fsrc_data_start) begin
+        fsrc_data_en <= 1'b1;
+      end
+    end
+  end
+
+  for(ii = 0; ii < MAX_CONV; ii=ii+1) begin : in_fifo_gen
       fifo_sync_2deep #(
         .DWIDTH             (DATA_WIDTH),
         .DORESET            (1'b0),
@@ -84,13 +96,11 @@ module tx_fsrc #(
     end
   end
 
-  assign fsrc_in_data = in_fifo_out_data;
-
   always_comb begin
-    if(reset) begin
+    if (reset) begin
       in_fifo_out_ready = '0;
     end else begin
-      if(fsrc_en) begin
+      if (fsrc_en) begin
         in_fifo_out_ready = {MAX_CONV{fsrc_in_single_valid && fsrc_in_single_ready}};
       end else begin
         in_fifo_out_ready = out_fifo_in_ready;
@@ -99,18 +109,16 @@ module tx_fsrc #(
   end
 
   always_comb begin
-    if(reset) begin
+    if (reset) begin
       out_fifo_in_valid = '0;
     end else begin
-      if(fsrc_en) begin
+      if (fsrc_en) begin
         out_fifo_in_valid = {MAX_CONV{fsrc_out_valid && fsrc_out_ready}} & conv_mask;
       end else begin
         out_fifo_in_valid = in_fifo_out_valid;
       end
     end
   end
-
-  assign out_fifo_in_data = fsrc_en ? fsrc_out_data : in_fifo_out_data;
 
   always_ff @(posedge clk) begin
     if(reset) begin
@@ -120,8 +128,8 @@ module tx_fsrc #(
     end
   end
 
+  assign out_fifo_in_data = fsrc_en ? fsrc_out_data : in_fifo_out_data;
   assign holes_data = fsrc_data_en ? {MAX_CONV{~holes_n}} : '1;
-  assign holes_valid = !reset;
   assign accum_en = !reset && fsrc_en && fsrc_data_en && holes_ready;
 
   // Generate sequence of valid and invalid samples
@@ -130,11 +138,12 @@ module tx_fsrc #(
     .NUM_SAMPLES  (NUM_SAMPLES)
   ) tx_fsrc_sample_en_gen (
     .clk        (clk),
-    .en         (accum_en),
-    .sample_en  (holes_n),
+    .reset      (reset),
     .set_val    (accum_set_val),
     .set        (accum_set),
-    .add_val    (accum_add_val)
+    .add_val    (accum_add_val),
+    .add        (accum_en),
+    .overflow   (holes_n)
   );
 
   // Insert invalid samples in sample streams
@@ -146,14 +155,14 @@ module tx_fsrc #(
   ) tx_fsrc_make_holes (
     .clk              (clk),
     .reset            (reset),
-    .in_data          (fsrc_in_data),
+    .in_data          (in_fifo_out_data),
     .in_valid         (fsrc_in_single_valid),
     .in_ready         (fsrc_in_single_ready),
     .out_data         (fsrc_out_data),
     .out_valid        (fsrc_out_valid),
     .out_ready        (fsrc_out_ready),
     .holes_ready      (holes_ready),
-    .holes_valid      (holes_valid),
+    .holes_valid      (!reset),
     .holes_data       (holes_data)
   );
 
