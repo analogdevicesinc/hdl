@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1069.6056mm"
+   height="624.50391mm"
+   viewBox="0 0 1069.6056 624.50391"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="clk_diagram.svg"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.18507471"
+     inkscape:cx="742.94321"
+     inkscape:cy="383.62886"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="1092.7076"
+       y="1730.7572"
+       width="905.49548"
+       height="202.49477"
+       id="rect101466" />
+    <rect
+       x="756.45129"
+       y="1063.0842"
+       width="672.70135"
+       height="86.451576"
+       id="rect93384" />
+    <marker
+       style="overflow:visible"
+       id="SquareL"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="SquareL"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M -5,-5 V 5 H 5 V -5 Z"
+         id="path41833" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790" />
+    </marker>
+    <rect
+       x="-1528.2625"
+       y="393.52756"
+       width="699.18005"
+       height="267.44592"
+       id="rect13583" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4-8" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6-2" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4-8-8" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6-2-7" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6-2-7-6" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4-8-8-5" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6-2-7-6-1" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4-8-8-5-0" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-7" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="813.18512"
+       height="62.137074"
+       id="rect6209-34-7-8" />
+    <rect
+       x="-1528.2625"
+       y="393.52756"
+       width="699.18005"
+       height="267.44592"
+       id="rect13583-9" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-7-5" />
+    <marker
+       style="overflow:visible"
+       id="SquareL-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="SquareL"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M -5,-5 V 5 H 5 V -5 Z"
+         id="path41833-6" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="SquareL-3-5"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="SquareL"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M -5,-5 V 5 H 5 V -5 Z"
+         id="path41833-6-8" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="SquareL-3-5-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="SquareL"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.8)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M -5,-5 V 5 H 5 V -5 Z"
+         id="path41833-6-8-9" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-4"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-3" />
+    </marker>
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="1037.4189"
+       height="213.42732"
+       id="rect6209-34-7-8-8" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-4" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-26" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="694.31421"
+       height="59.435459"
+       id="rect6209-34-7-8-0" />
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-4" />
+    </marker>
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-3-2-6-2-7-4" />
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-46" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-6-6"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-46-4" />
+    </marker>
+    <rect
+       x="1092.7076"
+       y="1730.7572"
+       width="619.12463"
+       height="56.607735"
+       id="rect101466-6" />
+    <rect
+       x="1092.7076"
+       y="1730.7572"
+       width="619.12463"
+       height="56.607735"
+       id="rect101466-6-6" />
+    <rect
+       x="1092.7076"
+       y="1730.7572"
+       width="619.12463"
+       height="56.607735"
+       id="rect101466-6-7" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-4-2" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-4-2-3" />
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-43"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-41" />
+    </marker>
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-9-4-4" />
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="267.45956"
+       height="72.94352"
+       id="rect6209-34-4-2-3-8" />
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-43-9"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path41790-41-8" />
+    </marker>
+    <rect
+       x="-529.51593"
+       y="270.16119"
+       width="813.18512"
+       height="62.137074"
+       id="rect6209-34-7-8-5" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(414.97999,188.10073)">
+    <rect
+       style="fill:#aaccee;fill-opacity:1;fill-rule:evenodd;stroke:#154676;stroke-width:0.665;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846"
+       width="174.77332"
+       height="483.65414"
+       x="-414.64749"
+       y="-63.876163"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#aaccee;fill-opacity:1;fill-rule:evenodd;stroke:#154676;stroke-width:0.665001;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846-7"
+       width="159.38983"
+       height="108.2075"
+       x="0.75193393"
+       y="-104.32534"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#aaccee;fill-opacity:1;fill-rule:evenodd;stroke:#154676;stroke-width:0.665;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846-7-4"
+       width="184.40788"
+       height="220.32611"
+       x="199.35062"
+       y="181.18831"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <rect
+       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.665;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846-8"
+       width="247.05644"
+       height="623.83893"
+       x="407.2366"
+       y="-187.76823"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.24531,-114.59859)"
+       id="text6207"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4523">CLK0</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,147.29716,-136.37279)"
+       id="text6207-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4525">CNV</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,349.34297,123.41477)"
+       id="text6207-4-8"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-4)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4527">SYSREF</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,346.47149,213.53101)"
+       id="text6207-4-8-7"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-4-2)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4529">CLK</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,146.99308,-113.65168)"
+       id="text6207-4-2"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-7)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4531">CLK</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,265.48896,-124.53929)"
+       id="text6207-4-2-2"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-7-5)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4533">DCO</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,549.86702,-58.122527)"
+       id="text6207-4-2-3"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-7-8)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4535">CAPTURE_SYNC(LA18_*_CC)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,549.55994,-129.77432)"
+       id="text6207-4-2-3-7"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-7-8-5)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4537">AD4080_CLK(CLK1_M2C_*)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,549.27791,-30.154286)"
+       id="text6207-4-2-3-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-7-8-0)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4539">SYSREF_COPY(LA02_*)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-142.24643,-86.608693)"
+       id="text6207-8"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4541">CLK12</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.1833,-58.618796)"
+       id="text6207-3"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4543">CLK2</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-143.74711,-30.628927)"
+       id="text6207-8-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4545">SCLK3</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-141.99218,121.17811)"
+       id="text6207-3-1"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9-4)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4547">SCLK1</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-163.14438,213.53411)"
+       id="text6207-3-1-0"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9-4-4)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4549">OSCOUT1</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.23911,261.28427)"
+       id="text6207-8-4-1"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4551">CLK4</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.27011,277.13064)"
+       id="text6207-3-1-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9-4-8)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4553">CLK6</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-143.81533,-2.6390203)"
+       id="text6207-8-4-1-8"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6-2)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4555">SCLK5</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-135.29492,292.97699)"
+       id="text6207-3-1-4-6"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9-4-8-8)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4557">CLK8</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-143.76572,53.34075)"
+       id="text6207-8-4-1-8-0"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6-2-7)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4559">SCLK9</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-142.30844,308.8234)"
+       id="text6207-3-1-4-6-0"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-9-4-8-8-5)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4561">CLK10</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-148.11274,81.330668)"
+       id="text6207-8-4-1-8-0-3"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6-2-7-6)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4563">SCLK11</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-150.81025,324.66355)"
+       id="text6207-8-4-1-8-0-3-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6-2-7-6-1)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4565">SCLK13</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,24.89541,77.951831)"
+       id="text13581"
+       style="font-size:64px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect13583)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-1528.2617"
+         y="451.17563"
+         id="tspan4569"><tspan
+           style="font-weight:bold;-inkscape-font-specification:'Arial Bold'"
+           id="tspan4567">HMC7044</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,900.59863,216.31573)"
+       id="text13581-1"
+       style="font-size:72px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect13583-9)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-1528.2617"
+         y="458.38166"
+         id="tspan4573"><tspan
+           style="font-weight:bold;-inkscape-font-specification:'Arial Bold'"
+           id="tspan4571">FPGA</tspan></tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -238.45005,-34.801125 80.01778,-0.526644 0.92372,-23.819247 152.0393639,0.634572"
+       id="path15299"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.99999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -239.03519,-6.7876444 100.63935,0.041272 0.69395,-28.2603406 133.0928132,0.374512"
+       id="path15299-4-0"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-143.74711,25.350851)"
+       id="text6207-8-4-1-8-0-1"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-3-2-6-2-7-4)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4575">SCLK7</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -239.8649,105.88607 639.91817,0.10613"
+       id="path15299-4-7-0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-6)"
+       d="m -240.8013,134.4694 639.91818,0.10613"
+       id="path15299-4-7-0-3"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-6-6)"
+       d="m -240.8013,159.32954 639.91817,0.10613"
+       id="path15299-4-7-0-3-8"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -240.58909,340.29937 167.001342,0.01"
+       id="path15299-4-19"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -240.64162,20.250352 121.75925,0.09525 v 0 l 518.78963,-3.71659"
+       id="path15299-4-2"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3.00001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-4)"
+       d="m 163.76344,-50.15433 235.72333,-1.41421"
+       id="path15299-4-2-8"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -240.78849,48.506289 91.72203,-0.49441 v 0 c 59.442344,-0.51187 488.91264,-0.768023 548.35564,-0.432843"
+       id="path15299-4-8"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-1)"
+       d="m -239.77375,78.532477 167.35945,-0.49441 v 0 c 52.895842,-0.51187 418.799,-0.696181 471.69542,-0.361001"
+       id="path15299-4-8-2"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#SquareL)"
+       d="m -240.58899,356.18556 32.52417,0.0154"
+       id="path15299-4-05"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#SquareL-3)"
+       d="m -240.58899,372.08207 32.52417,0.0154"
+       id="path15299-4-05-0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#SquareL-3-5)"
+       d="m -240.58899,387.97867 32.52417,0.0154"
+       id="path15299-4-05-0-6"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#SquareL-3-5-6)"
+       d="m -240.58899,403.87522 32.52417,0.0154"
+       id="path15299-4-05-0-6-9"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
+       d="m -238.96291,200.47255 431.88032,-0.6994"
+       id="path15299-4-03"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-43)"
+       d="m 129.91385,292.46204 63.92018,-0.6994"
+       id="path15299-4-03-8"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Mend-43-9)"
+       d="m -238.30732,292.5745 185.265988,-0.6994"
+       id="path15299-4-03-8-0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m -384.74186,-1.7800692 v 0"
+       id="path15301"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="46.123184"
+       y="-40.189972"
+       id="text20049"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan20047"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583"
+         x="46.123184"
+         y="-40.189972">AD4080</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="266.08722"
+       y="300.67102"
+       id="text20049-2"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan20047-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583"
+         x="266.08722"
+         y="300.67102">AD9213</tspan></text>
+    <rect
+       style="fill:#aaccee;fill-opacity:1;fill-rule:evenodd;stroke:#154676;stroke-width:0.665;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="rect846-7-4-3"
+       width="184.40788"
+       height="124.54273"
+       x="-44.080326"
+       y="226.7326"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       xml:space="preserve"
+       style="font-size:16.9333px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="10.334445"
+       y="297.88757"
+       id="text20049-2-2"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         sodipodi:role="line"
+         id="tspan20047-6-2"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Arial;-inkscape-font-specification:'Arial Bold';stroke-width:0.264583"
+         x="10.334445"
+         y="297.88757">ADF4371</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-437.9552,41.684175)"
+       id="text93382"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect93384)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="756.45117"
+         y="1106.3202"
+         id="tspan4577">HMC7044_CLKOUT_MMCX</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,120.00282,-388.78413)"
+       id="text101464"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect101466)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="1092.707"
+         y="1773.994"
+         id="tspan4579">CLK_COPY OR GLBLCLK(LA00_*_CC)</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,119.59355,-360.6671)"
+       id="text101464-9"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect101466-6)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="1092.707"
+         y="1773.994"
+         id="tspan4581">FMC_P1_GBTCLK0M2C</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,119.59355,-332.69888)"
+       id="text101464-9-8"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect101466-6-6)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="1092.707"
+         y="1773.994"
+         id="tspan4583">FMC_P1_GBTCLK3M2C</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,119.59355,-304.73061)"
+       id="text101464-9-2"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect101466-6-7)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="1092.707"
+         y="1773.994"
+         id="tspan4585">FMC_P1_GBTCLK2M2C</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,244.13187,213.4721)"
+       id="text6207-4-8-7-7"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-4-2-3)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4587">RF16</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,98.639601,213.53101)"
+       id="text6207-4-8-7-7-4"
+       style="font-size:48px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect6209-34-4-2-3-8)"
+       inkscape:export-filename="C:\Users\PPop\OneDrive - Analog Devices, Inc\Documents\hammerhead\clk_diagram_export.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
+         x="-529.51562"
+         y="313.39832"
+         id="tspan4589">REF</tspan></text>
+  </g>
+</svg>
