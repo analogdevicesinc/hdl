@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL(Verilog or VHDL) components. The individual modules are
@@ -37,7 +37,8 @@
 
 module axi_ad408x #(
   parameter   ID = 0,
-  parameter   FPGA_TECHNOLOGY = 0
+  parameter   FPGA_TECHNOLOGY = 0,
+  parameter   IO_DELAY_GROUP = "dev_if_delay_group"
 ) (
 
   // ADC interface
@@ -62,7 +63,8 @@ module axi_ad408x #(
   output      [ 31:0]     adc_data,
   output                  adc_valid,
   input                   adc_dovf,
-
+  output                  adc_enable,
+  output                  adc_rst,
   // delay interface
 
   input                   delay_clk,
@@ -107,7 +109,6 @@ module axi_ad408x #(
   wire             filter_enable;
   wire             delay_locked;
   wire             sync_status;
-  wire             adc_enable;
   wire             adc_clk_s;
   wire             adc_rst_s;
   wire             delay_rst;
@@ -137,7 +138,7 @@ module axi_ad408x #(
   assign adc_clk = adc_clk_s;
   assign up_clk  = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
-
+  assign adc_rst = adc_rst_s;
   assign self_sync     = adc_custom_control_s[1];
   assign filter_enable = adc_custom_control_s[0];
 
@@ -270,6 +271,7 @@ module axi_ad408x #(
 
   ad408x_phy #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IO_DELAY_GROUP(IO_DELAY_GROUP),
     .IODELAY_CTRL(1)
   ) ad408x_interface (
     .dclk_in_n(dclk_in_n),
