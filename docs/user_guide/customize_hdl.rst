@@ -15,3 +15,9 @@ to be on another FPGA carrier, please take a look at our
 - :dokuwiki:`[Wiki] A simple BBP for RF Transceivers <resources/fpga/docs/hdl/xcomm2ip>`
 - :adi:`Model based design for SDR <analog-dialogue/articles/using-model-based-design-sdr-1.html>`
 - :dokuwiki:`[Wiki] Quick system validation with no-OS <resources/fpga/quick_validation>`
+
+Project flow and detailed description example
+-------------------------------------------------------------------------------
+
+Please check out the example at
+:ref:`FMCOMMS11 HDL project/Detailed description <fmcomms11 detailed-description>`.
