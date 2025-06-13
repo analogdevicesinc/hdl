@@ -64,6 +64,7 @@ Contents
    ADA4355-FMC <ada4355_fmc/index>
    ADAQ7980-SDZ <adaq7980_sdz/index>
    ADAQ8092-FMC <adaq8092_fmc/index>
+   ADMX6001-EBZ <admx6001_ebz/index>
    ADRV9001 <adrv9001/index>
    ADRV9001-DUAL <adrv9001_dual/index>
    ADRV9009 <adrv9009/index>
