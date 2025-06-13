@@ -11,6 +11,7 @@ module accum_set #(
   parameter WIDTH = 32
 )(
   input  wire               clk,
+  input  wire               reset,
 
   input  wire  [WIDTH-1:0]  set_val,
   input  wire               set,
@@ -18,15 +19,19 @@ module accum_set #(
   input  wire  [WIDTH-1:0]  add_val,
   input  wire               add,
 
-  output logic [WIDTH-1:0]  accum,
   output logic              overflow
 );
 
+  logic [WIDTH-1:0]  accum;
+
   always_ff @(posedge clk) begin
-    if(set) begin
+    if (reset) begin
+      accum <= 'b0;
+      overflow <= 1'b0;
+    end else if (set) begin
       accum <= set_val;
       overflow <= 1'b0;
-    end else if(add) begin
+    end else if (add) begin
       {overflow, accum} <= accum + add_val;
     end
   end

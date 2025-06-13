@@ -34,7 +34,7 @@
 // ***************************************************************************
 
 module axi_fsrc_tx #(
-  parameter DATA_WIDTH = 512,
+  parameter DATA_WIDTH = 256,
   parameter NP = 16,
   parameter MAX_CONV = 8,
   parameter ACCUM_WIDTH = 64
@@ -81,7 +81,8 @@ module axi_fsrc_tx #(
                                                   // 0.01.0
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // FSRC
 
-  localparam NUM_SAMPLES = DATA_WIDTH / NP / MAX_CONV;
+  localparam NUM_SAMPLES = DATA_WIDTH / NP;
+  localparam NUM_SAMPLES2 = DATA_WIDTH / NP / MAX_CONV;
 
   // internal signals
 
@@ -166,29 +167,20 @@ module axi_fsrc_tx #(
   wire [MAX_CONV-1:0]    data_in_ready_s;
   wire [MAX_CONV-1:0]    data_out_valid_s;
   wire [DATA_WIDTH-1:0]  data_out_s;
-  reg                    fsrc_data_en;
 
-  wire [MAX_CONV-1:0][NP*NUM_SAMPLES-1:0] data_in_per_converter;
-  wire [MAX_CONV-1:0][NP*NUM_SAMPLES-1:0] data_out_per_converter;
+  wire [MAX_CONV-1:0][NP*NUM_SAMPLES2-1:0] data_in_per_converter;
+  wire [MAX_CONV-1:0][NP*NUM_SAMPLES2-1:0] data_out_per_converter;
 
   /* Map a flat array to a 2d array (needed by the tx_fsrc) and vice-versa */
   genvar ii;
   for (ii = 0; ii < MAX_CONV; ii = ii + 1) begin
-    assign data_in_per_converter[ii] = s_axis_data[ii*NP*NUM_SAMPLES+:NP*NUM_SAMPLES];
-    assign data_out_s[ii*NP*NUM_SAMPLES+:NP*NUM_SAMPLES] = data_out_per_converter[ii];
+    assign data_in_per_converter[ii] = s_axis_data[ii*NP*NUM_SAMPLES2+:NP*NUM_SAMPLES2];
+    assign data_out_s[ii*NP*NUM_SAMPLES2+:NP*NUM_SAMPLES2] = data_out_per_converter[ii];
   end
 
-  always @(posedge clk) begin
-    if (reset) begin
-      fsrc_data_en <= 1'b0;
-    end else begin
-      if (fsrc_stop) begin
-        fsrc_data_en <= 1'b0;
-      end else if (tx_data_start) begin
-        fsrc_data_en <= 1'b1;
-      end
-    end
-  end
+  // TODO merge tx_data_start and fsrc_stop together,
+  // latch on trig if ext enabled, but for reg access juts 1 to run and
+  // 0 to stop.
 
   tx_fsrc #(
     .NP (NP),
@@ -200,9 +192,10 @@ module axi_fsrc_tx #(
     .reset (reset),
 
     .fsrc_en (tx_fsrc_en),
-    .fsrc_data_en (fsrc_data_en),
+    .fsrc_data_start(tx_data_start),
+    .fsrc_stop (fsrc_stop),
     .conv_mask (fsrc_conv_mask),
-    .accum_set_val (fsrc_accum_set_val),
+    .accum_set_val ({NUM_SAMPLES{fsrc_accum_set_val}}),
     .accum_set (fsrc_accum_set),
     .accum_add_val (fsrc_accum_add_val),
 

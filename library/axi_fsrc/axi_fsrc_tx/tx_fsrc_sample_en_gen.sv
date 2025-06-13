@@ -12,12 +12,15 @@ module tx_fsrc_sample_en_gen #(
   parameter NUM_SAMPLES = 8
 )(
   input  wire                                     clk,
-  input  wire                                     en,
+  input  wire                                     reset,
 
-  output logic [NUM_SAMPLES-1:0]                  sample_en,
   input  wire  [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] set_val,
   input  wire                                     set,
-  input  wire  [ACCUM_WIDTH-1:0]                  add_val
+
+  input  wire  [ACCUM_WIDTH-1:0]                  add_val,
+  input  wire                                     add,
+
+  output logic [NUM_SAMPLES-1:0]                  overflow
 );
 
   genvar ii;
@@ -27,12 +30,12 @@ module tx_fsrc_sample_en_gen #(
       .WIDTH  (ACCUM_WIDTH)
     ) accum_set (
       .clk         (clk),
+      .reset       (reset),
       .set_val     (set_val[ii]),
       .set         (set),
       .add_val     (add_val),
-      .add         (en),
-      .accum       (),
-      .overflow    (sample_en[ii])
+      .add         (add),
+      .overflow    (overflow[ii])
     );
 end
 
