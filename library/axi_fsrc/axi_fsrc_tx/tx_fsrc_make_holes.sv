@@ -63,7 +63,7 @@ module tx_fsrc_make_holes #(
 
   // Input flow control and pipeline
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       in_valid_d <= '0;
     end else begin
       if(in_xfer) begin
@@ -75,7 +75,7 @@ module tx_fsrc_make_holes #(
   end
 
   always_ff @(posedge clk) begin
-    if(in_xfer) begin
+    if (in_xfer) begin
       in_data_d <= in_data;
     end
   end
@@ -87,10 +87,10 @@ module tx_fsrc_make_holes #(
   assign holes_xfer = holes_valid && holes_ready;
 
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       holes_valid_d <= '0;
     end else begin
-      if(holes_xfer) begin
+      if (holes_xfer) begin
         holes_valid_d <= 1'b1;
       end else if(data_shift_holes_xfer) begin
         holes_valid_d <= 1'b0;
@@ -107,16 +107,16 @@ module tx_fsrc_make_holes #(
   end
 
   always_ff @(posedge clk) begin
-    if(data_shift_holes_xfer) begin
+    if (data_shift_holes_xfer) begin
       holes_data_d[2] <= holes_data_d[1];
     end
   end
 
   // Count of non-holes words from 0 to jj for each word jj
-  for(jj=0;jj<NUM_WORDS;jj=jj+1) begin : move_holes_gen
+  for (jj=0;jj<NUM_WORDS;jj=jj+1) begin : move_holes_gen
     int kk;
     always_comb begin
-      if(jj==0) begin
+      if (jj==0) begin
         non_holes_cnt_total_per_word[jj] = !holes_data_d[1][0];
       end else begin
         non_holes_cnt_total_per_word[jj] = non_holes_cnt_total_per_word[jj-1] + !holes_data_d[1][jj];
@@ -144,9 +144,9 @@ module tx_fsrc_make_holes #(
   assign non_holes_cnt_comb_shift_out = data_out_xfer ? non_holes_cnt_shift_out : non_holes_cnt;
   assign non_holes_cnt_comb = non_holes_cnt_comb_shift_out + (data_shift_in_xfer ? NUM_WORDS : '0);
 
-  for(ii = 0; ii < NUM_DATA; ii=ii+1) begin : data_gen
+  for (ii = 0; ii < NUM_DATA; ii=ii+1) begin : data_gen
     // Data after shifting out and in
-    for(jj = 0; jj < NUM_WORDS*3; jj=jj+1) begin : data_stored_shift_out_gen
+    for (jj = 0; jj < NUM_WORDS*3; jj=jj+1) begin : data_stored_shift_out_gen
       assign data_stored_shift[ii][jj*WORD_LENGTH+:WORD_LENGTH] = jj < non_holes_cnt_comb_shift_out ? data_stored[ii][jj+non_holes_cnt_out] : in_data_d[ii][jj-non_holes_cnt_comb_shift_out];
     end
   end
@@ -156,7 +156,7 @@ module tx_fsrc_make_holes #(
   end
 
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       non_holes_cnt <= '0;
       data_stored_out_valid <= 1'b0;
       data_stored_in_ready <= 1'b0;
@@ -176,12 +176,12 @@ module tx_fsrc_make_holes #(
   assign data_shift_holes_xfer = holes_valid_d && data_shift_holes_ready;
 
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       data_out_valid <= '0;
     end else begin
-      if(data_shift_holes_xfer) begin
+      if (data_shift_holes_xfer) begin
         data_out_valid <= 1'b1;
-      end else if(data_out_xfer) begin
+      end else if (data_out_xfer) begin
         data_out_valid <= 1'b0;
       end
     end
@@ -193,11 +193,11 @@ module tx_fsrc_make_holes #(
   assign data_out_ready = !out_valid || out_xfer;
   assign data_out_xfer = out_valid_next && data_out_ready;
 
-  for(ii = 0; ii < NUM_DATA; ii=ii+1) begin : out_data_gen
+  for (ii = 0; ii < NUM_DATA; ii=ii+1) begin : out_data_gen
     // Create output bus
-    for(jj = 0; jj < NUM_WORDS; jj=jj+1) begin : out_data_gen
+    for (jj = 0; jj < NUM_WORDS; jj=jj+1) begin : out_data_gen
       always_ff @(posedge clk) begin
-        if(data_out_xfer) begin
+        if (data_out_xfer) begin
           out_data[ii][jj*WORD_LENGTH+:WORD_LENGTH] <= holes_data_d[2][jj] ? HOLE_VALUE : data_stored[ii][non_holes_cnt_total_per_word_d[jj]];
         end
       end
@@ -206,12 +206,12 @@ module tx_fsrc_make_holes #(
 
   // Output flow control
   always_ff @(posedge clk) begin
-    if(reset) begin
+    if (reset) begin
       out_valid <= 1'b0;
     end else begin
-      if(data_out_xfer) begin
+      if (data_out_xfer) begin
         out_valid <= 1'b1;
-      end else if(out_xfer) begin
+      end else if (out_xfer) begin
         out_valid <= 1'b0;
       end
     end
