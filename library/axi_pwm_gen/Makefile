@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2025 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -23,5 +23,10 @@ INTEL_DEPS += ../util_cdc/sync_bits.v
 INTEL_DEPS += ../util_cdc/sync_data.v
 INTEL_DEPS += axi_pwm_gen_constr.sdc
 INTEL_DEPS += axi_pwm_gen_hw.tcl
+
+LATTICE_DEPS += ../util_cdc/sync_bits.v
+LATTICE_DEPS += ../util_cdc/sync_data.v
+LATTICE_DEPS += ../util_cdc/sync_event.v
+LATTICE_DEPS += axi_pwm_gen_ltt.tcl
 
 include ../scripts/library.mk
