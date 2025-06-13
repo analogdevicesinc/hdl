@@ -119,6 +119,15 @@ included in the SD card image that is provided with the evaluation board.
    :align: center
    :alt: AD4630_FMC SPI mode - transfer zone 1 block diagram
 
+For 1 SDI (:adi:`AD4030`) or 2 SDIs (:adi:`AD4630`) a special mode can be built,
+that bypasses the spi_axis_reorder IP and connects the SPI Engine Offload directly
+to DMA. For **other** number of SDIs this special mode **is not expected to work**.
+
+.. image:: ad463x_hdl_cm0_cz1_no_reorder.svg
+   :width: 800
+   :align: center
+   :alt: AD4630_FMC SPI mode - transfer zone 1 block diagram without using the spi_axis_reorder IP
+   
 SPI mode - transfer zone 2
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -171,29 +180,36 @@ Configuration modes
 The CLK_MODE configuration parameter defines clocking mode of the device's
 digital interface:
 
-* 0 - SPI mode
-* 1 - Echo-clock or Master clock mode
+- 0 - SPI mode
+- 1 - Echo-clock or Master clock mode
 
 The NUM_OF_SDI configuration parameter defines the number of MOSI lines of the
 SPI interface:
 
-* 1 - Interleaved mode
-* 2 - 1 lane per channel,
-* 4 - 2 lanes per channel
-* 8 - 4 lanes per channel
+- 1 - Interleaved mode
+- 2 - 1 lane per channel,
+- 4 - 2 lanes per channel
+- 8 - 4 lanes per channel
 
 The CAPTURE_ZONE configuration parameter defines the capture zone of the next
 sample. There are two capture zones:
 
-* 1 - from negative edge of the BUSY line until the next CNV positive edge -20ns
-* 2 - from the next consecutive CNV positive edge +20ns until the second next
+- 1 - from negative edge of the BUSY line until the next CNV positive edge -20ns
+- 2 - from the next consecutive CNV positive edge +20ns until the second next
   consecutive CNV positive edge -20ns
 
 The DDR_EN configuration parameter defines the type of data transfer. In echo
-and master clock mode the SDI lines can have Single or Double Data Rates.
+and master clock mode the SDI lines can have Single or Double Data Rates:
 
-* 0 - MISO runs on SDR
-* 1 - MISO runs on DDR.
+- 0 - MISO runs on SDR
+- 1 - MISO runs on DDR.
+
+The ``NO_REORDER`` configuration parameter removes the spi_axis_reorder IP from
+the system for CAPTURE_ZONE = 1 and NUM_OF_SDI = 1 (AD4030) or NUM_OF_SDI = 2 
+(AD4630) and directly connects the SPI Engine to DMA:
+
+- 0 - spi_axis_reorder present (default)
+- 1 - spi_axis_reorder removed
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
