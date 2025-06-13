@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -64,8 +64,7 @@
 `include "i3c_controller_word.vh"
 
 module i3c_controller_framing #(
-  parameter MAX_DEVS = 16,
-  parameter CLK_MOD = 0
+  parameter MAX_DEVS = 16
 ) (
   input         clk,
   input         reset_n,
@@ -117,7 +116,7 @@ module i3c_controller_framing #(
 
   // Defines the bus available condition width (> 1us for target)
   // Setting around 0.64us for the controller.
-  localparam BUS_AVAIL = CLK_MOD ? 4 : 5;
+  localparam BUS_AVAIL = 5;
 
   localparam [2:0] SM_SETUP       = 0;
   localparam [2:0] SM_VALIDATE    = 1;
@@ -186,7 +185,6 @@ module i3c_controller_framing #(
       // Delay DAA trigger one word to match last SDI byte.
       cmdp_daa_trigger <= 1'b0;
       if (cmdw_ready) begin
-        daa_trigger <= 1'b0;
         cmdp_daa_trigger <= daa_trigger;
       end
 
@@ -282,13 +280,14 @@ module i3c_controller_framing #(
               `CMDW_DAA_DEV_CHAR: begin
                 dev_char_len <= dev_char_len - 1;
                 if (~|dev_char_len) begin
-                  st  <= `CMDW_DYN_ADDR;
+                  st <= `CMDW_DYN_ADDR;
                   sm <= SM_SETUP_SDO;
                   daa_trigger <= 1'b1;
                 end
               end
               `CMDW_DYN_ADDR: begin
                 st <= j == MAX_DEVS - 1 ? `CMDW_STOP_OD : `CMDW_START;
+                daa_trigger <= 1'b0;
               end
               `CMDW_MSG_SR: begin
                 cmdw_body <= {cmdp_da, cmdp_rnw}; // Be aware of RnW here
