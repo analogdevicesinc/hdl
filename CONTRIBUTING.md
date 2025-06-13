@@ -5,7 +5,7 @@ to make, via the [issue tracker](https://github.com/analogdevicesinc/hdl/issues)
 before making a pull request. We will let you know if we want to have it
 supported on our repo. If not, depending on the case, we might propose you to
 have it added to our
-[Third party forks](https://analogdevicesinc.github.io/hdl/user_guide/third_party.html) 
+[Third party forks](https://analogdevicesinc.github.io/hdl/user_guide/third_party.html)
 list.
 
 The [HDL repo](https://github.com/analogdevicesinc/hdl) is the place where
@@ -35,7 +35,7 @@ and responsibilities that he or she has by using them.
     [Developer Certificate of Origin](https://developercertificate.org/).
     If you can not agree to the DCO, don't submit a pull request, as we can
     not accept it.
-- For first-time contributors, you will be asked by **CLAssistant** to 
+- For first-time contributors, you will be asked by **CLAssistant** to
   "sign our [Contributor License Agreement](https://cla-assistant.io/analogdevicesinc/hdl?pullRequest=959)
   before we can accept your contribution."
 - Commit should be "atomic", meaning it should do one thing only.
@@ -84,7 +84,7 @@ and responsibilities that he or she has by using them.
 
 - Create a pull request on this repository. If you are not sure on how to
   do this, check out
-  [GitHub help](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork) 
+  [GitHub help](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork)
 - In the description of the PR:
   - Motivate the additions/changes/deletions to the code
   - Add link to related GitHub issues
@@ -144,4 +144,4 @@ Resources:
 * [Write better commits, build better projects](https://github.blog/2022-06-30-write-better-commits-build-better-projects/)
 * [Good commit example (but extreme one)](https://dhwthompson.com/2019/my-favourite-git-commit)
 * [How should a PR look like](https://opensource.com/article/18/6/anatomy-perfect-pull-request) and [anatomy of a PR](https://github.blog/2015-01-21-how-to-write-the-perfect-pull-request/)
-* [Submitting patches](https://github.com/analogdevicesinc/linux/blob/master/Documentation/process/submitting-patches.rst)
+* [Submitting patches](https://github.com/analogdevicesinc/linux/blob/main/Documentation/process/submitting-patches.rst)
