@@ -3,8 +3,8 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-source ../../../../hdl/scripts/adi_env.tcl
-source ../../../../hdl/projects/scripts/adi_project_intel.tcl
+source ../../../scripts/adi_env.tcl
+source ../../../projects/scripts/adi_project_intel.tcl
 
 # get_env_param retrieves parameter value from the environment if exists,
 # other case use the default value
