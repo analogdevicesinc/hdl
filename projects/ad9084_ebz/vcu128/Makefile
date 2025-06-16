@@ -15,8 +15,8 @@ M_DEPS += ../../common/vcu128/vcu128_system_bd.tcl
 M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
-M_DEPS += ../../../../hdl/projects/common/xilinx/data_offload_bd.tcl
-M_DEPS += ../../../../hdl/library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
+M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
 
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
