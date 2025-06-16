@@ -1,4 +1,4 @@
-# EVAL-BOARD HDL Project (Template for the evaluation board specific README.md)
+# BOARD_NAME HDL Project (Template for the evaluation board specific README.md)
 
 ! The title of the page should be the name of the evaluation board folder.
 
@@ -18,7 +18,7 @@ Please enter the folder for the FPGA carrier you want to use and read the README
 
 ---------------------------
 
-# EVAL-BOARD/CARRIER HDL Project (Template for the carrier-specific README.md)
+# BOARD_NAME/CARRIER HDL Project (Template for the carrier-specific README.md)
 
 ! The title of the page should be the name of the evaluation board folder/the name of the carrier folder.
 
@@ -43,7 +43,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- JESD_MODE: link layer encoder mode used; 
+- JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
   - 64B66B - 64b66b link layer defined in JESD204C
 - [RX/TX]_LANE_RATE: lane rate of the [RX/TX] link (RX: MxFE to FPGA/TX: FPGA to MxFE)
