@@ -19,6 +19,7 @@ M_DEPS += ../../ad9084_ebz/common/ad9084_ebz_qsys.tcl
 M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 
+
 LIB_DEPS += axi_dmac
 LIB_DEPS += axi_sysid
 LIB_DEPS += intel/adi_jesd204
