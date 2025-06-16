@@ -142,8 +142,8 @@ We suggest using the latest release branch, see
 The files are built from [main branch](https://github.com/analogdevicesinc/hdl/tree/main)
 whenever there are new commits in HDL or Linux repositories.
 
-> :warning: Pay attention when using already built files from the main branch,
-  as they are not tested in hardware!
+:warning: Pay attention when using already built files from the main branch,
+as they are not tested in hardware!
 
 ## Software
 

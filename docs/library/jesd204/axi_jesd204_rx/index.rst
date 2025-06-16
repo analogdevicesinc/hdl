@@ -177,12 +177,12 @@ AXI JESD204 RX Signal and Interface Pins
       - Interrupt output of the module. Is asserted when at least one of the
         modules interrupt is pending and enabled.
     * - device_clk
-      - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+      - :ref:`Device clock <jesd204 glossary>`
         for the JESD204 interface. Its frequency must be link clock
         \* ``DATA_PATH_WIDTH`` / ``TPL_DATA_PATH_WIDTH``
     * - device_reset
       - Reset active high synchronous with the
-        :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`.
+        :ref:`Device clock <jesd204 glossary>`.
 
 JESD204 RX Signal and Interface Pins
 --------------------------------------------------------------------------------
@@ -191,12 +191,12 @@ JESD204 RX Signal and Interface Pins
     :path: library/jesd204/jesd204_rx
 
     * - clk
-      - :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+      - :ref:`Link clock <jesd204 glossary>`
         for the JESD204 interface. Must be line clock/40 for correct operation
         in 8B/10B mode, line clock/66 in 64B/66B mode.
     * - reset
       - Reset active high synchronous with the
-        :dokuwiki:`Link clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+        :ref:`Link clock <jesd204 glossary>`
     * - rx_data
       - Received data.
     * - sync
@@ -607,22 +607,22 @@ depending on the selected decoder.
 
 Possible values for a 8B/10B link are:
 
-- RESET (0x0): The link is currently disabled;
-- WAIT FOR PHY (0x1): The controller waits for the PHY level component to be
+- RESET (**0x0**): The link is currently disabled;
+- WAIT FOR PHY (**0x1**): The controller waits for the PHY level component to be
   ready;
-- CGS (0x2): The controller is waiting for one or more lanes to complete the
+- CGS (**0x2**): The controller is waiting for one or more lanes to complete the
   CGS phase;
-- DATA (0x3): All lanes are in the data phase and the link is properly
+- DATA (**0x3**): All lanes are in the data phase and the link is properly
   established.
 
 Possible values for a 64B/66B link are:
 
-- RESET (0x0): The link is currently disabled;
-- WAIT BLOCK SYNC (0x1): The controller waits for all enabled lanes to reach
+- RESET (**0x0**): The link is currently disabled;
+- WAIT BLOCK SYNC (**0x1**): The controller waits for all enabled lanes to reach
   sync header alignment;
-- BLOCK SYNC (0x2): All enabled lanes from the PHY reached sync header
+- BLOCK SYNC (**0x2**): All enabled lanes from the PHY reached sync header
   alignment phase;
-- DATA (0x3): All enabled lanes reached the multi-block synchronization phase,
+- DATA (**0x3**): All enabled lanes reached the multi-block synchronization phase,
   elastic buffer released the data and the link is properly established.
 
 The state of each individual lane can be queried from the
@@ -642,10 +642,10 @@ indicates the current state of the lane.
 The ``CGS_STATE`` (``[1:0]``) indicates the current state of the lane code group
 synchronization:
 
-- INIT (0x0): Lane is not synchronized;
-- CHECK (0x1): Lane is in the process of synchronizing, at least some /K/
+- INIT (**0x0**): Lane is not synchronized;
+- CHECK (**0x1**): Lane is in the process of synchronizing, at least some /K/
   synchronization characters have been observed;
-- DATA (0x2): Lane is synchronized and ready to receive data.
+- DATA (**0x2**): Lane is synchronized and ready to receive data.
 
 The ``IFS_READY`` (``[4]``) bit indicates that initial frame synchronization has
 completed for the lane and the lane is receiving either ILAS data or user data.
@@ -661,11 +661,11 @@ valid data if the ``IFS_READY`` bit of the ``LANEn_STATUS`` register is set.
 The ``EMB_STATE`` (``[10:8]``) indicates the current state of the Extended
 Multi-Block alignment state machine:
 
-- EMB_INIT (3'b001): Wait for sync header alignment and for an end of extended
+- EMB_INIT (**3'b001**): Wait for sync header alignment and for an end of extended
   multiblock (EoEMB) indicator;
-- EMB_HUNT (3'b010): Keep track and monitor consecutive EoEMBs until a
+- EMB_HUNT (**3'b010**): Keep track and monitor consecutive EoEMBs until a
   threshold is reached;
-- EMB_LOCK (3'b100): Asserted by receiver to indicate that extended multiblock
+- EMB_LOCK (**3'b100**): Asserted by receiver to indicate that extended multiblock
   alignment has been achieved.
 
 8B/10B Link ILAS Configuration Data
@@ -1090,7 +1090,7 @@ The following lists where the peripheral deviates from the standard:
 Additional Information
 --------------------------------------------------------------------------------
 
-- :dokuwiki:`JESD204 Glossary <resources/fpga/peripherals/jesd204/jesd204_glossary>`
+- :ref:`JESD204 Glossary <jesd204 glossary>`
 
 .. _axi_jesd204_rx_supported_devices:
 
@@ -1135,15 +1135,11 @@ JESD204B Analog-to-Digital Converters
 JESD204B RF Transceivers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with
-  Observation Path
-- :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with
-  Observation Path and DPD
-- :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver
-  with Observation Path
+- :adi:`AD9371`: SDR Integrated, Dual RF Transceiver with Observation Path
+- :adi:`AD9375`: SDR Integrated, Dual RF Transceiver with Observation Path and DPD
+- :adi:`ADRV9009`: SDR Integrated, Dual RF Transceiver with Observation Path
 - :adi:`ADRV9008-1`: SDR Integrated, Dual RF Receiver
-- :adi:`ADRV9008-2`: SDR Integrated, Dual RF
-  Transmitter with Observation Path
+- :adi:`ADRV9008-2`: SDR Integrated, Dual RF Transmitter with Observation Path
 
 JESD204B/C Mixed-Signal Front Ends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

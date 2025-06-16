@@ -29,11 +29,11 @@ E         Number of multiblocks in an extended multiblock
 
    In JESD links, the following equations must hold:
 
-      M * S * NP = L * F * 8
+      **M * S * NP = L * F * 8**
 
    or
 
-      M / L = (F / S) * (8 / NP)
+      **M / L = (F / S) * (8 / NP)**
 
 Changing the link parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +87,7 @@ enough samples for each converter such that the Transport Layer can fill
 
 Due to this constraint, the following equation must hold:
 
-L * 32 = M * NP * SPC
+**L * 32 = M * NP * SPC**
 
 In such designs, the following constraints apply to the Transport Layer:
 
@@ -100,22 +100,22 @@ In such designs, the following constraints apply to the Transport Layer:
 
    Some general rules that **always should hold**:
 
-   - LaneRate = SampleRate * (10/8) * (M/L) * NP
-   - SampleRate = DAC_rate/Total_interpolation
-   - Link Clock = Lane Rate / 40
-   - If OUTDIV_CLK is used: Link Clock = (RefClock)/((OutClkSel == 4)? 2 : (OutClkSel == 3)? 1 : 1)
+   - **LaneRate = SampleRate * (10/8) * (M/L) * NP**
+   - **SampleRate = DAC_rate/Total_interpolation**
+   - **Link Clock = Lane Rate / 40**
+   - If OUTDIV_CLK is used: **Link Clock = (RefClock)/((OutClkSel == 4)? 2 : (OutClkSel == 3)? 1 : 1)**
 
 Where:
 
-- M - "adi,converters-per-device", device tree property from "axi-jesd204-tx" node
-- L - number of lanes per link, parameter of JESD IP
-- NP - "adi,bits-per-sample" device tree property from "axi-jesd204-tx" node
-- RefClock - reference clock for the transceivers
-- SampleRate - rate of the samples that feeds the JESD link
-- DAC_rate - DAC raw sample rate after interpolation
-- Total_interpolation - product of selected interpolations on the datapath,
+- ``M`` - "adi,converters-per-device", device tree property from "axi-jesd204-tx" node
+- ``L`` - number of lanes per link, parameter of JESD IP
+- ``NP`` - "adi,bits-per-sample" device tree property from "axi-jesd204-tx" node
+- ``RefClock`` - reference clock for the transceivers
+- ``SampleRate`` - rate of the samples that feeds the JESD link
+- ``DAC_rate`` - DAC raw sample rate after interpolation
+- ``Total_interpolation`` - product of selected interpolations on the datapath,
   e.g: ``DAC_interpolation * Channel_interpolation``
-- OutClkSel - "adi,out-clk-select" device tree property from XCVR node
+- ``OutClkSel`` - "adi,out-clk-select" device tree property from XCVR node
 
 More information on the DAC Transport Layer can be found in
 :ref:`ad_ip_jesd204_tpl_dac` page.
@@ -132,7 +132,7 @@ In this mode, the Transport Layer will output 2 frames in every clock cycle
 The Application Layer must provide 8 samples each cycle to be able to fill
 the 2 frames.
 
-SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8
+**SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8**
 
 .. image:: jesd204_generic_tx_path_ex1.svg
    :width: 600
@@ -147,7 +147,7 @@ In this mode the Transport Layer will output two frames in every clock cycle.
 The Application Layer must provide 8 samples each cycle to be able to fill the
 2 frames.
 
-SPC = (L*32) / (M*NP) = (4*32) / (4*16) = 128/64 = 2
+**SPC = (L*32) / (M*NP) = (4*32) / (4*16) = 128/64 = 2**
 
 .. image:: jesd204_generic_tx_path_ex2.svg
    :width: 600
@@ -195,7 +195,7 @@ In this mode the Transport Layer will accept two frames in every clock cycle.
 The Application Layer must accept 8 samples each cycle so the transport layer
 can deframe the 2 frames.
 
-SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8
+**SPC = (L*32) / (M*NP) = (4*32) / (1*16) = 128/16 = 8**
 
 .. image:: jesd204_generic_rx_path_ex1.svg
    :width: 600

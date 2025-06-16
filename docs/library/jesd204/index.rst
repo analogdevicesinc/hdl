@@ -70,6 +70,8 @@ If you have a question about the license, you can email
 Details on the JESD204 standard
 --------------------------------------------------------------------------------
 
+.. _jesd204 glossary:
+
 Glossary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -398,40 +400,24 @@ Tutorial
 HDL Example Projects
 --------------------------------------------------------------------------------
 
-- :dokuwiki:`AD-FMCADC2-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcadc2-ebz>`
-
-  - :git-hdl:`AMD Xilinx VC707 <projects/fmcadc2/vc707>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/fmcadc2/zc706>`
-
-- :dokuwiki:`AD-FMCADC3-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcadc3-ebz>`
-
-  - :git-hdl:`AMD Xilinx VC707 <projects/fmcadc2/vc707>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/fmcadc2/zc706>`
-
-- :dokuwiki:`AD-FMCADC4-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc4-ebz>`
+- :ref:`AD-FMCADC2-EBZ Reference Design (RETIRED) <fmcadc2>`
+- :dokuwiki:`AD-FMCADC3-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc3-ebz>`
+- :dokuwiki:`AD-FMCADC4-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc4-ebz>` on:
 
   - :git-hdl:`AMD Xilinx ZC706 <hdl_2018_r2:projects/fmcadc4/zc706>`
 
-- :dokuwiki:`AD-FMCADC5-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcadc5-ebz>`
-
-  - :git-hdl:`AMD Xilinx VC707 <projects/fmcadc5/vc707>`
-
-- :dokuwiki:`AD-FMCJESDADC1-EBZ Reference Design <resources/fpga/xilinx/fmc/ad-fmcjesdadc1-ebz>`
-
-  - :git-hdl:`AMD Xilinx KC705 <projects/fmcjesdadc1/kc705>`
-  - :git-hdl:`AMD Xilinx VC707 <projects/fmcjesdadc1/vc707>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/fmcjesdadc1/zc706>`
-
-- :dokuwiki:`AD-FMCOMMS8-EBZ Reference Design <resources/eval/user-guides/ad-fmcomms8-ebz/quick-start-guide>`
+- :ref:`AD-FMCADC5-EBZ Reference Design (RETIRED) <fmcadc5>`
+- :ref:`AD-FMCJESDADC1-EBZ Reference Design (RETIRED) <fmcjesdadc1>`
+- :ref:`AD-FMCOMMS8-EBZ Reference Design <fmcomms8>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/fmcomms8/a10soc>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/fmcomms8/zcu102>`
 
-- :dokuwiki:`AD-FMCOMMS11-EBZ Reference Design <resources/eval/user-guides/ad-fmcomms11-ebz>`
+- :ref:`AD-FMCOMMS11-EBZ Reference Design <fmcomms11>` on:
 
   - :git-hdl:`AMD Xilinx ZC706 <projects/fmcomms11/zc706>`
 
-- :dokuwiki:`AD-FMCDAQ2-EBZ Reference Design <resources/eval/user-guides/ad-fmcdaq2-ebz>`
+- :ref:`AD-FMCDAQ2-EBZ Reference Design <daq2>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/daq2/a10soc>`
   - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/daq2/a10gx>`
@@ -441,7 +427,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/daq2/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/daq2/zcu102>`
 
-- :dokuwiki:`AD-FMCDAQ3-EBZ Reference Design <resources/eval/user-guides/ad-fmcdaq3-ebz>`
+- :ref:`AD-FMCDAQ3-EBZ Reference Design <daq3>` on:
 
   - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/daq3/a10gx>`
   - :git-hdl:`AMD Xilinx KCU105 <projects/daq3/kcu105>`
@@ -449,7 +435,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/daq3/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/daq3/zcu102>`
 
-- :dokuwiki:`ADRV9371 Reference Design <resources/eval/user-guides/mykonos>`
+- :ref:`ADRV9371X Reference Design <adrv9371x>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/adrv9371x/a10soc>`
   - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/adrv9371x/a10gx>`
@@ -457,18 +443,18 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9371x/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9371x/zcu102>`
 
-- :dokuwiki:`ADRV9009 Reference Design <resources/eval/user-guides/adrv9009>`
+- :ref:`ADRV9009 Reference Design <adrv9009>` on:
 
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9009/zcu102>`
 
-- :dokuwiki:`ADRV9009-ZU11EG-SOM Reference Design <resources/eval/user-guides/adrv9009-zu11eg>`
+- :ref:`ADRV9009-ZU11EG-SOM Reference Design <adrv9009zu11eg>` on:
 
-  - :git-hdl:`Intel Arria 10 SoC <projects/adrv9009/a10soc>`
-  - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/adrv9009/a10gx>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9009/zc706>`
+  - :git-hdl:`Intel Arria 10 SoC <projects/adrv9009zu11eg/a10soc>`
+  - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/adrv9009zu11eg/a10gx>`
+  - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9009zu11eg/zc706>`
   - :git-hdl:`ADRV9009-ZU11EG-SOM <projects/adrv9009zu11eg>`
 
-- :dokuwiki:`AD913x/AD917x/AD9144/AD915x/AD916X Reference Design (dac_fmc_ebz) <resources/eval/user-guides/ad-dac-fmc-ebz>`
+- :ref:`AD913x/AD917x/AD9144/AD915x Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
 
   - See the :git-hdl:`list of supported parts <projects/dac_fmc_ebz#readme>`
   - :git-hdl:`Intel Arria 10 SoC <projects/dac_fmc_ebz/a10soc>`
@@ -476,7 +462,12 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/dac_fmc_ebz/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/dac_fmc_ebz/zcu102>`
 
-- :ref:`ad9081_fmca_ebz` on:
+- :ref:`AD916x Reference Design <ad916x_fmc>` on:
+
+  - See the :git-hdl:`list of supported parts <projects/ad916x_fmc#readme>`
+  - :git-hdl:`AMD Xilinx ZCU102 <projects/ad916x_fmc/zcu102>`
+
+- :ref:`AD9081-FMCA-EBZ/AD9082-FMCA-EBZ <ad9081_fmca_ebz>` on:
 
   - (AD9081) :git-hdl:`Intel Arria 10 SoC <projects/ad9081_fmca_ebz/a10soc>`
   - (AD9081) :git-hdl:`Intel FM87 <projects/ad9081_fmca_ebz/fm87>`
@@ -490,70 +481,60 @@ HDL Example Projects
   - (AD9082) :git-hdl:`AMD Xilinx ZC706 <projects/ad9082_fmca_ebz/zc706>`
   - (AD9082) :git-hdl:`AMD Xilinx ZCU102 <projects/ad9082_fmca_ebz/zcu102>`
 
-- :dokuwiki:`AD9081-FMCA-EBZ X-Band Phased Array Reference Design <resources/eval/user-guides/x-band-platform>`
+- :ref:`AD9081-FMCA-EBZ X-Band Phased Array Reference Design <ad9081_fmca_ebz_x_band>`
 
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad9081_fmca_ebz_x_band/zcu102>`
 
-- :dokuwiki:`AD9213-DUAL-EBZ Reference Design <resources/eval/user-guides/ad9213_dual_ebz/ad9213_dual_ebz_hdl>`
+- :ref:`AD9213-DUAL-EBZ Reference Design <ad9213_dual_ebz>`
 
   - :git-hdl:`Intel Stratix 10 SoC <projects/ad9213_dual_ebz/s10soc>`
 
-- :ref:`ad9213_evb` on:
+- :ref:`AD9213-EVB Reference Design <ad9213_evb>` on:
 
   - :git-hdl:`AMD Xilinx VCU118 <projects/ad9213_evb/vcu118>`
 
-- :dokuwiki:`AD6676-EBZ Reference Design <resources/eval/user-guides/ad6676-ebz/software/baremetal>`
+- :ref:`AD6676EVB Reference Design <ad6676evb>` on:
 
   - :git-hdl:`AMD Xilinx VC707 <projects/ad6676evb/vc707>`
   - :git-hdl:`AMD Xilinx ZC706 <projects/ad6676evb/zc706>`
 
-- :dokuwiki:`AD9083-FMC <resources/eval/user-guides/ad9083/ad9083_evb_reference_hdl>`
+- :ref:`AD9083-EVB Reference Design <ad9083_evb>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/ad9083_evb/a10soc>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad9083_evb/zcu102>`
 
-- :dokuwiki:`AD9208-DUAL-EBZ reference design <resources/eval/user-guides/ad9208_dual_ebz/ad9208_dual_ebz_hdl>`
+- :ref:`AD9208-DUAL-EBZ Reference Design <ad9208_dual_ebz>` on:
 
   - :git-hdl:`AMD Xilinx VCU118 <projects/ad9208_dual_ebz/vcu118>`
 
-- :dokuwiki:`AD9209-FMCA-EBZ reference design <resources/eval/user-guides/ad9209_fmca_ebz/ad9209_fmca_ebz>`
+- :ref:`AD9209-FMCA-EBZ reference design <ad9209_fmca_ebz>` on:
 
   - :git-hdl:`AMD Xilinx VCK190 <projects/ad9209_fmca_ebz/vck190>`
 
-- :dokuwiki:`AD9656 HDL Reference Design <resources/eval/user-guides/ad9656/reference_hdl>`
+- :ref:`AD9656-FMC HDL Reference Design <ad9656_fmc>` on:
 
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad9656_fmc/zcu102>`
 
-- :dokuwiki:`AD9695-FMC reference design <resources/eval/user-guides/ad9695_fmc>`
+- :ref:`AD9695-FMC Reference Design <ad9695_fmc>` on:
 
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad9695_fmc/zcu102>`
 
-- :dokuwiki:`AD-QUADMXFE1-EBZ reference design <resources/eval/user-guides/ad_quadmxfe1_ebz/ad_quadmxfe1_ebz_hdl>`
+- :ref:`AD-QUADMXFE1-EBZ Reference Design <ad_quadmxfe1_ebz>` on:
 
   - :git-hdl:`AMD Xilinx VCU118 <projects/ad_quadmxfe1_ebz/vcu118>`
 
-- :dokuwiki:`AD-FMCLIDAR1-EBZ reference design <resources/eval/user-guides/ad-fmclidar1-ebz>`
-
-  - :git-hdl:`Intel Arria 10 SoC (RETIRED) <projects/ad_fmclidar1_ebz/a10soc>`
-  - :git-hdl:`AMD Xilinx ZC706 (RETIRED)<projects/ad_fmclidar1_ebz/zc706>`
-  - :git-hdl:`AMD Xilinx ZCU102 (RETIRED)<projects/ad_fmclidar1_ebz/zcu102>`
-
-- :ref:`adrv9026` on:
+- :ref:`AD-FMCLIDAR1-EBZ Reference Design (RETIRED) <ad_fmclidar1_ebz>`
+- :ref:`ADRV9026 Reference Design <adrv9026>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/adrv9026/a10soc>`
   - :git-hdl:`AMD Xilinx VCK190 <projects/adrv9026/vck190>`
   - :git-hdl:`AMD Xilinx VCU118 <projects/adrv9026/vcu118>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9026/zcu102>`
 
-- :ref:`adrv904x` on:
+- :ref:`ADRV904x Reference Design <adrv904x>` on:
 
   - :git-hdl:`AMD Xilinx VCK190 <projects/adrv904x/vck190>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv904x/zcu102>`
-
-Additional Information
---------------------------------------------------------------------------------
-
-- :dokuwiki:`JESD204B Glossary <resources/fpga/peripherals/jesd204/jesd204_glossary>`
 
 Technical Articles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -569,7 +550,7 @@ JESD204B Rapid Prototyping Platforms
 - :adi:`AD-FMCOMMS11-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcomms11-ebz>`
 - :adi:`ADRV9009-ZU11EG` :dokuwiki:`ADRV9009-ZU11EG (User Guide) <resources/eval/user-guides/adrv9009-zu11eg>`
 - :adi:`EVAL-AD-FMCADC2-EBZ`
-- :adi:`EVAL-AD-FMCADC3-EBZ`
+- :adi:`EVAL-AD-FMCADC3-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCADC4-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCDAQ2-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcdaq2-ebz>`
 - :adi:`EVAL-AD-FMCJESDADC1-EBZ`

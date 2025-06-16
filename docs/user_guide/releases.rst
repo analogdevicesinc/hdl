@@ -64,7 +64,7 @@ The BOOT partition files for the main branches can be found in the link inside
 Keep in mind that the ones from the main branch are not stable all the time.
 
 The files are built from :git-hdl:`main branch <>` whenever there are new
-commits in HDL or Linux repositories.  
+commits in HDL or Linux repositories.
 
 We suggest using the latest release branch; see the table below.
 
@@ -92,7 +92,7 @@ Release branches
      - ---
      - ---
      - `main <https://swdownloads.analog.com/cse/boot_partition_files/main/latest_boot.txt>`__
-   * - :git-hdl:`hdl_2023_r2 patch1 <hdl_2023_r2_p1:>`
+   * - :git-hdl:`2023_R2 patch1 <2023_R2_p1:>`
      - Quartus Pro 23.2
      - Vivado 2023.2
      - `Release notes 2023_R2_p1 <https://github.com/analogdevicesinc/hdl/releases/tag/2023_R2_p1>`__
