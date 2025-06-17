@@ -1,19 +1,18 @@
 ###############################################################################
-## Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2015-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-## FIFO depth is 4Mb - 250k samples
-set adc_fifo_address_width 16
+## Offload attributes
+set adc_offload_type 0                   ; ## BRAM
+set adc_offload_size [expr 1*1024*1024]  ; ## 1 MB
 
-## FIFO depth is 4Mb - 250k samples
-set dac_fifo_address_width 15
+set dac_offload_type 0                   ; ## BRAM
+set dac_offload_size [expr 512*1024]     ; ## 512 kB
 
-## NOTE: With this configuration the #36Kb BRAM utilization is at ~70%
+set plddr_offload_axi_data_width 0
 
 source $ad_hdl_dir/projects/common/kcu105/kcu105_system_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
-source $ad_hdl_dir/projects/common/xilinx/dacfifo_bd.tcl
 source ../common/daq3_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -28,8 +27,10 @@ S=$ad_project_params(RX_JESD_S)\
 TX:M=$ad_project_params(TX_JESD_M)\
 L=$ad_project_params(TX_JESD_L)\
 S=$ad_project_params(TX_JESD_S)\
-ADC_FIFO_ADDR_WIDTH=$adc_fifo_address_width\
-DAC_FIFO_ADDR_WIDTH=$dac_fifo_address_width"
+ADC_OFFLOAD:TYPE=$adc_offload_type\
+SIZE=$adc_offload_size\
+DAC_OFFLOAD:TYPE=$dac_offload_type\
+SIZE=$dac_offload_size"
 
 sysid_gen_sys_init_file $sys_cstring
 
