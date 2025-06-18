@@ -60,33 +60,37 @@ module axi_gpio_adi (
   output      [31:0]      s_axi_rdata,
   input                   s_axi_rready,
   
-  output      [3:0]   	  gpio_out, // for LEDs
-  input       [3:0]       gpio_in   // for buttons
+  output      [31:0]   	  gpio_out, // for LEDs
+  input       [31:0]      gpio_in   // for buttons
 );
   reg                     up_resetn = 1'b0;
   
   reg                     up_wack = 'd0;
   reg         [31:0]      up_rdata = 'd0;
   reg                     up_rack = 'd0;
+  wire                    up_rreq_s;
+  wire        [7:0]       up_raddr_s;
+  wire                    up_wreq_s;
+  wire        [7:0]       up_waddr_s;
   wire        [31:0]      up_wdata_s;
   //IRQ
-  reg         [3:0]      up_irq_mask = 4'b1111;
-  reg         [3:0]      up_irq_source = 4'h0;
-  wire        [3:0]      up_irq_pending;
-  wire        [3:0]      up_irq_trigger;
-  wire        [3:0]      up_irq_source_clear;
+  reg         [31:0]      up_irq_mask = 32'hFFFFFFFF;
+  reg         [31:0]      up_irq_source = 32'h0;
+  wire        [31:0]      up_irq_pending;
+  wire        [31:0]      up_irq_trigger;
+  wire        [31:0]      up_irq_source_clear;
   
   //CLK
   wire                   up_clk;
   
-  reg [3:0] gpio_out_reg;
+  reg [31:0] gpio_out_reg;
   assign gpio_out = gpio_out_reg;
   assign up_clk = s_axi_aclk;
 
   //IRQ handling
   assign up_irq_pending = ~up_irq_mask & up_irq_source;
   assign up_irq_trigger  = {1'b0, 1'b0, led_blink, 1'b0}; 
-  assign up_irq_source_clear = (up_wreq_s == 1'b1 && up_waddr_s == 8'h11) ? up_wdata_s[3:0] : 4'b0000;
+  assign up_irq_source_clear = (up_wreq_s == 1'b1 && up_waddr_s == 8'h11) ? up_wdata_s[31:0] : 32'b0;
 
 
   up_axi #(
@@ -139,7 +143,7 @@ module axi_gpio_adi (
 	   gpio_out_reg <= 'h0;
 	end else begin
 		if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h21)) begin
-			gpio_out_reg <= up_wdata_s[3:0]; 
+			gpio_out_reg <= up_wdata_s[31:0]; 
 		end
 	end
   end
@@ -147,9 +151,9 @@ module axi_gpio_adi (
   //mask
   always @(posedge up_clk) begin
   if (up_resetn == 1'b0)
-    up_irq_mask <= 4'b1111;
+    up_irq_mask <= 32'hFFFFFFFF;
   else if ((up_wreq_s == 1'b1) && (up_waddr_s == 8'h23))
-    up_irq_mask <= up_wdata_s[3:0];
+    up_irq_mask <= up_wdata_s[31:0];
   end
 
 
@@ -196,20 +200,20 @@ module axi_gpio_adi (
 
   always @(posedge up_clk) begin
     if (up_resetn == 1'b0) begin
-      up_irq_source <= 4'b0000;
+      up_irq_source <= 32'b0;
     end else begin
       up_irq_source <= up_irq_trigger | (up_irq_source & ~up_irq_source_clear);
     end
   end
 
   //led_blink
-  reg [3:0] irq_source_d1;
+  reg [31:0] irq_source_d1;
   reg       led_state;
 
 
   always @(posedge up_clk) begin
     if (up_resetn == 1'b0) begin
-      irq_source_d1 <= 4'b0000;
+      irq_source_d1 <= 32'b0;
       led_state     <= 1'b0;
     end else begin
       irq_source_d1 <= up_irq_source;
