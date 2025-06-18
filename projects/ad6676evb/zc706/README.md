@@ -9,13 +9,13 @@ cd projects/ad6676evb/zc706
 make
 ```
 
-All of the RX/TX link modes can be found in the [AD6676 data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/AD6676.pdf). We offer support for only a few of them.
+All of the RX link modes can be found in the [AD6676 data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/AD6676.pdf). We offer support for only one of them.
 
 If other configurations are desired, then the parameter from the HDL project (see below) needs to be changed, as well as the Linux/no-OS project configurations.
 
 The overwritable parameter from the environment:
 
-- [RX/TX]_JESD_L - [RX/TX] number of lanes per link
+- [RX/TX]_JESD_L: [RX/TX] number of lanes per link
 
 ### Example configurations
 
