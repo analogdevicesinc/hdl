@@ -101,8 +101,8 @@ module axi_fsrc_tx #(
   wire        fsrc_stop;
   wire        fsrc_accum_set;
   wire [15:0] fsrc_conv_mask;
-  wire [63:0] fsrc_accum_add_val;
-  wire [63:0] fsrc_accum_set_val;
+  wire [ACCUM_WIDTH-1:0] fsrc_accum_add_val;
+  wire [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] fsrc_accum_set_val;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -139,7 +139,9 @@ module axi_fsrc_tx #(
   axi_fsrc_tx_regmap #(
     .ID (0),
     .CORE_VERSION (CORE_VERSION),
-    .CORE_MAGIC (CORE_MAGIC)
+    .CORE_MAGIC (CORE_MAGIC),
+    .ACCUM_WIDTH (ACCUM_WIDTH),
+    .NUM_SAMPLES (NUM_SAMPLES)
   ) i_regmap (
     .clk (clk),
     .reset (reset),
@@ -195,7 +197,7 @@ module axi_fsrc_tx #(
     .fsrc_data_start(tx_data_start),
     .fsrc_stop (fsrc_stop),
     .conv_mask (fsrc_conv_mask),
-    .accum_set_val ({NUM_SAMPLES{fsrc_accum_set_val}}),
+    .accum_set_val (fsrc_accum_set_val),
     .accum_set (fsrc_accum_set),
     .accum_add_val (fsrc_accum_add_val),
 
