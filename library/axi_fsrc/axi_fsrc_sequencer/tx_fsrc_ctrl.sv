@@ -29,9 +29,7 @@ module tx_fsrc_ctrl #(
   input  wire [CTRL_WIDTH-1:0]                     next_ctrl_value,      // Set before start is asserted, hold the value until ctrl value is changed
   input  wire [COUNTER_WIDTH-1:0]                  ctrl_change_cnt,
   input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   first_trig_cnt,
-  input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   second_trig_cnt, // TODO remove, it is useless
   input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> tx_data_start    // Must be greater than first_trig_cnt
-  input  wire [COUNTER_WIDTH-1:0]                  rx_delay_cnt, // -> rx_data_start // TODO remove, it is useless.
   input  wire                                      seq_trig_in,
   input  wire                                      seq_ext_trig_en,
 
