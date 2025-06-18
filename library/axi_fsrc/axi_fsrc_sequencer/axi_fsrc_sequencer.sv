@@ -160,13 +160,11 @@ module axi_fsrc_sequencer #(
     .reg_o_seq_tx_accum_reset_cnt (fsrc_accum_reset_cnt),
 
     .reg_o_seq_ext_trig_en (fsrc_seq_ext_trig_en),
-    .reg_o_seq_rx_delay_cnt (fsrc_rx_delay_cnt),
 
     .reg_o_dut_seq_gpio_w (fsrc_next_ctrl_value),
     .reg_o_trig_out (seq_trig_out),
 
     .reg_o_first_trig_cnt (fsrc_first_trig_cnt),
-    .reg_o_second_trig_cnt (fsrc_second_trig_cnt),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq_s),
@@ -199,9 +197,7 @@ module axi_fsrc_sequencer #(
     .next_ctrl_value (fsrc_next_ctrl_value),
     .ctrl_change_cnt (fsrc_ctrl_change_cnt),
     .first_trig_cnt (fsrc_first_trig_cnt),
-    .second_trig_cnt (fsrc_second_trig_cnt),
     .accum_reset_cnt (fsrc_accum_reset_cnt),
-    .rx_delay_cnt (fsrc_rx_delay_cnt),
     .trig_out (fsrc_trig_out),
     .seq_trig_in (fsrc_trig_in),
     .seq_ext_trig_en (fsrc_seq_ext_trig_en),
