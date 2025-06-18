@@ -53,14 +53,11 @@ module axi_fsrc_sequencer_regmap #(
 
   output        reg_o_seq_ext_trig_en,
 
-  output [COUNTER_WIDTH-1:0] reg_o_seq_rx_delay_cnt,
-
   output [CTRL_WIDTH-1:0]    reg_o_dut_seq_gpio_w,
 
   output [NUM_TRIG-1:0] reg_o_trig_out,
 
   output [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0] reg_o_first_trig_cnt,
-  output [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0] reg_o_second_trig_cnt,
 
 
   // axi interface
@@ -230,7 +227,6 @@ module axi_fsrc_sequencer_regmap #(
   generate
     for (i = 0; i < NUM_TRIG; i++) begin
       assign reg_o_first_trig_cnt[i]  = seq_ctrl_2[(i*4) +: COUNTER_WIDTH];
-      assign reg_o_second_trig_cnt[i] = seq_ctrl_2[((i+4)*4) +: COUNTER_WIDTH];
     end
   endgenerate
 
@@ -240,7 +236,6 @@ module axi_fsrc_sequencer_regmap #(
   assign reg_o_seq_tx_accum_reset_cnt         = seq_ctrl_3[16+:COUNTER_WIDTH];
 
   assign reg_o_seq_ext_trig_en  = seq_ctrl_4[0];
-  assign reg_o_seq_rx_delay_cnt = seq_ctrl_4[16+:COUNTER_WIDTH];
 
   assign reg_o_dut_seq_gpio_w = {seq_gpio_w_2, seq_gpio_w_1};
 
