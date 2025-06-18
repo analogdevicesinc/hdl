@@ -14,12 +14,14 @@ adi_project_files ad_gmsl2eth_sl_k26 [list \
   "system_constr.xdc" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/eth_xcvr_phy_10g_gty_wrapper.tcl" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/sync_reset.tcl" \
-  "$ad_hdl_dir/../corundum/fpga/mqnic/KR260/fpga/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_clock_cdc.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/sync_reset.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
   "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/tdma_ber_ch.tcl" \
   "$ad_hdl_dir/library/common/ad_iobuf.v" ]
 
