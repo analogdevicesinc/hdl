@@ -1,11 +1,11 @@
-# ADRV9009/ZC706 HDL Project
+# ADRV9009/KCU105 HDL Project
 
 ## Building the project
 
 The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default configuration.
 
 ```
-cd projects/adrv9009/zc706
+cd projects/adrv9009/kcu105
 make
 ```
 
@@ -39,4 +39,4 @@ RX_OS_JESD_L=2 \
 RX_OS_JESD_S=1
 ```
 
-Corresponding device tree: [zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-adrv9009-jesd204-fsm.dts)
+Corresponding device tree: [kcu105_adrv9009.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/microblaze/boot/dts/kcu105_adrv9009.dts)
