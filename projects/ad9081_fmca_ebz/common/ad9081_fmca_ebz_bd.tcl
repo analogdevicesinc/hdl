@@ -162,7 +162,6 @@ if {!$ADI_PHY_SEL} {
   create_bd_port -dir I tx_sync_0
 }
 
-create_bd_port -dir I fsrc_sysref
 create_bd_port -dir I fsrc_trig_in
 create_bd_port -dir O fsrc_trig_out
 create_bd_port -dir O -from 39 -to 0 fsrc_ctrl
@@ -299,8 +298,6 @@ if {$INTF_CFG != "TX"} {
 
   if {$ENABLE_FSRC} {
     adi_axi_fsrc_rx_create fsrc_rx $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_DATAPATH_WIDTH $RX_DMA_SAMPLE_WIDTH
-    ad_connect fsrc_rx/axi_fsrc_rx/link_data axi_mxfe_rx_jesd/rx_data_tdata
-    ad_connect fsrc_rx/axi_fsrc_rx/link_valid axi_mxfe_rx_jesd/rx_data_tvalid
   }
 
   set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
@@ -379,7 +376,6 @@ if {$INTF_CFG != "RX"} {
     ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 1
 
     ad_connect tx_device_clk fsrc_ctrl/clk
-    ad_connect fsrc_sysref   fsrc_ctrl/sysref
     ad_connect fsrc_trig_in  fsrc_ctrl/trig_in
     ad_connect fsrc_trig_out fsrc_ctrl/trig_out
     ad_connect fsrc_ctrl     fsrc_ctrl/ctrl
@@ -474,6 +470,9 @@ if {$ADI_PHY_SEL == 1} {
       ad_connect axi_mxfe_tx_jesd/sync tx_sync_0
     }
   }
+}
+if {$ENABLE_FSRC} {
+  ad_connect fsrc_ctrl/sysref tx_sysref_0
 }
 
 if {$INTF_CFG != "TX"} {
@@ -704,7 +703,6 @@ if {$INTF_CFG != "TX"} {
 
   if {$ENABLE_FSRC} {
     ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
-    ad_connect cpack_rst_logic/res fsrc_rx/cpack_reset
   }
 }
 
