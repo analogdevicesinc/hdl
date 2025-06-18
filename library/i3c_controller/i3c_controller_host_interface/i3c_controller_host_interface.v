@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,6 +36,11 @@
 `timescale 1ns/100ps
 
 module i3c_controller_host_interface #(
+  parameter CMD_FIFO_ADDRESS_WIDTH = 4,
+  parameter CMDR_FIFO_ADDRESS_WIDTH = 4,
+  parameter SDO_FIFO_ADDRESS_WIDTH = 5,
+  parameter SDI_FIFO_ADDRESS_WIDTH = 5,
+  parameter IBI_FIFO_ADDRESS_WIDTH = 4,
   parameter ID = 0,
   parameter ASYNC_CLK = 0,
   parameter OFFLOAD = 1
@@ -140,6 +145,11 @@ module i3c_controller_host_interface #(
   endgenerate
 
   i3c_controller_regmap #(
+    .CMD_FIFO_ADDRESS_WIDTH(CMD_FIFO_ADDRESS_WIDTH),
+    .CMDR_FIFO_ADDRESS_WIDTH(CMDR_FIFO_ADDRESS_WIDTH),
+    .SDO_FIFO_ADDRESS_WIDTH(SDO_FIFO_ADDRESS_WIDTH),
+    .SDI_FIFO_ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
+    .IBI_FIFO_ADDRESS_WIDTH(IBI_FIFO_ADDRESS_WIDTH),
     .ID(ID),
     .OFFLOAD(OFFLOAD),
     .ASYNC_CLK(ASYNC_CLK)
