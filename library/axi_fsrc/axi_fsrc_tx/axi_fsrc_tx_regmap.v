@@ -36,19 +36,21 @@
 module axi_fsrc_tx_regmap #(
   parameter ID = 0,
   parameter [31:0] CORE_VERSION = 0,
-  parameter [31:0] CORE_MAGIC = 0
+  parameter [31:0] CORE_MAGIC = 0,
+  parameter ACCUM_WIDTH = 64,
+  parameter NUM_SAMPLES = 16
 ) (
-  input                   clk,
-  input                   reset,
-  output                  tx_fsrc_en,
-  output                  transmit_start,
-  output                  transmit_stop,
-  output                  tx_fsrc_stop,
-  output                  tx_fsrc_change_rate,
-  output       [3:0]      fsrc_accum_set,
-  output      [15:0]      conv_mask,
-  output      [63:0]      fsrc_accum_add_val,
-  output      [63:0]      fsrc_accum_set_val,
+  input         clk,
+  input         reset,
+  output        tx_fsrc_en,
+  output        transmit_start,
+  output        transmit_stop,
+  output        tx_fsrc_stop,
+  output        tx_fsrc_change_rate,
+  output        fsrc_accum_set,
+  output [15:0] conv_mask,
+  output [ACCUM_WIDTH-1:0] fsrc_accum_add_val,
+  output reg [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] fsrc_accum_set_val,
 
   // axi interface
   input                   up_rstn,
@@ -63,6 +65,9 @@ module axi_fsrc_tx_regmap #(
   output reg              up_rack
 );
 
+  wire  [3:0] fsrc_accum_set_val_addr;
+  wire [63:0] fsrc_accum_set_val_s;
+  wire fsrc_accum_set_val_apply;
   wire [31:0] jesd204b_tx_config;
   wire [31:0] ctrl_transmit;
   wire [31:0] link_ctrl;
@@ -74,6 +79,8 @@ module axi_fsrc_tx_regmap #(
   reg [31:0] up_link_ctrl_s;
   reg [31:0] up_fsrc_accum_add_val_s;
   reg [31:0] up_fsrc_accum_add_val_2_s;
+  reg  [3:0] up_fsrc_accum_set_val_addr_s;
+  reg        up_fsrc_accum_set_val_apply_s;
   reg [31:0] up_fsrc_accum_set_val_s;
   reg [31:0] up_fsrc_accum_set_val_2_s;
 
@@ -86,6 +93,8 @@ module axi_fsrc_tx_regmap #(
       up_link_ctrl_s <= 'd0;
       up_fsrc_accum_add_val_s <= 'd0;
       up_fsrc_accum_add_val_2_s <= 'd0;
+      up_fsrc_accum_set_val_addr_s <= 'd0;
+      up_fsrc_accum_set_val_apply_s <= 1'b0;
       up_fsrc_accum_set_val_s <= 'd0;
       up_fsrc_accum_set_val_2_s <= 'd0;
     end else begin
@@ -109,10 +118,16 @@ module axi_fsrc_tx_regmap #(
         up_fsrc_accum_add_val_2_s <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h9)) begin
-        up_fsrc_accum_set_val_s <= up_wdata;
+        up_fsrc_accum_set_val_addr_s <= up_wdata[3:0];
+        up_fsrc_accum_set_val_apply_s <= 1'b1;
       end
-      if ((up_wreq == 1'b1) && (up_waddr == 14'h10)) begin
+      if ((up_wreq == 1'b1) && (up_waddr == 14'ha)) begin
+        up_fsrc_accum_set_val_s <= up_wdata;
+        up_fsrc_accum_set_val_apply_s <= 1'b0;
+      end
+      if ((up_wreq == 1'b1) && (up_waddr == 14'hb)) begin
         up_fsrc_accum_set_val_2_s <= up_wdata;
+        up_fsrc_accum_set_val_apply_s <= 1'b0;
       end
     end
   end
@@ -134,8 +149,9 @@ module axi_fsrc_tx_regmap #(
           14'h6:   up_rdata <= up_link_ctrl_s;
           14'h7:   up_rdata <= up_fsrc_accum_add_val_s;
           14'h8:   up_rdata <= up_fsrc_accum_add_val_2_s;
-          14'h9:   up_rdata <= up_fsrc_accum_set_val_s;
-          14'h10:  up_rdata <= up_fsrc_accum_add_val_2_s;
+          14'h9:   up_rdata <= {28'b0, up_fsrc_accum_set_val_addr_s};
+          14'ha:   up_rdata <= up_fsrc_accum_set_val_s;
+          14'hb:   up_rdata <= up_fsrc_accum_set_val_2_s;
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -169,7 +185,7 @@ module axi_fsrc_tx_regmap #(
     .out_bits(link_ctrl));
 
   sync_bits #(
-    .NUM_OF_BITS (64),
+    .NUM_OF_BITS (ACCUM_WIDTH),
     .ASYNC_CLK (1)
   ) fsrc_accum_add_val_sync (
     .in_bits({up_fsrc_accum_add_val_2_s, up_fsrc_accum_add_val_s}),
@@ -177,19 +193,29 @@ module axi_fsrc_tx_regmap #(
     .out_bits(fsrc_accum_add_val));
 
   sync_bits #(
-    .NUM_OF_BITS (64),
+      .NUM_OF_BITS (ACCUM_WIDTH + 5),
     .ASYNC_CLK (1)
   ) fsrc_accum_set_val_sync (
-    .in_bits({up_fsrc_accum_set_val_2_s, up_fsrc_accum_set_val_s}),
+    .in_bits({up_fsrc_accum_set_val_2_s, up_fsrc_accum_set_val_s, up_fsrc_accum_set_val_addr_s, up_fsrc_accum_set_val_apply_s}),
     .out_clk(clk),
-    .out_bits(fsrc_accum_set_val));
+    .out_bits({fsrc_accum_set_val_s, fsrc_accum_set_val_addr, fsrc_accum_set_val_apply}));
+
+  genvar j;
+  for (j=0; j < NUM_SAMPLES; j=j+1) begin : set_val_gen
+    always @(posedge clk) begin
+      // Write value first then address to apply
+      if (j == fsrc_accum_set_val_addr && fsrc_accum_set_val_apply) begin
+        fsrc_accum_set_val[j] <= fsrc_accum_set_val_s;
+      end
+    end
+  end
 
   assign tx_fsrc_en          = jesd204b_tx_config[0];
   assign transmit_start      = ctrl_transmit[1];
   assign transmit_stop       = ctrl_transmit[3];
   assign tx_fsrc_stop        = ctrl_transmit[4];
   assign tx_fsrc_change_rate = ctrl_transmit[5];
-  assign fsrc_accum_set = ctrl_transmit[27:24];
+  assign fsrc_accum_set = ctrl_transmit[6];
   assign conv_mask      = link_ctrl[31:16];
 
 endmodule
