@@ -27,10 +27,15 @@ Features
 Files
 --------------------------------------------------------------------------------
 
-:git-hdl:`ad_ip_jesd204_tpl_adc.v <library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v>`
+.. important::
+
+   To instantiate it, you need to use the procedure
+   :git-hdl:`adi_tpl_jesd204_rx_create <library/jesd204/scripts/jesd204.tcl#L305>`
+
+- :git-hdl:`ad_ip_jesd204_tpl_adc.v <library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v>`
 
 Block Diagram
--------------
+--------------------------------------------------------------------------------
 
 .. image:: ad_ip_jesd204_transport_adc.svg
    :width: 700
@@ -84,7 +89,7 @@ Signal and Interface Pins
    * - link
      - link_data: JESD204 link data interface (link layer interface).
    * - link_clk
-     - :dokuwiki:`Device clock <resources/fpga/peripherals/jesd204/jesd204_glossary#clocks>`
+     - :ref:`Device clock <jesd204 glossary>`
        for the JESD204B interface of the Link Layer Interface. Must
        be line clock/40 for correct 204B operation. Must be line
        clock/66 for correct 64b66b 204C operation.
@@ -338,7 +343,7 @@ More Information
 --------------------------------------------------------------------------------
 
 -  :ref:`JESD204 Interface Framework <jesd204>`
--  :dokuwiki:`Glossary of terms <resources/fpga/peripherals/jesd204/jesd204_glossary>`
+-  :ref:`Glossary of terms <jesd204 glossary>`
 -  :ref:`HDL User Guide <user_guide>`
 
 Technical Support
