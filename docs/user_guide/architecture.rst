@@ -248,6 +248,7 @@ from the HDL project to obtain the final number used in software:
 
 - PS7 EMIO offset = **54**
 - PS8 EMIO offset = **78**
+- MicroBlaze - no offset
 
 Connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
