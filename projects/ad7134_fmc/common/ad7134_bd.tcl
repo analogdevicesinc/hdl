@@ -55,9 +55,28 @@ ad_ip_parameter odr_generator CONFIG.PULSE_1_PERIOD 85
 ad_ip_parameter odr_generator CONFIG.PULSE_1_WIDTH 13
 
 ad_connect odr_generator/ext_clk axi_ad7134_clkgen/clk_0
-ad_connect ad713x_odr $hier_spi_engine/trigger
+
+#ad_connect ad713x_odr $hier_spi_engine/trigger
+#
 #ad_connect odr_generator/pwm_0 $hier_spi_engine/trigger
 #ad_connect odr_generator/pwm_1 ad713x_odr
+
+
+
+
+# trigger to BUSY's negative edge
+create_bd_cell -type module -reference sync_bits busy_sync
+create_bd_cell -type module -reference ad_edge_detect busy_capture
+set_property -dict [list CONFIG.EDGE 1] [get_bd_cells busy_capture]
+
+ad_connect axi_ad7134_clkgen/clk_0 busy_capture/clk
+ad_connect busy_capture/rst GND
+
+ad_connect busy_sync/out_resetn $hier_spi_engine/${hier_spi_engine}_axi_regmap/spi_resetn
+ad_connect axi_ad7134_clkgen/clk_0 busy_sync/out_clk
+ad_connect busy_sync/in_bits ad713x_odr
+ad_connect busy_sync/out_bits busy_capture/signal_in
+ad_connect busy_capture/signal_out $hier_spi_engine/trigger
 
 # sdpclk clock - 50 MHz
 
