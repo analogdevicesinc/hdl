@@ -67,6 +67,16 @@ foreach prefix [list "s0" "s1"] {
         -vlnv {analog.com:ADI:spi_engine_ctrl:1.0}]
 }
 
+set ip [ipl::add_interface -ip $ip \
+    -inst_name s_interconnect_ctrl \
+    -display_name s_interconnect_ctrl \
+    -description spi_engine_interconnect_ctrl \
+    -master_slave slave \
+    -portmap { \
+        {"interconnect_dir" "INTERCONNECT_DIR"} \
+    } \
+    -vlnv {analog.com:ADI:spi_engine_interconnect_ctrl:1.0}]
+
 set ip [ipl::add_ip_files -ip $ip -dpath rtl -flist [list \
     "spi_engine_interconnect.v" ]]
 
