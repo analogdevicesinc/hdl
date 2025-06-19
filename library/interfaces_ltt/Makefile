@@ -25,6 +25,8 @@ LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_
 LTT_INTERFACES += analog.com/ADI/spi_engine_offload_ctrl/1.0/spi_engine_offload_ctrl_rtl.xml
 LTT_INTERFACES += analog.com/ADI/if_framelock/1.0/if_framelock.xml
 LTT_INTERFACES += analog.com/ADI/if_framelock/1.0/if_framelock_rtl.xml
+LTT_INTERFACES += analog.com/ADI/spi_engine_interconnect_ctrl/1.0/spi_engine_interconnect_ctrl.xml
+LTT_INTERFACES += analog.com/ADI/spi_engine_interconnect_ctrl/1.0/spi_engine_interconnect_ctrl_rtl.xml
 
 CLEAN_TARGETS += analog.com/ADI/fifo_rd
 CLEAN_TARGETS += analog.com/ADI/fifo_wr
@@ -32,12 +34,14 @@ CLEAN_TARGETS += analog.com/ADI/spi_master
 CLEAN_TARGETS += analog.com/ADI/spi_engine_ctrl
 CLEAN_TARGETS += analog.com/ADI/spi_engine_offload_ctrl
 CLEAN_TARGETS += analog.com/ADI/if_framelock
+CLEAN_TARGETS += analog.com/ADI/spi_engine_interconnect_ctrl
 
 ifeq ($(LATTICE_DEFAULT_PATHS),1)
 LTT_INTERFACES := $(LTT_INTERFACES) $(foreach dep,$(LTT_INTERFACES),$(LATTICE_DEFAULT_INTERFACE_PATH)/$(dep))
 CLEAN_TARGETS := $(CLEAN_TARGETS) $(foreach dep,$(CLEAN_TARGETS),$(LATTICE_DEFAULT_INTERFACE_PATH)/$(dep))
 endif
 
+CLEAN_TARGETS += .lock
 CLEAN_TARGETS += $(wildcard ./*/)
 CLEAN_TARGETS += interfaces_ltt.log
 
@@ -49,11 +53,12 @@ clean: clean-all
 
 clean-all:
 	$(call clean, \
-		$(CLEAN_TARGETS) .lock, \
-		$(HL)ADI$(NC) interfaces for lattice)
+		$(CLEAN_TARGETS), \
+		interfaces definitions)
 
 $(LTT_INTERFACES): $(L_DEPS)
+	-rm -fr $(CLEAN_TARGETS)
 	$(call build, \
 		$(LATTICE_IP_TOOL) interfaces_ltt.tcl, \
 		interfaces_ltt.log, \
-		$(HL)ADI$(NC) interfaces for lattice)
+		interfaces definitions)
