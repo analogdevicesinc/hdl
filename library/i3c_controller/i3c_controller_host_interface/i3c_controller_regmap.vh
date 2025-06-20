@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -40,6 +40,9 @@
 `define I3C_REGMAP_DEVICE_ID        8'h01
 `define I3C_REGMAP_SCRATCH          8'h02
 `define I3C_REGMAP_ENABLE           8'h10
+`define I3C_REGMAP_PID_L            8'h15
+`define I3C_REGMAP_PID_H            8'h16
+`define I3C_REGMAP_DCR_BCR_DA       8'h17
 `define I3C_REGMAP_IRQ_MASK         8'h20
 `define I3C_REGMAP_IRQ_PENDING      8'h21
 `define I3C_REGMAP_IRQ_SOURCE       8'h22
