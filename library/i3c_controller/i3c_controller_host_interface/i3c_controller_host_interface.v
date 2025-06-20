@@ -42,8 +42,14 @@ module i3c_controller_host_interface #(
   parameter SDI_FIFO_ADDRESS_WIDTH = 5,
   parameter IBI_FIFO_ADDRESS_WIDTH = 4,
   parameter ID = 0,
+  parameter DA = 7'h31,
   parameter ASYNC_CLK = 0,
-  parameter OFFLOAD = 1
+  parameter OFFLOAD = 1,
+  parameter PID_MANUF_ID = 15'b0,
+  parameter PID_TYPE_SELECTOR = 1'b1,
+  parameter PID_PART_ID = 16'b0,
+  parameter PID_INSTANCE_ID = 4'b0,
+  parameter PID_EXTRA_ID = 12'b0
 ) (
   input  clk,
   output reset_n,
@@ -151,8 +157,14 @@ module i3c_controller_host_interface #(
     .SDI_FIFO_ADDRESS_WIDTH(SDI_FIFO_ADDRESS_WIDTH),
     .IBI_FIFO_ADDRESS_WIDTH(IBI_FIFO_ADDRESS_WIDTH),
     .ID(ID),
+    .DA(DA),
+    .ASYNC_CLK(ASYNC_CLK),
     .OFFLOAD(OFFLOAD),
-    .ASYNC_CLK(ASYNC_CLK)
+    .PID_MANUF_ID(PID_MANUF_ID),
+    .PID_TYPE_SELECTOR(PID_TYPE_SELECTOR),
+    .PID_PART_ID(PID_PART_ID),
+    .PID_INSTANCE_ID(PID_INSTANCE_ID),
+    .PID_EXTRA_ID(PID_EXTRA_ID)
   ) i_i3c_controller_regmap (
     .s_axi_aclk(s_axi_aclk),
     .s_axi_aresetn(s_axi_aresetn),
