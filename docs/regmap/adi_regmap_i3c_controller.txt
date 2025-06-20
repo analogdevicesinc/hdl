@@ -80,6 +80,91 @@ ENDFIELD
 ############################################################################################
 
 REG
+0x15
+PID_L
+Least significant part of Provisioned ID. The PID value has no effect and is
+present only for conformity with the bus specification.
+ENDREG
+
+FIELD
+[31:16] PART_ID
+PART_ID
+RO
+Device identifier, use the same for all instances of this controller unless ``TYPE_SELECTOR``
+is set to 1'b1.
+ENDFIELD
+
+FIELD
+[15:12] INSTANCE_ID
+INSTANCE_ID
+RO
+Identify the individual device.
+ENDFIELD
+
+FIELD
+[11:0] EXTRA_ID
+EXTRA_ID
+RO
+Extra characteristics field.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x16
+PID_H
+Most significant part of Provisioned ID. The PID value has no effect and is
+present only for conformity with bus specification.
+ENDREG
+
+FIELD
+[15:1] MANUF_ID
+MANUF_ID
+RO
+MIPI Manufacturer ID.
+ENDFIELD
+
+FIELD
+[0] TYPE_SELECTOR
+TYPE_SELECTOR
+RO
+1'b1: Random Value, 1'b0: Vendor Fixed Value.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x17
+DCR_BCR_DA
+ENDREG
+
+FIELD
+[22:16] DA
+DA
+RW
+Controller dynamic address, used only for conformity, has no effect.
+ENDFIELD
+
+FIELD
+[15:8] 0x40
+BCR
+RO
+Bus characteristics register.
+ENDFIELD
+
+FIELD
+[7:0] 0x00
+DCR
+RO
+Device characteristics register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
 0x20
 IRQ_MASK
 ENDREG
@@ -318,21 +403,21 @@ Writing to it has no effect.
 ENDREG
 
 FIELD
-[23:0] 
+[23:0]
 CMDR_FIFO_ERROR
 RO
 If an error occurred during the transfer.
 ENDFIELD
 
 FIELD
-[19:8] 
+[19:8]
 CMDR_FIFO_BUFFER_LENGTH
 RO
 Unsigned 12-bits transferred payload length.
 ENDFIELD
 
 FIELD
-[7:0] 
+[7:0]
 CMDR_FIFO_SYNC
 RO
 Command synchronization.

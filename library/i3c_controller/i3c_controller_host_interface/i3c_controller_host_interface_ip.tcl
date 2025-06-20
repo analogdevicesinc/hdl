@@ -225,6 +225,49 @@ set_property -dict [list \
   "tooltip" "\[IBI_FIFO_ADDRESS_WIDTH\] Define the depth of the FIFO" \
 ] [ipgui::get_guiparamspec -name "SDI_FIFO_ADDRESS_WIDTH" -component $cc]
 
+## Provisioned ID and dynamic address configuration
+set cmd_stream_fifo_group [ipgui::add_group -name "Provisioned ID and dynamic address configuration" -component $cc \
+    -parent $page0 -display_name "Provisioned ID and dynamic address configuration" ]
+
+ipgui::add_param -name "DA" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "Dynamic address" \
+  "tooltip" "\[DA\] Controller dynamic address, used only for conformity, has no effect." \
+] [ipgui::get_guiparamspec -name "DA" -component $cc]
+
+ipgui::add_param -name "PID_MANUF_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Manufacturer ID" \
+  "tooltip" "\[PID_MANUF_ID\] MIPI Manufacturer ID" \
+] [ipgui::get_guiparamspec -name "PID_MANUF_ID" -component $cc]
+
+ipgui::add_param -name "PID_TYPE_SELECTOR" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Type selector" \
+  "tooltip" "\[PID_TYPE_SELECTOR\] 1'b1: Random Value, 1'b0: Vendor Fixed Value" \
+] [ipgui::get_guiparamspec -name "PID_TYPE_SELECTOR" -component $cc]
+
+
+ipgui::add_param -name "PID_PART_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Part ID" \
+  "tooltip" "\[PID_PART_ID\] Device identifier, use the same for all instances of this controller" \
+] [ipgui::get_guiparamspec -name "PID_PART_ID" -component $cc]
+
+
+ipgui::add_param -name "PID_INSTANCE_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Instance ID" \
+  "tooltip" "\[PID_INSTANCE_ID\] Identify the individual device" \
+] [ipgui::get_guiparamspec -name "PID_INSTANCE_ID" -component $cc]
+
+
+ipgui::add_param -name "PID_EXTRA_ID" -component $cc -parent $cmd_stream_fifo_group
+set_property -dict [list \
+  "display_name" "PID - Extra ID" \
+  "tooltip" "\[PID_EXTRA_ID\] Extra characteristics field" \
+] [ipgui::get_guiparamspec -name "PID_EXTRA_ID" -component $cc]
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 ipx::save_core $cc

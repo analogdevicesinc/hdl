@@ -44,9 +44,15 @@ module i3c_controller_regmap #(
   parameter SDI_FIFO_ADDRESS_WIDTH = 5,
   parameter IBI_FIFO_ADDRESS_WIDTH = 4,
   parameter ID = 0,
+  parameter DA = 7'h31,
   parameter ASYNC_CLK = 0,
   parameter OFFLOAD = 1,
-  parameter DATA_WIDTH = 32
+  parameter DATA_WIDTH = 32,
+  parameter PID_MANUF_ID = 15'b0,
+  parameter PID_TYPE_SELECTOR = 1'b1,
+  parameter PID_PART_ID = 16'b0,
+  parameter PID_INSTANCE_ID = 4'b0,
+  parameter PID_EXTRA_ID = 12'b0
 ) (
 
   // Slave AXI interface
@@ -121,6 +127,11 @@ module i3c_controller_regmap #(
   localparam PCORE_VERSION = 'h00000100;
 
   reg [31:0] up_scratch  = 32'h00; // Scratch register
+  reg [31:0] up_pid_l  = {PID_PART_ID, PID_INSTANCE_ID, PID_EXTRA_ID};
+  reg [31:0] up_pid_h  = {16'd0, PID_MANUF_ID, PID_TYPE_SELECTOR};
+  reg [6:0]  up_da  = DA;
+  reg [7:0]  up_bcr = 'h40;
+  reg [7:0]  up_dcr = 'h00;
   reg        up_sw_reset = 1'b1;
   reg [31:0] up_rdata_ff = 32'd0;
   reg        up_wack_ff  = 1'b0;
@@ -307,8 +318,9 @@ module i3c_controller_regmap #(
       up_wack_ff <= up_wreq_s;
       if (up_wreq_s) begin
         case (up_waddr_s[7:0])
-          `I3C_REGMAP_ENABLE:  up_sw_reset <= up_wdata_s[0];
-          `I3C_REGMAP_SCRATCH: up_scratch <= up_wdata_s;
+          `I3C_REGMAP_ENABLE:     up_sw_reset <= up_wdata_s[0];
+          `I3C_REGMAP_SCRATCH:    up_scratch <= up_wdata_s;
+          `I3C_REGMAP_DCR_BCR_DA: up_da <= up_wdata_s[22:16];
         endcase
       end
     end
@@ -363,6 +375,9 @@ module i3c_controller_regmap #(
       `I3C_REGMAP_DEVICE_ID:      up_rdata_ff <= ID;
       `I3C_REGMAP_SCRATCH:        up_rdata_ff <= up_scratch;
       `I3C_REGMAP_ENABLE:         up_rdata_ff <= up_sw_reset;
+      `I3C_REGMAP_PID_L:          up_rdata_ff <= up_pid_l;
+      `I3C_REGMAP_PID_H:          up_rdata_ff <= up_pid_h;
+      `I3C_REGMAP_DCR_BCR_DA:     up_rdata_ff <= {up_da, up_bcr, up_dcr};
       `I3C_REGMAP_IRQ_MASK:       up_rdata_ff <= up_irq_mask;
       `I3C_REGMAP_IRQ_PENDING:    up_rdata_ff <= up_irq_pending;
       `I3C_REGMAP_IRQ_SOURCE:     up_rdata_ff <= up_irq_source;
