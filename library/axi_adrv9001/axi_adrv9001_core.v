@@ -292,7 +292,7 @@ module axi_adrv9001_core #(
   // tx1_r1_mode should be 0 only when tx1_clk and tx2_clk have the same frequency
 
   sync_bits #(
-    .NUM_OF_BITS (8),
+    .NUM_OF_BITS (9),
     .ASYNC_CLK (1)
   ) i_rx1_ctrl_sync (
     .in_bits ({up_rx1_r1_mode,rx1_symb_op,rx1_symb_8_16b,rx1_sdr_ddr_n,rx1_single_lane,rx1_rst,adc_sync_1,adc_1_ext_sync_arm,adc_1_ext_sync_disarm}),
@@ -712,7 +712,7 @@ module axi_adrv9001_core #(
     .dac_sync_out (dac_sync_out_2),
     .dac_ext_sync_arm (dac_2_ext_sync_arm),
     .dac_ext_sync_disarm (dac_2_ext_sync_disarm),
-    .dac_sync_in_status (dac_sync_armed_cdc_s),
+    .dac_sync_in_status (dac_sync_armed_cd_2_s),
     .dac_valid (dac_2_valid),
     .dac_enable_i0 (dac_2_enable_i0),
     .dac_data_i0 (dac_2_data_i0[15:0]),

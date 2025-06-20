@@ -133,7 +133,7 @@ module adrv9001_rx #(
     .SERDES_FACTOR (8)
   ) i_serdes (
     .rst (adc_rst | serdes_reset),
-    .clk (adc_clk_in_fast),
+    .clk (clk_in_s),
     .div_clk (adc_clk_div),
     .data_s0 (data_s0),
     .data_s1 (data_s1),
@@ -209,12 +209,55 @@ module adrv9001_rx #(
     mssi_sync_d2 <= mssi_sync_d1;
   end
 
-  always @(posedge clk_in_s, posedge mssi_sync_d2) begin
-    if (mssi_sync_d2 == 1'b1) begin
-      bufdiv_clr <= 1'b1;
-    end else begin
-      bufdiv_clr <= 1'b0;
+  generate
+  if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
+    reg [2:0] state_cnt = 7;
+    reg [2:0] bufdiv_clr_state = 3;
+    reg       bufdiv_ce = 1'b1;
+
+    always @(posedge clk_in_s, posedge mssi_sync_d2) begin
+      if (mssi_sync_d2 == 1'b1) begin
+        bufdiv_ce <= 1'b0;
+        bufdiv_clr <= 1'b0;
+        bufdiv_clr_state <= 3'd0;
+        state_cnt <= 3'd7;
+      end else begin
+        if (bufdiv_ce == 1'b0) begin
+          if (state_cnt == 3'd0) begin
+            bufdiv_clr_state <= bufdiv_clr_state + 1;
+          end else begin
+            state_cnt <= state_cnt - 3'd1;
+          end
+        end
+
+        case (bufdiv_clr_state)
+          3'd0 : begin
+            bufdiv_ce <= 1'b0;
+            bufdiv_clr <= 1'b0;
+          end
+          3'd1 : begin
+            bufdiv_ce <= 1'b0;
+            bufdiv_clr <= 1'b1;
+          end
+          3'd2 : begin
+            bufdiv_ce <= 1'b0;
+            bufdiv_clr <= 1'b0;
+          end
+          default: begin
+            bufdiv_ce <= 1'b1;
+            bufdiv_clr <= 1'b0;
+          end
+        endcase
+      end
     end
+  end else begin
+     always @(posedge clk_in_s, posedge mssi_sync_d2) begin
+        if (mssi_sync_d2 == 1'b1) begin
+          bufdiv_clr <= 1'b1;
+        end else begin
+          bufdiv_clr <= 1'b0;
+        end
+     end
   end
 
   always @(posedge adc_clk_div, posedge bufdiv_clr) begin
@@ -251,8 +294,6 @@ module adrv9001_rx #(
       end
     end
   end
-
-  generate
 
   if (EN_RX_MCS_TO_STRB_M == 1'b1) begin
 

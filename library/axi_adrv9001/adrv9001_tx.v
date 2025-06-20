@@ -136,7 +136,7 @@ module adrv9001_tx #(
   generate
   if (CMOS_LVDS_N == 0) begin
 
-    IBUFGDS i_dac_clk_in_ibuf (
+    IBUFDS i_dac_clk_in_ibuf (
       .I (tx_dclk_in_p_dclk_in),
       .IB (tx_dclk_in_n_NC),
       .O (tx_dclk_in_s));
@@ -241,7 +241,7 @@ module adrv9001_tx #(
 
       wire dac_clk_div_s;
       // SERDES fast clock
-      BUFIO i_dac_clk_in_gbuf (
+      BUFG i_dac_clk_in_gbuf (
         .I (tx_dclk_in_s),
         .O (dac_fast_clk));
 
