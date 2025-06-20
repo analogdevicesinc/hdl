@@ -156,7 +156,7 @@ module adrv9001_rx #(
   generate
   if (CMOS_LVDS_N == 0) begin
 
-    IBUFGDS i_clk_in_ibuf (
+    IBUFDS i_clk_in_ibuf (
       .I (rx_dclk_in_p_dclk_in),
       .IB (rx_dclk_in_n_NC),
       .O (clk_in_s));
@@ -316,7 +316,7 @@ module adrv9001_rx #(
   if (FPGA_TECHNOLOGY == SEVEN_SERIES) begin
     wire adc_clk_div_s;
 
-    BUFIO i_clk_buf (
+    BUFG i_clk_buf (
       .I (clk_in_s),
       .O (adc_clk_in_fast));
 
