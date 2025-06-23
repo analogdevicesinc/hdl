@@ -31,7 +31,7 @@ if {[info exists ::env(ADI_IGNORE_VERSION_CHECK)]} {
 
 # Define the supported tool version
 if {![info exists REQUIRED_QUARTUS_VERSION]} {
-  set REQUIRED_QUARTUS_VERSION "24.2.0"
+  set REQUIRED_QUARTUS_VERSION "25.1.0"
 }
 
 # Define the supported tool version
