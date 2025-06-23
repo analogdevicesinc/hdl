@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=c218d0f6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=057c4fc5"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=fe5054b0"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -19,6 +19,9 @@
   
   <meta name="repository" content="hdl">
   <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
   
 
 
@@ -179,11 +182,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../generic_jesd_bds/index.html">Generic JESD204 block designs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">ADC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
@@ -401,7 +406,14 @@ binary);</p></li>
 </section>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
-<p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v">ad_ip_jesd204_tpl_adc.v</a></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>To instantiate it, you need to use the procedure
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl#L305">adi_tpl_jesd204_rx_create</a></p>
+</div>
+<ul class="simple">
+<li><p><a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/ad_ip_jesd204_tpl_adc/ad_ip_jesd204_tpl_adc.v">ad_ip_jesd204_tpl_adc.v</a></p></li>
+</ul>
 </section>
 <section id="block-diagram">
 <h2>Block Diagram<a class="headerlink" href="#block-diagram" title="Permalink to this heading"></a></h2>
@@ -772,7 +784,7 @@ binary);</p></li>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a> for the JESD204B interface of the Link Layer Interface. Must be line clock/40 for correct 204B operation. Must be line clock/66 for correct 64b66b 204C operation. Bus <code class="docutils literal notranslate"><span class="pre">link</span></code> is synchronous to this clock domain.</p>
+<p><a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Device clock</span></a> for the JESD204B interface of the Link Layer Interface. Must be line clock/40 for correct 204B operation. Must be line clock/66 for correct 64b66b 204C operation. Bus <code class="docutils literal notranslate"><span class="pre">link</span></code> is synchronous to this clock domain.</p>
 </section>
 </td>
 </tr>
@@ -2739,7 +2751,7 @@ Observation Receiver</p></li>
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD204 Interface Framework</span></a></p></li>
-<li><p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary">Glossary of terms</a></p></li>
+<li><p><a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Glossary of terms</span></a></p></li>
 <li><p><a class="reference internal" href="../../../user_guide/index.html#user-guide"><span class="std std-ref">HDL User Guide</span></a></p></li>
 </ul>
 </section>

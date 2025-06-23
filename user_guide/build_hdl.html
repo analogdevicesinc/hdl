@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../_static/app.min.css?v=c218d0f6" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script defer="" src="../_static/app.umd.js?v=057c4fc5"></script>
+    <script defer="" src="../_static/app.umd.js?v=fe5054b0"></script>
     <link rel="icon" href="../_static/icon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -19,6 +19,9 @@
   
   <meta name="repository" content="hdl">
   <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
   
 
 
@@ -93,8 +96,8 @@
 <li><a class="reference internal" href="#environment">3. Environment</a><ul>
 <li><a class="reference internal" href="#a-linux-environment-setup">3a. Linux environment setup</a></li>
 <li><a class="reference internal" href="#b-windows-environment-setup">3b. Windows environment setup</a><ul>
-<li><a class="reference internal" href="#cygwin">Cygwin</a></li>
 <li><a class="reference internal" href="#wsl">WSL</a></li>
+<li><a class="reference internal" href="#cygwin-not-recommended">Cygwin (NOT RECOMMENDED)</a></li>
 </ul>
 </li>
 </ul>
@@ -196,11 +199,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2"/><div class="collapse"><a class="reference internal" href="../library/jesd204/index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/generic_jesd_bds/index.html">Generic JESD204 block designs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_tx/index.html">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../library/jesd204/axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../library/jesd204/ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../library/jesd204/xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library/jesd204/troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../library/spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
@@ -611,85 +616,6 @@ package name.</p>
 <div class="clear-left"></div></div></div></section>
 <section id="b-windows-environment-setup">
 <h3>3b. Windows environment setup<a class="headerlink" href="#b-windows-environment-setup" title="Permalink to this heading"></a></h3>
-<section id="cygwin">
-<h4>Cygwin<a class="headerlink" href="#cygwin" title="Permalink to this heading"></a></h4>
-<p>Because GNU Make is not supported on Windows, you need to install
-<a class="reference external" href="https://www.cygwin.com/">Cygwin</a>, which is a UNIX-like environment
-and command-line interface for Microsoft Windows.</p>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>Change the path and the tool version accordingly to your installation!</p>
-</div>
-<p>For AMD Xilinx Vivado:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div><p>For Lattice:</p>
-<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
-</pre></div>
-</div>
-<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
-</pre></div>
-</div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
-</pre></div>
-</div>
-<div class="clear-left"></div></div></div></section>
 <section id="wsl">
 <h4>WSL<a class="headerlink" href="#wsl" title="Permalink to this heading"></a></h4>
 <p><a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install/">WSL</a> (or Windows
@@ -908,7 +834,7 @@ current environment, for example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>vivado
 </pre></div>
 </div>
-<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vivado/2023.2/bin/vivado
+<div class="clear-left"></div></div><div><div class="no-select highlight-text notranslate"><div class="highlight"><pre><span></span>/opt/Xilinx/Vivado/2024.2/bin/vivado
 </pre></div>
 </div>
 <div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~$
@@ -921,6 +847,157 @@ current environment, for example:</p>
 </pre></div>
 </div>
 <div class="clear-left"></div></div></div></section>
+<section id="cygwin-not-recommended">
+<span id="build-hdl-cygwin"></span><h4>Cygwin (NOT RECOMMENDED)<a class="headerlink" href="#cygwin-not-recommended" title="Permalink to this heading"></a></h4>
+<p>Using <a class="reference external" href="https://www.cygwin.com/">Cygwin</a> is not recommended anymore, and if
+one encounters issues with this flow, we will not offer support for this.</p>
+<p><span class="red">We do not offer support on Cygwin-related issues or on Vivado/Vitis issues!</span></p>
+<p>Please note, that using Cygwin to build the HDL project has limitations!
+One cannot build the boot file needed for the setup, but instead should use
+the Vivado Tcl console building mode to build the BOOT.BIN (see
+“Building the BOOT.BIN in Vivado GUI”).</p>
+<div><div class="collapsible docutils container">
+<input class="collapsible_input" id="b2bff5a458dc76475714e877c36fbe06d70cc944" name="b2bff5a458dc76475714e877c36fbe06d70cc944" type="checkbox"></input><label for="b2bff5a458dc76475714e877c36fbe06d70cc944"><p>Installation paths for tools in Cygwin</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Change the path and the tool version accordingly to your installation!</p>
+</div>
+<p>For AMD Xilinx Vivado:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vivado_HLS/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/arm/nt/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_be/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/microblaze/linux_toolchain/nt64_le/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/Xilinx/Vitis/202x.x/gnu/aarch32/nt/gcc-arm-none-eabi/bin
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Intel Quartus:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/intelFPGA_pro/2x.x/quartus/bin64
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div><p>For Lattice:</p>
+<div class="code-shell"><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/propel/202x.x/builder/rtf/bin/nt64
+</pre></div>
+</div>
+<div class="clear-left"></div></div><div><div class="no-select float-left highlight-default notranslate"><div class="highlight"><pre><span></span>~/hdl$
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/cygdrive/c/lscc/radiant/202x.x/bin/nt64
+</pre></div>
+</div>
+<div class="clear-left"></div></div></div></div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="bd216859ce77c26bf46566fb57e948bbc2b6e2ad" name="bd216859ce77c26bf46566fb57e948bbc2b6e2ad" type="checkbox"></input><label for="bd216859ce77c26bf46566fb57e948bbc2b6e2ad"><p>Building the libraries and the project in Vivado GUI</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<ol class="arabic">
+<li><p>Open Vivado GUI</p></li>
+<li><p>In the Tcl console, run <code class="docutils literal notranslate"><span class="pre">pwd</span></code> to see the location you’re at</p></li>
+<li><p>Go to the project folder using the <code class="docutils literal notranslate"><span class="pre">cd</span></code> Linux command. For example,</p>
+<p><code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">c:/github/hdl/projects/ad9081_fmca_ebz/zcu102</span></code></p>
+</li>
+<li><p>Now you need to source the script</p>
+<p><code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">../../scripts/adi_make.tcl</span></code></p>
+<p>This will give you access to two commands (adi_make::lib and
+adi_make::boot_bin).</p>
+</li>
+</ol>
+<p>Prior to building the project, the necessary libraries must be built, so please
+follow thoroughly these steps!</p>
+<p>To build all the libraries on which the project depends on, run</p>
+<p><code class="code docutils literal notranslate"><span class="pre">adi_make::lib</span> <span class="pre">all</span></code></p>
+<p>To build only one specific library, you need to
+specify its name, for example <code class="code docutils literal notranslate"><span class="pre">adi_make::lib</span> <span class="pre">axi_dmac</span></code> or
+<code class="code docutils literal notranslate"><span class="pre">adi_make::lib</span> <span class="pre">jesd204/jesd204_rx</span></code>.</p>
+<p>To build the project itself, you need to run</p>
+<p><code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">./system_project.tcl</span></code></p>
+<p>Then go on to the next step of building the boot file, BOOT.BIN.</p>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="f9f3dfc5e8fc730592353a500ef66e69c2382675" name="f9f3dfc5e8fc730592353a500ef66e69c2382675" type="checkbox"></input><label for="f9f3dfc5e8fc730592353a500ef66e69c2382675"><p>Building the BOOT.BIN in Vivado GUI</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<p>This requires either having the project built with <code class="docutils literal notranslate"><span class="pre">make</span></code> command
+(<a class="reference internal" href="#build-hdl-build-amd-project"><span class="std std-ref">4a. Building an AMD project</span></a>), or with the flow
+“Building the libraries and the project in Vivado GUI”.
+To check if you are prepared to build the BOOT.BIN, verify in the project
+folder if you have an <code class="docutils literal notranslate"><span class="pre">*.sdk/system_top.xsa</span></code> file (for example,
+hdl/projects/ad9081_fmca_ebz/zcu102/ad9081_fmca_ebz_zcu102.sdk/system_top.xsa).</p>
+<p>If you do, then proceed with the following:</p>
+<ol class="arabic">
+<li><p>Open Vivado GUI</p></li>
+<li><p>In the Tcl console, run <code class="docutils literal notranslate"><span class="pre">pwd</span></code> to see the location you’re at</p></li>
+<li><p>Go to the project folder using the <code class="docutils literal notranslate"><span class="pre">cd</span></code> Linux command. For example,</p>
+<p><code class="code docutils literal notranslate"><span class="pre">cd</span> <span class="pre">c:/github/hdl/projects/ad9081_fmca_ebz/zcu102</span></code></p>
+</li>
+<li><p>Now you need to source the script</p>
+<p><code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">../../scripts/adi_make.tcl</span></code></p>
+</li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">adi_make::boot_bin</span></code>. Wait up to 5 minutes.</p></li>
+<li><p>The BOOT.BIN will be found in a folder called “output”.</p></li>
+</ol>
+</div>
+</div>
+</div><div><div class="collapsible docutils container">
+<input class="collapsible_input" id="dace50ecb371befaeaff40071bc27279240dea56" name="dace50ecb371befaeaff40071bc27279240dea56" type="checkbox"></input><label for="dace50ecb371befaeaff40071bc27279240dea56"><p>Example for building the AD9081-FMCA-EBZ/ZCU102 project and its BOOT.BIN</p>
+<div class="icon"></div></label><div class="collapsible_content docutils container">
+<div class="highlight-tcl notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>c:<span class="o">/</span>github<span class="o">/</span>hdl<span class="o">/</span>projects<span class="o">/</span>ad9081_fmca_ebz<span class="o">/</span>zcu102
+<span class="nb">source</span><span class="w"> </span>..<span class="o">/</span>..<span class="o">/</span>scripts<span class="o">/</span>adi_make.tcl
+<span class="nv">adi_make</span><span class="o">::</span>lib<span class="w"> </span>all
+<span class="nb">source</span><span class="w"> </span>.<span class="o">/</span>system_project.tcl
+<span class="nv">adi_make</span><span class="o">::</span>boot_bin
+</pre></div>
+</div>
+</div>
+</div>
+</div></section>
 </section>
 </section>
 <section id="building-the-projects">
@@ -947,10 +1024,10 @@ in hardware using the Vivado version
 or in Cygwin. For more details, please read the rest of the documentation.</p>
 <p>To clean only a project or an IP core before building it again,
 run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>.
-To clean both the already built IP cores which the project depends on and the project,
-run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean-all</span></code>.</p>
+To clean both the already built IP cores which the project depends on and the
+project, run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean-all</span></code>.</p>
 <section id="a-building-an-amd-project">
-<h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading"></a></h3>
+<span id="build-hdl-build-amd-project"></span><h3>4a. Building an AMD project<a class="headerlink" href="#a-building-an-amd-project" title="Permalink to this heading"></a></h3>
 <p>An AMD project is built the same way as an Intel project. The only
 exception is that there are a few ‘sub-make(s)’ for the library
 components. The way of building a project in Cygwin and WSL is almost the same.</p>

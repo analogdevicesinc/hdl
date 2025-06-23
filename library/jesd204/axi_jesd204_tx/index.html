@@ -9,16 +9,19 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8e8a900e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/app.min.css?v=c218d0f6" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
-    <script defer="" src="../../../_static/app.umd.js?v=057c4fc5"></script>
+    <script defer="" src="../../../_static/app.umd.js?v=fe5054b0"></script>
     <link rel="icon" href="../../../_static/icon.svg"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="JESD204B/C Link Receive Peripheral" href="../axi_jesd204_rx/index.html" />
-    <link rel="prev" title="JESD204 Interface Framework" href="../index.html" />
+    <link rel="prev" title="Generic JESD204 block designs" href="../generic_jesd_bds/index.html" />
    
   
   <meta name="repository" content="hdl">
   <meta name="version" content="">
+  
+    <meta name="page_source_suffix" content=".rst">
+  
   
 
 
@@ -206,11 +209,13 @@ Content on this topic
 </ul>
 </li>
 <li class="toctree-l2 current"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-2" id="toctree-collapse-2-2" checked=""/><div class="collapse"><a class="reference internal" href="../index.html">JESD204 Interface Framework</a><label for="toctree-collapse-2-2"><div class="icon"></div></label></div><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../generic_jesd_bds/index.html">Generic JESD204 block designs</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">JESD204B/C Link Transmit Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../axi_jesd204_rx/index.html">JESD204B/C Link Receive Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_adc/index.html">ADC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../ad_ip_jesd204_tpl_dac/index.html">DAC JESD204B/C Transport Peripheral</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../xgt_wizard/index.html">Xilinx FPGAs Transceivers Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx.html">Troubleshooting JESD204 TX links</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><input class="toctree-collapse" type="checkbox" name="toctree-collapse-2-3" id="toctree-collapse-2-3"/><div class="collapse"><a class="reference internal" href="../../spi_engine/index.html">SPI Engine</a><label for="toctree-collapse-2-3"><div class="icon"></div></label></div><ul>
@@ -409,27 +414,28 @@ Content on this topic
                     text-decoration: none;
                 }
                 </style><defs><linearGradient id="ip_background" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#c4e5ff"/><stop offset="100%" stop-color="#ebf6ff"/></linearGradient></defs><rect x="18" y="18" width="303.6" height="252" rx="18" fill="url(#ip_background)"/><a href="#bus-interface-s_axi"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="54">s_axi</text></a><g transform="translate(18,46.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aclk"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="78">s_axi_aclk</text></a><g transform="translate(18,70.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-s_axi_aresetn"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="102">s_axi_aresetn</text></a><g transform="translate(18,94.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_ilas_config"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="126">tx_ilas_config</text></a><g transform="translate(18,118.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_event"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="150">tx_event</text></a><g transform="translate(18,142.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_status"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="174">tx_status</text></a><g transform="translate(18,166.0) scale(-1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="198">core_clk</text></a><g transform="translate(18,190.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="222">core_reset_ext</text></a><g transform="translate(18,214.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="start" dominant-baseline="middle" x="36" y="246">device_clk</text></a><g transform="translate(18,238.0) scale(-1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#bus-interface-tx_cfg"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="54">tx_cfg</text></a><g transform="translate(321.6,46.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-tx_ctrl"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="78">tx_ctrl</text></a><g transform="translate(321.6,70.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#bus-interface-irq"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="102">irq</text></a><g transform="translate(321.6,94.0) scale(1,1)"><rect x="0" y="0" width="16" height="16" fill="#c4e5ff"/><rect x="3.2" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="0" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="6.4" width="3.2" height="3.2" fill="#0067b9"/><rect x="3.2" y="12.8" width="3.2" height="3.2" fill="#0067b9"/><rect x="9.600000000000001" y="12.8" width="3.2" height="3.2" fill="#0067b9"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="126">core_reset</text></a><g transform="translate(321.6,118.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><a href="#ports"><text style="font: 16px sans-serif" text-anchor="end" dominant-baseline="middle" x="303.6" y="150">device_reset</text></a><g transform="translate(321.6,142.0) scale(1,1)"><line stroke="white" stroke-width="6" x1="0" y1="8.0" x2="19" y2="8.0"/><line stroke="black" stroke-width="3" x1="0" y1="8.0" x2="16" y2="8.0"/></g><rect x="18" y="18" width="303.6" height="252" rx="18" fill="none" stroke="#0067b9" stroke-width="3"/><text style="font: 16px sans-serif" fill="#0067b9" text-anchor="middle" dominant-baseline="middle" x="169.8" y="290">axi_jesd204_tx</text></svg></section>
-</div><p>The Analog Devices JESD204B/C Link Transmit Peripheral implements the link layer
-handling of a JESD204 transmit logic device. Implements the 8B/10B based link
-layer defined in JESD204C standard that is similar to the link layer defined in
-JESD204B. This includes handling of the SYSREF and SYNC~ and controlling the
-<a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">link state machine</span></a> accordingly
-as well as performing per lane scrambling and character replacement. It has
-been designed for interoperability with
-<a class="reference internal" href="#axi-jesd204-tx-supported-devices"><span class="std std-ref">Analog Devices JESD204B DAC converter products</span></a>.
-Implements the 64B/66B based link layer defined in the JESD204C standard.
+</div><p>The <a class="icon adi reference external" href="https://www.analog.com/">ADI</a> JESD204B/C Link Transmit Peripheral implements the Link layer
+handling of a JESD204 transmit logic device. Implements the 8B/10B based Link
+layer defined in JESD204C standard that is similar to the Link layer defined in
+JESD204B.</p>
+<p>This includes handling of the SYSREF and SYNC~ and controlling the
+<a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">link state machine</span></a> accordingly,
+as well as performing per lane scrambling and character replacement.</p>
+<p>It has been designed for interoperability with
+<a class="reference internal" href="#axi-jesd204-tx-supported-devices"><span class="std std-ref">ADI JESD204B DAC converter products</span></a>.
+It implements the 64B/66B-based Link layer defined in the JESD204C standard.
 This includes handling of the SYSREF, per lane encoding of sync header,
 scrambling as per data multi-block CRC generation.</p>
-<p>The type of link layer is selectable during implementation phase through the
+<p>The type of Link layer is selectable during implementation phase through the
 <code class="docutils literal notranslate"><span class="pre">LINK_MODE</span></code> synthesis parameter.</p>
-<p>To form a complete JESD204 transmit logic device it has to be combined with a
+<p>To form a complete JESD204 transmit logic device, it has to be combined with a
 <a class="reference internal" href="../index.html#jesd204-physical-layer"><span class="std std-ref">PHY layer</span></a> and
 <a class="reference internal" href="../index.html#jesd204-transport-layer"><span class="std std-ref">transport layer</span></a> peripheral.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Backwards compatibility with JESD204B;</p></li>
-<li><p>64B/66B link layer defined in JESD204C;</p></li>
+<li><p>64B/66B Link layer defined in JESD204C;</p></li>
 <li><p>Subclass 0 and Subclass 1 support;</p></li>
 <li><p>Deterministic Latency (for Subclass 1 operation);</p></li>
 <li><p>Runtime re-configurability through memory-mapped register interface (AXI4);</p></li>
@@ -443,6 +449,12 @@ scrambling as per data multi-block CRC generation.</p>
 </section>
 <section id="files">
 <h2>Files<a class="headerlink" href="#files" title="Permalink to this heading"></a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>To use this wrapper in your project, you need to use the procedure
+<a class="icon git reference external" href="https://github.com/analogdevicesinc/hdl/tree/main/library/jesd204/scripts/jesd204.tcl#L6">adi_tpl_jesd204_tx_create</a>
+to instantiate it.</p>
+</div>
 <div class="table-wrapper docutils container">
 <table class="docutils align-default">
 <thead>
@@ -1092,7 +1104,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a> for the JESD204 interface. Its frequency must be link clock * <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> / <code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></p>
+<p><a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Device clock</span></a> for the JESD204 interface. Its frequency must be link clock * <code class="docutils literal notranslate"><span class="pre">DATA_PATH_WIDTH</span></code> / <code class="docutils literal notranslate"><span class="pre">TPL_DATA_PATH_WIDTH</span></code></p>
 </section>
 </td>
 </tr>
@@ -1100,7 +1112,7 @@ peripheral.</p></td>
 <td><p>out</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Reset active high synchronous with the <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Device clock</a>.</p>
+<p>Reset active high synchronous with the <a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Device clock</span></a>.</p>
 </section>
 </td>
 </tr>
@@ -1442,7 +1454,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Link clock</a> for the JESD204 interface. Must be line clock/40 for correct operation in 8B/10B mode, line clock/66 in 64B/66B mode. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this clock domain.</p>
+<p><a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Link clock</span></a> for the JESD204 interface. Must be line clock/40 for correct operation in 8B/10B mode, line clock/66 in 64B/66B mode. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this clock domain.</p>
 </section>
 </td>
 </tr>
@@ -1450,7 +1462,7 @@ peripheral.</p></td>
 <td><p>in</p></td>
 <td><p></p></td>
 <td class="description"><section>
-<p>Reset active high synchronous with the <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#clocks">Link clock</a>. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this reset signal.</p>
+<p>Reset active high synchronous with the <a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">Link clock</span></a>. Bus <code class="docutils literal notranslate"><span class="pre">tx_cfg_tx_ilas_config_tx_event_tx_status_tx_ctrl</span></code> is synchronous to this reset signal.</p>
 </section>
 </td>
 </tr>
@@ -2515,14 +2527,15 @@ Where n is from 0 to 31.</p>
 </div></section>
 <section id="theory-of-operation">
 <h2>Theory of Operation<a class="headerlink" href="#theory-of-operation" title="Permalink to this heading"></a></h2>
-<p>The JESD204B/C transmit peripheral consists of two main components. The register
-map and the link processor. Both components are fully asynchronous and are
-clocked by independent clocks. The register map is in the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> clock
-domain, while the link processor is in the <code class="docutils literal notranslate"><span class="pre">clk</span></code> and <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> clock
-domain.</p>
-<p>The register map is used to configure the operational parameters of the link
-processor as well as to query the current state of the link processor. The link
-processor itself is responsible for handling the JESD204 link layer protocol.</p>
+<p>The JESD204B/C transmit peripheral consists of <strong>two main components</strong>:
+the register map and the link processor.</p>
+<p>Both components are fully asynchronous and are clocked by independent clocks.
+The register map is in the <code class="docutils literal notranslate"><span class="pre">s_axi_aclk</span></code> clock domain, while the
+link processor is in the <code class="docutils literal notranslate"><span class="pre">clk</span></code> and <code class="docutils literal notranslate"><span class="pre">device_clk</span></code> clock domain.</p>
+<p>The <strong>register map</strong> is used to configure the operational parameters of the link
+processor as well as to query the current state of the link processor.</p>
+<p>The <strong>link processor</strong> itself is responsible for handling the JESD204 link layer
+protocol.</p>
 <section id="interfaces-and-signals">
 <h3>Interfaces and Signals<a class="headerlink" href="#interfaces-and-signals" title="Permalink to this heading"></a></h3>
 <section id="register-map-configuration-interface">
@@ -2739,7 +2752,8 @@ testing purposes.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">LINK_CONF2</span></code> (<code class="docutils literal notranslate"><span class="pre">0x240</span></code>) register contains configuration data that affects
 the transitions of the <a class="reference internal" href="#axi-jesd204-tx-8b-10b-link-state-machine"><span class="std std-ref">link state machine</span></a>. If the
 <code class="docutils literal notranslate"><span class="pre">CONTINUOUS_CGS</span></code> (<code class="docutils literal notranslate"><span class="pre">[0]</span></code>) bit is set the state machine will remain in the CGS
-phase indefinitely and send repeated <a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>.
+phase indefinitely and send repeated
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/K/ control character</span></a>.
 If the <code class="docutils literal notranslate"><span class="pre">CONTINUOUS_ILAS</span></code> (<code class="docutils literal notranslate"><span class="pre">[1]</span></code>) bit is set the state machine will remain
 in the ILAS phase indefinitely and send repeated ILAS sequences. If the
 <code class="docutils literal notranslate"><span class="pre">SKIP_ILAS</span></code> (<code class="docutils literal notranslate"><span class="pre">[2]</span></code>) bit is set the state machine will directly transition
@@ -2805,15 +2819,15 @@ or 64B/66B link state machine depending on the selected encoder. Possible
 values are:</p>
 <p>Possible values for a 8B/10B link are:</p>
 <ul class="simple">
-<li><p>0: WAIT phase;</p></li>
-<li><p>1: CGS phase;</p></li>
-<li><p>2: ILAS phase;</p></li>
-<li><p>3: DATA phase.</p></li>
+<li><p><strong>0</strong>: WAIT phase;</p></li>
+<li><p><strong>1</strong>: CGS phase;</p></li>
+<li><p><strong>2</strong>: ILAS phase;</p></li>
+<li><p><strong>3</strong>: DATA phase.</p></li>
 </ul>
 <p>Possible values for a 64B/66B link are:</p>
 <ul class="simple">
-<li><p>0: WAIT phase;</p></li>
-<li><p>3: DATA phase.</p></li>
+<li><p><strong>0</strong>: WAIT phase;</p></li>
+<li><p><strong>3</strong>: DATA phase.</p></li>
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">STATUS_SYNC</span></code> (<code class="docutils literal notranslate"><span class="pre">[4]</span></code>) field represents the raw state of the external
 SYNC~ and can be used to monitor whether the JESD204B converter device has
@@ -2878,7 +2892,7 @@ map configuration interface or by one of the JESD204B receivers by asserting the
 <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal. Once a synchronization request is received the peripheral
 transitions to the CGS phase.</p>
 <p>During the WAIT phase the peripheral will continuously transmit
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/K/ control character</span></a>
 on each of the <code class="docutils literal notranslate"><span class="pre">TX_PHYn</span></code> interfaces.</p>
 <p>If at any point the peripheral is disabled, it will automatically transition
 back to the WAIT state.</p>
@@ -2888,7 +2902,7 @@ behave as if the link was in the WAIT state regardless of the actual state.</p>
 <section id="code-group-synchronization-phase-cgs">
 <h4>Code Group Synchronization Phase (CGS)<a class="headerlink" href="#code-group-synchronization-phase-cgs" title="Permalink to this heading"></a></h4>
 <p>During the CGS phase the peripheral will continuously transmit
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/K/ control character</a>
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/K/ control character</span></a>
 on each of the <code class="docutils literal notranslate"><span class="pre">TX_PHYn</span></code> interfaces.</p>
 <p>The peripheral will stay in the CGS phase until all of following conditions are
 satisfied:</p>
@@ -2912,12 +2926,12 @@ directly transition to the DATA phase.</p>
 <p>During the ILAS phase the peripheral transmits the initial lane alignment
 sequence. The transmitted ILAS consists of four multi-frames. The first octet of
 each multi-frame is the
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/R/ control character</a>
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/R/ control character</span></a>
 and the last octet of each multi-frame is the
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/A/ control character</a>.</p>
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/A/ control character</span></a>.</p>
 <p>During the second multi-frame the link configuration data is transmitted from
 the 3rd to 16th octet. The second octet of the second multi-frame is the
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/Q/ control character</a>
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/Q/ control character</span></a>
 to indicate that this multi-frame carries configuration data. The ILAS
 configuration data sequence can be programmed through the register map
 configuration interface.</p>
@@ -2952,10 +2966,10 @@ character replacement will replace under certain predictable conditions (i.e.
 the receiver can recover the replaced character) the last octet in a frame or
 multi-frame. Replaced characters at the end of a frame, that is also the end of
 a multi-frame, are replaced by the
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/A/ character</a>.
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/A/ character</span></a>.
 Replaced characters at the end of a frame, that is not the end of a
 multi-frame, are replaced by the
-<a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_glossary#control_characters">/F/ character</a>.
+<a class="reference internal" href="../index.html#jesd204-glossary"><span class="std std-ref">/F/ character</span></a>.
 Alignment characters can be used by the receiver to ensure proper frame
 and lane alignment.</p>
 <p>Alignment character replacement can optionally be disabled via the register map
@@ -2971,14 +2985,15 @@ otherwise undefined behavior might occur.</p>
 <p>In a multi-endpoint configuration one link transmit peripheral connects to
 several endpoints/converter devices. In such cases the link is established
 only when all enabled endpoints reach the DATA phase. For that all endpoints
-must pass through CGS and ILAS stages. Depending on the software
-implementation that controls the converter devices the endpoints can be
-enabled at different moments. The link transmit peripheral will send CGS
-characters until all enabled endpoints succeeded character alignment and
-signalize that through the de-assertion of <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal.
-In the below example we have a multi-point link of four endpoints
+must pass through CGS and ILAS stages.</p>
+<p>Depending on the software implementation that controls the converter devices
+the endpoints can be enabled at different moments. The link transmit peripheral
+will send CGS characters until all enabled endpoints succeeded character
+alignment and signalize that through the de-assertion of <code class="docutils literal notranslate"><span class="pre">SYNC~</span></code> signal.</p>
+<p>In the below example we have a multi-point link of four endpoints
 (<code class="docutils literal notranslate"><span class="pre">NUM_LINKS</span></code> = 4):</p>
-<img alt="../../../_images/quadmxfe_linkbringup_204b_dac.svg" class="align-center" src="../../../_images/quadmxfe_linkbringup_204b_dac.svg" /><div class="admonition note">
+<a class="reference internal image-reference" href="../../../_images/quadmxfe_linkbringup_204b_dac.svg"><img alt="../../../_images/quadmxfe_linkbringup_204b_dac.svg" class="align-center" src="../../../_images/quadmxfe_linkbringup_204b_dac.svg" width="700" /></a>
+<div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The physical layer is not depicted on purpose. JRXn represents the link
 layer counterpart in the converter device/endpoint <em>n</em>.</p>
@@ -3005,7 +3020,7 @@ captured the link transmit peripheral will stay in CGS state.</strong></p></li>
 </section>
 <section id="diagnostics">
 <h3>Diagnostics<a class="headerlink" href="#diagnostics" title="Permalink to this heading"></a></h3>
-<p><a class="reference external" href="https://wiki.analog.com/resources/fpga/peripherals/jesd204/jesd204_troubleshooting">Troubleshooting JESD204B Tx links</a></p>
+<p><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx.html#troubleshoot-jesd204-tx"><span class="std std-ref">Troubleshooting JESD204B Tx links</span></a></p>
 </section>
 </section>
 <section id="b-66b-link">
@@ -3070,31 +3085,32 @@ from using custom low-level software for interfacing the peripheral.</p>
 <span id="axi-jesd204-tx-restrictions"></span><h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this heading"></a></h2>
 <p>During the design of the peripheral the deliberate decision was made to support
 only a subset of the features mandated by the JESD204B standard for transmitter
-logic devices. The reasoning here is that the peripheral has been designed to
-interface to Analog Devices JESD204B DAC converter devices and features that are
+logic devices.</p>
+<p>The reasoning here is that the peripheral has been designed to interface to
+<a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a> JESD204B DAC converter devices and features that are
 either not required or not supported by those converter devices would otherwise
-lie dormant in peripheral and never be used. Instead the decision was made to
-not implement those unneeded features even when the JESD204B standard requires
-them for general purpose JESD204B transmitter logic devices. As Analog Devices
-DAC converter devices with new requirements are released the peripheral will be
-adjusted accordingly.</p>
+lie dormant in peripheral and never be used.</p>
+<p>Instead, the decision was made to not implement those unneeded features, even
+when the JESD204B standard requires them for general purpose JESD204B
+transmitter logic devices. As <a class="icon adi reference external" href="https://www.analog.com/">Analog Devices</a> DAC converter devices
+with new requirements are released the peripheral will be adjusted accordingly.</p>
 <p>This approach allows for a leaner design using less resources, allowing for
 lower pipeline latency and a higher maximum device clock frequency.</p>
 <p>The following lists where the peripheral deviates from the standard:</p>
 <ul class="simple">
-<li><p>No subclass 2 support. JESD204B subclass 2 has due to its implementation
-details restricted applicability and is seldom a viable option for a modern
+<li><p>No subclass 2 support. JESD204B subclass 2 has, due to its implementation
+details, restricted applicability and is seldom a viable option for a modern
 high-speed data converter system. To achieve deterministic latency it is
 recommend to use subclass 1 mode;</p></li>
 <li><p>Reduced number of octets-per-frame settings. The JESD204B standard allows for
 any value between 1 and 256 to be used for the number of octets-per-frame;</p></li>
 <li><p>The following octets-per-frame values are supported by the peripheral: 1, 2,
-4 and 8.(No longer applies starting from 1.06.a);</p></li>
+4 and 8 (no longer applies starting from 1.06.a);</p></li>
 <li><p>Reduced number of frames-per-multi-frame settings. The following values are
 supported by the peripheral: 1-32, with the additional requirement that F*K
 is a multiple of 4. In addition F*K needs to be in the range of 4-256;</p></li>
 <li><p>No support for alignment character replacement when scrambling is
-disabled.(No longer applies starting from 1.06.a).</p></li>
+disabled (no longer applies starting from 1.06.a).</p></li>
 </ul>
 </section>
 <section id="supported-devices">
@@ -3102,61 +3118,39 @@ disabled.(No longer applies starting from 1.06.a).</p></li>
 <section id="jesd204b-digital-to-analog-converters">
 <h3>JESD204B Digital-to-Analog Converters<a class="headerlink" href="#jesd204b-digital-to-analog-converters" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9135">AD9135</a>: Dual, 11-Bit, high dynamic, 2.8 GSPS,
-TxDAC+® Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9136">AD9136</a>: Dual, 16-Bit, 2.8 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9144">AD9144</a>: Quad, 16-Bit, 2.8 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9152">AD9152</a>: Dual, 16-Bit, 2.25 GSPS, TxDAC+
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9154">AD9154</a>: Quad, 16-Bit, 2.4 GSPS, TxDAC+®
-Digital-to-Analog Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9161">AD9161</a>: 11-Bit, 12 GSPS, RF Digital-to-Analog
-Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9162">AD9162</a>: 16-Bit, 12 GSPS, RF Digital-to-Analog
-Converter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9163">AD9163</a>: 16-Bit, 12 GSPS, RF DAC and Digital
-Upconverter</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-Bit, 12 GSPS, RF DAC and Direct Digital
-Synthesizer</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9172">AD9172</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9173">AD9173</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9174">AD9174</a>: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct
-Digital Synthesizer</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9175">AD9175</a>: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with
-Wideband Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9176">AD9176</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with
-Wideband Channelizers</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9177">AD9177</a>: Quad, 16-Bit, 12 GSPS RF DAC with
-Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9135">AD9135</a>: Dual, 11-Bit, high dynamic, 2.8 GSPS, TxDAC+ Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9136">AD9136</a>: Dual, 16-Bit, 2.8 GSPS, TxDAC+ Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9144">AD9144</a>: Quad, 16-Bit, 2.8 GSPS, TxDAC+ Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9152">AD9152</a>: Dual, 16-Bit, 2.25 GSPS, TxDAC+ Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9154">AD9154</a>: Quad, 16-Bit, 2.4 GSPS, TxDAC+ Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9161">AD9161</a>: 11-Bit, 12 GSPS, RF Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9162">AD9162</a>: 16-Bit, 12 GSPS, RF Digital-to-Analog Converter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9163">AD9163</a>: 16-Bit, 12 GSPS, RF DAC and Digital Upconverter</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9164">AD9164</a>: 16-Bit, 12 GSPS, RF DAC and Direct Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9172">AD9172</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9173">AD9173</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9174">AD9174</a>: Dual, 16-Bit, 12.6 GSPS RF DAC and Direct Digital Synthesizer</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9175">AD9175</a>: Dual, 11-Bit/16-Bit, 12.6 GSPS RF DAC with Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9176">AD9176</a>: Dual, 16-Bit, 12.6 GSPS RF DAC with Wideband Channelizers</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9177">AD9177</a>: Quad, 16-Bit, 12 GSPS RF DAC with Wideband Channelizers</p></li>
 </ul>
 </section>
 <section id="jesd204b-rf-transceivers">
 <h3>JESD204B RF Transceivers<a class="headerlink" href="#jesd204b-rf-transceivers" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with
-Observation Path and DPD</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver
-with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9371">AD9371</a>: SDR Integrated, Dual RF Transceiver with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9375">AD9375</a>: SDR Integrated, Dual RF Transceiver with Observation Path and DPD</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9009">ADRV9009</a>: SDR Integrated, Dual RF Transceiver with Observation Path</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-1">ADRV9008-1</a>: SDR Integrated, Dual RF Receiver</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF
-Transmitter with Observation Path</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/ADRV9008-2">ADRV9008-2</a>: SDR Integrated, Dual RF Transmitter with Observation Path</p></li>
 </ul>
 </section>
 <section id="jesd204b-c-mixed-signal-front-ends">
 <h3>JESD204B/C Mixed-Signal Front Ends<a class="headerlink" href="#jesd204b-c-mixed-signal-front-ends" title="Permalink to this heading"></a></h3>
 <ul class="simple">
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a>: MxFE™ Quad, 16-Bit, 12GSPS RFDAC and
-Quad, 12-Bit, 4GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a>: MxFE™ QUAD, 16-Bit, 12GSPS RFDAC and
-DUAL, 12-Bit, 6GSPS RFADC</p></li>
-<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and
-Observation Receiver</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9081">AD9081</a>: MxFE Quad, 16-Bit, 12GSPS RFDAC and Quad, 12-Bit, 4GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9082">AD9082</a>: MxFE QUAD, 16-Bit, 12GSPS RFDAC and DUAL, 12-Bit, 6GSPS RFADC</p></li>
+<li><p><a class="icon adi reference external" href="https://www.analog.com/AD9986">AD9986</a>: 4T2R Direct RF Transmitter and Observation Receiver</p></li>
 <li><p><a class="icon adi reference external" href="https://www.analog.com/AD9988">AD9988</a>: 4T4R Direct RF Receiver and Transmitter</p></li>
 </ul>
 </section>
@@ -3175,6 +3169,7 @@ encounter.</p>
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="../index.html#jesd204"><span class="std std-ref">JESD204B High-Speed Serial Interface Support</span></a></p></li>
+<li><p><a class="reference internal" href="../troubleshoot/troubleshoot_jesd204_tx.html#troubleshoot-jesd204-tx"><span class="std std-ref">Troubleshooting JESD204B TX links</span></a></p></li>
 <li><p><a class="reference internal" href="../../../user_guide/index.html#user-guide"><span class="std std-ref">HDL User Guide</span></a></p></li>
 </ul>
 </section>
@@ -3184,7 +3179,7 @@ encounter.</p>
           </div>
               <div class="related">
                 &nbsp;
-    <a href="../index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">JESD204 Interface Framework</a>
+    <a href="../generic_jesd_bds/index.html" title="Previous document (Alt+Shift+LeftArrow)" class="prev">Generic JESD204 block designs</a>
     <a href="../axi_jesd204_rx/index.html" title="Next document (Alt+Shift+RightArrow)" class="next">JESD204B/C Link Receive Peripheral</a>
               </div>
           
