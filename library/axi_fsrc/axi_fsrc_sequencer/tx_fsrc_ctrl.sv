@@ -34,9 +34,7 @@ module tx_fsrc_ctrl #(
   input  wire                                      seq_ext_trig_en,
 
   output logic [NUM_TRIG-1:0]                      trig_out, // first
-  output logic                                     rx_data_start, // TODO remove, it is useless.
   output logic                                     tx_data_start,
-  output logic [CTRL_WIDTH-1:0]                    ctrl // TODO remove, it sets unused GPIOs
 );
 
   localparam TRIG_PULSE_WIDTH = 4;
@@ -114,10 +112,6 @@ module tx_fsrc_ctrl #(
       end
     end
   end
-
-
-  assign ctrl = 'b0;
-  assign rx_data_start = 'b0;
 
   genvar ii;
   for (ii=0; ii<NUM_TRIG; ii=ii+1) begin

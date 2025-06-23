@@ -74,6 +74,8 @@ module axi_fsrc_sequencer #(
   input                   s_axi_rready
 );
 
+  assign rx_data_start = 'b0;
+  assign ctrl = 'b0;
   assign seq_debug = 1'b0;
 
   localparam [31:0] CORE_VERSION = {16'h0000,     /* MAJOR */
@@ -201,9 +203,7 @@ module axi_fsrc_sequencer #(
     .trig_out (fsrc_trig_out),
     .seq_trig_in (fsrc_trig_in),
     .seq_ext_trig_en (fsrc_seq_ext_trig_en),
-    .rx_data_start (rx_data_start),
-    .tx_data_start (tx_data_start),
-    .ctrl (ctrl));
+    .tx_data_start (tx_data_start));
 
   assign seq_ext_trig_s = trig_in;
 
