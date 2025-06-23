@@ -1,4 +1,8 @@
-# AD719X-ASDZ/CoraZ7S HDL Project
+<!-- no_build_example, no_no_os -->
+
+# AD719X-ASDZ/CORAZ7S HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
