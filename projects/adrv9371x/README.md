@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-ADRV9371](https://www.analog.com/eval-adrv9371)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/mykonos/quickstart
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9371x/index.html
+- Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts
 
