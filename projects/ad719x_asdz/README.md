@@ -8,6 +8,7 @@
   - [EVAL-AD7195](https://www.analog.com/eval-ad7195asdz)
 - System documentation: https://wiki.analog.com/resources/eval/adc/ad719x_asdz 
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html
+- Evaluation board VIO: 3.3V
 
 ## Supported parts
 
