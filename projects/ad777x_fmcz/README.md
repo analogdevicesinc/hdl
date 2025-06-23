@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD7770/1/9](https://www.analog.com/eval-ad7770-ad7779.html)
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad777x_fmcz/index.html
+- Evaluation board VADJ range: 1.8V - 3.6V
 
 ## Supported parts
 
