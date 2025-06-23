@@ -94,6 +94,12 @@ proc adi_project {project_name {parameter_list {}}} {
     set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
   }
 
+  if [regexp "_a5e" $project_name] {
+    set family "Agilex 5"
+    set device A5ED065BB32AE6SR0
+    set system_qip_file ${ad_project_dir}/system_bd/synthesis/system_bd.qip
+  }
+
   # version check
 
   set m_version [lindex $quartus(version) 1]
