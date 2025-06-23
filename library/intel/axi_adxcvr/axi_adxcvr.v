@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2025 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -48,8 +48,8 @@ module axi_adxcvr #(
   parameter   integer XCVR_TYPE = 0,
   parameter   integer TX_OR_RX_N = 0,
   parameter   integer NUM_OF_LANES = 4,
-  parameter           LOCKED_W = (FPGA_TECHNOLOGY == 105) ?  NUM_OF_LANES : 1,
-  parameter           READY_W = (FPGA_TECHNOLOGY != 105) ?  NUM_OF_LANES : 1
+  parameter           LOCKED_W = (FPGA_TECHNOLOGY == 105 || FPGA_TECHNOLOGY == 106) ?  NUM_OF_LANES : 1,
+  parameter           READY_W = (FPGA_TECHNOLOGY != 105 && FPGA_TECHNOLOGY != 106) ?  NUM_OF_LANES : 1
 ) (
 
   // xcvr, lane-pll and ref-pll are shared
@@ -105,6 +105,48 @@ module axi_adxcvr #(
 
   assign xcvr_reset = up_rst;
 
+  // CDC
+  wire [LOCKED_W-1:0]     up_pll_locked_s;
+  wire [NUM_OF_LANES-1:0] up_rx_lockedtodata_s;
+  wire [READY_W-1:0]      up_ready_s;
+  wire [READY_W-1:0]      up_reset_ack_s;
+
+  sync_bits #(
+    .NUM_OF_BITS(LOCKED_W),
+    .ASYNC_CLK(1)
+  ) i_pll_locked_cdc (
+    .in_bits(up_pll_locked),
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .out_bits(up_pll_locked_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(NUM_OF_LANES),
+    .ASYNC_CLK(1)
+  ) i_rx_lockedtodata_cdc (
+    .in_bits(up_rx_lockedtodata),
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .out_bits(up_rx_lockedtodata_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(READY_W),
+    .ASYNC_CLK(1)
+  ) i_ready_cdc (
+    .in_bits(up_ready),
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .out_bits(up_ready_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(READY_W),
+    .ASYNC_CLK(1)
+  ) i_reset_ack_cdc (
+    .in_bits(up_reset_ack),
+    .out_clk(up_clk),
+    .out_resetn(1'b1),
+    .out_bits(up_reset_ack_s));
+
   // instantiations
 
   axi_adxcvr_up #(
@@ -120,10 +162,10 @@ module axi_adxcvr #(
     .READY_W (READY_W)
   ) i_up (
     .up_rst (up_rst),
-    .up_pll_locked (&up_pll_locked),
-    .up_rx_lockedtodata (&up_rx_lockedtodata),
-    .up_ready (up_ready),
-    .up_reset_ack (up_reset_ack),
+    .up_pll_locked (&up_pll_locked_s),
+    .up_rx_lockedtodata (&up_rx_lockedtodata_s),
+    .up_ready (up_ready_s),
+    .up_reset_ack (up_reset_ack_s),
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_wreq (up_wreq),

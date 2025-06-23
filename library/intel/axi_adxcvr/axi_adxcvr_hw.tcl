@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2016-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2016-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -23,6 +23,9 @@ ad_ip_files axi_adxcvr [list \
   $ad_hdl_dir/library/common/up_axi.v \
   axi_adxcvr_up.v \
   axi_adxcvr.v \
+  axi_adxcvr_constr.sdc \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
 ]
 
 # parameters
@@ -75,7 +78,8 @@ proc p_axi_adxcvr {} {
   }
 
   # 105 = Agilex, see adi_intel_device_info_enc.tcl
-  if {$fpga_technology == 105} {
+  if {$fpga_technology == 105 || $fpga_technology == 106} {
+
     add_interface ready conduit end
     add_interface_port ready up_ready ${rx_tx}_ready input 1
 
@@ -86,11 +90,21 @@ proc p_axi_adxcvr {} {
     add_interface_port reset_ack up_reset_ack ${rx_tx}_reset_ack input 1
 
     if {$m_tx_or_rx_n == 0} {
-      add_interface rx_lockedtodata conduit end
-      add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+      if {$fpga_technology == 105} {
+        add_interface rx_lockedtodata conduit end
+        add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+      } else {
+        add_interface rx_lockedtodata conduit end
+        add_interface_port rx_lockedtodata up_rx_lockedtodata o_rx_is_lockedtodata input $m_num_of_lanes
+      }
     } else {
-      add_interface core_pll_locked conduit end
-      add_interface_port core_pll_locked up_pll_locked ${rx_tx}_pll_locked Input $m_num_of_lanes
+      if {$fpga_technology == 105} {
+        add_interface core_pll_locked conduit end
+        add_interface_port core_pll_locked up_pll_locked tx_pll_locked Input $m_num_of_lanes
+      } else {
+        add_interface core_pll_locked conduit end
+        add_interface_port core_pll_locked up_pll_locked o_tx_pll_locked Input $m_num_of_lanes
+      }
     }
 
   } else {
