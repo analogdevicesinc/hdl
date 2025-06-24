@@ -56,10 +56,10 @@ module fifo_sync_2deep #(
       if (~aresetn & DORESET) begin
         dout <= {DWIDTH{1'b0}};
       end else begin
-        if((cnt == 2'b00) && fifo_we) begin
+        if ((cnt == 2'b00) && fifo_we) begin
           dout <= s_tdata;
         end else if(fifo_re) begin
-          if(cnt == 2'b01) begin
+          if (cnt == 2'b01) begin
             dout <= s_tdata;
           end else begin
             dout <= data[~rptr];
