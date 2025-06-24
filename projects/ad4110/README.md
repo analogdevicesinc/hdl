@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD4110-1] (https://www.analog.com/eval-ad4110-1)
 - System documentation: TO BE ADDED
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad4110/index.html
+- Evaluation board VIO: 3.3V
  
 ## Supported parts
 
