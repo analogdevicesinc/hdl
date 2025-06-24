@@ -87,7 +87,7 @@ module util_upack2_impl #(
   assign data_rd_en = fifo_rd_en[0];
 
   assign ce = s_axis_valid & data_rd_en;
-  assign s_axis_ready = ready & ce;
+  assign s_axis_ready = ready & data_rd_en;
 
   pack_shell #(
     .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
