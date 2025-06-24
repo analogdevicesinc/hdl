@@ -34,7 +34,7 @@ module tx_fsrc_ctrl #(
   input  wire                                      seq_ext_trig_en,
 
   output logic [NUM_TRIG-1:0]                      trig_out, // first
-  output logic                                     tx_data_start,
+  output logic                                     tx_data_start
 );
 
   localparam TRIG_PULSE_WIDTH = 4;
