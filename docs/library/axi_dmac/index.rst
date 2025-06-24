@@ -462,12 +462,12 @@ Transfer Tear-down
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Non-cyclic transfers stop once the programmed amount of data is transferred to
-the destination. Cyclic transfers needs to be stopped with software intervention
-by setting the ``ENABLE`` control bit to 0. In case if required, non cyclic
-transfers can be interrupted in the same way. The transfer tear down is done
-gracefully and is done at a burst resolution on MM interfaces and beat
-resolution on non-MM interfaces. DMAC shuts down gracefully as fast as possible
-while completing all in-progress MM transactions.
+the destination. Cyclic transfers need to be stopped with software intervention
+by setting the ``CYCLIC`` flag to 0. In case if required, cyclic and non cyclic
+transfers can also be interrupted by setting the ``ENABLE`` control bit to 0. In
+this case, the transfer tear down is done gracefully at a burst resolution on MM
+interfaces and beat resolution on non-MM interfaces. DMAC shuts down gracefully
+as fast as possible while completing all in-progress MM transactions.
 
 Source side: For MM interface once the ``ENABLE`` bit de-asserts the DMAC won't
 issue new requests towards the source interface but will wait until all pending
@@ -569,8 +569,9 @@ overhead.
 A transfer is cyclic if the ``CYCLIC`` (``[0]``) bit of the ``FLAGS``
 (``0x40C``) is set to 1 during transfer submission.
 
-For cyclic transfers no end-of-transfer interrupts will be generated. To stop a
-cyclic transfer the DMA channel must be disabled.
+For cyclic transfers one start-of-transfer interrupt and one end-of-transfer
+interrupt will be generated, marking the limits of the full transfer. To stop a
+cyclic transfer the ``CYCLIC`` flag must be set to 0.
 
 Any additional transfers that are submitted after the submission of a cyclic
 transfer (and before stopping the cyclic transfer) will never be executed.
