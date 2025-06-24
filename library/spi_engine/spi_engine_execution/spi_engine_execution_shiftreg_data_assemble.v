@@ -30,6 +30,7 @@ reg               [3:0] count_active_lanes = 0;
 reg                     last_handshake_int;
 reg               [7:0] spi_lane_config_mask = DEFAULT_MASK_SPI_LANE;
 integer                 lane_index = 0;
+integer                 lane_index_d = 0;
 integer                 valid_indices [0:7];
 
 wire                    sdo_toshiftreg = (transfer_active && trigger_tx && first_bit && sdo_enabled);
@@ -68,9 +69,9 @@ always @(posedge clk) begin
         aligned_data <= {(NUM_OF_SDI * DATA_WIDTH){idle_state}};
     end else begin
         if (spi_lane_config_mask == DEFAULT_MASK_SPI_LANE) begin
-            aligned_data[lane_index * DATA_WIDTH+:DATA_WIDTH] <= data_reg[lane_index * DATA_WIDTH+:DATA_WIDTH] << left_aligned;
+            aligned_data[lane_index_d * DATA_WIDTH+:DATA_WIDTH] <= data_reg[lane_index_d * DATA_WIDTH+:DATA_WIDTH] << left_aligned;
         end else begin
-            aligned_data[valid_indices[lane_index] * DATA_WIDTH+:DATA_WIDTH] <= data_reg[valid_indices[lane_index] * DATA_WIDTH+:DATA_WIDTH] << left_aligned;
+            aligned_data[valid_indices[lane_index_d] * DATA_WIDTH+:DATA_WIDTH] <= data_reg[valid_indices[lane_index_d] * DATA_WIDTH+:DATA_WIDTH] << left_aligned;
         end
     end
 end
@@ -111,6 +112,7 @@ end
 always @(posedge clk) begin
     if (resetn == 1'b0) begin
         lane_index <= 0;
+        lane_index_d <= 0;
         last_handshake_int <= 1'b0;
     end else begin
         if (data_ready && data_valid) begin
@@ -120,6 +122,7 @@ always @(posedge clk) begin
             end else begin
                 lane_index <= 0;
             end
+            lane_index_d <= lane_index;
         end else if (sdo_toshiftreg) begin
             last_handshake_int <= 1'b0;
         end
