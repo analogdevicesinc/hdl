@@ -35,9 +35,8 @@
 
 module axi_fsrc_tx #(
   parameter DATA_WIDTH = 256,
-  parameter NP = 16,
-  parameter MAX_CONV = 8,
-  parameter ACCUM_WIDTH = 64
+  parameter ACCUM_WIDTH = 64,
+  parameter NP = 16
 ) (
   input                       clk,
   input                       reset,
@@ -82,7 +81,6 @@ module axi_fsrc_tx #(
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // FSRC
 
   localparam NUM_SAMPLES = DATA_WIDTH / NP;
-  localparam NUM_SAMPLES2 = DATA_WIDTH / NP / MAX_CONV;
 
   // internal signals
 
@@ -166,18 +164,18 @@ module axi_fsrc_tx #(
     .up_rdata (up_rdata_s),
     .up_rack (up_rack_s));
 
-  wire [MAX_CONV-1:0]    data_in_ready_s;
-  wire [MAX_CONV-1:0]    data_out_valid_s;
+  wire                   data_in_ready_s;
+  wire                   data_out_valid_s;
   wire [DATA_WIDTH-1:0]  data_out_s;
 
-  wire [MAX_CONV-1:0][NP*NUM_SAMPLES2-1:0] data_in_per_converter;
-  wire [MAX_CONV-1:0][NP*NUM_SAMPLES2-1:0] data_out_per_converter;
+  wire [NUM_SAMPLES-1:0][NP-1:0] data_in_per_converter;
+  wire [NUM_SAMPLES-1:0][NP-1:0] data_out_per_converter;
 
   /* Map a flat array to a 2d array (needed by the tx_fsrc) and vice-versa */
   genvar ii;
-  for (ii = 0; ii < MAX_CONV; ii = ii + 1) begin
-    assign data_in_per_converter[ii] = s_axis_data[ii*NP*NUM_SAMPLES2+:NP*NUM_SAMPLES2];
-    assign data_out_s[ii*NP*NUM_SAMPLES2+:NP*NUM_SAMPLES2] = data_out_per_converter[ii];
+  for (ii = 0; ii < NUM_SAMPLES; ii = ii + 1) begin
+    assign data_in_per_converter[ii] = s_axis_data[ii*NP+:NP];
+    assign data_out_s[ii*NP+:NP] = data_out_per_converter[ii];
   end
 
   // TODO merge tx_data_start and fsrc_stop together,
@@ -187,8 +185,8 @@ module axi_fsrc_tx #(
   tx_fsrc #(
     .NP (NP),
     .DATA_WIDTH (DATA_WIDTH),
-    .MAX_CONV (MAX_CONV),
-    .ACCUM_WIDTH (ACCUM_WIDTH)
+    .ACCUM_WIDTH (ACCUM_WIDTH),
+    .NUM_SAMPLES (NUM_SAMPLES)
   ) i_tx_fsrc (
     .clk (clk),
     .reset (reset),
@@ -207,12 +205,12 @@ module axi_fsrc_tx #(
 
     .out_data (data_out_per_converter),
     .out_valid (data_out_valid_s),
-    .out_ready ({MAX_CONV{m_axis_ready}}));
+    .out_ready (m_axis_ready));
 
   always @(posedge clk) begin
     m_axis_data <= data_out_s;
-    m_axis_valid <= |data_out_valid_s;
-    s_axis_ready <= |data_in_ready_s;
+    m_axis_valid <= data_out_valid_s;
+    s_axis_ready <= data_in_ready_s;
   end
 
 endmodule

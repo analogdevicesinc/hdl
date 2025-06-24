@@ -44,7 +44,7 @@ module rx_fsrc_remove_invalid #(
     in_data_d <= in_data;
   end
 
-  for(ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : invalid_sample_check_gen
+  for(ii = 0; ii < NUM_SAMPLES; ii = ii + 1) begin : invalid_sample_check_gen
     always_ff @(posedge clk) begin
       if(reset) begin
         invalid_sample[ii] <= '0;

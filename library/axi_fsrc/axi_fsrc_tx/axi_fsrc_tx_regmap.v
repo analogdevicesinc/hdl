@@ -76,7 +76,7 @@ module axi_fsrc_tx_regmap #(
   reg [31:0] up_scratch_s;
   reg [31:0] up_jesd204b_tx_config_s;
   reg [31:0] up_ctrl_transmit_s;
-  reg [31:0] up_link_ctrl_s;
+  reg [31:0] up_conv_mask_s;
   reg [31:0] up_fsrc_accum_add_val_s;
   reg [31:0] up_fsrc_accum_add_val_2_s;
   reg  [3:0] up_fsrc_accum_set_val_addr_s;
@@ -90,7 +90,7 @@ module axi_fsrc_tx_regmap #(
       up_scratch_s <= 'd0;
       up_jesd204b_tx_config_s <= 'd0;
       up_ctrl_transmit_s <= 'd0;
-      up_link_ctrl_s <= 'd0;
+      up_conv_mask_s <= 'd0;
       up_fsrc_accum_add_val_s <= 'd0;
       up_fsrc_accum_add_val_2_s <= 'd0;
       up_fsrc_accum_set_val_addr_s <= 'd0;
@@ -109,7 +109,7 @@ module axi_fsrc_tx_regmap #(
         up_ctrl_transmit_s <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h6)) begin
-        up_link_ctrl_s <= up_wdata;
+       up_conv_mask_s <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h7)) begin
         up_fsrc_accum_add_val_s <= up_wdata;
@@ -146,7 +146,7 @@ module axi_fsrc_tx_regmap #(
           14'h3:   up_rdata <= CORE_MAGIC;
           14'h4:   up_rdata <= up_jesd204b_tx_config_s;
           14'h5:   up_rdata <= up_ctrl_transmit_s;
-          14'h6:   up_rdata <= up_link_ctrl_s;
+          14'h6:   up_rdata <= up_conv_mask_s;
           14'h7:   up_rdata <= up_fsrc_accum_add_val_s;
           14'h8:   up_rdata <= up_fsrc_accum_add_val_2_s;
           14'h9:   up_rdata <= {28'b0, up_fsrc_accum_set_val_addr_s};
@@ -180,7 +180,7 @@ module axi_fsrc_tx_regmap #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
   ) link_ctrl_sync (
-    .in_bits(up_link_ctrl_s),
+    .in_bits(up_conv_mask_s),
     .out_clk(clk),
     .out_bits(link_ctrl));
 
@@ -216,6 +216,6 @@ module axi_fsrc_tx_regmap #(
   assign tx_fsrc_stop        = ctrl_transmit[4];
   assign tx_fsrc_change_rate = ctrl_transmit[5];
   assign fsrc_accum_set = ctrl_transmit[6];
-  assign conv_mask      = link_ctrl[31:16];
+  assign conv_mask      = link_ctrl[15:0];
 
 endmodule
