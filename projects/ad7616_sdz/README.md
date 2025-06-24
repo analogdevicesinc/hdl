@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD7616](https://www.analog.com/eval-ad7616)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad7616-sdz
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad7616_sdz/index.html
+- Evaluation board VIO: 3.3V
 
 ## Supported parts
 
