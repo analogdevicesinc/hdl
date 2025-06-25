@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-CN0540-ARDZ](https://www.analog.com/cn0540)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0540
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0540/index.html
+- Evaluation board VADJ: 3.3V
 
 ## Supported parts
 
