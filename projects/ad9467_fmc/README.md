@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD9467](https://www.analog.com/eval-ad9467)
 - System documentation: https://wiki.analog.com/resources/eval/ad9467-fmc-250ebz
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad9467_fmc/index.html
+- Evaluation board VADJ: 2.5V
 
 ## Supported parts
 
