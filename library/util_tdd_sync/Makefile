@@ -9,7 +9,8 @@ LIBRARY_NAME := util_tdd_sync
 GENERIC_DEPS += ../common/util_pulse_gen.v
 GENERIC_DEPS += util_tdd_sync.v
 
-XILINX_DEPS += util_tdd_sync_constr.xdc
 XILINX_DEPS += util_tdd_sync_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

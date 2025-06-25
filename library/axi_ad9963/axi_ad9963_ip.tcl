@@ -9,10 +9,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_ad9963
 adi_ip_files axi_ad9963 [list \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_data_in.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_dcfilter.v" \
@@ -35,7 +32,7 @@ adi_ip_files axi_ad9963 [list \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-  "axi_ad9963_constr.xdc" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9963_if.v" \
   "axi_ad9963_rx_pnmon.v" \
   "axi_ad9963_rx_channel.v" \

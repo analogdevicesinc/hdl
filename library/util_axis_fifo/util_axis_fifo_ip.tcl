@@ -10,9 +10,8 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create util_axis_fifo
 adi_ip_files util_axis_fifo [list \
+	"$ad_hdl_dir/library/common/ad_mem.v" \
 	"util_axis_fifo_address_generator.v" \
-	"../common/ad_mem.v" \
-	"../common/ad_mem_asym.v" \
 	"util_axis_fifo.v" \
 ]
 

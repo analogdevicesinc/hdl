@@ -6,7 +6,6 @@
 
 PROJECT_NAME := pluto
 
-M_DEPS += ../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../library/util_cdc/sync_bits.v
 M_DEPS += ../../library/common/util_pulse_gen.v

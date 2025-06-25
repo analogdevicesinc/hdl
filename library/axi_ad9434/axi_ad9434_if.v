@@ -84,16 +84,15 @@ module axi_ad9434_if #(
 
   localparam SDR = 0;
 
-  // internal registers
-
-  reg             adc_status_m1 = 'd0;
-
   // internal signals
 
   wire    [3:0]   adc_or_s;
 
   wire            adc_clk_in;
   wire            adc_div_clk;
+
+  wire            up_drp_locked_sync;
+  wire            delay_locked_sync;
 
   genvar          l_inst;
 
@@ -196,12 +195,30 @@ module axi_ad9434_if #(
   // adc status: adc is up, if both the MMCM_OR_BUFR_N and DELAY blocks are up
   always @(posedge adc_div_clk) begin
     if (adc_rst == 1'b1) begin
-      adc_status_m1 <= 1'b0;
       adc_status <= 1'b0;
     end else begin
-      adc_status_m1 <= up_drp_locked & delay_locked;
-      adc_status <= adc_status_m1;
+      adc_status <= up_drp_locked_sync & delay_locked_sync;
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(SYNC_STAGES)
+  ) i_up_drp_locked_sync (
+    .out_clk(adc_div_clk),
+    .out_resetn(~adc_rst),
+    .in_bits(up_drp_locked),
+    .out_bits(up_drp_locked_sync));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(SYNC_STAGES)
+  ) i_delay_locked_sync (
+    .out_clk(adc_div_clk),
+    .out_resetn(~adc_rst),
+    .in_bits(delay_locked),
+    .out_bits(delay_locked_sync));
 
 endmodule

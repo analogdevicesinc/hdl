@@ -38,7 +38,7 @@ GENERIC_DEPS += src_axi_mm.v
 GENERIC_DEPS += src_axi_stream.v
 GENERIC_DEPS += src_fifo_inf.v
 
-XILINX_DEPS += axi_dmac_constr.ttcl
+XILINX_DEPS += axi_dmac_constr.xdc
 XILINX_DEPS += axi_dmac_ip.tcl
 XILINX_DEPS += axi_dmac_pkg_sv.ttcl
 XILINX_DEPS += bd/bd.tcl
@@ -52,6 +52,7 @@ XILINX_DEPS += interfaces/if_framelock_rtl.xml
 
 XILINX_LIB_DEPS += util_axis_fifo
 XILINX_LIB_DEPS += util_cdc
+XILINX_LIB_DEPS += util_rst_chain
 
 XILINX_INTERFACE_DEPS += axi_dmac/interfaces
 

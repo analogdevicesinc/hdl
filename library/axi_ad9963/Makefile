@@ -37,10 +37,8 @@ XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_dcfilter.v
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_ad9963_constr.xdc
 XILINX_DEPS += axi_ad9963_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

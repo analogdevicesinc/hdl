@@ -9,7 +9,6 @@ LIBRARY_NAME := util_hbm
 GENERIC_DEPS += util_hbm.v
 
 XILINX_DEPS += bd/bd.tcl
-XILINX_DEPS += util_hbm_constr.xdc
 XILINX_DEPS += util_hbm_ip.tcl
 XILINX_DEPS += util_hbm_ooc.ttcl
 

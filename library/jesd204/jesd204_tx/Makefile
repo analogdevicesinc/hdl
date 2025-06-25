@@ -14,7 +14,6 @@ GENERIC_DEPS += jesd204_tx_gearbox.v
 GENERIC_DEPS += jesd204_tx_lane.v
 
 XILINX_DEPS += bd/bd.tcl
-XILINX_DEPS += jesd204_tx_constr.ttcl
 XILINX_DEPS += jesd204_tx_header.v
 XILINX_DEPS += jesd204_tx_ip.tcl
 XILINX_DEPS += jesd204_tx_lane_64b.v

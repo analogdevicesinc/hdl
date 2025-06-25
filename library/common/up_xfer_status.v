@@ -55,18 +55,15 @@ module up_xfer_status #(
 
   // internal registers
 
-  reg                         d_xfer_state_m1 = 'd0;
-  reg                         d_xfer_state_m2 = 'd0;
-  reg                         d_xfer_state = 'd0;
+  wire                        d_xfer_state;
   reg     [ 5:0]              d_xfer_count = 'd0;
   reg                         d_xfer_toggle = 'd0;
   reg     [(DATA_WIDTH-1):0]  d_xfer_data = 'd0;
   reg     [(DATA_WIDTH-1):0]  d_acc_data = 'd0;
-  reg                         up_xfer_toggle_m1 = 'd0;
-  reg                         up_xfer_toggle_m2 = 'd0;
-  reg                         up_xfer_toggle_m3 = 'd0;
-  reg                         up_xfer_toggle = 'd0;
+  wire                        up_xfer_toggle;
+  reg                         up_xfer_toggle_d;
   reg     [(DATA_WIDTH-1):0]  up_data_status_int = 'd0;
+  wire    [(DATA_WIDTH-1):0]  up_data_status_int_cdc;
 
   // internal signals
 
@@ -79,17 +76,11 @@ module up_xfer_status #(
 
   always @(posedge d_clk or posedge d_rst) begin
     if (d_rst == 1'b1) begin
-      d_xfer_state_m1 <= 'd0;
-      d_xfer_state_m2 <= 'd0;
-      d_xfer_state <= 'd0;
       d_xfer_count <= 'd0;
       d_xfer_toggle <= 'd0;
       d_xfer_data <= 'd0;
       d_acc_data <= 'd0;
     end else begin
-      d_xfer_state_m1 <= up_xfer_toggle;
-      d_xfer_state_m2 <= d_xfer_state_m1;
-      d_xfer_state <= d_xfer_state_m2;
       d_xfer_count <= d_xfer_count + 1'd1;
       if ((d_xfer_count == 6'd1) && (d_xfer_enable_s == 1'b0)) begin
         d_xfer_toggle <= ~d_xfer_toggle;
@@ -104,24 +95,42 @@ module up_xfer_status #(
   end
 
   assign up_data_status = up_data_status_int;
-  assign up_xfer_toggle_s = up_xfer_toggle_m3 ^ up_xfer_toggle_m2;
+  assign up_xfer_toggle_s = up_xfer_toggle_d ^ up_xfer_toggle;
 
   always @(posedge up_clk) begin
     if (up_rstn == 1'b0) begin
-      up_xfer_toggle_m1 <= 'd0;
-      up_xfer_toggle_m2 <= 'd0;
-      up_xfer_toggle_m3 <= 'd0;
-      up_xfer_toggle <= 'd0;
+      up_xfer_toggle_d <= 'd0;
       up_data_status_int <= 'd0;
     end else begin
-      up_xfer_toggle_m1 <= d_xfer_toggle;
-      up_xfer_toggle_m2 <= up_xfer_toggle_m1;
-      up_xfer_toggle_m3 <= up_xfer_toggle_m2;
-      up_xfer_toggle <= up_xfer_toggle_m3;
+      up_xfer_toggle_d <= up_xfer_toggle;
       if (up_xfer_toggle_s == 1'b1) begin
-        up_data_status_int <= d_xfer_data;
+        up_data_status_int <= up_data_status_int_cdc;
       end
     end
   end
+
+  sync_bits #(
+    .SYNC_STAGES (3)
+  ) i_sync_up_xfer_state (
+    .in_bits(d_xfer_toggle),
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .out_bits(up_xfer_toggle));
+
+  sync_bits #(
+    .SYNC_STAGES (3)
+  ) i_sync_up_xfer_toggle (
+    .in_bits(up_xfer_toggle),
+    .out_clk(d_clk),
+    .out_resetn(~d_rst),
+    .out_bits(d_xfer_state));
+
+  sync_bits #(
+    .NUM_OF_BITS (DATA_WIDTH)
+  ) i_sync_up_xfer_data (
+    .in_bits(d_xfer_data),
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .out_bits(up_data_status_int_cdc));
 
 endmodule

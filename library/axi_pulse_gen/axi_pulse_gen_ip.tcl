@@ -15,12 +15,10 @@ adi_ip_files axi_pulse_gen [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "$ad_hdl_dir/library/common/util_pulse_gen.v" \
-  "axi_pulse_gen_constr.ttcl" \
   "axi_pulse_gen_regmap.v" \
   "axi_pulse_gen.v"]
 
 adi_ip_properties axi_pulse_gen
-adi_ip_ttcl axi_pulse_gen "axi_pulse_gen_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \

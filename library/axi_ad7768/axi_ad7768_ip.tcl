@@ -22,10 +22,8 @@ adi_ip_files axi_ad7768 [list \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad7768_if.v" \
   "axi_ad7768.v" ]
 
@@ -52,7 +50,7 @@ set_property enablement_dependency { $NUM_CHANNELS == 8 } \
   [ipx::get_ports *_5   -of_objects $cc] \
   [ipx::get_ports *_6   -of_objects $cc] \
   [ipx::get_ports *_7   -of_objects $cc]
- 
+
 
 ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 $cc
 ipx::infer_bus_interface clk_in xilinx.com:signal:clock_rtl:1.0 $cc

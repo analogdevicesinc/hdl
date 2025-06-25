@@ -15,7 +15,6 @@ adi_ip_files jesd204_tx [list \
   "jesd204_tx_header.v" \
   "jesd204_tx_gearbox.v" \
   "jesd204_tx_ctrl.v" \
-  "jesd204_tx_constr.ttcl" \
   "jesd204_tx_ooc.ttcl" \
   "../../common/ad_pack.v" \
   "../../common/ad_upack.v" \
@@ -29,7 +28,6 @@ set_property used_in_synthesis false [get_files ./bd/bd.tcl]
 set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties_lite jesd204_tx
-adi_ip_ttcl jesd204_tx "jesd204_tx_constr.ttcl"
 adi_ip_ttcl jesd204_tx "jesd204_tx_ooc.ttcl"
 adi_ip_bd jesd204_tx "bd/bd.tcl"
 

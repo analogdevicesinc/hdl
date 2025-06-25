@@ -431,6 +431,8 @@ module axi_dmac #(
   wire [11:0] dbg_status;
   wire [31:0] dbg_ids0;
   wire [31:0] dbg_ids1;
+  wire [DMA_AXI_ADDR_WIDTH-1:0] dbg_dest_addr;
+  wire [DMA_AXI_ADDR_WIDTH-1:0] dbg_src_addr;
 
   wire up_req_eot;
   wire [31:0] up_req_sg_desc_id;
@@ -573,8 +575,8 @@ module axi_dmac #(
     .response_ready(up_response_ready),
 
     // Debug interface
-    .dbg_dest_addr(m_dest_axi_awaddr),
-    .dbg_src_addr(m_src_axi_araddr),
+    .dbg_dest_addr(dbg_dest_addr),
+    .dbg_src_addr(dbg_src_addr),
     .dbg_status(dbg_status),
     .dbg_ids0(dbg_ids0),
     .dbg_ids1(dbg_ids1));
@@ -737,6 +739,8 @@ module axi_dmac #(
     .fifo_rd_xfer_req(fifo_rd_xfer_req),
 
     // DBG
+    .dbg_dest_addr(dbg_dest_addr),
+    .dbg_src_addr(dbg_src_addr),
     .dbg_dest_request_id(dest_request_id),
     .dbg_dest_address_id(dest_address_id),
     .dbg_dest_data_id(dest_data_id),

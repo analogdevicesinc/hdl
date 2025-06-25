@@ -41,6 +41,8 @@ module jesd204_up_rx_lane #(
   wire [31:0] up_ilas_rdata;
   wire up_ilas_ready;
 
+  wire [13:0] up_status_latency_reg;
+
   sync_bits #(
     .NUM_OF_BITS(1)
   ) i_cdc_status_ready (
@@ -53,12 +55,20 @@ module jesd204_up_rx_lane #(
       up_status_ifs_ready
     }));
 
+  sync_bits #(
+    .NUM_OF_BITS(14)
+  ) i_sync_bits_up_status_latency (
+    .in_bits (core_status_latency),
+    .out_resetn (1'b1),
+    .out_clk (up_clk),
+    .out_bits (up_status_latency_reg));
+
   always @(posedge up_clk) begin
     if (up_reset_synchronizer == 1'b1) begin
       up_status_latency <= 'h00;
     end else begin
       if (up_status_ifs_ready == 1'b1) begin
-        up_status_latency <= core_status_latency;
+        up_status_latency <= up_status_latency_reg;
       end
     end
   end

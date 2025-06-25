@@ -50,13 +50,8 @@ XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/ad_serdes_clk.v
 XILINX_DEPS += ../xilinx/common/ad_serdes_in.v
 XILINX_DEPS += ../xilinx/common/ad_serdes_out.v
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += adrv9001_rx.v
 XILINX_DEPS += adrv9001_tx.v
-XILINX_DEPS += axi_adrv9001_constr.xdc
-XILINX_DEPS += axi_adrv9001_constr.ttcl
 XILINX_DEPS += axi_adrv9001_ip.tcl
 
 XILINX_LIB_DEPS += util_cdc

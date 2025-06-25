@@ -10,8 +10,6 @@ GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += axi_laser_driver.v
 GENERIC_DEPS += axi_laser_driver_regmap.v
 
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += axi_laser_driver_constr.xdc
 XILINX_DEPS += axi_laser_driver_ip.tcl
 
 XILINX_LIB_DEPS += axi_pulse_gen
@@ -24,6 +22,7 @@ INTEL_DEPS += ../common/up_axi.v
 INTEL_DEPS += ../common/util_pulse_gen.v
 INTEL_DEPS += ../util_cdc/sync_bits.v
 INTEL_DEPS += ../util_cdc/sync_event.v
+INTEL_DEPS += ../util_cdc/sync_data.v
 INTEL_DEPS += axi_laser_driver_constr.sdc
 INTEL_DEPS += axi_laser_driver_hw.tcl
 

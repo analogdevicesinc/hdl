@@ -111,7 +111,7 @@ module axi_dmac_reset_manager #(
 
   assign req_enable = do_enable;
 
-  assign dbg_status = {needs_reset,req_resetn,src_resetn,dest_resetn,sg_resetn,req_enabled,enabled_src,enabled_dest,enabled_sg,state};
+  assign dbg_status = {needs_reset,req_resetn,src_resetn_dbg,dest_resetn_dbg,sg_resetn_dbg,req_enabled,enabled_src,enabled_dest,enabled_sg,state};
 
   always @(posedge clk) begin
     if (state == STATE_DO_RESET) begin
@@ -212,76 +212,79 @@ module axi_dmac_reset_manager #(
 
   /*
    * Chain the reset through all clock domains. This makes sure that is asserted
-   * for at least 4 clock cycles of the slowest domain, no matter what. If
-   * successive domains have the same clock they'll share their reset signal.
+   * for at least 4 clock cycles of the slowest domain, no matter what. Each
+   * channel will have its own separate reset signal.
    */
 
   localparam NUM_RESET_LINKS = DMA_SG_TRANSFER ? 4 : 3;
-  localparam GEN_ASYNC_RESET = {
-    ASYNC_CLK_REQ_SG ? 1'b1 : 1'b0,
-    ASYNC_CLK_REQ_SRC ? 1'b1 : 1'b0,
-    ASYNC_CLK_SRC_DEST ? 1'b1 : 1'b0,
-    1'b1
-  };
 
-  wire [NUM_RESET_LINKS:0] reset_async_chain;
-  wire [NUM_RESET_LINKS:0] reset_sync_chain;
-  wire [3:0] reset_chain_clks = {sg_clk, clk, src_clk, dest_clk};
+  wire [NUM_RESET_LINKS-1:0] reset_chain_clks;
+  wire [NUM_RESET_LINKS-1:0] resetn_chain;
 
-  assign reset_async_chain[0] = 1'b0;
-  assign reset_sync_chain[0] = reset_async_chain[3];
+  wire src_resetn_dbg;
+  wire dest_resetn_dbg;
+  wire sg_resetn_dbg;
 
   generate
-  genvar i;
 
-  for (i = 0; i < NUM_RESET_LINKS; i = i + 1) begin: reset_gen
+    if (DMA_SG_TRANSFER) begin
 
-    if (GEN_ASYNC_RESET[i] == 1'b1) begin
+      assign reset_chain_clks = {clk, src_clk, sg_clk, dest_clk};
 
-      reg [3:0] reset_async = 4'b1111;
-      reg [1:0] reset_sync = 2'b11;
-      reg reset_sync_in = 1'b1;
-
-      always @(posedge reset_chain_clks[i] or posedge reset_sync_chain[i]) begin
-        if (reset_sync_chain[i] == 1'b1) begin
-          reset_sync_in <= 1'b1;
-        end else begin
-          reset_sync_in <= reset_async[0];
-        end
-      end
-
-      always @(posedge reset_chain_clks[i] or posedge do_reset) begin
-        if (do_reset == 1'b1) begin
-          reset_async <= 4'b1111;
-        end else begin
-          reset_async <= {reset_async_chain[i], reset_async[3:1]};
-        end
-      end
-
-      always @(posedge reset_chain_clks[i]) begin
-        reset_sync <= {reset_sync_in,reset_sync[1]};
-      end
-
-      assign reset_async_chain[i+1] = reset_async[0];
-      assign reset_sync_chain[i+1] = reset_sync[0];
+      assign req_resetn = resetn_chain[3];
+      assign src_resetn = resetn_chain[2];
+      assign sg_resetn = resetn_chain[1];
+      assign dest_resetn = resetn_chain[0];
 
     end else begin
-      assign reset_async_chain[i+1] = reset_async_chain[i];
-      assign reset_sync_chain[i+1] = reset_sync_chain[i];
+
+      assign reset_chain_clks = {clk, src_clk, dest_clk};
+
+      assign req_resetn = resetn_chain[2];
+      assign src_resetn = resetn_chain[1];
+      assign dest_resetn = resetn_chain[0];
+
+      assign sg_resetn = 1'b1;
+
     end
-  end
 
   endgenerate
 
-  /* De-assertions in the opposite direction of the data flow: dest, src, request */
-  assign dest_resetn = ~reset_sync_chain[1];
-  assign src_resetn = ~reset_sync_chain[2];
-  assign req_resetn = ~reset_sync_chain[3];
-  generate if (DMA_SG_TRANSFER == 1) begin
-  assign sg_resetn = ~reset_sync_chain[4];
-  end else begin
-  assign sg_resetn = 1'b0;
-  end endgenerate
+  util_rst_chain #(
+    .ASYNC_STAGES(4),
+    .NUM_OF_RESET(NUM_RESET_LINKS)
+  ) i_reset_chain_sync (
+    .rst_async(do_reset),
+    .clk(reset_chain_clks),
+    .rstn(resetn_chain),
+    .rst());
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_CLK_REQ_SRC)
+  ) i_sync_src_resetn_dbg (
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .in_bits (src_resetn),
+    .out_bits (src_resetn_dbg));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_CLK_DEST_REQ)
+  ) i_sync_dest_resetn_dbg (
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .in_bits (dest_resetn),
+    .out_bits (dest_resetn_dbg));
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (ASYNC_CLK_REQ_SG)
+  ) i_sync_sg_resetn_dbg (
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .in_bits (sg_resetn),
+    .out_bits (sg_resetn_dbg));
 
   sync_bits #(
     .NUM_OF_BITS (1),

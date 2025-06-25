@@ -34,7 +34,7 @@ ifneq ($(strip $(DIR_NAME)), )
     $(shell test -d $(DIR_NAME) || mkdir $(DIR_NAME))
     ADI_PROJECT_DIR := $(DIR_NAME)/
     export ADI_PROJECT_DIR
-	VIVADO := vivado -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source 
+	VIVADO := vivado -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
 endif
 
 CLEAN_TARGET := *.cache
@@ -71,6 +71,9 @@ M_DEPS += $(wildcard system_top*.v)
 M_DEPS += $(wildcard system_constr*.xdc) # Not all projects have this file
 M_DEPS += $(wildcard system_constr*.tcl) # Not all projects have this file
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_project_xilinx.tcl
+M_DEPS += $(HDL_LIBRARY_PATH)xilinx/common/cdc_constr_async.tcl
+M_DEPS += $(HDL_LIBRARY_PATH)xilinx/common/cdc_constr.tcl
+M_DEPS += $(HDL_LIBRARY_PATH)xilinx/common/timing_constr.tcl
 M_DEPS += $(HDL_PROJECT_PATH)../scripts/adi_env.tcl
 M_DEPS += $(HDL_PROJECT_PATH)scripts/adi_board.tcl
 M_DEPS += $(EXTERNAL_DEPS)

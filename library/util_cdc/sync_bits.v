@@ -49,7 +49,10 @@ module sync_bits #(
   parameter NUM_OF_BITS = 1,
   // Whether input and output clocks are asynchronous, if 0 the synchronizer will
   // be bypassed and the output signal equals the input signal.
-  parameter ASYNC_CLK = 1
+  parameter ASYNC_CLK = 1,
+  // Number of synchronization stages, if the design is fast, multiple stages
+  // should be used to ensure that the output isn't in a metastable state
+  parameter SYNC_STAGES = 2
 ) (
   input [NUM_OF_BITS-1:0] in_bits,
   input out_resetn,
@@ -57,22 +60,26 @@ module sync_bits #(
   output [NUM_OF_BITS-1:0] out_bits
 );
 
+  integer i;
+
   generate if (ASYNC_CLK == 1) begin
-    reg [NUM_OF_BITS-1:0] cdc_sync_stage1 = 'h0;
-    reg [NUM_OF_BITS-1:0] cdc_sync_stage2 = 'h0;
+    reg [NUM_OF_BITS-1:0] cdc_sync_stage [0:SYNC_STAGES-1];
 
     always @(posedge out_clk)
     begin
       if (out_resetn == 1'b0) begin
-        cdc_sync_stage1 <= 'b0;
-        cdc_sync_stage2 <= 'b0;
+        for (i = 0; i < SYNC_STAGES; i = i + 1) begin
+          cdc_sync_stage[i] <= {NUM_OF_BITS{1'b0}};
+        end
       end else begin
-        cdc_sync_stage1 <= in_bits;
-        cdc_sync_stage2 <= cdc_sync_stage1;
+        cdc_sync_stage[0] <= in_bits;
+        for (i = 1; i < SYNC_STAGES; i = i + 1) begin
+          cdc_sync_stage[i] <= cdc_sync_stage[i-1];
+        end
       end
     end
 
-    assign out_bits = cdc_sync_stage2;
+    assign out_bits = cdc_sync_stage[SYNC_STAGES-1];
   end else begin
     assign out_bits = in_bits;
   end endgenerate

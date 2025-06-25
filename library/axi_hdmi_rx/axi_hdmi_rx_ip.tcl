@@ -9,10 +9,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create axi_hdmi_rx
 adi_ip_files axi_hdmi_rx [list \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/ad_csc.v" \
   "$ad_hdl_dir/library/common/ad_ss_422to444.v" \
@@ -22,6 +19,7 @@ adi_ip_files axi_hdmi_rx [list \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_hdmi_rx.v" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_hdmi_rx.v" \
   "axi_hdmi_rx_es.v" \
   "axi_hdmi_rx_tpm.v" \

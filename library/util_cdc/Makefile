@@ -6,11 +6,16 @@
 
 LIBRARY_NAME := util_cdc
 
-GENERIC_DEPS += sync_bits.v
-GENERIC_DEPS += sync_data.v
-GENERIC_DEPS += sync_event.v
-GENERIC_DEPS += sync_gray.v
+# GENERIC_DEPS += sync_bits.v
+# GENERIC_DEPS += sync_data.v
+# GENERIC_DEPS += sync_event.v
+# GENERIC_DEPS += sync_gray.v
 
 XILINX_DEPS += util_cdc_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc/sync_bits
+XILINX_LIB_DEPS += util_cdc/sync_data
+XILINX_LIB_DEPS += util_cdc/sync_event
+XILINX_LIB_DEPS += util_cdc/sync_gray
 
 include ../scripts/library.mk

@@ -69,7 +69,7 @@ module sync_event #(
   wire in_ready = in_toggle == in_toggle_d1;
   wire load_out = out_toggle ^ out_toggle_d1;
 
-  reg [NUM_OF_EVENTS-1:0] in_event_sticky = 'h00;
+  reg [NUM_OF_EVENTS-1:0] in_event_sticky = {NUM_OF_EVENTS{1'b0}};
   wire [NUM_OF_EVENTS-1:0] pending_events = in_event_sticky | in_event;
   wire [NUM_OF_EVENTS-1:0] out_event_s;
 
@@ -85,7 +85,7 @@ module sync_event #(
   end
 
   if (NUM_OF_EVENTS > 1) begin
-    reg [NUM_OF_EVENTS-1:0] cdc_hold = 'h00;
+    reg [NUM_OF_EVENTS-1:0] cdc_hold = {NUM_OF_EVENTS{1'b0}};
 
     always @(posedge in_clk) begin
       if (in_ready == 1'b1) begin

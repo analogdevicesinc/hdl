@@ -29,11 +29,9 @@ XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
 XILINX_DEPS += ../xilinx/common/ad_serdes_clk.v
 XILINX_DEPS += ../xilinx/common/ad_serdes_out.v
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_ad9122_constr.xdc
 XILINX_DEPS += axi_ad9122_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 INTEL_DEPS += ../intel/common/ad_mul.v
 INTEL_DEPS += ../intel/common/up_clock_mon_constr.sdc

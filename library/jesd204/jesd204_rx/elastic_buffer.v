@@ -39,7 +39,7 @@ module elastic_buffer #(
 
   reg [ADDR_WIDTH:0] wr_addr = 'h00;
   reg [ADDR_WIDTH:0] rd_addr = 'h00;
-  (* ram_style = "distributed" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
+  (* ram_style = "block" *) reg [WIDTH-1:0] mem[0:SIZE - 1];
   reg             mem_rd_valid = 'b0;
   reg [WIDTH-1:0] mem_rd_data;
 
@@ -47,57 +47,59 @@ module elastic_buffer #(
   wire [WIDTH-1:0] mem_wr_data;
   wire unpacker_ready;
 
-  generate if ((OWIDTH < IWIDTH) && ASYNC_CLK) begin
+  generate
+    if ((OWIDTH < IWIDTH) && ASYNC_CLK) begin
 
-    assign mem_wr = 1'b1;
+      assign mem_wr = 1'b1;
 
-    always @(posedge clk) begin
-      if (ready_n) begin
-        wr_addr <= 'h00;
-      end else if (mem_wr) begin
-        wr_addr <= wr_addr + 1;
+      always @(posedge clk) begin
+        if (ready_n) begin
+          wr_addr <= 'h00;
+        end else if (mem_wr) begin
+          wr_addr <= wr_addr + 1;
+        end
       end
-    end
 
-    always @(posedge clk) begin
-      if (mem_wr) begin
-        mem[wr_addr] <= wr_data;
+      always @(posedge clk) begin
+        if (mem_wr) begin
+          mem[wr_addr] <= wr_data;
+        end
       end
-    end
 
-    assign mem_rd_en = ~do_release_n & unpacker_ready;
+      assign mem_rd_en = ~do_release_n & unpacker_ready;
 
-    always @(posedge device_clk) begin
-      if (mem_rd_en) begin
-        mem_rd_data <= mem[rd_addr];
+      always @(posedge device_clk) begin
+        if (mem_rd_en) begin
+          mem_rd_data <= mem[rd_addr];
+        end
+        mem_rd_valid <= mem_rd_en;
       end
-      mem_rd_valid <= mem_rd_en;
-    end
 
-    always @(posedge device_clk) begin
-      if (do_release_n) begin
-        rd_addr <= 'b0;
-      end else if (mem_rd_en) begin
-        rd_addr <= rd_addr + 1;
+      always @(posedge device_clk) begin
+        if (do_release_n) begin
+          rd_addr <= 'b0;
+        end else if (mem_rd_en) begin
+          rd_addr <= rd_addr + 1;
+        end
       end
-    end
 
-    ad_upack #(
-      .I_W(IWIDTH/8),
-      .O_W(OWIDTH/8),
-      .UNIT_W(8),
-      .O_REG(0)
-    ) i_ad_upack (
-      .clk(device_clk),
-      .reset(do_release_n),
-      .idata(mem_rd_data),
-      .ivalid(mem_rd_valid),
-      .iready(unpacker_ready),
+      ad_upack #(
+        .I_W(IWIDTH/8),
+        .O_W(OWIDTH/8),
+        .UNIT_W(8),
+        .O_REG(0)
+      ) i_ad_upack (
+        .clk(device_clk),
+        .reset(do_release_n),
+        .idata(mem_rd_data),
+        .ivalid(mem_rd_valid),
+        .iready(unpacker_ready),
 
-      .odata(rd_data),
-      .ovalid());
+        .odata(rd_data),
+        .ovalid());
 
     end else begin
+
       if ((OWIDTH > IWIDTH) && ASYNC_CLK) begin
         ad_pack #(
           .I_W(IWIDTH/8),

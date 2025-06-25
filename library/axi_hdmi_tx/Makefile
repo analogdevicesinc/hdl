@@ -23,11 +23,9 @@ GENERIC_DEPS += axi_hdmi_tx_vdma.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
-XILINX_DEPS += axi_hdmi_tx_constr.xdc
 XILINX_DEPS += axi_hdmi_tx_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 INTEL_DEPS += ../../library/scripts/adi_intel_device_info_enc.tcl
 INTEL_DEPS += ../intel/common/ad_mul.v

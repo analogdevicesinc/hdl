@@ -151,10 +151,6 @@ module axi_ad9361_lvds_if #(
   reg     [ 5:0]      tx_data_1 = 'd0;
   reg                 up_enable_int = 'd0;
   reg                 up_txnrx_int = 'd0;
-  reg                 enable_up_m1 = 'd0;
-  reg                 txnrx_up_m1 = 'd0;
-  reg                 enable_up = 'd0;
-  reg                 txnrx_up = 'd0;
   reg                 enable_int = 'd0;
   reg                 txnrx_int = 'd0;
   reg                 enable_int_p = 'd0;
@@ -162,6 +158,8 @@ module axi_ad9361_lvds_if #(
 
   // internal signals
 
+  wire                enable_up;
+  wire                txnrx_up;
   wire    [ 5:0]      rx_data_1_s;
   wire    [ 5:0]      rx_data_0_s;
   wire    [ 1:0]      rx_frame_s;
@@ -387,19 +385,25 @@ module axi_ad9361_lvds_if #(
     up_txnrx_int <= up_txnrx;
   end
 
-  always @(posedge clk or posedge rst) begin
-    if (rst == 1'b1) begin
-      enable_up_m1 <= 1'b0;
-      txnrx_up_m1 <= 1'b0;
-      enable_up <= 1'b0;
-      txnrx_up <= 1'b0;
-    end else begin
-      enable_up_m1 <= up_enable_int;
-      txnrx_up_m1 <= up_txnrx_int;
-      enable_up <= enable_up_m1;
-      txnrx_up <= txnrx_up_m1;
-    end
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_enable_up_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(up_enable_int),
+    .out_bits(enable_up));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_cdc_async_stage_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(up_txnrx_int),
+    .out_bits(txnrx_up));
 
   always @(posedge clk) begin
     if (tdd_mode == 1'b1) begin

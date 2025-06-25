@@ -14,12 +14,10 @@ adi_ip_files axi_spi_engine [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "axi_spi_engine_constr.ttcl" \
   "axi_spi_engine.v" \
 ]
 
 adi_ip_properties axi_spi_engine
-adi_ip_ttcl axi_spi_engine "axi_spi_engine_constr.ttcl"
 
 adi_ip_add_core_dependencies [list \
 	analog.com:$VIVADO_IP_LIBRARY:util_axis_fifo:1.0 \

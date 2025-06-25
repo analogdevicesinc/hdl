@@ -10,10 +10,13 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create util_rfifo
 adi_ip_files util_rfifo [list \
   "$ad_hdl_dir/library/common/ad_mem.v" \
-  "util_rfifo_constr.xdc" \
   "util_rfifo.v" ]
 
 adi_ip_properties_lite util_rfifo
+
+adi_ip_add_core_dependencies [list \
+	analog.com:$VIVADO_IP_LIBRARY:util_cdc:1.0 \
+]
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/util_rfifo} [ipx::current_core]
 

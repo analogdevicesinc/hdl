@@ -39,7 +39,8 @@ module jesd204_up_tx #(
   input [NUM_LINKS-1:0] core_status_sync
 );
 
-  reg [31:0] up_cfg_ilas_data[0:NUM_LANES-1][0:3];
+  reg  [31:0] up_cfg_ilas_data[0:NUM_LANES-1][0:3];
+  wire [31:0] up_cfg_ilas_data_cdc[0:NUM_LANES-1][0:3];
   reg up_ctrl_manual_sync_request = 1'b0;
 
   wire [1:0] up_status_state;
@@ -256,23 +257,38 @@ module jesd204_up_tx #(
   end
 
   generate
-  if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
-  always @(posedge core_clk) begin
-    if (core_ilas_config_rd == 1'b1) begin
-      for (i = 0; i < NUM_LANES; i = i + 1) begin
-        core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data[i][core_ilas_config_addr];
+    genvar j, k;
+    for (j = 0; j < 4; j = j + 1) begin
+      for (k = 0; k < NUM_LANES; k = k + 1) begin
+        sync_bits #(
+          .NUM_OF_BITS(32)
+        ) i_sync_bits_up_cfg_ilas_data (
+          .in_bits (up_cfg_ilas_data[k][j]),
+          .out_resetn (1'b1),
+          .out_clk (core_clk),
+          .out_bits (up_cfg_ilas_data_cdc[k][j]));
       end
     end
-  end
-  end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
-  always @(posedge core_clk) begin
-    if (core_ilas_config_rd == 1'b1) begin
-      for (i = 0; i < NUM_LANES; i = i + 1) begin
-        core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data[i][{core_ilas_config_addr[0], 1'b0}]};
+  endgenerate
+
+  generate
+    if(DATA_PATH_WIDTH == 4) begin : gen_dp_4
+      always @(posedge core_clk) begin
+        if (core_ilas_config_rd == 1'b1) begin
+          for (i = 0; i < NUM_LANES; i = i + 1) begin
+            core_ilas_config_data[i*32+:32] <= up_cfg_ilas_data_cdc[i][core_ilas_config_addr];
+          end
+        end
+      end
+    end else if(DATA_PATH_WIDTH == 8) begin : gen_dp_8
+      always @(posedge core_clk) begin
+        if (core_ilas_config_rd == 1'b1) begin
+          for (i = 0; i < NUM_LANES; i = i + 1) begin
+            core_ilas_config_data[i*64+:64] <= {up_cfg_ilas_data_cdc[i][{core_ilas_config_addr[0], 1'b1}],up_cfg_ilas_data_cdc[i][{core_ilas_config_addr[0], 1'b0}]};
+          end
+        end
       end
     end
-  end
-  end
   endgenerate
 
 endmodule

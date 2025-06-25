@@ -41,35 +41,33 @@ module ad_rst (
 
   input                   rst_async,
   input                   clk,
-  output                  rstn,
-  output  reg             rst
+  output reg              rstn,
+  output reg              rst
 );
 
   // internal registers
-  reg             rst_async_d1 = 1'd1;
-  reg             rst_async_d2 = 1'd1;
-  reg             rst_sync = 1'd1;
-  reg             rst_sync_d = 1'd1;
+  reg cdc_sync_stage [2:0];
+
+  reg rst_sync_d = 1'd1;
 
   // simple reset synchronizer
   always @(posedge clk or posedge rst_async) begin
     if (rst_async) begin
-      rst_async_d1 <= 1'b1;
-      rst_async_d2 <= 1'b1;
-      rst_sync <= 1'b1;
+      cdc_sync_stage[0] <= 1'b1;
+      cdc_sync_stage[1] <= 1'b1;
+      cdc_sync_stage[2] <= 1'b1;
     end else begin
-      rst_async_d1 <= 1'b0;
-      rst_async_d2 <= rst_async_d1;
-      rst_sync <= rst_async_d2;
+      cdc_sync_stage[0] <= 1'b0;
+      cdc_sync_stage[1] <= cdc_sync_stage[0];
+      cdc_sync_stage[2] <= cdc_sync_stage[1];
     end
   end
 
   // two-stage synchronizer to prevent metastability on the falling edge
   always @(posedge clk) begin
-    rst_sync_d <= rst_sync;
+    rst_sync_d <= cdc_sync_stage[2];
     rst <= rst_sync_d;
+    rstn <= ~rst_sync_d;
   end
-
-  assign rstn = ~rst;
 
 endmodule

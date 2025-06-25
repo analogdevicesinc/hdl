@@ -628,12 +628,29 @@ if {$INTF_CFG != "TX"} {
   ad_connect ext_sync_in rx_mxfe_tpl_core/adc_tpl_core/adc_sync_in
   if {$INTF_CFG == "RXTX"} {
     # Rx & Tx
-    ad_ip_instance ilvector_logic manual_sync_or [list \
+    ad_ip_instance sync_bits cdc_adc_sync
+    ad_connect cdc_adc_sync/out_resetn VCC
+    ad_connect cdc_adc_sync/out_clk rx_device_clk
+
+    ad_ip_instance sync_bits cdc_dac_sync
+    ad_connect cdc_dac_sync/out_resetn VCC
+    ad_connect cdc_dac_sync/out_clk tx_device_clk
+
+    ad_ip_instance ilvector_logic manual_sync_or_adc [list \
       C_SIZE 1 \
       C_OPERATION {or} \
     ]
-    ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or/Op1
-    ad_connect manual_sync_or/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
+
+    ad_ip_instance ilvector_logic manual_sync_or_dac [list \
+      C_SIZE 1 \
+      C_OPERATION {or} \
+    ]
+
+    ad_connect cdc_dac_sync/in_bits rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out
+
+    ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out manual_sync_or_adc/Op1
+    ad_connect cdc_adc_sync/out_bits manual_sync_or_adc/Op2
+    ad_connect manual_sync_or_adc/Res rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
   } else {
     # Only Rx
     ad_connect rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_out rx_mxfe_tpl_core/adc_tpl_core/adc_sync_manual_req_in
@@ -664,8 +681,11 @@ if {$INTF_CFG != "RX"} {
   ad_connect ext_sync_in tx_mxfe_tpl_core/dac_tpl_core/dac_sync_in
   if {$INTF_CFG == "RXTX"} {
     # Rx & Tx
-    ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or/Op2
-    ad_connect manual_sync_or/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
+    ad_connect cdc_adc_sync/in_bits tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out
+
+    ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out manual_sync_or_dac/Op1
+    ad_connect cdc_dac_sync/out_bits manual_sync_or_dac/Op2
+    ad_connect manual_sync_or_dac/Res tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in
   } else {
     # Only Tx
     ad_connect tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_out tx_mxfe_tpl_core/dac_tpl_core/dac_sync_manual_req_in

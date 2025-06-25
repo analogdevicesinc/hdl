@@ -12,7 +12,6 @@ M_DEPS += ../../common/zc706/zc706_system_constr.xdc
 M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_dacfifo_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc
-M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl

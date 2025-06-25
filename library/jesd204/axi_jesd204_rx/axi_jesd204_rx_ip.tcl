@@ -14,9 +14,11 @@ adi_ip_files axi_jesd204_rx [list \
   "jesd204_up_rx.v" \
   "jesd204_up_rx_lane.v" \
   "jesd204_up_ilas_mem.v" \
-  "axi_jesd204_rx_constr.xdc" \
   "axi_jesd204_rx_ooc.ttcl" \
   "axi_jesd204_rx.v" \
+  "../../common/ad_mem.v" \
+  "../../common/ad_rst.v" \
+  "../../xilinx/common/ad_rst_constr.xdc" \
 ]
 
 set_property source_mgmt_mode DisplayOnly [current_project]
@@ -26,10 +28,6 @@ adi_ip_properties axi_jesd204_rx
 adi_ip_ttcl axi_jesd204_rx "axi_jesd204_rx_ooc.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/jesd204/axi_jesd204_rx} [ipx::current_core]
-
-set_property PROCESSING_ORDER LATE [ipx::get_files axi_jesd204_rx_constr.xdc \
-  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] \
-  -filter {NAME =~ *synthesis*}]]
 
 adi_ip_add_core_dependencies [list \
   analog.com:$VIVADO_IP_LIBRARY:axi_jesd204_common:1.0 \

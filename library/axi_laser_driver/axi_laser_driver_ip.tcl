@@ -12,13 +12,10 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_laser_driver
 adi_ip_files axi_laser_driver [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
-  "axi_laser_driver_constr.xdc" \
   "axi_laser_driver_regmap.v" \
   "axi_laser_driver.v"]
 
 adi_ip_properties axi_laser_driver
-adi_ip_ttcl axi_laser_driver "../axi_pulse_gen/axi_pulse_gen_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/docs/axi_laser_driver} [ipx::current_core]
 

@@ -133,9 +133,7 @@ module ad_tdd_control#(
 
   reg             tdd_last_burst = 1'b0;
 
-  reg             tdd_sync_d1 = 1'b0;
-  reg             tdd_sync_d2 = 1'b0;
-  reg             tdd_sync_d3 = 1'b0;
+  reg             tdd_sync_d = 1'b0;
 
   reg             tdd_endof_frame = 1'b0;
 
@@ -165,20 +163,28 @@ module ad_tdd_control#(
   wire            tdd_endof_burst;
   wire            tdd_txrx_only_en_s;
 
+  wire            tdd_sync_s;
+
   assign  tdd_counter_status = tdd_counter;
 
   // synchronization of tdd_sync
   always @(posedge clk) begin
     if (rst == 1'b1) begin
-      tdd_sync_d1 <= 1'b0;
-      tdd_sync_d2 <= 1'b0;
-      tdd_sync_d3 <= 1'b0;
+      tdd_sync_d <= 1'b0;
     end else begin
-      tdd_sync_d1 <= tdd_sync;
-      tdd_sync_d2 <= tdd_sync_d1;
-      tdd_sync_d3 <= tdd_sync_d2;
+      tdd_sync_d <= tdd_sync_s;
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_cdc_async_stage_sync (
+    .out_clk(clk),
+    .out_resetn(~rst),
+    .in_bits(tdd_sync),
+    .out_bits(tdd_sync_s));
 
   // ***************************************************************************
   // tdd counter (state machine)
@@ -204,7 +210,7 @@ module ad_tdd_control#(
 
       OFF : begin
         if(tdd_enable == 1'b1) begin
-          tdd_cstate_next <= ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) ? ON : OFF;
+          tdd_cstate_next <= ((~tdd_sync_d & tdd_sync_s) == 1'b1) ? ON : OFF;
         end
       end
     endcase
@@ -225,7 +231,7 @@ module ad_tdd_control#(
       tdd_counter <= tdd_counter_init;
     end else begin
       if (tdd_cstate == ON) begin
-        if ((~tdd_sync_d3 & tdd_sync_d2) == 1'b1) begin
+        if ((~tdd_sync_d & tdd_sync_s) == 1'b1) begin
           tdd_counter <= 24'b0;
         end else begin
           tdd_counter <= (tdd_endof_frame == 1'b1) ? 24'b0 : tdd_counter + 1'b1;

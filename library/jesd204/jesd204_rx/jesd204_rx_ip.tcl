@@ -22,7 +22,6 @@ adi_ip_files jesd204_rx [list \
   "align_mux.v" \
   "jesd204_lane_latency_monitor.v" \
   "jesd204_rx_frame_align.v" \
-  "jesd204_rx_constr.ttcl" \
   "jesd204_rx_ooc.ttcl" \
   "jesd204_rx.v" \
   "../../common/ad_pack.v" \
@@ -36,7 +35,6 @@ set_property used_in_synthesis false [get_files ./bd/bd.tcl]
 set_property source_mgmt_mode DisplayOnly [current_project]
 
 adi_ip_properties_lite jesd204_rx
-adi_ip_ttcl jesd204_rx "jesd204_rx_constr.ttcl"
 adi_ip_ttcl jesd204_rx "jesd204_rx_ooc.ttcl"
 adi_ip_bd jesd204_rx "bd/bd.tcl"
 

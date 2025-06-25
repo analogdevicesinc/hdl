@@ -59,10 +59,9 @@ module sync_gray #(
 );
 
   generate if (ASYNC_CLK == 1) begin
-    reg [DATA_WIDTH-1:0] cdc_sync_stage0 = 'h0;
-    reg [DATA_WIDTH-1:0] cdc_sync_stage1 = 'h0;
-    reg [DATA_WIDTH-1:0] cdc_sync_stage2 = 'h0;
-    reg [DATA_WIDTH-1:0] out_count_m = 'h0;
+    reg  [DATA_WIDTH-1:0] cdc_pre_sync_stage = {DATA_WIDTH{1'b0}};
+    wire [DATA_WIDTH-1:0] cdc_sync_stage;
+    reg  [DATA_WIDTH-1:0] out_count_m = {DATA_WIDTH{1'b0}};
 
     function [DATA_WIDTH-1:0] g2b;
       input [DATA_WIDTH-1:0] g;
@@ -90,21 +89,25 @@ module sync_gray #(
 
     always @(posedge in_clk) begin
       if (in_resetn == 1'b0) begin
-        cdc_sync_stage0 <= 'h00;
+        cdc_pre_sync_stage <= {DATA_WIDTH{1'b0}};
       end else begin
-        cdc_sync_stage0 <= b2g(in_count);
+        cdc_pre_sync_stage <= b2g(in_count);
       end
     end
 
+    sync_bits #(
+      .NUM_OF_BITS(DATA_WIDTH)
+    ) i_sync_gray (
+      .in_bits(cdc_pre_sync_stage),
+      .out_clk(out_clk),
+      .out_resetn(out_resetn),
+      .out_bits(cdc_sync_stage));
+
     always @(posedge out_clk) begin
       if (out_resetn == 1'b0) begin
-        cdc_sync_stage1 <= 'h00;
-        cdc_sync_stage2 <= 'h00;
-        out_count_m <= 'h00;
+        out_count_m <= {DATA_WIDTH{1'b0}};
       end else begin
-        cdc_sync_stage1 <= cdc_sync_stage0;
-        cdc_sync_stage2 <= cdc_sync_stage1;
-        out_count_m <= g2b(cdc_sync_stage2);
+        out_count_m <= g2b(cdc_sync_stage);
       end
     end
 

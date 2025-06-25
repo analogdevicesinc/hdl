@@ -21,10 +21,7 @@ adi_ip_files axi_ad777x [list \
   "$ad_hdl_dir/library/common/up_delay_cntrl.v" \
   "$ad_hdl_dir/library/common/up_adc_channel.v" \
   "$ad_hdl_dir/library/common/up_adc_common.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad777x_if.v" \
   "axi_ad777x.v" ]
 

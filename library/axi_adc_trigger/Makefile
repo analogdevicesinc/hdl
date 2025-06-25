@@ -11,8 +11,8 @@ GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += axi_adc_trigger.v
 GENERIC_DEPS += axi_adc_trigger_reg.v
 
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += axi_adc_trigger_constr.xdc
 XILINX_DEPS += axi_adc_trigger_ip.tcl
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

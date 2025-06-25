@@ -54,9 +54,7 @@ module util_tdd_sync #(
   output  reg             sync_out
 );
 
-  reg           sync_mode_d1 = 1'b0;
-  reg           sync_mode_d2 = 1'b0;
-
+  wire          sync_mode_d;
   wire          sync_internal;
   wire          sync_external;
 
@@ -74,15 +72,15 @@ module util_tdd_sync #(
 
   // synchronization logic
 
-  always @(posedge clk) begin
-    if(rstn == 1'b0) begin
-      sync_mode_d1 <= 1'b0;
-      sync_mode_d2 <= 1'b0;
-    end else begin
-      sync_mode_d1 <= sync_mode;
-      sync_mode_d2 <= sync_mode_d1;
-    end
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_sync_mode_sync (
+    .out_clk(clk),
+    .out_resetn(1'b1),
+    .in_bits(sync_mode),
+    .out_bits(sync_mode_d));
 
   // output logic
 
@@ -91,7 +89,7 @@ module util_tdd_sync #(
     if(rstn == 1'b0) begin
       sync_out <= 1'b0;
     end else begin
-      sync_out <= (sync_mode_d2 == 1'b0) ? sync_internal : sync_external;
+      sync_out <= (sync_mode_d == 1'b0) ? sync_internal : sync_external;
     end
   end
 

@@ -152,7 +152,7 @@ set_property -dict [list \
 	"value_validation_range_maximum" "1" \
  ] \
  [ipx::get_user_parameters HAS_RX -of_objects $cc]
- 
+
 set_property -dict [list \
 	"value_validation_type" "range_long" \
 	"value_validation_range_minimum" "0" \

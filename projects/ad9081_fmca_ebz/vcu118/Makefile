@@ -7,6 +7,7 @@
 PROJECT_NAME := ad9081_fmca_ebz_vcu118
 
 M_DEPS += timing_constr.xdc
+M_DEPS += timing_constr.tcl
 M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
@@ -34,8 +35,6 @@ LIB_DEPS += jesd204/jesd204_tx
 LIB_DEPS += jesd204/jesd204_versal_gt_adapter_rx
 LIB_DEPS += jesd204/jesd204_versal_gt_adapter_tx
 LIB_DEPS += sysid_rom
-LIB_DEPS += util_adcfifo
-LIB_DEPS += util_dacfifo
 LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2

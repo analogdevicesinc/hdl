@@ -13,7 +13,6 @@ M_DEPS += ../../common/zc706/zc706_system_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_data_offload_bd.tcl
 M_DEPS += ../../common/zc706/zc706_plddr3_constr.xdc
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
-M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl

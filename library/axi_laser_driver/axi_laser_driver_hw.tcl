@@ -18,6 +18,7 @@ set_module_property DISPLAY_NAME axi_laser_driver
 ad_ip_files axi_laser_driver [list \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_event.v" \
+  "$ad_hdl_dir/library/util_cdc/sync_data.v" \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \

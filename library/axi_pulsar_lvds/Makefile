@@ -22,12 +22,11 @@ GENERIC_DEPS += axi_pulsar_lvds_if.v
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v
 XILINX_DEPS += ../xilinx/common/ad_data_in.v
 XILINX_DEPS += ../xilinx/common/ad_rst_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_clock_mon_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
-XILINX_DEPS += ../xilinx/common/up_xfer_status_constr.xdc
 XILINX_DEPS += axi_pulsar_lvds_ip.tcl
 
 XILINX_DEPS += ../interfaces/fifo_wr.xml
 XILINX_DEPS += ../interfaces/fifo_wr_rtl.xml
+
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

@@ -11,7 +11,6 @@ M_DEPS += ../../scripts/adi_pd.tcl
 M_DEPS += ../../common/zcu102/zcu102_system_constr.xdc
 M_DEPS += ../../common/zcu102/zcu102_system_bd.tcl
 M_DEPS += ../../common/xilinx/dacfifo_bd.tcl
-M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../../library/util_cdc/sync_bits.v
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl

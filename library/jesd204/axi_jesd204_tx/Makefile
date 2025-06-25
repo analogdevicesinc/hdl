@@ -9,10 +9,12 @@ LIBRARY_NAME := axi_jesd204_tx
 GENERIC_DEPS += ../../common/up_axi.v
 GENERIC_DEPS += axi_jesd204_tx.v
 GENERIC_DEPS += jesd204_up_tx.v
+GENERIC_DEPS += ../axi_jesd204_common/jesd204_up_common.v
+GENERIC_DEPS += ../../common/ad_rst.v
 
-XILINX_DEPS += axi_jesd204_tx_constr.xdc
 XILINX_DEPS += axi_jesd204_tx_ip.tcl
 XILINX_DEPS += axi_jesd204_tx_ooc.ttcl
+XILINX_DEPS += ../../xilinx/common/ad_rst_constr.xdc
 
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg.xml
 XILINX_DEPS += ../../jesd204/interfaces/jesd204_tx_cfg_rtl.xml

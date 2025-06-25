@@ -172,6 +172,7 @@ module jesd204_tx #(
 
     reg link_lmfc_reset = 1'b1;
     reg device_tx_ready = 1'b0;
+    reg tx_next_mf_ready_reg;
 
     jesd204_lmfc #(
       .LINK_MODE(LINK_MODE),
@@ -238,11 +239,15 @@ module jesd204_tx #(
       .link_data(gearbox_data),
       .output_ready(tx_ready_nx));
 
+    always @(posedge clk) begin
+      tx_next_mf_ready_reg <= tx_next_mf_ready;
+    end
+
     sync_bits #(
       .NUM_OF_BITS (1),
       .ASYNC_CLK(ASYNC_CLK)
     ) i_next_mf_ready_cdc (
-      .in_bits(tx_next_mf_ready),
+      .in_bits(tx_next_mf_ready_reg),
       .out_clk(device_clk),
       .out_resetn(1'b1),
       .out_bits(device_tx_next_mf_ready));

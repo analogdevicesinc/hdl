@@ -81,6 +81,8 @@ module util_axis_fifo #(
     if (ASYNC_CLK) begin
 
         (* KEEP = "yes" *) reg [DATA_WIDTH-1:0] cdc_sync_fifo_ram;
+        wire [DATA_WIDTH-1:0] cdc_sync_fifo_data;
+
         reg s_axis_waddr = 1'b0;
         reg m_axis_raddr = 1'b0;
 
@@ -89,7 +91,8 @@ module util_axis_fifo #(
 
         sync_bits #(
           .NUM_OF_BITS(1),
-          .ASYNC_CLK(ASYNC_CLK)
+          .ASYNC_CLK(ASYNC_CLK),
+          .SYNC_STAGES(3)
         ) i_waddr_sync (
           .out_clk(m_axis_aclk),
           .out_resetn(m_axis_aresetn),
@@ -98,12 +101,22 @@ module util_axis_fifo #(
 
         sync_bits #(
           .NUM_OF_BITS(1),
-          .ASYNC_CLK(ASYNC_CLK)
+          .ASYNC_CLK(ASYNC_CLK),
+          .SYNC_STAGES(3)
         ) i_raddr_sync (
           .out_clk(s_axis_aclk),
           .out_resetn(s_axis_aresetn),
           .in_bits(m_axis_raddr),
           .out_bits(s_axis_raddr));
+
+        sync_bits #(
+          .NUM_OF_BITS(1),
+          .ASYNC_CLK(ASYNC_CLK)
+        ) i_cdc_sync_fifo_data (
+          .out_clk(m_axis_aclk),
+          .out_resetn(m_axis_aresetn),
+          .in_bits(cdc_sync_fifo_ram),
+          .out_bits(cdc_sync_fifo_data));
 
         assign m_axis_valid = m_axis_raddr != m_axis_waddr;
         assign m_axis_level = ~m_axis_ready;
@@ -136,7 +149,7 @@ module util_axis_fifo #(
           end
         end
 
-        assign m_axis_data = cdc_sync_fifo_ram;
+        assign m_axis_data = cdc_sync_fifo_data;
 
         // TLAST support
         if (TLAST_EN) begin

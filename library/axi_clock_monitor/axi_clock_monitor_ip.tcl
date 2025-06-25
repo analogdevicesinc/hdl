@@ -11,7 +11,7 @@ adi_ip_create axi_clock_monitor
 adi_ip_files axi_clock_monitor [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_clock_monitor.v" ]
 
 adi_ip_properties axi_clock_monitor

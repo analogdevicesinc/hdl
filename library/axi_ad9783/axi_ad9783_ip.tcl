@@ -24,10 +24,8 @@ adi_ip_files axi_ad9783 [list \
   "$ad_hdl_dir/library/common/up_clock_mon.v" \
   "$ad_hdl_dir/library/common/up_dac_common.v" \
   "$ad_hdl_dir/library/common/up_dac_channel.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
-  "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "axi_ad9783_channel.v" \
   "axi_ad9783_core.v" \
   "axi_ad9783_if.v" \

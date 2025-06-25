@@ -8,7 +8,6 @@ LIBRARY_NAME := spi_engine_offload
 
 GENERIC_DEPS += spi_engine_offload.v
 
-XILINX_DEPS += spi_engine_offload_constr.ttcl
 XILINX_DEPS += spi_engine_offload_ip.tcl
 
 XILINX_DEPS += ../../spi_engine/interfaces/spi_engine_ctrl.xml

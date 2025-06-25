@@ -120,11 +120,8 @@ module axi_hdmi_tx_core #(
   reg     [15:0]  hdmi_hs_count = 'd0;
   reg     [15:0]  hdmi_vs_count = 'd0;
   reg             hdmi_fs = 'd0;
-  reg             hdmi_fs_ret_toggle_m1 = 'd0;
-  reg             hdmi_fs_ret_toggle_m2 = 'd0;
-  reg             hdmi_fs_ret_toggle_m3 = 'd0;
+  reg             hdmi_fs_ret_toggle_d = 'd0;
   reg             hdmi_fs_ret = 'd0;
-  reg     [ 8:0]  hdmi_fs_waddr = 'd0;
   reg             hdmi_hs = 'd0;
   reg             hdmi_vs = 'd0;
   reg             hdmi_hs_de = 'd0;
@@ -174,6 +171,8 @@ module axi_hdmi_tx_core #(
 
   // internal wires
 
+  wire            hdmi_fs_ret_toggle;
+  wire    [ 8:0]  hdmi_fs_waddr;
   wire    [15:0]  hdmi_hl_width_s;
   wire    [15:0]  hdmi_vf_width_s;
   wire    [15:0]  hdmi_he_width_s;
@@ -281,23 +280,32 @@ module axi_hdmi_tx_core #(
 
   // hdmi sof write address
 
-  assign hdmi_fs_ret_s = hdmi_fs_ret_toggle_m2 ^ hdmi_fs_ret_toggle_m3;
-
-  always @(posedge reference_clk or posedge reference_rst) begin
-    if (reference_rst == 1'b1) begin
-      hdmi_fs_ret_toggle_m1 <= 1'd0;
-      hdmi_fs_ret_toggle_m2 <= 1'd0;
-      hdmi_fs_ret_toggle_m3 <= 1'd0;
-    end else begin
-      hdmi_fs_ret_toggle_m1 <= vdma_fs_ret_toggle;
-      hdmi_fs_ret_toggle_m2 <= hdmi_fs_ret_toggle_m1;
-      hdmi_fs_ret_toggle_m3 <= hdmi_fs_ret_toggle_m2;
-    end
-  end
+  assign hdmi_fs_ret_s = hdmi_fs_ret_toggle_d ^ hdmi_fs_ret_toggle;
 
   always @(posedge reference_clk) begin
-      hdmi_fs_ret <= hdmi_fs_ret_s;
-      hdmi_fs_waddr <= vdma_fs_waddr;
+    hdmi_fs_ret_toggle_d <= hdmi_fs_ret_toggle;
+  end
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1)
+  ) hdmi_fs_ret_toggle_sync (
+    .out_clk(reference_clk),
+    .out_resetn(~reference_rst),
+    .in_bits(vdma_fs_ret_toggle),
+    .out_bits(hdmi_fs_ret_toggle));
+
+  sync_bits #(
+    .NUM_OF_BITS(9),
+    .ASYNC_CLK(1)
+  ) hdmi_fs_waddr_sync (
+    .out_clk(reference_clk),
+    .out_resetn(~reference_rst),
+    .in_bits(vdma_fs_waddr),
+    .out_bits(hdmi_fs_waddr));
+
+  always @(posedge reference_clk) begin
+    hdmi_fs_ret <= hdmi_fs_ret_s;
   end
 
   // hdmi sync signals

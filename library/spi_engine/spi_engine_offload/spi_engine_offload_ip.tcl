@@ -10,12 +10,10 @@ global VIVADO_IP_LIBRARY
 
 adi_ip_create spi_engine_offload
 adi_ip_files spi_engine_offload [list \
-  "spi_engine_offload_constr.ttcl" \
 	"spi_engine_offload.v" \
 ]
 
 adi_ip_properties_lite spi_engine_offload
-adi_ip_ttcl spi_engine_offload "spi_engine_offload_constr.ttcl"
 
 set_property company_url {https://wiki.analog.com/resources/fpga/peripherals/spi_engine/offload} [ipx::current_core]
 

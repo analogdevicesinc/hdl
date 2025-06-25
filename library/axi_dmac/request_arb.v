@@ -334,10 +334,41 @@ module request_arb #(
   wire [1:0] response_src_resp;
   */
 
-  assign dbg_dest_request_id = dest_request_id;
-  assign dbg_dest_response_id = dest_response_id;
-  assign dbg_src_request_id = src_request_id;
-  assign dbg_src_response_id = src_response_id;
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_request_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(dest_request_id),
+    .out_bits(dbg_dest_request_id));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_response_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(dest_response_id),
+    .out_bits(dbg_dest_response_id));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_dbg_src_request_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(src_request_id),
+    .out_bits(dbg_src_request_id));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_dbg_src_response_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(src_response_id),
+    .out_bits(dbg_src_response_id));
 
   always @(posedge req_clk)
   begin
@@ -360,11 +391,44 @@ module request_arb #(
   assign dest_ext_resetn = m_dest_axi_aresetn;
 
   wire [ID_WIDTH-1:0] dest_address_id;
-  wire dest_address_eot = eot_mem_dest[dest_address_id];
-  wire dest_response_eot = eot_mem_dest[dest_response_id];
+  wire dest_address_eot;
+  wire dest_response_eot;
 
-  assign dbg_dest_address_id = dest_address_id;
-  assign dbg_dest_data_id = dest_data_response_id;
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_dest_address_eot_sync (
+    .out_clk(m_dest_axi_aclk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[dest_address_id]),
+    .out_bits(dest_address_eot));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_dest_response_eot_sync (
+    .out_clk(m_dest_axi_aclk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[dest_response_id]),
+    .out_bits(dest_response_eot));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_address_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(dest_address_id),
+    .out_bits(dbg_dest_address_id));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_data_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(dest_data_response_id),
+    .out_bits(dbg_dest_data_id));
 
   assign dest_data_request_id = dest_address_id;
 
@@ -505,13 +569,39 @@ module request_arb #(
 
   wire [ID_WIDTH-1:0] data_id;
 
-  wire data_eot = eot_mem_dest[data_id];
-  wire response_eot = eot_mem_dest[dest_response_id];
+  wire data_eot;
+  wire response_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_data_eot_sync (
+    .out_clk(m_axis_aclk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[data_id]),
+    .out_bits(data_eot));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_response_eot_sync (
+    .out_clk(m_axis_aclk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[dest_response_id]),
+    .out_bits(response_eot));
 
   assign dest_data_request_id = dest_request_id;
 
   assign dbg_dest_address_id = 'h00;
-  assign dbg_dest_data_id = data_id;
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_data_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(data_id),
+    .out_bits(dbg_dest_data_id));
 
   dest_axi_stream #(
     .ID_WIDTH(ID_WIDTH),
@@ -571,13 +661,39 @@ module request_arb #(
 
   wire [ID_WIDTH-1:0] data_id;
 
-  wire data_eot = eot_mem_dest[data_id];
-  wire response_eot = eot_mem_dest[dest_response_id];
+  wire data_eot;
+  wire response_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_data_eot_sync (
+    .out_clk(fifo_rd_clk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[data_id]),
+    .out_bits(data_eot));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_SRC_DEST)
+  ) i_response_eot_sync (
+    .out_clk(fifo_rd_clk),
+    .out_resetn(dest_resetn),
+    .in_bits(eot_mem_dest[dest_response_id]),
+    .out_bits(response_eot));
 
   assign dest_data_request_id = dest_request_id;
 
   assign dbg_dest_address_id = 'h00;
-  assign dbg_dest_data_id = data_id;
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_data_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(data_id),
+    .out_bits(dbg_dest_data_id));
 
   dest_fifo_inf #(
     .ID_WIDTH(ID_WIDTH),
@@ -630,7 +746,16 @@ module request_arb #(
 
   wire [ID_WIDTH-1:0] src_data_id;
   wire [ID_WIDTH-1:0] src_address_id;
-  wire src_address_eot = eot_mem_src[src_address_id];
+  wire src_address_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_address_eot_sync (
+    .out_clk(m_src_axi_aclk),
+    .out_resetn(src_resetn),
+    .in_bits(eot_mem_src[src_address_id]),
+    .out_bits(src_address_eot));
 
   assign source_id = src_address_id;
   assign source_eot = src_address_eot;
@@ -638,8 +763,23 @@ module request_arb #(
   assign src_clk = m_src_axi_aclk;
   assign src_ext_resetn = m_src_axi_aresetn;
 
-  assign dbg_src_address_id = src_address_id;
-  assign dbg_src_data_id = src_data_id;
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_dbg_src_address_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(src_address_id),
+    .out_bits(dbg_src_address_id));
+
+  sync_bits #(
+    .NUM_OF_BITS(ID_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_dbg_src_data_id_sync (
+    .out_clk(req_clk),
+    .out_resetn(req_resetn),
+    .in_bits(src_data_id),
+    .out_bits(dbg_src_data_id));
 
   src_axi_mm #(
     .ID_WIDTH(ID_WIDTH),
@@ -718,7 +858,16 @@ module request_arb #(
   assign src_clk = s_axis_aclk;
   assign src_ext_resetn = 1'b1;
 
-  wire src_eot = eot_mem_src[src_response_id];
+  wire src_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_eot_sync (
+    .out_clk(s_axis_aclk),
+    .out_resetn(src_resetn),
+    .in_bits(eot_mem_src[src_response_id]),
+    .out_bits(src_eot));
 
   assign dbg_src_address_id = 'h00;
   assign dbg_src_data_id = 'h00;
@@ -835,7 +984,16 @@ module request_arb #(
 
   if (DMA_TYPE_SRC == DMA_TYPE_FIFO) begin
 
-  wire src_eot = eot_mem_src[src_response_id];
+  wire src_eot;
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_src_eot_sync (
+    .out_clk(fifo_wr_clk),
+    .out_resetn(src_resetn),
+    .in_bits(eot_mem_src[src_response_id]),
+    .out_bits(src_eot));
 
   assign source_id = src_response_id;
   assign source_eot = src_eot;

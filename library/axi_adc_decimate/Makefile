@@ -16,9 +16,9 @@ GENERIC_DEPS += cic_decim.v
 GENERIC_DEPS += fir_decim.v
 
 XILINX_DEPS += ../xilinx/common/ad_mul.v
-XILINX_DEPS += ../xilinx/common/up_xfer_cntrl_constr.xdc
 XILINX_DEPS += axi_adc_decimate_ip.tcl
 
 XILINX_LIB_DEPS += util_cic
+XILINX_LIB_DEPS += util_cdc
 
 include ../scripts/library.mk

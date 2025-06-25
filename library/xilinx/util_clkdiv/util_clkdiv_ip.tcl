@@ -8,16 +8,12 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create util_clkdiv
 adi_ip_files util_clkdiv [list \
-  "util_clkdiv_constr.xdc" \
   "util_clkdiv_ooc.ttcl" \
   "util_clkdiv.v" ]
 
 adi_ip_properties_lite util_clkdiv
 
 adi_ip_ttcl util_clkdiv "util_clkdiv_ooc.ttcl"
-
-set_property processing_order LATE [ipx::get_files "util_clkdiv_constr.xdc" \
-                  -of_objects [ipx::get_file_groups -of_objects [ipx::current_core] -filter {NAME =~ *synthesis*}]]
 
 set_property driver_value 0 [ipx::get_ports clk_sel -of_objects [ipx::current_core]]
 

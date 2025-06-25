@@ -13,7 +13,7 @@ adi_ip_files axi_dac_interpolate [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
   "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
-  "$ad_hdl_dir/library/xilinx/common/up_xfer_cntrl_constr.xdc" \
+	"$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "cic_interp.v" \
   "fir_interp.v" \
   "axi_dac_interpolate_reg.v" \

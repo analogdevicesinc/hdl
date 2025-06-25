@@ -53,15 +53,14 @@ module up_clock_mon #(
 
   // internal registers
 
-  reg     [15:0]           up_count = 'd1;
-  reg                      up_count_run = 'd0;
-  reg                      up_count_running_m1 = 'd0;
-  reg                      up_count_running_m2 = 'd0;
-  reg                      up_count_running_m3 = 'd0;
-  reg                      d_count_run_m1 = 'd0;
-  reg                      d_count_run_m2 = 'd0;
-  reg                      d_count_run_m3 = 'd0;
-  reg     [TOTAL_WIDTH:0]  d_count = 'd0;
+  reg  [15:0]            up_count = 'd1;
+  reg                    up_count_run = 'd0;
+  wire                   up_count_running;
+  reg                    up_count_running_d;
+  wire                   d_count_run;
+  reg                    d_count_run_d;
+  reg  [TOTAL_WIDTH:0]   d_count = 'd0;
+  wire [TOTAL_WIDTH-1:0] up_d_count_cdc;
 
   // internal signals
 
@@ -71,17 +70,19 @@ module up_clock_mon #(
   // processor reference
 
   // Capture on the falling edge of running
-  assign up_count_capture_s = up_count_running_m3 == 1'b1 && up_count_running_m2 == 1'b0;
+  assign up_count_capture_s = up_count_running_d == 1'b1 && up_count_running == 1'b0;
+
+  sync_bits i_sync_d_count_run (
+    .in_bits(d_count_run),
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .out_bits(up_count_running));
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
-      up_count_running_m1 <= 1'b0;
-      up_count_running_m2 <= 1'b0;
-      up_count_running_m3 <= 1'b0;
+      up_count_running_d <= 1'b0;
     end else begin
-      up_count_running_m1 <= d_count_run_m3;
-      up_count_running_m2 <= up_count_running_m1;
-      up_count_running_m3 <= up_count_running_m2;
+      up_count_running_d <= up_count_running;
     end
   end
 
@@ -90,22 +91,22 @@ module up_clock_mon #(
       up_d_count <= 'd0;
       up_count_run <= 1'b0;
     end else begin
-      if (up_count_running_m3 == 1'b0) begin
+      if (up_count_running_d == 1'b0) begin
         up_count_run <= 1'b1;
       end else if (up_count == 'h00) begin
         up_count_run <= 1'b0;
       end
 
       if (up_count_capture_s == 1'b1) begin
-        up_d_count <= d_count[TOTAL_WIDTH-1:0];
-      end else if (up_count == 'h00 && up_count_run != up_count_running_m3) begin
+        up_d_count <= up_d_count_cdc;
+      end else if (up_count == 'h00 && up_count_run != up_count_running_d) begin
         up_d_count <= 'h00;
       end
     end
   end
 
   always @(posedge up_clk) begin
-    if (up_count_run == 1'b0 && up_count_running_m3 == 1'b0) begin
+    if (up_count_run == 1'b0 && up_count_running_d == 1'b0) begin
       up_count <= 'h01;
     end else begin
       up_count <= up_count + 1'b1;
@@ -115,24 +116,26 @@ module up_clock_mon #(
   // device free running
 
   // Reset on the rising edge of run
-  assign d_count_reset_s = d_count_run_m3 == 1'b0 && d_count_run_m2 == 1'b1;
+  assign d_count_reset_s = d_count_run_d == 1'b0 && d_count_run == 1'b1;
+
+  sync_bits i_sync_up_count_run (
+    .in_bits(up_count_run),
+    .out_clk(d_clk),
+    .out_resetn(~d_rst),
+    .out_bits(d_count_run));
 
   always @(posedge d_clk or posedge d_rst) begin
     if (d_rst == 1'b1) begin
-      d_count_run_m1 <= 1'b0;
-      d_count_run_m2 <= 1'b0;
-      d_count_run_m3 <= 1'b0;
+      d_count_run_d <= 1'b0;
     end else begin
-      d_count_run_m1 <= up_count_run;
-      d_count_run_m2 <= d_count_run_m1;
-      d_count_run_m3 <= d_count_run_m2;
+      d_count_run_d <= d_count_run;
     end
   end
 
   always @(posedge d_clk) begin
     if (d_count_reset_s == 1'b1) begin
       d_count <= 'h00;
-    end else if (d_count_run_m3 == 1'b1) begin
+    end else if (d_count_run_d == 1'b1) begin
       if (d_count[TOTAL_WIDTH] == 1'b0) begin
         d_count <= d_count + 1'b1;
       end else begin
@@ -140,5 +143,13 @@ module up_clock_mon #(
       end
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS (TOTAL_WIDTH)
+  ) i_sync_d_count (
+    .in_bits(d_count[TOTAL_WIDTH-1:0]),
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .out_bits(up_d_count_cdc));
 
 endmodule

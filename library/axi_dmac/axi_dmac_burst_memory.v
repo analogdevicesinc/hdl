@@ -161,6 +161,7 @@ module axi_dmac_burst_memory #(
 
   wire [BYTES_PER_BURST_WIDTH+1-1:0] src_burst_len_data;
   reg [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data = {DMA_LENGTH_ALIGN{1'b1}};
+  wire [BYTES_PER_BURST_WIDTH+1-1:0] dest_burst_len_data_s;
 
   wire src_beat;
   wire src_last_beat;
@@ -319,9 +320,18 @@ module axi_dmac_burst_memory #(
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(BYTES_PER_BURST_WIDTH-DMA_LENGTH_ALIGN+1),
+    .ASYNC_CLK(1)
+  ) i_waddr_sync (
+    .out_clk(dest_clk),
+    .out_resetn(~dest_reset),
+    .in_bits(burst_len_mem[dest_id_reduced_next]),
+    .out_bits(dest_burst_len_data_s[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN]));
+
   always @(posedge dest_clk) begin
     if (dest_burst_valid == 1'b1 && dest_burst_ready == 1'b1) begin
-      dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= burst_len_mem[dest_id_reduced_next];
+      dest_burst_len_data[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN] <= dest_burst_len_data_s[BYTES_PER_BURST_WIDTH:DMA_LENGTH_ALIGN];
     end
   end
 

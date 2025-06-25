@@ -205,6 +205,9 @@ module axi_dmac_transfer #(
   output fifo_rd_underflow,
   output fifo_rd_xfer_req,
 
+  output [DMA_AXI_ADDR_WIDTH-1:0] dbg_dest_addr,
+  output [DMA_AXI_ADDR_WIDTH-1:0] dbg_src_addr,
+
   output [ID_WIDTH-1:0] dbg_dest_request_id,
   output [ID_WIDTH-1:0] dbg_dest_address_id,
   output [ID_WIDTH-1:0] dbg_dest_data_id,
@@ -293,6 +296,24 @@ module axi_dmac_transfer #(
 
   wire ext_sync_ready;
   wire ext_sync_valid;
+
+  sync_data #(
+    .NUM_OF_BITS(DMA_AXI_ADDR_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_REQ_SRC)
+  ) i_dbg_src_addr_sync (
+    .in_clk(src_clk),
+    .in_bits(m_axi_araddr),
+    .out_clk(req_clk),
+    .out_bits(dbg_src_addr));
+
+  sync_data #(
+    .NUM_OF_BITS(DMA_AXI_ADDR_WIDTH),
+    .ASYNC_CLK(ASYNC_CLK_DEST_REQ)
+  ) i_dbg_dest_addr_sync (
+    .in_clk(dest_clk),
+    .in_bits(m_axi_awaddr),
+    .out_clk(req_clk),
+    .out_bits(dbg_dest_addr));
 
   axi_dmac_reset_manager #(
     .ASYNC_CLK_REQ_SRC (ASYNC_CLK_REQ_SRC),

@@ -102,6 +102,9 @@ module axi_ad9963_if #(
 
   wire            div_clk;
 
+  wire            up_adc_ce_sync;
+  wire            up_dac_ce_sync;
+
   genvar          l_inst;
 
   always @(posedge adc_clk) begin
@@ -126,6 +129,16 @@ module axi_ad9963_if #(
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_adc_ce_sync (
+    .out_clk(trx_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_adc_ce),
+    .out_bits(up_adc_ce_sync));
+
   // device clock interface (receive clock)
 
   BUFGCTRL #(
@@ -140,7 +153,7 @@ module axi_ad9963_if #(
     .I1(1'b0),
     .IGNORE0(1'b0),
     .IGNORE1(1'b0),
-    .S0(up_adc_ce),
+    .S0(up_adc_ce_sync),
     .S1(1'b0));
 
   // receive data interface, ibuf -> idelay -> iddr
@@ -202,6 +215,16 @@ module axi_ad9963_if #(
     .I (tx_clk),
     .O (div_clk));
 
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_dac_ce_sync (
+    .out_clk(div_clk),
+    .out_resetn(1'b1),
+    .in_bits(up_dac_ce),
+    .out_bits(up_dac_ce_sync));
+
   BUFGCTRL #(
     .INIT_OUT(0),
     .PRESELECT_I0("FALSE"),
@@ -214,7 +237,7 @@ module axi_ad9963_if #(
     .I1(1'b0),
     .IGNORE0(1'b0),
     .IGNORE1(1'b0),
-    .S0(up_dac_ce),
+    .S0(up_dac_ce_sync),
     .S1(1'b0));
 
   generate

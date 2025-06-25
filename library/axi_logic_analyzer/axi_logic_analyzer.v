@@ -102,14 +102,9 @@ module axi_logic_analyzer (
   reg     [31:0]    delay_counter = 'd0;
   reg               triggered = 'd0;
 
-  reg               up_triggered;
-  reg               up_triggered_d1;
-  reg               up_triggered_d2;
-
+  wire              up_triggered;
   reg               up_triggered_set;
-  reg               up_triggered_reset;
-  reg               up_triggered_reset_d1;
-  reg               up_triggered_reset_d2;
+  wire              up_triggered_reset;
 
   reg               streaming_on;
 
@@ -224,16 +219,27 @@ module axi_logic_analyzer (
     end else if (up_triggered_reset == 1'b1) begin
       up_triggered_set <= 1'b0;
     end
-    up_triggered_reset_d1 <= up_triggered;
-    up_triggered_reset_d2 <= up_triggered_reset_d1;
-    up_triggered_reset    <= up_triggered_reset_d2;
   end
 
-  always @(posedge up_clk) begin
-    up_triggered_d1 <= up_triggered_set;
-    up_triggered_d2 <= up_triggered_d1;
-    up_triggered    <= up_triggered_d2;
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_up_triggered_reset_sync (
+    .out_clk(clk_out),
+    .out_resetn(1'b1),
+    .in_bits(up_triggered),
+    .out_bits(up_triggered_reset));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_cdc_async_stage_sync (
+    .out_clk(up_clk),
+    .out_resetn(up_rstn),
+    .in_bits(up_triggered_set),
+    .out_bits(up_triggered));
 
   generate
   for (i = 0 ; i < 16; i = i + 1) begin

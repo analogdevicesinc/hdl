@@ -117,7 +117,7 @@ module util_rfifo #(
   input                                   dout_valid_7,
   output                                  dout_valid_out_7,
   output      [DOUT_DATA_WIDTH-1:0]       dout_data_7,
-  output  reg                             dout_unf
+  output                                  dout_unf
 );
 
   localparam  M_MEM_RATIO = DOUT_DATA_WIDTH/DIN_DATA_WIDTH;
@@ -133,11 +133,7 @@ module util_rfifo #(
   reg                                     din_wr = 'd0;
   reg                                     din_valid = 'd0;
   reg         [ 6:0]                      din_req_cnt = 'd0;
-  reg         [ 7:0]                      din_enable_m1 = 'd0;
-  reg         [ 7:0]                      din_enable = 'd0;
-  reg                                     din_req_t_m1 = 'd0;
-  reg                                     din_req_t_m2 = 'd0;
-  reg                                     din_req_t_m3 = 'd0;
+  reg                                     din_req_t_d = 'd0;
   reg                                     din_req = 'd0;
   reg                                     din_init = 'd0;
   reg                                     din_unf_d = 'd0;
@@ -148,12 +144,14 @@ module util_rfifo #(
   reg                                     dout_req_t = 'd0;
   reg                                     dout_init = 'd0;
   reg         [(ADDRESS_WIDTH-1):0]       dout_raddr = 'd0;
-  reg                                     dout_unf_m1 = 'd0;
 
   // internal signals
 
   wire        [(T_DIN_DATA_WIDTH-1):0]    din_data_s;
+  wire                                    din_init_s;
   wire                                    din_req_s;
+  wire        [ 7:0]                      din_enable;
+  wire                                    din_req_t_s;
   wire        [ 7:0]                      dout_enable_s;
   wire        [ 7:0]                      dout_valid_s;
   wire        [(T_DOUT_DATA_WIDTH+1):0]   dout_data_s;
@@ -268,31 +266,53 @@ module util_rfifo #(
     end
   end
 
-  assign din_req_s = din_req_t_m3 ^ din_req_t_m2;
+  assign din_req_s = din_req_t_d ^ din_req_t_s;
 
-  always @(posedge din_clk or negedge din_rstn) begin
+  always @(posedge din_clk) begin
     if (din_rstn == 1'b0) begin
-      din_enable_m1 <= 'd0;
-      din_enable <= 'd0;
-      din_req_t_m1 <= 'd0;
-      din_req_t_m2 <= 'd0;
-      din_req_t_m3 <= 'd0;
+      din_req_t_d <= 'd0;
       din_req <= 'd0;
       din_init <= 'd0;
       din_unf_d <= 'd0;
     end else begin
-      din_enable_m1 <= dout_enable;
-      din_enable <= din_enable_m1;
-      din_req_t_m1 <= dout_req_t;
-      din_req_t_m2 <= din_req_t_m1;
-      din_req_t_m3 <= din_req_t_m2;
+      din_req_t_d <= din_req_t_s;
       din_req <= din_req_s;
       if (din_req_s == 1'b1) begin
-        din_init <= dout_init;
+        din_init <= din_init_s;
       end
       din_unf_d <= din_unf;
     end
   end
+
+  sync_bits #(
+    .NUM_OF_BITS(8),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i_din_enable_sync (
+    .out_clk(din_clk),
+    .out_resetn(din_rstn),
+    .in_bits(dout_enable),
+    .out_bits(din_enable));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i__sync (
+    .out_clk(din_clk),
+    .out_resetn(din_rstn),
+    .in_bits(dout_req_t),
+    .out_bits(din_req_t_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i__sync (
+    .out_clk(din_clk),
+    .out_resetn(din_rstn),
+    .in_bits(dout_init),
+    .out_bits(din_init_s));
 
   // read interface (bus expansion and/or clock conversion)
 
@@ -377,15 +397,15 @@ module util_rfifo #(
     end
   end
 
-  always @(posedge dout_clk) begin
-    if (dout_rst == 1'b1) begin
-      dout_unf_m1 <= 'd0;
-      dout_unf <= 'd0;
-    end else begin
-      dout_unf_m1 <= din_unf_d;
-      dout_unf <= dout_unf_m1;
-    end
-  end
+  sync_bits #(
+    .NUM_OF_BITS(1),
+    .ASYNC_CLK(1),
+    .SYNC_STAGES(2)
+  ) i__sync (
+    .out_clk(dout_clk),
+    .out_resetn(~dout_rst),
+    .in_bits(din_unf_d),
+    .out_bits(dout_unf));
 
   // instantiations
 

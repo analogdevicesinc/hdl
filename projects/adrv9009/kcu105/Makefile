@@ -13,7 +13,6 @@ M_DEPS += ../../common/kcu105/kcu105_system_lutram_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_constr.xdc
 M_DEPS += ../../common/kcu105/kcu105_system_bd.tcl
 M_DEPS += ../../common/xilinx/data_offload_bd.tcl
-M_DEPS += ../../common/xilinx/adi_fir_filter_constr.xdc
 M_DEPS += ../../common/xilinx/adi_fir_filter_bd.tcl
 M_DEPS += ../../../library/util_hbm/scripts/adi_util_hbm.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl

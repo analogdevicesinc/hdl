@@ -48,19 +48,19 @@ module jesd204_up_common #(
 
   output up_cfg_is_writeable,
 
-  output reg [NUM_LANES-1:0] core_cfg_lanes_disable = {NUM_LANES{1'b0}},
-  output reg [NUM_LINKS-1:0] core_cfg_links_disable = {NUM_LINKS{1'b0}},
-  output reg [9:0] core_cfg_octets_per_multiframe = 'h00,
-  output reg [7:0] core_cfg_octets_per_frame = 'h00,
-  output reg core_cfg_disable_scrambler = 'h00,
-  output reg core_cfg_disable_char_replacement = 'h00,
-  output reg [EXTRA_CFG_WIDTH-1:0] core_extra_cfg = 'h00,
+  output reg [NUM_LANES-1:0] core_cfg_lanes_disable,
+  output reg [NUM_LINKS-1:0] core_cfg_links_disable,
+  output reg [9:0] core_cfg_octets_per_multiframe,
+  output reg [7:0] core_cfg_octets_per_frame,
+  output reg core_cfg_disable_scrambler,
+  output reg core_cfg_disable_char_replacement,
+  output reg [EXTRA_CFG_WIDTH-1:0] core_extra_cfg,
 
-  output reg [DEV_EXTRA_CFG_WIDTH-1:0] device_extra_cfg = 'h00,
+  output reg [DEV_EXTRA_CFG_WIDTH-1:0] device_extra_cfg,
 
-  output reg [9:0] device_cfg_octets_per_multiframe = 'h00,
-  output reg [7:0] device_cfg_octets_per_frame = 'h00,
-  output reg [7:0] device_cfg_beats_per_multiframe = 'h00,
+  output reg [9:0] device_cfg_octets_per_multiframe,
+  output reg [7:0] device_cfg_octets_per_frame,
+  output reg [7:0] device_cfg_beats_per_multiframe,
 
   input [31:0] status_synth_params0,
   input [31:0] status_synth_params1,
@@ -77,103 +77,205 @@ module jesd204_up_common #(
   reg up_cfg_disable_char_replacement = 1'b0;
   reg up_cfg_disable_scrambler = 1'b0;
 
+  wire [NUM_LANES-1:0] core_cfg_lanes_disable_reg;
+  wire [NUM_LINKS-1:0] core_cfg_links_disable_reg;
+  wire [9:0] core_cfg_octets_per_multiframe_reg;
+  wire [7:0] core_cfg_octets_per_frame_reg;
+  wire core_cfg_disable_scrambler_reg;
+  wire core_cfg_disable_char_replacement_reg;
+  wire [EXTRA_CFG_WIDTH-1:0] core_extra_cfg_reg;
+
+  wire [DEV_EXTRA_CFG_WIDTH-1:0] device_extra_cfg_reg;
+
+  wire [9:0] device_cfg_octets_per_multiframe_reg;
+  wire [7:0] device_cfg_octets_per_frame_reg;
+  wire [7:0] device_cfg_beats_per_multiframe_reg;
+
   /* Reset for the register map */
-  reg [2:0] up_reset_vector = 3'b111;
-  assign up_reset = up_reset_vector[0];
+  wire up_reset_vector_s;
+  assign up_reset = up_reset_vector_s;
 
   /* Reset signal generation for the JESD core */
-  reg [4:0] core_reset_vector = 5'b11111;
+  reg  [1:0] core_reset_vector = 2'b11;
+  wire       core_reset_vector_s;
   assign core_reset = core_reset_vector[0];
 
-  reg [4:0] device_reset_vector = 5'b11111;
+  reg  [1:0] device_reset_vector = 2'b11;
+  wire       device_reset_vector_s;
   assign device_reset = device_reset_vector[0];
 
   /* Transfer the reset signal back to the up domain, used to keep the
    * synchronizers in reset until the core is ready. This is done in order to
    * prevent bogus data to propagate to the register map. */
-  reg [1:0] up_reset_synchronizer_vector = 2'b11;
-  assign up_reset_synchronizer = up_reset_synchronizer_vector[0];
+  wire up_reset_synchronizer_vector_s;
+  assign up_reset_synchronizer = up_reset_synchronizer_vector_s;
 
   /*
    * Synchronize the external core reset to the register map domain so the status
    * can be shown in the register map. This is useful for debugging.
    */
-  reg [1:0] up_core_reset_ext_synchronizer_vector = 2'b11;
+  wire up_core_reset_ext_synchronizer_vector_s;
   wire up_core_reset_ext;
 
-  assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector[0];
+  assign up_core_reset_ext = up_core_reset_ext_synchronizer_vector_s;
 
   /* Transfer two cycles before the core comes out of reset */
   wire core_cfg_transfer_en;
-  assign core_cfg_transfer_en = core_reset_vector[2] ^ core_reset_vector[1];
+  assign core_cfg_transfer_en = !core_reset_vector_s && core_reset_vector[1];
 
   wire device_cfg_transfer_en;
-  assign device_cfg_transfer_en = device_reset_vector[2] ^ device_reset_vector[1];
+  assign device_cfg_transfer_en = !device_reset_vector_s && device_reset_vector[1];
 
   reg up_reset_core = 1'b1;
 
   assign up_cfg_is_writeable = up_reset_core;
 
-  always @(posedge up_clk or negedge ext_resetn) begin
-    if (ext_resetn == 1'b0) begin
-      up_reset_vector <= 3'b111;
-    end else begin
-      up_reset_vector <= {1'b0,up_reset_vector[2:1]};
-    end
-  end
+  ad_rst i_up_reset_vector (
+    .rst_async (~ext_resetn),
+    .clk (up_clk),
+    .rstn (),
+    .rst (up_reset_vector_s));
 
   wire core_reset_all = up_reset_core | core_reset_ext;
 
-  always @(posedge core_clk or posedge core_reset_all) begin
-    if (core_reset_all == 1'b1) begin
-      core_reset_vector <= 5'b11111;
-    end else begin
-      core_reset_vector <= {1'b0,core_reset_vector[4:1]};
-    end
+  ad_rst i_core_reset_vector (
+    .rst_async (core_reset_all),
+    .clk (core_clk),
+    .rstn (),
+    .rst (core_reset_vector_s));
+
+  always @(posedge core_clk) begin
+    core_reset_vector <= {core_reset_vector_s, core_reset_vector[1]};
   end
 
-  always @(posedge device_clk or posedge core_reset_all) begin
-    if (core_reset_all == 1'b1) begin
-      device_reset_vector <= 5'b11111;
-    end else begin
-      device_reset_vector <= {1'b0,device_reset_vector[4:1]};
-    end
+  ad_rst i_device_reset_vector (
+    .rst_async (core_reset_all),
+    .clk (device_clk),
+    .rstn (),
+    .rst (device_reset_vector_s));
+
+  always @(posedge device_clk) begin
+    device_reset_vector <= {device_reset_vector_s, device_reset_vector[1]};
   end
 
-  always @(posedge up_clk or posedge core_reset) begin
-    if (core_reset == 1'b1) begin
-      up_reset_synchronizer_vector <= 2'b11;
-    end else begin
-      up_reset_synchronizer_vector <= {1'b0,up_reset_synchronizer_vector[1]};
-    end
-  end
+  ad_rst i_up_reset_synchronizer_vector (
+    .rst_async (core_reset),
+    .clk (up_clk),
+    .rstn (),
+    .rst (up_reset_synchronizer_vector_s));
 
-  always @(posedge up_clk or posedge core_reset_ext) begin
-    if (core_reset_ext == 1'b1) begin
-      up_core_reset_ext_synchronizer_vector <= 2'b11;
-    end else begin
-      up_core_reset_ext_synchronizer_vector <= {1'b0,up_core_reset_ext_synchronizer_vector[1]};
-    end
-  end
+  ad_rst i_up_core_reset_ext_synchronizer_vector (
+    .rst_async (core_reset_ext),
+    .clk (up_clk),
+    .rstn (),
+    .rst (up_core_reset_ext_synchronizer_vector_s));
+
+  sync_bits #(
+    .NUM_OF_BITS(10)
+  ) i_sync_bits_core_cfg_octets_per_multiframe (
+    .in_bits (up_cfg_octets_per_multiframe),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_octets_per_multiframe_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(8)
+  ) i_sync_bits_core_cfg_octets_per_frame (
+    .in_bits (up_cfg_octets_per_frame),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_octets_per_frame_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(NUM_LANES)
+  ) i_sync_bits_core_cfg_lanes_disable (
+    .in_bits (up_cfg_lanes_disable),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_lanes_disable_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(NUM_LANES)
+  ) i_sync_bits_core_cfg_links_disable (
+    .in_bits (up_cfg_links_disable),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_links_disable_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) i_sync_bits_core_cfg_disable_scrambler (
+    .in_bits (up_cfg_disable_scrambler),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_disable_scrambler_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(1)
+  ) i_sync_bits_core_cfg_disable_char_replacement (
+    .in_bits (up_cfg_disable_char_replacement),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_cfg_disable_char_replacement_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(EXTRA_CFG_WIDTH)
+  ) i_sync_bits_up_extra_cfg (
+    .in_bits (up_extra_cfg),
+    .out_resetn (1'b1),
+    .out_clk (core_clk),
+    .out_bits (core_extra_cfg_reg));
 
   always @(posedge core_clk) begin
     if (core_cfg_transfer_en == 1'b1) begin
-      core_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
-      core_cfg_octets_per_frame <= up_cfg_octets_per_frame;
-      core_cfg_lanes_disable <= up_cfg_lanes_disable;
-      core_cfg_links_disable <= up_cfg_links_disable;
-      core_cfg_disable_scrambler <= up_cfg_disable_scrambler;
-      core_cfg_disable_char_replacement <= up_cfg_disable_char_replacement;
-      core_extra_cfg <= up_extra_cfg;
+      core_cfg_octets_per_multiframe <= core_cfg_octets_per_multiframe_reg;
+      core_cfg_octets_per_frame <= core_cfg_octets_per_frame_reg;
+      core_cfg_lanes_disable <= core_cfg_lanes_disable_reg;
+      core_cfg_links_disable <= core_cfg_links_disable_reg;
+      core_cfg_disable_scrambler <= core_cfg_disable_scrambler_reg;
+      core_cfg_disable_char_replacement <= core_cfg_disable_char_replacement_reg;
+      core_extra_cfg <= core_extra_cfg_reg;
     end
   end
 
+  sync_bits #(
+    .NUM_OF_BITS(10)
+  ) i_sync_bits_device_cfg_octets_per_multiframe (
+    .in_bits (up_cfg_octets_per_multiframe),
+    .out_resetn (1'b1),
+    .out_clk (device_clk),
+    .out_bits (device_cfg_octets_per_multiframe_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(8)
+  ) i_sync_bits_device_cfg_octets_per_frame (
+    .in_bits (up_cfg_octets_per_frame),
+    .out_resetn (1'b1),
+    .out_clk (device_clk),
+    .out_bits (device_cfg_octets_per_frame_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(8)
+  ) i_sync_bits_device_cfg_beats_per_multiframe (
+    .in_bits (up_cfg_beats_per_multiframe),
+    .out_resetn (1'b1),
+    .out_clk (device_clk),
+    .out_bits (device_cfg_beats_per_multiframe_reg));
+
+  sync_bits #(
+    .NUM_OF_BITS(DEV_EXTRA_CFG_WIDTH)
+  ) i_sync_bits_device_extra_cfg (
+    .in_bits (up_dev_extra_cfg),
+    .out_resetn (1'b1),
+    .out_clk (device_clk),
+    .out_bits (device_extra_cfg_reg));
+
   always @(posedge device_clk) begin
     if (device_cfg_transfer_en == 1'b1) begin
-      device_cfg_octets_per_multiframe <= up_cfg_octets_per_multiframe;
-      device_cfg_octets_per_frame <= up_cfg_octets_per_frame;
-      device_cfg_beats_per_multiframe <= up_cfg_beats_per_multiframe;
-      device_extra_cfg <= up_dev_extra_cfg;
+      device_cfg_octets_per_multiframe <= device_cfg_octets_per_multiframe_reg;
+      device_cfg_octets_per_frame <= device_cfg_octets_per_frame_reg;
+      device_cfg_beats_per_multiframe <= device_cfg_beats_per_multiframe_reg;
+      device_extra_cfg <= device_extra_cfg_reg;
     end
   end
 

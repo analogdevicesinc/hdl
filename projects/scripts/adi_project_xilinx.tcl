@@ -316,6 +316,26 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
     }
   }
 
+  add_files -fileset constrs_1 -norecurse [list \
+    "$ad_hdl_dir/library/xilinx/common/cdc_constr_async.tcl" \
+    "$ad_hdl_dir/library/xilinx/common/cdc_constr.tcl" \
+  ]
+  set_property used_in_synthesis false [get_files $ad_hdl_dir/library/xilinx/common/cdc_constr.tcl]
+
+  if { [file exists {timing_constr.tcl}] == 1} {
+    add_files -fileset constrs_1 -norecurse [list \
+      "timing_constr.tcl" \
+    ]
+    set_property used_in_synthesis false [get_files timing_constr.tcl]
+    set_property processing_order late [get_files timing_constr.tcl]
+  } else {
+    add_files -fileset constrs_1 -norecurse [list \
+      "$ad_hdl_dir/library/xilinx/common/timing_constr.tcl" \
+    ]
+    set_property used_in_synthesis false [get_files $ad_hdl_dir/library/xilinx/common/timing_constr.tcl]
+    set_property processing_order late [get_files $ad_hdl_dir/library/xilinx/common/timing_constr.tcl]
+  }
+
 }
 
 ## Add source files to an existing project.
