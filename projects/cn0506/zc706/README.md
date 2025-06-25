@@ -1,4 +1,9 @@
+<!-- no_no_os -->
+
 # CN0506/ZC706 HDL Project
+
+- Connect on FMC LPC
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
@@ -14,9 +19,6 @@ The overwritable parameter from the environment is:
 - INTF_CFG - defines the MAC to PHY interface type (MII, RGMII or RMII)
 
 ### Example configurations
-
-- Connect on FMC LPC
-- VADJ = 2.5V
 
 #### RGMII mode (default)
 

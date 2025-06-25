@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-CN0506](https://www.analog.com/cn0506)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/circuits-from-the-lab/cn0506
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/cn0506/index.html
+- Evaluation board VADJ range: 1.8V - 3.3V
 
 ## Supported parts
 
