@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD4630-FMC/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
@@ -21,7 +25,7 @@ The overwritable parameters from the environment are:
 
 - CLK_MODE: clocking mode of the device's digital interface
   - 0 - SPI (default)
-  - 1 - Echo-clock or Master clock 
+  - 1 - Echo-clock or Master clock
 - NUM_OF_SDI: the number of MOSI lines of the SPI interface
   - 1 - Interleaved
   - 2 - 1LPC
@@ -42,7 +46,7 @@ This specific command is equivalent to running `make` only:
 
 ```
 make CLK_MODE=0 NUM_OF_SDI=4 CAPTURE_ZONE=2 DDR_EN=0
-``` 
+```
 
 Corresponding device trees:
 - [zynq-zed-adv7511-ad4630-24.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4630-24.dts)
@@ -56,7 +60,7 @@ Corresponding device trees:
 make CLK_MODE=0 NUM_OF_SDI=2 CAPTURE_ZONE=2 DDR_EN=0
 ```
 
-Corresponding device trees: 
+Corresponding device trees:
 
 - [zynq-zed-adv7511-ad4030-24.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4030-24.dts)
 - [zynq-zed-adv7511-ad4032-24.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4032-24.dts)
