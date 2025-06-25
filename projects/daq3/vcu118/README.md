@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # DAQ3/VCU118 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
