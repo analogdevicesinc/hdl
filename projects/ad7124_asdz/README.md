@@ -5,6 +5,7 @@
   - [EVAL-AD7124-8](https://www.analog.com/eval-ad7124-8)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad7124-x
 - HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad7124_asdz/index.html
+- Evaluation board VADJ: 3.3V
 
 ## Supported parts
 
