@@ -42,7 +42,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`AD-FMCDAQ2-EBZ <EVAL-AD-FMCDAQ2-EBZ>`
-     - :xilinx:`KC705`
+     - :xilinx:`KC705` *
      - FMC HPC
    * -
      - :xilinx:`KCU105`
@@ -53,6 +53,12 @@ Supported carriers
    * -
      - :xilinx:`ZCU102`
      - FMC HPC0
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+     :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/daq2/kc705>`
 
 Block design
 -------------------------------------------------------------------------------
