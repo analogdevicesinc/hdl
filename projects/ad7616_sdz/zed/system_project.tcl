@@ -41,8 +41,7 @@ adi_project ad7616_sdz_zed 0 [list \
 ]
 
 adi_project_files ad7616_sdz_zed [list \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc"]
+  "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
 switch $INTF {
   1 {
