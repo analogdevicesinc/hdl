@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD4630-FMC](https://www.analog.com/eval-ad4630-24)
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4630_fmc/index.html
+- Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts
 
