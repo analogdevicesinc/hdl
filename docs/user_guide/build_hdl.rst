@@ -1041,7 +1041,7 @@ In general, always run ``make`` within a project folder such as
 not be a need for you to run ``make`` inside the library or root folders.
 The ``make`` framework passes the top level 'targets' to any sub-makes
 inside its sub-folders. What this means, is that if you run ``make`` inside
-**hdl/projects/daq2**, it builds all the carriers (**kc705**, **a10soc**,
+**hdl/projects/daq2**, it builds all the carriers (**a10soc**,
 **kcu105**, **zc706** to **zcu102**) instead of just the target carrier.
 
 The following targets/arguments are supported:
