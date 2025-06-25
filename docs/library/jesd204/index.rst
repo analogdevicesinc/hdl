@@ -421,7 +421,7 @@ HDL Example Projects
 
   - :git-hdl:`Intel Arria 10 SoC <projects/daq2/a10soc>`
   - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/daq2/a10gx>`
-  - :git-hdl:`AMD Xilinx KC705 <projects/daq2/kc705>`
+  - :git-hdl:`AMD Xilinx KC705 (RETIRED) <hdl_2023_r2:projects/daq2/kc705>`
   - :git-hdl:`AMD Xilinx KCU105 <projects/daq2/kcu105>`
   - :git-hdl:`AMD Xilinx VC707 (RETIRED) <hdl_2018_r2:projects/daq2/vc707>`
   - :git-hdl:`AMD Xilinx ZC706 <projects/daq2/zc706>`
