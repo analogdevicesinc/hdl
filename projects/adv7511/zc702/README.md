@@ -1,4 +1,8 @@
+<!-- no_build_example, no-no-os -->
+
 # ADV7511/ZC702 HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
