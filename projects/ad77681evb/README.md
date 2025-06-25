@@ -5,6 +5,7 @@
   - [EVAL-ADAQ7768-1](https://www.analog.com/eval-adaq7768-1)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad7768-1
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad77681evb/index.html
+- Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts
 
