@@ -1,4 +1,9 @@
+<!-- no_no_os -->
+
 # CN0506/ZCU102 HDL Project
+
+- Connect on FMC1
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
@@ -14,9 +19,6 @@ The overwritable parameter from the environment:
 - INTF_CFG - defines the MAC to PHY interface type (MII, RGMII or RMII)
 
 ### Example configurations
-
-- Connect on FMC1
-- VADJ = 1.8V
 
 #### RGMII mode (default)
 

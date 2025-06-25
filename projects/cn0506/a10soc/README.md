@@ -1,11 +1,13 @@
+<!-- no_build_example, no_no_os -->
+
 # CN0506/A10SOC HDL Project
 
-## Building the project
-
 - Connect on FMC A HPC(V57.1)
-- VADJ = 1.8V
+- VADJ with which it was tested in hardware: 1.8V
 - Only the default configuration is supported in MII mode.
 - Connected to HPS (EMAC1-PHY0 and EMAC2-PHY1).
+
+## Building the project
 
 ```
 cd projects/cn0506/a10soc
