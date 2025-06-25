@@ -56,7 +56,7 @@ Supported carriers
      - Carrier
      - FMC slot
    * - FMCOMMS2/3/4
-     - :xilinx:`KC705`
+     - :xilinx:`KC705` *
      - FMC LPC
    * -
      - :xilinx:`KCU105`
@@ -76,6 +76,12 @@ Supported carriers
    * -
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC LPC
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+      :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/fmcomms2/kc705>`
 
 Block design
 -------------------------------------------------------------------------------
