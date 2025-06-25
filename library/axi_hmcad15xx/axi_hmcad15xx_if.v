@@ -41,7 +41,8 @@ module axi_hmcad15xx_if #(
   parameter          FPGA_TECHNOLOGY = 0,
   parameter          IODELAY_CTRL = 1,
   parameter          IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter          REFCLK_FREQUENCY = 200
+  parameter          REFCLK_FREQUENCY = 200,
+  parameter          POLARITY_MASK = 8'h00
 ) (
 
   // device-interface
@@ -219,18 +220,18 @@ ad_serdes_in # (
 wire [15:0] data_out [0:7];
 wire [ 7:0] data_en;
 
-generate
-  genvar i;
-    for (i = 0; i < NUM_LANES-1; i=i+1) begin: sample_assembly_lanes
-      sample_assembly  sample_assembly_inst (
-        .clk(adc_clk_div),
-        .frame(frame_data),
-        .data_in(serdes_data[i]),
-        .resolution(resolution),
-        .data_en(data_en[i]),
-        .data_out(data_out[i])
-      );
-    end
+  generate
+    genvar i;
+      for (i = 0; i < NUM_LANES-1; i=i+1) begin: sample_assembly_lanes
+        sample_assembly  sample_assembly_inst (
+          .clk(adc_clk_div),
+          .frame(frame_data),
+          .data_in(serdes_data[i] ^ POLARITY_MASK),
+          .resolution(resolution),
+          .data_en(data_en[i]),
+          .data_out(data_out[i])
+        );
+      end
   endgenerate
 
  //==========================================================================
@@ -279,7 +280,5 @@ reg  [127:0]      wr_data_reg;
  assign wr_clk      = adc_clk_div;
  assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
  assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
-
-
 
 endmodule

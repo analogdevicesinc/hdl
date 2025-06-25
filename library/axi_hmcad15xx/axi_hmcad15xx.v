@@ -44,7 +44,8 @@ module axi_hmcad15xx #(
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
   parameter   IO_DELAY_GROUP = "adc_if_delay_group",
-  parameter   IODELAY_CTRL = 1
+  parameter   IODELAY_CTRL = 1,
+  parameter   POLARITY_MASK = 8'h00
 ) (
 
   input           adc_dovf,
@@ -247,7 +248,8 @@ assign mode       = adc_custom_control[4:2];
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
     .IO_DELAY_GROUP(IO_DELAY_GROUP),
-    .IODELAY_CTRL(IODELAY_CTRL)
+    .IODELAY_CTRL(IODELAY_CTRL),
+    .POLARITY_MASK(POLARITY_MASK)
   ) i_axi_hmcad15xx_if (
     .up_clk(up_clk),
     .adc_rst(adc_rst_s),
@@ -270,8 +272,6 @@ assign mode       = adc_custom_control[4:2];
     .delay_locked(delay_locked));
 
   // adc up common
-
-
 
   up_adc_common #(
     .ID(ID)
@@ -331,7 +331,6 @@ assign mode       = adc_custom_control[4:2];
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[4]),
     .up_rack (up_rack_s[4]));
-
 
  // adc delay control
 
