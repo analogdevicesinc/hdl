@@ -378,7 +378,7 @@ if {$INTF_CFG != "RX"} {
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_LENGTH_WIDTH 24
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.CYCLIC 1
-  ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 4096
+  ad_ip_parameter axi_mxfe_tx_dma CONFIG.MAX_BYTES_PER_BURST 2048
   if {$ADI_PHY_SEL} {
     ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_DATA_WIDTH_SRC $dac_dma_data_width
   } else {

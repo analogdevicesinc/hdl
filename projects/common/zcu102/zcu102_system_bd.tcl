@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set CACHE_COHERENCY true
+set CACHE_COHERENCY false
 
 # create board design
 # default ports
@@ -69,10 +69,17 @@ ad_ip_instance proc_sys_reset sys_500m_rstgen
 ad_ip_parameter sys_500m_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 # system reset/clock definitions
+ad_ip_instance clk_wiz dma_clk_wiz
+ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
+ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
+ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
+ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 332.9
+ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
 
 ad_connect  sys_cpu_clk sys_ps8/pl_clk0
-ad_connect  sys_250m_clk sys_ps8/pl_clk1
-ad_connect  sys_500m_clk sys_ps8/pl_clk2
+ad_connect sys_cpu_clk  dma_clk_wiz/clk_in1
+ad_connect sys_250m_clk dma_clk_wiz/clk_out1
+ad_connect sys_500m_clk sys_ps8/pl_clk2
 
 ad_connect  sys_ps8/pl_resetn0 sys_rstgen/ext_reset_in
 ad_connect  sys_cpu_clk sys_rstgen/slowest_sync_clk
@@ -83,6 +90,7 @@ ad_connect  sys_500m_clk sys_500m_rstgen/slowest_sync_clk
 
 ad_connect  sys_cpu_reset sys_rstgen/peripheral_reset
 ad_connect  sys_cpu_resetn sys_rstgen/peripheral_aresetn
+ad_connect  sys_cpu_resetn dma_clk_wiz/resetn
 ad_connect  sys_250m_reset sys_250m_rstgen/peripheral_reset
 ad_connect  sys_250m_resetn sys_250m_rstgen/peripheral_aresetn
 ad_connect  sys_500m_reset sys_500m_rstgen/peripheral_reset
@@ -145,7 +153,7 @@ ad_connect  axi_sysid_0/sys_rom_data   	rom_sys_0/rom_data
 ad_connect  sys_cpu_clk                 rom_sys_0/clk
 
 ad_cpu_interconnect 0x45000000 axi_sysid_0
-# interrupts	
+# interrupts
 
 ad_ip_instance xlconcat sys_concat_intc_0
 ad_ip_parameter sys_concat_intc_0 CONFIG.NUM_PORTS 8
@@ -172,4 +180,3 @@ ad_connect  sys_concat_intc_0/In3 GND
 ad_connect  sys_concat_intc_0/In2 GND
 ad_connect  sys_concat_intc_0/In1 GND
 ad_connect  sys_concat_intc_0/In0 GND
-
