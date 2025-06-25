@@ -1,4 +1,8 @@
+<!-- no_build_example, no_dts -->
+
 # AD7606X-FMC/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 2.5V
 
 The parameters configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default
 configuration.
@@ -64,4 +68,4 @@ make INTF=1 NUM_OF_SDI=4
 make INTF=1 NUM_OF_SDI=8
 ```
 
-- [AD7606x Corresponding no-OS project](https://analogdevicesinc.github.io/no-OS/projects/ad7606x-fmc.html)
+Corresponding no-OS project: [ad7606x-fmc](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad7606x-fmc)
