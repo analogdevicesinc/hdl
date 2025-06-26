@@ -1,14 +1,16 @@
 ###############################################################################
-## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
 # SPI interface
 
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25 IOB TRUE}                 [get_ports ad77681_spi_sclk]; ## D8   FMC_LA01_CC_P   IO_L14P_T2_SRCC_34
-set_property -dict {PACKAGE_PIN P17 IOSTANDARD LVCMOS25 IOB TRUE PULLTYPE PULLUP} [get_ports ad77681_spi_miso]; ## H7   FMC_LA02_P      IO_L20P_T3_34
-set_property -dict {PACKAGE_PIN N22 IOSTANDARD LVCMOS25}                          [get_ports ad77681_spi_mosi]; ## G9   FMC_LA03_P      IO_L16P_T2_34
-set_property -dict {PACKAGE_PIN M21 IOSTANDARD LVCMOS25}                          [get_ports ad77681_spi_cs];   ## H10  FMC_LA04_P      IO_L15P_T2_DQS_34
+set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_sclk]; ## D17   FMC_LA13_P
+set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_miso]; ## C19   FMC_LA14_N
+set_property -dict {PACKAGE_PIN H19 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_mosi]; ## H19   FMC_LA15_P
+set_property -dict {PACKAGE_PIN G18 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_cs_0]; ## G17   FMC_LA16_P  CS_FPGA
+set_property -dict {PACKAGE_PIN G27 IOSTANDARD LVCMOS33}                 [get_ports admx100x_spi_cs_1]; ## G27   FMC_LA25_P  CS_DAC
+
 
 # reset and GPIO signal
 
