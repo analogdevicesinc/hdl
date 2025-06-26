@@ -41,11 +41,17 @@ Supported carriers
      - Carrier
      - FMC slot
    * - :adi:`EVAL-AD6676`
-     - :xilinx:`VC707`
+     - :xilinx:`VC707` *
      - FMC1 HPC
    * -
      - :xilinx:`ZC706`
      - FMC HPC
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+      :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad6676_evb/vc707>`
 
 Block design
 -------------------------------------------------------------------------------
