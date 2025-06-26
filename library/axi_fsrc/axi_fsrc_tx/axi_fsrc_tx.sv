@@ -95,12 +95,13 @@ module axi_fsrc_tx #(
   wire [13:0] up_waddr_s;
   wire [31:0] up_wdata_s;
 
-  wire        tx_fsrc_en;
-  wire        fsrc_stop;
-  wire        fsrc_accum_set;
-  wire [15:0] fsrc_conv_mask;
-  wire [ACCUM_WIDTH-1:0] fsrc_accum_add_val;
-  wire [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] fsrc_accum_set_val;
+  wire        enable;
+  wire        stop;
+  wire        start;
+  wire        accum_set;
+  wire [15:0] conv_mask;
+  wire [ACCUM_WIDTH-1:0] accum_add_val;
+  wire [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0] accum_set_val;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -143,15 +144,14 @@ module axi_fsrc_tx #(
   ) i_regmap (
     .clk (clk),
     .reset (reset),
-    .tx_fsrc_en (tx_fsrc_en),
-    .transmit_start (),
-    .transmit_stop (),
-    .tx_fsrc_stop (fsrc_stop),
-    .tx_fsrc_change_rate (tx_fsrc_change_rate),
-    .fsrc_accum_set (fsrc_accum_set),
-    .conv_mask (fsrc_conv_mask),
-    .fsrc_accum_add_val (fsrc_accum_add_val),
-    .fsrc_accum_set_val (fsrc_accum_set_val),
+    .enable (enable),
+    .start (start),
+    .stop (stop),
+    .change_rate (),
+    .accum_set (accum_set),
+    .conv_mask (conv_mask),
+    .accum_add_val (accum_add_val),
+    .accum_set_val (accum_set_val),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -178,10 +178,6 @@ module axi_fsrc_tx #(
     assign data_out_s[ii*NP+:NP] = data_out_per_converter[ii];
   end
 
-  // TODO merge tx_data_start and fsrc_stop together,
-  // latch on trig if ext enabled, but for reg access juts 1 to run and
-  // 0 to stop.
-
   tx_fsrc #(
     .NP (NP),
     .DATA_WIDTH (DATA_WIDTH),
@@ -191,13 +187,13 @@ module axi_fsrc_tx #(
     .clk (clk),
     .reset (reset),
 
-    .fsrc_en (tx_fsrc_en),
-    .fsrc_data_start(tx_data_start),
-    .fsrc_stop (fsrc_stop),
-    .conv_mask (fsrc_conv_mask),
-    .accum_set_val (fsrc_accum_set_val),
-    .accum_set (fsrc_accum_set),
-    .accum_add_val (fsrc_accum_add_val),
+    .enable (enable),
+    .start(tx_data_start | start),
+    .stop (stop),
+    .conv_mask (conv_mask),
+    .accum_set_val (accum_set_val),
+    .accum_set (accum_set),
+    .accum_add_val (accum_add_val),
 
     .in_ready (data_in_ready_s),
     .in_data (data_in_per_converter),

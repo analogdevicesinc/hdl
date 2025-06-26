@@ -63,7 +63,7 @@ module sync_bits #(
 
     always @(posedge out_clk)
     begin
-      if (out_resetn == 1'b0) begin
+      if (out_resetn === 1'b0) begin
         cdc_sync_stage1 <= 'b0;
         cdc_sync_stage2 <= 'b0;
       end else begin
