@@ -65,6 +65,6 @@ if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
 
-set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
 adi_project_run ad9082_fmca_ebz_vcu118
