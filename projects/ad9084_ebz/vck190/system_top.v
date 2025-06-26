@@ -446,7 +446,12 @@ module system_top #(
     .rx_sysref_0 (sysref),
     .tx_sysref_0 (sysref),
     .rx_sysref_12 (sysref),
-    .tx_sysref_12 (sysref)
+    .tx_sysref_12 (sysref),
+
+    .fsrc_sysref (sysref),
+    .fsrc_trig_in (),
+    .fsrc_trig_out (),
+    .fsrc_ctrl ()
   );
   assign rx_data_p_loc[11:8] = stxb_p[7:4];
   assign rx_data_p_loc[ 7:4] = stxa_p[3:0];
