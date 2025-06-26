@@ -44,6 +44,8 @@ adi_project ad9084_ebz_vck190 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
   REF_CLK_RATE        [get_env_param REF_CLK_RATE     312.5 ] \
   ENABLE_HSCI         [get_env_param ENABLE_HSCI          1 ] \
+  ENABLE_FSRC         [get_env_param ENABLE_FSRC          1 ] \
+  FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    64 ] \
   RX_LANE_RATE        [get_env_param RX_LANE_RATE    20.625 ] \
   TX_LANE_RATE        [get_env_param TX_LANE_RATE    20.625 ] \
   RX_JESD_M           [get_env_param RX_JESD_M            4 ] \
