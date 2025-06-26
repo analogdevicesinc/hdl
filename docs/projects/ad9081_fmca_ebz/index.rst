@@ -93,7 +93,7 @@ Supported carriers
      - :xilinx:`VCU118`
      - FMC+
    * -
-     - :xilinx:`VCU128`
+     - :xilinx:`VCU128` *
      - FMC+
    * -
      - :xilinx:`ZCU102`
@@ -101,6 +101,12 @@ Supported carriers
    * -
      - :xilinx:`ZC706`
      - FMC HPC
+
+.. admonition:: Legend
+   :class: note
+
+   - ``*`` removed; last release that supports this project on this carrier is
+     :git-hdl:`hdl_2023_r2 <hdl_2023_r2:projects/ad9081_fmca_ebz/vcu128>`
 
 .. list-table::
    :widths: 35 35 30
