@@ -1,4 +1,8 @@
-# AD7405-FMC/ZED HDL Project
+<!-- no_build_example, no_dts, no_no_os -->
+
+# AD7405-FMC/ZED HDL
+
+- VADJ with which it was tested in hardware: 2.5V
 
 ## Building the project
 
