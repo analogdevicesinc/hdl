@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -147,8 +147,6 @@ set_interface_property h2f_reset EXPORT_OF sys_hps.h2f_reset
 
 add_connection sys_clk.clk sys_hps.h2f_lw_axi_clock
 add_connection sys_clk.clk_reset sys_hps.h2f_lw_axi_reset
-add_connection sys_clk.clk sys_hps.f2h_axi_clock
-add_connection sys_clk.clk_reset sys_hps.f2h_axi_reset
 add_connection sys_clk.clk sys_hps.h2f_axi_clock
 add_connection sys_clk.clk_reset sys_hps.h2f_axi_reset
 add_interface sys_hps_io conduit end
@@ -172,8 +170,12 @@ set_instance_parameter_value emif_calbus_0 SHORT_QSYS_INTERFACE_NAMES {1}
 add_instance sys_dma_clk clock_source
 set_instance_parameter_value sys_dma_clk {resetSynchronousEdges} {DEASSERT}
 set_instance_parameter_value sys_dma_clk {clockFrequencyKnown} {true}
+set_instance_parameter_value sys_dma_clk {clockFrequency} {250000000.0}
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_hps.h2f_user0_clock sys_dma_clk.clk_in
+
+add_connection sys_dma_clk.clk sys_hps.f2h_axi_clock
+add_connection sys_dma_clk.clk_reset sys_hps.f2h_axi_reset
 
 # sys-id
 
