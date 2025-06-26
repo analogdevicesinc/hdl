@@ -16,9 +16,9 @@ module tx_fsrc #(
   input  wire                                         clk,
   input  wire                                         reset,
 
-  input  wire                                         fsrc_en,
-  input  wire                                         fsrc_data_start,
-  input  wire                                         fsrc_stop,
+  input  wire                                         enable,
+  input  wire                                         start,
+  input  wire                                         stop,
   input  wire  [NUM_SAMPLES-1:0]                      conv_mask,
   input  wire  [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0]     accum_set_val,
   input  wire                                         accum_set,
@@ -62,9 +62,9 @@ module tx_fsrc #(
     if (reset) begin
       fsrc_data_en <= 1'b0;
     end else begin
-      if (~fsrc_en || fsrc_stop) begin
+      if (~enable || stop) begin
         fsrc_data_en <= 1'b0;
-      end else if (fsrc_data_start & in_valid) begin
+      end else if (start & in_valid) begin
         fsrc_data_en <= 1'b1;
       end
     end
@@ -95,7 +95,7 @@ module tx_fsrc #(
     if(reset) begin
       fsrc_in_single_valid <= 1'b0;
     end else begin
-      fsrc_in_single_valid <= fsrc_en && &(in_fifo_out_valid_next | ~conv_mask);
+      fsrc_in_single_valid <= enable && &(in_fifo_out_valid_next | ~conv_mask);
     end
   end
 
@@ -103,7 +103,7 @@ module tx_fsrc #(
     if (reset) begin
       in_fifo_out_ready = '0;
     end else begin
-      if (fsrc_en) begin
+      if (enable) begin
         in_fifo_out_ready = fsrc_in_single_valid;
       end else begin
         in_fifo_out_ready = |out_fifo_in_ready;
@@ -115,7 +115,7 @@ module tx_fsrc #(
     if (reset) begin
       out_fifo_in_valid = '0;
     end else begin
-      if (fsrc_en) begin
+      if (enable) begin
         out_fifo_in_valid = {NUM_SAMPLES{fsrc_out_valid && fsrc_out_ready}} & conv_mask;
       end else begin
         out_fifo_in_valid = in_fifo_out_valid;
@@ -127,13 +127,13 @@ module tx_fsrc #(
     if(reset) begin
       fsrc_out_ready <= 1'b0;
     end else begin
-      fsrc_out_ready <= fsrc_en && &(out_fifo_in_ready_next | ~conv_mask);
+      fsrc_out_ready <= enable && &(out_fifo_in_ready_next | ~conv_mask);
     end
   end
 
-  assign out_fifo_in_data = fsrc_en ? fsrc_out_data : in_fifo_out_data;
+  assign out_fifo_in_data = enable ? fsrc_out_data : in_fifo_out_data;
   assign holes_data = fsrc_data_en ? {NUM_SAMPLES{~holes_n}} : '1;
-  assign accum_en = !reset && fsrc_en && fsrc_data_en && holes_ready;
+  assign accum_en = !reset && enable && fsrc_data_en && holes_ready;
 
   // Generate sequence of valid and invalid samples
   tx_fsrc_sample_en_gen #(
