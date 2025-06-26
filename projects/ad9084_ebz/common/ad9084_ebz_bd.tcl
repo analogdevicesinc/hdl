@@ -22,6 +22,8 @@ if {$ASYMMETRIC_A_B_MODE} {
 
 set HSCI_ENABLE [ expr { [info exists ad_project_params(HSCI_ENABLE)] \
                           ? $ad_project_params(HSCI_ENABLE) : 1 } ]
+set FSRC_ENABLE [ expr { [info exists ad_project_params(FSRC_ENABLE)] \
+                          ? $ad_project_params(FSRC_ENABLE) : 0 } ]
 set TDD_SUPPORT [ expr { [info exists ad_project_params(TDD_SUPPORT)] \
                           ? $ad_project_params(TDD_SUPPORT) : 0 } ]
 set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
@@ -29,6 +31,12 @@ set SHARED_DEVCLK [ expr { [info exists ad_project_params(SHARED_DEVCLK)] \
 
 if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
+}
+
+set FSRC_ACCUM_WIDTH $ad_project_params(FSRC_ACCUM_WIDTH)
+
+if {$FSRC_ENABLE} {
+  source $ad_hdl_dir/library/axi_fsrc/axi_fsrc.tcl
 }
 
 set adc_do_mem_type [ expr { [info exists ad_project_params(ADC_DO_MEM_TYPE)] \
@@ -183,6 +191,10 @@ create_bd_port -dir I rx_device_clk
 create_bd_port -dir I tx_device_clk
 create_bd_port -dir I rx_b_device_clk
 create_bd_port -dir I tx_b_device_clk
+create_bd_port -dir I fsrc_sysref
+create_bd_port -dir I fsrc_trig_in
+create_bd_port -dir O fsrc_trig_out
+create_bd_port -dir O -from 39 -to 0 fsrc_ctrl
 
 ##AXI_HSCI IP
 if {$HSCI_ENABLE} {
@@ -468,6 +480,10 @@ ad_ip_instance util_cpack2 util_apollo_cpack [list \
   SAMPLE_DATA_WIDTH $RX_DMA_SAMPLE_WIDTH \
 ]
 
+if {$FSRC_ENABLE} {
+  adi_axi_fsrc_rx_create fsrc_rx $RX_NUM_OF_LANES $RX_NUM_OF_CONVERTERS $RX_SAMPLES_PER_FRAME $RX_SAMPLE_WIDTH $RX_DATAPATH_WIDTH $RX_DMA_SAMPLE_WIDTH
+}
+
 set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width]
 ad_data_offload_create $adc_data_offload_name \
                        0 \
@@ -517,6 +533,9 @@ if {$ASYMMETRIC_A_B_MODE} {
     SAMPLE_DATA_WIDTH $RX_B_DMA_SAMPLE_WIDTH \
   ]
 
+  if {$FSRC_ENABLE} {
+    adi_axi_fsrc_rx_create fsrc_rx_b $RX_B_NUM_OF_LANES $RX_B_NUM_OF_CONVERTERS $RX_B_SAMPLES_PER_FRAME $RX_B_SAMPLE_WIDTH $RX_B_DATAPATH_WIDTH $RX_B_DMA_SAMPLE_WIDTH
+  }
   set adc_b_data_offload_size [expr $adc_b_data_width / 8 * 2**$adc_b_fifo_address_width]
   ad_data_offload_create $adc_b_data_offload_name \
                          0 \
@@ -570,6 +589,26 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
   SAMPLE_DATA_WIDTH $TX_DMA_SAMPLE_WIDTH \
 ]
 
+if {$FSRC_ENABLE} {
+  ad_ip_instance axi_fsrc_tx fsrc_tx
+  ad_ip_parameter fsrc_tx CONFIG.DATA_WIDTH  $dac_data_width
+  ad_ip_parameter fsrc_tx CONFIG.NP          $TX_DMA_SAMPLE_WIDTH
+  ad_ip_parameter fsrc_tx CONFIG.ACCUM_WIDTH $FSRC_ACCUM_WIDTH
+
+  ad_ip_instance axi_fsrc_sequencer fsrc_ctrl
+  ad_ip_parameter fsrc_ctrl CONFIG.CTRL_WIDTH 40
+  ad_ip_parameter fsrc_ctrl CONFIG.COUNTER_WIDTH 16
+  ad_ip_parameter fsrc_ctrl CONFIG.NUM_TRIG 1
+
+  ad_connect tx_device_clk fsrc_ctrl/clk
+  ad_connect fsrc_sysref   fsrc_ctrl/sysref
+  ad_connect fsrc_trig_in  fsrc_ctrl/trig_in
+  ad_connect fsrc_trig_out fsrc_ctrl/trig_out
+  ad_connect fsrc_ctrl     fsrc_ctrl/ctrl
+
+  ad_connect fsrc_tx/tx_data_start fsrc_ctrl/tx_data_start
+}
+
 set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
 ad_data_offload_create $dac_data_offload_name \
                        1 \
@@ -620,6 +659,15 @@ if {$ASYMMETRIC_A_B_MODE} {
     SAMPLES_PER_CHANNEL $TX_B_SAMPLES_PER_CHANNEL \
     SAMPLE_DATA_WIDTH $TX_B_DMA_SAMPLE_WIDTH \
   ]
+
+  if {$FSRC_ENABLE} {
+    ad_ip_instance axi_fsrc_tx fsrc_tx_b
+    ad_ip_parameter fsrc_tx_b CONFIG.DATA_WIDTH  $dac_b_data_width
+    ad_ip_parameter fsrc_tx_b CONFIG.NP          $TX_B_DMA_SAMPLE_WIDTH
+    ad_ip_parameter fsrc_tx_b CONFIG.ACCUM_WIDTH $FSRC_ACCUM_WIDTH
+
+    ad_connect fsrc_tx_b/tx_data_start fsrc_ctrl/tx_data_start
+  }
 
   set dac_b_data_offload_size [expr $dac_b_data_width / 8 * 2**$dac_b_fifo_address_width]
   ad_data_offload_create $dac_b_data_offload_name \
@@ -916,10 +964,21 @@ ad_connect  axi_apollo_rx_jesd/rx_sof rx_apollo_tpl_core/link_sof
 ad_connect  axi_apollo_rx_jesd/rx_data_tdata rx_apollo_tpl_core/link_data
 ad_connect  axi_apollo_rx_jesd/rx_data_tvalid rx_apollo_tpl_core/link_valid
 
-ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
-for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
-  ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
-  ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+if {$FSRC_ENABLE} {
+  ad_connect rx_device_clk fsrc_rx/link_clk
+  ad_connect rx_apollo_tpl_core/adc_valid_0 fsrc_rx/adc_data_in_valid
+  for {set i 0} {$i < $RX_NUM_OF_LANES} {incr i} {
+    ad_connect fsrc_rx/adc_data_in_${i}  rx_apollo_tpl_core/adc_data_$i
+    ad_connect fsrc_rx/adc_data_out_${i} util_apollo_cpack/fifo_wr_data_$i
+    ad_connect rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
+  }
+  ad_connect fsrc_rx/adc_data_out_valid util_apollo_cpack/fifo_wr_en
+} else {
+  ad_connect rx_apollo_tpl_core/adc_valid_0 util_apollo_cpack/fifo_wr_en
+  for {set i 0} {$i < $RX_NUM_OF_CONVERTERS} {incr i} {
+    ad_connect  rx_apollo_tpl_core/adc_enable_$i util_apollo_cpack/enable_$i
+    ad_connect  rx_apollo_tpl_core/adc_data_$i util_apollo_cpack/fifo_wr_data_$i
+  }
 }
 ad_connect rx_apollo_tpl_core/adc_dovf util_apollo_cpack/fifo_wr_overflow
 
@@ -935,11 +994,23 @@ if {$ASYMMETRIC_A_B_MODE} {
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tdata rx_b_apollo_tpl_core/link_data
   ad_connect  axi_apollo_rx_b_jesd/rx_data_tvalid rx_b_apollo_tpl_core/link_valid
 
-  ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
-  for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
-    ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
-    ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+  if {$FSRC_ENABLE} {
+    ad_connect rx_b_device_clk fsrc_rx_b/link_clk
+    ad_connect rx_b_apollo_tpl_core/adc_valid_0 fsrc_rx_b/adc_data_in_valid
+    for {set i 0} {$i < $RX_B_NUM_OF_LANES} {incr i} {
+      ad_connect fsrc_rx_b/adc_data_in_${i}  rx_b_apollo_tpl_core/adc_data_$i
+      ad_connect fsrc_rx_b/adc_data_out_${i} util_apollo_cpack_b/fifo_wr_data_$i
+      ad_connect rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
+    }
+    ad_connect fsrc_rx_b/adc_data_out_valid util_apollo_cpack_b/fifo_wr_en
+  } else {
+    ad_connect rx_b_apollo_tpl_core/adc_valid_0 util_apollo_cpack_b/fifo_wr_en
+    for {set i 0} {$i < $RX_B_NUM_OF_CONVERTERS} {incr i} {
+      ad_connect  rx_b_apollo_tpl_core/adc_enable_$i util_apollo_cpack_b/enable_$i
+      ad_connect  rx_b_apollo_tpl_core/adc_data_$i util_apollo_cpack_b/fifo_wr_data_$i
+    }
   }
+
   ad_connect rx_b_apollo_tpl_core/adc_dovf util_apollo_cpack_b/fifo_wr_overflow
 
   ad_connect  util_apollo_cpack_b/packed_fifo_wr_data $adc_b_data_offload_name/s_axis_tdata
@@ -964,8 +1035,15 @@ for {set i 0} {$i < $TX_NUM_OF_CONVERTERS} {incr i} {
 }
 
 ad_connect $dac_data_offload_name/s_axis axi_apollo_tx_dma/m_axis
+if {$FSRC_ENABLE} {
+  ad_connect tx_device_clk                         fsrc_tx/clk
+  ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_tx/reset
 
-ad_connect  util_apollo_upack/s_axis $dac_data_offload_name/m_axis
+  ad_connect $dac_data_offload_name/m_axis fsrc_tx/s_axis
+  ad_connect util_apollo_upack/s_axis      fsrc_tx/m_axis
+} else {
+  ad_connect  util_apollo_upack/s_axis $dac_data_offload_name/m_axis
+}
 
 ad_connect $dac_data_offload_name/init_req axi_apollo_tx_dma/m_axis_xfer_req
 ad_connect $adc_data_offload_name/init_req axi_apollo_rx_dma/s_axis_xfer_req
@@ -981,8 +1059,15 @@ if {$ASYMMETRIC_A_B_MODE} {
   }
 
   ad_connect $dac_b_data_offload_name/s_axis axi_apollo_tx_b_dma/m_axis
+  if {$FSRC_ENABLE} {
+    ad_connect tx_b_device_clk                         fsrc_tx_b/clk
+    ad_connect tx_b_device_clk_rstgen/peripheral_reset fsrc_tx_b/reset
 
-  ad_connect  util_apollo_upack_b/s_axis $dac_b_data_offload_name/m_axis
+    ad_connect $dac_b_data_offload_name/m_axis fsrc_tx_b/s_axis
+    ad_connect util_apollo_upack_b/s_axis      fsrc_tx_b/m_axis
+  } else {
+   ad_connect  util_apollo_upack_b/s_axis $dac_b_data_offload_name/m_axis
+  }
 
   ad_connect $dac_b_data_offload_name/init_req axi_apollo_tx_b_dma/m_axis_xfer_req
   ad_connect $adc_b_data_offload_name/init_req axi_apollo_rx_b_dma/s_axis_xfer_req
@@ -1008,6 +1093,15 @@ ad_cpu_interconnect 0x7c450000 $adc_data_offload_name
 if {$HSCI_ENABLE} {
   ad_cpu_interconnect 0x44ad0000 axi_hsci_clkgen
   ad_cpu_interconnect 0x7c500000 axi_hsci_0
+}
+if {$FSRC_ENABLE} {
+  ad_cpu_interconnect 0x44500000 fsrc_rx
+  ad_cpu_interconnect 0x44510000 fsrc_tx
+  if {$ASYMMETRIC_A_B_MODE} {
+    ad_cpu_interconnect 0x44520000 fsrc_rx_b
+    ad_cpu_interconnect 0x44530000 fsrc_tx_b
+  }
+  ad_cpu_interconnect 0x44540000 fsrc_ctrl
 }
 # Reserved for TDD! 0x7c460000
 
@@ -1138,6 +1232,10 @@ ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
 ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
 ad_connect cpack_rst_logic/res util_apollo_cpack/reset
 
+if {$FSRC_ENABLE} {
+  ad_connect rx_device_clk_rstgen/peripheral_reset fsrc_rx/reset
+}
+
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance util_reduced_logic cpack_b_rst_logic
   ad_ip_parameter cpack_b_rst_logic config.c_operation {or}
@@ -1157,6 +1255,10 @@ if {$ASYMMETRIC_A_B_MODE} {
 
   ad_connect cpack_b_reset_sources/dout cpack_b_rst_logic/op1
   ad_connect cpack_b_rst_logic/res util_apollo_cpack_b/reset
+
+  if {$FSRC_ENABLE} {
+    ad_connect rx_b_device_clk_rstgen/peripheral_reset fsrc_rx_b/reset
+  }
 }
 
 # Reset unpack cores
@@ -1171,6 +1273,10 @@ ad_connect tx_apollo_tpl_core/dac_tpl_core/dac_rst upack_reset_sources/in1
 
 ad_connect upack_reset_sources/dout upack_rst_logic/op1
 ad_connect upack_rst_logic/res util_apollo_upack/reset
+
+if {$FSRC_ENABLE} {
+  ad_connect tx_device_clk_rstgen/peripheral_reset fsrc_ctrl/reset
+}
 
 if {$ASYMMETRIC_A_B_MODE} {
   ad_ip_instance util_reduced_logic upack_b_rst_logic
