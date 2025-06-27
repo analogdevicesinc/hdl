@@ -34,15 +34,16 @@
 // ***************************************************************************
 
 module axi_fsrc_rx #(
-  parameter DATA_WIDTH = 512,
-  parameter NP = 16
+  parameter NUM_OF_CHANNELS = 4,
+  parameter SAMPLES_PER_CHANNEL = 1,
+  parameter SAMPLE_DATA_WIDTH = 16
 ) (
   input                       clk,
   input                       reset,
-  input      [DATA_WIDTH-1:0] data_in,
-  input                       data_in_valid,
-  output reg [DATA_WIDTH-1:0] data_out,
-  output reg                  data_out_valid,
+  input      data_in_valid,
+  input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_in,
+  output reg data_out_valid,
+  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0]   data_out,
 
   // axi interface
   input                       s_axi_aclk,
@@ -73,6 +74,8 @@ module axi_fsrc_rx #(
                                     8'h00};      /* PATCH */
                                                  // 0.01.0
   localparam [31:0] CORE_MAGIC = 32'h504c5347;   // FSRC
+  localparam DATA_WIDTH = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
+  localparam NP = SAMPLE_DATA_WIDTH;
 
   // internal signals
 

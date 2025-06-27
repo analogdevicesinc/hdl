@@ -50,8 +50,9 @@ proc adi_axi_fsrc_rx_create {ip_name num_of_lanes num_of_converters samples_per_
     }
 
     ad_ip_instance axi_fsrc_rx ${ip_name}/axi_fsrc_rx [list \
-      DATA_WIDTH ${data_width} \
-      NP         ${sample_width} \
+      NUM_OF_CHANNELS ${num_of_converters} \
+      SAMPLES_PER_CHANNEL ${samples_per_channel} \
+      SAMPLE_DATA_WIDTH ${sample_width} \
     ]
 
     # Slice the FSRC output stream into individial ADC streams
