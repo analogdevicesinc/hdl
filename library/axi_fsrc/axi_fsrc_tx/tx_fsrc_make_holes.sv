@@ -9,54 +9,55 @@
 `default_nettype none
 
 module tx_fsrc_make_holes #(
-  parameter NP = 8,
-  parameter NUM_SAMPLES = 8,
-  parameter logic [NP-1:0] HOLE_VALUE = '0
+  parameter SAMPLE_DATA_WIDTH = 8,
+  parameter NUM_OF_CHANNELS = 8,
+  parameter CHANNEL_WIDTH = 31,
+  parameter SAMPLES_PER_CHANNEL = 8,
+  parameter logic [SAMPLE_DATA_WIDTH-1:0] HOLE_VALUE = '0
 )(
   input  wire       clk,
   input  wire       reset,
 
-  output logic                                         in_ready,
-  input  wire  [NUM_SAMPLES-1:0][(NP*NUM_SAMPLES)-1:0] in_data,
-  input  wire                                          in_valid,
+  output logic                                          in_ready,
+  input  wire  [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] in_data,
+  input  wire                                           in_valid,
 
-  output logic [NUM_SAMPLES-1:0][(NP*NUM_SAMPLES)-1:0] out_data,
-  output logic                                         out_valid,
-  input  wire                                          out_ready,
+  output logic [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] out_data,
+  output logic                                          out_valid,
+  input  wire                                           out_ready,
 
-  output logic                                         holes_ready,
-  input  wire                                          holes_valid,
-  input  wire  [NUM_SAMPLES-1:0]                       holes_data
+  output logic                           holes_ready,
+  input  wire                            holes_valid,
+  input  wire  [SAMPLES_PER_CHANNEL-1:0] holes_data
 );
 
-  logic                                               in_xfer;
-  logic                                               in_valid_d;
-  logic [NUM_SAMPLES-1:0][NUM_SAMPLES-1:0][NP-1:0]    in_data_d;
-  logic                                               holes_xfer;
-  logic                                               holes_valid_d;
-  logic [2:1][NUM_SAMPLES-1:0]                        holes_data_d;
-  logic [NUM_SAMPLES-1:0] [$clog2(NUM_SAMPLES+1)-1:0] non_holes_cnt_total_per_word;
-  logic [NUM_SAMPLES-1:0] [$clog2(NUM_SAMPLES+1)-1:0] non_holes_cnt_total_per_word_d;
-  logic [$clog2(NUM_SAMPLES+1)-1:0]                   non_holes_cnt_total;
-  logic [$clog2(NUM_SAMPLES+1)-1:0]                   non_holes_cnt_total_comb;
-  logic [$clog2(NUM_SAMPLES+1)-1:0]                   non_holes_cnt_out;
-  logic                                               out_xfer;
-  logic [$clog2((NUM_SAMPLES*3)+1)-1:0]               non_holes_cnt_comb;
-  logic [$clog2((NUM_SAMPLES*3)+1)-1:0]               non_holes_cnt_comb_shift_out;
-  logic [$clog2((NUM_SAMPLES*3)+1)-1:0]               non_holes_cnt_shift_out;
-  logic [$clog2((NUM_SAMPLES*3)+1)-1:0]               non_holes_cnt;
-  // logic [NUM_SAMPLES-1:0][NUM_SAMPLES-1:0][NP-1:0] in_data_d_padded;
-  logic [NUM_SAMPLES-1:0][(NUM_SAMPLES*3)-1:0][NP-1:0] data_stored;
-  logic [NUM_SAMPLES-1:0][(NP*NUM_SAMPLES*3)-1:0]     data_stored_shift;
-  logic                                               data_stored_out_valid;
-  logic                                               data_stored_in_ready;
-  logic                                               data_shift_in_xfer;
-  logic                                               data_shift_holes_ready;
-  logic                                               data_shift_holes_xfer;
-  logic                                               data_out_valid;
-  logic                                               data_out_ready;
-  logic                                               data_out_xfer;
-  logic                                               out_valid_next;
+  logic in_xfer;
+  logic out_xfer;
+  logic in_valid_d;
+  logic holes_xfer;
+  logic holes_valid_d;
+  logic [2:1][NUM_OF_CHANNELS-1:0]                        holes_data_d;
+  logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word;
+  logic [SAMPLES_PER_CHANNEL-1:0] [$clog2(SAMPLES_PER_CHANNEL+1)-1:0] non_holes_cnt_total_per_word_d;
+  logic [$clog2(SAMPLES_PER_CHANNEL+1)-1:0]                   non_holes_cnt_total;
+  logic [$clog2(SAMPLES_PER_CHANNEL+1)-1:0]                   non_holes_cnt_total_comb;
+  logic [$clog2(SAMPLES_PER_CHANNEL+1)-1:0]                   non_holes_cnt_out;
+  logic [$clog2((SAMPLES_PER_CHANNEL*3)+1)-1:0]               non_holes_cnt_comb;
+  logic [$clog2((SAMPLES_PER_CHANNEL*3)+1)-1:0]               non_holes_cnt_comb_shift_out;
+  logic [$clog2((SAMPLES_PER_CHANNEL*3)+1)-1:0]               non_holes_cnt_shift_out;
+  logic [$clog2((SAMPLES_PER_CHANNEL*3)+1)-1:0]               non_holes_cnt;
+  logic [NUM_OF_CHANNELS-1:0][SAMPLES_PER_CHANNEL-1:0][SAMPLE_DATA_WIDTH-1:0]     in_data_d;
+  logic [NUM_OF_CHANNELS-1:0][(SAMPLES_PER_CHANNEL*3)-1:0][SAMPLE_DATA_WIDTH-1:0] data_stored;
+  logic [NUM_OF_CHANNELS-1:0][(SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH*3)-1:0]      data_stored_shift;
+  logic data_stored_out_valid;
+  logic data_stored_in_ready;
+  logic data_shift_in_xfer;
+  logic data_shift_holes_ready;
+  logic data_shift_holes_xfer;
+  logic data_out_valid;
+  logic data_out_ready;
+  logic data_out_xfer;
+  logic out_valid_next;
   genvar ii;
   genvar jj;
 
@@ -112,7 +113,7 @@ module tx_fsrc_make_holes #(
   end
 
   // Count of non-holes words from 0 to jj for each word jj
-  for (jj=0;jj<NUM_SAMPLES;jj=jj+1) begin : move_holes_gen
+  for (jj = 0; jj < SAMPLES_PER_CHANNEL; jj = jj + 1) begin : move_holes_gen
     int kk;
     always_comb begin
       if (jj==0) begin
@@ -130,7 +131,7 @@ module tx_fsrc_make_holes #(
     end
   end
 
-  assign non_holes_cnt_total_comb = data_shift_holes_xfer ? non_holes_cnt_total_per_word[NUM_SAMPLES-1] : non_holes_cnt_total;
+  assign non_holes_cnt_total_comb = data_shift_holes_xfer ? non_holes_cnt_total_per_word[SAMPLES_PER_CHANNEL-1] : non_holes_cnt_total;
 
   always_ff @(posedge clk) begin
     non_holes_cnt_total <= non_holes_cnt_total_comb;
@@ -141,12 +142,12 @@ module tx_fsrc_make_holes #(
 
   // Number of words after shifting out
   assign non_holes_cnt_comb_shift_out = data_out_xfer ? non_holes_cnt_shift_out : non_holes_cnt;
-  assign non_holes_cnt_comb = non_holes_cnt_comb_shift_out + (data_shift_in_xfer ? NUM_SAMPLES : '0);
+  assign non_holes_cnt_comb = non_holes_cnt_comb_shift_out + (data_shift_in_xfer ? SAMPLES_PER_CHANNEL : '0);
 
-  for (ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : data_gen
+  for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : data_gen
     // Data after shifting out and in
-    for (jj = 0; jj < NUM_SAMPLES*3; jj=jj+1) begin : data_stored_shift_out_gen
-      assign data_stored_shift[ii][jj*NP+:NP] = jj < non_holes_cnt_comb_shift_out ? data_stored[ii][jj+non_holes_cnt_out] : in_data_d[ii][jj-non_holes_cnt_comb_shift_out];
+    for (jj = 0; jj < SAMPLES_PER_CHANNEL*3; jj=jj+1) begin : data_stored_shift_out_gen
+      assign data_stored_shift[ii][jj*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] = jj < non_holes_cnt_comb_shift_out ? data_stored[ii][jj+non_holes_cnt_out] : in_data_d[ii][jj-non_holes_cnt_comb_shift_out];
     end
   end
 
@@ -162,8 +163,8 @@ module tx_fsrc_make_holes #(
     end else begin
       non_holes_cnt <= non_holes_cnt_comb;
       non_holes_cnt_shift_out <= non_holes_cnt_comb - non_holes_cnt_total_comb;
-      data_stored_out_valid <= non_holes_cnt_comb >= NUM_SAMPLES;
-      data_stored_in_ready <= non_holes_cnt_comb <= NUM_SAMPLES*2;
+      data_stored_out_valid <= non_holes_cnt_comb >= SAMPLES_PER_CHANNEL;
+      data_stored_in_ready <= non_holes_cnt_comb <= SAMPLES_PER_CHANNEL*2;
     end
   end
 
@@ -192,12 +193,12 @@ module tx_fsrc_make_holes #(
   assign data_out_ready = !out_valid || out_xfer;
   assign data_out_xfer = out_valid_next && data_out_ready;
 
-  for (ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : out_data_gen
+  for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : out_data_gen
     // Create output bus
-    for (jj = 0; jj < NUM_SAMPLES; jj=jj+1) begin : out_data_gen
+    for (jj = 0; jj < SAMPLES_PER_CHANNEL; jj=jj+1) begin : out_data_gen
       always_ff @(posedge clk) begin
         if (data_out_xfer) begin
-          out_data[ii][jj*NP+:NP] <= holes_data_d[2][jj] ? HOLE_VALUE : data_stored[ii][non_holes_cnt_total_per_word_d[jj]];
+          out_data[ii][jj*SAMPLE_DATA_WIDTH+:SAMPLE_DATA_WIDTH] <= holes_data_d[2][jj] ? HOLE_VALUE : data_stored[ii][non_holes_cnt_total_per_word_d[jj]];
         end
       end
     end

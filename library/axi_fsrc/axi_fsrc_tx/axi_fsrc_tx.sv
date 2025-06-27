@@ -34,21 +34,22 @@
 // ***************************************************************************
 
 module axi_fsrc_tx #(
-  parameter DATA_WIDTH = 256,
-  parameter ACCUM_WIDTH = 64,
-  parameter NP = 16
+  parameter NUM_OF_CHANNELS = 4,
+  parameter SAMPLES_PER_CHANNEL = 1,
+  parameter SAMPLE_DATA_WIDTH = 16,
+  parameter ACCUM_WIDTH = 64
 ) (
-  input                       clk,
-  input                       reset,
-  input                       tx_data_start,
+  input clk,
+  input reset,
+  input tx_data_start,
 
-  input                       s_axis_valid,
-  output reg                  s_axis_ready,
-  input      [DATA_WIDTH-1:0] s_axis_data,
+  input      s_axis_valid,
+  output reg s_axis_ready,
+  input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] s_axis_data,
 
-  output reg                  m_axis_valid,
-  input                       m_axis_ready,
-  output reg [DATA_WIDTH-1:0] m_axis_data,
+  output reg m_axis_valid,
+  input      m_axis_ready,
+  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] m_axis_data,
 
   // axi interface
   input                   s_axi_aclk,
@@ -80,7 +81,8 @@ module axi_fsrc_tx #(
                                                   // 0.01.0
   localparam [31:0] CORE_MAGIC = 32'h504c5347;    // FSRC
 
-  localparam NUM_SAMPLES = DATA_WIDTH / NP;
+  localparam DATA_WIDTH = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL * SAMPLE_DATA_WIDTH;
+  localparam NUM_SAMPLES = NUM_OF_CHANNELS * SAMPLES_PER_CHANNEL;
 
   // internal signals
 
@@ -140,7 +142,7 @@ module axi_fsrc_tx #(
     .CORE_VERSION (CORE_VERSION),
     .CORE_MAGIC (CORE_MAGIC),
     .ACCUM_WIDTH (ACCUM_WIDTH),
-    .NUM_SAMPLES (NUM_SAMPLES)
+    .NUM_SAMPLES(NUM_SAMPLES)
   ) i_regmap (
     .clk (clk),
     .reset (reset),
@@ -168,18 +170,9 @@ module axi_fsrc_tx #(
   wire                   data_out_valid_s;
   wire [DATA_WIDTH-1:0]  data_out_s;
 
-  wire [NUM_SAMPLES-1:0][NP-1:0] data_in_per_converter;
-  wire [NUM_SAMPLES-1:0][NP-1:0] data_out_per_converter;
-
-  /* Map a flat array to a 2d array (needed by the tx_fsrc) and vice-versa */
-  genvar ii;
-  for (ii = 0; ii < NUM_SAMPLES; ii = ii + 1) begin
-    assign data_in_per_converter[ii] = s_axis_data[ii*NP+:NP];
-    assign data_out_s[ii*NP+:NP] = data_out_per_converter[ii];
-  end
-
   tx_fsrc #(
-    .NP (NP),
+    .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
+    .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
     .DATA_WIDTH (DATA_WIDTH),
     .ACCUM_WIDTH (ACCUM_WIDTH),
     .NUM_SAMPLES (NUM_SAMPLES)
@@ -196,10 +189,10 @@ module axi_fsrc_tx #(
     .accum_add_val (accum_add_val),
 
     .in_ready (data_in_ready_s),
-    .in_data (data_in_per_converter),
+    .in_data (s_axis_data),
     .in_valid (s_axis_valid),
 
-    .out_data (data_out_per_converter),
+    .out_data (data_out_s),
     .out_valid (data_out_valid_s),
     .out_ready (m_axis_ready));
 
