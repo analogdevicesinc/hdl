@@ -1,10 +1,12 @@
-# ADRV9009ZU11EG/ADRV2CRR-FMC HDL Project
+<!-- no_no_os -->
+
+# ADRV9009ZU11EG/ADRV2CRR-FMCOMMS8 HDL Project
 
 Aside from the [ADRV9009ZU11EG](https://www.analog.com/adrv9009-zu11eg) SoM attached to the mother board [ADRV2CRR-FMC](https://www.analog.com/adrv2crr-fmc), an extra evaluation board [FMCOMMS8](https://www.analog.com/eval-ad-fmcomms8-ebz) should be attached on the FMC HPC connecter.
 
-## Building the project
+- VADJ with which it was tested in hardware: 1.8V
 
-This project is not parameterizable, it has a fixed configuration.
+## Building the project
 
 ```
 cd projects/adrv9009zu11eg/adrv2crr_fmcomms8
@@ -13,13 +15,61 @@ make
 
 All of the RX/TX link modes can be found in the [ADRV9009 data sheet](https://www.analog.com/media/en/technical-documentation/data-sheets/ADRV9009.pdf). We offer support for only a few of them.
 
-The parameters from the environment:
+The overwritable parameters from the environment are:
 
-- [RX/TX]_JESD_M: RX: **16** & TX: **16**; [RX/TX] number of converters per link
-- [RX/TX]_JESD_L: RX: **8** & TX: **16**; [RX/TX] number of lanes per link
-- [RX/TX]_JESD_S: RX: **1** & TX: **1**; [RX/TX] number of samples per converter per frame
-- RX_OS_JESD_M: **8**; number of converters per link
-- RX_OS_JESD_L: **8**; number of lanes per link
-- RX_OS_JESD_S: **1**; number of samples per frame
+- [RX/TX/RX_OS]_JESD_M: [RX/TX/RX_OS] number of converters per link
+- [RX/TX/RX_OS]_JESD_L: [RX/TX/RX_OS] number of lanes per link
+- [RX/TX/RX_OS]_JESD_S: [RX/TX/RX_OS] number of samples per converter per frame
 
-Corresponding device tree: [zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-revb-adrv2crr-fmc-revb-sync-fmcomms8-jesd204-fsm.dts)
+### Example configurations
+
+#### L=8 (default)
+
+This specific command is equivalent to running `make` only:
+
+```
+make RX_JESD_M=16 \
+RX_JESD_L=8 \
+RX_JESD_S=1 \
+TX_JESD_M=16 \
+TX_JESD_L=16 \
+TX_JESD_S=1 \
+RX_OS_JESD_M=8 \
+RX_OS_JESD_L=8 \
+RX_OS_JESD_S=1
+```
+
+Corresponding device tree: [zynqmp-adrv9009-zu11eg-fmcomms8-tx-l8.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-fmcomms8-tx-l8.dts)
+
+#### L=4
+
+```
+make RX_JESD_M=4 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=2 \
+TX_JESD_L=4 \
+TX_JESD_S=1 \
+RX_OS_JESD_M=2 \
+RX_OS_JESD_L=4 \
+RX_OS_JESD_S=1
+```
+
+Corresponding device tree: [zynqmp-adrv9009-zu11eg-fmcomms8-tx-l4-rx-l4-orx-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-fmcomms8-tx-l4-rx-l4-orx-l4.dts)
+
+
+#### TX L=8, RX L=4, RX_OS L=4
+
+```
+make RX_JESD_M=4 \
+RX_JESD_L=4 \
+RX_JESD_S=1 \
+TX_JESD_M=4 \
+TX_JESD_L=8 \
+TX_JESD_S=1 \
+RX_OS_JESD_M=2 \
+RX_OS_JESD_L=4 \
+RX_OS_JESD_S=1
+```
+
+Corresponding device tree: [zynqmp-adrv9009-zu11eg-fmcomms8-tx-l8-rx-l4-orx-l4.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm64/boot/dts/xilinx/zynqmp-adrv9009-zu11eg-fmcomms8-tx-l8-rx-l4-orx-l4.dts)
