@@ -7,8 +7,8 @@ if {![info exists ADI_PHY_SEL]} {
   set ADI_PHY_SEL 1
 }
 
-source ../../../projects/common/xilinx/data_offload_bd.tcl
-source ../../../library/jesd204/scripts/jesd204.tcl
+source $ad_hdl_dir/projects/common/xilinx/data_offload_bd.tcl
+source $ad_hdl_dir/library/jesd204/scripts/jesd204.tcl
 
 # Common parameter for TX and RX
 set JESD_MODE  $ad_project_params(JESD_MODE)
