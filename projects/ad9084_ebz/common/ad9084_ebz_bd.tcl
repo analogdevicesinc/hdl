@@ -220,7 +220,7 @@ if {$HSCI_ENABLE} {
     ad_ip_parameter axi_hsci_clkgen CONFIG.VCO_MUL 8
     ad_ip_parameter axi_hsci_clkgen CONFIG.CLK0_DIV 4
 
-    ad_connect axi_ddr_cntrl/addn_ui_clkout1 axi_hsci_clkgen/clk
+    ad_connect $sys_cpu_clk axi_hsci_clkgen/clk
     ad_connect selectio_clk_in axi_hsci_clkgen/clk_0
   } else {
     source ../common/versal_hsci_phy.tcl
