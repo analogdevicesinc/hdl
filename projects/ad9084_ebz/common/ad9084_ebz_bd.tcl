@@ -33,7 +33,8 @@ if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
   error "ERROR: Cannot enable TDD support without shared deviceclocks!"
 }
 
-set FSRC_ACCUM_WIDTH $ad_project_params(FSRC_ACCUM_WIDTH)
+set FSRC_ACCUM_WIDTH [ expr { [info exists ad_project_params(FSRC_ACCUM_WIDTH)] \
+                            ? $ad_project_params(FSRC_ACCUM_WIDTH) : 64 } ]
 
 if {$FSRC_ENABLE} {
   source $ad_hdl_dir/library/axi_fsrc/axi_fsrc.tcl
