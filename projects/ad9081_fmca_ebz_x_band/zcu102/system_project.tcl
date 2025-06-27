@@ -67,4 +67,3 @@ adi_project_files ad9081_fmca_ebz_x_band_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run ad9081_fmca_ebz_x_band_zcu102
-
