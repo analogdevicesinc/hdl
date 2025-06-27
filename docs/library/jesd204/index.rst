@@ -423,7 +423,6 @@ HDL Example Projects
   - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/daq2/a10gx>`
   - :git-hdl:`AMD Xilinx KC705 <projects/daq2/kc705>`
   - :git-hdl:`AMD Xilinx KCU105 <projects/daq2/kcu105>`
-  - :git-hdl:`AMD Xilinx VC707 (RETIRED) <hdl_2018_r2:projects/daq2/vc707>`
   - :git-hdl:`AMD Xilinx ZC706 <projects/daq2/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/daq2/zcu102>`
 
@@ -495,7 +494,6 @@ HDL Example Projects
 
 - :ref:`AD6676EVB Reference Design <ad6676evb>` on:
 
-  - :git-hdl:`AMD Xilinx VC707 <projects/ad6676evb/vc707>`
   - :git-hdl:`AMD Xilinx ZC706 <projects/ad6676evb/zc706>`
 
 - :ref:`AD9083-EVB Reference Design <ad9083_evb>` on:
