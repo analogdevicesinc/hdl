@@ -1,8 +1,12 @@
+<!-- no_build_example, no_no_os -->
+
 # ADRV9009ZU11EG/ADRV2CRR-FMC HDL Project
 
 Aside from the [ADRV9009ZU11EG](https://www.analog.com/adrv9009-zu11eg) SoM attached to the mother board [ADRV2CRR-FMC](https://www.analog.com/adrv2crr-fmc), an extra evaluation board [FMCOMMS8](https://www.analog.com/eval-ad-fmcomms8-ebz) should be attached on the FMC HPC connecter.
 
 ## Building the project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 This project is not parameterizable, it has a fixed configuration.
 
