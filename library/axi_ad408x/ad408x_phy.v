@@ -134,6 +134,8 @@ module ad408x_phy #(
   wire [19:0]          pattern_value;
   wire [19:0]          packed_16_20;
   wire [19:0]          packed_8_20;
+  wire                 pack16_valid;
+  wire                 pack8_valid;
   wire                 adc_clk_div;
   wire [NUM_LANES-1:0] serdes_in_p;
   wire [NUM_LANES-1:0] serdes_in_n;
@@ -150,7 +152,7 @@ module ad408x_phy #(
   reg  [5:0]  serdes_reset = 6'b000110;
   reg         sync_status_int = 1'b0;
   reg  [1:0]  serdes_valid = 2'b00;
-  reg  [3:0]  filter_rdy_n_d = 'b0;
+  reg  [2:0]  filter_rdy_n_d = 'b0;
   reg         shift_cnt_en = 1'b0;
   reg         packed_data_valid_d;
   reg         packed_data_valid;
@@ -161,7 +163,7 @@ module ad408x_phy #(
   reg         slip_dd;
   reg         slip_d;
 
-  assign fall_filter_ready = filter_rdy_n_d[3] & ~filter_rdy_n_d[2];
+  assign fall_filter_ready = (filter_rdy_n_d == 3'h4) || (filter_rdy_n_d == 3'h6);
   assign sync_status       = sync_status_int;
   assign single_lane       = num_lanes[0];
   assign adc_clk           = adc_clk_div;
@@ -380,7 +382,7 @@ module ad408x_phy #(
   always @(posedge adc_clk_div) begin
     adc_data_shifted <= {packed_data_d,packed_data} >> shift_cnt;
     packed_data_valid_d <= packed_data_valid;
-    filter_rdy_n_d <= {filter_rdy_n_d[2:0], filter_rdy_n};
+    filter_rdy_n_d <= {filter_rdy_n_d[1:0], filter_rdy_n};
   end
 
   // Sign extend to 32 bits
