@@ -36,7 +36,6 @@ adi_project_create fmcomms8_adrv9009zu11eg 0 [list \
   RX_OS_JESD_S    [get_env_param RX_OS_JESD_S  1 ] \
 ] "xczu11eg-ffvf1517-2-i"
 
-
 adi_project_files fmcomms8_adrv9009zu11eg [list \
   "system_top.v" \
   "fmcomms8_constr.xdc"\
