@@ -1,4 +1,8 @@
+<!-- no_build_example, no_no_os -->
+
 # CN0579/DE10NANO HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
