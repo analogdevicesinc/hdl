@@ -591,9 +591,11 @@ ad_ip_instance util_upack2 util_apollo_upack [list \
 
 if {$FSRC_ENABLE} {
   ad_ip_instance axi_fsrc_tx fsrc_tx
-  ad_ip_parameter fsrc_tx CONFIG.DATA_WIDTH  $dac_data_width
-  ad_ip_parameter fsrc_tx CONFIG.NP          $TX_DMA_SAMPLE_WIDTH
-  ad_ip_parameter fsrc_tx CONFIG.ACCUM_WIDTH $FSRC_ACCUM_WIDTH
+
+  ad_ip_parameter fsrc_tx CONFIG.NUM_OF_CHANNELS     $TX_NUM_OF_CONVERTERS
+  ad_ip_parameter fsrc_tx CONFIG.SAMPLES_PER_CHANNEL $TX_SAMPLES_PER_CHANNEL
+  ad_ip_parameter fsrc_tx CONFIG.SAMPLE_DATA_WIDTH   $TX_DMA_SAMPLE_WIDTH
+  ad_ip_parameter fsrc_tx CONFIG.ACCUM_WIDTH         $FSRC_ACCUM_WIDTH
 
   ad_ip_instance axi_fsrc_sequencer fsrc_ctrl
   ad_ip_parameter fsrc_ctrl CONFIG.CTRL_WIDTH 40
