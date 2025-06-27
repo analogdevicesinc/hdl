@@ -3,6 +3,7 @@
 - Board product page: [ADALM2000](https://www.analog.com/adalm2000)
 - System documentation: https://wiki.analog.com/university/tools/m2k/users/quick_start
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/m2k/index.html
+- Evaluation board VADJ range: 1.8V - 3.3V
 
 ## Supported parts
 
