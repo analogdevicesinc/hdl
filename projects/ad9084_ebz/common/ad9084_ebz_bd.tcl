@@ -193,10 +193,10 @@ if {$AION_ENABLE} {
   create_bd_port -dir I adf4030_clk
   create_bd_port -dir I adf4030_trigger
   create_bd_port -dir O adf4030_sysref
-  create_bd_port -dir O -from 1 -to 0 adf4030_trig_channel
+  create_bd_port -dir O -from 2 -to 0 adf4030_trig_channel
 
   ad_ip_instance axi_adf4030 axi_adf4030_0
-  ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 2
+  ad_ip_parameter axi_adf4030_0 CONFIG.CHANNEL_COUNT 3
 
   ad_connect axi_adf4030_0/bsync_p adf4030_bsync_p
   ad_connect axi_adf4030_0/bsync_n adf4030_bsync_n

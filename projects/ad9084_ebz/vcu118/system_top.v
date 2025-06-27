@@ -215,7 +215,7 @@ module system_top #(
   wire    [ 7:0]  hsci_data_in;
   wire    [ 7:0]  hsci_data_out;
 
-  wire    [ 1:0]  trig_channel;
+  wire    [ 2:0]  trig_channel;
 
   assign iic_rstn = 1'b1;
 
@@ -602,6 +602,8 @@ module system_top #(
     .adf4030_trigger      (aux_gpio),
     .adf4030_sysref       (sysref),
     .adf4030_trig_channel (trig_channel),
+
+    .ext_sync_in(trig_channel[2]),
 
     .rx_sync_0 (rx_syncout[0]),
     .tx_sync_0 (tx_syncin[0]),
