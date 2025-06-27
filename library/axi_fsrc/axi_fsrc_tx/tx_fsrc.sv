@@ -8,7 +8,8 @@
 `default_nettype none
 
 module tx_fsrc #(
-  parameter NP = 16,
+  parameter NUM_OF_CHANNELS = 4,
+  parameter SAMPLE_DATA_WIDTH = 16,
   parameter DATA_WIDTH = 256,
   parameter ACCUM_WIDTH = 64,
   parameter NUM_SAMPLES = 16
@@ -19,44 +20,54 @@ module tx_fsrc #(
   input  wire                                         enable,
   input  wire                                         start,
   input  wire                                         stop,
-  input  wire  [NUM_SAMPLES-1:0]                      conv_mask,
+  input  wire  [NUM_OF_CHANNELS-1:0]                  conv_mask,
   input  wire  [NUM_SAMPLES-1:0][ACCUM_WIDTH-1:0]     accum_set_val,
   input  wire                                         accum_set,
   input  wire  [ACCUM_WIDTH-1:0]                      accum_add_val,
 
-  output logic                                        in_ready,
-  input  wire                                         in_valid,
-  input  wire  [NUM_SAMPLES-1:0][NP-1:0]              in_data,
+  output logic                   in_ready,
+  input  wire                    in_valid,
+  input  wire  [DATA_WIDTH-1:0]  in_data,
 
-  input  wire                                         out_ready,
-  output logic [NUM_SAMPLES-1:0][NP-1:0]              out_data,
-  output logic                                        out_valid
+  input  wire                    out_ready,
+  output logic [DATA_WIDTH-1:0]  out_data,
+  output logic                   out_valid
 );
 
-  localparam FSRC_INVALID_SAMPLE = {1'b1, {(NP-1){1'b0}}};
+  localparam FSRC_INVALID_SAMPLE = {1'b1, {(SAMPLE_DATA_WIDTH-1){1'b0}}};
+  localparam CHANNEL_WIDTH = DATA_WIDTH / NUM_OF_CHANNELS;
+  localparam SAMPLES_PER_CHANNEL = CHANNEL_WIDTH / SAMPLE_DATA_WIDTH;
 
-  logic                                       in_fifo_out_ready;
-  logic [NUM_SAMPLES-1:0][NP-1:0]             in_fifo_out_data;
-  logic [NUM_SAMPLES-1:0]                     in_fifo_out_valid;
-  logic [NUM_SAMPLES-1:0]                     in_fifo_out_valid_next;
-  logic                                       fsrc_in_single_valid;
-  logic                                       fsrc_in_single_ready;
-  logic                                       fsrc_out_valid;
-  logic [NUM_SAMPLES-1:0][NP-1:0]             fsrc_out_data;
-  logic                                       fsrc_out_ready;
-  logic [NUM_SAMPLES-1:0]                     out_fifo_in_ready;
-  logic [NUM_SAMPLES-1:0]                     out_fifo_in_ready_next;
-  logic [NUM_SAMPLES-1:0][NP-1:0]             out_fifo_in_data;
-  logic [NUM_SAMPLES-1:0]                     out_fifo_in_valid;
-  logic                                       accum_en;
-  logic                                       holes_ready;
-  logic [NUM_SAMPLES-1:0]                     holes_n;
-  logic [NUM_SAMPLES-1:0]                     holes_data;
-  logic                                       fsrc_data_en;
-  logic [NUM_SAMPLES-1:0]                     in_ready_s;
-  logic [NUM_SAMPLES-1:0]                     out_valid_s;
+  logic                                          in_fifo_out_ready;
+  logic [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] in_fifo_out_data;
+  logic [NUM_OF_CHANNELS-1:0]                    in_fifo_out_valid;
+  logic [NUM_OF_CHANNELS-1:0]                    in_fifo_out_valid_next;
+  logic                                          fsrc_in_single_valid;
+  logic                                          fsrc_in_single_ready;
+  logic                                          fsrc_out_valid;
+  logic [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] fsrc_out_data;
+  logic                                          fsrc_out_ready;
+  logic [NUM_OF_CHANNELS-1:0]                    out_fifo_in_ready;
+  logic [NUM_OF_CHANNELS-1:0]                    out_fifo_in_ready_next;
+  logic [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] out_fifo_in_data;
+  logic [NUM_OF_CHANNELS-1:0]                    out_fifo_in_valid;
+  logic                                          accum_en;
+  logic                   holes_ready;
+  logic [NUM_SAMPLES-1:0] holes_n;
+  logic [NUM_SAMPLES-1:0] holes_data;
+  logic                   fsrc_data_en;
+  logic [NUM_OF_CHANNELS-1:0] in_ready_s;
+  logic [NUM_OF_CHANNELS-1:0] out_valid_s;
 
+  wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] in_data_arr;
+  wire [NUM_OF_CHANNELS-1:0][CHANNEL_WIDTH-1:0] out_data_arr;
+
+  /* Map a flat array to a 2d array of data per channel and vice-versa */
   genvar ii;
+  for (ii = 0; ii < NUM_OF_CHANNELS; ii = ii + 1) begin
+    assign in_data_arr[ii] = in_data[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH];
+    assign out_data[ii*CHANNEL_WIDTH+:CHANNEL_WIDTH] = out_data_arr[ii];
+  end
 
   always @(posedge clk) begin
     if (reset) begin
@@ -70,9 +81,9 @@ module tx_fsrc #(
     end
   end
 
-  for (ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : in_fifo_gen
+  for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : in_fifo_gen
       fifo_sync_2deep #(
-        .DWIDTH             (DATA_WIDTH),
+        .DWIDTH             (CHANNEL_WIDTH),
         .DORESET            (1'b0),
         .REGISTER_INTERFACE (1'b1)
       ) in_fifo (
@@ -84,7 +95,7 @@ module tx_fsrc #(
         .m_tvalid_next  (in_fifo_out_valid_next[ii]),
         .s_tready       (in_ready_s[ii]),
         .s_tready_next  (),
-        .s_tdata        (in_data[ii]),
+        .s_tdata        (in_data_arr[ii]),
         .s_tvalid       (in_valid),
         .cnt            ()
       );
@@ -132,7 +143,7 @@ module tx_fsrc #(
   end
 
   assign out_fifo_in_data = enable ? fsrc_out_data : in_fifo_out_data;
-  assign holes_data = fsrc_data_en ? {NUM_SAMPLES{~holes_n}} : '1;
+  assign holes_data = fsrc_data_en ? {NUM_OF_CHANNELS{~holes_n}} : '1;
   assign accum_en = !reset && enable && fsrc_data_en && holes_ready;
 
   // Generate sequence of valid and invalid samples
@@ -151,8 +162,10 @@ module tx_fsrc #(
 
   // Insert invalid samples in sample streams
   tx_fsrc_make_holes #(
-    .NP (NP),
-    .NUM_SAMPLES (NUM_SAMPLES),
+    .SAMPLE_DATA_WIDTH (SAMPLE_DATA_WIDTH),
+    .NUM_OF_CHANNELS (NUM_OF_CHANNELS),
+    .CHANNEL_WIDTH (CHANNEL_WIDTH),
+    .SAMPLES_PER_CHANNEL(SAMPLES_PER_CHANNEL),
     .HOLE_VALUE (FSRC_INVALID_SAMPLE)
   ) tx_fsrc_make_holes (
     .clk              (clk),
@@ -168,16 +181,16 @@ module tx_fsrc #(
     .holes_data       (holes_data)
   );
 
-  for (ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : out_fifo_gen
+  for (ii = 0; ii < NUM_OF_CHANNELS; ii=ii+1) begin : out_fifo_gen
     fifo_sync_2deep #(
-      .DWIDTH             (DATA_WIDTH),
+      .DWIDTH             (CHANNEL_WIDTH),
       .DORESET            (1'b0),
       .REGISTER_INTERFACE (1'b1)
     ) out_fifo (
       .aclk           (clk),
       .aresetn        (!reset),
       .m_tready       (out_ready),
-      .m_tdata        (out_data[ii]),
+      .m_tdata        (out_data_arr[ii]),
       .m_tvalid       (out_valid_s[ii]),
       .m_tvalid_next  (),
       .s_tready       (out_fifo_in_ready[ii]),

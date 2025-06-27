@@ -174,7 +174,7 @@ module axi_fsrc_tx_regmap #(
   sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
-  ) jesd204b_tx_config_sync (
+  ) enable_sync (
     .in_bits(up_enable_s),
     .out_clk(clk),
     .out_bits(enable_s));
@@ -190,7 +190,7 @@ module axi_fsrc_tx_regmap #(
   sync_bits #(
     .NUM_OF_BITS (32),
     .ASYNC_CLK (1)
-  ) link_ctrl_sync (
+  ) conv_mask_sync (
     .in_bits(up_conv_mask_s),
     .out_clk(clk),
     .out_bits(conv_mask_s));
@@ -222,9 +222,10 @@ module axi_fsrc_tx_regmap #(
   end
 
   always @(posedge clk) begin
-    stop_reg <= stop_s;
     change_rate_reg <= change_rate_s;
     accum_set_reg <= accum_set_s;
+    start_reg <= start_s;
+    stop_reg <= stop_s;
   end
 
   assign enable          = enable_s[0];
