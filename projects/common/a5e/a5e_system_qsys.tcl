@@ -666,6 +666,7 @@ proc ad_dma_interconnect {m_port} {
     # We cannot enable the f2sdram bridge if we don't use it
     # So we instantiate it as disabled and only enable it
     # if we are using it in the design
+    set f2sdram_data_width [get_instance_parameter_value sys_hps f2sdram_data_width]
     if {$f2sdram_data_width == 0} {
       set_instance_parameter_value sys_hps f2sdram_data_width {256}
       add_connection sys_dma_clk.clk sys_hps.f2sdram_axi_clock
