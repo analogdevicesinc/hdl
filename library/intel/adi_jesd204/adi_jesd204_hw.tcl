@@ -115,7 +115,7 @@ ad_ip_parameter DATA_PATH_WIDTH INTEGER 4 false { \
 ad_ip_parameter EXTERNAL_PHY BOOLEAN 0 false { \
   DISPLAY_HINT "radio" \
   DISPLAY_NAME "External PHY" \
-  ALLOWED_RANGES { "0:External" "1:Internal" }
+  ALLOWED_RANGES { "0:Internal" "1:External" }
 }
 
 proc create_phy_reset_control {tx num_of_lanes sysclk_frequency} {
