@@ -40,7 +40,7 @@ module axi_rx_fsrc_regmap #(
 ) (
   input                   clk,
   input                   reset,
-  output                  fsrc_enable,
+  output                  enable,
 
   // axi interface
   input                   up_rstn,
@@ -56,20 +56,20 @@ module axi_rx_fsrc_regmap #(
 );
   // internal registers
   reg [31:0] up_scratch_s;
-  reg        up_fsrc_enable_s;
+  reg        up_enable_s;
 
   always @(posedge up_clk) begin
     if (up_rstn == 0) begin
       up_wack <= 'd0;
       up_scratch_s <= 'd0;
-      up_fsrc_enable_s <= 'd0;
+      up_enable_s <= 'd0;
     end else begin
       up_wack <= up_wreq;
       if ((up_wreq == 1'b1) && (up_waddr == 14'h2)) begin
         up_scratch_s <= up_wdata;
       end
       if ((up_wreq == 1'b1) && (up_waddr == 14'h4)) begin
-        up_fsrc_enable_s <= up_wdata[0];
+        up_enable_s <= up_wdata[0];
       end
     end
   end
@@ -86,7 +86,7 @@ module axi_rx_fsrc_regmap #(
           14'h1:   up_rdata <= ID;
           14'h2:   up_rdata <= up_scratch_s;
           14'h3:   up_rdata <= CORE_MAGIC;
-          14'h4:   up_rdata <= {31'h0, up_fsrc_enable_s};
+          14'h4:   up_rdata <= {31'h0, up_enable_s};
           default: up_rdata <= 0;
         endcase
       end else begin
@@ -99,9 +99,9 @@ module axi_rx_fsrc_regmap #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
   ) fsrc_enable_sync (
-    .in_bits(up_fsrc_enable_s),
+    .in_bits(up_enable_s),
     .out_clk(clk),
     .out_resetn(~reset),
-    .out_bits(fsrc_enable));
+    .out_bits(enable));
 
 endmodule

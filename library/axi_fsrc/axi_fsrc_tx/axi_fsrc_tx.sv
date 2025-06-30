@@ -41,7 +41,7 @@ module axi_fsrc_tx #(
 ) (
   input clk,
   input reset,
-  input tx_data_start,
+  input start,
 
   input      s_axis_valid,
   output reg s_axis_ready,
@@ -98,8 +98,10 @@ module axi_fsrc_tx #(
   wire [31:0] up_wdata_s;
 
   wire        enable;
+  wire        ext_trig_en;
   wire        stop;
-  wire        start;
+  wire        reg_start_s;
+  wire        start_s;
   wire        accum_set;
   wire [15:0] conv_mask;
   wire [ACCUM_WIDTH-1:0] accum_add_val;
@@ -147,7 +149,8 @@ module axi_fsrc_tx #(
     .clk (clk),
     .reset (reset),
     .enable (enable),
-    .start (start),
+    .ext_trig_en (ext_trig_en),
+    .start (reg_start_s),
     .stop (stop),
     .change_rate (),
     .accum_set (accum_set),
@@ -181,7 +184,7 @@ module axi_fsrc_tx #(
     .reset (reset),
 
     .enable (enable),
-    .start(tx_data_start | start),
+    .start(start_s),
     .stop (stop),
     .conv_mask (conv_mask),
     .accum_set_val (accum_set_val),
@@ -201,5 +204,7 @@ module axi_fsrc_tx #(
     m_axis_valid <= data_out_valid_s;
     s_axis_ready <= data_in_ready_s;
   end
+
+  assign start_s = (start & ext_trig_en) | reg_start_s;
 
 endmodule
