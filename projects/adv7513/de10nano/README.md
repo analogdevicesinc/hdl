@@ -2,9 +2,9 @@
 
 # ADV7513/DE10NANO HDL Project
 
-## Building the project
-
 - VADJ with which it was tested in hardware: 3.3V
+
+## Building the project
 
 ```
 cd projects/adv7513/de10nano
