@@ -73,10 +73,6 @@ module axi_fsrc_sequencer_regmap #(
   output reg              up_rack
 );
 
-  //assert (CTRL_WIDTH <= 64);
-  //assert (COUNTER_WIDTH <= 4);
-  //assert (NUM_TRIG <= 4);
-
   wire [31:0] seq_ctrl_1;
   wire [31:0] seq_ctrl_2;
   wire [31:0] seq_ctrl_3;
