@@ -17,11 +17,11 @@ set_property         -dict {PACKAGE_PIN M35  IOSTANDARD LVCMOS18                
 set_property         -dict {PACKAGE_PIN L35  IOSTANDARD LVCMOS18                                     } [get_ports agc3[1]                   ]    ; ## IO_L24N_T3U_N11_45
 set_property         -dict {PACKAGE_PIN P36  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports clkin6_n                  ]    ; ## IO_L14N_T2L_N3_GC_45
 set_property         -dict {PACKAGE_PIN P35  IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100 DQS_BIAS TRUE} [get_ports clkin6_p                  ]    ; ## IO_L14P_T2L_N2_GC_45
-set_property         -dict {PACKAGE_PIN AM39                                                         } [get_ports clkin8_n                  ]    ; ## MGTREFCLK1N_120 
-set_property         -dict {PACKAGE_PIN AM38                                                         } [get_ports clkin8_p                  ]    ; ## MGTREFCLK1P_120 
-set_property         -dict {PACKAGE_PIN AK39                                                         } [get_ports fpga_refclk_in_n          ]    ; ## MGTREFCLK0N_121 
-set_property         -dict {PACKAGE_PIN AK38                                                         } [get_ports fpga_refclk_in_p          ]    ; ## MGTREFCLK0P_121 
-set_property         -dict {PACKAGE_PIN V39                                                          } [get_ports fpga_refclk_in_replica_n  ]    ; ## MGTREFCLK0N_126 
+set_property         -dict {PACKAGE_PIN AM39                                                         } [get_ports clkin8_n                  ]    ; ## MGTREFCLK1N_120
+set_property         -dict {PACKAGE_PIN AM38                                                         } [get_ports clkin8_p                  ]    ; ## MGTREFCLK1P_120
+set_property         -dict {PACKAGE_PIN AK39                                                         } [get_ports fpga_refclk_in_n          ]    ; ## MGTREFCLK0N_121
+set_property         -dict {PACKAGE_PIN AK38                                                         } [get_ports fpga_refclk_in_p          ]    ; ## MGTREFCLK0P_121
+set_property         -dict {PACKAGE_PIN V39                                                          } [get_ports fpga_refclk_in_replica_n  ]    ; ## MGTREFCLK0N_126
 set_property         -dict {PACKAGE_PIN V38                                                          } [get_ports fpga_refclk_in_replica_p  ]    ; ## MGTREFCLK0P_126
 set_property  -quiet -dict {PACKAGE_PIN AL46                                                         } [get_ports rx_data_n[2]              ]    ; ## MGTYRXN2_121               FPGA_SERDIN_0_N
 set_property  -quiet -dict {PACKAGE_PIN AL45                                                         } [get_ports rx_data_p[2]              ]    ; ## MGTYRXP2_121               FPGA_SERDIN_0_P
@@ -55,7 +55,7 @@ set_property  -quiet -dict {PACKAGE_PIN T43                                     
 set_property  -quiet -dict {PACKAGE_PIN T42                                                          } [get_ports tx_data_p[4]              ]    ; ## MGTYTXP0_126               FPGA_SERDOUT_6_P
 set_property  -quiet -dict {PACKAGE_PIN AL41                                                         } [get_ports tx_data_n[3]              ]    ; ## MGTYTXN3_121               FPGA_SERDOUT_7_N
 set_property  -quiet -dict {PACKAGE_PIN AL40                                                         } [get_ports tx_data_p[3]              ]    ; ## MGTYTXP3_121               FPGA_SERDOUT_7_P
-set_property  -quiet -dict {PACKAGE_PIN AK32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[0]          ]    ; ## IO_L14N_T2L_N3_GC_43       
+set_property  -quiet -dict {PACKAGE_PIN AK32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[0]          ]    ; ## IO_L14N_T2L_N3_GC_43
 set_property  -quiet -dict {PACKAGE_PIN AJ32 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[0]          ]    ; ## IO_L14P_T2L_N2_GC_43
 set_property  -quiet -dict {PACKAGE_PIN AT40 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_n[1]          ]    ; ## IO_L4N_T0U_N7_DBC_AD7N_43
 set_property  -quiet -dict {PACKAGE_PIN AT39 IOSTANDARD LVDS     DIFF_TERM_ADV TERM_100              } [get_ports fpga_syncin_p[1]          ]    ; ## IO_L4P_T0U_N6_DBC_AD7P_43
@@ -93,7 +93,72 @@ set_property         -dict {PACKAGE_PIN AL32 IOSTANDARD LVDS     DIFF_TERM_ADV T
 set_property         -dict {PACKAGE_PIN AJ33 IOSTANDARD LVCMOS18                                     } [get_ports txen[0]                   ]    ; ## IO_L19P_T3L_N0_DBC_AD9P_43
 set_property         -dict {PACKAGE_PIN AK33 IOSTANDARD LVCMOS18                                     } [get_ports txen[1]                   ]    ; ## IO_L19N_T3L_N1_DBC_AD9N_43
 
-set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP                     } [get_ports vadj_1v8_pgood            ]    ; ## IO_T1U_N12_43_AK35 
+set_property         -dict {PACKAGE_PIN AK35 IOSTANDARD LVCMOS18 PULLTYPE PULLUP                     } [get_ports vadj_1v8_pgood            ]    ; ## IO_T1U_N12_43_AK35
 
+# U145 QSFP+ Module QSFP1
+# set_property -dict {PACKAGE_PIN Y2} [get_ports {qsfp_rx_p[0]}]
+# set_property -dict {PACKAGE_PIN Y1} [get_ports {qsfp_rx_n[0]}]
+# set_property -dict {PACKAGE_PIN V7} [get_ports {qsfp_tx_p[0]}]
+# set_property -dict {PACKAGE_PIN V6} [get_ports {qsfp_tx_n[0]}]
+# set_property -dict {PACKAGE_PIN W4} [get_ports {qsfp_rx_p[1]}]
+# set_property -dict {PACKAGE_PIN W3} [get_ports {qsfp_rx_n[1]}]
+# set_property -dict {PACKAGE_PIN T7} [get_ports {qsfp_tx_p[1]}]
+# set_property -dict {PACKAGE_PIN T6} [get_ports {qsfp_tx_n[1]}]
+# set_property -dict {PACKAGE_PIN V2} [get_ports {qsfp_rx_p[2]}]
+# set_property -dict {PACKAGE_PIN V1} [get_ports {qsfp_rx_n[2]}]
+# set_property -dict {PACKAGE_PIN P7} [get_ports {qsfp_tx_p[2]}]
+# set_property -dict {PACKAGE_PIN P6} [get_ports {qsfp_tx_n[2]}]
+# set_property -dict {PACKAGE_PIN U4} [get_ports {qsfp_rx_p[3]}]
+# set_property -dict {PACKAGE_PIN U3} [get_ports {qsfp_rx_n[3]}]
+# set_property -dict {PACKAGE_PIN M7} [get_ports {qsfp_tx_p[3]}]
+# set_property -dict {PACKAGE_PIN M6} [get_ports {qsfp_tx_n[3]}]
 
+# U145 QSFP+ Module QSFP2
+set_property -dict {PACKAGE_PIN T2} [get_ports {qsfp_rx_p[0]}]
+set_property -dict {PACKAGE_PIN T1} [get_ports {qsfp_rx_n[0]}]
+set_property -dict {PACKAGE_PIN L5} [get_ports {qsfp_tx_p[0]}]
+set_property -dict {PACKAGE_PIN L4} [get_ports {qsfp_tx_n[0]}]
+set_property -dict {PACKAGE_PIN R4} [get_ports {qsfp_rx_p[1]}]
+set_property -dict {PACKAGE_PIN R3} [get_ports {qsfp_rx_n[1]}]
+set_property -dict {PACKAGE_PIN K7} [get_ports {qsfp_tx_p[1]}]
+set_property -dict {PACKAGE_PIN K6} [get_ports {qsfp_tx_n[1]}]
+set_property -dict {PACKAGE_PIN P2} [get_ports {qsfp_rx_p[2]}]
+set_property -dict {PACKAGE_PIN P1} [get_ports {qsfp_rx_n[2]}]
+set_property -dict {PACKAGE_PIN J5} [get_ports {qsfp_tx_p[2]}]
+set_property -dict {PACKAGE_PIN J4} [get_ports {qsfp_tx_n[2]}]
+set_property -dict {PACKAGE_PIN M2} [get_ports {qsfp_rx_p[3]}]
+set_property -dict {PACKAGE_PIN M1} [get_ports {qsfp_rx_n[3]}]
+set_property -dict {PACKAGE_PIN H7} [get_ports {qsfp_tx_p[3]}]
+set_property -dict {PACKAGE_PIN H6} [get_ports {qsfp_tx_n[3]}]
 
+# REF clock
+set_property -dict {PACKAGE_PIN W9} [get_ports qsfp_mgt_refclk_p]
+set_property -dict {PACKAGE_PIN W8} [get_ports qsfp_mgt_refclk_n]
+
+# 156.25 MHz MGT reference clock
+create_clock -period 6.400 -name qsfp_mgt_refclk [get_ports qsfp_mgt_refclk_p]
+
+set_property -dict {PACKAGE_PIN AM21 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports qsfp_modsell]
+set_property -dict {PACKAGE_PIN BA22 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports qsfp_resetl]
+set_property -dict {PACKAGE_PIN AN21 IOSTANDARD LVCMOS18 SLEW SLOW DRIVE 8} [get_ports qsfp_lpmode]
+set_property -dict {PACKAGE_PIN AL21 IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports qsfp_modprsl]
+set_property -dict {PACKAGE_PIN AP21 IOSTANDARD LVCMOS18 PULLTYPE PULLUP} [get_ports qsfp_intl]
+
+set_false_path -to [get_ports {qsfp_modsell qsfp_resetl qsfp_lpmode}]
+set_output_delay 0.000 [get_ports {qsfp_modsell qsfp_resetl qsfp_lpmode}]
+set_false_path -from [get_ports {qsfp_modprsl qsfp_intl}]
+set_input_delay 0.000 [get_ports {qsfp_modprsl qsfp_intl}]
+
+# QSPI flash
+set_property -dict {PACKAGE_PIN AM19 IOSTANDARD LVCMOS18 DRIVE 12} [get_ports {qspi1_dq[0]}]
+set_property -dict {PACKAGE_PIN AM18 IOSTANDARD LVCMOS18 DRIVE 12} [get_ports {qspi1_dq[1]}]
+set_property -dict {PACKAGE_PIN AN20 IOSTANDARD LVCMOS18 DRIVE 12} [get_ports {qspi1_dq[2]}]
+set_property -dict {PACKAGE_PIN AP20 IOSTANDARD LVCMOS18 DRIVE 12} [get_ports {qspi1_dq[3]}]
+set_property -dict {PACKAGE_PIN BF16 IOSTANDARD LVCMOS18 DRIVE 12} [get_ports qspi1_cs]
+
+set_false_path -to [get_ports {{qspi1_dq[*]} qspi1_cs}]
+set_output_delay 0.000 [get_ports {{qspi1_dq[*]} qspi1_cs}]
+set_false_path -from [get_ports qspi1_dq]
+set_input_delay 0.000 [get_ports qspi1_dq]
+
+set_property LOC CMACE4_X0Y7 [get_cells -hierarchical -filter {NAME =~ */qsfp[0].qsfp_cmac_inst/cmac_inst/inst/i_cmac_usplus_top/* && REF_NAME==CMACE4}]

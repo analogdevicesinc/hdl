@@ -60,14 +60,28 @@ adi_project_files ad9081_fmca_ebz_vcu118 [list \
   "timing_constr.xdc"\
   "../../../library/common/ad_3w_spi.v"\
   "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" ]
+  "$ad_hdl_dir/projects/common/vcu118/vcu118_system_constr.xdc" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/boot.xdc" \
+  "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
+]
+
+add_files -fileset constrs_1 -norecurse [list \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/rb_drp.tcl" \
+  "$ad_hdl_dir/library/corundum/scripts/sync_reset.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/cmac_gty_wrapper.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/cmac_gty_ch_wrapper.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_rb_clk_info.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_ptp_clock.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/common/syn/vivado/mqnic_port.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/lib/axis/syn/vivado/axis_async_fifo.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_leaf.tcl" \
+  "$ad_hdl_dir/../corundum/fpga/lib/eth/syn/vivado/ptp_td_rel2tod.tcl" \
+]
 
 # Avoid critical warning in OOC mode from the clock definitions
 # since at that stage the submodules are not stiched together yet
 if {$ADI_USE_OOC_SYNTHESIS == 1} {
   set_property used_in_synthesis false [get_files timing_constr.xdc]
 }
-
-set_property strategy Performance_RefinePlacement [get_runs impl_1]
 
 adi_project_run ad9081_fmca_ebz_vcu118
