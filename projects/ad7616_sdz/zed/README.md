@@ -1,5 +1,7 @@
 # AD7616-SDZ/Zed HDL Project
 
+- VADJ with which it was tested in hardware: 3.3V
+
 ## Building the project
 
 The parameter configurable through the `make` command, can be found below, as well as in the **system_project.tcl** file; it contains the default configuration.
