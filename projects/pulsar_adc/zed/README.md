@@ -1,4 +1,8 @@
-# PULSAR-ADC/Zed HDL Project
+<!-- no_no_os-->
+
+# PULSAR-ADC/ZED HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
