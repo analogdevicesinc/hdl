@@ -365,7 +365,7 @@ set_instance_parameter_value sys_hps User1_clk_src_select {7}
 set_instance_parameter_value sys_hps eosc1_clk_mhz {25.0}
 set_instance_parameter_value sys_hps f2s_SMMU {0}
 set_instance_parameter_value sys_hps f2s_address_width {32}
-set_instance_parameter_value sys_hps f2s_data_width {256}
+set_instance_parameter_value sys_hps f2s_data_width {Unused}
 set_instance_parameter_value sys_hps f2s_mode {ace5lite}
 set_instance_parameter_value sys_hps f2sdram_SMMU {0}
 set_instance_parameter_value sys_hps f2sdram_address_width {32}
@@ -426,8 +426,8 @@ add_connection sys_clk.clk sys_hps.hps2fpga_axi_clock
 add_connection sys_clk.clk_reset sys_hps.hps2fpga_axi_reset
 add_connection sys_clk.clk sys_hps.lwhps2fpga_axi_clock
 add_connection sys_clk.clk_reset sys_hps.lwhps2fpga_axi_reset
-add_connection sys_clk.clk sys_hps.fpga2hps_clock
-add_connection sys_clk.clk_reset sys_hps.fpga2hps_reset
+# add_connection sys_clk.clk sys_hps.fpga2hps_clock
+# add_connection sys_clk.clk_reset sys_hps.fpga2hps_reset
 add_connection sys_clk.clk sys_hps.usb31_phy_reconfig_clk
 add_connection sys_clk.clk_reset sys_hps.usb31_phy_reconfig_rst
 
@@ -438,7 +438,7 @@ set_interface_property sys_hps_io EXPORT_OF sys_hps.hps_io
 
 add_instance sys_dma_clk clock_source
 set_instance_parameter_value sys_dma_clk {resetSynchronousEdges} {DEASSERT}
-set_instance_parameter_value sys_clk {clockFrequency} {250000000.0}
+set_instance_parameter_value sys_dma_clk {clockFrequency} {250000000.0}
 set_instance_parameter_value sys_dma_clk {clockFrequencyKnown} {true}
 add_connection sys_clk.clk_reset sys_dma_clk.clk_in_reset
 add_connection sys_hps.h2f_user0_clk sys_dma_clk.clk_in
@@ -626,24 +626,24 @@ add_connection emif_hps.io96b0_to_hps sys_hps.io96b0_to_hps
 
 # cache coherency
 
-add_instance sys_hps_cache_coherency altera_ace5lite_cache_coherency_translator
-set_instance_parameter_value sys_hps_cache_coherency F2H_ADDRESS_WIDTH {32}
+# add_instance sys_hps_cache_coherency altera_ace5lite_cache_coherency_translator
+# set_instance_parameter_value sys_hps_cache_coherency F2H_ADDRESS_WIDTH {32}
 
-add_connection sys_clk.clk sys_hps_cache_coherency.clock
-add_connection sys_clk.clk_reset sys_hps_cache_coherency.reset
-add_connection sys_hps_cache_coherency.m0 sys_hps.fpga2hps
+# add_connection sys_clk.clk sys_hps_cache_coherency.clock
+# add_connection sys_clk.clk_reset sys_hps_cache_coherency.reset
+# add_connection sys_hps_cache_coherency.m0 sys_hps.fpga2hps
 
 # jtag
 
 add_instance fpga_m altera_jtag_avalon_master
-add_instance hps_m  altera_jtag_avalon_master
+# add_instance hps_m  altera_jtag_avalon_master
 
-add_connection sys_clk.clk hps_m.clk
+# add_connection sys_clk.clk hps_m.clk
 add_connection sys_clk.clk fpga_m.clk
-add_connection sys_clk.clk_reset hps_m.clk_reset
+# add_connection sys_clk.clk_reset hps_m.clk_reset
 add_connection sys_clk.clk_reset fpga_m.clk_reset
 
-add_connection hps_m.master sys_hps_cache_coherency.s0
+# add_connection hps_m.master sys_hps_cache_coherency.s0
 add_connection fpga_m.master sys_hps.usb31_phy_reconfig_slave
 
 # system id
@@ -761,7 +761,7 @@ set_interface_property o_pma_cu_clk EXPORT_OF gts_reset.o_pma_cu_clk
 set_interface_property i_refclk_bus_out EXPORT_OF gts_reset.i_refclk_bus_out
 set_interface_property o_shoreline_refclk_fail_stat EXPORT_OF gts_reset.o_shoreline_refclk_fail_stat
 
-set_interface_property h2f_warm_reset_handshake EXPORT_OF sys_hps.h2f_warm_reset_handshake
+# set_interface_property h2f_warm_reset_handshake EXPORT_OF sys_hps.h2f_warm_reset_handshake
 
 set_interface_property f2h_irq1_in EXPORT_OF sys_hps.fpga2hps_interrupt_irq1
 set_interface_property usb31_io EXPORT_OF sys_hps.usb31_io

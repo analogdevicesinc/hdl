@@ -154,8 +154,6 @@ module system_top (
     .sys_rst_reset_n                                         (sys_resetn),
     .rst_ninit_done                                          (ninit_done),
     .h2f_reset_reset                                         (h2f_reset),
-    .h2f_warm_reset_handshake_reset_req                      (),
-    .h2f_warm_reset_handshake_reset_ack                      (),
 
     .f2h_irq1_in_irq                                         ('h0),
     .pr_rom_data_nc_rom_data                                 ('h0),
