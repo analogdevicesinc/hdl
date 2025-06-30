@@ -110,6 +110,8 @@ EXTERNAL_DEPS += ../../../../corundum/fpga/lib/eth/rtl/xgmii_baser_enc_64.v
 
 XILINX_DEPS  += ../interfaces/if_ctrl_reg.xml
 XILINX_DEPS  += ../interfaces/if_ctrl_reg_rtl.xml
+XILINX_DEPS  += ../interfaces/if_csr.xml
+XILINX_DEPS  += ../interfaces/if_csr_rtl.xml
 XILINX_DEPS  += ../interfaces/if_ptp.xml
 XILINX_DEPS  += ../interfaces/if_ptp_rtl.xml
 XILINX_DEPS  += ../interfaces/if_flow_control_tx.xml
