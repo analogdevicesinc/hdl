@@ -32,7 +32,6 @@ set mipi_phy_if_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:m
 set mipi_phy_if_1 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:mipi_phy_rtl:1.0 mipi_phy_if_1 ]
 
 # Corundum NIC
-#create_bd_intf_port -mode Master -vlnv analog.com:interface:if_sfp_rtl:1.0 sfp
 create_bd_port -dir I sfp_rx_p
 create_bd_port -dir I sfp_rx_n
 create_bd_port -dir O sfp_tx_p
@@ -47,12 +46,6 @@ create_bd_port -dir I sfp_mod_abs
 
 create_bd_port -dir IO sfp_i2c_scl
 create_bd_port -dir IO sfp_i2c_sda
-
-# create_bd_port -dir O -type clk clk_125mhz
-# create_bd_port -dir O -type clk clk_250mhz
-
-# create_bd_port -dir I -type rst ptp_rst
-# set_property CONFIG.POLARITY ACTIVE_HIGH [get_bd_ports ptp_rst]
 
 create_bd_port -dir O ref_clk0
 
@@ -486,16 +479,10 @@ ad_ip_instance proc_sys_reset sys_125m_rstgen
 ad_connect sys_125m_rstgen/slowest_sync_clk clk125_gen/clk_out1
 ad_connect sys_125m_rstgen/ext_reset_in $sys_dma_resetn
 
-# create_bd_intf_port -mode Master -vlnv analog.com:interface:if_i2c_rtl:1.0 sfp_iic
-# ad_connect sfp_iic corundum_hierarchy/i2c
 ad_connect sfp_i2c_scl corundum_hierarchy/sfp_i2c_scl
 ad_connect sfp_i2c_sda corundum_hierarchy/sfp_i2c_sda
 
-#ad_connect led corundum_hierarchy/led
-# ad_connect sfp_led corundum_hierarchy/sfp_led
 connect_bd_net [get_bd_ports led] [get_bd_pins corundum_hierarchy/ethernet_core/led]
-
-#set_property verilog_define {APP_CUSTOM_PORTS_ENABLE APP_CUSTOM_PARAMS_ENABLE} [get_filesets sources_1]
 
 ad_connect corundum_hierarchy/clk_250mhz $sys_dma_clk
 ad_connect corundum_hierarchy/rst_250mhz $sys_dma_reset
@@ -503,10 +490,6 @@ ad_connect clk10_gen/clk_in1 $sys_dma_clk
 ad_connect clk10_gen/resetn $sys_dma_resetn
 ad_connect clk125_gen/clk_in1 $sys_dma_clk
 ad_connect clk125_gen/resetn $sys_dma_resetn
-
-# ad_connect corundum_hierarchy/clk_125mhz clk125_gen/clk_out1
-# ad_connect corundum_hierarchy/rst_125mhz sys_125m_rstgen/peripheral_aresetn
-# ad_connect corundum_hierarchy/ptp_rst ptp_rst
 
 ad_connect corundum_hierarchy/sfp_rx_p sfp_rx_p
 ad_connect corundum_hierarchy/sfp_rx_n sfp_rx_n
@@ -519,7 +502,6 @@ ad_connect corundum_hierarchy/sfp_tx_disable sfp_tx_disable
 ad_connect corundum_hierarchy/sfp_mod_abs sfp_mod_abs
 ad_connect corundum_hierarchy/sfp_rx_los sfp_rx_los
 ad_connect corundum_hierarchy/sfp_tx_fault sfp_tx_fault
-#ad_connect corundum_hierarchy/sfp sfp
 
 ad_connect clk10_gen/clk_out1 ref_clk0
 
@@ -528,7 +510,6 @@ set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/m
 set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins /corundum_hierarchy/corundum_core/m_axi]
 set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/s_axil_corundum]
 set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins /corundum_hierarchy/corundum_core/s_axil_ctrl]
-#set_property CONFIG.FREQ_HZ $axi_clk_freq [get_bd_intf_pins corundum_hierarchy/s_axil_application]
 
 ad_ip_instance axi_interconnect smartconnect_corundum
 ad_ip_parameter smartconnect_corundum CONFIG.NUM_MI 2
@@ -548,7 +529,6 @@ ad_connect smartconnect_corundum/M00_ACLK $sys_dma_clk
 ad_connect smartconnect_corundum/M01_ACLK $sys_dma_clk
 
 ad_connect smartconnect_corundum/M00_AXI corundum_hierarchy/s_axil_corundum
-#ad_connect smartconnect_corundum/M01_AXI corundum_hierarchy/s_axil_application
 
 ad_ip_parameter sys_ps8 CONFIG.PSU__USE__M_AXI_GP0 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__MAXIGP0__DATA_WIDTH 32
@@ -558,9 +538,6 @@ ad_connect sys_ps8/maxihpm0_fpd_aclk $sys_dma_clk
 assign_bd_address -offset 0xA000_0000 [get_bd_addr_segs \
   corundum_hierarchy/corundum_core/s_axil_ctrl/Reg
 ] -target_address_space sys_ps8/Data
-#assign_bd_address -offset 0xA800_0000 [get_bd_addr_segs \
-#  corundum_hierarchy/corundum_core/s_axil_app_ctrl/Reg
-#] -target_address_space sys_ps8/Data
 
 ad_ip_instance util_reduced_logic util_reduced_logic_0
 ad_ip_parameter util_reduced_logic_0 CONFIG.C_OPERATION {or}
