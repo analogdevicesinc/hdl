@@ -43,6 +43,7 @@ module axi_fsrc_tx_regmap #(
   input         clk,
   input         reset,
   output        enable,
+  output        ext_trig_en,
   output        start,
   output        stop,
   output        change_rate,
@@ -229,6 +230,7 @@ module axi_fsrc_tx_regmap #(
   end
 
   assign enable          = enable_s[0];
+  assign ext_trig_en     = enable_s[1];
   assign start_s         = ctrl_transmit[0];
   assign stop_s          = ctrl_transmit[1];
   assign accum_set_s     = ctrl_transmit[2];

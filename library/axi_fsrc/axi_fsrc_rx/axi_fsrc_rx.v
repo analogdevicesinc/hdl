@@ -90,7 +90,7 @@ module axi_fsrc_rx #(
   wire [13:0] up_waddr_s;
   wire [31:0] up_wdata_s;
 
-  wire                  fsrc_enable;
+  wire                  enable;
   wire [DATA_WIDTH-1:0] data_out_s;
   wire                  data_out_valid_s;
 
@@ -133,7 +133,7 @@ module axi_fsrc_rx #(
   ) i_regmap (
     .clk (clk),
     .reset (reset),
-    .fsrc_enable (fsrc_enable),
+    .enable (enable),
 
     .up_rstn (up_rstn),
     .up_clk (up_clk),
@@ -152,7 +152,7 @@ module axi_fsrc_rx #(
   ) remove_invalid (
     .clk (clk),
     .reset (reset),
-    .fsrc_en (fsrc_enable),
+    .fsrc_en (enable),
     .in_data (data_in),
     .in_valid (data_in_valid),
     .out_data (data_out_s),

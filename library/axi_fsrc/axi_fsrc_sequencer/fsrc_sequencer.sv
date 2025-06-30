@@ -6,18 +6,18 @@
 // Sequence:
 //  User sets next_ctrl_value, first_trig_cnt
 //  User asserts start
-//  tx_data_start asserted
+//  data_start_0 asserted
 //  Counter start at 0, increments when sysref_int is asserted
 //  When counter equals ctrl_change_cnt, set ctrl = next_ctrl_value
 //  When counter equals first_trig_cnt, pulse trig
-//  When counter equals accum_reset_cnt, tx_data_start deasserted
+//  When counter equals accum_reset_cnt, data_start_0 deasserted
 //////////////////////////////////////////////////////////////////////////////////
 
 
 `timescale 1ps / 1ps
 `default_nettype none
 
-module tx_fsrc_ctrl #(
+module fsrc_sequencer #(
   parameter CTRL_WIDTH = 40,
   parameter COUNTER_WIDTH = 4,
   parameter NUM_TRIG = 4
@@ -29,12 +29,12 @@ module tx_fsrc_ctrl #(
   input  wire [CTRL_WIDTH-1:0]                     next_ctrl_value,      // Set before start is asserted, hold the value until ctrl value is changed
   input  wire [COUNTER_WIDTH-1:0]                  ctrl_change_cnt,
   input  wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0]   first_trig_cnt,
-  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> tx_data_start    // Must be greater than first_trig_cnt
+  input  wire [COUNTER_WIDTH-1:0]                  accum_reset_cnt,  // -> data_start_0    // Must be greater than first_trig_cnt
   input  wire                                      seq_trig_in,
-  input  wire                                      seq_ext_trig_en,
+  input  wire                                      ext_trig_en,
 
   output logic [NUM_TRIG-1:0]                      trig_out, // first
-  output logic                                     tx_data_start
+  output logic                                     data_start_0
 );
 
   localparam TRIG_PULSE_WIDTH = 4;
@@ -43,7 +43,7 @@ module tx_fsrc_ctrl #(
   logic                                         count_en;
   logic [NUM_TRIG-1:0]                          trig_pulse;
   logic [NUM_TRIG-1:0] [TRIG_PULSE_WIDTH-1:0]   trig_shift;
-  logic [COUNTER_WIDTH-1:0]                     count; // -> tx_data_start ; trig_out
+  logic [COUNTER_WIDTH-1:0]                     count; // -> data_start_0 ; trig_out
   logic                                         seq_trig_in_d;
   logic                                         seq_trig_re;
   logic                                         trig_start_pulse;
@@ -65,8 +65,7 @@ module tx_fsrc_ctrl #(
 
   assign seq_trig_re = seq_trig_in & ~seq_trig_in_d;
 
-  // If seq_ext_trig_en enabled use seq_trig_re else use regmap start.
-  assign trig_start_pulse = seq_ext_trig_en ? seq_trig_re : reg_start;
+  assign trig_start_pulse = (ext_trig_en & seq_trig_re) | reg_start;
 
   pulse_sync trig_start_sync(
       .dout        (trig_start),
@@ -77,7 +76,7 @@ module tx_fsrc_ctrl #(
       .din         (trig_start_pulse)
    );
 
-  // Counter and count enable for tx_data_start and trigs
+  // Counter and count enable for data_start_0 and trigs
   always_ff @(posedge clk) begin
     if (reset) begin
       count_en <= 1'b0;
@@ -99,16 +98,16 @@ module tx_fsrc_ctrl #(
     end
   end
 
-  // Pulse tx_data_start when count equals accum_reset_cnt
+  // Pulse data_start_0 when count equals accum_reset_cnt
   always_ff @(posedge clk) begin
     if (reset) begin
-      tx_data_start <= 1'b0;
+      data_start_0 <= 1'b0;
     end else begin
-      tx_data_start <= 1'b0;
+      data_start_0 <= 1'b0;
       if (accum_reset_cnt == 0) begin
-        tx_data_start <= 1'b1;
+        data_start_0 <= 1'b1;
       end else if (sysref_int_d && (count == accum_reset_cnt)) begin
-        tx_data_start <= 1'b1;
+        data_start_0 <= 1'b1;
       end
     end
   end

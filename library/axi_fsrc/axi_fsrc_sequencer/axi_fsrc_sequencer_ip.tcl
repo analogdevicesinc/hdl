@@ -13,7 +13,7 @@ adi_ip_files axi_fsrc_sequencer [list \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_data.v" \
   "pulse_sync.v" \
-  "tx_fsrc_ctrl.sv" \
+  "fsrc_sequencer.sv" \
   "axi_fsrc_sequencer_regmap.sv" \
   "axi_fsrc_sequencer.sv" \
 ]
