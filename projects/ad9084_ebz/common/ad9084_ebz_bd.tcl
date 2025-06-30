@@ -609,7 +609,7 @@ if {$FSRC_ENABLE} {
   ad_connect fsrc_trig_out fsrc_ctrl/trig_out
   ad_connect fsrc_ctrl     fsrc_ctrl/ctrl
 
-  ad_connect fsrc_tx/tx_data_start fsrc_ctrl/tx_data_start
+  ad_connect fsrc_tx/start fsrc_ctrl/data_start_0
 }
 
 set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width]
