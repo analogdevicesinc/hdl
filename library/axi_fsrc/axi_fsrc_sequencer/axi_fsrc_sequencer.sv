@@ -43,8 +43,7 @@ module axi_fsrc_sequencer #(
   input                   sysref,
   input                   trig_in,
   output [NUM_TRIG-1:0]   trig_out,
-  output                  rx_data_start,
-  output                  tx_data_start,
+  output                  data_start_0,
   output [CTRL_WIDTH-1:0] ctrl,
 
   output                  tx_sequencer_non_fsrc_delay_en,
@@ -74,7 +73,6 @@ module axi_fsrc_sequencer #(
   input                   s_axi_rready
 );
 
-  assign rx_data_start = 'b0;
   assign ctrl = 'b0;
   assign seq_debug = 1'b0;
 
@@ -100,17 +98,16 @@ module axi_fsrc_sequencer #(
   wire [CTRL_WIDTH-1:0]    fsrc_next_ctrl_value;
   wire [COUNTER_WIDTH-1:0] fsrc_ctrl_change_cnt;
   wire [COUNTER_WIDTH-1:0] fsrc_accum_reset_cnt;
-  wire [COUNTER_WIDTH-1:0] fsrc_rx_delay_cnt;
-  wire                     fsrc_seq_ext_trig_en;
+  wire                     ext_trig_en;
   wire                     fsrc_reg_start;
   wire                     seq_en;
-  wire                     fsrc_trig_in;
-  wire [NUM_TRIG-1:0]      fsrc_trig_out;
+  wire                     trig_in_s;
+  wire [NUM_TRIG-1:0]      trig_out_s;
   wire [NUM_TRIG-1:0]      seq_trig_out;
 
   wire [NUM_TRIG-1:0] [COUNTER_WIDTH-1:0] fsrc_first_trig_cnt;
 
-  assign trig_out = seq_en ? fsrc_trig_out : seq_trig_out;
+  assign trig_out = seq_en ? trig_out_s : seq_trig_out;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -161,7 +158,7 @@ module axi_fsrc_sequencer #(
     .reg_o_tx_sequencer_non_fsrc_delay_en (tx_sequencer_non_fsrc_delay_en),
     .reg_o_seq_tx_accum_reset_cnt (fsrc_accum_reset_cnt),
 
-    .reg_o_seq_ext_trig_en (fsrc_seq_ext_trig_en),
+    .reg_o_seq_ext_trig_en (ext_trig_en),
 
     .reg_o_dut_seq_gpio_w (fsrc_next_ctrl_value),
     .reg_o_trig_out (seq_trig_out),
@@ -182,16 +179,16 @@ module axi_fsrc_sequencer #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK (1)
   ) fsrc_trig_sync (
-    .in_bits(seq_ext_trig_s),
+    .in_bits(trig_in),
     .out_clk(clk),
     .out_resetn(~reset),
-    .out_bits(fsrc_trig_in));
+    .out_bits(trig_in_s));
 
-  tx_fsrc_ctrl #(
+  fsrc_sequencer #(
     .CTRL_WIDTH (CTRL_WIDTH),
     .COUNTER_WIDTH (COUNTER_WIDTH),
     .NUM_TRIG (NUM_TRIG)
-  ) tx_fsrc_sequencer (
+  ) fsrc_sequencer_i (
     .clk (clk),
     .reset (reset),
     .sysref_int (sysref),
@@ -200,11 +197,9 @@ module axi_fsrc_sequencer #(
     .ctrl_change_cnt (fsrc_ctrl_change_cnt),
     .first_trig_cnt (fsrc_first_trig_cnt),
     .accum_reset_cnt (fsrc_accum_reset_cnt),
-    .trig_out (fsrc_trig_out),
-    .seq_trig_in (fsrc_trig_in),
-    .seq_ext_trig_en (fsrc_seq_ext_trig_en),
-    .tx_data_start (tx_data_start));
-
-  assign seq_ext_trig_s = trig_in;
+    .trig_out (trig_out_s),
+    .seq_trig_in (trig_in_s),
+    .ext_trig_en (ext_trig_en),
+    .data_start_0 (data_start_0));
 
 endmodule
