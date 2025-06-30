@@ -6,8 +6,6 @@
 
 ## Building the project
 
-- VADJ with which it was tested in hardware: 3.3V
-
 ```
 cd projects/ad353xr/de10nano
 make
