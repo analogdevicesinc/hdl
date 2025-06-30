@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: BSD-2-Clause-Views
+/*
+ * Copyright (c) 2023 Missing Link Electronics, Inc.
+ *
+ * Template verilog header containing definitions for custom app parameters.
+ *
+ * See mqnic_app_custom_ports.vh for detailed explanation.
+ */
+
+// Custom parameter list (name, default value)
+`define APP_CUSTOM_PARAMS_DECL \
+  parameter DMA_ADDR_WIDTH_APP = 0, \
+  parameter RAM_SEL_WIDTH_APP = 0, \
+  parameter RAM_SEG_COUNT_APP = 0, \
+  parameter RAM_SEG_DATA_WIDTH_APP = 0, \
+  parameter RAM_SEG_BE_WIDTH_APP = 0, \
+  parameter RAM_SEG_ADDR_WIDTH_APP = 0, \
+  parameter AXIS_SYNC_KEEP_WIDTH_APP = 0, \
+  parameter AXIS_SYNC_TX_USER_WIDTH_APP = 0, \
+  parameter AXIS_SYNC_RX_USER_WIDTH_APP = 0, \
+  parameter AXIS_IF_KEEP_WIDTH_APP = 0, \
+  parameter AXIS_IF_TX_ID_WIDTH_APP = 0, \
+  parameter AXIS_IF_RX_ID_WIDTH_APP = 0, \
+  parameter AXIS_IF_TX_DEST_WIDTH_APP = 0, \
+  parameter AXIS_IF_RX_DEST_WIDTH_APP = 0, \
+  parameter AXIS_IF_TX_USER_WIDTH_APP = 0, \
+  parameter AXIS_IF_RX_USER_WIDTH_APP = 0,
+
+`define APP_CUSTOM_PARAMS_MAP \
+  .DMA_ADDR_WIDTH_APP(DMA_ADDR_WIDTH_APP), \
+  .RAM_SEL_WIDTH_APP(RAM_SEL_WIDTH_APP), \
+  .RAM_SEG_COUNT_APP(RAM_SEG_COUNT_APP), \
+  .RAM_SEG_DATA_WIDTH_APP(RAM_SEG_DATA_WIDTH_APP), \
+  .RAM_SEG_BE_WIDTH_APP(RAM_SEG_BE_WIDTH_APP), \
+  .RAM_SEG_ADDR_WIDTH_APP(RAM_SEG_ADDR_WIDTH_APP), \
+  .AXIS_SYNC_KEEP_WIDTH_APP(AXIS_SYNC_KEEP_WIDTH_APP), \
+  .AXIS_SYNC_TX_USER_WIDTH_APP(AXIS_SYNC_TX_USER_WIDTH_APP), \
+  .AXIS_SYNC_RX_USER_WIDTH_APP(AXIS_SYNC_RX_USER_WIDTH_APP), \
+  .AXIS_IF_KEEP_WIDTH_APP(AXIS_IF_KEEP_WIDTH_APP), \
+  .AXIS_IF_TX_ID_WIDTH_APP(AXIS_IF_TX_ID_WIDTH_APP), \
+  .AXIS_IF_RX_ID_WIDTH_APP(AXIS_IF_RX_ID_WIDTH_APP), \
+  .AXIS_IF_TX_DEST_WIDTH_APP(AXIS_IF_TX_DEST_WIDTH_APP), \
+  .AXIS_IF_RX_DEST_WIDTH_APP(AXIS_IF_RX_DEST_WIDTH_APP), \
+  .AXIS_IF_TX_USER_WIDTH_APP(AXIS_IF_TX_USER_WIDTH_APP), \
+  .AXIS_IF_RX_USER_WIDTH_APP(AXIS_IF_RX_USER_WIDTH_APP),
