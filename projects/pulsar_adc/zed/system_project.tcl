@@ -31,8 +31,7 @@ adi_project pulsar_adc_zed 0 [list \
   SPI_OP_MODE   [get_env_param SPI_OP_MODE 0] ]
 
 adi_project_files pulsar_adc_zed [list \
-  "$ad_hdl_dir/library/common/ad_iobuf.v" \
-  "$ad_hdl_dir/projects/common/zed/zed_system_constr.xdc" ]
+  "$ad_hdl_dir/library/common/ad_iobuf.v"]
 
 if {$FMC_N_PMOD == 0} {
   adi_project_files pulsar_adc_zed [list \
