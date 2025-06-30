@@ -19,7 +19,7 @@ if [info exists ::env(BOARD)] {
     source "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/ip/cmac_gty.tcl"
 
     # Corundum sources
-    adi_ip_files ethernet [list \
+    adi_ip_files ethernet_core_vcu118 [list \
       "ethernet_core_vcu118.v" \
       "$ad_hdl_dir/../corundum/fpga/mqnic/VCU118/fpga_100g/rtl/sync_signal.v" \
       "$ad_hdl_dir/../corundum/fpga/common/rtl/mqnic_port_map_mac_axis.v" \
