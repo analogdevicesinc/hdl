@@ -4,9 +4,9 @@
 ###############################################################################
 
 create_clock -period "10.0000 ns"   -name sys_clk_100mhz      [get_ports {sys_clk}]
-create_clock -period "4.00000 ns"   -name ref_clk             [get_ports {fpga_refclk_in}]
-create_clock -period "4.00000 ns"   -name tx_device_clk       [get_ports {clkin6}]
-create_clock -period "4.00000 ns"   -name rx_device_clk       [get_ports {clkin10}]
+create_clock -period "4.08163 ns"   -name ref_clk             [get_ports {fpga_refclk_in}]
+create_clock -period "4.08163 ns"   -name tx_device_clk       [get_ports {clkin6}]
+create_clock -period "4.08163 ns"   -name rx_device_clk       [get_ports {clkin10}]
 
 derive_clock_uncertainty
 
