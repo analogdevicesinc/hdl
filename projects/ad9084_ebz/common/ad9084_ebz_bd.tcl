@@ -34,7 +34,7 @@ if {$TDD_SUPPORT && !$SHARED_DEVCLK} {
 }
 
 set FSRC_ACCUM_WIDTH [ expr { [info exists ad_project_params(FSRC_ACCUM_WIDTH)] \
-                            ? $ad_project_params(FSRC_ACCUM_WIDTH) : 64 } ]
+                            ? $ad_project_params(FSRC_ACCUM_WIDTH) : 56 } ]
 
 if {$FSRC_ENABLE} {
   source $ad_hdl_dir/library/axi_fsrc/axi_fsrc.tcl
