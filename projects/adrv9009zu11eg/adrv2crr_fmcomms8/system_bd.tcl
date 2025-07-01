@@ -122,8 +122,7 @@ ad_xcvrpll  axi_adrv9009_som_obs_xcvr/up_pll_rst util_adrv9009_som_xcvr/up_cpll_
 ad_xcvrpll  axi_adrv9009_som_obs_xcvr/up_pll_rst util_adrv9009_som_xcvr/up_cpll_rst_15
 
 ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.DMA_TYPE_SRC 1
-# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CYCLIC 1
-# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.CACHE_COHERENT 1
+# ad_ip_parameter axi_adrv9009_som_rx_dma CONFIG.SYNC_TRANSFER_START 1
 ad_connect sys_dma_clk axi_adrv9009_som_rx_dma/s_axis_aclk
 
 ad_connect ddr4_0/c0_ddr4_aresetn ddr4_0_rstgen/peripheral_aresetn
@@ -150,26 +149,27 @@ ad_connect sys_dma_clk $adc_data_offload_name/m_axis_aclk
 ad_connect sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
 
 # Reset pack cores
-ad_ip_instance util_reduced_logic cpack_rst_logic
-ad_ip_parameter cpack_rst_logic config.c_operation {or}
-ad_ip_parameter cpack_rst_logic config.c_size {3}
+# ad_ip_instance util_reduced_logic cpack_rst_logic
+# ad_ip_parameter cpack_rst_logic config.c_operation {or}
+# ad_ip_parameter cpack_rst_logic config.c_size {3}
 
-ad_ip_instance util_vector_logic rx_do_rstout_logic
-ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
-ad_ip_parameter rx_do_rstout_logic config.c_size {1}
+# ad_ip_instance util_vector_logic rx_do_rstout_logic
+# ad_ip_parameter rx_do_rstout_logic config.c_operation {not}
+# ad_ip_parameter rx_do_rstout_logic config.c_size {1}
 
-ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
+# ad_connect $adc_data_offload_name/s_axis_tready rx_do_rstout_logic/Op1
 
-ad_ip_instance xlconcat cpack_reset_sources
-ad_ip_parameter cpack_reset_sources config.num_ports {3}
+# ad_ip_instance xlconcat cpack_reset_sources
+# ad_ip_parameter cpack_reset_sources config.num_ports {3}
 
 ad_disconnect util_som_rx_cpack/reset rx_adrv9009_som_tpl_core/adc_rst
-ad_connect core_clk_b_rstgen/peripheral_reset cpack_reset_sources/in0
-ad_connect rx_adrv9009_som_tpl_core/adc_rst cpack_reset_sources/in1
-ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
+ad_connect core_clk_b_rstgen/peripheral_reset util_som_rx_cpack/reset
+# ad_connect core_clk_b_rstgen/peripheral_reset cpack_reset_sources/in0
+# ad_connect rx_adrv9009_som_tpl_core/adc_rst cpack_reset_sources/in1
+# ad_connect rx_do_rstout_logic/res cpack_reset_sources/in2
 
-ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
-ad_connect cpack_rst_logic/res util_som_rx_cpack/reset
+# ad_connect cpack_reset_sources/dout cpack_rst_logic/op1
+# ad_connect cpack_rst_logic/res util_som_rx_cpack/reset
 
 ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
