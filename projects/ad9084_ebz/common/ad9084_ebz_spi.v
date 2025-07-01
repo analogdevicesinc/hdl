@@ -37,7 +37,8 @@
 
 module ad9084_ebz_spi #(
 
-  parameter NUM_OF_SLAVES = 8
+  parameter NUM_OF_SLAVES = 8,
+  parameter IS_4WIRE = 8'b00000001
 ) (
   input  [NUM_OF_SLAVES-1:0] spi_csn,
   input                      spi_clk,
@@ -57,6 +58,8 @@ module ad9084_ebz_spi #(
 
   wire            spi_csn_s;
   wire            spi_enable_s;
+
+  wire [NUM_OF_SLAVES-1:0] spi_csn_4wire;
 
   // check on rising edge and change on falling edge
 
@@ -87,7 +90,15 @@ module ad9084_ebz_spi #(
 
   // io buffer
 
-  assign spi_miso = (spi_csn[0] == 1'b0) ? spi_miso_in : spi_sdio;
+  genvar i;
+
+  generate
+    for (i = 0; i < NUM_OF_SLAVES ; i = i + 1) begin
+      assign spi_csn_4wire[i] = (IS_4WIRE[i] == 1'b1) ? spi_csn[i] : 1'b1;
+    end
+  endgenerate
+
+  assign spi_miso = (&spi_csn_4wire == 1'b0) ? spi_miso_in : spi_sdio;
   assign spi_sdio = (spi_enable_s == 1'b1) ? 1'bz : spi_mosi;
 
 endmodule

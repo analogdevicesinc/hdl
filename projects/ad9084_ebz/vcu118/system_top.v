@@ -319,7 +319,8 @@ module system_top #(
   assign spi2_sclk    = spi_clk;
 
   ad9084_ebz_spi #(
-    .NUM_OF_SLAVES(2)
+    .NUM_OF_SLAVES(2),
+    .IS_4WIRE(2'b01)
   ) i_spi (
     .spi_csn (spi_csn[1:0]),
     .spi_clk (spi_clk),
