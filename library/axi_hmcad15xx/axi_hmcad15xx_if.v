@@ -59,11 +59,15 @@ module axi_hmcad15xx_if #(
   input   [ 1:0]         resolution,
   input   [ 2:0]         mode,
 
+  input                  adc_pattern_check_enable,
+  input   [7:0]          pattern_value,
+
   // data path interface
 
   output                 adc_clk,
   output                 adc_valid,
-  output    [127:0]      adc_data,
+  output     [127:0]     adc_data,
+  output reg [ 3:0]      adc_pattern_ch_mismatch,
 
   // delay control signals
   input                                     up_clk,
@@ -124,86 +128,87 @@ IBUFDS i_clk_in_ibuf(
     .REGRST (1'b0)
   );
 
- BUFR #(
-   .BUFR_DIVIDE("4")
- ) i_div_clk_buf (
-   .CLR(1'b0),
-   .CE(1'b1),
-   .I(clk_in_s_idelay),
-   .O(adc_clk_div));
+  BUFR #(
+    .BUFR_DIVIDE("4")
+  ) i_div_clk_buf (
+    .CLR(1'b0),
+    .CE(1'b1),
+    .I(clk_in_s_idelay),
+    .O(adc_clk_div));
 
 
   assign adc_clk = adc_clk_div;
 
-wire [8:0] data_s0;
-wire [8:0] data_s1;
-wire [8:0] data_s2;
-wire [8:0] data_s3;
-wire [8:0] data_s4;
-wire [8:0] data_s5;
-wire [8:0] data_s6;
-wire [8:0] data_s7;
+  wire [8:0] data_s0;
+  wire [8:0] data_s1;
+  wire [8:0] data_s2;
+  wire [8:0] data_s3;
+  wire [8:0] data_s4;
+  wire [8:0] data_s5;
+  wire [8:0] data_s6;
+  wire [8:0] data_s7;
 
 
   // Min 2 div_clk cycles once div_clk is running after deassertion of sync
   // Control externally the reset of serdes for precise timing
 
-reg  [5:0]  serdes_reset = 6'b000110;
-reg  [1:0]  serdes_valid = 2'b00;
+  reg  [5:0]  serdes_reset = 6'b000110;
+  reg  [1:0]  serdes_valid = 2'b00;
 
-wire serdes_reset_s;
+  wire serdes_reset_s;
 
 
-always @(posedge adc_clk_div or posedge adc_rst) begin
-  if(adc_rst) begin
-    serdes_reset <= 6'b000110;
-  end else begin
-    serdes_reset <= {serdes_reset[4:0],1'b0};
+  always @(posedge adc_clk_div or posedge adc_rst) begin
+    if(adc_rst) begin
+      serdes_reset <= 6'b000110;
+    end else begin
+      serdes_reset <= {serdes_reset[4:0],1'b0};
+    end
   end
-end
-assign serdes_reset_s = serdes_reset[5];
 
-always @(posedge adc_clk_div) begin
-  if(serdes_reset_s) begin
-    serdes_valid <= 2'b00;
-  end else begin
-    serdes_valid <= {serdes_valid[0],1'b1};
+  assign serdes_reset_s = serdes_reset[5];
+
+  always @(posedge adc_clk_div) begin
+    if(serdes_reset_s) begin
+      serdes_valid <= 2'b00;
+    end else begin
+      serdes_valid <= {serdes_valid[0],1'b1};
+    end
   end
-end
 
-ad_serdes_in # (
-  .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
-  .IODELAY_GROUP(IO_DELAY_GROUP),
-  .IODELAY_CTRL(IODELAY_CTRL),
-  .DATA_WIDTH(NUM_LANES),
-  .DRP_WIDTH(DRP_WIDTH),
-  .EXT_SERDES_RESET(1),
-  .SERDES_FACTOR(8),
-  .DDR_OR_SDR_N(1),
-  .CMOS_LVDS_N(0)
-) ad_serdes_data_inst (
-  .rst(serdes_reset_s),
-  .ext_serdes_rst(serdes_reset_s),
-  .clk(clk_in_s_idelay),
-  .div_clk(adc_clk_div),
-  .data_s0(data_s0),
-  .data_s1(data_s1),
-  .data_s2(data_s2),
-  .data_s3(data_s3),
-  .data_s4(data_s4),
-  .data_s5(data_s5),
-  .data_s6(data_s6),
-  .data_s7(data_s7),
-  .data_in_p({fclk_p, data_in_p}),
-  .data_in_n({fclk_n, data_in_n}),
-  .up_clk(up_clk),
-  .up_dld(up_dld),
-  .up_dwdata(up_dwdata),
-  .up_drdata(up_drdata),
-  .delay_clk(delay_clk),
-  .delay_rst(delay_rst),
-  .delay_locked(delay_locked)
-);
+  ad_serdes_in # (
+    .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
+    .IODELAY_GROUP(IO_DELAY_GROUP),
+    .IODELAY_CTRL(IODELAY_CTRL),
+    .DATA_WIDTH(NUM_LANES),
+    .DRP_WIDTH(DRP_WIDTH),
+    .EXT_SERDES_RESET(1),
+    .SERDES_FACTOR(8),
+    .DDR_OR_SDR_N(1),
+    .CMOS_LVDS_N(0)
+  ) ad_serdes_data_inst (
+    .rst(serdes_reset_s),
+    .ext_serdes_rst(serdes_reset_s),
+    .clk(clk_in_s_idelay),
+    .div_clk(adc_clk_div),
+    .data_s0(data_s0),
+    .data_s1(data_s1),
+    .data_s2(data_s2),
+    .data_s3(data_s3),
+    .data_s4(data_s4),
+    .data_s5(data_s5),
+    .data_s6(data_s6),
+    .data_s7(data_s7),
+    .data_in_p({fclk_p, data_in_p}),
+    .data_in_n({fclk_n, data_in_n}),
+    .up_clk(up_clk),
+    .up_dld(up_dld),
+    .up_dwdata(up_dwdata),
+    .up_drdata(up_drdata),
+    .delay_clk(delay_clk),
+    .delay_rst(delay_rst),
+    .delay_locked(delay_locked)
+  );
 
   wire [7:0] frame_data;
   wire [7:0] serdes_data [0:7];
@@ -217,8 +222,8 @@ ad_serdes_in # (
   assign {frame_data[1],serdes_data[7][1],serdes_data[6][1],serdes_data[5][1],serdes_data[4][1],serdes_data[3][1],serdes_data[2][1],serdes_data[1][1],serdes_data[0][1]} = data_s6;  //
   assign {frame_data[0],serdes_data[7][0],serdes_data[6][0],serdes_data[5][0],serdes_data[4][0],serdes_data[3][0],serdes_data[2][0],serdes_data[1][0],serdes_data[0][0]} = data_s7;  // oldest bit received
 
-wire [15:0] data_out [0:7];
-wire [ 7:0] data_en;
+  wire [15:0] data_out [0:7];
+  wire [ 7:0] data_en;
 
   generate
     genvar i;
@@ -234,51 +239,97 @@ wire [ 7:0] data_en;
       end
   endgenerate
 
- //==========================================================================
- // Arrange samples in capture format
- //==========================================================================
+  reg               wr_en8_reg;
+  reg               wr_en14_reg;
+  reg  [127:0]      wr_data14_reg;
+  reg               wr_en_reg;
+  reg  [127:0]      wr_data_int;
+  reg  [127:0]      wr_data_reg;
 
-always @(posedge adc_clk_div) begin
-if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
-     wr_data_int <= {data_out[6][ 7:0], data_out[4][ 7:0], data_out[2][ 7:0], data_out[0][ 7:0],data_out[7][ 7:0], data_out[5][ 7:0], data_out[3][ 7:0], data_out[1][ 7:0],
-                     data_out[6][15:8], data_out[4][15:8], data_out[2][15:8], data_out[0][15:8],data_out[7][15:8], data_out[5][15:8], data_out[3][15:8], data_out[1][15:8]};
+  //==========================================================================
+  // Arrange samples in capture format
+  //==========================================================================
+
+  always @(posedge adc_clk_div) begin
+  if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
+      wr_data_int <= {data_out[6][ 7:0], data_out[4][ 7:0], data_out[2][ 7:0], data_out[0][ 7:0],data_out[7][ 7:0], data_out[5][ 7:0], data_out[3][ 7:0], data_out[1][ 7:0],
+                      data_out[6][15:8], data_out[4][15:8], data_out[2][15:8], data_out[0][15:8],data_out[7][15:8], data_out[5][15:8], data_out[3][15:8], data_out[1][15:8]};
   end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
-     wr_data_int <= {data_out[7][ 7:0], data_out[3][ 7:0], data_out[6][ 7:0], data_out[2][ 7:0], data_out[5][ 7:0], data_out[1][ 7:0], data_out[4][ 7:0], data_out[0][ 7:0],
-                     data_out[7][15:8], data_out[3][15:8], data_out[6][15:8], data_out[2][15:8], data_out[5][15:8], data_out[1][15:8], data_out[4][15:8], data_out[0][15:8]};
+      wr_data_int <= {data_out[7][ 7:0], data_out[3][ 7:0], data_out[6][ 7:0], data_out[2][ 7:0], data_out[5][ 7:0], data_out[1][ 7:0], data_out[4][ 7:0], data_out[0][ 7:0],
+                      data_out[7][15:8], data_out[3][15:8], data_out[6][15:8], data_out[2][15:8], data_out[5][15:8], data_out[1][15:8], data_out[4][15:8], data_out[0][15:8]};
   end else if((resolution == 2'b00) && (mode == 3'b001)) begin  //  8-bit single channel
-     wr_data_int <= {data_out[7][ 7:0], data_out[6][ 7:0], data_out[5][ 7:0], data_out[4][ 7:0],
-                     data_out[3][ 7:0], data_out[2][ 7:0], data_out[1][ 7:0], data_out[0][ 7:0],
-                     data_out[7][15:8], data_out[6][15:8], data_out[5][15:8], data_out[4][15:8],
-                     data_out[3][15:8], data_out[2][15:8], data_out[1][15:8], data_out[0][15:8]};
+      wr_data_int <= {data_out[7][ 7:0], data_out[6][ 7:0], data_out[5][ 7:0], data_out[4][ 7:0],
+                      data_out[3][ 7:0], data_out[2][ 7:0], data_out[1][ 7:0], data_out[0][ 7:0],
+                      data_out[7][15:8], data_out[6][15:8], data_out[5][15:8], data_out[4][15:8],
+                      data_out[3][15:8], data_out[2][15:8], data_out[1][15:8], data_out[0][15:8]};
   end
-end
+  end
 
-reg               wr_en8_reg;
-reg               wr_en14_reg;
-reg  [127:0]      wr_data14_reg;
-reg               wr_en_reg;
-reg  [127:0]      wr_data_int;
-reg  [127:0]      wr_data_reg;
+ //==========================================================================
+ // Check custom sequence mechansim
+ //==========================================================================
+  integer j;
 
- always @(posedge adc_clk_div) begin
-    if(adc_rst) begin
-       wr_en8_reg    <= 1'b0;
-       wr_en14_reg   <= 1'b0;
-       wr_data14_reg <= 128'b0;
-    end else if(data_en[0]) begin
-       wr_en8_reg    <= ~wr_en8_reg;
-       wr_en14_reg   <= ~wr_en14_reg;
-       wr_data14_reg <= {wr_data14_reg[63:0], wr_data_int[127:64]};
+  always @(posedge adc_clk_div) begin
+    if (adc_pattern_check_enable == 1'b1 && adc_valid == 1'b1) begin
+      for (j=0; j < 8; j = j + 1) begin
+
+        if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
+
+          if (j%2 != 0 && data_out[j][15:8] != pattern_value) begin
+            adc_pattern_ch_mismatch[0] <= 1'b1; // pattern mismatch dected on channel 0
+          end
+          if (j%2 != 0 && data_out[j][7:0] != pattern_value) begin
+            adc_pattern_ch_mismatch[1] <= 1'b1; // pattern mismatch dected on channel 1
+          end
+          if (j%2 == 0 && data_out[j][15:8] != pattern_value) begin
+            adc_pattern_ch_mismatch[2] <= 1'b1; // pattern mismatch dected on channel 2
+          end
+          if (j%2 == 0 && data_out[j][7:0] != pattern_value) begin
+            adc_pattern_ch_mismatch[3] <= 1'b1; // pattern mismatch dected on channel 3
+          end
+
+        end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
+
+          if(data_out[j][15:8] != pattern_value) begin
+            adc_pattern_ch_mismatch[0] <= 1'b1; // pattern mismatch dected on channel 0
+          end;
+          if(data_out[j][7:0] != pattern_value) begin
+            adc_pattern_ch_mismatch[1] <= 1'b1; // pattern mismatch dected on channel 1
+          end;
+
+        end else if((resolution == 2'b00) && (mode == 3'b001)) begin  //  8-bit single channel
+
+          if (data_out[j] != {pattern_value, pattern_value}) begin
+            adc_pattern_ch_mismatch[0] <= 1'b1; // pattern mismatch dected on channel 0
+          end
+
+        end
+      end
+    end else begin
+      adc_pattern_ch_mismatch <= 4'b0000;
     end
- end
+  end
 
- always @(posedge adc_clk_div) begin
+  always @(posedge adc_clk_div) begin
+    if(adc_rst) begin
+        wr_en8_reg    <= 1'b0;
+        wr_en14_reg   <= 1'b0;
+        wr_data14_reg <= 128'b0;
+    end else if(data_en[0]) begin
+        wr_en8_reg    <= ~wr_en8_reg;
+        wr_en14_reg   <= ~wr_en14_reg;
+        wr_data14_reg <= {wr_data14_reg[63:0], wr_data_int[127:64]};
+    end
+  end
+
+  always @(posedge adc_clk_div) begin
     wr_en_reg   <= data_en[0];
     wr_data_reg <= wr_data_int;
- end
+  end
 
- assign wr_clk      = adc_clk_div;
- assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
- assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
+  assign wr_clk      = adc_clk_div;
+  assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
+  assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
 
 endmodule
