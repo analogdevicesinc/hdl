@@ -6,6 +6,7 @@
    - [EVAL-AD5782-ARDZ](https://www.analog.com/eval-ad5782ardz)
 - System documentation: TO BE ADDED
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad57xx_ardz/index.html
+- Evaluation board VIO: 3.3V
 
 ## Supported parts
 
