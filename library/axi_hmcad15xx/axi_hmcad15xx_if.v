@@ -57,11 +57,15 @@ module axi_hmcad15xx_if #(
   input   [ 1:0]         resolution,
   input   [ 2:0]         mode,
 
+  input                  adc_pattern_check_enable,
+  input   [7:0]          pattern_value,
+
   // data path interface
 
   output                 adc_clk,
   output                 adc_valid,
-  output    [127:0]      adc_data,
+  output     [127:0]     adc_data,
+  output reg [ 3:0]      adc_pattern_ch_mismatch,
 
   // delay control signals
   input                                     up_clk,
@@ -169,9 +173,6 @@ ad_serdes_in # (
   .delay_locked(delay_locked)
 );
 
-
-
-
   wire [7:0] frame_data;
   wire [7:0] serdes_data [0:7];
 
@@ -201,6 +202,13 @@ generate
     end
   endgenerate
 
+reg               wr_en8_reg;
+reg               wr_en14_reg;
+reg  [127:0]      wr_data14_reg;
+reg               wr_en_reg;
+reg  [127:0]      wr_data_int;
+reg  [127:0]      wr_data_reg;
+
  //==========================================================================
  // Arrange samples in capture format
  //==========================================================================
@@ -220,12 +228,55 @@ if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
   end
 end
 
-reg               wr_en8_reg;
-reg               wr_en14_reg;
-reg  [127:0]      wr_data14_reg;
-reg               wr_en_reg;
-reg  [127:0]      wr_data_int;
-reg  [127:0]      wr_data_reg;
+ //==========================================================================
+ // Check custom sequence mechansim
+ //==========================================================================
+  integer j;
+
+  always @(posedge adc_clk_div) begin
+    if (adc_pattern_check_enable == 1'b1 && adc_valid == 1'b1) begin
+      for (j=0; j < 8; j = j + 1) begin
+
+        if((resolution == 2'b00) && (mode == 3'b100)) begin  //  8-bit quad channel
+
+          if (j%2 != 0 && data_out[j][15:8] != pattern_value) begin
+            //adc_pattern_ch_mismatch <= adc_pattern_ch_mismatch | 4'b0001; // pattern mismatch dected on channel 0
+            adc_pattern_ch_mismatch[0] <= 1'b1;
+          end
+          if (j%2 != 0 && data_out[j][7:0] != pattern_value) begin
+            //adc_pattern_ch_mismatch <= adc_pattern_ch_mismatch | 4'b0010; // pattern mismatch dected on channel 1
+            adc_pattern_ch_mismatch[1] <= 1'b1;
+          end
+          if (j%2 == 0 && data_out[j][15:8] != pattern_value) begin
+            //adc_pattern_ch_mismatch <= adc_pattern_ch_mismatch | 4'b0100; // pattern mismatch dected on channel 2
+            adc_pattern_ch_mismatch[2] <= 1'b1;
+          end
+          if (j%2 == 0 && data_out[j][7:0] != pattern_value) begin
+            //adc_pattern_ch_mismatch <= adc_pattern_ch_mismatch | 4'b1000; // pattern mismatch dected on channel 3
+            adc_pattern_ch_mismatch[3] <= 1'b1;
+          end
+
+        end else if((resolution == 2'b00) && (mode == 3'b010)) begin  //  8-bit dual channel
+
+          if(data_out[j][15:8] != pattern_value) begin
+            adc_pattern_ch_mismatch[0] <= 1'b1; // pattern mismatch dected on channel 0
+          end;
+          if(data_out[j][7:0] != pattern_value) begin
+            adc_pattern_ch_mismatch[1] <= 1'b1; // pattern mismatch dected on channel 1
+          end;
+
+        end else if((resolution == 2'b00) && (mode == 3'b001)) begin  //  8-bit single channel
+
+          if (data_out[j] != {pattern_value, pattern_value}) begin
+            adc_pattern_ch_mismatch[0] <= 1'b1; // pattern mismatch dected on channel 0
+          end
+
+        end
+      end
+    end else begin
+      adc_pattern_ch_mismatch <= 4'b0000;
+    end
+  end
 
  always @(posedge adc_clk_div) begin
     if(adc_rst) begin
@@ -247,7 +298,5 @@ reg  [127:0]      wr_data_reg;
  assign wr_clk      = adc_clk_div;
  assign adc_valid   = (resolution == 2'b00) ? wr_en8_reg  : (resolution != 2'b11) ? wr_en_reg : (wr_en14_reg && data_en[0]);
  assign adc_data    = (resolution != 2'b11) ? wr_data_reg :  wr_data14_reg;
-
-
 
 endmodule

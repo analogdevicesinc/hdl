@@ -43,6 +43,7 @@ module axi_hmcad15xx #(
   parameter   SPEED_GRADE = 0,
   parameter   DEV_PACKAGE = 0,
   parameter   ADC_DATAPATH_DISABLE = 0,
+  parameter   POLARITY_MASK = 8'h00,
   parameter   IO_DELAY_GROUP = "adc_if_delay_group"
 ) (
 
@@ -62,9 +63,6 @@ module axi_hmcad15xx #(
   output          adc_valid,
 
   output  [127:0] adc_data,
-
-
-
 
   output          adc_clk,
   output          adc_reset,
@@ -105,7 +103,6 @@ wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_dwdata;
 wire  [DELAY_CTRL_DRP_WIDTH*DELAY_CTRL_NUM_LANES-1:0]  up_drdata;
 wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
-
   // internal registers
 
   reg  [31:0] up_rdata = 'd0;
@@ -135,10 +132,11 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
 
   wire  [7:0] adc_enable;
   wire  [4:0] adc_num_lanes;
-  wire        adc_crc_enable;
 
   wire        delay_rst;
 
+  wire        adc_pattern_check_enable;
+  wire  [3:0] adc_pattern_ch_mismatch;
 
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
@@ -202,7 +200,7 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
         .adc_or (1'b0),
         .adc_read_data ('d0),
         .adc_status_header(),
-        .adc_crc_err(),
+        .adc_crc_err(adc_pattern_ch_mismatch[i]),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
         .up_adc_or (),
@@ -239,9 +237,12 @@ wire  [DELAY_CTRL_NUM_LANES-1:0]                       up_dld;
   wire [7:0]       adc_custom_control;
   wire [1:0]       resolution;
   wire [2:0]       mode;
+  wire [31:0]      adc_config_write_s;
+  wire  [7:0]      pattern_value;
 
 assign resolution = adc_custom_control[1:0];
 assign mode       = adc_custom_control[4:2];
+assign pattern_value = adc_config_write_s[7:0];
 
   axi_hmcad15xx_if  #(
     .FPGA_TECHNOLOGY(FPGA_TECHNOLOGY),
@@ -259,6 +260,9 @@ assign mode       = adc_custom_control[4:2];
     .data_in_n (data_in_n),
     .adc_clk (adc_clk_s),
     .adc_valid (adc_valid),
+    .adc_pattern_ch_mismatch(adc_pattern_ch_mismatch),
+    .adc_pattern_check_enable(adc_pattern_check_enable),
+    .pattern_value (pattern_value),
     .adc_data (adc_data),
     .resolution(resolution),
     .mode(mode),
@@ -268,8 +272,6 @@ assign mode       = adc_custom_control[4:2];
     .delay_locked(delay_locked));
 
   // adc up common
-
-
 
   up_adc_common #(
     .ID(ID)
@@ -295,7 +297,7 @@ assign mode       = adc_custom_control[4:2];
     .adc_symb_op(),
     .adc_symb_8_16b(),
     .adc_num_lanes(),
-    .adc_crc_enable(),
+    .adc_crc_enable(adc_pattern_check_enable),
     .up_pps_rcounter (32'b0),
     .up_pps_status (1'b0),
     .up_pps_irq_mask (),
@@ -311,7 +313,7 @@ assign mode       = adc_custom_control[4:2];
     .up_drp_rdata (32'd0),
     .up_drp_ready (1'd0),
     .up_drp_locked (1'd1),
-    .adc_config_wr (),
+    .adc_config_wr (adc_config_write_s),
     .adc_config_ctrl (),
     .adc_config_rd ('d0),
     .adc_ctrl_status ('d0),
