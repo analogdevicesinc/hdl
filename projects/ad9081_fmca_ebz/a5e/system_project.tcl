@@ -54,6 +54,7 @@ adi_project ad9081_fmca_ebz_a5e [list \
   TX_NUM_LINKS      [get_env_param TX_NUM_LINKS       1 ] \
   RX_KS_PER_CHANNEL [get_env_param RX_KS_PER_CHANNEL  1 ] \
   TX_KS_PER_CHANNEL [get_env_param TX_KS_PER_CHANNEL  1 ] \
+  DDS_DISABLED      [get_env_param DDS_DISABLED       1 ] \
 ]
 
 source $ad_hdl_dir/projects/common/a5e/a5e_system_assign.tcl

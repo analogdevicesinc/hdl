@@ -7,6 +7,9 @@ set JESD_MODE [ expr { [info exists ad_project_params(JESD_MODE)] \
                           ? $ad_project_params(JESD_MODE) : "8B10B" } ]
 set LINK_MODE [expr {$JESD_MODE == "8B10B"} ? 1 : 2]
 
+set DDS_DISABLED [ expr { [info exists ad_project_params(DDS_DISABLED)] \
+                          ? $ad_project_params(DDS_DISABLED) : 0 } ]
+
 set EXTERNAL_PHY [expr {$TRANSCEIVER_TYPE == "E-Tile"} ? 1 : 0]
 
 # RX parameters
@@ -178,7 +181,7 @@ set_instance_parameter_value mxfe_tx_tpl {BITS_PER_SAMPLE} $TX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {CONVERTER_RESOLUTION} $TX_SAMPLE_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {OCTETS_PER_BEAT} $TX_TPL_DATA_PATH_WIDTH
 set_instance_parameter_value mxfe_tx_tpl {DMA_BITS_PER_SAMPLE} $TX_DMA_SAMPLE_WIDTH
-set_instance_parameter_value mxfe_tx_tpl {DATAPATH_DISABLE} {false}
+set_instance_parameter_value mxfe_tx_tpl {DATAPATH_DISABLE} $DDS_DISABLED
 
 # pack(s) & unpack(s)
 

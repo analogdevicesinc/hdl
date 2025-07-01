@@ -53,7 +53,8 @@ module system_top #(
   parameter TX_JESD_NP         = 16,
   parameter TX_NUM_LINKS       = 1,
   parameter RX_KS_PER_CHANNEL  = 32,
-  parameter TX_KS_PER_CHANNEL  = 32
+  parameter TX_KS_PER_CHANNEL  = 32,
+  parameter DDS_DISABLED       = 0
 ) (
 
     // clock and resets
