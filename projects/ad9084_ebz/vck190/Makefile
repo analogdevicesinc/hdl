@@ -27,6 +27,7 @@ LIB_DEPS += axi_dmac
 LIB_DEPS += axi_fsrc/axi_fsrc_rx
 LIB_DEPS += axi_fsrc/axi_fsrc_tx
 LIB_DEPS += axi_fsrc/axi_fsrc_sequencer
+LIB_DEPS += axi_adf4030
 LIB_DEPS += axi_hsci
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
