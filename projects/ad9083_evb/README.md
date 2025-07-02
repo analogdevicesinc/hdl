@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-AD9083](https://www.analog.com/eval-ad9083)
 - System documentation: https://wiki.analog.com/resources/eval/ad9083
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9083_evb/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
