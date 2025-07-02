@@ -90,6 +90,8 @@ Configuration Parameters
      - If enabled the CDC circuitry for the external sync signal is added.
    * - HAS_BYPASS
      - If enabled the bypass circuitry is added.
+   * - ASYNC_CLK
+     - If enabled the FIFO is connected to asynchronous clocks.
 
 Interface
 --------------------------------------------------------------------------------

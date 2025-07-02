@@ -11,7 +11,8 @@ proc ad_data_offload_create {instance_name
                              destination_dwidth
                              {axi_data_width 256}
                              {axi_addr_width 32}
-                             {shared_devclk 0}} {
+                             {shared_devclk 0}
+                             {async_clk 1}} {
 
   global ad_hdl_dir
   global sys_cpu_resetn
@@ -54,6 +55,7 @@ proc ad_data_offload_create {instance_name
       DST_DATA_WIDTH $destination_dwidth \
       DST_CYCLIC_EN $datapath_type \
       SYNC_EXT_ADD_INTERNAL_CDC [expr {!$shared_devclk}] \
+      ASYNC_CLK $async_clk \
     ]
 
     if {$mem_type == 0} {
