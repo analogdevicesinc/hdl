@@ -75,6 +75,16 @@ set if [ipl::create_interface \
 ipl::generate_interface $if
 
 set if [ipl::create_interface \
+    -vlnv {analog.com:ADI:spi_engine_interconnect_ctrl:1.0} \
+    -directConnection true \
+    -isAddressable false \
+    -description "ADI SPI Engine Interconnect Control Interface" \
+    -ports {
+        {-n INTERCONNECT_DIR -p required -w 1 -d out}
+    }]
+ipl::generate_interface $if
+
+set if [ipl::create_interface \
     -vlnv {analog.com:ADI:spi_master:1.0} \
     -directConnection true \
     -isAddressable false \
