@@ -1,4 +1,8 @@
-# AD469X-FMC/CORAZ7S HDL Project
+<!-- no_dts, no_no_os -->
+
+# AD469X-EVB/CORAZ7S HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
