@@ -297,7 +297,8 @@ if {$INTF_CFG != "TX"} {
                         $adc_data_width \
                         $adc_data_width \
                         $do_axi_data_width \
-                        $SHARED_DEVCLK
+                        $SHARED_DEVCLK \
+                        0
 
   ad_ip_instance axi_dmac axi_mxfe_rx_dma
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_TYPE_SRC 1
@@ -366,7 +367,8 @@ if {$INTF_CFG != "RX"} {
                         $dac_data_width \
                         $dac_data_width \
                         $do_axi_data_width \
-                        $SHARED_DEVCLK
+                        $SHARED_DEVCLK \
+                        0
 
   ad_ip_instance axi_dmac axi_mxfe_tx_dma
   ad_ip_parameter axi_mxfe_tx_dma CONFIG.DMA_TYPE_SRC 0
