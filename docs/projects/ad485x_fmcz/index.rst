@@ -16,12 +16,6 @@ Supported boards
 
 - :adi:`EVAL-AD4858`
 - :adi:`EVAL-AD4857`
-- :adi:`EVAL-AD4856`
-- :adi:`EVAL-AD4855`
-- :adi:`EVAL-AD4854`
-- :adi:`EVAL-AD4853`
-- :adi:`EVAL-AD4852`
-- :adi:`EVAL-AD4851`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -44,20 +38,6 @@ Supported carriers
 | :adi:`EVAL-AD4858` | ZedBoard | FMC LPC  |
 +--------------------+          |          |
 | :adi:`EVAL-AD4857` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4856` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4855` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4854` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4853` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4852` |          |          |
-+--------------------+          |          |
-| :adi:`EVAL-AD4851` |          |          |
-+--------------------+----------+----------+
-
 Block design
 -------------------------------------------------------------------------------
 
@@ -76,22 +56,6 @@ AD4857_FMCZ Block diagram
    :width: 800
    :align: center
    :alt: AD4857_FMCZ/ZED block diagram
-
-AD4854_FMCZ Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: ad4854_fmcz_block_diagram.svg
-   :width: 800
-   :align: center
-   :alt: AD4854_FMCZ/ZED block diagram
-
-AD4851_FMCZ Block diagram
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: ad4851_fmcz_block_diagram.svg
-   :width: 800
-   :align: center
-   :alt: AD4851_FMCZ/ZED block diagram
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,16 +216,6 @@ HDL related
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4858-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4858-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4857-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4857-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4856-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4856-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4855-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4855-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4854-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4854-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4853-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4853-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4852-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4852-fmcz.dts>`
-- :git-linux:`Linux device tree zynq-zed-adv7511-ad4851-fmcz.dts <arch/arm/boot/dts/zynq-zed-adv7511-ad4851-fmcz.dts>`
-- :git-linux:`Linux driver ad485x.c <drivers/iio/adc/ad485x.c>`
 
 .. include:: ../common/more_information.rst
 
