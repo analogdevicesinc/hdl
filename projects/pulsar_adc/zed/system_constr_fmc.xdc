@@ -1,13 +1,13 @@
 ###############################################################################
-## Copyright (C) 2021-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports pulsar_spi_sdi]       ; ## D8   FMC_LA01_CC_P  IO_L14P_T2_SRCC_34
-set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS25 IOB TRUE} [get_ports pulsar_spi_sclk]      ; ## G6   FMC_LA00_CC_P  IO_L13P_T2_MRCC_34
+set_property -dict {PACKAGE_PIN N19 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_spi_sdi]       ; ## D8   FMC_LA01_CC_P  IO_L14P_T2_SRCC_34
+set_property -dict {PACKAGE_PIN M19 IOSTANDARD LVCMOS33 IOB TRUE} [get_ports pulsar_spi_sclk]      ; ## G6   FMC_LA00_CC_P  IO_L13P_T2_MRCC_34
 
-set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS25} [get_ports pulsar_gpio[0]]                ; ## G10  FMC_LA03_N     IO_L16N_T2_34
-set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS25} [get_ports pulsar_gpio[1]]                ; ## D09  FMC_LA01_CC_N
+set_property -dict {PACKAGE_PIN P22 IOSTANDARD LVCMOS33} [get_ports pulsar_gpio[0]]                ; ## G10  FMC_LA03_N     IO_L16N_T2_34
+set_property -dict {PACKAGE_PIN N20 IOSTANDARD LVCMOS33} [get_ports pulsar_gpio[1]]                ; ## D09  FMC_LA01_CC_N
 
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
 

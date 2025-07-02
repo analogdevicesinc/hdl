@@ -1,6 +1,10 @@
-# PULSAR-ADC/Zed HDL Project
+<!-- no_build_example, no_no_os-->
+
+# PULSAR-ADC/ZED HDL Project
 
 ## Building the project
+
+- VIO with which it was tested in hardware: 3.3V
 
 :warning: Make sure that you set up your required ADC resolution in [../common/pulsar_adc_bd.tcl](../common/pulsar_adc_bd.tcl)
 
