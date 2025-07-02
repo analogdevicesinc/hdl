@@ -1,4 +1,8 @@
-# AD469X-FMC/ZED HDL Project
+<!-- no_no_os -->
+
+# AD469X-EVB/ZED HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 

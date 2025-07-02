@@ -5,6 +5,8 @@
    - EVAL-AD4692
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad469x
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad469x_evb/index.html
+- Evaluation board VADJ range for EVAL-AD4696: 1.2V - 1.8V
+- Evaluation board VIO for EVAL-AD4692: 3.3V
 
 ## Supported parts
 

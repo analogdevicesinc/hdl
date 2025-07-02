@@ -1,4 +1,8 @@
-# AD469X-FMC/DE10NANO HDL Project
+<!-- no_dts, no_no_os -->
+
+# AD469X-EVB/DE10NANO HDL Project
+
+- VIO with which it was tested in hardware: 3.3V
 
 ## Building the project
 
