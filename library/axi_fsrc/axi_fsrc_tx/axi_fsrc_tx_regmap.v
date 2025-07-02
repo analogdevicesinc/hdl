@@ -164,6 +164,7 @@ module axi_fsrc_tx_regmap #(
           14'h9:   up_rdata <= {28'b0, up_accum_set_val_addr_s};
           14'ha:   up_rdata <= up_accum_set_val_s;
           14'hb:   up_rdata <= up_accum_set_val_2_s;
+          14'hc:   up_rdata <= ACCUM_WIDTH;
           default: up_rdata <= 0;
         endcase
       end else begin
