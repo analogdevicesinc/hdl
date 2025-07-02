@@ -24,6 +24,12 @@ The overwritable parameters from the environment are:
   - 1 - 3 wire SPI
   
 - DEVICE - selects the device to be used:
+  - AD4851
+  - AD4852
+  - AD4853
+  - AD4854
+  - AD4855
+  - AD4856
   - AD4857
   - AD4858 (default)
 
