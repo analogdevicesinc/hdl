@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2021-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2021-2025 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -187,17 +187,20 @@ foreach {k v} { \
     "HAS_BYPASS" "true" \
     "DST_CYCLIC_EN" "true" \
     "SYNC_EXT_ADD_INTERNAL_CDC" "true" \
+    "ASYNC_CLK" "true" \
   } { \
   set_property -dict [list \
       "value_format" "bool" \
       "value_format" "bool" \
       "value" $v \
+      "value_format" "bool" \
     ] \
     [ipx::get_user_parameters $k -of_objects $cc]
   set_property -dict [list \
       "value_format" "bool" \
       "value_format" "bool" \
       "value" $v \
+      "value_format" "bool" \
     ] \
     [ipx::get_hdl_parameters $k -of_objects $cc]
 }
@@ -277,8 +280,12 @@ set_property -dict [list \
   "display_name" "Generate CDC Circuit for sync_ext" \
 ] [ipgui::get_guiparamspec -name "SYNC_EXT_ADD_INTERNAL_CDC" -component $cc]
 
+ipgui::add_param -name "ASYNC_CLK" -component $cc -parent $features_group
+set_property -dict [list \
+  "display_name" "Enabled the asynchronous connection of the clocks in the FIFO" \
+] [ipgui::get_guiparamspec -name "ASYNC_CLK" -component $cc]
+
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc
 
 ipx::save_core [ipx::current_core]
-
