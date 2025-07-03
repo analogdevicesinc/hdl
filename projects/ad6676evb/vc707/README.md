@@ -1,4 +1,8 @@
+<!-- no_no_os -->
+
 # AD6676-EVB/VC707 HDL Project
+
+- VADJ with which it was tested in hardware: 1.8V
 
 ## Building the project
 
