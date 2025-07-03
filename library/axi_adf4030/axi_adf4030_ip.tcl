@@ -20,7 +20,6 @@ adi_ip_files axi_adf4030 [list \
   "$ad_hdl_dir/library/common/ad_rst.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_data.v" \
-  "$ad_hdl_dir/library/xilinx/common/ad_rst_constr.xdc" \
   "bsync_generator.sv" \
   "trigger_channel.sv" \
   "axi_adf4030_regmap.sv" \

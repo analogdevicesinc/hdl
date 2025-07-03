@@ -239,14 +239,7 @@ module axi_adf4030_regmap #(
     end
   end /* read interface */
 
-  sync_bits #(
-    .NUM_OF_BITS (1),
-    .ASYNC_CLK (1)
-  ) i_direction (
-    .in_bits (up_direction),
-    .out_clk (clk),
-    .out_resetn (1'b1),
-    .out_bits (direction));
+  assign direction = up_direction;
 
   // Clock Domain Crossing Logic for reset, control and status signals
   sync_data #(

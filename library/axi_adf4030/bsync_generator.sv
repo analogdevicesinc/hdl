@@ -45,16 +45,14 @@ module bsync_generator (
   logic                    direction_s;
   logic                    bsync_edge;
 
-  assign direction_s = direction;
-
-  // sync_bits #(
-  //   .NUM_OF_BITS (1),
-  //   .ASYNC_CLK (1)
-  // ) i_control_signals (
-  //   .in_bits (direction),
-  //   .out_clk (clk),
-  //   .out_resetn (1'b1),
-  //   .out_bits (direction_s));
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK (1)
+  ) i_control_signals (
+    .in_bits (direction),
+    .out_clk (clk),
+    .out_resetn (1'b1),
+    .out_bits (direction_s));
 
   always @* begin
     next_state = curr_state;
