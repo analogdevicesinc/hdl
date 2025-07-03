@@ -1,4 +1,8 @@
+<!-- no_dts -->
+
 # AD7616-SDZ/Zed HDL Project
+
+- VADJ with which it was tested in hardware: 3.3V
 
 ## Building the project
 
