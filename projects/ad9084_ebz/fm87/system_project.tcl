@@ -23,7 +23,7 @@ source ../../../projects/scripts/adi_project_intel.tcl
 #
 #   REF_CLK_RATE : Reference clock frequency in MHz, should be Lane Rate / 66 for JESD204C or Lane Rate / 40 for JESD204B
 #   DEVICE_CLK_RATE : Device clock frequency in MHz, usually the same as REF_CLK_RATE but it can vary based on the JESD configuration
-#   ENABLE_HSCI : If set, adds and enables the HSCI core in the design
+#   HSCI_ENABLE : If set, adds and enables the HSCI core in the design
 #   RX_LANE_RATE :  Lane rate of the Rx link ( Apollo to FPGA )
 #   TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 #   [RX/TX]_JESD_M : Number of converters per link

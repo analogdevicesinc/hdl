@@ -21,7 +21,7 @@ if {$ASYMMETRIC_A_B_MODE == 1} {
 source $ad_hdl_dir/library/util_hbm/scripts/adi_util_hbm.tcl
 ad_create_hbm HBM "8GB"
 
-set ENABLE_HSCI 0
+set HSCI_ENABLE 0
 
 source $ad_hdl_dir/projects/common/vcu128/vcu128_system_bd.tcl
 source $ad_hdl_dir/projects/ad9084_ebz/common/ad9084_ebz_bd.tcl
