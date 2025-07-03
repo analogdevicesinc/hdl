@@ -410,6 +410,32 @@ proc adi_ip_properties {ip_name} {
   ipx::save_core
 }
 
+## Set IP version from PCORE_VERSION.
+#
+# \param[ip_regmap] - The regmap file path
+#
+proc adi_ip_set_version_from_regmap {ip_regmap} {
+
+  set file [open $ip_regmap]
+  set data [read $file]
+  close $file
+
+  # TODO create common, least touched files, format
+  set match [regexp {localparam\s+PCORE_VERSION\s*=\s*'h([0-9A-Fa-f]+)} $data match hex_version]
+
+  if {$match} {
+    set hex_major [string range $hex_version 0 3]
+    set hex_minor [string range $hex_version 4 5]
+    set hex_patch [string range $hex_version 6 7]
+    set major [expr 0x$hex_major]
+    set minor [expr 0x$hex_minor]
+    set patch [expr 0x$hex_patch]
+    set_property version $major.$minor.$patch [ipx::current_core]
+  } else {
+    puts [format "WARNING: Failed to get PCORE_VERSION from %s to set version" $ip_regmap]
+  }
+}
+
 ## Create/overwrite temporary files containing particular build case dependencies.
 #
 #  DO NOT USE FOR: axi_dmac/jesd204/axi_clkgen
