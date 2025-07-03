@@ -48,7 +48,6 @@ module fill_holes #(
   always @(posedge clk) begin
     if(reset) begin
       in_holes_d <= '0;
-      in_data_d <= 'X;
       in_valid_d <=  '0;
     end else begin
       in_holes_d <= in_holes;
@@ -111,7 +110,6 @@ module fill_holes #(
     if(reset) begin
       non_holes_cnt <= '0;
       out_valid <= 1'b0;
-      data_stored <= 'X;
     end else begin
       non_holes_cnt <= non_holes_cnt_comb;
       out_valid <= non_holes_cnt_comb >= NUM_WORDS;
