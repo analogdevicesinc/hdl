@@ -3,6 +3,7 @@
 - Evaluation board product page: [EVAL-ADRV9026/ADRV9029](https://www.analog.com/eval-adrv9026)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv9026/quickstart
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9026/index.html
+- Evaluation board VADJ: 1.8V
 
 ## Supported parts
 
