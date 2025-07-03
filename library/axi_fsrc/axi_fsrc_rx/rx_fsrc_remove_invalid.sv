@@ -44,7 +44,7 @@ module rx_fsrc_remove_invalid #(
     in_data_d <= in_data;
   end
 
-  for(ii = 0; ii < NUM_SAMPLES; ii = ii + 1) begin : invalid_sample_check_gen
+  for(ii = 0; ii < NUM_SAMPLES; ii=ii+1) begin : invalid_sample_check_gen
     always_ff @(posedge clk) begin
       if(reset) begin
         invalid_sample[ii] <= '0;
@@ -67,8 +67,8 @@ module rx_fsrc_remove_invalid #(
     .out_valid        (out_valid_fsrc)
   );
 
-  assign out_data = fsrc_en ? out_data_fsrc : in_data_d;
-  assign out_valid = fsrc_en ? out_valid_fsrc : in_valid_d;
+  assign out_data  = fsrc_en ? out_data_fsrc  : in_data;
+  assign out_valid = fsrc_en ? out_valid_fsrc : in_valid;
 
 endmodule
 

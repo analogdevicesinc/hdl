@@ -43,7 +43,7 @@ module axi_fsrc_rx #(
   input      data_in_valid,
   input      [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_in,
   output reg data_out_valid,
-  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0]   data_out,
+  output reg [NUM_OF_CHANNELS*SAMPLES_PER_CHANNEL*SAMPLE_DATA_WIDTH-1:0] data_out,
 
   // axi interface
   input                       s_axi_aclk,
@@ -156,8 +156,7 @@ module axi_fsrc_rx #(
     .in_data (data_in),
     .in_valid (data_in_valid),
     .out_data (data_out_s),
-    .out_valid (data_out_valid_s)
-  );
+    .out_valid (data_out_valid_s));
 
   always @(posedge clk) begin
     data_out <= data_out_s;
