@@ -5,6 +5,7 @@
 - Evaluation board product page: [EVAL-AD9695](https://www.analog.com/eval-ad9695)
 - System documentation: https://wiki.analog.com/resources/eval/ad9695-1300ebz
 - HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9695_fmc/index.html
+- Evaluation board VADJ range: 1.2V - 2.5V
 
 ## Supported parts
 
