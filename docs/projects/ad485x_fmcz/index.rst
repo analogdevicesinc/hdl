@@ -38,6 +38,8 @@ Supported carriers
 | :adi:`EVAL-AD4858` | ZedBoard | FMC LPC  |
 +--------------------+          |          |
 | :adi:`EVAL-AD4857` |          |          |
++--------------------+----------+----------+
+
 Block design
 -------------------------------------------------------------------------------
 
@@ -156,6 +158,13 @@ To build the LVDS version of the interface, run:
 
    $cd hdl/projects/ad485x_fmc/zed
    $make LVDS_CMOS_N=1
+
+The default LVDS configuration is for 4 wire SPI. To use the 3 wire SPI, run:
+
+ .. shell:: bash
+ 
+   $cd hdl/projects/ad485x_fmc/zed
+   $make LVDS_CMOS_N=1 THREE_W_SPI=1
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user
 guide.
